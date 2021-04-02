@@ -1,8 +1,8 @@
-import employee from './employee'
-import customer from './customer'
+import project from './project';
+import investor from './investor';
 
 export default {
-    employee,
-    customer
+    project,
+    investor
 }
 

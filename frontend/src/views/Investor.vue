@@ -1,0 +1,282 @@
+<style scoped>
+.addmargin {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.vue-logo-back {
+  background-color: black;
+}
+
+.logo {
+  width: 144px;
+}
+
+.fullbody {
+  width: 100%;
+}
+
+.floatLeft {
+  float: left;
+}
+.floatRight {
+  float: right;
+}
+.card-header {
+  background: aliceblue;
+  padding: 0px;
+}
+.sm-tiles {
+  float: left;
+  padding: 5px;
+  border: 1px solid #8080807d;
+  margin: 1%;
+  border-radius: 5px;
+  background: #f5dda71c;
+  color: #888b8f;
+}
+.sm-tiles:hover {
+  float: left;
+  padding: 5px;
+  border: 1px solid #8080807d;
+  margin: 1%;
+  border-radius: 5px;
+  background: #f5dda7a3;
+  font-style: bold;
+  color: #888b8f;
+}
+
+label {
+  font-weight: bold;
+}
+.card {
+  border-radius: 10px;
+}
+</style>
+<template>
+  <div class="home marginLeft marginRight">
+    <loading
+      :active.sync="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    ></loading>
+
+    <div class="row">
+      <div class="col-md-12" style="text-align: left">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Email:</label>
+                  <input
+                    type="text"
+                    v-model="investor.email"
+                    size="30"
+                    placeholder="Enter your email address"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Name:</label>
+                  <input
+                    type="text"
+                    v-model="investor.name"
+                    size="30"
+                    placeholder="Enter your name"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Twitter Handle:</label>
+                  <input
+                    type="text"
+                    v-model="investor.twitterHandle"
+                    size="30"
+                    placeholder="Enter your twitter handle"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Telegram Handle:</label>
+                  <input
+                    type="text"
+                    v-model="investor.telegramHandle"
+                    size="30"
+                    placeholder="Enter your telegram handle"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Ethereum Address:</label>
+                  <input
+                    type="text"
+                    v-model="investor.ethAddress"
+                    size="30"
+                    placeholder="Enter ethereum address"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Did:</label>
+                  <input
+                    type="text"
+                    v-model="investor.did"
+                    size="30"
+                    placeholder="Enter did"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <hr />
+                <button
+                  class="btn btn-outline-primary btn-sm"
+                  @click="saveInvestor()"
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import fetch from "node-fetch";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
+export default {
+  name: "Investor",
+  components: { Loading },
+  data() {
+    return {
+      investor: {
+        did: "did:hs:TEqweqweqwe12",
+        email: "vikram.anand1@gmail.com",
+        name: "Vikram Anand",
+        ethAddress: "0xREWE123213",
+        twitterHandle: "@hyperchain",
+        telegramHandle: "@hyperchain",
+        hasTwitted: false,
+        hasJoinedTGgroup: false,
+        projectId: "60676b4f09baec1befb5f469",
+      },
+      active: 0,
+      host: location.hostname,
+      authToken: localStorage.getItem("authToken"),
+      isLoading: false,
+      fullPage: true,
+    };
+  },
+  async mounted() {
+    //const usrStr = localStorage.getItem("user");
+    //this.user = null; JSON.parse(usrStr);
+    //await this.fetchProcurment();
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.prevRoute = from;
+    });
+  },
+  methods: {
+    notifySuccess(msg) {
+      this.isLoading = false;
+      this.$notify({
+        group: "foo",
+        title: "Information",
+        type: "success",
+        text: msg,
+      });
+    },
+    notifyErr(msg) {
+      this.isLoading = false;
+      this.$notify({
+        group: "foo",
+        title: "Error",
+        type: "error",
+        text: msg,
+      });
+    },
+
+    gotosubpage: (id) => {
+      this.$router.push(`${id}`);
+    },
+    formateDate(d) {
+      return new Date(d).toLocaleString();
+    },
+    async saveInvestor() {
+      try {
+        this.isLoading = true;
+
+        // if (this.vehiclNumber == "")
+        //   return this.notifyErr("Error: Vehicle Number can not be blank");
+        // if (this.typOfMaterial == "")
+        //   return this.notifyErr("Error: typeOfMaterial can not be blank");
+        // if (this.numprOfSacks == "")
+        //   return this.notifyErr("Error: Number Of Sacks can not be blank");
+
+        
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
+        let headers = {
+          "Content-Type": "application/json",
+        };
+        const resp = await fetch(url, {
+          method: "POST",
+          body: JSON.stringify(this.investor),
+          headers,
+        });
+        
+        if (resp.status !== 200) {
+          throw new Error(resp.statusText);
+        }
+
+        const json = await resp.json();
+        this.notifySuccess("Your data is saved. Id = " + json._id);
+      } catch (e) {
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+        this.clear();
+      }
+    },
+    clear() {
+      this.investor = {
+        did: "did:hs:TEqweqweqwe12",
+        email: "",
+        name: "",
+        ethAddress: "",
+        twitterHandle: "",
+        telegramHandle: "",
+        hasTwitted: false,
+        hasJoinedTGgroup: false,
+        projectId: "606742855244b589bc100083",
+      };
+    },
+  },
+};
+</script>
+
+

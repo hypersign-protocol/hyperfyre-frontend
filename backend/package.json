@@ -1,5 +1,5 @@
 {
-    "name": "express-prod-boilerplate",
+    "name": "whitelisting-backend",
     "version": "1.0.0",
     "description": "Node express API production ready boilerplate",
     "main": "app.js",
@@ -15,6 +15,7 @@
     "author": "Vishwas Anand Bhushan",
     "license": "MIT",
     "dependencies": {
+        "cors": "^2.8.5",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "express-rate-limit": "^5.2.6",
