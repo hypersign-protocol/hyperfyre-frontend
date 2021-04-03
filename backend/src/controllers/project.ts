@@ -1,6 +1,7 @@
 import { logger } from "../config";
 import { Request, Response } from "express";
 import ProjectModel, { IProject } from "../models/project";
+import InvestorModel, {IInvestor} from "../models/investor";
 
 async function addProject(req: Request, res: Response) {
   try {
@@ -52,8 +53,18 @@ async function getAllProject(req: Request, res: Response) {
 async function getProjectById(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    const investor:IProject = await ProjectModel.findById({ _id: id})
-    res.send(investor);
+    const { fetchInvestors, limit } =  req.query;
+    const project:IProject = await ProjectModel.findById({ _id: id})
+    let projectInfo = {
+      ...project["_doc"]
+    }
+    if(fetchInvestors){
+      const limitInt = limit? parseInt(limit.toString()) : 100;
+      const investorList:Array<IInvestor> =  await InvestorModel.where({projectId: id}).find().limit(limitInt);
+      projectInfo.investors = investorList;
+    }
+    
+    res.send(projectInfo);
   } catch (e) {
     logger.error('InvestorCtrl:: getProjectById(): Error ' + e);
     res.status(500).send(e.message);

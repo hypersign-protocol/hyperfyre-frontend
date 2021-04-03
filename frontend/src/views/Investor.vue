@@ -61,7 +61,51 @@ label {
       :is-full-page="fullPage"
     ></loading>
 
-    <div class="row">
+    <div class="row" v-if="!projectFetched" >
+      <div class="col-md-12" style="text-align: left;">
+        <div class="card" style="padding:10px; background: #ff000029"> 
+          <div class="card-body" >
+            <h3>Oops! Some error occurred.</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+
+    <div class="row" v-if="projectFetched" >
+      <div class="col-md-12" style="text-align: left;">
+        <div class="card" style="padding:10px">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6"><h2>{{project.projectName.toUpperCase()}}</h2>
+              <h4>WHITELISTING</h4>
+              </div>
+            </div>
+            <div class="row" style="margin-top: 5%">
+              <div class="col-md-6">
+                <h5>From: {{project.fromDate}}</h5>
+                <h5>To: {{project.toDate}}</h5>
+              </div>
+              <div class="col-md-6">
+                <img :src="project.logoUrl" style="float:right"/>
+              </div>
+            </div>            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" v-if="isDataSaved" style="margin-top: 2%">
+      <div class="col-md-12" style="text-align: left;">
+        <div class="card" style="padding:10px; background: #0080004f"> 
+          <div class="card-body" >
+            <h3>Your data has been successfully saved and is under verfication. Once verified, you will receive whitelisting credential in your email. Thank you! </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 2%" v-if="!isDataSaved">
       <div class="col-md-12" style="text-align: left">
         <div class="card">
           <div class="card-body">
@@ -175,15 +219,24 @@ export default {
     return {
       investor: {
         did: "did:hs:TEqweqweqwe12",
-        email: "vikram.anand1@gmail.com",
-        name: "Vikram Anand",
-        ethAddress: "0xREWE123213",
-        twitterHandle: "@hyperchain",
-        telegramHandle: "@hyperchain",
+        email: "",
+        name: "",
+        ethAddress: "",
+        twitterHandle: "",
+        telegramHandle: "",
         hasTwitted: false,
         hasJoinedTGgroup: false,
-        projectId: "60676b4f09baec1befb5f469",
+        projectId: "",
       },
+      project: {
+        projectName: "",
+        logoUrl: "",
+        fromDate: "",
+        toDate: "",
+        ownerDid: ""
+      },
+      projectFetched: false,
+      isDataSaved: false,
       active: 0,
       host: location.hostname,
       authToken: localStorage.getItem("authToken"),
@@ -192,6 +245,9 @@ export default {
     };
   },
   async mounted() {
+     this.investor.projectId = this.$route.query.projectId ?  this.$route.query.projectId : "60676b4f09baec1befb5f469"; // if projectId is not passed, hardcoding hypersign project Id
+    console.log(this.investor.projectId)
+    await this.fetchProjectData();
     //const usrStr = localStorage.getItem("user");
     //this.user = null; JSON.parse(usrStr);
     //await this.fetchProcurment();
@@ -227,6 +283,36 @@ export default {
     formateDate(d) {
       return new Date(d).toLocaleString();
     },
+    async fetchProjectData(){
+      try {
+        this.isLoading = true;
+        
+        if(!this.investor.projectId) throw new Error("No project found");
+
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.investor.projectId}`;
+        
+        const resp = await fetch(url);
+        
+        if (resp.status !== 200) {
+          throw new Error(resp.statusText);
+        }
+
+        const json = await resp.json();
+        this.project = {...json};
+        this.project.fromDate = this.formateDate(this.project.fromDate)
+        this.project.toDate = this.formateDate(this.project.toDate)
+        this.projectFetched = true;
+        this.notifySuccess("Project is fetched. ProjectName " + json.projectName);
+      } catch (e) {
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    formateDate(dateStr){
+      const d =  new Date(dateStr);
+      return d.toDateString();
+    },
     async saveInvestor() {
       try {
         this.isLoading = true;
@@ -254,6 +340,7 @@ export default {
         }
 
         const json = await resp.json();
+        this.isDataSaved = true;
         this.notifySuccess("Your data is saved. Id = " + json._id);
       } catch (e) {
         this.notifyErr(e.message);

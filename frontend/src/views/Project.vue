@@ -122,6 +122,17 @@ label {
         </div>
       </div>
     </div>
+
+    <div class="row" v-if="whitelistingLink != ''" style="margin-top: 2%">
+      <div class="col-md-12" style="text-align: left">
+        <div class="card">
+          <div class="card-body">
+            <h4>Congratulations!!! Your project is successfully created, you can give this link to your investors for whitelisting. 
+            <a :href="whitelistingLink" target="_blank">{{whitelistingLink}}</a></h4>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -136,12 +147,13 @@ export default {
   data() {
     return {
       project: {
-        projectName: "Hypersign Project",
-        logoUrl: "https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png",
+        projectName: "",
+        logoUrl: "",
         fromDate: "",
         toDate: "",
-        ownerDid: "did:hs:QWERTlkasd090123SWEE"
+        ownerDid: "did:hs:QWERTlkasd090123SWEE12322"
       },
+      whitelistingLink: "",
       active: 0,
       host: location.hostname,
       authToken: localStorage.getItem("authToken"),
@@ -212,6 +224,7 @@ export default {
         }
 
         const json = await resp.json();
+        this.whitelistingLink = `${window.location.origin}/studio/investor?projectId=${json._id}`;
         this.notifySuccess("Project is saved. Id = " + json._id);
       } catch (e) {
         this.notifyErr(e.message);
