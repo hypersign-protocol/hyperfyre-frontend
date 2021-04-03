@@ -128,13 +128,8 @@ export default {
       authRoutes:  ['register', 'PKIIdLogin'],
       menu: [
         { 
-          name: "Project",  
+          name: "Projects",  
           path: "/studio/project",
-          isShow: true,
-        },
-        { 
-          name: "Investor",  
-          path: "/studio/investor",
           isShow: true,
         },
         {

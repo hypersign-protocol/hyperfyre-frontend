@@ -112,7 +112,7 @@ label {
                 <hr />
                 <button
                   class="btn btn-outline-primary btn-sm"
-                  @click="saveInvestor()"
+                  @click="saveProject()"
                 >
                   Submit
                 </button>
@@ -133,6 +133,28 @@ label {
         </div>
       </div>
     </div>
+
+    <div class="row" style="margin-top: 2%" v-if="!isDataSaved">
+      <div class="col-md-12" style="text-align: left">
+        <table class="table table-striped">
+            <thead>
+              <tr><th v-for="col in cols" v-bind:key="col">{{col}}</th></tr>
+            </thead>
+            <tbody>
+              <tr v-for="project in projects" v-bind:key="project">
+                <td>{{project._id}}</td>
+                <!-- <td>{{project.ownerDid}}</td> -->
+                <td>{{project.projectName}}</td>
+                <td>{{project.fromDate}}</td>
+                <td>{{project.toDate}}</td>
+                <td><a :href="project.logoUrl" target="_blank">Url</a></td>
+                <td><a :href="project.investors_link" target="_blank">Url</a></td>
+                <td><a :href="project.whitelisting_link" target="_blank">Url</a></td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -147,12 +169,15 @@ export default {
   data() {
     return {
       project: {
+        _id: "",
         projectName: "",
         logoUrl: "",
         fromDate: "",
         toDate: "",
         ownerDid: "did:hs:QWERTlkasd090123SWEE12322"
       },
+      projects: [],
+      cols: ["Project Id", "Project Name", "From Date", "To Date", "Logo Url",  "Investor List", "Whitelisting Form"],
       whitelistingLink: "",
       active: 0,
       host: location.hostname,
@@ -162,9 +187,11 @@ export default {
     };
   },
   async mounted() {
+    
     //const usrStr = localStorage.getItem("user");
     //this.user = null; JSON.parse(usrStr);
-    //await this.fetchProcurment();
+    this.project.ownerDid = "did:hs:QWERTlkasd090123SWEE12322"
+    await this.fetchProjects();
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
@@ -172,6 +199,33 @@ export default {
     });
   },
   methods: {
+    async fetchProjects(){
+      try {
+        this.isLoading = true;
+        
+        if(!this.project.ownerDid) throw new Error("No project found");
+
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.project.ownerDid}`;
+        
+        const resp = await fetch(url);
+        
+        if (resp.status !== 200) {
+          throw new Error(resp.statusText);
+        }
+
+        const json = await resp.json();
+        this.projects = json;
+        this.projects.map(x =>{
+            x["whitelisting_link"] = window.location.origin + "/studio/investor?projectId=" + x._id
+           x["investors_link"] = window.location.origin + "/studio/investors?projectId=" + x._id
+        });
+        this.notifySuccess("No. of projects fetched " + this.projects.length);
+      } catch (e) {
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     notifySuccess(msg) {
       this.isLoading = false;
       this.$notify({
@@ -197,7 +251,7 @@ export default {
     formateDate(d) {
       return new Date(d).toLocaleString();
     },
-    async saveInvestor() {
+    async saveProject() {
       try {
         this.isLoading = true;
 
@@ -225,7 +279,11 @@ export default {
 
         const json = await resp.json();
         this.whitelistingLink = `${window.location.origin}/studio/investor?projectId=${json._id}`;
+        setTimeout(() => {
+          this.whitelistingLink = ""
+        }, 10000)
         this.notifySuccess("Project is saved. Id = " + json._id);
+        await this.fetchProjects();
       } catch (e) {
         this.notifyErr(e.message);
       } finally {

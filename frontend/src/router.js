@@ -5,6 +5,7 @@ import config from './config'
 import Dashboard from './views/Dashboard.vue'
 import fetch from 'node-fetch'
 import Investor from './views/Investor.vue';
+import Investors from './views/Investors.vue';
 import Project from './views/Project.vue';
 
 Vue.use(Router)
@@ -48,6 +49,14 @@ const router = new Router({
                 requiresAuth: false
             }
         },
+        {
+            path: '/studio/investors',
+            name: 'investors',
+            component: Investors,
+            meta: {
+                requiresAuth: false
+            }
+        }
     ]
 })
 

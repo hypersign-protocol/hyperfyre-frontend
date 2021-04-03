@@ -42,7 +42,13 @@ async function addProject(req: Request, res: Response) {
 
 async function getAllProject(req: Request, res: Response) {
   try {
-    const employeeList:Array<IProject> = await ProjectModel.find({});
+    const {owner} = req.query;
+    let employeeList:Array<IProject>;
+    if(owner){
+      employeeList = await ProjectModel.find({}).where({ownerDid: owner});
+    }else{
+      employeeList = await ProjectModel.find({});
+    }
     res.send(employeeList);
   } catch (e) {
     logger.error('InvestorCtrl:: getAllProject(): Error ' + e);
