@@ -77,8 +77,22 @@ async function getProjectById(req: Request, res: Response) {
   }
 }
 
+async function updateProject(req: Request, res: Response) {
+  try {
+    const { projectName, logoUrl, fromDate, toDate, ownerDid, twitterHandle,  telegramHandle, _id } = req.body;
+    const project:IProject = await ProjectModel.findByIdAndUpdate(_id, {projectName, logoUrl, fromDate, toDate, ownerDid, twitterHandle,  telegramHandle});
+    res.send({
+      _id: project._id
+    });
+  } catch (e) {
+    logger.error('InvestorCtrl:: getProjectById(): Error ' + e);
+    res.status(500).send(e.message);
+  }
+}
+
 export default {
   addProject,
   getProjectById,
-  getAllProject
+  getAllProject,
+  updateProject
 };

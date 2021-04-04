@@ -177,6 +177,7 @@ label {
                 <td><a :href="project.logoUrl" target="_blank">Url</a></td>
                 <td><a :href="project.investors_link" target="_blank">Url</a></td>
                 <td><a :href="project.whitelisting_link" target="_blank">Url</a></td>
+                <td><button type="button" class="btn btn-outline-primary" @click="editProject(project)">Edit</button></td>
               </tr>
             </tbody>
         </table>
@@ -205,8 +206,9 @@ export default {
         twitterHandle: "",
         telegramHandle: ""
       },
+      isProjectEditing: false,
       projects: [],
-      cols: ["Project Id", "Project Name", "WL Start Date", "WL End Date", "Logo Url",  "Investor List", "Whitelisting Form"],
+      cols: ["Project Id", "Project Name", "WL Start Date", "WL End Date", "Logo Url",  "Investor List", "Whitelisting Form", ""],
       whitelistingLink: "",
       active: 0,
       host: location.hostname,
@@ -280,24 +282,26 @@ export default {
     formateDate(d) {
       return new Date(d).toLocaleString();
     },
+    editProject(project){
+        this.project = {...project};
+        this.isProjectEditing =  true;
+      },
     async saveProject() {
       try {
-        this.isLoading = true;
-
-        // if (this.vehiclNumber == "")
-        //   return this.notifyErr("Error: Vehicle Number can not be blank");
-        // if (this.typOfMaterial == "")
-        //   return this.notifyErr("Error: typeOfMaterial can not be blank");
-        // if (this.numprOfSacks == "")
-        //   return this.notifyErr("Error: Number Of Sacks can not be blank");
-
-        
+        this.isLoading = true;    
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
           "Content-Type": "application/json",
         };
+
+        let method =  "POST"
+
+        if(this.isProjectEditing){
+            method =  "PUT"
+        }
+
         const resp = await fetch(url, {
-          method: "POST",
+          method,
           body: JSON.stringify(this.project),
           headers,
         });
@@ -305,7 +309,6 @@ export default {
         if (resp.status !== 200) {
           throw new Error(resp.statusText);
         }
-
         const json = await resp.json();
         this.whitelistingLink = `${window.location.origin}/studio/investor?projectId=${json._id}`;
         setTimeout(() => {
@@ -321,12 +324,17 @@ export default {
       }
     },
     clear() {
+      this.isProjectEditing = false;
       this.project = {
+        
+        _id: "",
         projectName: "",
         logoUrl: "",
         fromDate: "",
         toDate: "",
-        onwerDid: ""
+        onwerDid: "",
+        twitterHandle: "",
+        telegramHandle: ""
       };
     },
   },

@@ -5,6 +5,8 @@ const router = Router();
 
 router.post("/", ProjectController.addProject);
 
+router.put("/", ProjectController.updateProject)
+
 router.get("/", ProjectController.getAllProject);
 
 router.get("/:id", ProjectController.getProjectById);
