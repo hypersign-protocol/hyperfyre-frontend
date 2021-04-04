@@ -12,6 +12,7 @@ export interface IInvestor extends Document {
     isVerfiedByHypersign: boolean;
     isVerificationComplete: boolean;
     projectId: string;
+    tweetUrl: string;
 }
 
 const InvestorSchema = new Schema({
@@ -25,7 +26,8 @@ const InvestorSchema = new Schema({
   hasJoinedTGgroup: { type: Boolean, required: true, default: false },
   isVerfiedByHypersign: { type: Boolean, required: true, default: false },
   isVerificationComplete: { type: Boolean, required: true, default: false },
-  projectId: { type: String, required: true }
+  projectId: { type: String, required: true },
+  tweetUrl: { type: String, required: true }
 });
 
 export default mongoose.model<IInvestor>("Investor", InvestorSchema);

@@ -5,7 +5,7 @@ import InvestorModel, {IInvestor} from "../models/investor";
 
 async function addProject(req: Request, res: Response) {
   try {
-    const { projectName, logoUrl, fromDate, toDate, ownerDid } = req.body;
+    const { projectName, logoUrl, fromDate, toDate, ownerDid, twitterHandle,  telegramHandle } = req.body;
 
     // if(isNaN(Date.parse(fromDate)) || isNaN(Date.parse(toDate))){
     //     res
@@ -31,7 +31,7 @@ async function addProject(req: Request, res: Response) {
     //     .send("firstName, lastName, email, role fields are mandatory");
 
     const newProject: IProject = await ProjectModel.create({
-      projectName, logoUrl, fromDate, toDate, ownerDid
+      projectName, logoUrl, fromDate, toDate, ownerDid, twitterHandle,  telegramHandle 
     });
     res.send(newProject);
   } catch (e) {

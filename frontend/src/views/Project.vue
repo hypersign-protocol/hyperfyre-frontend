@@ -95,14 +95,41 @@ label {
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label style="margin-right: 8%">From Date:</label>
+                  <label style="margin-right: 8%">Whitelisting Start Date:</label>
                   <datepicker v-model="project.fromDate" name="uniquename"></datepicker>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label style="margin-right: 8%">To Date:</label>
+                  <label style="margin-right: 8%">Whitelisting End Date:</label>
                   <datepicker v-model="project.toDate" name="uniquename"></datepicker>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Project's Twitter Handle (optional):</label>
+                  <input
+                    type="text"
+                    v-model="project.twitterHandle"
+                    size="30"
+                    placeholder="Enter twitter handle"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Project's Telegram Handle (optional):</label>
+                  <input
+                    type="text"
+                    v-model="project.telegramHandle"
+                    size="30"
+                    placeholder="Enter telegram channel"
+                    class="form-control"
+                  />
                 </div>
               </div>
             </div>
@@ -174,10 +201,12 @@ export default {
         logoUrl: "",
         fromDate: "",
         toDate: "",
-        ownerDid: "did:hs:QWERTlkasd090123SWEE12322"
+        ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
+        twitterHandle: "",
+        telegramHandle: ""
       },
       projects: [],
-      cols: ["Project Id", "Project Name", "From Date", "To Date", "Logo Url",  "Investor List", "Whitelisting Form"],
+      cols: ["Project Id", "Project Name", "WL Start Date", "WL End Date", "Logo Url",  "Investor List", "Whitelisting Form"],
       whitelistingLink: "",
       active: 0,
       host: location.hostname,

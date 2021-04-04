@@ -88,7 +88,7 @@ label {
                 <h5>To: {{project.toDate}}</h5>
               </div>
               <div class="col-md-6">
-                <img :src="project.logoUrl" style="float:right"/>
+                <img :src="project.logoUrl"  style="float:right;max-width: 176.86px; max-height: 42px;"/>                
               </div>
             </div>            
           </div>
@@ -105,23 +105,11 @@ label {
         </div>
       </div>
     </div>
-    <div class="row" style="margin-top: 2%" v-if="!isDataSaved">
+    <div class="row" style="margin-top: 2%" v-if="!isDataSaved && projectFetched">
       <div class="col-md-12" style="text-align: left">
         <div class="card">
           <div class="card-body">
             <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label style="margin-right: 8%">Email:</label>
-                  <input
-                    type="text"
-                    v-model="investor.email"
-                    size="30"
-                    placeholder="Enter your email address"
-                    class="form-control"
-                  />
-                </div>
-              </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label style="margin-right: 8%">Name:</label>
@@ -134,6 +122,19 @@ label {
                   />
                 </div>
               </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Email:</label>
+                  <input
+                    type="text"
+                    v-model="investor.email"
+                    size="30"
+                    placeholder="Enter your email address"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              
             </div>
 
             <div class="row">
@@ -165,8 +166,12 @@ label {
 
             <div class="row">
               <div class="col-md-6">
+                
                 <div class="form-group">
-                  <label style="margin-right: 8%">Ethereum Address:</label>
+                  <div class="row"><div class="col-md-12"><label style="margin-right: 8%">Ethereum Address:</label></div></div>
+                  <div class="row">
+                    <div class="col-md-10">
+                      
                   <input
                     type="text"
                     v-model="investor.ethAddress"
@@ -174,6 +179,13 @@ label {
                     placeholder="Enter ethereum address"
                     class="form-control"
                   />
+                    </div>
+                    <div class="col-md-2">
+                      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2Fa-%2FAAuE7mC1z-HXEKxL4YhAhc7WDHWA6Rnly1I592T5ag%3Ds900-mo-c-c0xffffffff-rj-k-no&f=1&nofb=1" 
+                      style="max-width: 50px;max-height: 60px;cursor:pointer;"
+                      @click="getCurrentAccount()" />
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="col-md-6">
@@ -189,6 +201,37 @@ label {
                 </div>
               </div>
             </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <a href="https://twitter.com/hypersignchain?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-size="large" data-show-screen-name="false" data-show-count="false">Follow @hypersignchain</a>
+                  </div>
+                  <div class="col-sm-3">
+                    <a href="https://twitter.com/intent/tweet?text=I%20am%20happy%20with%20%23hypersign%20%23pollkadot%20%40hypersignchain%20" class="twitter-share-button" data-size="large" data-show-count="false" title="Tweet about this project tagging two of your friends">Tweet</a>
+                  </div>
+                  <div class="col-sm-3">
+                    <a href="https://telegram.im/@hypersignchain" target="_blank" class="telegramim_button telegramim_shadow" style="font-size:12px;width:113px;background:#27A5E7;box-shadow:1px 1px 5px #27A5E7;color:#FFFFFF;border-radius:7px;" title="Join our telegram channel for latest updates"><i></i> Join Us</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Tweet Url:</label>
+                  <input
+                    type="text"
+                    v-model="investor.tweetUrl"
+                    size="30"
+                    placeholder="Enter tweet url"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+
+            </div>
+
 
             <div class="row">
               <div class="col-md-12">
@@ -212,6 +255,7 @@ label {
 import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
+import Web3 from 'web3';
 export default {
   name: "Investor",
   components: { Loading },
@@ -227,13 +271,16 @@ export default {
         hasTwitted: false,
         hasJoinedTGgroup: false,
         projectId: "",
+        tweetUrl: "https://twitter.com/VishwasBAnand1/status/1378516089466843137?s=20"
       },
       project: {
         projectName: "",
         logoUrl: "",
         fromDate: "",
         toDate: "",
-        ownerDid: ""
+        ownerDid: "",
+        twitterHandle: "",
+        telegramHandle: ""
       },
       projectFetched: false,
       isDataSaved: false,
@@ -245,9 +292,18 @@ export default {
     };
   },
   async mounted() {
+
+    if (window.ethereum) {
+    window.web3 = new Web3(window.ethereum);
+    window.ethereum.enable();
+  }
+
+
      this.investor.projectId = this.$route.query.projectId ?  this.$route.query.projectId : "60676b4f09baec1befb5f469"; // if projectId is not passed, hardcoding hypersign project Id
     console.log(this.investor.projectId)
     await this.fetchProjectData();
+
+
     //const usrStr = localStorage.getItem("user");
     //this.user = null; JSON.parse(usrStr);
     //await this.fetchProcurment();
@@ -276,6 +332,15 @@ export default {
         text: msg,
       });
     },
+
+async getCurrentAccount() {
+    const accounts = await window.web3.eth.getAccounts();
+    if (accounts.length == 0) {
+      alert("No Account found..");
+      return;
+    }
+    this.investor.ethAddress =  accounts[0];
+},
 
     gotosubpage: (id) => {
       this.$router.push(`${id}`);

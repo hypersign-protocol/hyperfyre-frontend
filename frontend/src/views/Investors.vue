@@ -88,7 +88,7 @@ label {
                 <h5>To: {{project.toDate}}</h5>
               </div>
               <div class="col-md-6">
-                <img :src="project.logoUrl" style="float:right"/>
+                <img :src="project.logoUrl" style="float:right; max-width: 176.86px; max-height: 42px;"/>
               </div>
             </div>            
           </div>
@@ -120,7 +120,8 @@ label {
                 <td><a :href="'https://etherscan.io/address/' + investor.ethAddress" target="_blank">{{investor.ethAddress}}</a></td>
                 <td><a :href="'https://twitter.com/' + investor.twitterHandle" target="_blank">@{{investor.twitterHandle}}</a></td>
                 <td><a :href="'https://t.me/' + investor.telegramHandle" target="_blank">@{{investor.telegramHandle}}</a></td>
-                <td>{{investor.projectId}}</td>
+                <td><a :href="investor.tweetUrl" target="_blank">Tweet</a></td>
+                <td><button type="button" class="btn btn-outline-primary">Verify</button></td>
               </tr>
             </tbody>
         </table>
@@ -149,7 +150,8 @@ export default {
         hasJoinedTGgroup: false,
         projectId: "",
         isVerfiedByHypersign: false,
-        isVerificationComplete: false
+        isVerificationComplete: false,
+        tweetUrl: "",
       },
       project: {
         projectName: "",
@@ -159,7 +161,7 @@ export default {
         ownerDid: "",
         investors: []
       },
-      cols: ["Investor Did", "Name", "Email", "EthAddress", "Twitter Handle", "Telegram Handle", "Tweet Url"],
+      cols: ["Investor Did", "Name", "Email", "EthAddress", "Twitter Handle", "Telegram Handle", "Tweet Url", ""],
       projectFetched: false,
       isDataSaved: false,
       active: 0,

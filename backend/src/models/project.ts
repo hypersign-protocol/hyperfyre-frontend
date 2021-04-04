@@ -6,6 +6,9 @@ export interface IProject extends Document{
     fromDate: string;
     toDate: string;
     ownerDid: string;
+    twitterHandle: string;
+    telegramHandle: string;
+
 }
 
 const ProjectSchema = new Schema({
@@ -14,6 +17,8 @@ const ProjectSchema = new Schema({
     fromDate:{ type: Date, required: true },
     toDate:{ type: Date, required: true },
     ownerDid:{ type: String, required: true},
+    twitterHandle:{ type: String, required: true},
+    telegramHandle:{ type: String, required: true},
 })
 
 export default mongoose.model<IProject>("Project", ProjectSchema);

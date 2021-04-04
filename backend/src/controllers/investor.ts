@@ -4,7 +4,7 @@ import InvestorModel, { IInvestor } from "../models/investor";
 
 async function addInvestor(req: Request, res: Response) {
   try {
-    const { did, email, name, ethAddress, twitterHandle, telegramHandle, hasTwitted, hasJoinedTGgroup,  projectId  } = req.body;
+    const { did, email, name, ethAddress, twitterHandle, telegramHandle, hasTwitted, hasJoinedTGgroup,  projectId, tweetUrl  } = req.body;
     // if (firstName == "" || lastName == "" || email == "" || role == "" || dob == "")
     //   res
     //     .status(400)
@@ -21,7 +21,8 @@ async function addInvestor(req: Request, res: Response) {
       hasJoinedTGgroup, 
       isVerfiedByHypersign : false,
       isVerificationComplete : false,
-      projectId
+      projectId,
+      tweetUrl
     });
     res.send(newEmp);
   } catch (e) {
