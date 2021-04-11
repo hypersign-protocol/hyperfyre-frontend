@@ -1,39 +1,29 @@
-import express  from 'express';
-import routes from './routes';
-import swaggerJsDoc = require('./swagger.json');
-import swaggerUi from 'swagger-ui-express';
-import { PORT, baseUrl, logger, db } from './config';
-import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
-import xss from 'xss-clean';
+import express from 'express';
 import cors from 'cors';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import { port, logger } from './config';
+import http from 'http';
+import HypersignAuth from 'hypersign-auth-js-sdk';
+import routes from './routes';
 
-const app = express();
+export default function app() {
+    const app = express();
+    const server = http.createServer(app);
+    const hypersign = new HypersignAuth(server);
+    
 
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per windowMs
-    message: 'Too many requests' // message to send
-  });
-  
-
-app.use(helmet());
-app.use(limiter);
-app.use(xss());
-app.use(cors());
-app.use(express.json({ limit: '10kb' }));
-
-app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerJsDoc))
-app.use('/api/v1/investor', routes.investor);
-app.use('/api/v1/project', routes.project);
-
-app.listen(PORT, () => console.log('Server is running @ ' + baseUrl));
+    app.use(express.json());
+    app.use(cors());
+    app.use(cookieParser());
+    app.use(bodyParser.json());
+    app.use(express.static('public'));
 
 
-// process.on('SIGTERM', () => {
-//   console.log("");
-  
-//   logger.error('SIGTERM signal received.');
-//   logger.error('Gracefully closing the database connection')
-//   db.close();
-// });
+    // Routes    
+    app.use('/api/v1/investor', routes.investor(hypersign));
+    app.use('/api/v1/project', routes.project(hypersign));
+    app.use("/hs/api/v2/auth", routes.auth(hypersign));
+    server.listen(port, () => logger.info(`The server is running on port ${port}`));
+
+}

@@ -218,7 +218,11 @@ export default {
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.investor.projectId}?fetchInvestors=true&limit=100`;
         
-        const resp = await fetch(url);
+        const headers = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.authToken}`
+        };
+        const resp = await fetch(url, headers);
         
         if (resp.status !== 200) {
           throw new Error(resp.statusText);
@@ -255,6 +259,7 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
         let headers = {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.authToken}`
         };
         const resp = await fetch(url, {
           method: "POST",

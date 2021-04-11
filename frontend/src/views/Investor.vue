@@ -119,6 +119,7 @@ label {
                     size="30"
                     placeholder="Enter your name"
                     class="form-control"
+                    disabled
                   />
                 </div>
               </div>
@@ -131,6 +132,7 @@ label {
                     size="30"
                     placeholder="Enter your email address"
                     class="form-control"
+                    disabled
                   />
                 </div>
               </div>
@@ -197,6 +199,7 @@ label {
                     size="30"
                     placeholder="Enter did"
                     class="form-control"
+                    disabled
                   />
                 </div>
               </div>
@@ -280,7 +283,8 @@ export default {
         toDate: "",
         ownerDid: "",
         twitterHandle: "",
-        telegramHandle: ""
+        telegramHandle: "",
+        projectId: ""
       },
       projectFetched: false,
       isDataSaved: false,
@@ -289,9 +293,10 @@ export default {
       authToken: localStorage.getItem("authToken"),
       isLoading: false,
       fullPage: true,
+      user: null
     };
   },
-  async mounted() {
+  async created() {
 
     if (window.ethereum) {
     window.web3 = new Web3(window.ethereum);
@@ -299,13 +304,17 @@ export default {
   }
 
 
-     this.investor.projectId = this.$route.query.projectId ?  this.$route.query.projectId : "60676b4f09baec1befb5f469"; // if projectId is not passed, hardcoding hypersign project Id
-    console.log(this.investor.projectId)
+      console.log(this.$route.query)
+      this.project.projectId = this.$route.query.projectId ?  this.$route.query.projectId : "60676b4f09baec1befb5f469"; // if projectId is not passed, hardcoding hypersign project Id
+    
     await this.fetchProjectData();
 
 
-    //const usrStr = localStorage.getItem("user");
-    //this.user = null; JSON.parse(usrStr);
+    const usrStr = localStorage.getItem("user");
+    this.user = JSON.parse(usrStr);
+    this.investor = {...this.user};
+    this.investor.did = this.user.id;
+    // alert(JSON.stringify(this.user))
     //await this.fetchProcurment();
   },
   beforeRouteEnter(to, from, next) {
@@ -352,11 +361,16 @@ async getCurrentAccount() {
       try {
         this.isLoading = true;
         
-        if(!this.investor.projectId) throw new Error("No project found");
+        if(!this.$route.query.projectId) throw new Error("No project found");
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.investor.projectId}`;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.$route.query.projectId}`;
         
-        const resp = await fetch(url);
+        
+        const headers = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.authToken}`
+        };
+        const resp = await fetch(url, headers);
         
         if (resp.status !== 200) {
           throw new Error(resp.statusText);
@@ -381,19 +395,14 @@ async getCurrentAccount() {
     async saveInvestor() {
       try {
         this.isLoading = true;
-
-        // if (this.vehiclNumber == "")
-        //   return this.notifyErr("Error: Vehicle Number can not be blank");
-        // if (this.typOfMaterial == "")
-        //   return this.notifyErr("Error: typeOfMaterial can not be blank");
-        // if (this.numprOfSacks == "")
-        //   return this.notifyErr("Error: Number Of Sacks can not be blank");
-
-        
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
         let headers = {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.authToken}`
         };
+
+        console.log(this.investor)
+        this.investor.projectId = this.$route.query.projectId;
         const resp = await fetch(url, {
           method: "POST",
           body: JSON.stringify(this.investor),
@@ -406,6 +415,13 @@ async getCurrentAccount() {
 
         const json = await resp.json();
         this.isDataSaved = true;
+
+
+        localStorage.removeItem('authToken')
+        localStorage.removeItem('projectId')
+        localStorage.removeItem('user')
+        
+
         this.notifySuccess("Your data is saved. Id = " + json._id);
       } catch (e) {
         this.notifyErr(e.message);
@@ -416,15 +432,15 @@ async getCurrentAccount() {
     },
     clear() {
       this.investor = {
-        did: "did:hs:TEqweqweqwe12",
-        email: "",
-        name: "",
+        did: this.user.id,
+        email: this.user.email,
+        name: this.user.name,
         ethAddress: "",
         twitterHandle: "",
         telegramHandle: "",
         hasTwitted: false,
         hasJoinedTGgroup: false,
-        projectId: "606742855244b589bc100083",
+        projectId: this.$route.query.projectId,
       };
     },
   },

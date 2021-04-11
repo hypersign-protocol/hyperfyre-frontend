@@ -59,8 +59,14 @@ async function getAllProject(req: Request, res: Response) {
 async function getProjectById(req: Request, res: Response) {
   try {
     const { id } = req.params;
+    
     const { fetchInvestors, limit } =  req.query;
-    const project:IProject = await ProjectModel.findById({ _id: id})
+    const project: IProject = await ProjectModel.findById({ _id: id})
+    
+    console.log({id, project})
+    
+    if(project == null) return res.status(400).send("No project found for id = " + id);
+
     let projectInfo = {
       ...project["_doc"]
     }

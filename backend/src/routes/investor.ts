@@ -1,17 +1,23 @@
 import { Router } from "express";
 import InvestorController from "../controllers/investor";
 
-const router = Router();
+export = (hypersign) => {
 
-router.post("/", InvestorController.addInvestor);
+  const router = Router();
 
-router.get("/", InvestorController.getAllInvestor);
+  router.post("/", hypersign.authorize.bind(hypersign), InvestorController.addInvestor);
+  
+  router.get("/", InvestorController.getAllInvestor);
+  
+  router.get("/:did", hypersign.authorize.bind(hypersign), InvestorController.getInvestorByDID);
+  
+  // Delete
+  router.delete("/", (req, res) => {
+    res.json({ message: "Hello World" });
+  });
+  
+ return router;  
 
-router.get("/:did", InvestorController.getInvestorByDID);
+}
 
-// Delete
-router.delete("/", (req, res) => {
-  res.json({ message: "Hello World" });
-});
 
-export default router;

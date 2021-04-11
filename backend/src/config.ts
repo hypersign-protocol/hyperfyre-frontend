@@ -1,114 +1,73 @@
-import dotenv from "dotenv";
-import path from "path";
-import winston from "winston";
-import fs from "fs";
-import { homedir } from "os";
+import env from 'dotenv'
+import path from 'path';
+import fs from 'fs'
+import HypersignSsiSDK  from 'hs-ssi-sdk';
 import mongoose from 'mongoose';
+const log = require('simple-node-logger');
 
-class Configuration {
-  private static instace: Configuration;
-  public db: any;
-  public NODE_ENV: string;
-  public HOST: string;
-  public PORT: string;
-  public baseUrl: string;
-  public logger: winston.Logger;
-  private LOG_LEVEL: string;
-  public dataDIR: string;
-  private dbConnUrl: string;
 
-  private constructor() {}
+env.config();
 
-  public static getInstance(): Configuration {
-    if (!Configuration.instace) {
-      Configuration.instace = new Configuration();
-      Configuration.instace.setupEnvVar();
-      Configuration.instace.setup();
-      Configuration.instace.setupLogger();
-      Configuration.instace.setupDb();
-    }
-    return Configuration.instace;
-  }
+const log_dir = path.resolve(__dirname,'../log')
 
-  private setup(){
-    this.HOST = process.env.HOST ? process.env.HOST : "localhost";
-    this.PORT = process.env.PORT ? process.env.PORT : "4006";
-    this.LOG_LEVEL = process.env.LOG_LEVEL ? process.env.LOG_LEVEL : "info";
-    this.NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
-    this.dbConnUrl = process.env.DB_URL;
-    this.baseUrl = "http://" + this.HOST + ":" + this.PORT;
+if(!fs.existsSync(log_dir)) fs.mkdirSync(log_dir)
 
-    this.dataDIR = process.env.DATA_DIR
-      ? process.env.DATA_DIR
-      : path.join(homedir(), "boilerplate");
-    if (!fs.existsSync(this.dataDIR)) fs.mkdirSync(this.dataDIR);
-  }
 
-  private setupEnvVar(){
-    // Enviroment  variable
-    ////////////////////////
-    const envPath = path.resolve(
-      __dirname,
-      "../",
-      process.env.NODE_ENV + ".env"
-    );
+// LOGGING
+const log_path = path.resolve(__dirname, process.env.LOG_FILEPATH || 'ssi-infra.log')
+const logger = log.createSimpleLogger({
+    logFilePath: log_path,
+    timestampFormat: process.env.LOG_TIMESTAMP_FORMAT || 'YYYY-MM-DD HH:mm:ss.SSS'
+})
+logger.setLevel(process.env.LOG_LEVEL || 'info')
 
-    console.log(envPath);
-    
-    if (fs.existsSync(envPath)) {
-      dotenv.config({
-        path: envPath,
-      });
-    } else {
-      dotenv.config();
-    }
-  }
+const port = process.env.PORT || 6006;
+const host = process.env.HOST || "localhost";
+const hostnameurl = process.env.HOSTNAMEURL || `http://${host}:${port}`;
 
-  private setupLogger() {
-    const logDIR = path.join(this.dataDIR, "./log");
-    if (!fs.existsSync(logDIR)) fs.mkdirSync(logDIR);
+//DATABASE
+const dbConnUrl = process.env.DB_URL && process.env.DB_URL != "" ? process.env.DB_URL :  "mongodb://admin:admin@cluster0-shard-00-00.jg0ef.mongodb.net:27017,cluster0-shard-00-01.jg0ef.mongodb.net:27017,cluster0-shard-00-02.jg0ef.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-n72avn-shard-0&authSource=admin&retryWrites=true&w=majority";
+if(dbConnUrl){
+    mongoose.connect(dbConnUrl, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+        if(err){
+            console.error("Error: could not connect to mongo database") 
+        }else{
+            console.log("Connected to mongo database")
+        }
+    })
+} 
 
-    const { combine, timestamp, printf } = winston.format;
-    const customLogFormat = printf(({ level, message, timestamp }) => {
-      return `${timestamp} [${level}] ${message}`;
-    });
-    const logFilePath = path.join(logDIR, "boilerplate.log");
-    this.logger = winston.createLogger({
-      level: this.LOG_LEVEL || "info",
-      format: combine(timestamp(), customLogFormat),
-      transports: [
-        new winston.transports.File({
-          filename: path.join(logDIR, "boilerplate-error.log"),
-          level: "error",
-        }),
-        new winston.transports.File({ filename: logFilePath }),
-      ],
-    });
-    if (this.NODE_ENV !== "production") {
-      this.logger.add(
-        new winston.transports.Console({
-          format: winston.format.simple(),
-        })
-      );
-    }
-
-    this.logger.info(`Log filepath is set to ${logFilePath}`);
-  }
-
-  private async setupDb(){
-    await mongoose.connect(this.dbConnUrl, 
-    {useNewUrlParser: true, useUnifiedTopology: true })
-    this.db = mongoose.connection;
-  }
-
+// DID Related: 
+// TODO: Not required for this project. so remove
+const did = {
+    sheme : process.env.DID_SCHEME || 'did',
+    method : process.env.DID_METHOD_NAME || 'hypersign',
 }
 
-const {
-  db,
-  NODE_ENV,
-  HOST,
-  PORT,
-  baseUrl,
-  logger,
-} = Configuration.getInstance();
-export { db, NODE_ENV, HOST, PORT, baseUrl, logger };
+const jwtSecret = process.env.JWT_SECRET || 'secretKey'
+const jwtExpiryInMilli = 240000
+
+const nodeServer = {
+    baseURl: process.env.NODE_SERVER_BASE_URL ||  "http://localhost:5000/",//"https://ssi.hypermine.in/core/",
+    didCreateEp: process.env.NODE_SERVER_DID_CREATE_EP || "api/did/register",
+    schemaCreateEp: process.env.NODE_SERVER_SCHEMA_CREATE_EP || "api/schema/create",
+    schemaGetEp: process.env.NODE_SERVER_SCHEMA_GET_EP || "api/v1/schema",
+    schemaListEp: process.env.NODE_SERVER_SCHEMA_LIST_EP || "api/schema/list",
+}
+
+const hypersignSDK = new HypersignSsiSDK(
+    { nodeUrl: nodeServer.baseURl } // Hypersign node url
+  );
+
+
+export  {
+    port,
+    host,
+    logger,
+    did,
+    jwtSecret,
+    jwtExpiryInMilli,
+    nodeServer,
+    hypersignSDK,
+    hostnameurl
+}

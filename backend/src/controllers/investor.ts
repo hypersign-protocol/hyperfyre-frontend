@@ -5,11 +5,6 @@ import InvestorModel, { IInvestor } from "../models/investor";
 async function addInvestor(req: Request, res: Response) {
   try {
     const { did, email, name, ethAddress, twitterHandle, telegramHandle, hasTwitted, hasJoinedTGgroup,  projectId, tweetUrl  } = req.body;
-    // if (firstName == "" || lastName == "" || email == "" || role == "" || dob == "")
-    //   res
-    //     .status(400)
-    //     .send("firstName, lastName, email, role fields are mandatory");
-
     const newEmp: IInvestor = await InvestorModel.create({
       did, 
       email, 

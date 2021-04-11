@@ -1,19 +1,25 @@
 import { Router } from "express";
 import ProjectController from "../controllers/project";
 
-const router = Router();
+export = (hypersign) => {
 
-router.post("/", ProjectController.addProject);
+  const router = Router();
 
-router.put("/", ProjectController.updateProject)
+  router.post("/",  ProjectController.addProject);
+  
+  router.put("/",  ProjectController.updateProject)
+  
+  router.get("/",  ProjectController.getAllProject);
+  
+  router.get("/:id",  ProjectController.getProjectById);
+  
+  // Delete
+  router.delete("/", (req, res) => {
+    res.json({ message: "Hello World" });
+  });
+  
 
-router.get("/", ProjectController.getAllProject);
+  return router;
 
-router.get("/:id", ProjectController.getProjectById);
+}
 
-// Delete
-router.delete("/", (req, res) => {
-  res.json({ message: "Hello World" });
-});
-
-export default router;

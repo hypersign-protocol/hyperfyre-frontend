@@ -30,7 +30,7 @@ const router = new Router({
             name: 'investor',
             component: Investor,
             meta: {
-                requiresAuth: false
+                requiresAuth: true
             }
         },
         {
@@ -38,7 +38,7 @@ const router = new Router({
             name: 'procurment',
             component: Investor,
             meta: {
-                requiresAuth: false
+                requiresAuth: true
             }
         },
         {
@@ -64,7 +64,7 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
         const authToken = localStorage.getItem('authToken');
         if (authToken) {
-            const url = `${config.studioServer.BASE_URL}protected`
+            const url = `${config.studioServer.BASE_URL}hs/api/v2/auth/protected`
             console.log(url)
             console.log('...............')
             fetch(url, {
@@ -94,6 +94,7 @@ router.beforeEach((to, from, next) => {
                     })
                 })
         } else {
+            localStorage.setItem("projectId", to.query["projectId"])
             next({
                 path: '/studio/login',
                 params: { nextUrl: to.fullPath }

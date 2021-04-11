@@ -137,10 +137,7 @@ export default {
   data() {
     return {
       active: 0,
-      username: "",
-      password: "",
       host: location.hostname,
-      challenge: "dddd",
       domain: location.host,
       credentials: {},
       userData: {},
@@ -149,33 +146,32 @@ export default {
       verifiablePresentation: "",
       fullPage: true,
       isLoading: false,
-      connection: null,
-      privateKey:
-        "3isrtEJ4gt1ZHkdUYYph1WFAtzfqAL5WM6Hh1NC2hmWnDfBypXjt5oUFdAqQdiess2vqqQ3iF6x4fDVuvLw454sn",
-      did: "did:hs:892325a4-75c9-465c-882b-91e3ca5143c3",
+      connection: null
     };
   },
   created() {
     console.log('Beofer creating websoceket connection')
     let baseUrl = this.$config.studioServer.BASE_URL;
-    let websocketUrl = "ws://localhost:4006";
+    let websocketUrl = "ws://localhost:5006";
     
     let parsedUrl = {}
-    try{
-      parsedUrl = url.parse(baseUrl);
-      console.log(parsedUrl)
-      websocketUrl = parsedUrl.protocol === 'https:' ?  `wss://${parsedUrl.host}` : `ws://${parsedUrl.host}`;
-      console.log(websocketUrl)
-    }catch(e){
-      websocketUrl = "ws://localhost:4006";
-    }
+      try{
+        parsedUrl = url.parse(baseUrl);
+        console.log(parsedUrl)
+        websocketUrl = parsedUrl.protocol === 'https:' ?  `wss://${parsedUrl.host}` : `ws://${parsedUrl.host}`;
+        console.log(websocketUrl)
+      }catch(e){
+        websocketUrl = "ws://localhost:5006";
+      }
   
-    this.connection = new WebSocket(websocketUrl);
-    this.connection.onopen = function() {
-      console.log('Websocket connection is open')
-    };
-         this.isLoading = true;
-         var _this = this;
+        this.connection = new WebSocket("ws://localhost:6006/");
+        this.connection.onopen = function() {
+          console.log('Websocket connection is open')
+        };
+
+        this.isLoading = true;
+        var _this = this;
+
         this.connection.onmessage = function({
             data
         }) {
@@ -185,7 +181,7 @@ export default {
             if (messageData.op == 'init') {
               _this.isLoading = false;
               console.log(messageData.data)
-              _this.value = messageData.data;
+              _this.value = JSON.stringify(messageData.data);
             } else if (messageData.op == 'end') {
                 _this.connection.close();
                 const authorizationToken = messageData.data.token;
@@ -198,7 +194,14 @@ export default {
                             _this.$router.push(_this.$route.params.nextUrl);
                           } else {
                             console.log(_this.$router)
-                            _this.$router.push("dashboard");
+                            let path = ""
+                            const projectId = localStorage.getItem("projectId");
+                            if(projectId){
+                              path = "investor?projectId=" + projectId;
+                            }else{
+                              path = "investor";
+                            }
+                            _this.$router.push(path)
                           }
                     }
                 
