@@ -51,6 +51,8 @@
   color: gray;
   font-size: larger;
   margin-top: auto;
+  /* padding-top: 10px; */
+  margin-bottom: 1%;
 }
 
 
@@ -60,17 +62,15 @@
     <div class="row nav-style">
       <div class="col-md-4">        
         <!-- <h5 class="leftAlign">{{$config.app.name}}</h5>  -->
-        <div class="form-group form-inline">
           
-          <h4 class="subtitle">  {{$config.app.name}} ({{$config.app.version}})</h4>  
+        <div class="form-group form-inline">
+          <div ><img src="https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png" /></div>  
+          <div class="subtitle">  {{$config.app.name}} ({{$config.app.version}})</div>  
         </div>
       </div>
         <div class="col-md-8 rightAlign" style="padding-top:12px" v-if="!(authRoutes.includes($router.history.current.name))">
             <button type="button" @click="goToNextPage(m.name)" class="btn btn-light btn-sm" v-for="m in menu" :key="m.name">{{m.name}}</button>    
-        </div>
-        
-       
-      
+        </div>      
     </div>
     <router-view />
     <notifications group="foo" />
@@ -127,16 +127,16 @@ export default {
     return {
       authRoutes:  ['register', 'PKIIdLogin'],
       menu: [
-        { 
-          name: "Projects",  
-          path: "/studio/project",
-          isShow: true,
-        },
-        {
-          name: "Logout",
-          path: "/login",
-          isShow: false,
-        },        
+        // { 
+        //   name: "Projects",  
+        //   path: "/studio/project",
+        //   isShow: false ,
+        // },
+        // {
+        //   name: "Logout",
+        //   path: "/login",
+        //   isShow: false,
+        // },        
       ]
     }
   },
