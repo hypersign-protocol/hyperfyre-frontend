@@ -16,7 +16,7 @@ export interface IInvestor extends Document {
 }
 
 const InvestorSchema = new Schema({
-  did: { type: String, required: true, unique: true },
+  did: { type: String, required: true },
   email: { type: String, required: true },
   name: { type: String, required: true },
   ethAddress: { type: String, required: true },

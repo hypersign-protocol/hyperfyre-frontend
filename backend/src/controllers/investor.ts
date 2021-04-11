@@ -5,6 +5,19 @@ import InvestorModel, { IInvestor } from "../models/investor";
 async function addInvestor(req: Request, res: Response) {
   try {
     const { did, email, name, ethAddress, twitterHandle, telegramHandle, hasTwitted, hasJoinedTGgroup,  projectId, tweetUrl  } = req.body;
+    
+    const investor:IInvestor = await InvestorModel.where({ did: did, projectId: projectId }).findOne();
+
+    const investor_email:IInvestor = await InvestorModel.where({ email: email, projectId: projectId }).findOne();
+
+    if(investor != null){
+      return res.status(400).send("More than one submition is not allowed from this did");
+    }
+
+    if(investor_email != null){
+      return res.status(400).send("More than one submition is not allowed from this emailId");
+    }
+
     const newEmp: IInvestor = await InvestorModel.create({
       did, 
       email, 
