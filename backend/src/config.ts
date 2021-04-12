@@ -49,16 +49,14 @@ const jwtExpiryInMilli = 240000
 
 const nodeServer = {
     baseURl: process.env.NODE_SERVER_BASE_URL ||  "http://localhost:5000/",//"https://ssi.hypermine.in/core/",
-    didCreateEp: process.env.NODE_SERVER_DID_CREATE_EP || "api/did/register",
-    schemaCreateEp: process.env.NODE_SERVER_SCHEMA_CREATE_EP || "api/schema/create",
-    schemaGetEp: process.env.NODE_SERVER_SCHEMA_GET_EP || "api/v1/schema",
-    schemaListEp: process.env.NODE_SERVER_SCHEMA_LIST_EP || "api/schema/list",
+    schemaGetEp: process.env.NODE_SERVER_SCHEMA_GET_EP || "api/v1/schema/",
 }
 
 const hypersignSDK = new HypersignSsiSDK(
     { nodeUrl: nodeServer.baseURl } // Hypersign node url
   );
 
+const whitelistingSchemaId =  process.env.WHITELISTING_SCHEMAID || "sch_3e2bb460-3028-4c64-accc-c680ce7744ed";
 
 export  {
     port,
@@ -69,5 +67,6 @@ export  {
     jwtExpiryInMilli,
     nodeServer,
     hypersignSDK,
-    hostnameurl
+    hostnameurl,
+    whitelistingSchemaId
 }

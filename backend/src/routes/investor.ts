@@ -11,6 +11,10 @@ export = (hypersign) => {
   
   router.get("/:did", hypersign.authorize.bind(hypersign), InvestorController.getInvestorByDID);
   
+  router.put("/:did", InvestorController.updateInvestor);
+
+  router.post("/issue", InvestorController.issueCredential);
+
   // Delete
   router.delete("/", (req, res) => {
     res.json({ message: "Hello World" });
