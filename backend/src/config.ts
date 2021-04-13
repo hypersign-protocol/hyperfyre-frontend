@@ -22,7 +22,7 @@ const logger = log.createSimpleLogger({
 logger.setLevel(process.env.LOG_LEVEL || 'info')
 
 const port = process.env.PORT || 6006;
-const host = process.env.HOST || "localhost";
+const host = process.env.HOST || "192.168.43.43";
 const hostnameurl = process.env.HOSTNAMEURL || `http://${host}:${port}`;
 
 //DATABASE
@@ -48,7 +48,7 @@ const jwtSecret = process.env.JWT_SECRET || 'secretKey'
 const jwtExpiryInMilli = 240000
 
 const nodeServer = {
-    baseURl: process.env.NODE_SERVER_BASE_URL ||  "http://localhost:5000/",//"https://ssi.hypermine.in/core/",
+    baseURl: process.env.NODE_SERVER_BASE_URL ||  "http://192.168.43.43:5000/",//"https://ssi.hypermine.in/core/",
     schemaGetEp: process.env.NODE_SERVER_SCHEMA_GET_EP || "api/v1/schema/",
 }
 

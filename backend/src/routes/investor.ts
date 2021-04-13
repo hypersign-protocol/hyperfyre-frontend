@@ -13,8 +13,6 @@ export = (hypersign) => {
   
   router.put("/:did", InvestorController.updateInvestor);
 
-  router.post("/issue", InvestorController.issueCredential);
-
   // Delete
   router.delete("/", (req, res) => {
     res.json({ message: "Hello World" });

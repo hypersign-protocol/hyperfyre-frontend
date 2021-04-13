@@ -6,7 +6,6 @@ export = (hypersign) => {
     router.post('/', hypersign.authenticate.bind(hypersign), async (req, res) => {
         try {
             const dataFromHypersign = req.body.hsUserData;
-            console.log(dataFromHypersign)
             const userModel = dataFromHypersign.hs_userdata;
             if (!userModel) throw new Error(`Could not fetch usermodel from Hypersign auth`)
             res.status(200).send({ status: 200, message: "Success", error: null });

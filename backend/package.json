@@ -30,7 +30,7 @@
         "lds-sdk": "^4.0.1",
         "mongoose": "^5.12.3",
         "node-fetch": "^2.6.1",
-        "nodemailer": "^6.4.11",
+        "nodemailer": "^6.5.0",
         "qrcode": "^1.4.4",
         "sha.js": "^2.4.11",
         "simple-node-logger": "^18.12.24",
