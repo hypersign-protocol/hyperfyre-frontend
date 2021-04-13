@@ -7,28 +7,21 @@ async function addProject(req: Request, res: Response) {
   try {
     const { projectName, logoUrl, fromDate, toDate, ownerDid, twitterHandle,  telegramHandle } = req.body;
 
-    // if(isNaN(Date.parse(fromDate)) || isNaN(Date.parse(toDate))){
-    //     res
-    //     .status(400)
-    //     .send("Invalid from or to date");
+    if (projectName == "" || logoUrl == "" || fromDate == "" || toDate == "" || ownerDid == ""){
+      res.statusMessage = "projectName, logoUrl, fromDate, toDate can not be empty"
+      return res.status(400).end();
+    }
 
-    //     return;
-    // }
+    if(isNaN(Date.parse(fromDate)) || isNaN(Date.parse(toDate))){
+      res.statusMessage = "Invalid fromDate or toDate"
+      return res.status(400).end();
+    }
 
-    // if(Date.parse(fromDate) > Date.parse(toDate)){
-    //   res
-    //     .status(400)
-    //     .send("From date can not be greater than to date")
-      
-    //     return;
-    // }
+    if(Date.parse(fromDate) > Date.parse(toDate)){
+      res.statusMessage = "fromDate can not be greater than toDate"
+      return res.status(400).end()
+    }
 
-    
-
-    // if (firstName == "" || lastName == "" || email == "" || role == "" || dob == "")
-    //   res
-    //     .status(400)
-    //     .send("firstName, lastName, email, role fields are mandatory");
 
     const newProject: IProject = await ProjectModel.create({
       projectName, logoUrl, fromDate, toDate, ownerDid, twitterHandle,  telegramHandle 
@@ -36,6 +29,7 @@ async function addProject(req: Request, res: Response) {
     res.send(newProject);
   } catch (e) {
     logger.error("ProjectCtrl:: addProject(): Error " + e);
+    res.statusMessage = e.message;
     res.status(500).send(e.message);
   }
 }
@@ -52,6 +46,7 @@ async function getAllProject(req: Request, res: Response) {
     res.send(employeeList);
   } catch (e) {
     logger.error('InvestorCtrl:: getAllProject(): Error ' + e);
+    res.statusMessage = e.message
     res.status(500).send(e.message);
   }
 }
@@ -65,7 +60,10 @@ async function getProjectById(req: Request, res: Response) {
     
     console.log({id, project})
     
-    if(project == null) return res.status(400).send("No project found for id = " + id);
+    if(project == null) {
+      res.statusMessage = "No project found for id = " + id;
+      return res.status(400).end();
+    }
 
     let projectInfo = {
       ...project["_doc"]
@@ -79,6 +77,7 @@ async function getProjectById(req: Request, res: Response) {
     res.send(projectInfo);
   } catch (e) {
     logger.error('InvestorCtrl:: getProjectById(): Error ' + e);
+    res.statusMessage = e.message
     res.status(500).send(e.message);
   }
 }
@@ -92,6 +91,7 @@ async function updateProject(req: Request, res: Response) {
     });
   } catch (e) {
     logger.error('InvestorCtrl:: getProjectById(): Error ' + e);
+    res.statusMessage = e.message
     res.status(500).send(e.message);
   }
 }

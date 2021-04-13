@@ -240,9 +240,8 @@ export default {
         
         const resp = await fetch(url);
         
-        if (resp.status !== 200) {
-          throw new Error(resp.statusText);
-        }
+        if(!resp.ok){ return this.notifyErr(resp.statusText); }
+
 
         const json = await resp.json();
         this.projects = json;
@@ -300,15 +299,18 @@ export default {
             method =  "PUT"
         }
 
+        this.project.ownerDid = "did:hs:QWERTlkasd090123SWEE12322" // need to remove this when we have login
+
         const resp = await fetch(url, {
           method,
           body: JSON.stringify(this.project),
           headers,
         });
         
-        if (resp.status !== 200) {
-          throw new Error(resp.statusText);
-        }
+        console.log(resp);
+
+        if(!resp.ok){ return this.notifyErr(resp.statusText); }
+
         const json = await resp.json();
         this.whitelistingLink = `${window.location.origin}/studio/investor?projectId=${json._id}`;
         setTimeout(() => {

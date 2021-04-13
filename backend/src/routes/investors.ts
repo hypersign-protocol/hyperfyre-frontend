@@ -7,7 +7,7 @@ export = () => {
 
   router.post("/issue", InvestorController.issueCredential);
 
-  router.get("/credential", InvestorController.getCredential1);
+  router.get("/credential", InvestorController.getCredential);
   
  return router;  
 

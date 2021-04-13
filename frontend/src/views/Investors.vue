@@ -113,7 +113,7 @@ label {
               <tr><th v-for="col in cols" v-bind:key="col">{{col}}</th></tr>
             </thead>
             <tbody>
-              <tr v-for="investor in project.investors" v-bind:key="investor">
+              <tr v-for="investor in project.investors" v-bind:key="investor.did">
                 <td>{{investor.did}}</td>
                 <td>{{investor.name}}</td>
                 <td>{{investor.email}}</td>                
@@ -121,7 +121,8 @@ label {
                 <td><a :href="'https://twitter.com/' + investor.twitterHandle" target="_blank">@{{investor.twitterHandle}}</a></td>
                 <td><a :href="'https://t.me/' + investor.telegramHandle" target="_blank">@{{investor.telegramHandle}}</a></td>
                 <td><a :href="investor.tweetUrl" target="_blank">Tweet</a></td>
-                <td><button type="button" class="btn btn-outline-primary">Verify</button></td>
+                <td><button type="button" class="btn btn-outline-primary" @click="verifyInvestor(investor)">Verify</button></td>
+                <td><button type="button" class="btn btn-outline-primary" @click="issueCredential(investor)">Issue</button></td>
               </tr>
             </tbody>
         </table>
@@ -161,7 +162,7 @@ export default {
         ownerDid: "",
         investors: []
       },
-      cols: ["Investor Did", "Name", "Email", "EthAddress", "Twitter Handle", "Telegram Handle", "Tweet Url", ""],
+      cols: ["Investor Did", "Name", "Email", "EthAddress", "Twitter Handle", "Telegram Handle", "Tweet Url", "", ""],
       projectFetched: false,
       isDataSaved: false,
       active: 0,
@@ -173,7 +174,7 @@ export default {
   },
   async mounted() {
      this.investor.projectId = this.$route.query.projectId ?  this.$route.query.projectId : "60676b4f09baec1befb5f469"; // if projectId is not passed, hardcoding hypersign project Id
-    console.log(this.investor.projectId)
+    
     await this.fetchProjectData();
     //const usrStr = localStorage.getItem("user");
     //this.user = null; JSON.parse(usrStr);
@@ -210,6 +211,74 @@ export default {
     formateDate(d) {
       return new Date(d).toLocaleString();
     },
+    async verifyInvestor(investor){
+      try{
+        this.isLoading = true;
+        
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor/${investor.did}?projectId=${this.investor.projectId}`;
+
+        
+        investor.hasJoinedTGgroup = true;
+        investor.isVerificationComplete = true;
+        investor.hasTwitted = true;
+
+        if(investor["_id"]) delete investor["_id"];
+
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        
+        const resp = await fetch(url, {
+          method: "PUT",
+          body: JSON.stringify(investor),
+          headers,
+        });
+
+
+        if(!resp.ok){ return this.notifyErr(resp.statusText); }
+        
+        const json = await resp.json();
+        this.notifySuccess("Investor verified successfully");
+
+
+       
+      }catch(e){
+          this.notifyErr(e.message);
+      }finally{
+         this.isLoading = false;
+      }
+    },
+    async issueCredential(investor){
+      try{
+        this.isLoading = true;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/investors/issue`;
+        const body = {
+              did: investor.did,
+              projectId: this.investor.projectId
+        }
+
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        
+        const resp = await fetch(url, {
+          method: "POST",
+          body: JSON.stringify(body),
+          headers,
+        }); 
+
+
+        if(!resp.ok){ return this.notifyErr(resp.statusText); }
+        
+        const json = await resp.json();
+        this.notifySuccess(json.message);
+
+      }catch(e){
+          this.notifyErr(e.message);
+      }finally{
+         this.isLoading = false;
+      }
+    },
     async fetchProjectData(){
       try {
         this.isLoading = true;
@@ -224,15 +293,16 @@ export default {
         };
         const resp = await fetch(url, headers);
         
-        if (resp.status !== 200) {
-          throw new Error(resp.statusText);
-        }
-
+        if(!resp.ok){return  this.notifyErr(resp.statusText); }
         const json = await resp.json();
+                 
+
         this.project = {...json};
         this.project.fromDate = this.formateDate(this.project.fromDate)
         this.project.toDate = this.formateDate(this.project.toDate)
         this.projectFetched = true;
+
+
         this.notifySuccess("Project is fetched. ProjectName " + json.projectName);
       } catch (e) {
         this.notifyErr(e.message);
@@ -267,9 +337,7 @@ export default {
           headers,
         });
         
-        if (resp.status !== 200) {
-          throw new Error(resp.statusText);
-        }
+        if(!resp.ok){ return this.notifyErr(resp.statusText); }
 
         const json = await resp.json();
         this.isDataSaved = true;

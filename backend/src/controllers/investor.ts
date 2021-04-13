@@ -18,11 +18,13 @@ async function addInvestor(req: Request, res: Response) {
     const investor_email:IInvestor = await InvestorModel.where({ email: email, projectId: projectId }).findOne();
 
     if(investor != null){
-      return res.status(400).send("More than one submition is not allowed from this did");
+      res.statusMessage = "More than one submition is not allowed from this did";
+      return res.status(400).end();
     }
 
     if(investor_email != null){
-      return res.status(400).send("More than one submition is not allowed from this emailId");
+      res.statusMessage = "More than one submition is not allowed from this emailId";
+      return res.status(400).end();
     }
 
     const newEmp: IInvestor = await InvestorModel.create({
@@ -42,6 +44,7 @@ async function addInvestor(req: Request, res: Response) {
     res.send(newEmp);
   } catch (e) {
     logger.error("InvestorCtrl:: addInvestor(): Error " + e);
+    res.statusMessage = e.message;
     res.status(500).send(e.message);
   }
 }
@@ -52,6 +55,7 @@ async function getAllInvestor(req: Request, res: Response) {
     res.send(employeeList);
   } catch (e) {
     logger.error('InvestorCtrl:: getAllInvestor(): Error ' + e);
+    res.statusMessage = e.message;
     res.status(500).send(e.message);
   }
 }
@@ -63,11 +67,12 @@ async function getInvestorByDID(req: Request, res: Response) {
     res.send(investors);
   } catch (e) {
     logger.error('InvestorCtrl:: getInvestorByDID(): Error ' + e);
+    res.statusMessage = e.message;
     res.status(500).send(e.message);
   }
 }
 
-async function update1(filter, updateParams){
+async function updateInvestorInDb(filter, updateParams){
 
   const opts = { new: true, useFindAndModify: true };
   console.log({filter, updateParams})
@@ -86,38 +91,43 @@ async function updateInvestor(req: Request, res: Response){
     const projectId: any = req.query.projectId;
 
     if(!did){
-      return res.status(400).send("Investor did must be passed"); 
+      res.statusMessage = "Investor did must be passed";      
+      return res.status(400).end();
     }
 
     if(!projectId){
-      return res.status(400).send("ProjectId must be passed in query"); 
+      res.statusMessage = "ProjectId must be passed in query";
+      return res.status(400).end();
     }
 
     const filter = { did, projectId };
     const updateParams = req.body;
     
-    const updatedInvetor1 = await update1(filter, updateParams);
+    const updatedInvetor1 = await updateInvestorInDb(filter, updateParams);
     
     res.send(updatedInvetor1);
 
   } catch (e){
     logger.error('InvestorCtrl:: updateInvestor(): Error ' + e);
+    res.statusMessage = e.message;
     res.status(500).send(e.message);  
   }
 }
 
-async function getCredential1(req: Request, res: Response) {
+async function getCredential(req: Request, res: Response) {
   try{
 
     const { token } =  req.query;
 
     if(!token){
-      return res.status(400).send("JWT token is not passed in query params");
+      res.statusMessage = "WT token is not passed in query params";
+      return res.status(400).end();
     }
     const attributesMap = await jsonWebToken.verify(token, jwt.secret);
 
     if(!attributesMap){
-      return res.status(400).send("Could not verify JWT token");
+      res.statusMessage = "Could not verify JWT token";
+      return res.status(400).end();
     }
   
     const { did, projectId } = attributesMap;
@@ -143,12 +153,13 @@ async function getCredential1(req: Request, res: Response) {
     // Finally (in backgroud) update that this investor is verifed by Hypersign
     const filter = { did, projectId };
     const updateParams = { isVerfiedByHypersign: true };
-    update1(filter, updateParams);
+    updateInvestorInDb(filter, updateParams);
 
 
 
   } catch (e){
     logger.error('InvestorCtrl:: verifyAndIssueCredential(): Error ' + e);
+    res.statusMessage = e.message;
     return res.status(500).send(e.message);
   }
 
@@ -186,15 +197,18 @@ async function issueCredential(req: Request, res: Response){
     const investor:IInvestor = await InvestorModel.where({ did: did, projectId: projectId }).findOne();
 
     if(!investor || !investor["_doc"]){
-      return res.status(400).send("No investor found");
+      res.statusMessage = "No investor foun";
+      return res.status(400).end();
     }
 
     if(!(investor.hasTwitted && investor.hasJoinedTGgroup && investor.isVerificationComplete)){
-      return res.status(400).send("Investor has not yet verifed");
+      res.statusMessage = "Investor has not yet verifed";
+      return res.status(400).end();
     }
 
     if(investor && investor.isVerfiedByHypersign === true){
-      return res.status(400).send("Investor has already been verifed.");
+      res.statusMessage = "Investor has already been verifed";
+      return res.status(400).end();
     }
 
     let attributesMap = {
@@ -219,6 +233,7 @@ async function issueCredential(req: Request, res: Response){
 
   } catch (e){
     logger.error('InvestorCtrl:: verifyAndIssueCredential(): Error ' + e);
+    res.statusMessage = e.message;
     return res.status(500).send(e.message);
   }
 
@@ -230,6 +245,6 @@ export default {
   getAllInvestor,
   issueCredential,
   updateInvestor,
-  getCredential1
+  getCredential
 }
 

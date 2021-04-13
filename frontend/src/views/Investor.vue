@@ -307,7 +307,7 @@ export default {
       console.log(this.$route.query)
       this.project.projectId = this.$route.query.projectId ?  this.$route.query.projectId : "60676b4f09baec1befb5f469"; // if projectId is not passed, hardcoding hypersign project Id
     
-    await this.fetchProjectData();
+    this.fetchProjectData();
 
 
     const usrStr = localStorage.getItem("user");
@@ -372,7 +372,7 @@ async getCurrentAccount() {
         };
         const resp = await fetch(url, headers);
         
-        if (resp.status !== 200) {
+        if (resp.status != 200) {
           throw new Error(resp.statusText);
         }
 
@@ -383,6 +383,7 @@ async getCurrentAccount() {
         this.projectFetched = true;
         this.notifySuccess("Project is fetched. ProjectName " + json.projectName);
       } catch (e) {
+        console.log(e)
         this.notifyErr(e.message);
       } finally {
         this.isLoading = false;
