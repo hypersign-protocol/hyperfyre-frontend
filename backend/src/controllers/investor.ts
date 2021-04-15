@@ -63,6 +63,10 @@ async function getAllInvestor(req: Request, res: Response) {
 async function getInvestorByDID(req: Request, res: Response) {
   try {
     const { did } = req.params;
+    if(!did) {
+      res.statusMessage = "Please pass the did in the paramater";
+      res.status(400).end()
+    }
     const investors:Array<IInvestor> = await InvestorModel.where({did: did}).find(); // one investor can participate into multiple projects
     res.send(investors);
   } catch (e) {

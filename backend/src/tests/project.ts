@@ -62,7 +62,6 @@ describe("API testing /api/v1/project", () => {
   });
 
   it("should be able to add (POST) a new project", (done) => {
-    console.log(projectData);
     chaiServer
       .post("/api/v1/project")
       .send(projectData)
