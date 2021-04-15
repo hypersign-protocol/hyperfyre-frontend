@@ -14,9 +14,7 @@ export = (hypersign) => {
   router.get("/:id",  ProjectController.getProjectById);
   
   // Delete
-  router.delete("/", (req, res) => {
-    res.json({ message: "Hello World" });
-  });
+  router.delete("/:id", ProjectController.deleteProjectById);
   
 
   return router;

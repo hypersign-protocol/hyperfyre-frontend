@@ -7,7 +7,7 @@ import http from 'http';
 import HypersignAuth from 'hypersign-auth-js-sdk';
 import routes from './routes';
 
-export default function app() {
+// export default function app() {
     const app = express();
     const server = http.createServer(app);
     const hypersign = new HypersignAuth(server);
@@ -20,11 +20,14 @@ export default function app() {
     app.use(express.static('public'));
 
 
+    app.get('/hello', (req, res) => {
+        res.send("Hello")
+    })
+
     // Routes    
     app.use('/api/v1/investor', routes.investor(hypersign));
     app.use('/api/v1/investors', routes.investors());
     app.use('/api/v1/project', routes.project(hypersign));
     app.use("/hs/api/v2/auth", routes.auth(hypersign));
-    server.listen(port, () => logger.info(`The server is running on port ${port}`));
-
-}
+    export default server.listen(port, () => logger.info(`The server is running on port ${port}`));
+// }

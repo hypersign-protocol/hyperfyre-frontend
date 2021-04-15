@@ -56,9 +56,7 @@ async function getProjectById(req: Request, res: Response) {
     const { id } = req.params;
     
     const { fetchInvestors, limit } =  req.query;
-    const project: IProject = await ProjectModel.findById({ _id: id})
-    
-    console.log({id, project})
+    const project: IProject = await ProjectModel.findById({ _id: id})    
     
     if(project == null) {
       res.statusMessage = "No project found for id = " + id;
@@ -82,23 +80,44 @@ async function getProjectById(req: Request, res: Response) {
   }
 }
 
-async function updateProject(req: Request, res: Response) {
+async function deleteProjectById(req: Request, res: Response) {
   try {
-    const { projectName, logoUrl, fromDate, toDate, ownerDid, twitterHandle,  telegramHandle, _id } = req.body;
-    const project:IProject = await ProjectModel.findByIdAndUpdate(_id, {projectName, logoUrl, fromDate, toDate, ownerDid, twitterHandle,  telegramHandle});
+    const { id } = req.params;
+    const project:IProject = await ProjectModel.findByIdAndDelete(id)
     res.send({
-      _id: project._id
+      ...project["_doc"]
     });
   } catch (e) {
-    logger.error('InvestorCtrl:: getProjectById(): Error ' + e);
+    logger.error('InvestorCtrl:: deleteProjectById(): Error ' + e);
     res.statusMessage = e.message
     res.status(500).send(e.message);
   }
 }
 
+
+async function updateProject(req: Request, res: Response) {
+  try {
+    const { projectName, logoUrl, fromDate, toDate, ownerDid, twitterHandle,  telegramHandle, _id } = req.body;
+    
+    // FindbyIdupdate returns the old object, however the value has been updated in the db
+    await ProjectModel.findByIdAndUpdate(_id, {projectName, logoUrl, fromDate, toDate, ownerDid, twitterHandle,  telegramHandle});
+    const project: IProject = await ProjectModel.findById({ _id: _id});
+    
+    res.send({
+      ...project["_doc"]
+    });
+  } catch (e) {
+    logger.error('InvestorCtrl:: updateProject(): Error ' + e);
+    res.statusMessage = e.message
+    res.status(500).send(e.message);
+  }
+}
+
+
 export default {
   addProject,
   getProjectById,
   getAllProject,
-  updateProject
+  updateProject,
+  deleteProjectById
 };
