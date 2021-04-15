@@ -146,7 +146,11 @@ async function getCredential(req: Request, res: Response) {
     })
 
     const signedCredential = await hypersignSDK.credential.signCredential(rawCredential, issuerKeyPair.publicKey.id, issuerKeyPair.privateKeyBase58)
-    res.send(signedCredential);
+    res.send({
+      status: 200,
+      message:signedCredential,
+      error: null
+    });
 
 
 

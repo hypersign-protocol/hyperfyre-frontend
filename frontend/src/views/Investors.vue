@@ -114,10 +114,10 @@ label {
             </thead>
             <tbody>
               <tr v-for="investor in project.investors" v-bind:key="investor.did">
-                <td>{{investor.did}}</td>
+                <td style="word-wrap: anywhere;">{{investor.did}}</td>
                 <td>{{investor.name}}</td>
                 <td>{{investor.email}}</td>                
-                <td><a :href="'https://etherscan.io/address/' + investor.ethAddress" target="_blank">{{investor.ethAddress}}</a></td>
+                <td style="word-wrap: anywhere;"><a :href="'https://etherscan.io/address/' + investor.ethAddress" target="_blank">{{investor.ethAddress}}</a></td>
                 <td><a :href="'https://twitter.com/' + investor.twitterHandle" target="_blank">@{{investor.twitterHandle}}</a></td>
                 <td><a :href="'https://t.me/' + investor.telegramHandle" target="_blank">@{{investor.telegramHandle}}</a></td>
                 <td><a :href="investor.tweetUrl" target="_blank">Tweet</a></td>

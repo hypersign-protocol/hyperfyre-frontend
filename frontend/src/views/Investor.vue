@@ -317,6 +317,8 @@ export default {
     this.user = JSON.parse(usrStr);
     this.investor = {...this.user};
     this.investor.did = this.user.id;
+
+    await this.getCurrentAccount()
     // alert(JSON.stringify(this.user))
     //await this.fetchProcurment();
   },
@@ -346,12 +348,13 @@ export default {
     },
 
 async getCurrentAccount() {
-    const accounts = await window.web3.eth.getAccounts();
-    if (accounts.length == 0) {
-      alert("No Account found..");
-      return;
-    }
-    this.investor.ethAddress =  accounts[0];
+  const accounts = await window.web3.eth.getAccounts();
+  console.log(accounts[0])
+  if (accounts.length == 0) {
+    alert("No Account found..");
+    return;
+  }
+  this.investor.ethAddress = accounts[0];
 },
 
     gotosubpage: (id) => {
