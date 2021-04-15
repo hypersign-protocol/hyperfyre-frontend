@@ -20,7 +20,7 @@ let projectData = {
   telegramHandle: "hermit1@",
 };
 
-describe("Project API testing /api/v1/project", () => {
+describe("API testing /api/v1/project", () => {
   beforeEach(() => {
     chaiServer = chai.request(server);
   });

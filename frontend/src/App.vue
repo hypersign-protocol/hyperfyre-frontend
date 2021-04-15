@@ -64,7 +64,7 @@
         <!-- <h5 class="leftAlign">{{$config.app.name}}</h5>  -->
           
         <div class="form-group form-inline">
-          <div ><img src="https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png" /></div>  
+          <div ><img src="https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png" style="max-width: 150px;" /></div>  
           <div class="subtitle">  {{$config.app.name}} ({{$config.app.version}})</div>  
         </div>
       </div>

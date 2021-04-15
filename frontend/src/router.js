@@ -12,7 +12,12 @@ Vue.use(Router)
 
 const router = new Router({
     mode: 'history',
-    routes: [{
+    routes: [
+        {
+            path: '/',
+            redirect: '/studio/login'
+        },
+        {
             path: '/login',
             redirect: '/studio/login'
         },

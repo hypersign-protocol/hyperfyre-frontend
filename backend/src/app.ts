@@ -20,10 +20,6 @@ import routes from './routes';
     app.use(express.static('public'));
 
 
-    app.get('/hello', (req, res) => {
-        res.send("Hello")
-    })
-
     // Routes    
     app.use('/api/v1/investor', routes.investor(hypersign));
     app.use('/api/v1/investors', routes.investors());

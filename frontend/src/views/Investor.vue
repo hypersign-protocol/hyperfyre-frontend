@@ -142,6 +142,46 @@ label {
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
+                  <label style="margin-right: 8%">Did:</label>
+                  <input
+                    type="text"
+                    v-model="investor.did"
+                    size="30"
+                    placeholder="Enter did"
+                    class="form-control"
+                    disabled
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                
+                <div class="form-group">
+                  <div class="row"><div class="col-md-12"><label style="margin-right: 8%">Ethereum Address:</label></div></div>
+                  <div class="row">
+                    <div class="col-md-10">
+                      
+                  <input
+                    type="text"
+                    v-model="investor.ethAddress"
+                    size="30"
+                    placeholder="Enter ethereum address"
+                    class="form-control"
+                  />
+                    </div>
+                    <div class="col-md-2">
+                      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2Fa-%2FAAuE7mC1z-HXEKxL4YhAhc7WDHWA6Rnly1I592T5ag%3Ds900-mo-c-c0xffffffff-rj-k-no&f=1&nofb=1" 
+                      style="max-width: 50px;max-height: 60px;cursor:pointer;"
+                      @click="getCurrentAccount()" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
                   <label style="margin-right: 8%">Twitter Handle:</label>
                   <input
                     type="text"
@@ -166,44 +206,7 @@ label {
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-md-6">
-                
-                <div class="form-group">
-                  <div class="row"><div class="col-md-12"><label style="margin-right: 8%">Ethereum Address:</label></div></div>
-                  <div class="row">
-                    <div class="col-md-10">
-                      
-                  <input
-                    type="text"
-                    v-model="investor.ethAddress"
-                    size="30"
-                    placeholder="Enter ethereum address"
-                    class="form-control"
-                  />
-                    </div>
-                    <div class="col-md-2">
-                      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2Fa-%2FAAuE7mC1z-HXEKxL4YhAhc7WDHWA6Rnly1I592T5ag%3Ds900-mo-c-c0xffffffff-rj-k-no&f=1&nofb=1" 
-                      style="max-width: 50px;max-height: 60px;cursor:pointer;"
-                      @click="getCurrentAccount()" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label style="margin-right: 8%">Did:</label>
-                  <input
-                    type="text"
-                    v-model="investor.did"
-                    size="30"
-                    placeholder="Enter did"
-                    class="form-control"
-                    disabled
-                  />
-                </div>
-              </div>
-            </div>
+            
 
             <div class="row">
               <div class="col-md-6">
