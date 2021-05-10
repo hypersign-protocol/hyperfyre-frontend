@@ -15,7 +15,6 @@
         "build": "tsc -p .",
         "bootstrap": "npm run start -- --bootstrap",
         "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'  --require src/app.ts"
-        
     },
     "author": "Vishwas Anand Bhushan",
     "license": "MIT",
