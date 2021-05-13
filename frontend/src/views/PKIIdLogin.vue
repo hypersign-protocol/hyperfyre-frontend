@@ -26,108 +26,144 @@
 }
 
 h5 {
-   width: 100%; 
-   text-align: center; 
-   border-bottom: 1px solid #80808045; 
-   line-height: 0.1em;
-   margin: 10px 0 20px; 
-} 
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #80808045;
+  line-height: 0.1em;
+  margin: 10px 0 20px;
+}
 
-.download{
+.download {
   padding: 5px;
 }
-h5 span { 
-    background:#fff; 
-    padding:0 10px; 
+h5 span {
+  background: #fff;
+  padding: 0 10px;
+}
+.bg-dark {
+  background-color: rgb(58, 58, 58);
+}
+.app-links img {
+  height: 50px;
+}
+/* .loginPage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 102%;
+  top: 0;
+} */
+.nav-style {
+  display: none;
+}
+.cmp-logo {
+  position: absolute;
+  z-index: 10;
+  background-color: #fff;
+  width: 20%;
+  text-align: center;
+  padding: 15px;
+  border-bottom-right-radius: 20px;
+}
+.hypersign-logo-footer {
+  position: absolute;
+  z-index: 10;
+  left: 30px;
+  bottom: 20px;
+}
+.hypersign-logo-footer p {
+  font-weight: 600;
 }
 </style>
 <template>
-  <!-- <div class="row" style="margin-left: 35%;"> -->
-  <div class="row" style="align-content: center;">
-    <div class="col-md-7" style="font-size: small;color:grey;" hidden>
-      Can we put one big image here?
+  <div class="row vh-100 loginPage">
+    <div class="cmp-logo">
+      <div>
+        <img
+          src="https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png"
+          style="max-width: 150px;"
+        />
+      </div>
     </div>
-    <div class="col-md-4"></div>
-    <div class="col-md-3" style="font-size: small;color:grey;">
-      <form action="#">
-        <b-card no-body style="padding: 12%; border-top: 4px solid #00f9;">
-          <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
-        <h4>Login</h4>
-        <hr/>
-          <div class="row" >
-            <form action="#" class="col-md-12">
-              <div class="form-group">
-                <qrcode-vue :value="value" :size="200" level="H"></qrcode-vue>
-                <label style="font-size:larger">Scan the QR code using <a href="https://superhero.com/" target="_blank"> Hypersign Auth</a> credential in your mobile app to authenticate!</label>
-                <div>
-                  <p>Don’t have the app yet? <a href="#">Get it now</a></p>
-                  <!-- <div>
-                    <span class="download">
-                      <a href="https://addons.mozilla.org/en-US/firefox/addon/superhero-wallet/" target="_blank"><img src="https://wallet.superhero.com/assets/firefox.4c960eb9612efe497c6476a594a28bd1.svg"/></a>
-                    </span>
-                    <span class="download">
-                      <a href="https://chrome.google.com/webstore/detail/superhero/mnhmmkepfddpifjkamaligfeemcbhdne" target="_blank"><img src="https://wallet.superhero.com/assets/google.f93c6aeccedec4384dda9c1deb9543c0.svg"/></a>
-                    </span>
-                    <span class="download">
-                      <a href="https://testflight.apple.com/join/3o5r4dQQ" target="_blank"><img src="data:image/svg+xml;base64,PHN2ZyBpZD0iR3JvdXBfMTM3NiIgZGF0YS1uYW1lPSJHcm91cCAxMzc2IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImxpbmVhci1ncmFkaWVudCIgeDE9IjAuNSIgeDI9IjAuNSIgeTI9IjEiIGdyYWRpZW50VW5pdHM9Im9iamVjdEJvdW5kaW5nQm94Ij4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMTdjOWZiIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzFhNzRlOCIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPGcgaWQ9ImJ1dHRvbiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAwKSI+CiAgICA8ZyBpZD0iaW9zIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwIDApIj4KICAgICAgPHBhdGggaWQ9IlBhdGhfMTIwMSIgZGF0YS1uYW1lPSJQYXRoIDEyMDEiIGQ9Ik04Ljc2LDBIMzEuMjRBOC43Niw4Ljc2LDAsMCwxLDQwLDguNzZWMzEuMjRBOC43Niw4Ljc2LDAsMCwxLDMxLjI0LDQwSDguNzZBOC43Niw4Ljc2LDAsMCwxLDAsMzEuMjRWOC43NkE4Ljc2LDguNzYsMCwwLDEsOC43NiwwWiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAwKSIgZmlsbD0idXJsKCNsaW5lYXItZ3JhZGllbnQpIi8+CiAgICAgIDxwYXRoIGlkPSJQYXRoXzEyMDIiIGRhdGEtbmFtZT0iUGF0aCAxMjAyIiBkPSJNNDMuNjM0LDY4LjQzaDBMNDIuMjcxLDcwLjhhMS44MDgsMS44MDgsMCwxLDEtMy4xMzEtMS44MDhsMS4wMDctMS43NDUuMS0uMTY4YTEuNDkyLDEuNDkyLDAsMCwxLDEuNDUxLS42czIuMDA2LjIxOCwyLjE1MSwxLjI2YTEuMjIsMS4yMiwwLDAsMS0uMjExLjY4NlptMTkuNC02LjA1SDU4Ljc2N2EuNjI5LjYyOSwwLDAsMS0uNDY3LS4xOFY2Mi4ybC00LjU2NS03LjkwN2gtLjAwNmwtLjI3NC0uMzkzYy0uNDQ5LS42ODYtMS4xNjEsMS4wNjktMS4xNjEsMS4wNjktLjg1MSwxLjk1Ni4xMjEsNC4xNzkuNDU5LDQuODUxTDU5LjA5MSw3MC44YTEuODA4LDEuODA4LDAsMSwwLDMuMTMxLTEuODA4bC0xLjU4NS0yLjc0NmMtLjAzMS0uMDY3LS4wODQtLjI0Ny4yNDEtLjI0OGgyLjE1NGExLjgwOCwxLjgwOCwwLDAsMCwwLTMuNjE2Wm0tOC4yODMsMi40NThTNTQuOTc2LDY2LDU0LjEsNjZIMzguMzNhMS44MDgsMS44MDgsMCwxLDEsMC0zLjYxNmg0LjA1M2MuNjU0LS4wMzguODEtLjQxNi44MS0uNDE2aDBMNDguNDg3LDUyLjhoMGEuNC40LDAsMCwwLDAtLjM3MUw0Ni43NCw0OS40YTEuODA4LDEuODA4LDAsMCwxLDMuMTMxLTEuOGwuODEsMS40LjgwOS0xLjRhMS44MDgsMS44MDgsMCwxLDEsMy4xMzEsMS44MDhMNDcuMjU5LDYyLjE1OWMtLjAzMi4wNzgtLjA0Mi4yLjIuMjIxaDQuNHYuMDQzYTIuOTU2LDIuOTU2LDAsMCwxLDIuODg5LDIuNDE0WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTMwLjgxNSAtMzkuMzk3KSIgZmlsbD0iI2ZmZiIvPgogICAgPC9nPgogIDwvZz4KPC9zdmc+Cg=="/></a>
-                    </span>
-                    <span class="download">
-                      <a href="https://play.google.com/store/apps/details?id=com.superhero.cordova" target="_blank"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzYuNTAxIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMzYuNTAxIDQwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50IiB4MT0iMC45MTUiIHkxPSIwLjA1IiB4Mj0iLTAuMzgzIiB5Mj0iMC43MTkiIGdyYWRpZW50VW5pdHM9Im9iamVjdEJvdW5kaW5nQm94Ij4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMDBhMGZmIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMC4wMDciIHN0b3AtY29sb3I9IiMwMGExZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIwLjI2IiBzdG9wLWNvbG9yPSIjMDBiZWZmIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMC41MTIiIHN0b3AtY29sb3I9IiMwMGQyZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIwLjc2IiBzdG9wLWNvbG9yPSIjMDBkZmZmIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwZTNmZiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50LTIiIHgxPSIxLjA3NiIgeTE9IjAuNSIgeDI9Ii0xLjMwNSIgeTI9IjAuNSIgZ3JhZGllbnRVbml0cz0ib2JqZWN0Qm91bmRpbmdCb3giPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmUwMDAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIwLjQwOSIgc3RvcC1jb2xvcj0iI2ZmYmQwMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjAuNzc1IiBzdG9wLWNvbG9yPSJvcmFuZ2UiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZmY5YzAwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQtMyIgeDE9IjAuODYyIiB5MT0iMC4xNzgiIHgyPSItMC41MDEiIHkyPSIxLjk0OCIgZ3JhZGllbnRVbml0cz0ib2JqZWN0Qm91bmRpbmdCb3giPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZjNhNDQiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjYzMxMTYyIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQtNCIgeDE9Ii0wLjE4OCIgeTE9Ii0wLjU0MiIgeDI9IjAuNDIxIiB5Mj0iMC4yNDkiIGdyYWRpZW50VW5pdHM9Im9iamVjdEJvdW5kaW5nQm94Ij4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMzJhMDcxIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMC4wNjgiIHN0b3AtY29sb3I9IiMyZGE3NzEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIwLjQ3NiIgc3RvcC1jb2xvcj0iIzE1Y2Y3NCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjAuODAxIiBzdG9wLWNvbG9yPSIjMDZlNzc1Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwZjA3NiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPGcgaWQ9InBsYXktc3RvcmUtaWNvbiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDYgLTAuMzIzKSI+CiAgICA8cGF0aCBpZD0iUGF0aF8xMjAzIiBkYXRhLW5hbWU9IlBhdGggMTIwMyIgZD0iTS43MzIsMS4xNTZBMy4wODUsMy4wODUsMCwwLDAsMCwzLjM0VjM3LjcyN2EzLjA3NiwzLjA3NiwwLDAsMCwuNzMyLDIuMTg0bC4xMTguMTEyTDIwLjQzMSwyMC43NjJ2LS40NTRMLjg0OSwxLjA0M2wtLjExOC4xMTNaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwIC0wLjIxNSkiIGZpbGw9InVybCgjbGluZWFyLWdyYWRpZW50KSIvPgogICAgPHBhdGggaWQ9IlBhdGhfMTIwNCIgZGF0YS1uYW1lPSJQYXRoIDEyMDQiIGQ9Ik0zNS42MzUsMzIuNjQzLDI5LjExLDI2LjIxOXYtLjQ1NGw2LjUyNy02LjQyMi4xNDkuMDgxLDcuNzMzLDQuMzIyYzIuMjA5LDEuMjM0LDIuMjA5LDMuMjUzLDAsNC40OWwtNy43MzMsNC4zMjFaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtOC42OCAtNS42NzEpIiBmaWxsPSJ1cmwoI2xpbmVhci1ncmFkaWVudC0yKSIvPgogICAgPHBhdGggaWQ9IlBhdGhfMTIwNSIgZGF0YS1uYW1lPSJQYXRoIDEyMDUiIGQ9Ik0yNy40MTYsMzUuMzg0LDIwLjc0LDI4LjgxNywxLjA0Myw0OC4yYy43MjguNzU5LDEuOTMyLjg1MiwzLjI4NC4xTDI3LjQxNiwzNS4zODQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0wLjMxMSAtOC40OTcpIiBmaWxsPSJ1cmwoI2xpbmVhci1ncmFkaWVudC0zKSIvPgogICAgPHBhdGggaWQ9IlBhdGhfMTIwNiIgZGF0YS1uYW1lPSJQYXRoIDEyMDYiIGQ9Ik0yNy40MTYsMTMuNzU0LDQuMzI3Ljg0NUMyLjk3NS4wODksMS43NzEuMTgzLDEuMDQzLjk0MUwyMC43NCwyMC4zMmw2LjY3Ni02LjU2OFoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0wLjMxMSAwKSIgZmlsbD0idXJsKCNsaW5lYXItZ3JhZGllbnQtNCkiLz4KICAgIDxnIGlkPSJHcm91cF85NzEiIGRhdGEtbmFtZT0iR3JvdXAgOTcxIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMC4wMDUgMjYuNzQ0KSI+CiAgICAgIDxwYXRoIGlkPSJQYXRoXzEyMDciIGRhdGEtbmFtZT0iUGF0aCAxMjA3IiBkPSJNMjcuMjY4LDM3Ljk3LDQuMzI4LDUwLjc5MmMtMS4yODUuNzE5LTIuNDMuNjcxLTMuMTY2LjAxN2wtLjExOC4xMTYuMTE4LjExMWEyLjY2NywyLjY2NywwLDAsMCwzLjE2Ni0uMDE1TDI3LjQxNywzOC4xMTNsLS4xNDgtLjE0M1oiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0wLjMwNiAtMzcuOTcpIiBvcGFjaXR5PSIwLjIiLz4KICAgICAgPHBhdGggaWQ9IlBhdGhfMTIwOCIgZGF0YS1uYW1lPSJQYXRoIDEyMDgiIGQ9Ik0uNzMyLDU1LjE3N0EzLjA4NSwzLjA4NSwwLDAsMSwwLDUyLjk5M3YuMjI3QTMuMDc2LDMuMDc2LDAsMCwwLC43MzIsNTUuNGwuMTE4LS4xMTYtLjExOC0uMTEyWiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDUgLTQyLjQ1KSIgb3BhY2l0eT0iMC4xMiIvPgogICAgPC9nPgogICAgPHBhdGggaWQ9IlBhdGhfMTIwOSIgZGF0YS1uYW1lPSJQYXRoIDEyMDkiIGQ9Ik00Ni4yOTIsMzAuODM2LDM4LjQxLDM1LjI0MmwuMTQ5LjE0NSw3LjczMy00LjMyMWEyLjczMiwyLjczMiwwLDAsMCwxLjY1Ny0yLjI0NiwyLjkwNiwyLjkwNiwwLDAsMS0xLjY1NywyLjAxN1oiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xMS40NTMgLTguNDk3KSIgb3BhY2l0eT0iMC4xMiIvPgogICAgPHBhdGggaWQ9IlBhdGhfMTIxMCIgZGF0YS1uYW1lPSJQYXRoIDEyMTAiIGQ9Ik00LjAxNiwxLjA3MywzNC44MzcsMTguM2EyLjksMi45LDAsMCwxLDEuNjU3LDIuMDE4LDIuNzMyLDIuNzMyLDAsMCwwLTEuNjU3LTIuMjQ2TDQuMDE2Ljg0N0MxLjgwOS0uMzg4LDAsLjYzOCwwLDMuMTI2di4yMjdDMCwuODY0LDEuODA3LS4xNjEsNC4wMTYsMS4wNzNaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwIDApIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjI1Ii8+CiAgPC9nPgo8L3N2Zz4K"/></a>
-                    </span>
-                  </div> -->
-                </div>
 
+    <div
+      class="col col-lg-8 d-flex justify-content-center align-items-center border border-1 bg-dark shadow text-left text-white"
+    >
+      <div>
+        <h3>Welcome to HYPERSIGN's Whitelist</h3>
+        <p>Instructiosn</p>
+        <ol class="px-3">
+          <li>Install the hypersign app on your phone</li>
+          <li>Follow the steps in the app to register [only needed once]</li>
+          <li>After registration scan the QR code on this screen</li>
+          <li>Follow on-screen steps to complete Whitelisting</li>
+        </ol>
 
-              </div>
-              <!-- <div class="form-group">
-                <h5><span>Or</span></h5>
-              </div> -->
-              <!-- <div class="form-group">
-                <label class="floatLeft">Upload keys.json:</label>
-                <input
-                  type="file"
-                  class="form-control"
-                  placeholder
-                  @change="onFileChange"
-                  accept="*.json"
-                />
-              </div>
-              <div class="form-group">
-                <label class="floatLeft">Upload vc.json:</label>
-                <input type="file" class="form-control" placeholder @change="onFileChange" />
-              </div>  -->
-            </form>
+        <p class="mt-5 text-center ">
+          Get The Hypersign App
+        </p>
+        <div class=" d-flex w-75 mx-auto app-links justify-content-around">
+          <div>
+            <img :src="require(`../assets/play_store.png`)" alt="play-store" />
           </div>
-          <!-- <div class="row">
-            <div class="col-sm-3">
-              <button
-                type="button"
-                data-toggle="modal"
-                @click="login('PKI')"
-                class="btn btn-primary btn-sm floatLeft"
-              >Login</button>
-            </div>
-            <div class="col-md-9 floatRight">
-              Do not have an account?
-              <a @click="push('register')" style="color:blue; cursor: pointer;">SignUp</a>
-            </div>
-          </div> -->
-        </b-card>
-      </form>
+          <div>
+            <img
+              class="w-90"
+              :src="require(`../assets/app_store.png`)"
+              alt="app-store"
+            />
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="col-md-4"></div>
-    
+
+    <div class="col col-lg-4 border border-1 bg-white border">
+      <div class="d-flex flex-column justify-content-between vh-100 px-3">
+        <a
+          class="text-right mt-3  text-dark text-reset fw-bold"
+          style="font-weight:600"
+          href="#"
+          >HELP ?</a
+        >
+        <div>
+          <p>Scan QR code with the Hypersign App</p>
+          <div>
+            <qrcode-vue :value="value" :size="200" level="H"></qrcode-vue>
+          </div>
+          <p class="mt-3">Scanner not working ?</p>
+        </div>
+        <a
+          style="font-weight:600"
+          class="mb-3 text-dark fw-bolder text-reset"
+          href="https://hypersign.id/"
+          >https://hypersign.id/</a
+        >
+      </div>
+    </div>
+
+    <div class="hypersign-logo-footer">
+      <div>
+        <p class="text-white my-0 fw-bolder">Powered By</p>
+        <img
+          :src="require(`../assets/footerLogo.png`)"
+          style="max-width: 150px;"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import QrcodeVue from "qrcode.vue";
-import conf from '../config';
+import conf from "../config";
 const { hypersignSDK } = conf;
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import url  from 'url';
+import url from "url";
 const { sha256hashStr } = require("../utils/hash");
+const playStoreImg = require("../assets/play_store.png");
+const appStoreImg = require("../assets/app_store.png");
+
 export default {
   name: "Login",
   components: {
@@ -141,82 +177,81 @@ export default {
       domain: location.host,
       credentials: {},
       userData: {},
-      value: '',
+      value: "",
       user: {},
       verifiablePresentation: "",
       fullPage: true,
       isLoading: false,
-      connection: null
+      connection: null,
     };
   },
   created() {
-    console.log('Beofer creating websoceket connection')
+    console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
     let websocketUrl = "ws://localhost:5006";
-    
-    let parsedUrl = {}
-      try{
-        parsedUrl = url.parse(baseUrl);
-        console.log(parsedUrl)
-        websocketUrl = parsedUrl.protocol === 'https:' ?  `wss://${parsedUrl.host}` : `ws://${parsedUrl.host}`;
-        console.log(websocketUrl)
-      }catch(e){
-        websocketUrl = "ws://localhost:5006";
-      }
-  
-        this.connection = new WebSocket("ws://localhost:6006/");
-        this.connection.onopen = function() {
-          console.log('Websocket connection is open')
-        };
 
-        this.isLoading = true;
-        var _this = this;
+    let parsedUrl = {};
+    try {
+      parsedUrl = url.parse(baseUrl);
+      console.log(parsedUrl);
+      websocketUrl =
+        parsedUrl.protocol === "https:"
+          ? `wss://${parsedUrl.host}`
+          : `ws://${parsedUrl.host}`;
+      console.log(websocketUrl);
+    } catch (e) {
+      websocketUrl = "ws://localhost:5006";
+    }
 
-        this.connection.onmessage = function({
-            data
-        }) {
-          console.log('Websocket connection messag receieved ', data);
-            let messageData = JSON.parse(data);
-            console.log(messageData)
-            if (messageData.op == 'init') {
-              _this.isLoading = false;
-              console.log(messageData.data)
-              _this.value = JSON.stringify(messageData.data);
-            } else if (messageData.op == 'end') {
-                _this.connection.close();
-                const authorizationToken = messageData.data.token;
-                console.log(authorizationToken)
-                localStorage.setItem("authToken",authorizationToken);
+    this.connection = new WebSocket("ws://localhost:6006/");
+    this.connection.onopen = function() {
+      console.log("Websocket connection is open");
+    };
 
-                
-                    if (localStorage.getItem("authToken") != null) {
-                          if (_this.$route.params.nextUrl != null) {
-                            _this.$router.push(_this.$route.params.nextUrl);
-                          } else {
-                            console.log(_this.$router)
-                            let path = ""
-                            const projectId = localStorage.getItem("projectId");
-                            if(projectId){
-                              path = "investor?projectId=" + projectId;
-                            }else{
-                              path = "investor";
-                            }
-                            _this.$router.push(path)
-                          }
-                    }
-                
+    this.isLoading = true;
+    var _this = this;
+
+    this.connection.onmessage = function({ data }) {
+      console.log("Websocket connection messag receieved ", data);
+      let messageData = JSON.parse(data);
+      console.log(messageData);
+      if (messageData.op == "init") {
+        _this.isLoading = false;
+        console.log(messageData.data);
+        _this.value = JSON.stringify(messageData.data);
+      } else if (messageData.op == "end") {
+        _this.connection.close();
+        const authorizationToken = messageData.data.token;
+        console.log(authorizationToken);
+        localStorage.setItem("authToken", authorizationToken);
+
+        if (localStorage.getItem("authToken") != null) {
+          if (_this.$route.params.nextUrl != null) {
+            _this.$router.push(_this.$route.params.nextUrl);
+          } else {
+            console.log(_this.$router);
+            let path = "";
+            const projectId = localStorage.getItem("projectId");
+            if (projectId) {
+              path = "investor?projectId=" + projectId;
+            } else {
+              path = "investor";
             }
-        };
-        this.connection.onerror = function(error) {
-          console.log('Websocket connection error ', error);
-        };    
+            _this.$router.push(path);
+          }
+        }
+      }
+    };
+    this.connection.onerror = function(error) {
+      console.log("Websocket connection error ", error);
+    };
   },
   mounted() {
     this.clean();
   },
   methods: {
-    push(path){
-      this.$router.push(path)
+    push(path) {
+      this.$router.push(path);
     },
     clean() {
       localStorage.removeItem("authToken");

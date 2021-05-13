@@ -61,36 +61,38 @@ label {
       :is-full-page="fullPage"
     ></loading>
 
-    <div class="row" v-if="!projectFetched" >
+    <div class="row" v-if="!projectFetched">
       <div class="col-md-12" style="text-align: left;">
-        <div class="card" style="padding:10px; background: #ff000029"> 
-          <div class="card-body" >
+        <div class="card" style="padding:10px; background: #ff000029">
+          <div class="card-body">
             <h3>Oops! Some error occurred.</h3>
           </div>
         </div>
       </div>
     </div>
 
-    
-
-    <div class="row" v-if="projectFetched" >
+    <div class="row" v-if="projectFetched">
       <div class="col-md-12" style="text-align: left;">
         <div class="card" style="padding:10px">
           <div class="card-body">
             <div class="row">
-              <div class="col-md-6"><h2>{{project.projectName.toUpperCase()}}</h2>
-              <h4>WHITELISTING</h4>
+              <div class="col-md-6">
+                <h2>{{ project.projectName.toUpperCase() }}</h2>
+                <h4>WHITELISTING</h4>
               </div>
             </div>
             <div class="row" style="margin-top: 5%">
               <div class="col-md-6">
-                <h5>From: {{project.fromDate}}</h5>
-                <h5>To: {{project.toDate}}</h5>
+                <h5>From: {{ project.fromDate }}</h5>
+                <h5>To: {{ project.toDate }}</h5>
               </div>
               <div class="col-md-6">
-                <img :src="project.logoUrl"  style="float:right;max-width: 176.86px; max-height: 42px;"/>                
+                <img
+                  :src="project.logoUrl"
+                  style="float:right;max-width: 176.86px; max-height: 42px;"
+                />
               </div>
-            </div>            
+            </div>
           </div>
         </div>
       </div>
@@ -98,14 +100,22 @@ label {
 
     <div class="row" v-if="isDataSaved" style="margin-top: 2%">
       <div class="col-md-12" style="text-align: left;">
-        <div class="card" style="padding:10px; background: #0080004f"> 
-          <div class="card-body" >
-            <h3>Your data has been successfully saved and is under verfication. Once verified, you will receive whitelisting credential in your email. Thank you! </h3>
+        <div class="card" style="padding:10px; background: #0080004f">
+          <div class="card-body">
+            <h3>
+              Your data has been successfully saved and is under verfication.
+              Once verified, you will receive whitelisting credential in your
+              email. Thank you!
+            </h3>
           </div>
         </div>
       </div>
     </div>
-    <div class="row" style="margin-top: 2%" v-if="!isDataSaved && projectFetched">
+    <div
+      class="row"
+      style="margin-top: 2%"
+      v-if="!isDataSaved && projectFetched"
+    >
       <div class="col-md-12" style="text-align: left">
         <div class="card">
           <div class="card-body">
@@ -136,7 +146,6 @@ label {
                   />
                 </div>
               </div>
-              
             </div>
 
             <div class="row">
@@ -154,29 +163,32 @@ label {
                 </div>
               </div>
               <div class="col-md-6">
-                
                 <div class="form-group">
-                  <div class="row"><div class="col-md-12"><label style="margin-right: 8%">Ethereum Address:</label></div></div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label style="margin-right: 8%">Ethereum Address:</label>
+                    </div>
+                  </div>
                   <div class="row">
                     <div class="col-md-10">
-                      
-                  <input
-                    type="text"
-                    v-model="investor.ethAddress"
-                    size="30"
-                    placeholder="Enter ethereum address"
-                    class="form-control"
-                  />
+                      <input
+                        type="text"
+                        v-model="investor.ethAddress"
+                        size="30"
+                        placeholder="Enter ethereum address"
+                        class="form-control"
+                      />
                     </div>
                     <div class="col-md-2">
-                      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2Fa-%2FAAuE7mC1z-HXEKxL4YhAhc7WDHWA6Rnly1I592T5ag%3Ds900-mo-c-c0xffffffff-rj-k-no&f=1&nofb=1" 
-                      style="max-width: 50px;max-height: 60px;cursor:pointer;"
-                      @click="getCurrentAccount()" />
+                      <img
+                        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2Fa-%2FAAuE7mC1z-HXEKxL4YhAhc7WDHWA6Rnly1I592T5ag%3Ds900-mo-c-c0xffffffff-rj-k-no&f=1&nofb=1"
+                        style="max-width: 50px;max-height: 60px;cursor:pointer;"
+                        @click="getCurrentAccount()"
+                      />
                     </div>
                   </div>
                 </div>
               </div>
-              
             </div>
 
             <div class="row">
@@ -206,19 +218,38 @@ label {
               </div>
             </div>
 
-            
-
             <div class="row">
               <div class="col-md-6">
                 <div class="row">
                   <div class="col-sm-3">
-                    <a href="https://twitter.com/hypersignchain?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-size="large" data-show-screen-name="false" data-show-count="false">Follow @hypersignchain</a>
+                    <a
+                      href="https://twitter.com/hypersignchain?ref_src=twsrc%5Etfw"
+                      class="twitter-follow-button"
+                      data-size="large"
+                      data-show-screen-name="false"
+                      data-show-count="false"
+                      >Follow @hypersignchain</a
+                    >
                   </div>
                   <div class="col-sm-3">
-                    <a href="https://twitter.com/intent/tweet?text=I%20am%20happy%20with%20%23hypersign%20%23pollkadot%20%40hypersignchain%20" class="twitter-share-button" data-size="large" data-show-count="false" title="Tweet about this project tagging two of your friends">Tweet</a>
+                    <a
+                      href="https://twitter.com/intent/tweet?text=I%20am%20happy%20with%20%23hypersign%20%23pollkadot%20%40hypersignchain%20"
+                      class="twitter-share-button"
+                      data-size="large"
+                      data-show-count="false"
+                      title="Tweet about this project tagging two of your friends"
+                      >Tweet</a
+                    >
                   </div>
                   <div class="col-sm-3">
-                    <a href="https://telegram.im/@hypersignchain" target="_blank" class="telegramim_button telegramim_shadow" style="font-size:12px;width:113px;background:#27A5E7;box-shadow:1px 1px 5px #27A5E7;color:#FFFFFF;border-radius:7px;" title="Join our telegram channel for latest updates"><i></i> Join Us</a>
+                    <a
+                      href="https://telegram.im/@hypersignchain"
+                      target="_blank"
+                      class="telegramim_button telegramim_shadow"
+                      style="font-size:12px;width:113px;background:#27A5E7;box-shadow:1px 1px 5px #27A5E7;color:#FFFFFF;border-radius:7px;"
+                      title="Join our telegram channel for latest updates"
+                      ><i></i> Join Us</a
+                    >
                   </div>
                 </div>
               </div>
@@ -235,9 +266,7 @@ label {
                   />
                 </div>
               </div>
-
             </div>
-
 
             <div class="row">
               <div class="col-md-12">
@@ -261,7 +290,7 @@ label {
 import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import Web3 from 'web3';
+import Web3 from "web3";
 export default {
   name: "Investor",
   components: { Loading },
@@ -277,7 +306,8 @@ export default {
         hasTwitted: false,
         hasJoinedTGgroup: false,
         projectId: "",
-        tweetUrl: "https://twitter.com/VishwasBAnand1/status/1378516089466843137?s=20"
+        tweetUrl:
+          "https://twitter.com/VishwasBAnand1/status/1378516089466843137?s=20",
       },
       project: {
         projectName: "",
@@ -287,7 +317,7 @@ export default {
         ownerDid: "",
         twitterHandle: "",
         telegramHandle: "",
-        projectId: ""
+        projectId: "",
       },
       projectFetched: false,
       isDataSaved: false,
@@ -296,29 +326,28 @@ export default {
       authToken: localStorage.getItem("authToken"),
       isLoading: false,
       fullPage: true,
-      user: null
+      user: null,
     };
   },
   async created() {
-
     if (window.ethereum) {
-    window.web3 = new Web3(window.ethereum);
-    window.ethereum.enable();
-  }
+      window.web3 = new Web3(window.ethereum);
+      window.ethereum.enable();
+    }
 
+    console.log(this.$route.query);
+    this.project.projectId = this.$route.query.projectId
+      ? this.$route.query.projectId
+      : "60676b4f09baec1befb5f469"; // if projectId is not passed, hardcoding hypersign project Id
 
-      console.log(this.$route.query)
-      this.project.projectId = this.$route.query.projectId ?  this.$route.query.projectId : "60676b4f09baec1befb5f469"; // if projectId is not passed, hardcoding hypersign project Id
-    
     this.fetchProjectData();
 
+    // const usrStr = localStorage.getItem("user");
+    // this.user = JSON.parse(usrStr);
+    // this.investor = {...this.user};
+    // this.investor.did = this.user.id;
 
-    const usrStr = localStorage.getItem("user");
-    this.user = JSON.parse(usrStr);
-    this.investor = {...this.user};
-    this.investor.did = this.user.id;
-
-    await this.getCurrentAccount()
+    // await this.getCurrentAccount();
     // alert(JSON.stringify(this.user))
     //await this.fetchProcurment();
   },
@@ -347,15 +376,15 @@ export default {
       });
     },
 
-async getCurrentAccount() {
-  const accounts = await window.web3.eth.getAccounts();
-  console.log(accounts[0])
-  if (accounts.length == 0) {
-    alert("No Account found..");
-    return;
-  }
-  this.investor.ethAddress = accounts[0];
-},
+    async getCurrentAccount() {
+      const accounts = await window.web3.eth.getAccounts();
+      console.log(accounts[0]);
+      if (accounts.length == 0) {
+        alert("No Account found..");
+        return;
+      }
+      this.investor.ethAddress = accounts[0];
+    },
 
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
@@ -363,40 +392,44 @@ async getCurrentAccount() {
     formateDate(d) {
       return new Date(d).toLocaleString();
     },
-    async fetchProjectData(){
+    async fetchProjectData() {
       try {
         this.isLoading = true;
-        
-        if(!this.$route.query.projectId) throw new Error("No project found");
+
+        if (!this.$route.query.projectId) throw new Error("No project found");
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.$route.query.projectId}`;
-        
-        
+
+        console.log(url);
+
         const headers = {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.authToken}`
+          Authorization: `Bearer ${this.authToken}`,
         };
         const resp = await fetch(url, headers);
-        
+
+        console.log("RESP", resp);
         if (resp.status != 200) {
           throw new Error(resp.statusText);
         }
 
         const json = await resp.json();
-        this.project = {...json};
-        this.project.fromDate = this.formateDate(this.project.fromDate)
-        this.project.toDate = this.formateDate(this.project.toDate)
+        this.project = { ...json };
+        this.project.fromDate = this.formateDate(this.project.fromDate);
+        this.project.toDate = this.formateDate(this.project.toDate);
         this.projectFetched = true;
-        this.notifySuccess("Project is fetched. ProjectName " + json.projectName);
+        this.notifySuccess(
+          "Project is fetched. ProjectName " + json.projectName
+        );
       } catch (e) {
-        console.log(e)
+        console.log(e);
         this.notifyErr(e.message);
       } finally {
         this.isLoading = false;
       }
     },
-    formateDate(dateStr){
-      const d =  new Date(dateStr);
+    formateDate(dateStr) {
+      const d = new Date(dateStr);
       return d.toDateString();
     },
     async saveInvestor() {
@@ -405,17 +438,17 @@ async getCurrentAccount() {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
         let headers = {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.authToken}`
+          Authorization: `Bearer ${this.authToken}`,
         };
 
-        console.log(this.investor)
+        console.log(this.investor);
         this.investor.projectId = this.$route.query.projectId;
         const resp = await fetch(url, {
           method: "POST",
           body: JSON.stringify(this.investor),
           headers,
         });
-        
+
         if (resp.status !== 200) {
           throw new Error(resp.statusText);
         }
@@ -423,11 +456,9 @@ async getCurrentAccount() {
         const json = await resp.json();
         this.isDataSaved = true;
 
-
-        localStorage.removeItem('authToken')
-        localStorage.removeItem('projectId')
-        localStorage.removeItem('user')
-        
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("projectId");
+        localStorage.removeItem("user");
 
         this.notifySuccess("Your data is saved. Id = " + json._id);
       } catch (e) {
@@ -453,5 +484,3 @@ async getCurrentAccount() {
   },
 };
 </script>
-
-

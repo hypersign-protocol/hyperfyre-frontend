@@ -106,3 +106,9 @@ dist
 
 # TernJS port file
 .tern-port
+.DS_STORE
+
+frontend/Dockerfile-jvjr
+frontend/jvjr-entrypoint.sh
+jvjr-env.json
+frontend/jvjr-env.json
