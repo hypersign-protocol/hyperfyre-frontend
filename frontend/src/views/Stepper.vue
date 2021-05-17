@@ -83,6 +83,7 @@ label {
   <section class="stepper-section">
     <d-stepper
       :stepOneData="stepOneData"
+      :stepTwoData="stepTwoData"
       :steps="steps"
       :initial-state="{ name: 'Carlos', users: [] }"
     >
@@ -95,12 +96,16 @@ label {
 import StepOne from "./Stepper/StepOne.vue";
 import StepTwo from "./Stepper/StepTwo.vue";
 import DStepper from "./Stepper/DStepper.vue";
+import StepThree from "./Stepper/StepThree.vue";
+import StepFour from "./Stepper/StepFour.vue";
+const avatarLabel = require("../assets/avatarUploadLabel.png");
 
 export default {
   name: "Stepper",
   components: {
     DStepper,
   },
+
   data() {
     return {
       stepOneData: {
@@ -128,6 +133,52 @@ export default {
         ],
       },
 
+      stepTwoData: {
+        line1:
+          "In order to be successfully chosen to the whitelist, please ensure that you fill out the following form with the correct and relevant information.",
+        line2:
+          "Note: Please use the same email address that you used to sign up to the PAID-Ignition platform, we will use this as a key identifier for your profile.",
+        imgLink: avatarLabel,
+        formData: [
+          {
+            label: "Full Name*",
+            placeholder: "Enter full name",
+            value: "",
+            id: "name",
+          },
+          {
+            label: "Email Address*",
+            placeholder: "someone@somewhere.com",
+            value: "",
+            id: "email",
+          },
+          {
+            label: "Twitter Handle*",
+            placeholder: "@mytwitterhandle",
+            value: "",
+            id: "twitterHandle",
+          },
+          {
+            label: "Telegram Handle*",
+            placeholder: "@mytelegramhandle",
+            value: "",
+            id: "telegramHandle",
+          },
+          {
+            label: "Wallet Address*",
+            placeholder: "http://",
+            fullWidth: true,
+            value: "",
+            id: "ethAddress",
+          },
+        ],
+
+        handleImageChange: (e) => {
+          const file = e.target.files[0];
+          this.stepTwoData.imgLink = URL.createObjectURL(file);
+        },
+      },
+
       steps: [
         {
           disabled: false,
@@ -138,6 +189,16 @@ export default {
           disabled: false,
           active: false,
           component: StepTwo,
+        },
+        {
+          disabled: false,
+          active: false,
+          component: StepThree,
+        },
+        {
+          disabled: false,
+          active: false,
+          component: StepFour,
         },
       ],
     };

@@ -3,119 +3,131 @@
     <div class="header w-100 text-left text-white">
       <div class="logo bg-white d-inline-block p-3 px-5">
         <img
-          width="150px"
+          width="120px"
           src="https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png"
         />
       </div>
       <div class="text mx-auto  py-3 text-left">
         <h4>Apply to HYPERSIGN's Whitelist</h4>
-        <p>{{ stepOneData.line1 }}</p>
-        <p>{{ stepOneData.line2 }}</p>
+        <p>{{ step == 0 ? stepOneData.line1 : stepTwoData.line1 }}</p>
+        <p>{{ step == 0 ? stepOneData.line2 : stepTwoData.line2 }}</p>
       </div>
     </div>
-    <div class="steps">
-      <div class="d-stepper-header d-flex justify-content-around">
-        <div
-          class="step-number-content text-center"
-          :class="{ active: step == i }"
-          v-for="(stepItem, i) in steps"
-          :key="i"
-        >
+    <div class="steps-container">
+      <div class="steps">
+        <div class="d-stepper-header d-flex justify-content-around">
           <div
-            class="step-number align-items-center justify-content-center mx-auto"
-            :class="stepNumberClasses(i)"
+            class="step-number-content text-center"
+            :class="{ active: step == i }"
+            v-for="(stepItem, i) in steps"
+            :key="i"
           >
-            <i v-if="step > i" class="fas fa-check"></i>
-            <i
-              v-else-if="step === i && fatalError"
-              class="fas fa-exclamation"
-            ></i>
-            <span v-else>{{ i + 1 }}</span>
+            <div
+              class="step-number align-items-center justify-content-center mx-auto"
+              :class="stepNumberClasses(i)"
+            >
+              <i v-if="step > i" class="fas fa-check"></i>
+              <i
+                v-else-if="step === i && fatalError"
+                class="fas fa-exclamation"
+              ></i>
+              <span v-else>{{ i + 1 }}</span>
+            </div>
+            <div class="mt-1 small">{{ stepItem.name }}</div>
           </div>
-          <div class="mt-1 small">{{ stepItem.name }}</div>
+        </div>
+
+        <b-card
+          class="my-0 border-0 overflow-hidden"
+          bg-variant="light"
+          no-body
+          :class="{ 'border-danger': error, 'shake-error': shake }"
+          v-loading="loading"
+        >
+          <b-card-body class="w-100 border-0 d-block">
+            <div v-if="steps[step].icon" class="d-none d-sm-block">
+              <i class="fas fa-fw fa-3x mr-4" :class="iconClasses"></i>
+            </div>
+            <div>
+              <!-- <h3>{{ step + 1 }}. {{ steps[step].name }}</h3>
+            <p class="text-muted">{{ steps[step].desc }}</p> -->
+
+              <div v-if="!fatalError">
+                <transition :name="effect" mode="out-in">
+                  <keep-alive>
+                    <component
+                      :stepOneData="stepOneData"
+                      :stepTwoData="stepTwoData"
+                      :store="store"
+                      :state="state"
+                      :step="step"
+                      :setState="setState"
+                      ref="step"
+                      :is="stepComponent"
+                      @loading="loadingAction"
+                      @error="errorHandler"
+                      @fatal-error="blockStepper"
+                      @can-continue="nextStepAction"
+                      @set-step="setStep"
+                    />
+                  </keep-alive>
+                </transition>
+              </div>
+              <div v-else>{{ fatalErrorMsg }}</div>
+            </div>
+          </b-card-body>
+        </b-card>
+
+        <div class=" d-flex btn-container" v-if="!fatalError">
+          <b-button
+            v-if="step > 0"
+            variant="dark"
+            :disabled="loading"
+            class="text-primary back-btn"
+            @click="backStep"
+          >
+            <i class="fas fa-angle-double-left"></i> Back
+          </b-button>
+
+          <b-button
+            v-if="step < steps.length - 1"
+            variant="dark"
+            class="ml-2 next-btn"
+            @click="nextStep"
+            :disabled="loading"
+          >
+            Next
+            <i class="fas fa-angle-double-right"></i>
+          </b-button>
+
+          <b-button
+            v-if="steps[step].confirm"
+            variant="success"
+            class="ml-2"
+            @click="$emit('confirm')"
+            >{{ steps[step].confirm }}</b-button
+          >
         </div>
       </div>
-
-      <b-card
-        class="my-0 border-0 overflow-hidden"
-        bg-variant="light"
-        no-body
-        :class="{ 'border-danger': error, 'shake-error': shake }"
-        v-loading="loading"
-      >
-        <b-card-body class="w-100 border-0 d-block">
-          <div v-if="steps[step].icon" class="d-none d-sm-block">
-            <i class="fas fa-fw fa-3x mr-4" :class="iconClasses"></i>
-          </div>
-          <div>
-            <!-- <h3>{{ step + 1 }}. {{ steps[step].name }}</h3>
-          <p class="text-muted">{{ steps[step].desc }}</p> -->
-
-            <div v-if="!fatalError">
-              <transition :name="effect" mode="out-in">
-                <keep-alive>
-                  <component
-                    :data="stepOneData"
-                    :store="store"
-                    :state="state"
-                    :step="step"
-                    :setState="setState"
-                    ref="step"
-                    :is="stepComponent"
-                    @loading="loadingAction"
-                    @error="errorHandler"
-                    @fatal-error="blockStepper"
-                    @can-continue="nextStepAction"
-                    @set-step="setStep"
-                  />
-                </keep-alive>
-              </transition>
-            </div>
-            <div v-else>{{ fatalErrorMsg }}</div>
-          </div>
-        </b-card-body>
-      </b-card>
-
-      <div class=" d-flex justify-content-end" v-if="!fatalError">
-        <b-button
-          v-if="step > 0"
-          variant="light"
-          :disabled="loading"
-          class="text-primary"
-          @click="backStep"
-        >
-          <i class="fas fa-angle-double-left"></i> Atrás
-        </b-button>
-
-        <b-button
-          v-if="step < steps.length - 1"
-          variant="dark"
-          class="ml-2"
-          @click="nextStep"
-          :disabled="loading"
-        >
-          Next
-          <i class="fas fa-angle-double-right"></i>
-        </b-button>
-
-        <b-button
-          v-if="steps[step].confirm"
-          variant="success"
-          class="ml-2"
-          @click="$emit('confirm')"
-          >{{ steps[step].confirm }}</b-button
-        >
-      </div>
     </div>
-
     <div class="footer">
       <div class="rule w-75 mx-auto" />
-      <div class="d-flex">
+      <div class="d-flex justify-content-between align-items-center">
         <div class="footer-logo">
           <p class="m-0 text-white" style="font-weight: bold">Powered By</p>
-          <img width="150px" :src="require('../../assets/footerLogo.png')" />
+          <img width="120px" :src="require('../../assets/footerLogo.png')" />
         </div>
-        <div class="social"></div>
+        <div class="social d-flex">
+          <div>
+            <img width="30px" :src="require(`../../assets/fbIcon.png`)" />
+          </div>
+          <div class="mx-3">
+            <img width="30px" :src="require(`../../assets/instaIcon.png`)" />
+          </div>
+          <div>
+            <img width="30px" :src="require(`../../assets/twitterIcon.png`)" />
+          </div>
+        </div>
         <div class="logo-partner"></div>
       </div>
     </div>
@@ -131,9 +143,14 @@ export default {
     stepOneData: {
       type: Object,
     },
+    stepTwoData: {
+      type: Object,
+    },
   },
+
   data() {
     return {
+      data: this.stepOneData,
       store: {
         state: this.initialState,
         setState: this.setState,
@@ -203,14 +220,52 @@ export default {
       };
     },
     nextStep() {
-      if (!this.$refs.step.nextStep) return this.nextStepAction();
+      const step = this.step + 1;
+      const data = step == 1 ? this.stepOneData : this.stepTwoData;
 
-      if (this.$refs.step.nextStep()) {
-        if (!this.loading) {
-          this.nextStepAction();
+      let gotoNextPage = false;
+
+      if (step == 1) {
+        const isAllChecked = data.rules.every((rule) => rule.checked);
+        if (isAllChecked) {
+          gotoNextPage = true;
+        } else {
+          this.$notify({
+            group: "foo",
+            title: "Error",
+            type: "error",
+            text: "Please follow all the rules and check",
+          });
+        }
+      } else if (step == 2) {
+        const isAllFilled = data.formData.every((input) => input.value.length);
+        if (isAllFilled) {
+          gotoNextPage = true;
+        } else {
+          this.$notify({
+            group: "foo",
+            title: "Error",
+            type: "error",
+            text: "Please fill the form properly",
+          });
+        }
+      } else if (step == 3) {
+        console.log("MAKE THE API CALL");
+        this.saveInvestor(data.formData);
+        //  gotoNextPage = true;
+      }
+
+      if (gotoNextPage) {
+        if (!this.$refs.step.nextStep) return this.nextStepAction();
+
+        if (this.$refs.step.nextStep()) {
+          if (!this.loading) {
+            this.nextStepAction();
+          }
         }
       }
     },
+
     nextStepAction() {
       this.effect = "in-out-translate-fade";
       this.resetParams();
@@ -224,6 +279,57 @@ export default {
     loadingAction(status) {
       this.loading = status;
       //if (!status) this.nextStepAction();
+    },
+    async saveInvestor(data) {
+      let investor = {
+        did: "did:hs:TEqweqweqwe12",
+        email: "",
+        name: "",
+        ethAddress: "",
+        twitterHandle: "",
+        telegramHandle: "",
+        hasTwitted: false,
+        hasJoinedTGgroup: false,
+        projectId: "",
+        tweetUrl:
+          "https://twitter.com/VishwasBAnand1/status/1378516089466843137?s=20",
+      };
+
+      try {
+        // this.isLoading = true;
+        // BUILDING UP THE INVESTOR OBJECT, TO SEND TO API
+        for (let i in data) {
+          investor[data[i].id] = data[i].value;
+        }
+        investor.projectId = this.$route.query.projectId;
+
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+
+        const resp = await fetch(url, {
+          method: "POST",
+          body: JSON.stringify(investor),
+          headers,
+        });
+        if (resp.status !== 200) {
+          throw new Error(resp.statusText);
+        }
+        const json = await resp.json();
+        console.log("JSON RESP", json);
+        // this.isDataSaved = true;
+        // localStorage.removeItem("authToken");
+        // localStorage.removeItem("projectId");
+        // localStorage.removeItem("user");
+        // this.notifySuccess("Your data is saved. Id = " + json._id);
+      } catch (e) {
+        // this.notifyErr(e.message);
+      } finally {
+        // this.isLoading = false;
+        // this.clear();
+      }
     },
   },
 };
@@ -307,7 +413,7 @@ export default {
   background-color: rgba(58, 58, 58, 1);
 }
 .footer {
-  padding: 20px 30px;
+  padding: 10px 30px;
 }
 .header .logo {
   border-bottom-right-radius: 20px;
@@ -317,12 +423,27 @@ export default {
 }
 div.rule {
   border-bottom: 1px solid #ffffff;
-  padding-top: 60px;
-  margin-bottom: 30px;
+  padding-top: 20px;
+  margin-bottom: 20px;
 }
-.steps {
-  min-height: 50vh;
+.steps-container {
+  height: 72vh;
   width: 60%;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+.steps-container .steps {
+  width: 100%;
+}
+
+.btn-container {
+  justify-content: center;
+}
+.btn-container button {
+  border-radius: 25px;
+  width: 120px;
+  background-color: rgb(58, 58, 58);
+  color: #ffffff !important;
 }
 </style>
