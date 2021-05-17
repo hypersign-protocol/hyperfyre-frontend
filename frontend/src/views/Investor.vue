@@ -1,4 +1,4 @@
-<style scoped>
+<style>
 .addmargin {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -52,10 +52,242 @@ label {
 .card {
   border-radius: 10px;
 }
+* {
+  font-family: "Montserrat", sans-serif;
+}
 </style>
-<template
-  ><div><Stepper></Stepper></div
-></template>
+<template>
+  <div class="home marginLeft marginRight">
+    <loading
+      :active.sync="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    ></loading>
+
+    <div class="row" v-if="!projectFetched">
+      <div class="col-md-12" style="text-align: left;">
+        <div class="card" style="padding:10px; background: #ff000029">
+          <div class="card-body">
+            <h3>Oops! Some error occurred.</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" v-if="projectFetched">
+      <div class="col-md-12" style="text-align: left;">
+        <div class="card" style="padding:10px">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <h2>{{ project.projectName.toUpperCase() }}</h2>
+                <h4>WHITELISTING</h4>
+              </div>
+            </div>
+            <div class="row" style="margin-top: 5%">
+              <div class="col-md-6">
+                <h5>From: {{ project.fromDate }}</h5>
+                <h5>To: {{ project.toDate }}</h5>
+              </div>
+              <div class="col-md-6">
+                <img
+                  :src="project.logoUrl"
+                  style="float:right;max-width: 176.86px; max-height: 42px;"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" v-if="isDataSaved" style="margin-top: 2%">
+      <div class="col-md-12" style="text-align: left;">
+        <div class="card" style="padding:10px; background: #0080004f">
+          <div class="card-body">
+            <h3>
+              Your data has been successfully saved and is under verfication.
+              Once verified, you will receive whitelisting credential in your
+              email. Thank you!
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="row"
+      style="margin-top: 2%"
+      v-if="!isDataSaved && projectFetched"
+    >
+      <div class="col-md-12" style="text-align: left">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Name:</label>
+                  <input
+                    type="text"
+                    v-model="investor.name"
+                    size="30"
+                    placeholder="Enter your name"
+                    class="form-control"
+                    disabled
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Email:</label>
+                  <input
+                    type="text"
+                    v-model="investor.email"
+                    size="30"
+                    placeholder="Enter your email address"
+                    class="form-control"
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Did:</label>
+                  <input
+                    type="text"
+                    v-model="investor.did"
+                    size="30"
+                    placeholder="Enter did"
+                    class="form-control"
+                    disabled
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label style="margin-right: 8%">Ethereum Address:</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-10">
+                      <input
+                        type="text"
+                        v-model="investor.ethAddress"
+                        size="30"
+                        placeholder="Enter ethereum address"
+                        class="form-control"
+                      />
+                    </div>
+                    <div class="col-md-2">
+                      <img
+                        src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2Fa-%2FAAuE7mC1z-HXEKxL4YhAhc7WDHWA6Rnly1I592T5ag%3Ds900-mo-c-c0xffffffff-rj-k-no&f=1&nofb=1"
+                        style="max-width: 50px;max-height: 60px;cursor:pointer;"
+                        @click="getCurrentAccount()"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Twitter Handle:</label>
+                  <input
+                    type="text"
+                    v-model="investor.twitterHandle"
+                    size="30"
+                    placeholder="Enter your twitter handle"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Telegram Handle:</label>
+                  <input
+                    type="text"
+                    v-model="investor.telegramHandle"
+                    size="30"
+                    placeholder="Enter your telegram handle"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <a
+                      href="https://twitter.com/hypersignchain?ref_src=twsrc%5Etfw"
+                      class="twitter-follow-button"
+                      data-size="large"
+                      data-show-screen-name="false"
+                      data-show-count="false"
+                      >Follow @hypersignchain</a
+                    >
+                  </div>
+                  <div class="col-sm-3">
+                    <a
+                      href="https://twitter.com/intent/tweet?text=I%20am%20happy%20with%20%23hypersign%20%23pollkadot%20%40hypersignchain%20"
+                      class="twitter-share-button"
+                      data-size="large"
+                      data-show-count="false"
+                      title="Tweet about this project tagging two of your friends"
+                      >Tweet</a
+                    >
+                  </div>
+                  <div class="col-sm-3">
+                    <a
+                      href="https://telegram.im/@hypersignchain"
+                      target="_blank"
+                      class="telegramim_button telegramim_shadow"
+                      style="font-size:12px;width:113px;background:#27A5E7;box-shadow:1px 1px 5px #27A5E7;color:#FFFFFF;border-radius:7px;"
+                      title="Join our telegram channel for latest updates"
+                      ><i></i> Join Us</a
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label style="margin-right: 8%">Tweet Url:</label>
+                  <input
+                    type="text"
+                    v-model="investor.tweetUrl"
+                    size="30"
+                    placeholder="Enter tweet url"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <hr />
+                <button
+                  class="btn btn-outline-primary btn-sm"
+                  @click="saveInvestor()"
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <script>
 import fetch from "node-fetch";
