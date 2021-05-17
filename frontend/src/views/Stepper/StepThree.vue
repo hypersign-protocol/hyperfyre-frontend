@@ -1,11 +1,20 @@
 <style scoped>
 input,
-input:focus {
-  background-color: rgb(236, 238, 245);
-  color: rgb(58, 58, 58);
+input:focus,
+input:read-only {
+  background: none;
+  padding: 0px;
   outline: none !important;
   border: 0;
   box-shadow: none;
+}
+input::placeholder {
+  opacity: 0.1;
+}
+input:read-only {
+  background: none;
+  padding: 0px;
+  font-weight: bolder;
 }
 label {
   font-weight: bold;
@@ -30,7 +39,7 @@ div.form > div {
 </style>
 <template>
   <div>
-    <p class="text-right w-100">Step 2 of 3</p>
+    <p class="text-right w-100">Step 3 of 3</p>
     <div>
       <h4 class="text-left my-4">Please fill out the folowing information</h4>
 
@@ -42,6 +51,7 @@ div.form > div {
             </div>
           </label>
           <input
+            readonly
             v-on:change="stepTwoData.handleImageChange"
             type="file"
             accept="image/*"
@@ -49,7 +59,6 @@ div.form > div {
             class="d-none"
           />
         </div>
-
         <div class="form d-flex flex-wrap justify-content-between">
           <div
             :class="[data.fullWidth ? 'w-100' : '']"
@@ -58,20 +67,22 @@ div.form > div {
           >
             <label class="form-label">{{ data.label }}</label>
             <input
-              v-model="stepTwoData.formData[idx].value"
+              readonly
+              v-bind:value="data.value"
               class="form-control"
               :placeholder="data.placeholder"
             />
           </div>
 
           <div class="w-100">
-            <!-- <div class="d-flex align-items-end">
+            <!--             
+            <div class="d-flex align-items-end">
               <label>Applying for galaxy tier ?*</label>
               <div class="d-flex mx-5">
                 <div>
                   <label for="galaxyTierYes">YES</label>
                   <input
-                    checked
+                    disabled
                     id="galaxyTierYes"
                     name="galaxyTier"
                     type="radio"
@@ -81,6 +92,7 @@ div.form > div {
                 <div class="mx-3">
                   <label for="galaxyTierNo">NO</label>
                   <input
+                    disabled
                     id="galaxyTierNo"
                     name="galaxyTier"
                     type="radio"
@@ -88,10 +100,8 @@ div.form > div {
                   />
                 </div>
               </div>
-        
-         
-            </div> -->
-          </div>
+            </div>
+          --></div>
         </div>
       </form>
     </div>
@@ -102,11 +112,16 @@ div.form > div {
 // This components will have the content for each stepper step.
 
 export default {
-  name: "StepTwo",
+  name: "StepThree",
   props: {
     stepTwoData: {
       type: Object,
     },
+  },
+
+  mounted() {
+    console.log("asd");
+    console.log(this.stepTwoData);
   },
 };
 </script>
