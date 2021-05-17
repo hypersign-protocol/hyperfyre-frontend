@@ -17,10 +17,10 @@ async function addInvestor(req: Request, res: Response) {
 
     const investor_email:IInvestor = await InvestorModel.where({ email: email, projectId: projectId }).findOne();
 
-    if(investor != null){
-      res.statusMessage = "More than one submition is not allowed from this did";
-      return res.status(400).end();
-    }
+    // if(investor != null){
+    //   res.statusMessage = "More than one submition is not allowed from this did";
+    //   return res.status(400).end();
+    // }
 
     if(investor_email != null){
       res.statusMessage = "More than one submition is not allowed from this emailId";

@@ -5,7 +5,8 @@ export = (hypersign) => {
 
   const router = Router();
 
-  router.post("/", hypersign.authorize.bind(hypersign), InvestorController.addInvestor);
+  // router.post("/", hypersign.authorize.bind(hypersign), InvestorController.addInvestor);
+  router.post("/", InvestorController.addInvestor);
   
   router.get("/", InvestorController.getAllInvestor);
   
