@@ -32,7 +32,7 @@ const router = new Router({
       component: PKIIdLogin,
     },
     {
-      path: "/studio/investor",
+      path: "/studio/form",
       name: "investor",
       component: Investor,
       meta: {

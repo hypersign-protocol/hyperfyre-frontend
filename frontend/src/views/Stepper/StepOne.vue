@@ -143,17 +143,14 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
 </style>
 <template>
   <div>
-    <p class="text-right w-100">Step 1 of 3</p>
     <div>
-      <h4 class="text-left my-4">RULES</h4>
       <ol class="px-0">
         <li
           class="text-left w-100 d-flex align-items-center  my-3"
           v-for="(rule, idx) in stepOneData.rules"
           :key="rule.id"
         >
-          <div style="width: 95%">{{ idx + 1 }}. {{ rule.text }}</div>
-
+          <div v-html="rule.id + '. ' + rule.text" style="width: 95%"></div>
           <div>
             <input
               v-model="stepOneData.rules[idx].checked"

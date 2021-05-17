@@ -1,5 +1,10 @@
 <template>
   <div class="d-stepper">
+    <loading
+      :active="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    ></loading>
     <div class="header w-100 text-left text-white">
       <div class="logo bg-white d-inline-block p-3 px-5">
         <img
@@ -13,7 +18,21 @@
         <p>{{ step == 0 ? stepOneData.line2 : stepTwoData.line2 }}</p>
       </div>
     </div>
+
     <div class="steps-container">
+      <div class="steps-indicator d-flex align-items-center">
+        <p class="heading my-0">
+          {{
+            step + 1 == 1
+              ? "Rules"
+              : step + 1 == 2
+              ? "Please fill the form"
+              : "Please confirm your data"
+          }}
+        </p>
+
+        <p class="text-right ml-auto my-0">Step {{ step + 1 }} of 3</p>
+      </div>
       <div class="steps">
         <div class="d-stepper-header d-flex justify-content-around">
           <div
@@ -80,7 +99,7 @@
 
         <div class=" d-flex btn-container" v-if="!fatalError">
           <b-button
-            v-if="step > 0"
+            v-if="step > 0 && step < steps.length - 1"
             variant="dark"
             :disabled="loading"
             class="text-primary back-btn"
@@ -110,22 +129,37 @@
         </div>
       </div>
     </div>
+
     <div class="footer">
       <div class="rule w-75 mx-auto" />
       <div class="d-flex justify-content-between align-items-center">
         <div class="footer-logo">
           <p class="m-0 text-white" style="font-weight: bold">Powered By</p>
-          <img width="120px" :src="require('../../assets/footerLogo.png')" />
+          <a href="">
+            <img width="120px" :src="require('../../assets/footerLogo.png')" />
+          </a>
         </div>
         <div class="social d-flex">
           <div>
-            <img width="30px" :src="require(`../../assets/fbIcon.png`)" />
+            <a href="https://t.me/hypersignchain" target="_blank">
+              <img
+                width="30px"
+                :src="require(`../../assets/telegramIcon.png`)"
+              />
+            </a>
           </div>
           <div class="mx-3">
-            <img width="30px" :src="require(`../../assets/instaIcon.png`)" />
+            <a href="https://twitter.com/hypersignchain" target="_blank">
+              <img width="30px" :src="require(`../../assets/instaIcon.png`)" />
+            </a>
           </div>
           <div>
-            <img width="30px" :src="require(`../../assets/twitterIcon.png`)" />
+            <a href="https://twitter.com/hypersignchain" target="_blank">
+              <img
+                width="30px"
+                :src="require(`../../assets/twitterIcon.png`)"
+              />
+            </a>
           </div>
         </div>
         <div class="logo-partner"></div>
@@ -135,8 +169,11 @@
 </template>
 
 <script>
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 export default {
   name: "DStepper",
+  components: { Loading },
   props: {
     steps: { type: Array, default: () => [] },
     initialState: { type: Object, default: () => ({}) },
@@ -163,6 +200,7 @@ export default {
       fatalErrorMsg: "",
       effect: "in-out-translate-fade",
       shake: false,
+      isLoading: false,
     };
   },
   computed: {
@@ -229,6 +267,7 @@ export default {
         const isAllChecked = data.rules.every((rule) => rule.checked);
         if (isAllChecked) {
           gotoNextPage = true;
+          this.slideToNextPage(gotoNextPage);
         } else {
           this.$notify({
             group: "foo",
@@ -241,6 +280,7 @@ export default {
         const isAllFilled = data.formData.every((input) => input.value.length);
         if (isAllFilled) {
           gotoNextPage = true;
+          this.slideToNextPage(gotoNextPage);
         } else {
           this.$notify({
             group: "foo",
@@ -250,11 +290,40 @@ export default {
           });
         }
       } else if (step == 3) {
-        console.log("MAKE THE API CALL");
-        this.saveInvestor(data.formData);
-        //  gotoNextPage = true;
+        this.saveInvestor(data.formData)
+          .then(async (res) => {
+            console.log(res);
+            if (res.status !== 200) {
+              throw new Error(res.statusText);
+            }
+            const json = await res.json();
+            console.log("JSON RESP", json);
+            this.isLoading = false;
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("projectId");
+            localStorage.removeItem("user");
+            gotoNextPage = true;
+            this.$notify({
+              group: "foo",
+              title: "Success",
+              type: "success",
+              text: "Successfully Signed Up",
+            });
+            this.slideToNextPage(gotoNextPage);
+          })
+          .catch((er) => {
+            this.isLoading = false;
+            this.$notify({
+              group: "foo",
+              title: "Something went wrong",
+              type: "error",
+              text: er.message,
+            });
+          });
       }
+    },
 
+    slideToNextPage(gotoNextPage) {
       if (gotoNextPage) {
         if (!this.$refs.step.nextStep) return this.nextStepAction();
 
@@ -296,7 +365,8 @@ export default {
       };
 
       try {
-        // this.isLoading = true;
+        this.isLoading = true;
+
         // BUILDING UP THE INVESTOR OBJECT, TO SEND TO API
         for (let i in data) {
           investor[data[i].id] = data[i].value;
@@ -309,21 +379,11 @@ export default {
           Authorization: `Bearer ${this.authToken}`,
         };
 
-        const resp = await fetch(url, {
+        return fetch(url, {
           method: "POST",
           body: JSON.stringify(investor),
           headers,
         });
-        if (resp.status !== 200) {
-          throw new Error(resp.statusText);
-        }
-        const json = await resp.json();
-        console.log("JSON RESP", json);
-        // this.isDataSaved = true;
-        // localStorage.removeItem("authToken");
-        // localStorage.removeItem("projectId");
-        // localStorage.removeItem("user");
-        // this.notifySuccess("Your data is saved. Id = " + json._id);
       } catch (e) {
         // this.notifyErr(e.message);
       } finally {
@@ -408,6 +468,9 @@ export default {
 .card.my-4 {
   border: 0;
 }
+.header {
+  height: 250px;
+}
 .header,
 .footer {
   background-color: rgba(58, 58, 58, 1);
@@ -432,6 +495,7 @@ div.rule {
   margin: 0 auto;
   display: flex;
   align-items: center;
+  position: relative;
 }
 .steps-container .steps {
   width: 100%;
@@ -445,5 +509,15 @@ div.rule {
   width: 120px;
   background-color: rgb(58, 58, 58);
   color: #ffffff !important;
+}
+.steps-indicator {
+  position: absolute;
+  top: 60px;
+  font-weight: bolder;
+  z-index: 100;
+  width: 100%;
+}
+.steps-indicator .heading {
+  font-size: 22px;
 }
 </style>

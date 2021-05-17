@@ -22,6 +22,9 @@ input::placeholder {
 div.form {
   margin-left: 50px;
 }
+form {
+  margin-top: 100px;
+}
 
 div.form > div {
   width: calc(50% - 50px);
@@ -30,10 +33,7 @@ div.form > div {
 </style>
 <template>
   <div>
-    <p class="text-right w-100">Step 2 of 3</p>
     <div>
-      <h4 class="text-left my-4">Please fill out the folowing information</h4>
-
       <form class="d-flex">
         <div class="avatar-upload">
           <label for="avatar">

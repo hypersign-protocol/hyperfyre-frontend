@@ -104,9 +104,17 @@ h5 span {
         </p>
         <div class=" d-flex w-75 mx-auto app-links justify-content-around">
           <div>
-            <img :src="require(`../assets/play_store.png`)" alt="play-store" />
+            <a
+              href="https://play.google.com/store/apps/details?id=com.hypersign.cordova"
+              target="_blank"
+            >
+              <img
+                :src="require(`../assets/play_store.png`)"
+                alt="play-store"
+              />
+            </a>
           </div>
-          <div>
+          <div title="Coming soon">
             <img
               class="w-90"
               :src="require(`../assets/app_store.png`)"
@@ -122,20 +130,22 @@ h5 span {
         <a
           class="text-right mt-3  text-dark text-reset fw-bold"
           style="font-weight:600"
-          href="#"
+          target="_blank"
+          href="https://www.hypermine.in/contact/"
           >HELP ?</a
         >
         <div>
-          <p>Scan QR code with the Hypersign App</p>
           <div>
             <qrcode-vue :value="value" :size="200" level="H"></qrcode-vue>
           </div>
-          <p class="mt-3">Scanner not working ?</p>
+          <p class="mt-3">Scan QR code with the Hypersign App</p>
+          <!-- <p class="mt-3">Scanner not working ?</p> -->
         </div>
         <a
           style="font-weight:600"
           class="mb-3 text-dark fw-bolder text-reset"
           href="https://hypersign.id/"
+          target="_blank"
           >https://hypersign.id/</a
         >
       </div>

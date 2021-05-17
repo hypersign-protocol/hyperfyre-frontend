@@ -9,18 +9,20 @@ input:read-only {
   box-shadow: none;
 }
 input::placeholder {
-  opacity: 0.1;
+  opacity: 0;
 }
 input:read-only {
   background: none;
   padding: 0px;
   font-weight: bolder;
+  color: grey;
 }
 label {
   font-weight: bold;
   text-align: left;
   display: block;
   text-transform: uppercase;
+  color: rgb(58, 58, 58);
 }
 input::placeholder {
   color: rgb(171, 176, 199);
@@ -32,6 +34,10 @@ div.form {
   margin-left: 50px;
 }
 
+form {
+  margin-top: 100px;
+}
+
 div.form > div {
   width: calc(50% - 50px);
   margin: 20px 0px;
@@ -39,10 +45,7 @@ div.form > div {
 </style>
 <template>
   <div>
-    <p class="text-right w-100">Step 3 of 3</p>
     <div>
-      <h4 class="text-left my-4">Please fill out the folowing information</h4>
-
       <form class="d-flex">
         <div class="avatar-upload">
           <label for="avatar">

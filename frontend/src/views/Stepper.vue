@@ -117,17 +117,20 @@ export default {
         rules: [
           {
             id: 1,
-            text: "Please follow Hypersign on twitter @hypersignchain",
+            text:
+              "Please follow Hypersign on twitter <a target='_blank' href='https://twitter.com/hypersignchain/'>@hypersignchain</a>",
             checked: false,
           },
           {
             id: 2,
-            text: "Retweet Hypersign;s last post and add #mydatamyway",
+            text:
+              "Retweet Hypersign;s last post and add <a href='https://twitter.com/intent/tweet?text=I%20am%20happy%20with%20%23hypersign%20%23pollkadot%20%40hypersignchain%20' class='twitter-share-button' data-size='large' data-show-count='false' title='Tweet about this project tagging two of your friends'> Tweet </a>",
             checked: false,
           },
           {
             id: 3,
-            text: "Join the Hypersign's telegram group @hypersignchain",
+            text:
+              "Join the Hypersign's telegram group <a href='https://t.me/hypersignchain' target='_blank'> @hypersignchain</a>",
             checked: false,
           },
         ],
@@ -165,8 +168,8 @@ export default {
             id: "telegramHandle",
           },
           {
-            label: "Wallet Address*",
-            placeholder: "http://",
+            label: "Ethereum  Address*",
+            placeholder: "Your Ethereum Address",
             fullWidth: true,
             value: "",
             id: "ethAddress",
