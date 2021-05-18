@@ -354,7 +354,7 @@ export default {
         }
 
         const json = await resp.json();
-        this.whitelistingLink = `${window.location.origin}/studio/investor?projectId=${json._id}`;
+        this.whitelistingLink = `${window.location.origin}/studio/form?projectId=${json._id}`;
         setTimeout(() => {
           this.whitelistingLink = "";
         }, 10000);
