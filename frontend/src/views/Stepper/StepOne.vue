@@ -141,17 +141,58 @@ input.large.custom[type="checkbox"]:checked:after {
 input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGHRFWHRBdXRob3IAbWluZWNyYWZ0aW5mby5jb23fZidLAAAAk0lEQVQ4y2P4//8/AyUYwcAD+OzN/oMwshjRBoA0Gr8+DcbIhhBlAEyz+qZZ/7WPryHNAGTNMOxpJvo/w0/uP0kGgGwGaZbrKgfTGnLc/0nyAgiDbEY2BCRGdCDCnA2yGeYVog0Aae5MV4c7Gzk6CRqAbDM2w/EaQEgzXgPQnU2SAcTYjNMAYm3GaQCxNuM0gFwMAPUKd8XyBVDcAAAAAElFTkSuQmCC");
 }
+.tweetUrlInput {
+  display: block;
+  width: 100%;
+  margin-left: 15px;
+}
 </style>
 <template>
   <div>
     <div>
       <ol class="px-0">
         <li
-          class="text-left w-100 d-flex align-items-center  my-3"
+          class="text-left w-100 d-flex flex-wrap align-items-center  my-3"
           v-for="(rule, idx) in stepOneData.rules"
           :key="rule.id"
         >
-          <div v-html="rule.id + '. ' + rule.text" style="width: 95%"></div>
+          <div style="width: 95%">
+            {{ rule.id + ". " + rule.text }}
+
+            <label v-if="rule.id == 1" for="checkbox-1">
+              <a
+                href="https://twitter.com/hypersignchain?ref_src=twsrc%5Etfw"
+                class="twitter-follow-button"
+                data-size="large"
+                data-show-screen-name="false"
+                data-show-count="false"
+                >Follow</a
+              >
+            </label>
+
+            <label v-if="rule.id == 2" for="checkbox-2">
+              <a
+                href="https://twitter.com/intent/tweet?text=I%20am%20happy%20with%20%23hypersign%20%23pollkadot%20%40hypersignchain%20"
+                class="twitter-share-button"
+                data-size="large"
+                data-show-count="false"
+                title="Tweet about this project tagging two of your friends"
+                >Tweet</a
+              >
+            </label>
+
+            <label v-if="rule.id == 3" for="checkbox-3">
+              <a
+                href="https://telegram.im/@hypersignchain"
+                target="_blank"
+                class="telegramim_button telegramim_shadow"
+                style="font-size:12px;width:113px;background:#27A5E7;box-shadow:1px 1px 5px #27A5E7;color:#FFFFFF;border-radius:7px;"
+                title="Join our telegram channel for latest updates"
+                ><i></i> Join Us</a
+              >
+            </label>
+          </div>
+
           <div>
             <input
               :id="'checkbox-' + rule.id"
@@ -159,6 +200,12 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
               class="checkbox large"
               type="checkbox"
             />
+          </div>
+          <div v-if="rule.showTweetInput && showInput" class="tweetUrlInput">
+            <input v-model="stepOneData.rules[idx].tweetUrl" type="url" />
+            <button @click="handleTweetSubmit" class="btn btn-dark btn-sm">
+              Submit
+            </button>
           </div>
         </li>
       </ol>
@@ -176,8 +223,26 @@ export default {
       type: Object,
     },
   },
-  created() {
-    console.log(this.data);
+  data() {
+    return {
+      showInput: false,
+    };
   },
+  methods: {
+    handleTweetSubmit(e) {
+      const checkbox2 = document.querySelector("#checkbox-2");
+      this.showInput = false;
+      checkbox2.checked = true;
+    },
+  },
+
+  mounted() {
+    const checkbox2 = document.querySelector("#checkbox-2");
+    checkbox2.addEventListener("click", () => {
+      checkbox2.checked = false;
+      this.showInput = true;
+    });
+  },
+  created() {},
 };
 </script>
