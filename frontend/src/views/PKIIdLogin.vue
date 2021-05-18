@@ -136,9 +136,11 @@ h5 span {
         >
         <div>
           <div>
-            <qrcode-vue :value="value" :size="200" level="H"></qrcode-vue>
+            <qrcode-vue :value="value" :size="300" level="H"></qrcode-vue>
           </div>
           <p class="mt-3">Scan QR code with the Hypersign App</p>
+          <h3>QR</h3>
+          <p> <button @click="openWallet()">Continue with Hypersign</button></p>
           <!-- <p class="mt-3">Scanner not working ?</p> -->
         </div>
         <a
@@ -198,7 +200,7 @@ export default {
   created() {
     console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
-    let websocketUrl = "ws://localhost:5006";
+    let websocketUrl = "ws://localhost:3003";
 
     let parsedUrl = {};
     try {
@@ -210,10 +212,10 @@ export default {
           : `ws://${parsedUrl.host}`;
       console.log(websocketUrl);
     } catch (e) {
-      websocketUrl = "ws://localhost:5006";
+      websocketUrl = "ws://localhost:3003";
     }
 
-    this.connection = new WebSocket("ws://localhost:6006/");
+    this.connection = new WebSocket(websocketUrl);
     this.connection.onopen = function() {
       console.log("Websocket connection is open");
     };
@@ -243,9 +245,9 @@ export default {
             let path = "";
             const projectId = localStorage.getItem("projectId");
             if (projectId) {
-              path = "investor?projectId=" + projectId;
+              path = "form?projectId=" + projectId;
             } else {
-              path = "investor";
+              path = "form";
             }
             _this.$router.push(path);
           }
@@ -260,6 +262,12 @@ export default {
     this.clean();
   },
   methods: {
+    openWallet(){
+      if(this.value != ""){
+        window.open(`https://hswallet.netlify.app/deeplink?url=${this.value}`, '_blank');
+      }
+      
+    },
     push(path) {
       this.$router.push(path);
     },

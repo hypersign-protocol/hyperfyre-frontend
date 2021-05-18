@@ -178,7 +178,7 @@ label {
       </div>
     </div>
 
-    <div class="row" style="margin-top: 2%" v-if="!isDataSaved">
+    <div class="row" style="margin-top: 2%">
       <div class="col-md-12" style="text-align: left">
         <table class="table table-striped">
           <thead>
