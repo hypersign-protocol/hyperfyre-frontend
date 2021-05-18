@@ -17,7 +17,7 @@ httpsLocalhost.getCerts().then(cert => {
     
 
     app.use(express.json());
-    app.use(cors());
+    app.use(cors({origin: "*"})); // add appropriate urls
     app.use(cookieParser());
     app.use(bodyParser.json());
     app.use(express.static('public'));
