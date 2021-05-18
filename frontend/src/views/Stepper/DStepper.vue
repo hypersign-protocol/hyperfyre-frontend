@@ -115,7 +115,7 @@
             @click="nextStep"
             :disabled="loading"
           >
-            Next
+            {{ step + 1 == 3 ? "Submit" : "Next" }}
             <i class="fas fa-angle-double-right"></i>
           </b-button>
 
@@ -503,6 +503,9 @@ div.rule {
 
 .btn-container {
   justify-content: center;
+  position: absolute;
+  right: 0;
+  bottom: 20px;
 }
 .btn-container button {
   border-radius: 25px;

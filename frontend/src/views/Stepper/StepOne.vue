@@ -77,6 +77,7 @@ label {
 }
 .checkbox {
   background-color: rgb(58, 58, 58);
+  -moz-appearance: initial;
 }
 input[type="checkbox"]:before {
   position: relative;
@@ -153,6 +154,7 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
           <div v-html="rule.id + '. ' + rule.text" style="width: 95%"></div>
           <div>
             <input
+              :id="'checkbox-' + rule.id"
               v-model="stepOneData.rules[idx].checked"
               class="checkbox large"
               type="checkbox"

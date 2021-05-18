@@ -118,19 +118,19 @@ export default {
           {
             id: 1,
             text:
-              "Please follow Hypersign on twitter <a target='_blank' href='https://twitter.com/hypersignchain/'>@hypersignchain</a>",
+              "Please follow Hypersign on twitter <label for='checkbox-1'> <a href='https://twitter.com/hypersignchain?ref_src=twsrc%5Etfw' class='twitter-follow-button' data-size='large' data-show-screen-name='false' data-show-count='false' target='_blank'>@hypersignchain</a></label>",
             checked: false,
           },
           {
             id: 2,
             text:
-              "Retweet Hypersign;s last post and add <a href='https://twitter.com/intent/tweet?text=I%20am%20happy%20with%20%23hypersign%20%23pollkadot%20%40hypersignchain%20' class='twitter-share-button' data-size='large' data-show-count='false' title='Tweet about this project tagging two of your friends'> Tweet </a>",
+              "Retweet Hypersign;s last post and add <label for='checkbox-2'><a href='https://twitter.com/intent/tweet?text=I%20am%20happy%20with%20%23hypersign%20%23pollkadot%20%40hypersignchain%20' class='twitter-share-button' data-size='large' data-show-count='false' title='Tweet about this project tagging two of your friends'> Tweet </a></label>",
             checked: false,
           },
           {
             id: 3,
             text:
-              "Join the Hypersign's telegram group <a href='https://t.me/hypersignchain' target='_blank'> @hypersignchain</a>",
+              "Join the Hypersign's telegram group  <label for='checkbox-3'><a href='https://telegram.im/@hypersignchain' target='_blank' class='telegramim_button telegramim_shadow' style='font-size:12px;width:113px;background:#27A5E7;box-shadow:1px 1px 5px #27A5E7;color:#FFFFFF;border-radius:7px;' title='Join our telegram channel for latest updates' target='_blank'> Join Us</a></label>",
             checked: false,
           },
         ],
