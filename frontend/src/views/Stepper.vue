@@ -147,12 +147,14 @@ export default {
             placeholder: "Enter full name",
             value: "",
             id: "name",
+            disabled: true,
           },
           {
             label: "Email Address*",
             placeholder: "someone@somewhere.com",
             value: "",
             id: "email",
+            disabled: true,
           },
           {
             label: "Twitter Handle*",
@@ -204,6 +206,16 @@ export default {
         },
       ],
     };
+  },
+
+  mounted() {
+    const usrStr =
+      localStorage.getItem("user") ||
+      '{"name": "Hypersign", "email": "hypersign@email.com" }';
+    const user = JSON.parse(usrStr);
+
+    this.stepTwoData.formData[0].value = user.name;
+    this.stepTwoData.formData[1].value = user.email;
   },
 };
 </script>

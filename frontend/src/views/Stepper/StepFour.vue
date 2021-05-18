@@ -7,7 +7,7 @@ h3 {
   <div>
     <h3>THANK YOU FOR SIGNING UP</h3>
     <p>We will send you an email about the next steps</p>
-    <a class="btn btn-dark" href="/">Home</a>
+    <a @click="logout" class="btn btn-dark">Home</a>
   </div>
 </template>
 
@@ -16,5 +16,14 @@ h3 {
 
 export default {
   name: "StepFour",
+  methods: {
+    logout() {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
+      localStorage.removeItem("credentials");
+      localStorage.removeItem("userData");
+      window.location.href = "/";
+    },
+  },
 };
 </script>

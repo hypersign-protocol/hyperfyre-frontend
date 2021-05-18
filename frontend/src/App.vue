@@ -185,12 +185,6 @@ export default {
     };
   },
   methods: {
-    logout() {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("user");
-      localStorage.removeItem("credentials");
-      localStorage.removeItem("userData");
-    },
     goToNextPage(route) {
       const r = this.menu.find((x) => x.name === route);
       if (r.name === "Logout") this.logout();

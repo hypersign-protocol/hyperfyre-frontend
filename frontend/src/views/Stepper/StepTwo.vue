@@ -57,11 +57,20 @@ div.form > div {
             :key="idx"
           >
             <label class="form-label">{{ data.label }}</label>
-            <input
-              v-model="stepTwoData.formData[idx].value"
-              class="form-control"
-              :placeholder="data.placeholder"
-            />
+            <div :class="[data.fullWidth ? 'd-flex' : '']">
+              <input
+                :disabled="data.disabled"
+                v-model="stepTwoData.formData[idx].value"
+                class="form-control w-100"
+                :placeholder="data.placeholder"
+              />
+              <img
+                v-if="data.fullWidth"
+                src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2Fa-%2FAAuE7mC1z-HXEKxL4YhAhc7WDHWA6Rnly1I592T5ag%3Ds900-mo-c-c0xffffffff-rj-k-no&f=1&nofb=1"
+                style="max-width: 50px;max-height: 60px;cursor:pointer;"
+                @click="getCurrentAccount()"
+              />
+            </div>
           </div>
 
           <div class="w-100">
@@ -103,9 +112,28 @@ div.form > div {
 
 export default {
   name: "StepTwo",
+
   props: {
     stepTwoData: {
       type: Object,
+    },
+  },
+  created() {
+    if (window.ethereum) {
+      window.web3 = new Web3(window.ethereum);
+      window.ethereum.enable();
+      console.log("ETH ENABLED");
+    }
+  },
+  methods: {
+    async getCurrentAccount() {
+      const accounts = await window.web3.eth.getAccounts();
+      console.log(accounts[0]);
+      if (accounts.length == 0) {
+        alert("No Account found..");
+        return;
+      }
+      // this.investor.ethAddress = accounts[0];
     },
   },
 };

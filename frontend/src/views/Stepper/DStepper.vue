@@ -171,6 +171,7 @@
 <script>
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
+
 export default {
   name: "DStepper",
   components: { Loading },
@@ -216,6 +217,7 @@ export default {
       return `fas ${this.activeStep.icon}`;
     },
   },
+
   methods: {
     setStep(step) {
       if (step >= 1 && step <= this.steps.length) this.step = step - 1;
@@ -469,7 +471,7 @@ export default {
   border: 0;
 }
 .header {
-  height: 250px;
+  min-height: 300px;
 }
 .header,
 .footer {
@@ -490,7 +492,7 @@ div.rule {
   margin-bottom: 20px;
 }
 .steps-container {
-  height: 72vh;
+  min-height: 80vh;
   width: 60%;
   margin: 0 auto;
   display: flex;

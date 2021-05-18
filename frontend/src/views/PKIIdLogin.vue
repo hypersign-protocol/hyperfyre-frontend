@@ -74,6 +74,9 @@ h5 span {
 .hypersign-logo-footer p {
   font-weight: 600;
 }
+.with-hypersign-btn {
+  background-color: rgb(61, 66, 60);
+}
 </style>
 <template>
   <div class="row vh-100 loginPage">
@@ -139,8 +142,22 @@ h5 span {
             <qrcode-vue :value="value" :size="300" level="H"></qrcode-vue>
           </div>
           <p class="mt-3">Scan QR code with the Hypersign App</p>
-          <h3>QR</h3>
-          <p> <button @click="openWallet()">Continue with Hypersign</button></p>
+          <h6>OR</h6>
+          <p class="text-center">
+            <button
+              class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill px-3"
+              @click="openWallet()"
+            >
+              <div>
+                <img
+                  style="width:35px"
+                  :src="require('../assets/hypersignSmallLogo.png')"
+                  class="mr-3 rounded rounded-circle border border-white border-1 p-1"
+                />
+              </div>
+              Continue with Hypersign
+            </button>
+          </p>
           <!-- <p class="mt-3">Scanner not working ?</p> -->
         </div>
         <a
@@ -262,11 +279,13 @@ export default {
     this.clean();
   },
   methods: {
-    openWallet(){
-      if(this.value != ""){
-        window.open(`https://hswallet.netlify.app/deeplink?url=${this.value}`, '_blank');
+    openWallet() {
+      if (this.value != "") {
+        window.open(
+          `https://hswallet.netlify.app/deeplink?url=${this.value}`,
+          "_blank"
+        );
       }
-      
     },
     push(path) {
       this.$router.push(path);

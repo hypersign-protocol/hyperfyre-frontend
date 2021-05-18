@@ -77,6 +77,8 @@ div.form > div {
             />
           </div>
 
+          <vue-recaptcha sitekey="Your key here"></vue-recaptcha>
+
           <div class="w-100">
             <!--             
             <div class="d-flex align-items-end">
@@ -112,6 +114,7 @@ div.form > div {
 </template>
 
 <script>
+import VueRecaptcha from "vue-recaptcha";
 // This components will have the content for each stepper step.
 
 export default {
@@ -120,6 +123,9 @@ export default {
     stepTwoData: {
       type: Object,
     },
+  },
+  components: {
+    VueRecaptcha,
   },
 
   mounted() {

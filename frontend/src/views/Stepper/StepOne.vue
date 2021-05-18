@@ -237,11 +237,11 @@ export default {
   },
 
   mounted() {
-    const checkbox2 = document.querySelector("#checkbox-2");
-    checkbox2.addEventListener("click", () => {
-      checkbox2.checked = false;
-      this.showInput = true;
-    });
+    // const checkbox2 = document.querySelector("#checkbox-2");
+    // checkbox2.addEventListener("click", () => {
+    //   checkbox2.checked = false;
+    //   this.showInput = true;
+    // });
   },
   created() {},
 };
