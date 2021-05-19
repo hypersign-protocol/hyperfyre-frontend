@@ -151,7 +151,7 @@ h5 span {
           class="text-right mt-3  text-dark text-reset fw-bold"
           style="font-weight:600"
           target="_blank"
-          href="https://www.hypermine.in/contact/"
+          href="https://t.me/hypersignchain"
           >HELP ?</a
         >
         <div>
