@@ -301,7 +301,7 @@ export default {
         window.open(
           `https://hswallet.netlify.app/deeplink?url=${this.value}`,
           "popUpWindow",
-          `height=${screen.height},width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`
+          `height=800,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`
         );
       }
     },

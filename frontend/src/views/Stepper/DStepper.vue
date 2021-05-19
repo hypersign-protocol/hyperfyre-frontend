@@ -210,6 +210,7 @@ export default {
       shake: false,
       isLoading: false,
       authToken: localStorage.getItem("authToken"),
+      fullPage: true
     };
   },
 
