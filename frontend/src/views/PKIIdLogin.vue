@@ -202,14 +202,9 @@ h5 span {
 
 <script>
 import QrcodeVue from "qrcode.vue";
-import conf from "../config";
-const { hypersignSDK } = conf;
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import url from "url";
-const { sha256hashStr } = require("../utils/hash");
-const playStoreImg = require("../assets/play_store.png");
-const appStoreImg = require("../assets/app_store.png");
 
 export default {
   name: "Login",

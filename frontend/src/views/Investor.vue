@@ -198,10 +198,6 @@ export default {
         this.isLoading = false;
       }
     },
-    formateDate(dateStr) {
-      const d = new Date(dateStr);
-      return d.toDateString();
-    },
     async saveInvestor() {
       try {
         this.isLoading = true;
