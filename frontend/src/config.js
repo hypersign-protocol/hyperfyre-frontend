@@ -1,18 +1,13 @@
-import EnvProvider from 'jvjr-docker-env'
-const hsdk = require('lds-sdk')
-
 const config = {
     studioServer: {
-        BASE_URL: EnvProvider.value('STUDIO_SERVER_BASE_URL'),
-        AUTH_CHALLENGE_EP: EnvProvider.value('STUDIO_SERVER_AUTH_CHALLENGE_EP') || "api/auth/challenge",
-        AUTH_LOGIN_EP: EnvProvider.value('STUDIO_SERVER_AUTH_LOGIN_EP') || "api/auth/login"
+        BASE_URL: process.env.VUE_APP_STUDIO_SERVER_BASE_URL
     },
     app: {
-        name: EnvProvider.value('TITLE') || "Dalmia Tracebil",
-        decription: EnvProvider.value('DESC'),
-        version: EnvProvider.value('VERSION')
+        name: process.env.VUE_APP_TITLE || "Dalmia Tracebil",
+        decription: process.env.VUE_APP_DESC,
+        version: process.env.VUE_APP_VERSION
     },
-
+    recaptchaSiteKey: process.env.VUE_APP_RECAPTCHA_SITE_KEY
 }
 
 
