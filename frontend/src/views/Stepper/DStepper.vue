@@ -470,12 +470,13 @@ export default {
 .card.my-4 {
   border: 0;
 }
-.header {
-  min-height: 300px;
-}
+
 .header,
 .footer {
   background-color: rgba(58, 58, 58, 1);
+}
+.header {
+  height: 300px;
 }
 .footer {
   padding: 10px 30px;

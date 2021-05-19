@@ -76,7 +76,24 @@ h5 span {
 }
 .with-hypersign-btn {
   background-color: rgb(61, 66, 60);
+  padding: 0;
 }
+.with-hypersign-btn .btn-text {
+  padding: 14px 25px 14px 14px;
+
+  text-transform: uppercase;
+}
+.loginInNow-text {
+  font-size: 25px;
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 990px) {
+  .loginPage {
+    flex-direction: column;
+  }
+}
+/* .with-hypersign-btn  */
 </style>
 <template>
   <div class="row vh-100 loginPage">
@@ -138,6 +155,7 @@ h5 span {
           >HELP ?</a
         >
         <div>
+          <p class="loginInNow-text">LOG IN NOW</p>
           <div>
             <qrcode-vue :value="value" :size="300" level="H"></qrcode-vue>
           </div>
@@ -145,17 +163,17 @@ h5 span {
           <h6>OR</h6>
           <p class="text-center">
             <button
-              class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill px-3"
+              class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill"
               @click="openWallet()"
             >
               <div>
                 <img
-                  style="width:35px"
+                  style="height:50px"
                   :src="require('../assets/hypersignSmallLogo.png')"
-                  class="mr-3 rounded rounded-circle border border-white border-1 p-1"
+                  class="ml-0 rounded rounded-circle border border-white border-1 p-1"
                 />
               </div>
-              Continue with Hypersign
+              <div class="btn-text">Login with Web Wallet</div>
             </button>
           </p>
           <!-- <p class="mt-3">Scanner not working ?</p> -->
