@@ -36,7 +36,7 @@ const router = new Router({
       name: "investor",
       component: Investor,
       meta: {
-        requiresAuth: false,
+        requiresAuth: true,
       },
     },
     {

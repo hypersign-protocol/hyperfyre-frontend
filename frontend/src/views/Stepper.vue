@@ -122,7 +122,7 @@ export default {
           },
           {
             id: 2,
-            text: "Retweet Hypersign;s last post and add ",
+            text: "Retweet Hypersign's last post and add ",
             checked: false,
             showTweetInput: true,
             tweetUrl: "",
@@ -170,7 +170,7 @@ export default {
           },
           {
             label: "Ethereum  Address*",
-            placeholder: "Your Ethereum Address",
+            placeholder: "0x",
             fullWidth: true,
             value: "",
             id: "ethAddress",

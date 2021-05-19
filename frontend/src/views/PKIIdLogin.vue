@@ -111,7 +111,7 @@ h5 span {
     >
       <div>
         <h3>Welcome to HYPERSIGN's Whitelist</h3>
-        <p>Instructiosn</p>
+        <p>Instructions</p>
         <ol class="px-3">
           <li>Install the hypersign app on your phone</li>
           <li>Follow the steps in the app to register [only needed once]</li>
@@ -157,7 +157,7 @@ h5 span {
         <div>
           <p class="loginInNow-text">LOG IN NOW</p>
           <div>
-            <qrcode-vue :value="value" :size="300" level="H"></qrcode-vue>
+            <qrcode-vue :value="value" :size="250" level="H"></qrcode-vue>
           </div>
           <p class="mt-3">Scan QR code with the Hypersign Mobile App</p>
           <h6>OR</h6>
@@ -249,6 +249,10 @@ export default {
     } catch (e) {
       websocketUrl = "ws://localhost:3003";
     }
+    if (websocketUrl[websocketUrl.length - 1] == "/") {
+      websocketUrl = websocketUrl.substring(0, websocketUrl.length - 1);
+    }
+    console.log(websocketUrl);
 
     this.connection = new WebSocket(websocketUrl);
     this.connection.onopen = function() {
@@ -301,7 +305,8 @@ export default {
       if (this.value != "") {
         window.open(
           `https://hswallet.netlify.app/deeplink?url=${this.value}`,
-          "_blank"
+          "popUpWindow",
+          `height=${screen.height},width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`
         );
       }
     },

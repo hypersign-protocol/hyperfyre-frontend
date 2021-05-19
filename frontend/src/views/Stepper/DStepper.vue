@@ -19,8 +19,11 @@
       </div>
     </div>
 
-    <div class="steps-container">
-      <div class="steps-indicator d-flex align-items-center">
+    <div v-if="showStepper" class="steps-container">
+      <div
+        v-if="step + 1 !== 4"
+        class="steps-indicator d-flex align-items-center"
+      >
         <p class="heading my-0">
           {{
             step + 1 == 1
@@ -129,6 +132,9 @@
         </div>
       </div>
     </div>
+    <div v-else class="steps-container no-stepper" style="height:100px">
+      <h2 class="text-center w-100 text-danger">Project Id Not found</h2>
+    </div>
 
     <div class="footer">
       <div class="rule w-75 mx-auto" />
@@ -188,6 +194,7 @@ export default {
 
   data() {
     return {
+      showStepper: false,
       data: this.stepOneData,
       store: {
         state: this.initialState,
@@ -202,8 +209,22 @@ export default {
       effect: "in-out-translate-fade",
       shake: false,
       isLoading: false,
+      authToken: localStorage.getItem("authToken"),
     };
   },
+
+  created() {
+    if (this.$route.query.projectId) {
+      this.showStepper = true;
+    } else {
+      this.showStepper = false;
+    }
+    const userDid = JSON.parse(localStorage.getItem("user")).id;
+    console.log(userDid);
+
+    this.checkIfAlreadyFilled(userDid);
+  },
+
   computed: {
     activeStep() {
       return this.steps[this.step];
@@ -267,7 +288,10 @@ export default {
 
       if (step == 1) {
         const isAllChecked = data.rules.every((rule) => rule.checked);
-        if (isAllChecked) {
+        const tweetFilled =
+          data.rules[1].tweetUrl.trim().length !== 0 ? true : false;
+
+        if (isAllChecked && tweetFilled) {
           gotoNextPage = true;
           this.slideToNextPage(gotoNextPage);
         } else {
@@ -275,7 +299,7 @@ export default {
             group: "foo",
             title: "Error",
             type: "error",
-            text: "Please follow all the rules and check",
+            text: "Please follow all the rules and provide a tweet URL",
           });
         }
       } else if (step == 2) {
@@ -352,21 +376,22 @@ export default {
       //if (!status) this.nextStepAction();
     },
     async saveInvestor(data) {
-      let investor = {
-        did: "did:hs:TEqweqweqwe12",
-        email: "",
-        name: "",
-        ethAddress: "",
-        twitterHandle: "",
-        telegramHandle: "",
-        hasTwitted: false,
-        hasJoinedTGgroup: false,
-        projectId: "",
-        tweetUrl:
-          "https://twitter.com/VishwasBAnand1/status/1378516089466843137?s=20",
-      };
-
       try {
+        let investor = {};
+        const did = JSON.parse(localStorage.getItem("user")).id;
+        // let investor = {
+        //   did: "did:hs:TEqweqweqwe12",
+        //   email: "",
+        //   name: "",
+        //   ethAddress: "",
+        //   twitterHandle: "",
+        //   telegramHandle: "",
+        //   hasTwitted: false,
+        //   hasJoinedTGgroup: false,
+        //   projectId: "",
+        //   tweetUrl:
+        //     "https://twitter.com/VishwasBAnand1/status/1378516089466843137?s=20",
+        // };
         this.isLoading = true;
 
         // BUILDING UP THE INVESTOR OBJECT, TO SEND TO API
@@ -374,6 +399,9 @@ export default {
           investor[data[i].id] = data[i].value;
         }
         investor.projectId = this.$route.query.projectId;
+        investor.did = did;
+
+        investor.tweetUrl = this.stepOneData.rules[1].tweetUrl;
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
         let headers = {
@@ -387,7 +415,38 @@ export default {
           headers,
         });
       } catch (e) {
+        console.log(e);
         // this.notifyErr(e.message);
+      } finally {
+        // this.isLoading = false;
+        // this.clear();
+      }
+    },
+
+    async checkIfAlreadyFilled(userDid) {
+      try {
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor/${userDid}`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+
+        const res = await fetch(url, {
+          method: "GET",
+          headers,
+        });
+
+        if (res.status !== 200) {
+          throw new Error(res.statusText);
+        }
+
+        const resData = await res.json();
+
+        if (resData.length) {
+          this.step = 3;
+        }
+      } catch (e) {
+        console.log(e);
       } finally {
         // this.isLoading = false;
         // this.clear();
@@ -499,6 +558,10 @@ div.rule {
   display: flex;
   align-items: center;
   position: relative;
+}
+
+.steps-container.no-stepper {
+  min-height: 60vh;
 }
 .steps-container .steps {
   width: 100%;

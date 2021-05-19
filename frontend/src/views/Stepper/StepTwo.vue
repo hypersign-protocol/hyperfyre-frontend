@@ -59,13 +59,12 @@ div.form > div {
             <label class="form-label">{{ data.label }}</label>
             <div :class="[data.fullWidth ? 'd-flex' : '']">
               <input
-                :disabled="data.disabled"
                 v-model="stepTwoData.formData[idx].value"
                 class="form-control w-100"
                 :placeholder="data.placeholder"
               />
               <img
-                v-if="data.fullWidth"
+                v-if="data.fullWidth && showFox"
                 src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2Fa-%2FAAuE7mC1z-HXEKxL4YhAhc7WDHWA6Rnly1I592T5ag%3Ds900-mo-c-c0xffffffff-rj-k-no&f=1&nofb=1"
                 style="max-width: 50px;max-height: 60px;cursor:pointer;"
                 @click="getCurrentAccount()"
@@ -108,6 +107,7 @@ div.form > div {
 </template>
 
 <script>
+import Web3 from "web3";
 // This components will have the content for each stepper step.
 
 export default {
@@ -118,17 +118,27 @@ export default {
       type: Object,
     },
   },
+  data() {
+    return {
+      showFox: false,
+    };
+  },
   created() {
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum);
       window.ethereum.enable();
-      console.log("ETH ENABLED");
+      this.showFox = true;
     }
   },
   methods: {
     async getCurrentAccount() {
       const accounts = await window.web3.eth.getAccounts();
-      console.log(accounts[0]);
+      this.stepTwoData.formData.find((x) => {
+        if (x.id == "ethAddress") {
+          x.value = accounts[0];
+        }
+      });
+
       if (accounts.length == 0) {
         alert("No Account found..");
         return;

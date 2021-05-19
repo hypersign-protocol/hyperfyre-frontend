@@ -7,7 +7,6 @@ h3 {
   <div>
     <h3>THANK YOU FOR SIGNING UP</h3>
     <p>We will send you an email about the next steps</p>
-    <a @click="logout" class="btn btn-dark">Home</a>
   </div>
 </template>
 

@@ -52,7 +52,9 @@ label {
   font-family: "Montserrat", sans-serif;
 }
 </style>
-<template> <Stepper /> </template>
+<template>
+  <div><Stepper /></div>
+</template>
 
 <script>
 import fetch from "node-fetch";
@@ -66,6 +68,7 @@ export default {
   components: { Loading, Stepper },
   data() {
     return {
+      showStepper: false,
       investor: {
         did: "did:hs:TEqweqweqwe12",
         email: "",
@@ -100,12 +103,12 @@ export default {
     };
   },
   async created() {
-    if (window.ethereum) {
-      window.web3 = new Web3(window.ethereum);
-      window.ethereum.enable();
+    if (this.$route.query.projectId) {
+      this.showStepper = true;
+    } else {
+      this.showStepper = false;
     }
 
-    console.log(this.$route.query);
     this.project.projectId = this.$route.query.projectId
       ? this.$route.query.projectId
       : "60676b4f09baec1befb5f469"; // if projectId is not passed, hardcoding hypersign project Id

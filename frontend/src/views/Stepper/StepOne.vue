@@ -141,10 +141,13 @@ input.large.custom[type="checkbox"]:checked:after {
 input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGHRFWHRBdXRob3IAbWluZWNyYWZ0aW5mby5jb23fZidLAAAAk0lEQVQ4y2P4//8/AyUYwcAD+OzN/oMwshjRBoA0Gr8+DcbIhhBlAEyz+qZZ/7WPryHNAGTNMOxpJvo/w0/uP0kGgGwGaZbrKgfTGnLc/0nyAgiDbEY2BCRGdCDCnA2yGeYVog0Aae5MV4c7Gzk6CRqAbDM2w/EaQEgzXgPQnU2SAcTYjNMAYm3GaQCxNuM0gFwMAPUKd8XyBVDcAAAAAElFTkSuQmCC");
 }
-.tweetUrlInput {
-  display: block;
+.tweetUrlInput input {
   width: 100%;
-  margin-left: 15px;
+  background-color: transparent;
+  border: 0;
+  border-bottom: 1px solid;
+  padding: 2px 5px;
+  outline: none;
 }
 </style>
 <template>
@@ -156,41 +159,46 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
           v-for="(rule, idx) in stepOneData.rules"
           :key="rule.id"
         >
-          <div style="width: 95%">
+          <div class="position-relative d-flex" style="width: 95%">
             {{ rule.id + ". " + rule.text }}
 
-            <label v-if="rule.id == 1" for="checkbox-1">
+            <div v-if="rule.id == 1" class="ml-2">
               <a
                 href="https://twitter.com/hypersignchain?ref_src=twsrc%5Etfw"
-                class="twitter-follow-button"
-                data-size="large"
-                data-show-screen-name="false"
-                data-show-count="false"
-                >Follow</a
+                target="_blank"
+                >@hypersign</a
               >
-            </label>
+            </div>
 
-            <label v-if="rule.id == 2" for="checkbox-2">
+            <div class="d-flex ml-2" v-if="rule.id == 2" for="checkbox-2">
               <a
+                @click="handleInputShow"
+                target="_blank"
                 href="https://twitter.com/intent/tweet?text=I%20am%20happy%20with%20%23hypersign%20%23pollkadot%20%40hypersignchain%20"
-                class="twitter-share-button"
-                data-size="large"
-                data-show-count="false"
                 title="Tweet about this project tagging two of your friends"
-                >Tweet</a
+                class="ml-1"
+                >#mydatamyway</a
               >
-            </label>
+              <div
+                v-if="rule.showTweetInput && showInput"
+                class="tweetUrlInput ml-4"
+              >
+                <input
+                  placeholder="Your Tweet Url"
+                  v-model="stepOneData.rules[idx].tweetUrl"
+                  type="url"
+                />
+              </div>
+            </div>
 
-            <label v-if="rule.id == 3" for="checkbox-3">
+            <div class="ml-2" v-if="rule.id == 3" for="checkbox-3">
               <a
                 href="https://telegram.im/@hypersignchain"
                 target="_blank"
-                class="telegramim_button telegramim_shadow"
-                style="font-size:12px;width:113px;background:#27A5E7;box-shadow:1px 1px 5px #27A5E7;color:#FFFFFF;border-radius:7px;"
                 title="Join our telegram channel for latest updates"
-                ><i></i> Join Us</a
+                ><i></i> @hypersignchain</a
               >
-            </label>
+            </div>
           </div>
 
           <div>
@@ -200,12 +208,6 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
               class="checkbox large"
               type="checkbox"
             />
-          </div>
-          <div v-if="rule.showTweetInput && showInput" class="tweetUrlInput">
-            <input v-model="stepOneData.rules[idx].tweetUrl" type="url" />
-            <button @click="handleTweetSubmit" class="btn btn-dark btn-sm">
-              Submit
-            </button>
           </div>
         </li>
       </ol>
@@ -229,10 +231,8 @@ export default {
     };
   },
   methods: {
-    handleTweetSubmit(e) {
-      const checkbox2 = document.querySelector("#checkbox-2");
-      this.showInput = false;
-      checkbox2.checked = true;
+    handleInputShow() {
+      this.showInput = true;
     },
   },
 
