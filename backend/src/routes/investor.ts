@@ -1,12 +1,11 @@
 import { Router } from "express";
 import InvestorController from "../controllers/investor";
-
+import { verifyReCaptcha } from "../middleware/recaptcha";
 export = (hypersign) => {
 
   const router = Router();
 
-  // router.post("/", hypersign.authorize.bind(hypersign), InvestorController.addInvestor);
-  router.post("/", InvestorController.addInvestor);
+  router.post("/", verifyReCaptcha, hypersign.authorize.bind(hypersign), InvestorController.addInvestor);
   
   router.get("/", InvestorController.getAllInvestor);
   
