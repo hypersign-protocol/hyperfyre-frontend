@@ -156,10 +156,11 @@ h5 span {
         >
         <div>
           <p class="loginInNow-text">LOG IN NOW</p>
-          <div>
-            <qrcode-vue :value="value" :size="250" level="H"></qrcode-vue>
+          
+          <div style="padding: 8px; border: 1px solid #8080805e; width: 47%;margin-left: 26%;">
+            <qrcode-vue :value="value" :size="250" level="H" ></qrcode-vue>
           </div>
-          <p class="mt-3">Scan QR code with the Hypersign Mobile App</p>
+          <p class="mt-1"><span style="font-size:small">Scan QR code with the Hypersign Mobile App</span></p>
           <h6>OR</h6>
           <p class="text-center">
             <button
