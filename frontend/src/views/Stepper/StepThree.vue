@@ -77,7 +77,16 @@ div.form > div {
             />
           </div>
 
-          <vue-recaptcha sitekey="Your key here"></vue-recaptcha>
+          <!-- <vue-recaptcha sitekey="Your key here"></vue-recaptcha> -->
+
+          <vue-recaptcha 
+                  ref="recaptcha" 
+                  size="invisible" 
+                  :sitekey="$config.recaptchaSiteKey" 
+                  :loadRecaptchaScript="true" 
+                  @verify="onCaptchaVerified"
+                  @expired="onCaptchaExpired"
+            ></vue-recaptcha>
 
           <div class="w-100">
             <!--             
@@ -124,13 +133,30 @@ export default {
       type: Object,
     },
   },
+  data(){
+    return {
+      recaptchaSiteKey: ""
+    }
+  },
   components: {
     VueRecaptcha,
   },
 
   mounted() {
-    console.log("asd");
+    console.log(this.$config);
     console.log(this.stepTwoData);
   },
+  methods: {
+    onCaptchaExpired: function () {
+      console.log('Captcha expired')
+      this.$refs.recaptcha.reset();
+    },
+    onCaptchaVerified: function (recaptchaToken) {
+      const self = this;
+      self.status = "submitting";
+      self.$refs.recaptcha.reset();
+      // this.signup(recaptchaToken)
+    },
+  }
 };
 </script>
