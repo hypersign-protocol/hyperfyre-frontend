@@ -93,6 +93,10 @@ h5 span {
     flex-direction: column;
   }
 }
+
+.qrWrapper{
+padding: 10px;border: 1px solid rgba(128, 128, 128, 0.37); width: 55%; margin-left: 22%;
+}
 /* .with-hypersign-btn  */
 </style>
 <template>
@@ -156,9 +160,9 @@ h5 span {
         >
         <div>
           <p class="loginInNow-text">LOG IN NOW</p>
-          
-          <div style="padding: 8px; border: 1px solid #8080805e; width: 47%;margin-left: 26%;">
-            <qrcode-vue :value="value" :size="250" level="H" ></qrcode-vue>
+          <div v-if="value && value != '' ">
+          <div class="qrWrapper">
+            <vue-qr v-if="value != ''" :logoSrc="src2" margin="1"  :text="value"  :size="300" logoBackgroundColor="white" logoCornerRadius="2"></vue-qr>            
           </div>
           <p class="mt-1"><span style="font-size:small">Scan QR code with the Hypersign Mobile App</span></p>
           <h6>OR</h6>
@@ -177,6 +181,8 @@ h5 span {
               <div class="btn-text">Login with Web Wallet</div>
             </button>
           </p>
+          </div>
+          <span v-if="!value || value == '' " style="color:red; font-size:small">Error in fetching QR data...</span>
           <!-- <p class="mt-3">Scanner not working ?</p> -->
         </div>
         <a
@@ -202,19 +208,22 @@ h5 span {
 </template>
 
 <script>
-import QrcodeVue from "qrcode.vue";
+
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import url from "url";
+import VueQr from 'vue-qr'
 
 export default {
   name: "Login",
   components: {
-    QrcodeVue,
     Loading,
+    VueQr
   },
   data() {
     return {
+      src2: require('../assets/icon.png'),
+
       active: 0,
       host: location.hostname,
       domain: location.host,
@@ -226,6 +235,11 @@ export default {
       fullPage: true,
       isLoading: false,
       connection: null,
+      qrConfig: {
+        value: "test",
+        imagePath: '/apple-icon-57x57.png',
+        filter: 'color'
+      }
     };
   },
   created() {
