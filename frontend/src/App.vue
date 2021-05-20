@@ -67,9 +67,8 @@
 </style>
 <template>
   <div id="app">
-    <div v-if="hideNavbar == true" class="row nav-style">
+    <!-- <div v-if="hideNavbar == true" class="row nav-style">
       <div class="col-md-4">
-        <!-- <h5 class="leftAlign">{{$config.app.name}}</h5>  -->
 
         <div class="form-group form-inline">
           <div>
@@ -82,7 +81,7 @@
             {{ $config.app.name }} ({{ $config.app.version }})
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- <div class="nav-logo col-md-7">
         <div>
           <div>
@@ -111,6 +110,12 @@
           {{ m.name }}
         </button>
       </div> -->
+    <!-- </div> -->
+
+    <div>
+      <sidebar-menu :menu="menu" v-if="hideNavbar == true" />
+    
+
     </div>
 
     <router-view />
@@ -170,16 +175,35 @@ export default {
           ? true
           : false,
       menu: [
-        // {
-        //   name: "Projects",
-        //   path: "/studio/project",
-        //   isShow: false ,
-        // },
-        // {
-        //   name: "Logout",
-        //   path: "/login",
-        //   isShow: false,
-        // },
+        {
+            header: true,
+            title: 'Main Navigation',
+            hiddenOnCollapse: true
+        },
+        {
+          title: 'Dashboard',
+          href: '/studio/dashboard',
+          icon: 'fa fa-user'
+        },
+        
+        {
+          href: '/studio/project',
+          title: 'Projects',
+          icon: 'fa fa-user'
+        },
+        {
+          href: '/studio/investors',
+          title: 'Investors',
+          icon: 'fa fa-user'
+        },
+        {
+          name: "Logout",
+          path: "/login",
+          isShow: false,
+          href: '/login',
+          title: 'Logout',
+          icon: 'fa fa-chart-area'
+        }
       ],
     };
   },
