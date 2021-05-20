@@ -390,7 +390,7 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${recaptchaToken}`;
         let headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
+           "Authorization": `Bearer ${this.authToken}`
         };
 
         const resp = await fetch(url, {
@@ -430,15 +430,15 @@ export default {
 
     async checkIfAlreadyFilled(userDid) {
       try {
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor/${userDid}`;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?did=${userDid}&projectId=${this.projectId}`;
         let headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
+          "Authorization": `Bearer ${this.authToken}`
         };
 
         const res = await fetch(url, {
-          method: "GET",
           headers,
+          method: "GET"
         });
 
         if (res.status !== 200) {
@@ -446,8 +446,8 @@ export default {
         }
 
         const resData = await res.json();
-
-        if (resData.length) {
+        
+        if (resData.length > 0) {
           this.step = 3;
         }
       } catch (e) {
@@ -471,6 +471,8 @@ export default {
     },
     async fetchProjectData() {
       try {
+        console.log("fetching the project detials. ...... ")
+        console.log(this.authToken)
         this.isLoading = true;
 
         if (!this.$route.query.projectId) throw new Error("No project found");
@@ -479,11 +481,15 @@ export default {
 
         console.log(url);
 
-        const headers = {
+        let headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
+           "Authorization": `Bearer ${this.authToken}`
         };
-        const resp = await fetch(url, headers);
+        console.log(headers)
+        const resp = await fetch(url, {
+          headers,
+          method: "GET"
+        });
 
         console.log("RESP", resp);
         if (resp.status != 200) {

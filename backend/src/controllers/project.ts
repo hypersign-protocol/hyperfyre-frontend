@@ -13,15 +13,17 @@ async function addProject(req: Request, res: Response) {
       ownerDid,
       twitterHandle,
       telegramHandle,
-      twitterPostFormat
+      twitterPostFormat,
+      userData
     } = req.body;
+
+    console.log(userData);
 
     if (
       projectName == "" ||
       logoUrl == "" ||
       fromDate == "" ||
       toDate == "" ||
-      ownerDid == "" ||
       twitterPostFormat == ""
     ) {
       res.statusMessage =
@@ -44,7 +46,7 @@ async function addProject(req: Request, res: Response) {
       logoUrl,
       fromDate,
       toDate,
-      ownerDid,
+      ownerDid: userData.id,
       twitterHandle,
       telegramHandle,
       twitterPostFormat
@@ -60,11 +62,12 @@ async function addProject(req: Request, res: Response) {
 async function getAllProject(req: Request, res: Response) {
   try {
     const { owner } = req.query;
+    const { userData } = req.body;
     let employeeList: Array<IProject>;
-    if (owner) {
-      employeeList = await ProjectModel.find({}).where({ ownerDid: owner });
+    if ( userData.id ) {
+      employeeList = await ProjectModel.find({}).where({ ownerDid: userData.id });
     } else {
-      employeeList = await ProjectModel.find({});
+      employeeList = []// await ProjectModel.find({});
     }
     res.send(employeeList);
   } catch (e) {
@@ -156,11 +159,13 @@ async function updateProject(req: Request, res: Response) {
       logoUrl,
       fromDate,
       toDate,
-      ownerDid,
       twitterHandle,
       telegramHandle,
       _id,
+      userData
     } = req.body;
+
+    const { id: ownerDid } = userData;
 
     // FindbyIdupdate returns the old object, however the value has been updated in the db
     await ProjectModel.findByIdAndUpdate(_id, {

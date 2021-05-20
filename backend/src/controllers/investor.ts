@@ -51,7 +51,7 @@ async function addInvestor(req: Request, res: Response) {
 
 async function getAllInvestor(req: Request, res: Response) {
   try {
-    const employeeList:Array<IInvestor> = await InvestorModel.find({});
+    const employeeList:Array<IInvestor> = await InvestorModel.find(req.query);
     res.send(employeeList);
   } catch (e) {
     logger.error('InvestorCtrl:: getAllInvestor(): Error ' + e);

@@ -270,12 +270,18 @@ export default {
       authToken: localStorage.getItem("authToken"),
       isLoading: false,
       fullPage: true,
+      user: {}
     };
   },
   async mounted() {
     //const usrStr = localStorage.getItem("user");
     //this.user = null; JSON.parse(usrStr);
-    this.project.ownerDid = "did:hs:QWERTlkasd090123SWEE12322";
+
+    const usrStr = localStorage.getItem('user');    
+     this.user = {
+       ...JSON.parse(usrStr)
+     }
+    this.project.ownerDid =  this.user.id // : "did:hs:QWERTlkasd090123SWEE12322";
     await this.fetchProjects();
   },
   beforeRouteEnter(to, from, next) {
@@ -292,7 +298,13 @@ export default {
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.project.ownerDid}`;
 
-        const resp = await fetch(url);
+        const headers =  {
+                        "Authorization": `Bearer ${this.authToken}`
+                    }
+        const resp = await fetch(url, {
+            headers,
+            method: "GET"
+        });
 
         if (!resp.ok) {
           return this.notifyErr(resp.statusText);
@@ -348,7 +360,10 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
           "Content-Type": "application/json",
+           "Authorization": `Bearer ${this.authToken}`
         };
+
+
 
         let method = "POST";
 
@@ -356,7 +371,7 @@ export default {
           method = "PUT";
         }
 
-        this.project.ownerDid = "did:hs:QWERTlkasd090123SWEE12322"; // need to remove this when we have login
+        
 
         const resp = await fetch(url, {
           method,

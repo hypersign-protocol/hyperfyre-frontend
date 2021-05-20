@@ -142,6 +142,10 @@ export default {
     };
   },
   async created() {
+    const usrStr = localStorage.getItem('user');    
+     this.user = {
+       ...JSON.parse(usrStr)
+     }
     // const usrStr = localStorage.getItem("user");
     // this.user = { ...JSON.parse(usrStr) };
     // this.userKeys = Object.keys(this.user);
@@ -158,7 +162,16 @@ export default {
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.user.id}`;
 
-        const resp = await fetch(url);
+
+        const headers =  {
+                        "Authorization": `Bearer ${this.authToken}`
+                    }
+        const resp = await fetch(url, {
+            headers,
+            method: "GET"
+        });
+
+        
 
         if (!resp.ok) {
           return this.notifyErr(resp.statusText);

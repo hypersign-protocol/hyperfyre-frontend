@@ -35,7 +35,7 @@
 </style>
 <template>
    <div class="home  marginLeft marginRight">
-     <h3 class="leftAlign">Welcome, {{user.name}} <b-icon icon="user"></b-icon> !</h3>
+     <h3 class="leftAlign">Welcome, {{user.name}} !</h3>
      <div class="row">
         <div class="col-md-6">
             <Profile/>
@@ -71,7 +71,9 @@ export default {
   },
   created() {
     const usrStr = localStorage.getItem('user');    
-    this.user = JSON.parse(usrStr);  
+     this.user = {
+       ...JSON.parse(usrStr)
+     }
   },
   methods: {
     
@@ -95,16 +97,17 @@ export default {
       this.$router.push(`${id}`);
     },
     logout(){
-      localStorage.removeItem('authToken')
-      localStorage.removeItem('user')
-      localStorage.removeItem("credentials")
-      localStorage.removeItem("userData")
+      console.log("Dashboard:: Logout method...")
+      // localStorage.removeItem('authToken')
+      // localStorage.removeItem('user')
+      // localStorage.removeItem("credentials")
+      // localStorage.removeItem("userData")
       
-      if(this.$route.params.nextUrl != null){
-                    this.$router.push(this.$route.params.nextUrl)
-                }else{
-        this.$router.push('/login')
-                }
+      // if(this.$route.params.nextUrl != null){
+      //               this.$router.push(this.$route.params.nextUrl)
+      //           }else{
+      //   this.$router.push('/login')
+      //           }
     },
   }
 };
