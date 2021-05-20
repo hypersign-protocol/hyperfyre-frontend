@@ -1,6 +1,7 @@
 const httpsLocalhost = require("https-localhost")();
 import { whitelist } from './config';
 
+// Ref: https://github.com/daquinoaldo/https-localhost#use-as-module
 export function getCerts(){
     return new Promise((resolve, reject) => {
         httpsLocalhost.getCerts().then(cert => {
