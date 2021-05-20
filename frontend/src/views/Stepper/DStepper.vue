@@ -204,7 +204,7 @@ export default {
 
   data() {
     return {
-      showStepper: false,
+      showStepper: true,
       data: this.stepTwoData,
       store: {
         state: this.initialState,
@@ -226,11 +226,14 @@ export default {
   },
 
   created() {
-    if (this.$route.query.projectId) {
-      this.showStepper = true;
-    } else {
+    if (
+      !this.$route.query.projectId ||
+      this.$route.query.projectId == "undefined"
+    ) {
       this.showStepper = false;
+      return;
     }
+
     const userDid = JSON.parse(localStorage.getItem("user")).id;
     console.log(userDid);
 
