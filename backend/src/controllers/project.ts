@@ -13,6 +13,7 @@ async function addProject(req: Request, res: Response) {
       ownerDid,
       twitterHandle,
       telegramHandle,
+      twitterPostFormat
     } = req.body;
 
     if (
@@ -20,7 +21,8 @@ async function addProject(req: Request, res: Response) {
       logoUrl == "" ||
       fromDate == "" ||
       toDate == "" ||
-      ownerDid == ""
+      ownerDid == "" ||
+      twitterPostFormat == ""
     ) {
       res.statusMessage =
         "projectName, logoUrl, fromDate, toDate can not be empty";
@@ -45,6 +47,7 @@ async function addProject(req: Request, res: Response) {
       ownerDid,
       twitterHandle,
       telegramHandle,
+      twitterPostFormat
     });
     res.send(newProject);
   } catch (e) {

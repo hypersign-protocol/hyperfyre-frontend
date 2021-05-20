@@ -119,7 +119,7 @@ label {
               <div class="col-md-6">
                 <div class="form-group">
                   <label style="margin-right: 8%"
-                    >Project's Twitter Handle (optional):</label
+                    >Project's Twitter Handle:</label
                   >
                   <input
                     type="text"
@@ -133,7 +133,7 @@ label {
               <div class="col-md-6">
                 <div class="form-group">
                   <label style="margin-right: 8%"
-                    >Project's Telegram Handle (optional):</label
+                    >Project's Telegram Handle:</label
                   >
                   <input
                     type="text"
@@ -142,6 +142,18 @@ label {
                     placeholder="Enter telegram channel"
                     class="form-control"
                   />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                
+                <div class="form-group">
+                  <label style="margin-right: 8%"
+                    >Twitter Post: </label
+                  >
+                <textarea rows="5" cols="5" v-model="project.twitterPostFormat" class="form-control" />
                 </div>
               </div>
             </div>
@@ -234,6 +246,7 @@ export default {
         ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
         twitterHandle: "",
         telegramHandle: "",
+        twitterPostFormat: "I am happy with #hypersign @hypersignchain"
       },
       isProjectEditing: false,
       projects: [],
