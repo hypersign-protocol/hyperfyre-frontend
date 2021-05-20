@@ -494,14 +494,9 @@ export default {
             i
           ].text.replace("projectName", this.projectDetails.projectName);
         }
-        // console.log(newStepOneDat);
-
-        // this.project.fromDate = this.formateDate(this.project.fromDate);
-        // this.project.toDate = this.formateDate(this.project.toDate);
-        // this.projectFetched = true;
-        // this.notifySuccess(
-        //   "Project is fetched. ProjectName " + json.projectName
-        // );
+        this.projectDetails.twitterPostFormat = encodeURIComponent(
+          this.projectDetails.twitterPostFormat
+        );
       } catch (e) {
         console.log(e);
         this.notifyErr(e.message);

@@ -178,7 +178,9 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
               <a
                 @click="handleInputShow"
                 target="_blank"
-                href="https://twitter.com/intent/tweet?text=I%20am%20happy%20with%20%23hypersign%20%23pollkadot%20%40hypersignchain%20"
+                :href="
+                  `https://twitter.com/intent/tweet?text=${projectDetails.twitterPostFormat}`
+                "
                 title="Tweet about this project tagging two of your friends"
                 class="ml-1"
                 >#mydatamyway</a
@@ -242,14 +244,5 @@ export default {
       this.showInput = true;
     },
   },
-
-  mounted() {
-    // const checkbox2 = document.querySelector("#checkbox-2");
-    // checkbox2.addEventListener("click", () => {
-    //   checkbox2.checked = false;
-    //   this.showInput = true;
-    // });
-  },
-  created() {},
 };
 </script>
