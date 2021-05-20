@@ -41,6 +41,10 @@ const router = new Router({
       },
     },
     {
+      path: "/studio/admin",
+      redirect: "/studio/admin/login",
+    },
+    {
       path: "/studio/admin/login",
       name: "AdminLogin",
       component: AdminLogin,
