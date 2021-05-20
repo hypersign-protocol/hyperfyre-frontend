@@ -222,6 +222,7 @@ export default {
       authToken: localStorage.getItem("authToken"),
       fullPage: true,
       projectDetails: {},
+      projectId: ""
     };
   },
 
@@ -234,16 +235,19 @@ export default {
       return;
     }
 
+
+    this.projectId = this.$route.query.projectId;
     const userDid = JSON.parse(localStorage.getItem("user")).id;
-    console.log(userDid);
+    
 
     this.checkIfAlreadyFilled(userDid);
+    this.fetchProjectData();
   },
   mounted() {
     this.data =
       this.step == 0 || this.step == 0 ? this.stepOneData : this.stepTwoData;
 
-    this.fetchProjectData();
+    
   },
 
   computed: {
@@ -378,7 +382,7 @@ export default {
         for (let i in data) {
           investor[data[i].id] = data[i].value;
         }
-        investor.projectId = this.$route.query.projectId;
+        investor.projectId = this.projectId;
         investor.did = did;
 
         investor.tweetUrl = this.stepOneData.rules[1].tweetUrl;
@@ -471,7 +475,7 @@ export default {
 
         if (!this.$route.query.projectId) throw new Error("No project found");
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.$route.query.projectId}`;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.projectId}`;
 
         console.log(url);
 
