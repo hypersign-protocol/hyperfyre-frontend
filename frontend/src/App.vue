@@ -18,7 +18,7 @@
   box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 2px 0px,
     rgba(0, 0, 0, 0.02) 0px 3px 1px -2px, rgba(0, 0, 0, 0.01) 0px 1px 5px 0px;
 }
-/* 
+/*
 .nav-style {
   text-align: left;
   background-color: rgb(58, 58, 58);
@@ -64,6 +64,27 @@
   /* padding-top: 10px; */
   margin-bottom: 1%;
 }
+.showNavbar .content-wrapper {
+  padding: 50px 20px;
+}
+.showNavbar.notCollapsed > .content-wrapper {
+  width: calc(100vw - 200px);
+  margin-left: auto;
+}
+.showNavbar.collapsed .sidebar-wrapper {
+  overflow: hidden;
+}
+.header-text {
+  text-align: center;
+  color: grey;
+  margin: 0;
+}
+.showNavbar.collapsed .header-text {
+  display: none;
+}
+.header-text + hr {
+  width: 80%;
+}
 </style>
 <template>
   <div id="app">
@@ -82,7 +103,7 @@
           </div>
         </div>
       </div> -->
-      <!-- <div class="nav-logo col-md-7">
+    <!-- <div class="nav-logo col-md-7">
         <div>
           <div>
             <img
@@ -95,7 +116,7 @@
           </div>
         </div>
       </div> -->
-      <!-- <div
+    <!-- <div
         class="col-md-8 rightAlign"
         style="padding-top:12px"
         v-if="!authRoutes.includes($router.history.current.name)"
@@ -112,13 +133,40 @@
       </div> -->
     <!-- </div> -->
 
-    <div>
-      <sidebar-menu :menu="menu" v-if="hideNavbar == true" />
-    
-
+    <div
+      :class="[
+        showNavbar
+          ? isSidebarCollapsed
+            ? 'showNavbar collapsed'
+            : 'showNavbar notCollapsed'
+          : 'hideNavbar',
+      ]"
+    >
+      <sidebar-menu
+        class="sidebar-wrapper"
+        @toggle-collapse="onToggleCollapse"
+        @item-click="onItemClick"
+        :theme="'white-theme'"
+        width="200px"
+        :menu="menu"
+        v-if="showNavbar"
+      >
+        <span slot="header">
+          <div class="ml-3 mt-3 mb-3">
+            <img
+              src="https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png"
+              alt="logo"
+            />
+          </div>
+          <p class="header-text">Whitelisting Platform</p>
+          <hr class="rule" />
+        </span>
+        <span slot="footer" class="text-center">v 1.0.0</span>
+      </sidebar-menu>
+      <div class="content-wrapper">
+        <router-view />
+      </div>
     </div>
-
-    <router-view />
     <notifications group="foo" />
   </div>
 </template>
@@ -162,53 +210,61 @@
 .marginRight {
   margin-right: 12%;
 }
+.v-sidebar-menu {
+  height: auto !important;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 42;
+}
+.v-sidebar-menu .vsm-arrow:after {
+  font-family: FontAwesome;
+}
+.v-sidebar-menu .collapse-btn:after {
+  content: "\f07e";
+  font-family: FontAwesome;
+}
 </style>
 
 <script>
 export default {
   data() {
     return {
+      isSidebarCollapsed: false,
       authRoutes: ["register", "PKIIdLogin"],
-      hideNavbar:
+      showNavbar:
         window.location.pathname.includes("investors") ||
-        window.location.pathname.includes("project")
+        window.location.pathname.includes("project") ||
+        window.location.pathname.includes("dashboard")
           ? true
           : false,
       menu: [
         {
-            header: true,
-            title: 'Main Navigation',
-            hiddenOnCollapse: true
+          href: "/studio/admin/project",
+          title: "Projects",
+          icon: "fa fa-minus",
         },
         {
-          title: 'Dashboard',
-          href: '/studio/dashboard',
-          icon: 'fa fa-user'
-        },
-        
-        {
-          href: '/studio/project',
-          title: 'Projects',
-          icon: 'fa fa-user'
+          href: "/studio/admin/dashboard",
+          title: "Dashboard",
+          icon: "fa fa-minus",
         },
         {
-          href: '/studio/investors',
-          title: 'Investors',
-          icon: 'fa fa-user'
+          href: "/studio/admin/investors",
+          title: "Investors",
+          icon: "fa fa-user",
         },
         {
           name: "Logout",
           path: "/login",
           isShow: false,
-          href: '/login',
-          title: 'Logout',
-          icon: 'fa fa-chart-area'
-        }
+          href: "/login",
+          title: "Logout",
+          icon: "fa fa-chart-area",
+        },
       ],
     };
-  },
-  mounted() {
-    console.log("MOUNTEDD");
   },
 
   methods: {
@@ -220,6 +276,24 @@ export default {
         this.$router.push(this.$route.params.nextUrl);
       } else {
         this.$router.push(r.path);
+      }
+    },
+    onToggleCollapse(collapsed) {
+      if (collapsed) {
+        this.isSidebarCollapsed = true;
+      } else {
+        this.isSidebarCollapsed = false;
+      }
+    },
+    onItemClick(item) {
+      if (
+        window.location.pathname.includes("investors") ||
+        window.location.pathname.includes("project") ||
+        window.location.pathname.includes("dashboard")
+      ) {
+        this.showNavbar = true;
+      } else {
+        this.showNavbar = false;
       }
     },
   },

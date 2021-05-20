@@ -68,9 +68,7 @@
           v-loading="loading"
         >
           <b-card-body class="w-100 border-0 d-block">
-            <div v-if="steps[step].icon" class="d-none d-sm-block">
-              <i class="fas fa-fw fa-3x mr-4" :class="iconClasses"></i>
-            </div>
+            <div v-if="steps[step].icon" class="d-none d-sm-block"></div>
             <div>
               <!-- <h3>{{ step + 1 }}. {{ steps[step].name }}</h3>
             <p class="text-muted">{{ steps[step].desc }}</p> -->
@@ -121,7 +119,6 @@
             :disabled="loading"
           >
             {{ step + 1 == 3 ? "Submit" : "Next" }}
-            <i class="fas fa-angle-double-right"></i>
           </b-button>
 
           <b-button
@@ -237,7 +234,7 @@ export default {
     const userDid = JSON.parse(localStorage.getItem("user")).id;
     console.log(userDid);
 
-    // this.checkIfAlreadyFilled(userDid);
+    this.checkIfAlreadyFilled(userDid);
   },
   mounted() {
     this.data =

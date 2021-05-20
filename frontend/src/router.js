@@ -54,8 +54,8 @@ const router = new Router({
       name: "Dashboard",
       component: Dashboard,
       meta: {
-        requiresAuth: true,
-        admin: true
+        requiresAuth: false,
+        admin: true,
       },
     },
     {
@@ -63,8 +63,8 @@ const router = new Router({
       name: "investors",
       component: Investors,
       meta: {
-        requiresAuth: true,
-        admin: true
+        requiresAuth: false,
+        admin: true,
       },
     },
     {
@@ -72,19 +72,19 @@ const router = new Router({
       name: "project",
       component: Project,
       meta: {
-        requiresAuth: true,
-        admin: true
+        requiresAuth: false,
+        admin: true,
       },
-    },    
+    },
   ],
 });
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    console.log("Requires auth")
+    console.log("Requires auth");
     const authToken = localStorage.getItem("authToken");
     if (authToken) {
-      console.log("Yes auth token")
+      console.log("Yes auth token");
       const url = `${config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
       fetch(url, {
         headers: {
@@ -95,19 +95,28 @@ router.beforeEach((to, from, next) => {
         .then((res) => res.json())
         .then((json) => {
           if (json.status == 403) {
-            next({ path: to.meta.admin  ? "/studio/admin/login" : "/studio/login", params: { nextUrl: to.fullPath },});
+            next({
+              path: to.meta.admin ? "/studio/admin/login" : "/studio/login",
+              params: { nextUrl: to.fullPath },
+            });
           } else {
             localStorage.setItem("user", JSON.stringify(json.message));
             next();
           }
         })
         .catch((e) => {
-          next({ path: to.meta.admin   ? "/studio/admin/login" : "/studio/login", params: { nextUrl: to.fullPath } });
+          next({
+            path: to.meta.admin ? "/studio/admin/login" : "/studio/login",
+            params: { nextUrl: to.fullPath },
+          });
         });
     } else {
-      console.log("No auth token")
-      localStorage.setItem("projectId", to.query["projectId"]);      
-      next({ path: to.meta.admin   ? "/studio/admin/login" : "/studio/login", params: { nextUrl: to.fullPath } });
+      console.log("No auth token");
+      localStorage.setItem("projectId", to.query["projectId"]);
+      next({
+        path: to.meta.admin ? "/studio/admin/login" : "/studio/login",
+        params: { nextUrl: to.fullPath },
+      });
     }
   } else {
     next();

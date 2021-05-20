@@ -150,12 +150,14 @@ label {
 
             <div class="row">
               <div class="col-md-12">
-                
                 <div class="form-group">
-                  <label style="margin-right: 8%"
-                    >Twitter Post: </label
-                  >
-                <textarea rows="5" cols="5" v-model="project.twitterPostFormat" class="form-control" />
+                  <label style="margin-right: 8%">Twitter Post: </label>
+                  <textarea
+                    rows="5"
+                    cols="5"
+                    v-model="project.twitterPostFormat"
+                    class="form-control"
+                  />
                 </div>
               </div>
             </div>
@@ -193,8 +195,8 @@ label {
     </div>
 
     <div class="row" style="margin-top: 2%">
-      <div class="col-md-12" style="text-align: left">
-        <table class="table table-striped">
+      <div class="col-md-12 w-100" style="text-align: left;overflow:scroll">
+        <table class="table table-striped w-100 overflow-hidden">
           <thead>
             <tr>
               <th v-for="col in cols" v-bind:key="col">{{ col }}</th>
@@ -248,7 +250,7 @@ export default {
         ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
         twitterHandle: "",
         telegramHandle: "",
-        twitterPostFormat: "I am happy with #hypersign @hypersignchain"
+        twitterPostFormat: "I am happy with #hypersign @hypersignchain",
       },
       isProjectEditing: false,
       projects: [],
