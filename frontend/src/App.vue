@@ -238,6 +238,7 @@
 </style>
 
 <script>
+// Ref:  fa icons:  https://fontawesome.com/
 export default {
   data() {
     return {
@@ -254,7 +255,7 @@ export default {
         {
           href: "/studio/admin/project",
           title: "Projects",
-          icon: "fas fa-plus-circle",
+          icon: "fas fa-plane-departure",
         },
         {
           href: "/studio/admin/investors",
