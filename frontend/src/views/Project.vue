@@ -215,12 +215,13 @@ label {
                 <a :href="project.whitelisting_link" target="_blank">Url</a>
               </td>
               <td>
+                
                 <button
                   type="button"
                   class="btn btn-outline-primary"
                   @click="editProject(project)"
                 >
-                  Edit
+                  <i class="fas fa-pencil-alt"></i>
                 </button>
               </td>
             </tr>

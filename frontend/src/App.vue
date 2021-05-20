@@ -76,8 +76,9 @@
 }
 .header-text {
   text-align: center;
-  color: #fff;
+  color:grey;
   margin: 0;
+  font-size: small;
 }
 .showNavbar.collapsed .header-text {
   display: none;
@@ -86,8 +87,8 @@
   width: 80%;
 }
 .v-sidebar-menu.vsm_white-theme {
-  background-color: #b4bdc6 !important;
-  color: #fff !important;
+  background-color: white !important;
+  color:grey !important;
 }
 .v-sidebar-menu.vsm_white-theme .vsm--link {
   color: #fff !important;
@@ -159,17 +160,17 @@
         v-if="showNavbar"
       >
         <span slot="header">
-          <div class="ml-3 mt-3 mb-3">
+          <div class="ml-1 mt-3 mb-2">
             <img
-              :src="require('./assets/footerLogo.png')"
+              :src="require('./assets/hypersign.webp')"
               alt="logo"
-              width="150px"
+              width="155px"
             />
           </div>
-          <p class="header-text">Whitelisting Platform</p>
+          <p class="header-text">{{ $config.app.name }}</p>
           <hr class="rule" />
         </span>
-        <span slot="footer" class="text-center">v 1.0.0</span>
+        <span slot="footer" class="text-center">{{ $config.app.version }}</span>
       </sidebar-menu>
       <div class="content-wrapper">
         <router-view />
@@ -225,6 +226,7 @@
   left: 0;
   right: 0;
   z-index: 42;
+  box-shadow: #80808042 1px 1px 1px 1px;
 }
 .v-sidebar-menu .vsm-arrow:after {
   font-family: FontAwesome;
@@ -247,22 +249,22 @@ export default {
         {
           href: "/studio/admin/dashboard",
           title: "Dashboard",
-          icon: "fa fa-minus",
+          icon: "fas fa-tachometer-alt",
         },
         {
           href: "/studio/admin/project",
           title: "Projects",
-          icon: "fa fa-minus",
+          icon: "fas fa-plus-circle",
         },
         {
           href: "/studio/admin/investors",
           title: "Investors",
-          icon: "fa fa-user",
+          icon: "fas fa-users",
         },
         {
           href:  "/studio/admin/login",
           title: "Logout",
-          icon: "fa fa-chart-area",
+          icon: "fas fa-sign-out-alt",
         },
       ],
     };
