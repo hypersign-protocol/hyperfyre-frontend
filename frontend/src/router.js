@@ -40,7 +40,7 @@ const router = new Router({
       },
     },
     {
-      path: "/studio/dashboard",
+      path: "/studio/admin/dashboard",
       name: "Dashboard",
       component: Dashboard,
       meta: {
@@ -48,23 +48,7 @@ const router = new Router({
       },
     },
     {
-      path: "/studio/procurment",
-      name: "procurment",
-      component: Investor,
-      meta: {
-        requiresAuth: true,
-      },
-    },
-    {
-      path: "/studio/project",
-      name: "project",
-      component: Project,
-      meta: {
-        requiresAuth: false,
-      },
-    },
-    {
-      path: "/studio/investors",
+      path: "/studio/admin/investors",
       name: "investors",
       component: Investors,
       meta: {
@@ -72,13 +56,13 @@ const router = new Router({
       },
     },
     {
-      path: "/studio/stepper",
-      name: "investors",
-      component: Stepper,
+      path: "/studio/admin/project",
+      name: "project",
+      component: Project,
       meta: {
         requiresAuth: false,
       },
-    },
+    },    
   ],
 });
 
