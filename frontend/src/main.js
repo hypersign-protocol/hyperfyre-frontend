@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-import BootstrapVue from "bootstrap-vue";
+import {BootstrapVue, IconsPlugin, BIcon} from "bootstrap-vue";
 import Notifications from "vue-notification";
 import config from "./config";
 import VuejsDialog from "vuejs-dialog";
@@ -33,6 +33,7 @@ Vue.use(VuejsDialog, {
 // Vue.use(vDialog);
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
+Vue.use(IconsPlugin);
 Vue.use(Notifications);
 
 //// VUE EASY TABEL ////

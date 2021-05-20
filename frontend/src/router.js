@@ -40,6 +40,14 @@ const router = new Router({
       },
     },
     {
+      path: "/studio/dashboard",
+      name: "Dashboard",
+      component: Dashboard,
+      meta: {
+        requiresAuth: false,
+      },
+    },
+    {
       path: "/studio/procurment",
       name: "procurment",
       component: Investor,
