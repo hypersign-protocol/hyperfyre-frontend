@@ -543,7 +543,7 @@ export default {
   background-color: rgba(58, 58, 58, 1);
 }
 .header {
-  height: 300px;
+  height: 275px;
 }
 .footer {
   padding: 10px 30px;
@@ -560,7 +560,7 @@ div.rule {
   margin-bottom: 20px;
 }
 .steps-container {
-  min-height: 80vh;
+  min-height: 60vh;
   width: 60%;
   margin: 0 auto;
   display: flex;
