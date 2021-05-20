@@ -183,6 +183,10 @@ export default {
       ],
     };
   },
+  mounted() {
+    console.log("MOUNTEDD");
+  },
+
   methods: {
     goToNextPage(route) {
       const r = this.menu.find((x) => x.name === route);
