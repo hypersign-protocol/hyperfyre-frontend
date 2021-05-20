@@ -233,12 +233,8 @@ export default {
     return {
       isSidebarCollapsed: false,
       authRoutes: ["register", "PKIIdLogin"],
-      showNavbar:
-        window.location.pathname.includes("investors") ||
-        window.location.pathname.includes("project") ||
-        window.location.pathname.includes("dashboard")
-          ? true
-          : false,
+      showNavbar: true,
+
       menu: [
         {
           href: "/studio/admin/project",
@@ -265,6 +261,36 @@ export default {
         },
       ],
     };
+  },
+
+  mounted() {
+    console.log("MOUNTED");
+    this.showNavbar =
+      window.location.pathname.includes("investors") ||
+      window.location.pathname.includes("project") ||
+      window.location.pathname.includes("dashboard")
+        ? true
+        : false;
+  },
+
+  beforeMount() {
+    console.log("BEFORE MOUNTED");
+    this.showNavbar =
+      window.location.pathname.includes("investors") ||
+      window.location.pathname.includes("project") ||
+      window.location.pathname.includes("dashboard")
+        ? true
+        : false;
+  },
+
+  created() {
+    console.log("CREATED");
+    this.showNavbar =
+      window.location.pathname.includes("investors") ||
+      window.location.pathname.includes("project") ||
+      window.location.pathname.includes("dashboard")
+        ? true
+        : false;
   },
 
   methods: {

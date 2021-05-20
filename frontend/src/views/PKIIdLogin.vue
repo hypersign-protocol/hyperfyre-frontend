@@ -170,7 +170,7 @@ h5 span {
                 :logoSrc="src2"
                 margin="1"
                 :text="value"
-                :size="300"
+                :size="200"
                 logoBackgroundColor="white"
                 logoCornerRadius="2"
               ></vue-qr>

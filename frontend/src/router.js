@@ -54,7 +54,7 @@ const router = new Router({
       name: "Dashboard",
       component: Dashboard,
       meta: {
-        requiresAuth: false,
+        requiresAuth: true,
         admin: true,
       },
     },
@@ -63,7 +63,7 @@ const router = new Router({
       name: "investors",
       component: Investors,
       meta: {
-        requiresAuth: false,
+        requiresAuth: true,
         admin: true,
       },
     },
@@ -72,7 +72,7 @@ const router = new Router({
       name: "project",
       component: Project,
       meta: {
-        requiresAuth: false,
+        requiresAuth: true,
         admin: true,
       },
     },
