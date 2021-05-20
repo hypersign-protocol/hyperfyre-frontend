@@ -7,13 +7,14 @@
     ></loading>
     <div class="header w-100 text-left text-white">
       <div class="logo bg-white d-inline-block p-3 px-5">
-        <img
-          width="120px"
-          src="https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png"
-        />
+        <img width="120px" :src="projectDetails.logoUrl" />
       </div>
       <div class="text mx-auto  py-3 text-left">
-        <h4>Apply to HYPERSIGN's Whitelist</h4>
+        <h4>
+          Apply to
+          <span class="text-uppercase">{{ projectDetails.projectName }}</span>
+          Whitelist
+        </h4>
         <p>{{ step == 0 ? stepOneData.line1 : stepTwoData.line1 }}</p>
         <p>{{ step == 0 ? stepOneData.line2 : stepTwoData.line2 }}</p>
       </div>
@@ -78,6 +79,7 @@
                 <transition :name="effect" mode="out-in">
                   <keep-alive>
                     <component
+                      :projectDetails="projectDetails"
                       :stepOneData="stepOneData"
                       :stepTwoData="stepTwoData"
                       :store="store"
@@ -222,6 +224,7 @@ export default {
       isLoading: false,
       authToken: localStorage.getItem("authToken"),
       fullPage: true,
+      projectDetails: {},
     };
   },
 
@@ -239,6 +242,8 @@ export default {
   mounted() {
     this.data =
       this.step == 0 || this.step == 0 ? this.stepOneData : this.stepTwoData;
+
+    this.fetchProjectData();
   },
 
   computed: {
@@ -459,6 +464,50 @@ export default {
       self.status = "submitting";
       self.$refs.recaptcha.reset();
       this.saveInvestor(this.stepTwoData.formData, recaptchaToken);
+    },
+    async fetchProjectData() {
+      try {
+        this.isLoading = true;
+
+        if (!this.$route.query.projectId) throw new Error("No project found");
+
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.$route.query.projectId}`;
+
+        console.log(url);
+
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+        const resp = await fetch(url, headers);
+
+        console.log("RESP", resp);
+        if (resp.status != 200) {
+          throw new Error(resp.statusText);
+        }
+
+        const json = await resp.json();
+        this.projectDetails = { ...json };
+
+        for (let i in this.stepOneData.rules) {
+          this.stepOneData.rules[i].text = this.stepOneData.rules[
+            i
+          ].text.replace("projectName", this.projectDetails.projectName);
+        }
+        // console.log(newStepOneDat);
+
+        // this.project.fromDate = this.formateDate(this.project.fromDate);
+        // this.project.toDate = this.formateDate(this.project.toDate);
+        // this.projectFetched = true;
+        // this.notifySuccess(
+        //   "Project is fetched. ProjectName " + json.projectName
+        // );
+      } catch (e) {
+        console.log(e);
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
 };

@@ -117,19 +117,19 @@ export default {
         rules: [
           {
             id: 1,
-            text: "Please follow Hypersign on twitter",
+            text: "Please follow projectName on twitter",
             checked: false,
           },
           {
             id: 2,
-            text: "Retweet Hypersign's last post and add ",
+            text: "Retweet projectName's last post and add ",
             checked: false,
             showTweetInput: true,
             tweetUrl: "",
           },
           {
             id: 3,
-            text: "Join the Hypersign's telegram group ",
+            text: "Join the projectName's telegram group ",
             checked: false,
           },
         ],

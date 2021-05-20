@@ -164,9 +164,13 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
 
             <div v-if="rule.id == 1" class="ml-2">
               <a
-                href="https://twitter.com/hypersignchain?ref_src=twsrc%5Etfw"
+                :href="
+                  'https://twitter.com/' +
+                    projectDetails.twitterHandle +
+                    '?ref_src=twsrc%5Etfw'
+                "
                 target="_blank"
-                >@hypersign</a
+                >@{{ projectDetails.twitterHandle }}</a
               >
             </div>
 
@@ -193,10 +197,10 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
 
             <div class="ml-2" v-if="rule.id == 3" for="checkbox-3">
               <a
-                href="https://telegram.im/@hypersignchain"
+                :href="`https://telegram.im/@${projectDetails.telegramHandle}`"
                 target="_blank"
                 title="Join our telegram channel for latest updates"
-                ><i></i> @hypersignchain</a
+                ><i></i> @{{ projectDetails.telegramHandle }}</a
               >
             </div>
           </div>
@@ -222,6 +226,9 @@ export default {
   name: "StepOne",
   props: {
     stepOneData: {
+      type: Object,
+    },
+    projectDetails: {
       type: Object,
     },
   },

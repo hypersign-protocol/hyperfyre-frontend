@@ -94,8 +94,11 @@ h5 span {
   }
 }
 
-.qrWrapper{
-padding: 10px;border: 1px solid rgba(128, 128, 128, 0.37); width: 55%; margin-left: 22%;
+.qrWrapper {
+  padding: 10px;
+  border: 1px solid rgba(128, 128, 128, 0.37);
+  width: 55%;
+  margin-left: 22%;
 }
 /* .with-hypersign-btn  */
 </style>
@@ -160,29 +163,43 @@ padding: 10px;border: 1px solid rgba(128, 128, 128, 0.37); width: 55%; margin-le
         >
         <div>
           <p class="loginInNow-text">LOG IN NOW</p>
-          <div v-if="value && value != '' ">
-          <div class="qrWrapper">
-            <vue-qr v-if="value != ''" :logoSrc="src2" margin="1"  :text="value"  :size="300" logoBackgroundColor="white" logoCornerRadius="2"></vue-qr>            
+          <div v-if="value && value != ''">
+            <div class="qrWrapper">
+              <vue-qr
+                v-if="value != ''"
+                :logoSrc="src2"
+                margin="1"
+                :text="value"
+                :size="300"
+                logoBackgroundColor="white"
+                logoCornerRadius="2"
+              ></vue-qr>
+            </div>
+            <p class="mt-1">
+              <span style="font-size:small"
+                >Scan QR code with the Hypersign Mobile App</span
+              >
+            </p>
+            <h6>OR</h6>
+            <p class="text-center">
+              <button
+                class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill"
+                @click="openWallet()"
+              >
+                <div>
+                  <img
+                    style="height:50px"
+                    :src="require('../assets/hypersignSmallLogo.png')"
+                    class="ml-0 rounded rounded-circle border border-white border-1 p-1"
+                  />
+                </div>
+                <div class="btn-text">Login with Web Wallet</div>
+              </button>
+            </p>
           </div>
-          <p class="mt-1"><span style="font-size:small">Scan QR code with the Hypersign Mobile App</span></p>
-          <h6>OR</h6>
-          <p class="text-center">
-            <button
-              class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill"
-              @click="openWallet()"
-            >
-              <div>
-                <img
-                  style="height:50px"
-                  :src="require('../assets/hypersignSmallLogo.png')"
-                  class="ml-0 rounded rounded-circle border border-white border-1 p-1"
-                />
-              </div>
-              <div class="btn-text">Login with Web Wallet</div>
-            </button>
-          </p>
-          </div>
-          <span v-if="!value || value == '' " style="color:red; font-size:small">Error in fetching QR data...</span>
+          <span v-if="!value || value == ''" style="color:red; font-size:small"
+            >Error in fetching QR data...</span
+          >
           <!-- <p class="mt-3">Scanner not working ?</p> -->
         </div>
         <a
@@ -208,21 +225,20 @@ padding: 10px;border: 1px solid rgba(128, 128, 128, 0.37); width: 55%; margin-le
 </template>
 
 <script>
-
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import url from "url";
-import VueQr from 'vue-qr'
+import VueQr from "vue-qr";
 
 export default {
   name: "Login",
   components: {
     Loading,
-    VueQr
+    VueQr,
   },
   data() {
     return {
-      src2: require('../assets/icon.png'),
+      src2: require("../assets/icon.png"),
 
       active: 0,
       host: location.hostname,
@@ -237,9 +253,9 @@ export default {
       connection: null,
       qrConfig: {
         value: "test",
-        imagePath: '/apple-icon-57x57.png',
-        filter: 'color'
-      }
+        imagePath: "/apple-icon-57x57.png",
+        filter: "color",
+      },
     };
   },
   created() {
