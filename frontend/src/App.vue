@@ -76,7 +76,7 @@
 }
 .header-text {
   text-align: center;
-  color: grey;
+  color: #fff;
   margin: 0;
 }
 .showNavbar.collapsed .header-text {
@@ -84,6 +84,13 @@
 }
 .header-text + hr {
   width: 80%;
+}
+.v-sidebar-menu.vsm_white-theme {
+  background-color: #b4bdc6 !important;
+  color: #fff !important;
+}
+.v-sidebar-menu.vsm_white-theme .vsm--link {
+  color: #fff !important;
 }
 </style>
 <template>
@@ -154,8 +161,9 @@
         <span slot="header">
           <div class="ml-3 mt-3 mb-3">
             <img
-              src="https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png"
+              :src="require('./assets/footerLogo.png')"
               alt="logo"
+              width="150px"
             />
           </div>
           <p class="header-text">Whitelisting Platform</p>
@@ -262,26 +270,6 @@ export default {
 
   mounted() {
     console.log("MOUNTED");
-    this.showNavbar =
-      window.location.pathname.includes("investors") ||
-      window.location.pathname.includes("project") ||
-      window.location.pathname.includes("dashboard")
-        ? true
-        : false;
-  },
-
-  beforeMount() {
-    console.log("BEFORE MOUNTED");
-    this.showNavbar =
-      window.location.pathname.includes("investors") ||
-      window.location.pathname.includes("project") ||
-      window.location.pathname.includes("dashboard")
-        ? true
-        : false;
-  },
-
-  created() {
-    console.log("CREATED");
     this.showNavbar =
       window.location.pathname.includes("investors") ||
       window.location.pathname.includes("project") ||

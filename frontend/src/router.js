@@ -72,7 +72,7 @@ const router = new Router({
       name: "project",
       component: Project,
       meta: {
-        requiresAuth: true,
+        requiresAuth: false,
         admin: true,
       },
     },
