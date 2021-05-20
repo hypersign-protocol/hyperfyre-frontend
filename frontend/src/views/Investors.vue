@@ -96,9 +96,14 @@ label {
 
     <div class="row">
       <div class="col-md-12" style="text-align: left;">
-        <select @change="fetchProjectInvestors()">
+        <select @change="fetchProjectInvestors">
           <option value="">Select Project</option>
-          <option v-for="project in projects" :key="project._id" :value="project._id">{{ project.projectName  }}</option>
+          <option
+            v-for="project in projects"
+            :key="project._id"
+            :value="project._id"
+            >{{ project.projectName }}</option
+          >
         </select>
       </div>
     </div>
@@ -417,8 +422,8 @@ export default {
     };
   },
   async mounted() {
-    const userProjectStr = localStorage.getItem('userProjects');
-    const userProjectsData  = JSON.parse(userProjectStr);
+    const userProjectStr = localStorage.getItem("userProjects");
+    const userProjectsData = JSON.parse(userProjectStr);
     this.projects = userProjectsData.projects;
   },
 
@@ -485,8 +490,9 @@ export default {
     async handleTableSearch() {
       this.fetchProjectData(0, this.perPage);
     },
-    async fetchProjectInvestors(projectId){
-      this.investor.projectId =  this.projects[1]._id;
+    async fetchProjectInvestors(e) {
+      // this.investor.projectId = this.projects[1]._id;
+      this.investor.projectId = e.target.value;
       await this.fetchProjectData(0, this.perPage);
     },
 
