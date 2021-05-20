@@ -160,7 +160,6 @@
 </style>
 
 <script>
-console.log();
 export default {
   data() {
     return {
