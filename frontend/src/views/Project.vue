@@ -101,6 +101,7 @@ label {
                   <datepicker
                     v-model="project.fromDate"
                     name="uniquename"
+                    input-class="form-control"
                   ></datepicker>
                 </div>
               </div>
@@ -110,6 +111,7 @@ label {
                   <datepicker
                     v-model="project.toDate"
                     name="uniquename"
+                    input-class="form-control"
                   ></datepicker>
                 </div>
               </div>
