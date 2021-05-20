@@ -63,6 +63,7 @@ export default {
   data() {
     return {
       appList: [],
+     
       user: {},
       appName: "",
       authToken: localStorage.getItem('authToken')
@@ -70,9 +71,10 @@ export default {
   },
   created() {
     const usrStr = localStorage.getItem('user');    
-    this.user = JSON.parse(usrStr);
+    this.user = JSON.parse(usrStr);  
   },
   methods: {
+    
     notifySuccess(msg){
       this.$notify({
           group: 'foo',

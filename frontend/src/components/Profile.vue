@@ -63,7 +63,7 @@
     <div class="row" style="margin-top: 2%">
       <div class="col-md-6">
         <div class="card">
-          <div class="card-body tile">{{ credentialCount }}</div>
+          <div class="card-body tile">{{ projectCount }}</div>
           <div class="card-header">Projects</div>
         </div>
       </div>
@@ -126,9 +126,9 @@ export default {
       userKeys: [],
       appList: [],
       schemaCount: 0,
-      credentialCount: 0,
+      projectCount: 0,
       user: {
-        id: "did:hs:123123",
+        id: "did:hs:QWERTlkasd090123SWEE12322",
         publicKey: "0x2123ASSD12312",
         email: "vishu.anand1@gmail.com",
         phoneNumber: "+91-12312312",
@@ -136,16 +136,56 @@ export default {
         Email: "vishu.anand1@gmail.com",
         Name: "Vishwas",
       },
+
       authToken: localStorage.getItem("authToken"),
+       projects: [],
     };
   },
-  created() {
+  async created() {
     // const usrStr = localStorage.getItem("user");
     // this.user = { ...JSON.parse(usrStr) };
     // this.userKeys = Object.keys(this.user);
     // this.pollData();
+      
+    await this.fetchProjects();
   },
   methods: {
+    async fetchProjects() {
+      try {
+        this.isLoading = true;
+
+        if (!this.user.id) throw new Error("No project owner found");
+
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.user.id}`;
+
+        const resp = await fetch(url);
+
+        if (!resp.ok) {
+          return this.notifyErr(resp.statusText);
+        }
+
+        const json = await resp.json();
+        this.projects = json;
+        this.projects.map((x) => {
+          x["whitelisting_link"] =
+            window.location.origin + "/studio/form?projectId=" + x._id;
+          x["investors_link"] =
+            window.location.origin + "/studio/investors?projectId=" + x._id;
+        });
+        this.projectCount = this.projects.length;
+        localStorage.setItem('userProjects', JSON.stringify({
+          projects: this.projects,
+          count: this.projectCount
+        }));
+
+        
+        // this.notifySuccess("No. of projects fetched " + this.projects.length);
+      } catch (e) {
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     // fetchData(url, options) {
     //   return fetch(url, options)
     //     .then((res) => res.json())

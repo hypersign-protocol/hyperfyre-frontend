@@ -84,7 +84,7 @@ label {
       :is-full-page="fullPage"
     ></loading>
 
-    <div class="row" v-if="!projectFetched">
+    <!-- <div class="row" v-if="!projectFetched">
       <div class="col-md-12" style="text-align: left;">
         <div class="card" style="padding:10px; background: #ff000029">
           <div class="card-body">
@@ -92,32 +92,14 @@ label {
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div class="row" v-if="projectFetched">
+    <div class="row">
       <div class="col-md-12" style="text-align: left;">
-        <div class="card" style="padding:10px">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-6">
-                <h2>{{ project.projectName.toUpperCase() }}</h2>
-                <h4>WHITELISTING</h4>
-              </div>
-            </div>
-            <div class="row" style="margin-top: 5%">
-              <div class="col-md-6">
-                <h5>From: {{ project.fromDate }}</h5>
-                <h5>To: {{ project.toDate }}</h5>
-              </div>
-              <div class="col-md-6">
-                <img
-                  :src="project.logoUrl"
-                  style="float:right; max-width: 176.86px; max-height: 42px;"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        <select @change="fetchProjectInvestors()">
+          <option value="">Select Project</option>
+          <option v-for="project in projects" :key="project._id" :value="project._id">{{ project.projectName  }}</option>
+        </select>
       </div>
     </div>
 
@@ -423,6 +405,8 @@ export default {
         investors: [],
       },
 
+      projects: [],
+
       projectFetched: false,
       isDataSaved: false,
       active: 0,
@@ -433,15 +417,11 @@ export default {
     };
   },
   async mounted() {
-    this.investor.projectId = this.$route.query.projectId
-      ? this.$route.query.projectId
-      : "60676b4f09baec1befb5f469"; // if projectId is not passed, hardcoding hypersign project Id
-
-    await this.fetchProjectData(0, this.perPage);
-    //const usrStr = localStorage.getItem("user");
-    //this.user = null; JSON.parse(usrStr);
-    //await this.fetchProcurment();
+    const userProjectStr = localStorage.getItem('userProjects');
+    const userProjectsData  = JSON.parse(userProjectStr);
+    this.projects = userProjectsData.projects;
   },
+
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.prevRoute = from;
@@ -504,6 +484,10 @@ export default {
 
     async handleTableSearch() {
       this.fetchProjectData(0, this.perPage);
+    },
+    async fetchProjectInvestors(projectId){
+      this.investor.projectId =  this.projects[1]._id;
+      await this.fetchProjectData(0, this.perPage);
     },
 
     filterVerified(label) {
