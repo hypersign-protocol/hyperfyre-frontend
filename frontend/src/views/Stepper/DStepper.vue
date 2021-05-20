@@ -171,16 +171,27 @@
         <div class="logo-partner"></div>
       </div>
     </div>
+    <vue-recaptcha
+      v-if="step + 1 == 3"
+      ref="recaptcha"
+      size="invisible"
+      :sitekey="$config.recaptchaSiteKey"
+      :loadRecaptchaScript="true"
+      @verify="onCaptchaVerified"
+      @expired="onCaptchaExpired"
+    ></vue-recaptcha>
   </div>
 </template>
 
 <script>
 import Loading from "vue-loading-overlay";
+import VueRecaptcha from "vue-recaptcha";
 import "vue-loading-overlay/dist/vue-loading.css";
 
 export default {
   name: "DStepper",
-  components: { Loading },
+
+  components: { Loading, VueRecaptcha },
   props: {
     steps: { type: Array, default: () => [] },
     initialState: { type: Object, default: () => ({}) },
@@ -195,7 +206,7 @@ export default {
   data() {
     return {
       showStepper: false,
-      data: this.stepOneData,
+      data: this.stepTwoData,
       store: {
         state: this.initialState,
         setState: this.setState,
@@ -210,7 +221,7 @@ export default {
       shake: false,
       isLoading: false,
       authToken: localStorage.getItem("authToken"),
-      fullPage: true
+      fullPage: true,
     };
   },
 
@@ -223,7 +234,11 @@ export default {
     const userDid = JSON.parse(localStorage.getItem("user")).id;
     console.log(userDid);
 
-    this.checkIfAlreadyFilled(userDid);
+    // this.checkIfAlreadyFilled(userDid);
+  },
+  mounted() {
+    this.data =
+      this.step == 0 || this.step == 0 ? this.stepOneData : this.stepTwoData;
   },
 
   computed: {
@@ -317,36 +332,7 @@ export default {
           });
         }
       } else if (step == 3) {
-        this.saveInvestor(data.formData)
-          .then(async (res) => {
-            console.log(res);
-            if (res.status !== 200) {
-              throw new Error(res.statusText);
-            }
-            const json = await res.json();
-            console.log("JSON RESP", json);
-            this.isLoading = false;
-            localStorage.removeItem("authToken");
-            localStorage.removeItem("projectId");
-            localStorage.removeItem("user");
-            gotoNextPage = true;
-            this.$notify({
-              group: "foo",
-              title: "Success",
-              type: "success",
-              text: "Successfully Signed Up",
-            });
-            this.slideToNextPage(gotoNextPage);
-          })
-          .catch((er) => {
-            this.isLoading = false;
-            this.$notify({
-              group: "foo",
-              title: "Something went wrong",
-              type: "error",
-              text: er.message,
-            });
-          });
+        this.$refs.recaptcha.execute();
       }
     },
 
@@ -376,23 +362,11 @@ export default {
       this.loading = status;
       //if (!status) this.nextStepAction();
     },
-    async saveInvestor(data) {
+    async saveInvestor(data, recaptchaToken) {
       try {
         let investor = {};
         const did = JSON.parse(localStorage.getItem("user")).id;
-        // let investor = {
-        //   did: "did:hs:TEqweqweqwe12",
-        //   email: "",
-        //   name: "",
-        //   ethAddress: "",
-        //   twitterHandle: "",
-        //   telegramHandle: "",
-        //   hasTwitted: false,
-        //   hasJoinedTGgroup: false,
-        //   projectId: "",
-        //   tweetUrl:
-        //     "https://twitter.com/VishwasBAnand1/status/1378516089466843137?s=20",
-        // };
+
         this.isLoading = true;
 
         // BUILDING UP THE INVESTOR OBJECT, TO SEND TO API
@@ -404,21 +378,42 @@ export default {
 
         investor.tweetUrl = this.stepOneData.rules[1].tweetUrl;
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${recaptchaToken}`;
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
         };
 
-        return fetch(url, {
+        const resp = await fetch(url, {
           method: "POST",
           body: JSON.stringify(investor),
           headers,
         });
-      } catch (e) {
-        console.log(e);
-        // this.notifyErr(e.message);
+        if (resp.status !== 200) {
+          throw new Error(resp.statusText);
+        }
+        const json = await resp.json();
+        console.log(json);
+
+        this.isLoading = false;
+        this.slideToNextPage(true);
+        this.$notify({
+          group: "foo",
+          title: "Success",
+          type: "success",
+          text: "Successfully Signed Up",
+        });
+      } catch (err) {
+        console.log("ERROR", err);
+        this.$notify({
+          group: "foo",
+          title: "Something went wrong",
+          type: "error",
+          text: err.message,
+        });
+        this.isLoading = false;
       } finally {
+        console.log("FINALLY ");
         // this.isLoading = false;
         // this.clear();
       }
@@ -452,6 +447,18 @@ export default {
         // this.isLoading = false;
         // this.clear();
       }
+    },
+
+    onCaptchaExpired: function() {
+      console.log("Captcha expired");
+      this.$refs.recaptcha.reset();
+    },
+
+    onCaptchaVerified: function(recaptchaToken) {
+      const self = this;
+      self.status = "submitting";
+      self.$refs.recaptcha.reset();
+      this.saveInvestor(this.stepTwoData.formData, recaptchaToken);
     },
   },
 };

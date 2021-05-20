@@ -79,15 +79,6 @@ div.form > div {
 
           <!-- <vue-recaptcha sitekey="Your key here"></vue-recaptcha> -->
 
-          <vue-recaptcha 
-                  ref="recaptcha" 
-                  size="invisible" 
-                  :sitekey="$config.recaptchaSiteKey" 
-                  :loadRecaptchaScript="true" 
-                  @verify="onCaptchaVerified"
-                  @expired="onCaptchaExpired"
-            ></vue-recaptcha>
-
           <div class="w-100">
             <!--             
             <div class="d-flex align-items-end">
@@ -124,7 +115,6 @@ div.form > div {
 
 <script>
 import VueRecaptcha from "vue-recaptcha";
-// This components will have the content for each stepper step.
 
 export default {
   name: "StepThree",
@@ -133,30 +123,15 @@ export default {
       type: Object,
     },
   },
-  data(){
+  data() {
     return {
-      recaptchaSiteKey: ""
-    }
-  },
-  components: {
-    VueRecaptcha,
+      recaptchaSiteKey: "",
+    };
   },
 
   mounted() {
     console.log(this.$config);
     console.log(this.stepTwoData);
   },
-  methods: {
-    onCaptchaExpired: function () {
-      console.log('Captcha expired')
-      this.$refs.recaptcha.reset();
-    },
-    onCaptchaVerified: function (recaptchaToken) {
-      const self = this;
-      self.status = "submitting";
-      self.$refs.recaptcha.reset();
-      // this.signup(recaptchaToken)
-    },
-  }
 };
 </script>

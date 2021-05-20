@@ -69,7 +69,6 @@ const whitelistingSchemaId =
   process.env.WHITELISTING_SCHEMAID ||
   "sch_3e2bb460-3028-4c64-accc-c680ce7744ed";
 
-
 const recaptchaSecret = process.env.RECAPTCHA_SECRET;
 const recaptchaUri = "https://www.google.com/recaptcha/api/siteverify";
 
