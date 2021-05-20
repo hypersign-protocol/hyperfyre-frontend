@@ -72,6 +72,10 @@ const whitelistingSchemaId =
 
 const recaptchaSecret = process.env.RECAPTCHA_SECRET;
 const recaptchaUri = "https://www.google.com/recaptcha/api/siteverify";
+
+const httpsEnabled = process.env.ENABLE_HTTPS || true;
+
+const whitelist = process.env.WHITELISTED_CORS || ['*'];
 export {
   port,
   host,
@@ -84,5 +88,7 @@ export {
   hostnameurl,
   whitelistingSchemaId,
   recaptchaSecret,
-  recaptchaUri
+  recaptchaUri,
+  httpsEnabled,
+  whitelist
 };
