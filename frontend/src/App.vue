@@ -237,13 +237,13 @@ export default {
 
       menu: [
         {
-          href: "/studio/admin/project",
-          title: "Projects",
+          href: "/studio/admin/dashboard",
+          title: "Dashboard",
           icon: "fa fa-minus",
         },
         {
-          href: "/studio/admin/dashboard",
-          title: "Dashboard",
+          href: "/studio/admin/project",
+          title: "Projects",
           icon: "fa fa-minus",
         },
         {
@@ -252,10 +252,7 @@ export default {
           icon: "fa fa-user",
         },
         {
-          name: "Logout",
-          path: "/login",
-          isShow: false,
-          href: "/login",
+          href:  "/studio/admin/login",
           title: "Logout",
           icon: "fa fa-chart-area",
         },
