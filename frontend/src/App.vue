@@ -76,7 +76,7 @@
 }
 .header-text {
   text-align: center;
-  color:grey;
+  color: grey;
   margin: 0;
   font-size: small;
 }
@@ -88,7 +88,7 @@
 }
 .v-sidebar-menu.vsm_white-theme {
   background-color: white !important;
-  color:grey !important;
+  color: grey !important;
 }
 .v-sidebar-menu.vsm_white-theme .vsm--link {
   color: #fff !important;
@@ -235,6 +235,14 @@
   content: "\f07e";
   font-family: FontAwesome;
 }
+.v-sidebar-menu.vsm_white-theme .vsm--link_level-1 .vsm--icon {
+  background-color: transparent !important;
+  color: #000 !important;
+}
+.v-sidebar-menu.vsm_white-theme .vsm--link_level-1.vsm--link_exact-active,
+.v-sidebar-menu.vsm_white-theme .vsm--link_level-1.vsm--link_active {
+  background-color: rgba(242, 242, 242, 1);
+}
 </style>
 
 <script>
@@ -263,7 +271,7 @@ export default {
           icon: "fas fa-users",
         },
         {
-          href:  "/studio/admin/login",
+          href: "/studio/admin/login",
           title: "Logout",
           icon: "fas fa-sign-out-alt",
         },
