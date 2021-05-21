@@ -103,10 +103,10 @@ border-top: 2px solid rgb(120, 120, 243);
                   logoCornerRadius="2"
                 ></vue-qr>
                 <label style="font-size:small; margin-top:1%"
-                  >Scan the QR code using Hypersign Modile App</label
+                  >Scan QR code using Hypersign Modile App</label
                 >
                 <div>
-                  <p>Don’t have the app yet? <a href="#">Get it now</a></p>
+                  <p style="font-size:small;"> Don’t have the app yet? <a href="#">Get it now</a></p>
                   <div>
                     <span class="download">
                       <a
