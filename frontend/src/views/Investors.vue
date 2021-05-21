@@ -577,6 +577,7 @@ export default {
 
         const headers = {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.authToken}`,
         };
 
         const resp = await fetch(url, {
@@ -608,6 +609,7 @@ export default {
 
         const headers = {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.authToken}`,
         };
 
         const resp = await fetch(url, {
@@ -675,17 +677,10 @@ export default {
       try {
         this.isLoading = true;
 
-        // if (this.vehiclNumber == "")
-        //   return this.notifyErr("Error: Vehicle Number can not be blank");
-        // if (this.typOfMaterial == "")
-        //   return this.notifyErr("Error: typeOfMaterial can not be blank");
-        // if (this.numprOfSacks == "")
-        //   return this.notifyErr("Error: Number Of Sacks can not be blank");
-
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
         let headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
+          "Authorization": `Bearer ${this.authToken}`,
         };
         const resp = await fetch(url, {
           method: "POST",
