@@ -282,7 +282,8 @@ export default {
     }
     console.log(websocketUrl);
 
-    this.connection = new WebSocket(websocketUrl);
+    // take it in the env
+    this.connection = new WebSocket(this.$config.websocketUrl);
     this.connection.onopen = function() {
       console.log("Websocket connection is open");
     };

@@ -9,6 +9,7 @@ const config = {
     },
     recaptchaSiteKey: process.env.VUE_APP_RECAPTCHA_SITE_KEY,
     webWalletAddress: process.env.VUE_APP_WEBWALLET_URL,
+    websocketUrl: process.env.VUE_APP_SERVER_WEBSOCKET_URL
 }
 
 
