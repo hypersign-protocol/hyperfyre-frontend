@@ -1,7 +1,7 @@
 {
-    "name": "dp-middleware",
+    "name": "whitelisting-backend",
     "version": "1.0.0",
-    "description": "",
+    "description": "Express backend server for whitelisting portal",
     "main": "dist/index",
     "typings": "dist/index",
     "scripts": {
