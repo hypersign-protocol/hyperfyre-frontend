@@ -34,7 +34,7 @@ async function setupApp() {
 
         // Routes    
         app.use('/api/v1/investor', routes.investor(hypersign));
-        app.use('/api/v1/investors', routes.investors());
+        app.use('/api/v1/investors', routes.investors(hypersign));
         app.use('/api/v1/project', routes.project(hypersign));
         app.use("/hs/api/v2/auth", routes.auth(hypersign));
 

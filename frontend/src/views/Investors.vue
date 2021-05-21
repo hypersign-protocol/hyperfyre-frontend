@@ -84,19 +84,12 @@ label {
       :is-full-page="fullPage"
     ></loading>
 
-    <!-- <div class="row" v-if="!projectFetched">
-      <div class="col-md-12" style="text-align: left;">
-        <div class="card" style="padding:10px; background: #ff000029">
-          <div class="card-body">
-            <h3>Oops! Some error occurred.</h3>
-          </div>
-        </div>
-      </div>
-    </div> -->
 
-    <div class="row">
-      <div class="col-md-12" style="text-align: left;">
-        <select @change="fetchProjectInvestors">
+    <div class="row " style="margin-top: 2%">
+      <div class="d-flex justify-content-between col-md-12">
+        <div>
+          
+          <select @change="fetchProjectInvestors">
           <option value="">Select Project</option>
           <option
             v-for="project in projects"
@@ -104,26 +97,8 @@ label {
             :value="project._id"
             >{{ project.projectName }}</option
           >
-        </select>
-      </div>
-    </div>
-
-    <div class="row" v-if="isDataSaved" style="margin-top: 2%">
-      <div class="col-md-12" style="text-align: left;">
-        <div class="card" style="padding:10px; background: #0080004f">
-          <div class="card-body">
-            <h3>
-              Your data has been successfully saved and is under verfication.
-              Once verified, you will receive whitelisting credential in your
-              email. Thank you!
-            </h3>
-          </div>
+        </select >
         </div>
-      </div>
-    </div>
-
-    <div class="row " style="margin-top: 2%">
-      <div class="d-flex justify-content-between col-md-12">
         <div>
           <b-form-input
             @input.native="handleTableSearch"
@@ -568,6 +543,7 @@ export default {
 
         const headers = {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.authToken}`,
         };
 
         const resp = await fetch(url, {
@@ -599,6 +575,7 @@ export default {
 
         const headers = {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.authToken}`,
         };
 
         const resp = await fetch(url, {
@@ -666,17 +643,10 @@ export default {
       try {
         this.isLoading = true;
 
-        // if (this.vehiclNumber == "")
-        //   return this.notifyErr("Error: Vehicle Number can not be blank");
-        // if (this.typOfMaterial == "")
-        //   return this.notifyErr("Error: typeOfMaterial can not be blank");
-        // if (this.numprOfSacks == "")
-        //   return this.notifyErr("Error: Number Of Sacks can not be blank");
-
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
         let headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
+          "Authorization": `Bearer ${this.authToken}`,
         };
         const resp = await fetch(url, {
           method: "POST",

@@ -68,25 +68,29 @@ h5 span {
 
   text-transform: uppercase;
 }
+
+.loginContent{
+  height: 100%;
+width: 22%;
+padding-right: 10px;
+padding-left: 10px;
+padding-top: 20px;
+padding-bottom: 10px;
+margin: 0 auto;
+border-top: 2px solid rgb(120, 120, 243);
+}
 </style>
 <template>
   <!-- <div class="row" style="margin-left: 35%;"> -->
-  <div class="row" style="align-content: center;">
-    <div class="col-md-7" style="font-size: small;color:grey;" hidden>
-      Can we put one big image here?
-    </div>
-    <div class="col-md-4"></div>
-    <div class="col-md-3" style="font-size: small;color:grey;">
-      <form action="#">
-        <b-card no-body style="padding: 12%; border-top: 4px solid #00f9;">
+  <div class="" style="justify-content: center; padding-top:3%">
+      <b-card no-body class="loginContent">
           <loading
             :active.sync="isLoading"
             :can-cancel="true"
             :is-full-page="fullPage"
           ></loading>
-          <h4>Login</h4>
-          <hr />
-          <div class="row">
+          <h4>ADMIN LOGIN</h4>
+          <div class="row" style="margin-top:3%">
             <form class="col-md-12">
               <div class="form-group">
                 <vue-qr
@@ -99,10 +103,10 @@ h5 span {
                   logoCornerRadius="2"
                 ></vue-qr>
                 <label style="font-size:small; margin-top:1%"
-                  >Scan the QR code using Hypersign Modile App</label
+                  >Scan QR code using Hypersign Modile App</label
                 >
                 <div>
-                  <p>Don’t have the app yet? <a href="#">Get it now</a></p>
+                  <p style="font-size:small;"> Don’t have the app yet? <a href="#">Get it now</a></p>
                   <div>
                     <span class="download">
                       <a
@@ -123,9 +127,11 @@ h5 span {
                   </div>
                 </div>
               </div>
-              <div class="form-group">
+              
+
+              
                 <h5><span>Or</span></h5>
-              </div>
+              
 
               <p class="text-center">
                 <button
@@ -145,10 +151,8 @@ h5 span {
               </p>
             </form>
           </div>
-        </b-card>
-      </form>
-    </div>
-    <div class="col-md-4"></div>
+      </b-card>
+    
   </div>
 </template>
 

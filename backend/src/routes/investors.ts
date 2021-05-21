@@ -1,13 +1,13 @@
 import { Router } from "express";
 import InvestorController from "../controllers/investor";
 
-export = () => {
+export = (hypersign) => {
 
   const router = Router();
 
-  router.post("/issue", InvestorController.issueCredential);
+  router.post("/issue",  hypersign.authorize.bind(hypersign), InvestorController.issueCredential);
 
-  router.get("/credential", InvestorController.getCredential);
+  router.get("/credential",  hypersign.authorize.bind(hypersign), InvestorController.getCredential);
   
  return router;  
 

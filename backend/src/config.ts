@@ -25,7 +25,10 @@ logger.setLevel(process.env.LOG_LEVEL || "info");
 
 const port = process.env.PORT || 6006;
 const host = process.env.HOST || "172.20.10.8";
-const hostnameurl = process.env.HOSTNAMEURL || `http://${host}:${port}`;
+const httpsEnabled = process.env.ENABLE_HTTPS || true;
+const protocol = httpsEnabled ? "https" : "http";
+const hostnameurl = `${protocol}://${host}:${port}`;
+
 
 //DATABASE
 const dbConnUrl =
@@ -57,7 +60,7 @@ const jwtSecret = process.env.JWT_SECRET || "secretKey";
 const jwtExpiryInMilli = 240000;
 
 const nodeServer = {
-  baseURl: process.env.NODE_SERVER_BASE_URL || "http://172.20.10.8:5000/", //"https://ssi.hypermine.in/core/",
+  baseURl: process.env.NODE_SERVER_BASE_URL || "https://ssi.hypermine.in/core/",
   schemaGetEp: process.env.NODE_SERVER_SCHEMA_GET_EP || "api/v1/schema/",
 };
 
@@ -72,7 +75,9 @@ const whitelistingSchemaId =
 const recaptchaSecret = process.env.RECAPTCHA_SECRET;
 const recaptchaUri = "https://www.google.com/recaptcha/api/siteverify";
 
-const httpsEnabled = process.env.ENABLE_HTTPS || true;
+
+const hsAuthServerEp = process.env.HS_AUTH_SERVER_URL || "https://ssi.hypermine.in/hsauth/";
+
 
 const whitelist = process.env.WHITELISTED_CORS || ['*'];
 export {
@@ -89,5 +94,6 @@ export {
   recaptchaSecret,
   recaptchaUri,
   httpsEnabled,
-  whitelist
+  whitelist,
+  hsAuthServerEp
 };
