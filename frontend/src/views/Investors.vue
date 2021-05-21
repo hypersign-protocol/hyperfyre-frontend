@@ -312,12 +312,7 @@ export default {
               <span class="text-bold d-flex justify-content-center">
                 {row.isVerificationComplete ? (
                   <span class="d-flex align-items-center justify-content-center">
-                    <img
-                      width="16"
-                      class="ml-2"
-                      src="https://cdn.worldvectorlogo.com/logos/twitter-verified-badge.svg"
-                      alt="verified-img"
-                    />{" "}
+                    <i style="font-size:20px" class="far fa-check-circle"></i>
                   </span>
                 ) : (
                   <button
@@ -365,19 +360,15 @@ export default {
             return (
               <span class="text-bold d-flex justify-content-center">
                 {row.isVerfiedByHypersign ? (
-                  <span class="text-bold">
-                    <img width="23px" alt="issue-ico" src={issuedImgLink} />
+                  <span class="text-bold" title="issued">
+                    <i style="font-size:20px" class="far fa-calendar-check"></i>
                   </span>
                 ) : (
                   <button
                     class="btn btn-white border border-1 btn-sm"
                     on-click={() => this.issueCredential(row)}
                   >
-                    <img
-                      width="23px"
-                      alt="issue-ico"
-                      src="https://static.thenounproject.com/png/1837652-200.png"
-                    />
+                    <i style="font-size:20px" class="far fa-clock"></i>
                   </button>
                 )}
               </span>
@@ -638,11 +629,11 @@ export default {
         console.log(url);
         const headers = {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.authToken}`,
+          Authorization: `Bearer ${this.authToken}`,
         };
         const resp = await fetch(url, {
           headers,
-          method: "GET"
+          method: "GET",
         });
 
         if (!resp.ok) {
