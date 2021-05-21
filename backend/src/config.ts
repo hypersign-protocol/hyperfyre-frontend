@@ -27,7 +27,7 @@ const port = process.env.PORT || 6006;
 const host = process.env.HOST || "172.20.10.8";
 const httpsEnabled = process.env.ENABLE_HTTPS || true;
 const protocol = httpsEnabled ? "https" : "http";
-const hostnameurl = `${protocol}://${host}:${port}`;
+const hostnameurl = process.env.SERVICE_EP_URL ||  `${protocol}://${host}:${port}`;
 
 
 //DATABASE
