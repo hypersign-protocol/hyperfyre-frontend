@@ -47,49 +47,69 @@
   border-bottom: 1px solid #8080802b;
 }
 .fVal {
-  font-size: initial;
+  font-size: small;
   color: gray;
   word-wrap: break-word;
 }
 
-.card{
+.card {
   border-radius: 10px;
 }
-
 </style>
 
 
-<template>  
-  <div class="row">
-
-    <div class="col-md-10 leftAlign">
-      <div class="card">
-        <div class="card-body">
-          <h5>PROFILE</h5>
-              <hr/>
-          <div class="row">
-            <!-- <div class="col-md-4">
-              <img
-                src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn2.iconfinder.com%2Fdata%2Ficons%2Fbusiness-management-52%2F96%2FArtboard_20-512.png&f=1&nofb=1"
-                alt="John"
-                style="color:grey;margin-top:30%;margin-left:10%;width:80%;height: 50%;"
-              />
-            </div> -->
-            <div class="col-md-12" style="flex-wrap: wrap; padding:20px">
-              
-              <!-- <p>DID</p>
-              <p class="fVal"><a :href="`${$config.nodeServer.BASE_URL}${$config.nodeServer.DID_RESOLVE_EP}`+user.id" target="_blank">{{user.id}}</a></p> -->
-              <p>Email</p>
-              <p class="fVal">{{user.Email}}</p>
-              <p>Role</p>
-              <p class="fVal">{{user.Name.split(':')[1]}}</p>
-              <p v-if="user.phoneNumber">Phone Number: {{user.phoneNumber}}</p>
-              <!-- <p>PUBLIC KEY</p>
-              <p class="fVal">{{user.publicKey}}</p> -->
+<template>
+  <div>
+    <div class="row" style="margin-top: 2%">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body tile">{{ projectCount }}</div>
+          <div class="card-header">Projects</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body tile">{{ schemaCount }}</div>
+          <div class="card-header">Investors</div>
+        </div>
+      </div>
+      
+    </div>
+    <div class="row" style="margin-top: 5%">
+      <div class="col-md-12 leftAlign">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <img
+                  src="../assets/avatarUploadLabel.png"
+                  alt="John"
+                  style="width: 100%; height: 100%"
+                />
+              </div>
+              <div class="col-md-6" style="flex-wrap: wrap; padding: 20px">
+                <p>DID</p>
+                <p class="fVal">
+                  <a
+                    :href="
+                      `/` +
+                      user.id
+                    "
+                    target="_blank"
+                    >{{ user.id }}</a
+                  >
+                </p>
+                <p>Email</p>
+                <p class="fVal">{{ user.email }}</p>
+                <p v-if="user.phoneNumber">
+                  Phone Number: {{ user.phoneNumber }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      
     </div>
   </div>
 </template>
@@ -106,88 +126,120 @@ export default {
       userKeys: [],
       appList: [],
       schemaCount: 0,
-      credentialCount: 0,
-      acceptedList:[],
-      dispatchedList:[],
-      schemaList:[],
+      projectCount: 0,
       user: {
-        id: "",
-        publicKey: "",
-        email: "",
-        phoneNumber: "",
-        fname: "",
-        Email: "",
-        Name: ""
+        id: "did:hs:QWERTlkasd090123SWEE12322",
+        publicKey: "0x2123ASSD12312",
+        email: "vishu.anand1@gmail.com",
+        phoneNumber: "+91-12312312",
+        fname: "vishwas",
+        Email: "vishu.anand1@gmail.com",
+        Name: "Vishwas",
       },
+
       authToken: localStorage.getItem("authToken"),
+       projects: [],
     };
   },
-  created() {
-    const usrStr = localStorage.getItem("user");
-    //console.log(usrStr);
-    this.user = { ...JSON.parse(usrStr) };
-    //console.log(this.user);
-    this.userKeys = Object.keys(this.user);
-    // this.fetchProcurment()
+  async created() {
+    const usrStr = localStorage.getItem('user');    
+     this.user = {
+       ...JSON.parse(usrStr)
+     }
+    // const usrStr = localStorage.getItem("user");
+    // this.user = { ...JSON.parse(usrStr) };
+    // this.userKeys = Object.keys(this.user);
+    // this.pollData();
+      
+    await this.fetchProjects();
   },
   methods: {
-    fetchData(url,options){
-      return fetch(url, options)
-            .then((res) => res.json())
-            .then((j) => {              
-              return j.message
-            })
-            .catch((e) => alert(`Error: ${e.message}`));
-    },
-    fetchProcurment() {
-      const url = `${this.$config.studioServer.BASE_URL}${this.$config.studioServer.PROCURMENT_LIST}`;
-      fetch(url)
-        .then((res) => res.json())
-        .then((j) => {
-          console.log(j)
-          // if (j.status != 200) throw new Error(j.error);
-          this.schemaList = j;
-          if (this.schemaList && this.schemaList.length > 0) {
-            this.acceptedList = this.schemaList.filter(
-              (x) => {
-                 return x.state == 'ACCEPTED'
-              }
-            );
-            this.dispatchedList = this.schemaList.filter(
-              (x) => {
-                 return x.state == 'DISPATCHED' || x.state == 'ADDED'
-              }
-            );
-          }
-        })
-        .catch((e) => this.notifyErr(`Error: ${e.message}`));
-    },
-    pollData(){
-      let url = `${this.$config.nodeServer.BASE_URL}${this.$config.nodeServer.SCHEMA_LIST_EP}`;
-      let options = {}
-      this.fetchData(url).then(data => {
-        if (data && data.length > 0) {
-          data = data.filter(
-            (x) => x.owner === this.user.id
-          );
-          this.schemaCount = data.length;
-        }
-      })
+    async fetchProjects() {
+      try {
+        this.isLoading = true;
 
-      url = `${this.$config.studioServer.BASE_URL}${this.$config.studioServer.CRED_LIST_EP}`;
-      options  = {
-          method: "GET",
-          headers: {'x-auth-token': this.authToken}
+        if (!this.user.id) throw new Error("No project owner found");
+
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.user.id}`;
+
+
+        const headers =  {
+                        "Authorization": `Bearer ${this.authToken}`
+                    }
+        const resp = await fetch(url, {
+            headers,
+            method: "GET"
+        });
+
+        
+
+        if (!resp.ok) {
+          return this.notifyErr(resp.statusText);
         }
-      this.fetchData(url,options).then(data => {
-        if (data) {
-          this.credentialCount = data.count;
-        }
-      })
+
+        const json = await resp.json();
+        this.projects = json;
+        this.projects.map((x) => {
+          x["whitelisting_link"] =
+            window.location.origin + "/studio/form?projectId=" + x._id;
+          x["investors_link"] =
+            window.location.origin + "/studio/investors?projectId=" + x._id;
+        });
+        this.projectCount = this.projects.length;
+        localStorage.setItem('userProjects', JSON.stringify({
+          projects: this.projects,
+          count: this.projectCount
+        }));
+
+        
+        // this.notifySuccess("No. of projects fetched " + this.projects.length);
+      } catch (e) {
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+      }
     },
-    gotosubpage: (id) => {
-      this.$router.push(`${id}`);
-    },
+    // fetchData(url, options) {
+    //   return fetch(url, options)
+    //     .then((res) => res.json())
+    //     .then((j) => {
+    //       return j.message;
+    //     })
+    //     .catch((e) => this.notifyErr(`Error: ${e.message}`));
+    // },
+    // fetchSchemas() {
+    //   const url = `${this.$config.studioServer.BASE_URL}hs/api/v2/schema/get`;
+    //   fetch(url, {
+    //                 headers: {
+    //                     "Authorization": `Bearer ${this.authToken}`
+    //                 },
+    //                 method: "GET"
+    //             },)
+    //     .then((res) => res.json())
+    //     .then((j) => {
+    //       if (j.status != 200) throw new Error(j.error);
+    //       const schemas =  j.message;
+    //       this.schemaCount = schemas.length;
+    //     })
+    //     .catch((e) => this.notifyErr(`Error: ${e.message}`));
+    // },
+    // pollData() {
+    //   this.fetchSchemas();
+      
+    //   const url = `${this.$config.studioServer.BASE_URL}hs/api/v2/app`;
+    //   const options = {
+    //     method: "GET",
+    //     headers: { Authorization: `Bearer ${this.authToken}` },
+    //   };
+    //   this.fetchData(url, options).then((data) => {
+    //     if (data) {
+    //       this.credentialCount = data.length;
+    //     }
+    //   });
+    // },
+    // gotosubpage: (id) => {
+    //   this.$router.push(`${id}`);
+    // },
   },
 };
 </script>

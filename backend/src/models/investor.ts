@@ -7,16 +7,16 @@ export interface IInvestor extends Document {
     ethAddress: string;
     twitterHandle: string;
     telegramHandle: string;
+    projectId: string;
+    tweetUrl: string;
     hasTwitted: boolean;
     hasJoinedTGgroup: boolean;
     isVerfiedByHypersign: boolean;
     isVerificationComplete: boolean;
-    projectId: string;
-    tweetUrl: string;
 }
 
 const InvestorSchema = new Schema({
-  did: { type: String, required: true, unique: true },
+  did: { type: String, required: true },
   email: { type: String, required: true },
   name: { type: String, required: true },
   ethAddress: { type: String, required: true },

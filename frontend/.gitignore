@@ -65,3 +65,4 @@ typings/
 .env
 
 **/.DS_Store
+jvjr-env.json
