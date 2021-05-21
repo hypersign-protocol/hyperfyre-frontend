@@ -68,9 +68,7 @@
           v-loading="loading"
         >
           <b-card-body class="w-100 border-0 d-block">
-            <div v-if="steps[step].icon" class="d-none d-sm-block">
-              <i class="fas fa-fw fa-3x mr-4" :class="iconClasses"></i>
-            </div>
+            <div v-if="steps[step].icon" class="d-none d-sm-block"></div>
             <div>
               <!-- <h3>{{ step + 1 }}. {{ steps[step].name }}</h3>
             <p class="text-muted">{{ steps[step].desc }}</p> -->
@@ -121,7 +119,6 @@
             :disabled="loading"
           >
             {{ step + 1 == 3 ? "Submit" : "Next" }}
-            <i class="fas fa-angle-double-right"></i>
           </b-button>
 
           <b-button
@@ -207,7 +204,7 @@ export default {
 
   data() {
     return {
-      showStepper: false,
+      showStepper: true,
       data: this.stepTwoData,
       store: {
         state: this.initialState,
@@ -225,25 +222,32 @@ export default {
       authToken: localStorage.getItem("authToken"),
       fullPage: true,
       projectDetails: {},
+      projectId: ""
     };
   },
 
   created() {
-    if (this.$route.query.projectId) {
-      this.showStepper = true;
-    } else {
+    if (
+      !this.$route.query.projectId ||
+      this.$route.query.projectId == "undefined"
+    ) {
       this.showStepper = false;
+      return;
     }
-    const userDid = JSON.parse(localStorage.getItem("user")).id;
-    console.log(userDid);
 
-    // this.checkIfAlreadyFilled(userDid);
+
+    this.projectId = this.$route.query.projectId;
+    const userDid = JSON.parse(localStorage.getItem("user")).id;
+    
+
+    this.checkIfAlreadyFilled(userDid);
+    this.fetchProjectData();
   },
   mounted() {
     this.data =
       this.step == 0 || this.step == 0 ? this.stepOneData : this.stepTwoData;
 
-    this.fetchProjectData();
+    
   },
 
   computed: {
@@ -378,7 +382,7 @@ export default {
         for (let i in data) {
           investor[data[i].id] = data[i].value;
         }
-        investor.projectId = this.$route.query.projectId;
+        investor.projectId = this.projectId;
         investor.did = did;
 
         investor.tweetUrl = this.stepOneData.rules[1].tweetUrl;
@@ -386,7 +390,7 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${recaptchaToken}`;
         let headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
+           "Authorization": `Bearer ${this.authToken}`
         };
 
         const resp = await fetch(url, {
@@ -426,15 +430,15 @@ export default {
 
     async checkIfAlreadyFilled(userDid) {
       try {
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor/${userDid}`;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?did=${userDid}&projectId=${this.projectId}`;
         let headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
+          "Authorization": `Bearer ${this.authToken}`
         };
 
         const res = await fetch(url, {
-          method: "GET",
           headers,
+          method: "GET"
         });
 
         if (res.status !== 200) {
@@ -442,8 +446,8 @@ export default {
         }
 
         const resData = await res.json();
-
-        if (resData.length) {
+        
+        if (resData.length > 0) {
           this.step = 3;
         }
       } catch (e) {
@@ -467,19 +471,25 @@ export default {
     },
     async fetchProjectData() {
       try {
+        console.log("fetching the project detials. ...... ")
+        console.log(this.authToken)
         this.isLoading = true;
 
         if (!this.$route.query.projectId) throw new Error("No project found");
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.$route.query.projectId}`;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.projectId}`;
 
         console.log(url);
 
-        const headers = {
+        let headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
+           "Authorization": `Bearer ${this.authToken}`
         };
-        const resp = await fetch(url, headers);
+        console.log(headers)
+        const resp = await fetch(url, {
+          headers,
+          method: "GET"
+        });
 
         console.log("RESP", resp);
         if (resp.status != 200) {

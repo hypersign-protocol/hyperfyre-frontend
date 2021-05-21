@@ -18,7 +18,7 @@
   box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 2px 0px,
     rgba(0, 0, 0, 0.02) 0px 3px 1px -2px, rgba(0, 0, 0, 0.01) 0px 1px 5px 0px;
 }
-/* 
+/*
 .nav-style {
   text-align: left;
   background-color: rgb(58, 58, 58);
@@ -64,12 +64,40 @@
   /* padding-top: 10px; */
   margin-bottom: 1%;
 }
+.showNavbar .content-wrapper {
+  padding: 50px 20px;
+}
+.showNavbar.notCollapsed > .content-wrapper {
+  width: calc(100vw - 200px);
+  margin-left: auto;
+}
+.showNavbar.collapsed .sidebar-wrapper {
+  overflow: hidden;
+}
+.header-text {
+  text-align: center;
+  color: grey;
+  margin: 0;
+  font-size: small;
+}
+.showNavbar.collapsed .header-text {
+  display: none;
+}
+.header-text + hr {
+  width: 80%;
+}
+.v-sidebar-menu.vsm_white-theme {
+  background-color: white !important;
+  color: grey !important;
+}
+.v-sidebar-menu.vsm_white-theme .vsm--link {
+  color: #fff !important;
+}
 </style>
 <template>
   <div id="app">
-    <div v-if="hideNavbar == true" class="row nav-style">
+    <!-- <div v-if="hideNavbar == true" class="row nav-style">
       <div class="col-md-4">
-        <!-- <h5 class="leftAlign">{{$config.app.name}}</h5>  -->
 
         <div class="form-group form-inline">
           <div>
@@ -82,8 +110,8 @@
             {{ $config.app.name }} ({{ $config.app.version }})
           </div>
         </div>
-      </div>
-      <!-- <div class="nav-logo col-md-7">
+      </div> -->
+    <!-- <div class="nav-logo col-md-7">
         <div>
           <div>
             <img
@@ -96,7 +124,7 @@
           </div>
         </div>
       </div> -->
-      <!-- <div
+    <!-- <div
         class="col-md-8 rightAlign"
         style="padding-top:12px"
         v-if="!authRoutes.includes($router.history.current.name)"
@@ -111,9 +139,43 @@
           {{ m.name }}
         </button>
       </div> -->
-    </div>
+    <!-- </div> -->
 
-    <router-view />
+    <div
+      :class="[
+        showNavbar
+          ? isSidebarCollapsed
+            ? 'showNavbar collapsed'
+            : 'showNavbar notCollapsed'
+          : 'hideNavbar',
+      ]"
+    >
+      <sidebar-menu
+        class="sidebar-wrapper"
+        @toggle-collapse="onToggleCollapse"
+        @item-click="onItemClick"
+        :theme="'white-theme'"
+        width="200px"
+        :menu="menu"
+        v-if="showNavbar"
+      >
+        <span slot="header">
+          <div class="ml-1 mt-3 mb-2">
+            <img
+              :src="require('./assets/hypersign.webp')"
+              alt="logo"
+              width="155px"
+            />
+          </div>
+          <p class="header-text">{{ $config.app.name }}</p>
+          <hr class="rule" />
+        </span>
+        <span slot="footer" class="text-center">{{ $config.app.version }}</span>
+      </sidebar-menu>
+      <div class="content-wrapper">
+        <router-view />
+      </div>
+    </div>
     <notifications group="foo" />
   </div>
 </template>
@@ -157,34 +219,74 @@
 .marginRight {
   margin-right: 12%;
 }
+.v-sidebar-menu {
+  height: auto !important;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 42;
+  box-shadow: #80808042 1px 1px 1px 1px;
+}
+.v-sidebar-menu .vsm-arrow:after {
+  font-family: FontAwesome;
+}
+.v-sidebar-menu .collapse-btn:after {
+  content: "\f07e";
+  font-family: FontAwesome;
+}
+.v-sidebar-menu.vsm_white-theme .vsm--link_level-1 .vsm--icon {
+  background-color: transparent !important;
+  color: #000 !important;
+}
+.v-sidebar-menu.vsm_white-theme .vsm--link_level-1.vsm--link_exact-active,
+.v-sidebar-menu.vsm_white-theme .vsm--link_level-1.vsm--link_active {
+  background-color: rgba(242, 242, 242, 1);
+}
 </style>
 
 <script>
+// Ref:  fa icons:  https://fontawesome.com/
 export default {
   data() {
     return {
+      isSidebarCollapsed: false,
       authRoutes: ["register", "PKIIdLogin"],
-      hideNavbar:
-        window.location.pathname.includes("investors") ||
-        window.location.pathname.includes("project")
-          ? true
-          : false,
+      showNavbar: true,
+
       menu: [
-        // {
-        //   name: "Projects",
-        //   path: "/studio/project",
-        //   isShow: false ,
-        // },
-        // {
-        //   name: "Logout",
-        //   path: "/login",
-        //   isShow: false,
-        // },
+        {
+          href: "/studio/admin/dashboard",
+          title: "Dashboard",
+          icon: "fas fa-tachometer-alt",
+        },
+        {
+          href: "/studio/admin/project",
+          title: "Projects",
+          icon: "fas fa-plane-departure",
+        },
+        {
+          href: "/studio/admin/investors",
+          title: "Investors",
+          icon: "fas fa-users",
+        },
+        {
+          href: "/studio/admin/login",
+          title: "Logout",
+          icon: "fas fa-sign-out-alt",
+        },
       ],
     };
   },
+
   mounted() {
-    console.log("MOUNTEDD");
+    console.log("MOUNTED");
+    this.showNavbar =
+      window.location.pathname.includes("investors") ||
+      window.location.pathname.includes("project") ||
+      window.location.pathname.includes("dashboard")
+        ? true
+        : false;
   },
 
   methods: {
@@ -196,6 +298,24 @@ export default {
         this.$router.push(this.$route.params.nextUrl);
       } else {
         this.$router.push(r.path);
+      }
+    },
+    onToggleCollapse(collapsed) {
+      if (collapsed) {
+        this.isSidebarCollapsed = true;
+      } else {
+        this.isSidebarCollapsed = false;
+      }
+    },
+    onItemClick(item) {
+      if (
+        window.location.pathname.includes("investors") ||
+        window.location.pathname.includes("project") ||
+        window.location.pathname.includes("dashboard")
+      ) {
+        this.showNavbar = true;
+      } else {
+        this.showNavbar = false;
       }
     },
   },

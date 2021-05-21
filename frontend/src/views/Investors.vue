@@ -84,59 +84,21 @@ label {
       :is-full-page="fullPage"
     ></loading>
 
-    <div class="row" v-if="!projectFetched">
-      <div class="col-md-12" style="text-align: left;">
-        <div class="card" style="padding:10px; background: #ff000029">
-          <div class="card-body">
-            <h3>Oops! Some error occurred.</h3>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row" v-if="projectFetched">
-      <div class="col-md-12" style="text-align: left;">
-        <div class="card" style="padding:10px">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-6">
-                <h2>{{ project.projectName.toUpperCase() }}</h2>
-                <h4>WHITELISTING</h4>
-              </div>
-            </div>
-            <div class="row" style="margin-top: 5%">
-              <div class="col-md-6">
-                <h5>From: {{ project.fromDate }}</h5>
-                <h5>To: {{ project.toDate }}</h5>
-              </div>
-              <div class="col-md-6">
-                <img
-                  :src="project.logoUrl"
-                  style="float:right; max-width: 176.86px; max-height: 42px;"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row" v-if="isDataSaved" style="margin-top: 2%">
-      <div class="col-md-12" style="text-align: left;">
-        <div class="card" style="padding:10px; background: #0080004f">
-          <div class="card-body">
-            <h3>
-              Your data has been successfully saved and is under verfication.
-              Once verified, you will receive whitelisting credential in your
-              email. Thank you!
-            </h3>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <div class="row " style="margin-top: 2%">
       <div class="d-flex justify-content-between col-md-12">
+        <div>
+          
+          <select @change="fetchProjectInvestors">
+          <option value="">Select Project</option>
+          <option
+            v-for="project in projects"
+            :key="project._id"
+            :value="project._id"
+            >{{ project.projectName }}</option
+          >
+        </select >
+        </div>
         <div>
           <b-form-input
             @input.native="handleTableSearch"
@@ -325,12 +287,7 @@ export default {
               <span class="text-bold d-flex justify-content-center">
                 {row.isVerificationComplete ? (
                   <span class="d-flex align-items-center justify-content-center">
-                    <img
-                      width="16"
-                      class="ml-2"
-                      src="https://cdn.worldvectorlogo.com/logos/twitter-verified-badge.svg"
-                      alt="verified-img"
-                    />{" "}
+                    <i style="font-size:20px" class="far fa-check-circle"></i>
                   </span>
                 ) : (
                   <button
@@ -378,19 +335,15 @@ export default {
             return (
               <span class="text-bold d-flex justify-content-center">
                 {row.isVerfiedByHypersign ? (
-                  <span class="text-bold">
-                    <img width="23px" alt="issue-ico" src={issuedImgLink} />
+                  <span class="text-bold" title="issued">
+                    <i style="font-size:20px" class="far fa-calendar-check"></i>
                   </span>
                 ) : (
                   <button
                     class="btn btn-white border border-1 btn-sm"
                     on-click={() => this.issueCredential(row)}
                   >
-                    <img
-                      width="23px"
-                      alt="issue-ico"
-                      src="https://static.thenounproject.com/png/1837652-200.png"
-                    />
+                    <i style="font-size:20px" class="far fa-clock"></i>
                   </button>
                 )}
               </span>
@@ -423,6 +376,8 @@ export default {
         investors: [],
       },
 
+      projects: [],
+
       projectFetched: false,
       isDataSaved: false,
       active: 0,
@@ -433,15 +388,11 @@ export default {
     };
   },
   async mounted() {
-    this.investor.projectId = this.$route.query.projectId
-      ? this.$route.query.projectId
-      : "60676b4f09baec1befb5f469"; // if projectId is not passed, hardcoding hypersign project Id
-
-    await this.fetchProjectData(0, this.perPage);
-    //const usrStr = localStorage.getItem("user");
-    //this.user = null; JSON.parse(usrStr);
-    //await this.fetchProcurment();
+    const userProjectStr = localStorage.getItem("userProjects");
+    const userProjectsData = JSON.parse(userProjectStr);
+    this.projects = userProjectsData.projects;
   },
+
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.prevRoute = from;
@@ -504,6 +455,11 @@ export default {
 
     async handleTableSearch() {
       this.fetchProjectData(0, this.perPage);
+    },
+    async fetchProjectInvestors(e) {
+      // this.investor.projectId = this.projects[1]._id;
+      this.investor.projectId = e.target.value;
+      await this.fetchProjectData(0, this.perPage);
     },
 
     filterVerified(label) {
@@ -587,6 +543,7 @@ export default {
 
         const headers = {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.authToken}`,
         };
 
         const resp = await fetch(url, {
@@ -618,6 +575,7 @@ export default {
 
         const headers = {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.authToken}`,
         };
 
         const resp = await fetch(url, {
@@ -650,7 +608,10 @@ export default {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
         };
-        const resp = await fetch(url, headers);
+        const resp = await fetch(url, {
+          headers,
+          method: "GET",
+        });
 
         if (!resp.ok) {
           return this.notifyErr(resp.statusText);
@@ -682,17 +643,10 @@ export default {
       try {
         this.isLoading = true;
 
-        // if (this.vehiclNumber == "")
-        //   return this.notifyErr("Error: Vehicle Number can not be blank");
-        // if (this.typOfMaterial == "")
-        //   return this.notifyErr("Error: typeOfMaterial can not be blank");
-        // if (this.numprOfSacks == "")
-        //   return this.notifyErr("Error: Number Of Sacks can not be blank");
-
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
         let headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
+          "Authorization": `Bearer ${this.authToken}`,
         };
         const resp = await fetch(url, {
           method: "POST",

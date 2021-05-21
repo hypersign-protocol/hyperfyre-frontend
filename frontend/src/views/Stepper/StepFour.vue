@@ -5,8 +5,8 @@ h3 {
 </style>
 <template>
   <div>
-    <h3>THANK YOU FOR SIGNING UP</h3>
-    <p>We will send you an email about the next steps</p>
+    <h2>Thank You!</h2>
+    <h3>Your data has been successfully saved and is under verfication.<h3></h3>Once verified, you will receive whitelisting credential in your email.</h3>
   </div>
 </template>
 

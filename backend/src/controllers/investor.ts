@@ -1,4 +1,4 @@
-import { logger, hypersignSDK, whitelistingSchemaId, nodeServer, hostnameurl } from "../config";
+import { logger, hypersignSDK, whitelistingSchemaId, nodeServer, hostnameurl, hsAuthServerEp } from "../config";
 import { Request, Response } from "express";
 import InvestorModel, { IInvestor } from "../models/investor";
 let { template :credentialMailTemplate} = require('../services/mail.template');
@@ -51,7 +51,7 @@ async function addInvestor(req: Request, res: Response) {
 
 async function getAllInvestor(req: Request, res: Response) {
   try {
-    const employeeList:Array<IInvestor> = await InvestorModel.find({});
+    const employeeList:Array<IInvestor> = await InvestorModel.find(req.query);
     res.send(employeeList);
   } catch (e) {
     logger.error('InvestorCtrl:: getAllInvestor(): Error ' + e);
@@ -188,7 +188,7 @@ async function sendEmail(data){
       QRType: 'ISSUE_CRED',
       url: link
   });
-  const deepLinkUrl = encodeURI('https://ssi.hypermine.in/hsauth/deeplink.html?deeplink=hypersign:deeplink?url=' + JSONdata);
+  const deepLinkUrl = encodeURI(hsAuthServerEp + 'deeplink.html?deeplink=hypersign:deeplink?url=' + JSONdata);
   credentialMailTemplate = credentialMailTemplate.replace("@@DEEPLINKURL@@", deepLinkUrl);
 
   const mailService = new MailService({ ...mail });

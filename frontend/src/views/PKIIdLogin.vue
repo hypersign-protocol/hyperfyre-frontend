@@ -100,6 +100,9 @@ h5 span {
   width: 55%;
   margin-left: 22%;
 }
+.qrWrapper img {
+  width: 100%;
+}
 /* .with-hypersign-btn  */
 </style>
 <template>
@@ -170,7 +173,6 @@ h5 span {
                 :logoSrc="src2"
                 margin="1"
                 :text="value"
-                :size="300"
                 logoBackgroundColor="white"
                 logoCornerRadius="2"
               ></vue-qr>
@@ -331,6 +333,7 @@ export default {
       if (this.value != "") {
         window.open(
           `https://hswallet.netlify.app/deeplink?url=${this.value}`,
+          // `${this.$config.webWalletAddress}/deeplink?url=${this.value}`,
           "popUpWindow",
           `height=800,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`
         );

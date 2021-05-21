@@ -177,9 +177,12 @@ export default {
 
         const headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
+          "Authorization": `Bearer ${this.authToken}`,
         };
-        const resp = await fetch(url, headers);
+        const resp = await fetch(url, {
+          headers,
+          method: "GET"
+        });
 
         console.log("RESP", resp);
         if (resp.status != 200) {

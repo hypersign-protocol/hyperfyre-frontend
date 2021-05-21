@@ -64,114 +64,123 @@ label {
     <div class="row">
       <div class="col-md-12" style="text-align: left">
         <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label style="margin-right: 8%">Project Name:</label>
-                  <input
-                    type="text"
-                    v-model="project.projectName"
-                    size="30"
-                    placeholder="Enter project name"
-                    class="form-control"
-                  />
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label style="margin-right: 8%">LogoUrl:</label>
-                  <input
-                    type="text"
-                    v-model="project.logoUrl"
-                    size="30"
-                    placeholder="Enter logo url"
-                    class="form-control"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label style="margin-right: 8%"
-                    >Whitelisting Start Date:</label
-                  >
-                  <datepicker
-                    v-model="project.fromDate"
-                    name="uniquename"
-                    input-class="form-control"
-                  ></datepicker>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label style="margin-right: 8%">Whitelisting End Date:</label>
-                  <datepicker
-                    v-model="project.toDate"
-                    name="uniquename"
-                    input-class="form-control"
-                  ></datepicker>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label style="margin-right: 8%"
-                    >Project's Twitter Handle:</label
-                  >
-                  <input
-                    type="text"
-                    v-model="project.twitterHandle"
-                    size="30"
-                    placeholder="Enter twitter handle"
-                    class="form-control"
-                  />
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label style="margin-right: 8%"
-                    >Project's Telegram Handle:</label
-                  >
-                  <input
-                    type="text"
-                    v-model="project.telegramHandle"
-                    size="30"
-                    placeholder="Enter telegram channel"
-                    class="form-control"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-12">
-                
-                <div class="form-group">
-                  <label style="margin-right: 8%"
-                    >Twitter Post: </label
-                  >
-                <textarea rows="5" cols="5" v-model="project.twitterPostFormat" class="form-control" />
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-12">
-                <hr />
-                <button
-                  class="btn btn-outline-primary btn-sm"
-                  @click="saveProject()"
-                >
-                  Submit
-                </button>
-              </div>
-            </div>
+           <div class="card-header">
+            <b-button v-b-toggle.collapse-1 variant="link"
+              ><i class="fas fa-plus"></i> CREATE OR EDIT A PROJECT</b-button
+            >
           </div>
+          <b-collapse id="collapse-1" class="mt-2">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label style="margin-right: 8%">Project Name:</label>
+                    <input
+                      type="text"
+                      v-model="project.projectName"
+                      size="30"
+                      placeholder="Enter project name"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label style="margin-right: 8%">LogoUrl:</label>
+                    <input
+                      type="text"
+                      v-model="project.logoUrl"
+                      size="30"
+                      placeholder="Enter logo url"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label style="margin-right: 8%"
+                      >Whitelisting Start Date:</label
+                    >
+                    <datepicker
+                      v-model="project.fromDate"
+                      name="uniquename"
+                      input-class="form-control"
+                    ></datepicker>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label style="margin-right: 8%">Whitelisting End Date:</label>
+                    <datepicker
+                      v-model="project.toDate"
+                      name="uniquename"
+                      input-class="form-control"
+                    ></datepicker>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label style="margin-right: 8%"
+                      >Project's Twitter Handle:</label
+                    >
+                    <input
+                      type="text"
+                      v-model="project.twitterHandle"
+                      size="30"
+                      placeholder="Enter twitter handle"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label style="margin-right: 8%"
+                      >Project's Telegram Handle:</label
+                    >
+                    <input
+                      type="text"
+                      v-model="project.telegramHandle"
+                      size="30"
+                      placeholder="Enter telegram channel"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label style="margin-right: 8%">Twitter Post: </label>
+                    <textarea
+                      rows="5"
+                      cols="5"
+                      v-model="project.twitterPostFormat"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <hr />
+                  <button
+                    class="btn btn-outline-primary btn-sm"
+                    @click="saveProject()"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </b-collapse>
         </div>
       </div>
     </div>
@@ -193,8 +202,8 @@ label {
     </div>
 
     <div class="row" style="margin-top: 2%">
-      <div class="col-md-12" style="text-align: left">
-        <table class="table table-striped">
+      <div class="col-md-12 w-100" style="text-align: left;overflow:scroll">
+        <table class="table table-striped w-100 overflow-hidden">
           <thead>
             <tr>
               <th v-for="col in cols" v-bind:key="col">{{ col }}</th>
@@ -213,12 +222,13 @@ label {
                 <a :href="project.whitelisting_link" target="_blank">Url</a>
               </td>
               <td>
+                
                 <button
                   type="button"
                   class="btn btn-outline-primary"
                   @click="editProject(project)"
                 >
-                  Edit
+                  <i class="fas fa-pencil-alt"></i>
                 </button>
               </td>
             </tr>
@@ -248,7 +258,7 @@ export default {
         ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
         twitterHandle: "",
         telegramHandle: "",
-        twitterPostFormat: "I am happy with #hypersign @hypersignchain"
+        twitterPostFormat: "I am happy with #hypersign @hypersignchain",
       },
       isProjectEditing: false,
       projects: [],
@@ -268,12 +278,18 @@ export default {
       authToken: localStorage.getItem("authToken"),
       isLoading: false,
       fullPage: true,
+      user: {}
     };
   },
   async mounted() {
     //const usrStr = localStorage.getItem("user");
     //this.user = null; JSON.parse(usrStr);
-    this.project.ownerDid = "did:hs:QWERTlkasd090123SWEE12322";
+
+    const usrStr = localStorage.getItem('user');    
+     this.user = {
+       ...JSON.parse(usrStr)
+     }
+    this.project.ownerDid =  this.user.id // : "did:hs:QWERTlkasd090123SWEE12322";
     await this.fetchProjects();
   },
   beforeRouteEnter(to, from, next) {
@@ -290,7 +306,13 @@ export default {
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.project.ownerDid}`;
 
-        const resp = await fetch(url);
+        const headers =  {
+                        "Authorization": `Bearer ${this.authToken}`
+                    }
+        const resp = await fetch(url, {
+            headers,
+            method: "GET"
+        });
 
         if (!resp.ok) {
           return this.notifyErr(resp.statusText);
@@ -346,7 +368,10 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
           "Content-Type": "application/json",
+           "Authorization": `Bearer ${this.authToken}`
         };
+
+
 
         let method = "POST";
 
@@ -354,7 +379,7 @@ export default {
           method = "PUT";
         }
 
-        this.project.ownerDid = "did:hs:QWERTlkasd090123SWEE12322"; // need to remove this when we have login
+        
 
         const resp = await fetch(url, {
           method,

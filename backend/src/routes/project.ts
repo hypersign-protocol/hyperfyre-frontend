@@ -4,16 +4,16 @@ import ProjectController from "../controllers/project";
 export = (hypersign) => {
   const router = Router();
 
-  router.post("/", ProjectController.addProject);
+  router.post("/", hypersign.authorize.bind(hypersign), ProjectController.addProject);
 
-  router.put("/", ProjectController.updateProject);
+  router.put("/", hypersign.authorize.bind(hypersign), ProjectController.updateProject);
 
-  router.get("/", ProjectController.getAllProject);
+  router.get("/", hypersign.authorize.bind(hypersign), ProjectController.getAllProject);
 
-  router.get("/:id", ProjectController.getProjectById);
+  router.get("/:id", hypersign.authorize.bind(hypersign), ProjectController.getProjectById);
 
   // Delete
-  router.delete("/:id", ProjectController.deleteProjectById);
+  router.delete("/:id", hypersign.authorize.bind(hypersign), ProjectController.deleteProjectById);
 
   return router;
 };

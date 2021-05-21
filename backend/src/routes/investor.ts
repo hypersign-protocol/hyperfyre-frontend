@@ -7,11 +7,11 @@ export = (hypersign) => {
 
   router.post("/", verifyReCaptcha, hypersign.authorize.bind(hypersign), InvestorController.addInvestor);
   
-  router.get("/", InvestorController.getAllInvestor);
+  router.get("/",  hypersign.authorize.bind(hypersign), InvestorController.getAllInvestor);
   
   router.get("/:did", hypersign.authorize.bind(hypersign), InvestorController.getInvestorByDID);
   
-  router.put("/:did", InvestorController.updateInvestor);
+  router.put("/:did",  hypersign.authorize.bind(hypersign), InvestorController.updateInvestor);
 
   // Delete
   router.delete("/", (req, res) => {

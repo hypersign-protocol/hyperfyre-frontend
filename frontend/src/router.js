@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import PKIIdLogin from "./views/PKIIdLogin.vue";
+import AdminLogin from "./views/AdminLogin.vue";
 import config from "./config";
 import Dashboard from "./views/Dashboard.vue";
 import fetch from "node-fetch";
@@ -40,35 +41,39 @@ const router = new Router({
       },
     },
     {
-      path: "/studio/procurment",
-      name: "procurment",
-      component: Investor,
+      path: "/studio/admin",
+      redirect: "/studio/admin/login",
+    },
+    {
+      path: "/studio/admin/login",
+      name: "AdminLogin",
+      component: AdminLogin,
+    },
+    {
+      path: "/studio/admin/dashboard",
+      name: "Dashboard",
+      component: Dashboard,
       meta: {
         requiresAuth: true,
+        admin: true,
       },
     },
     {
-      path: "/studio/project",
+      path: "/studio/admin/investors",
+      name: "investors",
+      component: Investors,
+      meta: {
+        requiresAuth: true,
+        admin: true,
+      },
+    },
+    {
+      path: "/studio/admin/project",
       name: "project",
       component: Project,
       meta: {
         requiresAuth: false,
-      },
-    },
-    {
-      path: "/studio/investors",
-      name: "investors",
-      component: Investors,
-      meta: {
-        requiresAuth: false,
-      },
-    },
-    {
-      path: "/studio/stepper",
-      name: "investors",
-      component: Stepper,
-      meta: {
-        requiresAuth: false,
+        admin: true,
       },
     },
   ],
@@ -76,11 +81,11 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
+    console.log("Requires auth");
     const authToken = localStorage.getItem("authToken");
     if (authToken) {
+      console.log("Yes auth token");
       const url = `${config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
-      console.log(url);
-      console.log("...............");
       fetch(url, {
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -89,29 +94,27 @@ router.beforeEach((to, from, next) => {
       })
         .then((res) => res.json())
         .then((json) => {
-          console.log("...............");
-          console.log(json.message);
           if (json.status == 403) {
             next({
-              path: "/studio/login",
+              path: to.meta.admin ? "/studio/admin/login" : "/studio/login",
               params: { nextUrl: to.fullPath },
             });
           } else {
-            console.log(json.message);
             localStorage.setItem("user", JSON.stringify(json.message));
             next();
           }
         })
         .catch((e) => {
           next({
-            path: "/studio/login",
+            path: to.meta.admin ? "/studio/admin/login" : "/studio/login",
             params: { nextUrl: to.fullPath },
           });
         });
     } else {
+      console.log("No auth token");
       localStorage.setItem("projectId", to.query["projectId"]);
       next({
-        path: "/studio/login",
+        path: to.meta.admin ? "/studio/admin/login" : "/studio/login",
         params: { nextUrl: to.fullPath },
       });
     }
