@@ -49,8 +49,6 @@
 
 
 <script>
-// import Dashboard from '@/components/Dashboard.vue'
-
 import Profile from '@/components/Profile.vue'
 export default {
   name: "PanelPage",
