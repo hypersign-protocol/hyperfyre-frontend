@@ -52,6 +52,11 @@ label {
 .card {
   border-radius: 10px;
 }
+
+i {
+  color: grey;
+  padding: 5px;
+}
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -64,7 +69,7 @@ label {
     <div class="row">
       <div class="col-md-12" style="text-align: left">
         <div class="card">
-           <div class="card-header">
+          <div class="card-header">
             <b-button v-b-toggle.collapse-1 variant="link"
               ><i class="fas fa-plus"></i> CREATE OR EDIT A PROJECT</b-button
             >
@@ -113,7 +118,9 @@ label {
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label style="margin-right: 8%">Whitelisting End Date:</label>
+                    <label style="margin-right: 8%"
+                      >Whitelisting End Date:</label
+                    >
                     <datepicker
                       v-model="project.toDate"
                       name="uniquename"
@@ -202,38 +209,97 @@ label {
     </div>
 
     <div class="row" style="margin-top: 2%">
-      <div class="col-md-12 w-100" style="text-align: left;overflow:scroll">
-        <table class="table table-striped w-100 overflow-hidden">
-          <thead>
-            <tr>
-              <th v-for="col in cols" v-bind:key="col">{{ col }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="project in projects" v-bind:key="project">
-              <td>{{ project._id }}</td>
-              <!-- <td>{{project.ownerDid}}</td> -->
-              <td>{{ project.projectName }}</td>
-              <td>{{ project.fromDate }}</td>
-              <td>{{ project.toDate }}</td>
-              <td><a :href="project.logoUrl" target="_blank">Url</a></td>
-              <td><a :href="project.investors_link" target="_blank">Url</a></td>
-              <td>
-                <a :href="project.whitelisting_link" target="_blank">Url</a>
-              </td>
-              <td>
-                
-                <button
-                  type="button"
-                  class="btn btn-outline-primary"
-                  @click="editProject(project)"
-                >
-                  <i class="fas fa-pencil-alt"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="col-md-12 w-100" style="text-align: left">
+        <div
+          class="card"
+          v-for="project in projects"
+          v-bind:key="project"
+          style="
+            float: left;
+            max-width: 60rem;
+            margin-right: 3%;
+            margin-bottom: 1%;
+          "
+        >
+          <div
+            class="card-header"
+            style="padding: 5px; text-align: center; font-weight: bold"
+          >
+            <h5>{{ project.projectName }}</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <img :src="project.logoUrl" style="max-width: 150px" />
+              </div>
+              <div class="col-md-8">
+                <ul style="list-style-type: none">
+                  <li
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="ProjectId"
+                  >
+                    <i class="far fa-id-card"></i
+                    ><span class="card-title">{{ project._id }}</span>
+                  </li>
+                  <li
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="Start Date"
+                  >
+                    <i class="fas fa-hourglass-start"></i>
+                    {{ project.fromDate }}
+                  </li>
+                  <li
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="End Date"
+                  >
+                    <i class="fas fa-hourglass-end"></i> {{ project.toDate }}
+                  </li>
+                   <li
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="Twitter handle"
+                  >
+                    <i class="fab fa-twitter"></i><a :href="`https://twitter.com/${project.twitterHandle}`" target="__blank">{{ project.twitterHandle }}</a>
+                  </li>
+                  <li
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="Telegram handle"
+                  >
+                    <i class="fab fa-telegram-plane"></i><a :href="`https://t.me/${project.telegramHandle}`" target="__blank">{{ project.telegramHandle }}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span
+              style="float: left"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Whitelisting Form"
+              ><a :href="project.whitelisting_link" target="_blank"
+                ><i class="fas fa-file-alt"></i></a
+            ></span>
+            <span
+              style="float: left"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Investor List"
+              ><a href="/studio/admin/investors"><i class="fas fa-users"></i></a
+            ></span>
+            <span
+              style="float: right; cursor: pointer"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Edit this project"
+              ><i class="fas fa-pencil-alt" @click="editProject(project)"></i
+            ></span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -278,18 +344,18 @@ export default {
       authToken: localStorage.getItem("authToken"),
       isLoading: false,
       fullPage: true,
-      user: {}
+      user: {},
     };
   },
   async mounted() {
     //const usrStr = localStorage.getItem("user");
     //this.user = null; JSON.parse(usrStr);
 
-    const usrStr = localStorage.getItem('user');    
-     this.user = {
-       ...JSON.parse(usrStr)
-     }
-    this.project.ownerDid =  this.user.id // : "did:hs:QWERTlkasd090123SWEE12322";
+    const usrStr = localStorage.getItem("user");
+    this.user = {
+      ...JSON.parse(usrStr),
+    };
+    this.project.ownerDid = this.user.id; // : "did:hs:QWERTlkasd090123SWEE12322";
     await this.fetchProjects();
   },
   beforeRouteEnter(to, from, next) {
@@ -306,12 +372,12 @@ export default {
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.project.ownerDid}`;
 
-        const headers =  {
-                        "Authorization": `Bearer ${this.authToken}`
-                    }
+        const headers = {
+          Authorization: `Bearer ${this.authToken}`,
+        };
         const resp = await fetch(url, {
-            headers,
-            method: "GET"
+          headers,
+          method: "GET",
         });
 
         if (!resp.ok) {
@@ -368,18 +434,14 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
           "Content-Type": "application/json",
-           "Authorization": `Bearer ${this.authToken}`
+          Authorization: `Bearer ${this.authToken}`,
         };
-
-
 
         let method = "POST";
 
         if (this.isProjectEditing) {
           method = "PUT";
         }
-
-        
 
         const resp = await fetch(url, {
           method,

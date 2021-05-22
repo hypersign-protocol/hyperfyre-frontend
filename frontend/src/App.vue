@@ -119,7 +119,7 @@
             <img
               :src="require('./assets/hypersign.webp')"
               alt="logo"
-              width="155px"
+              width="175px"
             />
           </div>
           <p class="header-text">{{ $config.app.name }}</p>
