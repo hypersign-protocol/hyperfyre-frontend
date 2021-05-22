@@ -257,40 +257,59 @@ i {
                   >
                     <i class="fas fa-hourglass-end"></i> {{ project.toDate }}
                   </li>
-                   <li
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="Twitter handle"
-                  >
-                    <i class="fab fa-twitter"></i><a :href="`https://twitter.com/${project.twitterHandle}`" target="__blank">{{ project.twitterHandle }}</a>
-                  </li>
+
                   <li
                     data-toggle="tooltip"
                     data-placement="bottom"
-                    title="Telegram handle"
+                    title="Whitelisting Form"
                   >
-                    <i class="fab fa-telegram-plane"></i><a :href="`https://t.me/${project.telegramHandle}`" target="__blank">{{ project.telegramHandle }}</a>
+                    <i class="fas fa-file-alt"></i>
+                    <a :href="project.whitelisting_link" target="_blank"
+                      >Whitelisting Form</a
+                    >
+                  </li>
+
+                  <li
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="Investor List"
+                  >
+                    <i class="fas fa-users"></i
+                    ><a :href="`/studio/admin/investors?${project._id}`"
+                      >Investor List</a
+                    >
                   </li>
                 </ul>
               </div>
             </div>
           </div>
-          <div class="card-footer">
+          <div
+            class="card-header"
+            style="padding: 5px; background-color: #8080801f"
+          >
             <span
-              style="float: left"
               data-toggle="tooltip"
               data-placement="bottom"
-              title="Whitelisting Form"
-              ><a :href="project.whitelisting_link" target="_blank"
-                ><i class="fas fa-file-alt"></i></a
-            ></span>
+              title="Twitter handle"
+            >
+              <a
+                :href="`https://twitter.com/${project.twitterHandle}`"
+                target="__blank"
+              >
+                <i class="fab fa-twitter"></i
+              ></a>
+            </span>
             <span
-              style="float: left"
               data-toggle="tooltip"
               data-placement="bottom"
-              title="Investor List"
-              ><a href="/studio/admin/investors"><i class="fas fa-users"></i></a
-            ></span>
+              title="Telegram handle"
+            >
+              <a
+                :href="`https://t.me/${project.telegramHandle}`"
+                target="__blank"
+                ><i class="fab fa-telegram-plane"></i
+              ></a>
+            </span>
             <span
               style="float: right; cursor: pointer"
               data-toggle="tooltip"
