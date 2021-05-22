@@ -4,10 +4,10 @@ import router from "./router";
 import {BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import Notifications from "vue-notification";
 import config from "./config";
-import VuejsDialog from "vuejs-dialog";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
-import "vuejs-dialog/dist/vuejs-dialog.min.css";
+
+
 import {
   VeTable,
   VePagination,
@@ -18,17 +18,7 @@ import {
 
 import VueSidebarMenu from "vue-sidebar-menu";
 import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
-import "@fortawesome/fontawesome-free/css/all.css";
-import "@fortawesome/fontawesome-free/js/all.js";
 
-// Tell Vue to install the plugin.
-Vue.use(VuejsDialog, {
-  html: true,
-  // loader: true,
-  okText: "Proceed",
-  cancelText: "Cancel",
-  // animation: 'bounce'
-});
 // Tell Vue to install the plugin.
 // Vue.use(VuejsDialog.main.default);
 
