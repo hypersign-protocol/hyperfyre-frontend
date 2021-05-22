@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-import {BootstrapVue, IconsPlugin, BIcon} from "bootstrap-vue";
+import {BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import Notifications from "vue-notification";
 import config from "./config";
 import VuejsDialog from "vuejs-dialog";

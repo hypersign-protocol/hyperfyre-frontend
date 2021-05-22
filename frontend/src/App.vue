@@ -96,51 +96,6 @@
 </style>
 <template>
   <div id="app">
-    <!-- <div v-if="hideNavbar == true" class="row nav-style">
-      <div class="col-md-4">
-
-        <div class="form-group form-inline">
-          <div>
-            <img
-              src="https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png"
-              style="max-width: 150px;"
-            />
-          </div>
-          <div class="subtitle">
-            {{ $config.app.name }} ({{ $config.app.version }})
-          </div>
-        </div>
-      </div> -->
-    <!-- <div class="nav-logo col-md-7">
-        <div>
-          <div>
-            <img
-              src="https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png"
-              style="max-width: 150px;"
-            />
-          </div>
-          <div class="subtitle">
-            {{ $config.app.name }} ({{ $config.app.version }})
-          </div>
-        </div>
-      </div> -->
-    <!-- <div
-        class="col-md-8 rightAlign"
-        style="padding-top:12px"
-        v-if="!authRoutes.includes($router.history.current.name)"
-      >
-        <button
-          type="button"
-          @click="goToNextPage(m.name)"
-          class="btn btn-light btn-sm"
-          v-for="m in menu"
-          :key="m.name"
-        >
-          {{ m.name }}
-        </button>
-      </div> -->
-    <!-- </div> -->
-
     <div
       :class="[
         showNavbar
@@ -155,7 +110,7 @@
         @toggle-collapse="onToggleCollapse"
         @item-click="onItemClick"
         :theme="'white-theme'"
-        width="200px"
+        width="220px"
         :menu="menu"
         v-if="showNavbar"
       >
@@ -226,7 +181,7 @@
   left: 0;
   right: 0;
   z-index: 42;
-  box-shadow: #80808042 1px 1px 1px 1px;
+  box-shadow: 2px 0 10px rgba(0,0,0,.1);
 }
 .v-sidebar-menu .vsm-arrow:after {
   font-family: FontAwesome;
@@ -243,6 +198,7 @@
 .v-sidebar-menu.vsm_white-theme .vsm--link_level-1.vsm--link_active {
   background-color: rgba(242, 242, 242, 1);
 }
+
 </style>
 
 <script>

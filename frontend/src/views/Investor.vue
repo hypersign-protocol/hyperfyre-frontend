@@ -114,15 +114,6 @@ export default {
       : "60676b4f09baec1befb5f469"; // if projectId is not passed, hardcoding hypersign project Id
 
     this.fetchProjectData();
-
-    // const usrStr = localStorage.getItem("user");
-    // this.user = JSON.parse(usrStr);
-    // this.investor = {...this.user};
-    // this.investor.did = this.user.id;
-
-    // await this.getCurrentAccount();
-    // alert(JSON.stringify(this.user))
-    //await this.fetchProcurment();
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {

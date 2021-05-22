@@ -97,7 +97,7 @@ border-top: 2px solid rgb(120, 120, 243);
                   v-if="value != ''"
                   margin="1"
                   :text="value"
-                  :size="250"
+                  :size="200"
                   :logoSrc="src2"
                   logoBackgroundColor="white"
                   logoCornerRadius="2"

@@ -1,14 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
-import PKIIdLogin from "./views/PKIIdLogin.vue";
-import AdminLogin from "./views/AdminLogin.vue";
 import config from "./config";
-import Dashboard from "./views/Dashboard.vue";
 import fetch from "node-fetch";
-import Investor from "./views/Investor.vue";
-import Investors from "./views/Investors.vue";
-import Project from "./views/Project.vue";
-import Stepper from "./views/Stepper.vue";
 
 Vue.use(Router);
 
@@ -30,12 +23,12 @@ const router = new Router({
     {
       path: "/studio/login",
       name: "PKIIdLogin",
-      component: PKIIdLogin,
+      component: () => import(/* webpackChunkName: "investorLogin" */ './views/PKIIdLogin.vue'),
     },
     {
       path: "/studio/form",
       name: "investor",
-      component: Investor,
+      component: () => import(/* webpackChunkName: "investor" */ './views/Investor.vue') ,
       meta: {
         requiresAuth: true,
       },
@@ -47,12 +40,12 @@ const router = new Router({
     {
       path: "/studio/admin/login",
       name: "AdminLogin",
-      component: AdminLogin,
+      component: () => import(/* webpackChunkName: "adminLogin" */ './views/AdminLogin.vue'),
     },
     {
       path: "/studio/admin/dashboard",
       name: "Dashboard",
-      component: Dashboard,
+      component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue') ,
       meta: {
         requiresAuth: true,
         admin: true,
@@ -61,7 +54,7 @@ const router = new Router({
     {
       path: "/studio/admin/investors",
       name: "investors",
-      component: Investors,
+      component: () => import(/* webpackChunkName: "investors" */ './views/Investors.vue') ,
       meta: {
         requiresAuth: true,
         admin: true,
@@ -70,7 +63,7 @@ const router = new Router({
     {
       path: "/studio/admin/project",
       name: "project",
-      component: Project,
+      component: () => import(/* webpackChunkName: "project" */ './views/Project.vue') ,
       meta: {
         requiresAuth: false,
         admin: true,
