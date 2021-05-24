@@ -81,7 +81,7 @@ async function getProjectById(req: Request, res: Response) {
   try {
     const { id } = req.params;
 
-    const { fetchInvestors, limit, skip, searchQuery } = req.query;
+    const { fetchInvestors, limit, skip, searchQuery, isPublic } = req.query;
     const project: IProject = await ProjectModel.findById({ _id: id });
 
     if (project == null) {
@@ -93,7 +93,7 @@ async function getProjectById(req: Request, res: Response) {
       ...project["_doc"],
     };
 
-    if (fetchInvestors) {
+    if ((fetchInvestors) && (!isPublic)) {
       if (searchQuery) {
         const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
         const searchRgx = rgx(searchQuery);

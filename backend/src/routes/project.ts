@@ -10,7 +10,14 @@ export = (hypersign) => {
 
   router.get("/", hypersign.authorize.bind(hypersign), ProjectController.getAllProject);
 
-  router.get("/:id", hypersign.authorize.bind(hypersign), ProjectController.getProjectById);
+  router.get("/:id", (req, res, next) => {
+      const { isPublic } = req.query;
+      if(isPublic){
+          next();
+      }else{
+        hypersign.authorize(req, res, next);
+      }
+  } , ProjectController.getProjectById);
 
   // Delete
   router.delete("/:id", hypersign.authorize.bind(hypersign), ProjectController.deleteProjectById);
