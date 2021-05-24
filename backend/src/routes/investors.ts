@@ -7,7 +7,8 @@ export = (hypersign) => {
 
   router.post("/issue",  hypersign.authorize.bind(hypersign), InvestorController.issueCredential);
 
-  router.get("/credential",  hypersign.authorize.bind(hypersign), InvestorController.getCredential);
+  // Since this will be called by mobile wallet, you need hypersign authorization middleware here...
+  router.get("/credential",  InvestorController.getCredential);
   
  return router;  
 
