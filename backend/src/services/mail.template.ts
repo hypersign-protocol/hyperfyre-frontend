@@ -74,6 +74,10 @@ export const template =
         <p class='colored'>Tap 'Get Credential' button (or link) to receieve the credential in your Hypersign Identity Wallet.</p>
         <br/>
         <p><a href='@@DEEPLINKURL@@' class="button">Get credential</a></p>
+        <p>If the 'Get Credential' button (or link) does not work, then copy paste the url text in your browser</p>
+        
+        <p>@@URLTEXT@@</p>
+
         <br/>
         <br/>
         <p>Thanks & Regards, <br />Team @@APPNAME@@!</p>

@@ -177,22 +177,22 @@ async function getCredential(req: Request, res: Response) {
 
 
 async function sendEmail(data){
-  console.log(data)
   const token = await jsonWebToken.sign(data, jwt.secret, { expiresIn: jwt.expiryTime })
   let link = `${hostnameurl}/api/v1/investors/credential?token=${token}`;
-  
-  credentialMailTemplate = credentialMailTemplate.replace(/@@APPNAME@@/g, mail.name);
-  credentialMailTemplate = credentialMailTemplate.replace('@@RECEIVERNAME@@', data.name);
-  credentialMailTemplate = credentialMailTemplate.replace('@@LINK@@', link);
+  let mailTemplateTemp = credentialMailTemplate;
+  mailTemplateTemp = mailTemplateTemp.replace(/@@APPNAME@@/g, mail.name);
+  mailTemplateTemp = mailTemplateTemp.replace('@@RECEIVERNAME@@', data.name);
+  mailTemplateTemp = mailTemplateTemp.replace('@@LINK@@', link);
   const JSONdata = JSON.stringify({
       QRType: 'ISSUE_CRED',
       url: link
   });
   const deepLinkUrl = encodeURI(hsAuthServerEp + 'deeplink.html?deeplink=hypersign:deeplink?url=' + JSONdata);
-  credentialMailTemplate = credentialMailTemplate.replace("@@DEEPLINKURL@@", deepLinkUrl);
+  mailTemplateTemp = mailTemplateTemp.replace("@@DEEPLINKURL@@", deepLinkUrl);
+  mailTemplateTemp = mailTemplateTemp.replace("@@URLTEXT@@", deepLinkUrl);
 
   const mailService = new MailService({ ...mail });
-  await mailService.sendEmail(data.email, credentialMailTemplate, `${mail.name} Auth Credential Issuance`);
+  await mailService.sendEmail(data.email, mailTemplateTemp, `${mail.name} Credential Issuance`);
   return link;
 }
 
@@ -232,12 +232,9 @@ async function issueCredential(req: Request, res: Response){
     Object.keys(attributesMap).map(x => {
       attributesMap[x] = investor["_doc"][x]
     })
-    
-    
+      
     const link = await sendEmail(attributesMap);
-
     return res.send({message: "Whitelisting credential has been successfully sent to the investor email", credentialUrl: link})
-
 
   } catch (e){
     logger.error('InvestorCtrl:: verifyAndIssueCredential(): Error ' + e);
