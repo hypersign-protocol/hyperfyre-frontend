@@ -19,9 +19,7 @@ input::placeholder {
 .avatar-upload {
   margin-top: 20px;
 }
-div.form {
-  
-}
+
 form {
   margin-top: 100px;
 }
@@ -35,7 +33,7 @@ div.form > div {
   <div>
     <div>
       <form class="d-flex">
-        <!-- <div class="avatar-upload"> -->
+        <!-- <div class="avatar-upload">
           <label for="avatar">
             <div class="">
               <img width="100px" :src="stepTwoData.imgLink" />
@@ -48,7 +46,7 @@ div.form > div {
             id="avatar"
             class="d-none"
           />
-        <!-- </div> -->
+        </div> -->
 
         <div class="form d-flex flex-wrap justify-content-between">
           <div
