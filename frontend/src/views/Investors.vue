@@ -341,7 +341,7 @@ export default {
                 ) : (
                   <button
                     class="btn btn-white border border-1 btn-sm"
-                    on-click={() => this.issueCredential(row)}
+                    on-click={() => this.issueCredential(row, rowIndex)}
                   >
                     <i style="font-size:20px" class="far fa-clock"></i>
                   </button>
@@ -564,7 +564,7 @@ export default {
         this.isLoading = false;
       }
     },
-    async issueCredential(investor) {
+    async issueCredential(investor, idx) {
       try {
         this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investors/issue`;
@@ -572,10 +572,9 @@ export default {
           did: investor.did,
           projectId: this.investor.projectId,
         };
-
         const headers = {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.authToken}`,
+          Authorization: `Bearer ${this.authToken}`,
         };
 
         const resp = await fetch(url, {
@@ -587,9 +586,9 @@ export default {
         if (!resp.ok) {
           return this.notifyErr(resp.statusText);
         }
-
         const json = await resp.json();
         this.notifySuccess(json.message);
+        this.project.investors[idx].isVerfiedByHypersign = true;
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
