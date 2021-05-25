@@ -84,20 +84,18 @@ label {
       :is-full-page="fullPage"
     ></loading>
 
-
     <div class="row " style="margin-top: 2%">
       <div class="d-flex justify-content-between col-md-12">
         <div>
-          
           <select @change="fetchProjectInvestors">
-          <option value="">Select Project</option>
-          <option
-            v-for="project in projects"
-            :key="project._id"
-            :value="project._id"
-            >{{ project.projectName }}</option
-          >
-        </select >
+            <option value="">Select Project</option>
+            <option
+              v-for="project in projects"
+              :key="project._id"
+              :value="project._id"
+              >{{ project.projectName }}</option
+            >
+          </select>
         </div>
         <div>
           <b-form-input
@@ -341,7 +339,7 @@ export default {
                 ) : (
                   <button
                     class="btn btn-white border border-1 btn-sm"
-                    on-click={() => this.issueCredential(row)}
+                    on-click={() => this.issueCredential(row, rowIndex)}
                   >
                     <i style="font-size:20px" class="far fa-clock"></i>
                   </button>
@@ -543,7 +541,7 @@ export default {
 
         const headers = {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.authToken}`,
+          Authorization: `Bearer ${this.authToken}`,
         };
 
         const resp = await fetch(url, {
@@ -564,18 +562,17 @@ export default {
         this.isLoading = false;
       }
     },
-    async issueCredential(investor) {
+    async issueCredential(investor, idx) {
       try {
-        this.isLoading = true;
+        // this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investors/issue`;
         const body = {
           did: investor.did,
           projectId: this.investor.projectId,
         };
-
         const headers = {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.authToken}`,
+          Authorization: `Bearer ${this.authToken}`,
         };
 
         const resp = await fetch(url, {
@@ -587,10 +584,12 @@ export default {
         if (!resp.ok) {
           return this.notifyErr(resp.statusText);
         }
-
         const json = await resp.json();
+        console.log(json);
         this.notifySuccess(json.message);
+        this.project.investors[idx].isVerfiedByHypersign = true;
       } catch (e) {
+        console.log(e);
         this.notifyErr(e.message);
       } finally {
         this.isLoading = false;
@@ -646,7 +645,7 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
         let headers = {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.authToken}`,
+          Authorization: `Bearer ${this.authToken}`,
         };
         const resp = await fetch(url, {
           method: "POST",

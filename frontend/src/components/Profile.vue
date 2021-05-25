@@ -57,7 +57,6 @@
 }
 </style>
 
-
 <template>
   <div>
     <div class="row" style="margin-top: 2%">
@@ -73,7 +72,6 @@
           <div class="card-header">Investors</div>
         </div>
       </div>
-      
     </div>
     <div class="row" style="margin-top: 5%">
       <div class="col-md-12 leftAlign">
@@ -90,14 +88,7 @@
               <div class="col-md-6" style="flex-wrap: wrap; padding: 20px">
                 <p>DID</p>
                 <p class="fVal">
-                  <a
-                    :href="
-                      `/` +
-                      user.id
-                    "
-                    target="_blank"
-                    >{{ user.id }}</a
-                  >
+                  <a :href="`/` + user.id" target="_blank">{{ user.id }}</a>
                 </p>
                 <p>Email</p>
                 <p class="fVal">{{ user.email }}</p>
@@ -109,11 +100,9 @@
           </div>
         </div>
       </div>
-      
     </div>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -138,19 +127,19 @@ export default {
       },
 
       authToken: localStorage.getItem("authToken"),
-       projects: [],
+      projects: [],
     };
   },
   async created() {
-    const usrStr = localStorage.getItem('user');    
-     this.user = {
-       ...JSON.parse(usrStr)
-     }
+    const usrStr = localStorage.getItem("user");
+    this.user = {
+      ...JSON.parse(usrStr),
+    };
     // const usrStr = localStorage.getItem("user");
     // this.user = { ...JSON.parse(usrStr) };
     // this.userKeys = Object.keys(this.user);
     // this.pollData();
-      
+
     await this.fetchProjects();
   },
   methods: {
@@ -162,16 +151,13 @@ export default {
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.user.id}`;
 
-
-        const headers =  {
-                        "Authorization": `Bearer ${this.authToken}`
-                    }
+        const headers = {
+          Authorization: `Bearer ${this.authToken}`,
+        };
         const resp = await fetch(url, {
-            headers,
-            method: "GET"
+          headers,
+          method: "GET",
         });
-
-        
 
         if (!resp.ok) {
           return this.notifyErr(resp.statusText);
@@ -183,15 +169,19 @@ export default {
           x["whitelisting_link"] =
             window.location.origin + "/studio/form?projectId=" + x._id;
           x["investors_link"] =
-            window.location.origin + "/studio/investors?projectId=" + x._id;
+            window.location.origin +
+            "/studio/admin/investors?projectId=" +
+            x._id;
         });
         this.projectCount = this.projects.length;
-        localStorage.setItem('userProjects', JSON.stringify({
-          projects: this.projects,
-          count: this.projectCount
-        }));
+        localStorage.setItem(
+          "userProjects",
+          JSON.stringify({
+            projects: this.projects,
+            count: this.projectCount,
+          })
+        );
 
-        
         // this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {
         this.notifyErr(e.message);
@@ -225,7 +215,7 @@ export default {
     // },
     // pollData() {
     //   this.fetchSchemas();
-      
+
     //   const url = `${this.$config.studioServer.BASE_URL}hs/api/v2/app`;
     //   const options = {
     //     method: "GET",

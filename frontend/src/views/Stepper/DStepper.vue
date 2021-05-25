@@ -144,22 +144,32 @@
             <img width="120px" :src="require('../../assets/footerLogo.png')" />
           </a>
         </div>
-        <div class="social d-flex">
-          <div>
-            <a href="https://t.me/hypersignchain" target="_blank">
+        <div class="social d-flex ">
+          <div class="mr-3">
+            <a
+              :href="`https://telegram.im/@${projectDetails.telegramHandle}`"
+              target="_blank"
+            >
               <img
                 width="30px"
                 :src="require(`../../assets/telegramIcon.png`)"
               />
             </a>
           </div>
-          <div class="mx-3">
+          <!-- <div class="mx-3">
             <a href="https://twitter.com/hypersignchain" target="_blank">
               <img width="30px" :src="require(`../../assets/instaIcon.png`)" />
             </a>
-          </div>
+          </div> -->
           <div>
-            <a href="https://twitter.com/hypersignchain" target="_blank">
+            <a
+              :href="
+                'https://twitter.com/' +
+                  projectDetails.twitterHandle +
+                  '?ref_src=twsrc%5Etfw'
+              "
+              target="_blank"
+            >
               <img
                 width="30px"
                 :src="require(`../../assets/twitterIcon.png`)"
@@ -170,6 +180,7 @@
         <div class="logo-partner"></div>
       </div>
     </div>
+
     <vue-recaptcha
       v-if="step + 1 == 3"
       ref="recaptcha"
@@ -222,7 +233,7 @@ export default {
       authToken: localStorage.getItem("authToken"),
       fullPage: true,
       projectDetails: {},
-      projectId: ""
+      projectId: "",
     };
   },
 
@@ -235,19 +246,15 @@ export default {
       return;
     }
 
-
     this.projectId = this.$route.query.projectId;
     const userDid = JSON.parse(localStorage.getItem("user")).id;
-    
 
-    this.checkIfAlreadyFilled(userDid);
+    // this.checkIfAlreadyFilled(userDid);
     this.fetchProjectData();
   },
   mounted() {
     this.data =
       this.step == 0 || this.step == 0 ? this.stepOneData : this.stepTwoData;
-
-    
   },
 
   computed: {
@@ -390,7 +397,7 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${recaptchaToken}`;
         let headers = {
           "Content-Type": "application/json",
-           "Authorization": `Bearer ${this.authToken}`
+          Authorization: `Bearer ${this.authToken}`,
         };
 
         const resp = await fetch(url, {
@@ -433,12 +440,12 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?did=${userDid}&projectId=${this.projectId}`;
         let headers = {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.authToken}`
+          Authorization: `Bearer ${this.authToken}`,
         };
 
         const res = await fetch(url, {
           headers,
-          method: "GET"
+          method: "GET",
         });
 
         if (res.status !== 200) {
@@ -446,7 +453,7 @@ export default {
         }
 
         const resData = await res.json();
-        
+
         if (resData.length > 0) {
           this.step = 3;
         }
@@ -471,8 +478,8 @@ export default {
     },
     async fetchProjectData() {
       try {
-        console.log("fetching the project detials. ...... ")
-        console.log(this.authToken)
+        console.log("fetching the project detials. ...... ");
+        console.log(this.authToken);
         this.isLoading = true;
 
         if (!this.$route.query.projectId) throw new Error("No project found");
@@ -483,12 +490,12 @@ export default {
 
         let headers = {
           "Content-Type": "application/json",
-           "Authorization": `Bearer ${this.authToken}`
+          Authorization: `Bearer ${this.authToken}`,
         };
-        console.log(headers)
+        console.log(headers);
         const resp = await fetch(url, {
           headers,
-          method: "GET"
+          method: "GET",
         });
 
         console.log("RESP", resp);
@@ -504,14 +511,15 @@ export default {
             i
           ].text.replace("projectName", this.projectDetails.projectName);
         }
-        // console.log(newStepOneDat);
 
-        // this.project.fromDate = this.formateDate(this.project.fromDate);
-        // this.project.toDate = this.formateDate(this.project.toDate);
-        // this.projectFetched = true;
-        // this.notifySuccess(
-        //   "Project is fetched. ProjectName " + json.projectName
-        // );
+        console.log(newStepOneDat);
+
+        this.project.fromDate = this.formateDate(this.project.fromDate);
+        this.project.toDate = this.formateDate(this.project.toDate);
+        this.projectFetched = true;
+        this.notifySuccess(
+          "Project is fetched. ProjectName " + json.projectName
+        );
       } catch (e) {
         console.log(e);
         this.notifyErr(e.message);

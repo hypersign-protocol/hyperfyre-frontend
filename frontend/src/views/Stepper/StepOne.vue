@@ -234,7 +234,7 @@ export default {
   },
   data() {
     return {
-      showInput: false,
+      showInput: true,
     };
   },
   methods: {

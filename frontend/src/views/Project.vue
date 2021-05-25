@@ -64,7 +64,7 @@ label {
     <div class="row">
       <div class="col-md-12" style="text-align: left">
         <div class="card">
-           <div class="card-header">
+          <div class="card-header">
             <b-button v-b-toggle.collapse-1 variant="link"
               ><i class="fas fa-plus"></i> CREATE OR EDIT A PROJECT</b-button
             >
@@ -113,7 +113,9 @@ label {
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label style="margin-right: 8%">Whitelisting End Date:</label>
+                    <label style="margin-right: 8%"
+                      >Whitelisting End Date:</label
+                    >
                     <datepicker
                       v-model="project.toDate"
                       name="uniquename"
@@ -222,7 +224,6 @@ label {
                 <a :href="project.whitelisting_link" target="_blank">Url</a>
               </td>
               <td>
-                
                 <button
                   type="button"
                   class="btn btn-outline-primary"
@@ -278,18 +279,18 @@ export default {
       authToken: localStorage.getItem("authToken"),
       isLoading: false,
       fullPage: true,
-      user: {}
+      user: {},
     };
   },
   async mounted() {
     //const usrStr = localStorage.getItem("user");
     //this.user = null; JSON.parse(usrStr);
 
-    const usrStr = localStorage.getItem('user');    
-     this.user = {
-       ...JSON.parse(usrStr)
-     }
-    this.project.ownerDid =  this.user.id // : "did:hs:QWERTlkasd090123SWEE12322";
+    const usrStr = localStorage.getItem("user");
+    this.user = {
+      ...JSON.parse(usrStr),
+    };
+    this.project.ownerDid = this.user.id; // : "did:hs:QWERTlkasd090123SWEE12322";
     await this.fetchProjects();
   },
   beforeRouteEnter(to, from, next) {
@@ -306,12 +307,12 @@ export default {
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.project.ownerDid}`;
 
-        const headers =  {
-                        "Authorization": `Bearer ${this.authToken}`
-                    }
+        const headers = {
+          Authorization: `Bearer ${this.authToken}`,
+        };
         const resp = await fetch(url, {
-            headers,
-            method: "GET"
+          headers,
+          method: "GET",
         });
 
         if (!resp.ok) {
@@ -324,7 +325,9 @@ export default {
           x["whitelisting_link"] =
             window.location.origin + "/studio/form?projectId=" + x._id;
           x["investors_link"] =
-            window.location.origin + "/studio/investors?projectId=" + x._id;
+            window.location.origin +
+            "/studio/admin/investors?projectId=" +
+            x._id;
         });
         this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {
@@ -368,18 +371,14 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
           "Content-Type": "application/json",
-           "Authorization": `Bearer ${this.authToken}`
+          Authorization: `Bearer ${this.authToken}`,
         };
-
-
 
         let method = "POST";
 
         if (this.isProjectEditing) {
           method = "PUT";
         }
-
-        
 
         const resp = await fetch(url, {
           method,
