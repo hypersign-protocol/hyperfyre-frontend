@@ -438,7 +438,9 @@ export default {
           x["whitelisting_link"] =
             window.location.origin + "/studio/form?projectId=" + x._id;
           x["investors_link"] =
-            window.location.origin + "/studio/investors?projectId=" + x._id;
+            window.location.origin +
+            "/studio/admin/investors?projectId=" +
+            x._id;
         });
         this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {
@@ -491,7 +493,6 @@ export default {
           method = "PUT";
         }
 
-console.log(JSON.stringify(this.project))
         const resp = await fetch(url, {
           method,
           body: JSON.stringify(this.project),
