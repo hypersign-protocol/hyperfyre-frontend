@@ -16,13 +16,18 @@ input:read-only {
   padding: 0px;
   font-weight: bolder;
   color: grey;
+  font-size: 17px;
+  color: #494949;
+  
 }
 label {
   font-weight: bold;
   text-align: left;
   display: block;
   text-transform: uppercase;
+  font-size: 11px;
   color: rgb(58, 58, 58);
+
 }
 input::placeholder {
   color: rgb(171, 176, 199);
@@ -38,6 +43,13 @@ form {
 div.form > div {
   width: calc(50% - 50px);
   margin: 20px 0px;
+}
+
+
+@media screen and (max-width: 768px) {
+ div.form  > div{
+   width: 100%;
+ }
 }
 </style>
 <template>

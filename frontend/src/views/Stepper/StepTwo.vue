@@ -28,6 +28,18 @@ div.form > div {
   width: calc(50% - 50px);
   margin: 20px 0px;
 }
+
+
+@media screen and (max-width: 768px) {
+ div.form  > div{
+   width: 100%;
+ }
+}
+@media screen and (max-width: 516px) {
+  
+}
+
+
 </style>
 <template>
   <div>

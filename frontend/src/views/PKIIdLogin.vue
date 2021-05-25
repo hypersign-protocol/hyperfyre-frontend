@@ -41,7 +41,7 @@ h5 span {
   padding: 0 10px;
 }
 .bg-dark {
-  background-color: rgb(58, 58, 58);
+  background-color: #494949 !important;
 }
 .app-links img {
   height: 50px;
@@ -75,7 +75,7 @@ h5 span {
   font-weight: 600;
 }
 .with-hypersign-btn {
-  background-color: rgb(61, 66, 60);
+  background-color: #494949;
   padding: 0;
 }
 .with-hypersign-btn .btn-text {
@@ -103,6 +103,71 @@ h5 span {
 .qrWrapper img {
   width: 100%;
 }
+
+@media screen and (max-width: 990px) {
+  .loginPage {
+    flex-direction: column;
+  }
+}
+
+.qrWrapper {
+  padding: 10px;
+  border: 1px solid rgba(128, 128, 128, 0.37);
+  width: 55%;
+  margin-left: 22%;
+}
+.qrWrapper img {
+  width: 100%;
+}
+
+@media screen and (max-width: 990px) {
+  .loginPage {
+    flex-direction: row;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .loginPage {
+    flex-direction: row !important;
+  }
+  .cmp-logo {
+    width: 40%;
+  }
+  .login-container {
+    height: auto !important;
+  }
+  body {
+    font-size: calc(0.75em + 1vmin);
+    overflow-x: hidden !important;
+  }
+  .login-inst-container {
+    padding: 100px 0px;
+  }
+}
+
+@media screen and (max-width: 516px) {
+  .login-inst-container {
+    padding: 100px 50px;
+    font-size: 14px;
+  }
+  .login-inst-container h3 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .cmp-logo {
+    width: 50%;
+  }
+  .hypersign-logo-footer {
+    font-size: 14px;
+  }
+  .hypersign-logo-footer img {
+    width: 90px;
+  }
+  .app-links img {
+    height: 40px;
+    margin: 0 10px;
+  }
+}
 /* .with-hypersign-btn  */
 </style>
 <template>
@@ -117,16 +182,17 @@ h5 span {
     </div>
 
     <div
-      class="col col-lg-8 d-flex justify-content-center align-items-center border border-1 bg-dark shadow text-left text-white"
+      class="col col-lg-8 col-md-12 col-sm-12 d-flex justify-content-center align-items-center border border-1 bg-dark shadow text-left text-white login-inst-container"
     >
       <div>
-        <h3>Welcome to HYPERSIGN's Whitelist</h3>
-        <p>Instructions</p>
+        <h3>Register for Hypersign's Private Token Sale</h3>
+        <p class="mt-4">Instructions</p>
         <ol class="px-3">
-          <li>Install the hypersign app on your phone</li>
-          <li>Follow the steps in the app to register [only needed once]</li>
-          <li>After registration scan the QR code on this screen</li>
-          <li>Follow on-screen steps to complete Whitelisting</li>
+          
+          <li>Login with the Hypersign Mobile App or Web Wallet</li>
+          <li>Follow the steps provided in the next screens</li>
+          <li>Submit additional information as requested</li>
+          <li>Wait for winners announcement.</li>
         </ol>
 
         <p class="mt-5 text-center ">
@@ -155,8 +221,8 @@ h5 span {
       </div>
     </div>
 
-    <div class="col col-lg-4 border border-1 bg-white border">
-      <div class="d-flex flex-column justify-content-between vh-100 px-3">
+    <div class="col col-lg-4 col-md-12 col-sm-12 border border-1 bg-white border">
+      <div class="d-flex flex-column justify-content-between vh-100 px-3 login-container">
         <a
           class="text-right mt-3  text-dark text-reset fw-bold"
           style="font-weight:600"
@@ -191,11 +257,11 @@ h5 span {
                 <div>
                   <img
                     style="height:50px"
-                    :src="require('../assets/hypersignSmallLogo.png')"
-                    class="ml-0 rounded rounded-circle border border-white border-1 p-1"
+                    :src="require('../assets/hypersign_logo_short_white.png')"
+                    class="ml-0 rounded rounded-circle p-1"
                   />
                 </div>
-                <div class="btn-text">Login with Web Wallet</div>
+                <div class="btn-text">USE HYPERSIGN WEB WALLET</div>
               </button>
             </p>
           </div>
@@ -240,7 +306,7 @@ export default {
   },
   data() {
     return {
-      src2: require("../assets/icon.png"),
+      src2: require("../assets/hypersign_logo_short_black.png"),
 
       active: 0,
       host: location.hostname,
