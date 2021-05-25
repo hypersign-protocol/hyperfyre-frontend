@@ -144,22 +144,32 @@
             <img width="120px" :src="require('../../assets/footerLogo.png')" />
           </a>
         </div>
-        <div class="social d-flex">
-          <div>
-            <a href="https://t.me/hypersignchain" target="_blank">
+        <div class="social d-flex ">
+          <div class="mr-3">
+            <a
+              :href="`https://telegram.im/@${projectDetails.telegramHandle}`"
+              target="_blank"
+            >
               <img
                 width="30px"
                 :src="require(`../../assets/telegramIcon.png`)"
               />
             </a>
           </div>
-          <div class="mx-3">
+          <!-- <div class="mx-3">
             <a href="https://twitter.com/hypersignchain" target="_blank">
               <img width="30px" :src="require(`../../assets/instaIcon.png`)" />
             </a>
-          </div>
+          </div> -->
           <div>
-            <a href="https://twitter.com/hypersignchain" target="_blank">
+            <a
+              :href="
+                'https://twitter.com/' +
+                  projectDetails.twitterHandle +
+                  '?ref_src=twsrc%5Etfw'
+              "
+              target="_blank"
+            >
               <img
                 width="30px"
                 :src="require(`../../assets/twitterIcon.png`)"
@@ -170,6 +180,7 @@
         <div class="logo-partner"></div>
       </div>
     </div>
+
     <vue-recaptcha
       v-if="step + 1 == 3"
       ref="recaptcha"
@@ -473,24 +484,19 @@ export default {
     },
     async fetchProjectData() {
       try {
-        console.log("fetching the project detials. ...... ")
-        console.log(this.authToken)
         this.isLoading = true;
 
         if (!this.$route.query.projectId) throw new Error("No project found");
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.projectId}`;
 
-        console.log(url);
-
         let headers = {
           "Content-Type": "application/json",
-           "Authorization": `Bearer ${this.authToken}`
+          Authorization: `Bearer ${this.authToken}`,
         };
-        console.log(headers)
         const resp = await fetch(url, {
           headers,
-          method: "GET"
+          method: "GET",
         });
 
         console.log("RESP", resp);
@@ -514,6 +520,13 @@ export default {
         }
         this.projectDetails.twitterPostFormat = encodeURIComponent(
           this.projectDetails.twitterPostFormat
+        );
+        
+        this.project.fromDate = this.formateDate(this.project.fromDate);
+        this.project.toDate = this.formateDate(this.project.toDate);
+        this.projectFetched = true;
+        this.notifySuccess(
+          "Project is fetched. ProjectName " + json.projectName
         );
       } catch (e) {
         this.showStepper = false;
