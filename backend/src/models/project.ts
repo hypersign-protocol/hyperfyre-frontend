@@ -9,6 +9,7 @@ export interface IProject extends Document{
     twitterHandle: string;
     telegramHandle: string;
     twitterPostFormat: string;
+    projectStatus: Boolean;
 
 }
 
@@ -20,7 +21,8 @@ const ProjectSchema = new Schema({
     ownerDid:{ type: String, required: true},
     twitterHandle:{ type: String, required: true},
     telegramHandle:{ type: String, required: true},
-    twitterPostFormat: { type: String, required: true}
+    twitterPostFormat: { type: String, required: true},
+    projectStatus: { type: Boolean, required: true}
 })
 
 export default mongoose.model<IProject>("Project", ProjectSchema);

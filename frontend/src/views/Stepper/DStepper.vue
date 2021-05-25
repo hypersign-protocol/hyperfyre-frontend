@@ -132,7 +132,7 @@
       </div>
     </div>
     <div v-else class="steps-container no-stepper" style="height:100px">
-      <h2 class="text-center w-100 text-danger">Project Id Not found</h2>
+      <h2 class="text-center w-100 text-danger">{{ errorMessage }}</h2>
     </div>
 
     <div class="footer">
@@ -204,6 +204,7 @@ export default {
 
   data() {
     return {
+      errorMessage: "No project found",
       showStepper: true,
       data: this.stepTwoData,
       store: {
@@ -232,6 +233,7 @@ export default {
       this.$route.query.projectId == "undefined"
     ) {
       this.showStepper = false;
+      this.errorMessage = "Sorry, no project found :( !"
       return;
     }
 
@@ -499,6 +501,12 @@ export default {
         const json = await resp.json();
         this.projectDetails = { ...json };
 
+        if(!this.projectDetails.projectStatus || this.projectDetails.projectStatus === false){
+          this.showStepper = false;
+          this.errorMessage = "Sorry, whitelisting process for this project has been over :( !"
+          return;
+        }
+
         for (let i in this.stepOneData.rules) {
           this.stepOneData.rules[i].text = this.stepOneData.rules[
             i
@@ -508,7 +516,8 @@ export default {
           this.projectDetails.twitterPostFormat
         );
       } catch (e) {
-        console.log(e);
+        this.showStepper = false;
+        this.errorMessage = "Sorry, no project found :( !"
         this.notifyErr(e.message);
       } finally {
         this.isLoading = false;

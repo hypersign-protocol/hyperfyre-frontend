@@ -162,7 +162,18 @@ i {
               </div>
 
               <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label style="margin-right: 8%"
+                      >Project Status:</label
+                    >
+                    <select class="form-control" v-model="project.projectStatus"  @change="changeProjectStatus($event)">
+                      <option value="true">OPEN</option>
+                      <option value="false">CLOSE</option>
+                    </select >
+                  </div>
+                </div>
+                <div class="col-md-6">
                   <div class="form-group">
                     <label style="margin-right: 8%">Twitter Post: </label>
                     <textarea
@@ -225,7 +236,20 @@ i {
             class="card-header"
             style="padding: 5px; text-align: center; font-weight: bold"
           >
-            <h5>{{ project.projectName }}</h5>
+            <span style="">{{ project.projectName }}</span>
+            <span data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="Project Status" style="float:right">
+
+              
+              <span v-if="project.projectStatus == true">
+                <i class="fas fa-signal" style="color:green"></i> 
+              </span>
+              <span  v-if="!project.projectStatus ||  project.projectStatus == false" >
+                <i class="fas fa-signal" style="color:red"></i>
+              </span>
+
+            </span>
           </div>
           <div class="card-body">
             <div class="row">
@@ -279,6 +303,7 @@ i {
                       >Investor List</a
                     >
                   </li>
+
                 </ul>
               </div>
             </div>
@@ -344,6 +369,7 @@ export default {
         twitterHandle: "",
         telegramHandle: "",
         twitterPostFormat: "I am happy with #hypersign @hypersignchain",
+        projectStatus: true,
       },
       isProjectEditing: false,
       projects: [],
@@ -383,6 +409,9 @@ export default {
     });
   },
   methods: {
+    changeProjectStatus (event) {
+      this.project.projectStatus = event.target.options[event.target.options.selectedIndex].value === "false" ? false : true ;
+    },
     async fetchProjects() {
       try {
         this.isLoading = true;
@@ -462,6 +491,7 @@ export default {
           method = "PUT";
         }
 
+console.log(JSON.stringify(this.project))
         const resp = await fetch(url, {
           method,
           body: JSON.stringify(this.project),

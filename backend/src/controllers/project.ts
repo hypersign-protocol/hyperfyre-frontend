@@ -49,7 +49,8 @@ async function addProject(req: Request, res: Response) {
       ownerDid: userData.id,
       twitterHandle,
       telegramHandle,
-      twitterPostFormat
+      twitterPostFormat,
+      projectStatus: true
     });
     res.send(newProject);
   } catch (e) {
@@ -162,7 +163,8 @@ async function updateProject(req: Request, res: Response) {
       twitterHandle,
       telegramHandle,
       _id,
-      userData
+      userData,
+      projectStatus
     } = req.body;
 
     const { id: ownerDid } = userData;
@@ -176,6 +178,7 @@ async function updateProject(req: Request, res: Response) {
       ownerDid,
       twitterHandle,
       telegramHandle,
+      projectStatus
     });
     const project: IProject = await ProjectModel.findById({ _id: _id });
 
