@@ -689,7 +689,7 @@ div.rule {
   width: 100%;
 }
 .steps-indicator .heading {
-  font-size: 22px;
+  font-size: 16px;
 }
 
 
@@ -710,11 +710,8 @@ div.rule {
   .social{
   margin-left: auto;
 }
-
-
  
 }
-
 @media screen and (max-width: 516px) {
    .steps-indicator{
      top: 30px;
@@ -723,6 +720,9 @@ div.rule {
 
 .steps-indicator .heading{
    margin-top: 10px !important;
+  }
+  div.form {
+    font-size: 12px;
   }
   
 }

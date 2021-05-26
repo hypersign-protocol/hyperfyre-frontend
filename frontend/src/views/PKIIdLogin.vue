@@ -185,6 +185,16 @@ h5 span {
   .openWebWalletWrapper .btn{
     width: 90%;
   }
+  .loginInNow-text{
+    font-size: 18px;
+  } 
+  .with-hypersign-btn .btn-text{
+    padding: 0 0 0 3px;
+
+  }
+   .with-hypersign-btn  img{
+     height: 40px !important;
+   }
 
 }
 /* .with-hypersign-btn  */
