@@ -136,7 +136,7 @@
     </div>
 
     <div class="footer">
-      <h5 class="text-white my-2"> You personal data is secure and encrypted</h5>
+      <!-- <h5 class="text-white my-2"> You personal data is secure and encrypted</h5> -->
       <div class="rule w-75 mx-auto" />
       <div class="d-flex justify-content-between align-items-center">
         <div class="footer-logo">
