@@ -13,7 +13,7 @@
         <h4 class="mb-4">
           Welcome to
           <span class="text-uppercase">{{ projectDetails.projectName || "Hypersign's" }}</span>
-          Token Sale  Registratiom
+          Token Sale  Registration
         </h4>
         <p class="my-0">{{ step == 0 ? stepOneData.line1 : stepTwoData.line1 }}</p>
         <p  class="my-0">{{ step == 0 ? stepOneData.line2 : stepTwoData.line2 }}</p>

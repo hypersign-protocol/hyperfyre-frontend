@@ -30,7 +30,7 @@ const router = new Router({
       name: "investor",
       component: () => import(/* webpackChunkName: "investor" */ './views/Investor.vue') ,
       meta: {
-        requiresAuth: false,
+        requiresAuth: true,
       },
     },
     {
