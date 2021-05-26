@@ -86,7 +86,7 @@ div.form > div {
             />
           </div>
 
-          <!-- <vue-recaptcha sitekey="Your key here"></vue-recaptcha> -->
+        
 
           <div class="w-100">
             <!--             
@@ -123,7 +123,7 @@ div.form > div {
 </template>
 
 <script>
-import VueRecaptcha from "vue-recaptcha";
+
 
 export default {
   name: "StepThree",
