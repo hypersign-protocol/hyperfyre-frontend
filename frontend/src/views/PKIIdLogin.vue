@@ -104,6 +104,9 @@ h5 span {
   width: 100%;
 }
 
+.openMobileAppWrapper a{
+  width: 90%;
+}
 @media screen and (max-width: 990px) {
   .loginPage {
     flex-direction: column;
@@ -178,6 +181,9 @@ h5 span {
   }
   .scan-qr-message{
     display: none;
+  }
+  .openWebWalletWrapper .btn{
+    width: 90%;
   }
 
 }
@@ -277,9 +283,10 @@ h5 span {
             </p>
 
             <div class="mb-2 openMobileAppWrapper">
-                <button
+                <a 
+                :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`"
                 class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill"
-                @click="openMobileWallet()"
+      
               >
                 <div>
                   <img
@@ -289,11 +296,11 @@ h5 span {
                   />
                 </div>
                 <div class="btn-text">USE HYPERSIGN MOBILE WALLET</div>
-              </button>
+              </a>
             </div>
 
             <h6>OR</h6>
-            <p class="text-center">
+            <p class=" openWebWalletWrapper text-center">
               <button
                 class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill"
                 @click="openWallet()"
@@ -442,17 +449,6 @@ export default {
       }
     },
 
-    openMobileWallet(){
-      console.log(`${this.$config.mobileWalletAddress}?url=${this.value}`)
-
-      if (this.value != "") {
-        window.open(
-          `${this.$config.mobileWalletAddress}?url=${this.value}`,
-          "popUpWindow",
-          `height=800,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`
-        );
-      }
-    },
 
     push(path) {
       this.$router.push(path);
