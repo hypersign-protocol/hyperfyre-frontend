@@ -476,7 +476,7 @@ export default {
           this.step = 3;
         }
       } catch (e) {
-        this.notifyErr(err.message);
+        this.notifyErr(e.message);
         console.log(e);
       } finally {
         // this.isLoading = false;
@@ -546,7 +546,7 @@ export default {
       } catch (e) {
         this.showStepper = false;
         this.errorMessage = e.message
-        this.notifyErr(err.message);
+        this.notifyErr(e.message);
       } finally {
         this.isLoading = false;
       }
