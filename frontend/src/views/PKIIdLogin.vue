@@ -104,6 +104,9 @@ h5 span {
   width: 100%;
 }
 
+.openMobileAppWrapper a{
+  width: 90%;
+}
 @media screen and (max-width: 990px) {
   .loginPage {
     flex-direction: column;
@@ -118,6 +121,9 @@ h5 span {
 }
 .qrWrapper img {
   width: 100%;
+}
+.openMobileAppWrapper{
+  display: none;
 }
 
 @media screen and (max-width: 990px) {
@@ -167,6 +173,19 @@ h5 span {
     height: 40px;
     margin: 0 10px;
   }
+  .qrWrapper{
+    display: none;
+  }
+  .openMobileAppWrapper{
+    display: block;
+  }
+  .scan-qr-message{
+    display: none;
+  }
+  .openWebWalletWrapper .btn{
+    width: 90%;
+  }
+
 }
 /* .with-hypersign-btn  */
 </style>
@@ -218,6 +237,16 @@ h5 span {
             />
           </div>
         </div>
+
+           <div class="hypersign-logo-footer">
+      <div>
+        <p class="text-white my-0 fw-bolder">Powered By</p>
+        <img
+          :src="require(`../assets/footerLogo.png`)"
+          style="max-width: 150px;"
+        />
+      </div>
+    </div>
       </div>
     </div>
 
@@ -233,6 +262,8 @@ h5 span {
         <div>
           <p class="loginInNow-text">LOG IN NOW</p>
           <div v-if="value && value != ''">
+            <!-- <div> -->
+
             <div class="qrWrapper">
               <vue-qr
                 v-if="value != ''"
@@ -243,13 +274,33 @@ h5 span {
                 logoCornerRadius="2"
               ></vue-qr>
             </div>
-            <p class="mt-1">
+            
+
+            <p class="mt-1 scan-qr-message">
               <span style="font-size:small"
                 >Scan QR code with the Hypersign Mobile App</span
               >
             </p>
+
+            <div class="mb-2 openMobileAppWrapper">
+                <a 
+                :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`"
+                class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill"
+      
+              >
+                <div>
+                  <img
+                    style="height:50px"
+                    :src="require('../assets/hypersign_logo_short_white.png')"
+                    class="ml-0 rounded rounded-circle p-1"
+                  />
+                </div>
+                <div class="btn-text">USE HYPERSIGN MOBILE WALLET</div>
+              </a>
+            </div>
+
             <h6>OR</h6>
-            <p class="text-center">
+            <p class=" openWebWalletWrapper text-center">
               <button
                 class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill"
                 @click="openWallet()"
@@ -280,15 +331,7 @@ h5 span {
       </div>
     </div>
 
-    <div class="hypersign-logo-footer">
-      <div>
-        <p class="text-white my-0 fw-bolder">Powered By</p>
-        <img
-          :src="require(`../assets/footerLogo.png`)"
-          style="max-width: 150px;"
-        />
-      </div>
-    </div>
+ 
   </div>
 </template>
 
@@ -405,6 +448,8 @@ export default {
         );
       }
     },
+
+
     push(path) {
       this.$router.push(path);
     },
