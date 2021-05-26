@@ -405,6 +405,7 @@ export default {
         text: msg,
       });
     },
+
     async saveInvestor(data, recaptchaToken) {
       try {
         let investor = {};
