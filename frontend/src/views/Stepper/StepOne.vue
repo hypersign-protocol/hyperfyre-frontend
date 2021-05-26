@@ -162,10 +162,9 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
  .tweetInput-container{
   
   width: 80% !important;
-  margin: 10px auto !important;
+  margin: 10px !important;
  }
  .text-container{
-
    flex-direction: column !important;
  }
 }
@@ -182,8 +181,22 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
   }
    .tweetInput-container{
      width: 100%;
-     text-align: center;
+    
    }
+   .rules-container .text{
+     width: 80%;
+     text-indent: -10px;
+   }
+    .rules-container > .text{
+      width: 80% !important;
+    }
+
+    /* .rules-container .links{
+      width: 80%;
+      margin: 0 !important;
+    } */
+    
+
 }
 
 
@@ -193,16 +206,16 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
     <div>
       <ol class="px-0">
         <li
-          class="text-left w-100 d-flex flex-wrap align-items-center  my-3"
+          class="text-left w-100 d-flex flex-wrap align-items-center  my-3 rules-container"
           v-for="(rule, idx) in stepOneData.rules"
           :key="rule.id"
         >
-          <div class="position-relative d-flex text-container" style="width: 95%">
-            <div>
+          <div class="text position-relative d-flex text-container" style="width: 95%">
+            <div class="text">
             {{ rule.id + ". " + rule.text }}
             </div>
 
-            <div v-if="rule.id == 1" class="ml-2">
+            <div v-if="rule.id == 1" class="ml-2 links">
               <a
                 :href="
                   'https://twitter.com/' +
@@ -215,7 +228,7 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
             </div>
 
 
-            <div class=" ml-2 " v-if="rule.id == 2">
+            <div class=" ml-2 links" v-if="rule.id == 2">
                   <a
                     @click="handleInputShow"
                     target="_blank"
@@ -227,7 +240,7 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
             </div>
 
 
-            <div class="ml-2" v-if="rule.id == 3" for="checkbox-3">
+            <div class="ml-2 links" v-if="rule.id == 3" for="checkbox-3">
               <a
                 :href="`https://telegram.im/@${projectDetails.telegramHandle}`"
                 target="_blank"
@@ -237,7 +250,7 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
             </div>
           </div>
 
-          <div>
+          <div class="checkbox-cont">
             <input
               :id="'checkbox-' + rule.id"
               v-model="stepOneData.rules[idx].checked"
