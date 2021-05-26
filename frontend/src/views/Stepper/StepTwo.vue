@@ -69,6 +69,7 @@ div.form > div {
             <label class="form-label">{{ data.label }}</label>
             <div :class="[data.fullWidth ? 'd-flex' : '']">
               <input
+              :disabled="stepTwoData.formData[idx].disabled"
                 v-model="stepTwoData.formData[idx].value"
                 class="form-control w-100"
                 :placeholder="data.placeholder"

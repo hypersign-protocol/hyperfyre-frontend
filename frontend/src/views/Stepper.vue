@@ -122,7 +122,7 @@ export default {
           },
           {
             id: 2,
-            text: 'Tweet  "Take back Control of Out Personal Data with @hypersignchain"',
+            text: "Tweet ",
             checked: false,
             showTweetInput: true,
             tweetUrl: "",

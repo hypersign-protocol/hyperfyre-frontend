@@ -215,6 +215,18 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
             </div>
 
 
+            <div class=" ml-2 " v-if="rule.id == 2">
+                  <a
+                    @click="handleInputShow"
+                    target="_blank"
+                    :href="'https://twitter.com/intent/tweet?text=' + projectDetails.twitterPostFormat"
+                    title="Tweet about this project tagging two of your friends"
+                    class="ml-1"
+                    >"{{projectDetails.twitterPostTextFormat}}"</a
+                  >
+            </div>
+
+
             <div class="ml-2" v-if="rule.id == 3" for="checkbox-3">
               <a
                 :href="`https://telegram.im/@${projectDetails.telegramHandle}`"
@@ -236,14 +248,14 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
 
 
            <div class="w-100 ml-2 tweetInput-container" v-if="rule.id == 2">
-            <a
+            <!-- <a
               @click="handleInputShow"
               target="_blank"
               href="https://twitter.com/intent/tweet?text=I%20am%20happy%20with%20%23hypersign%20%23pollkadot%20%40hypersignchain%20"
               title="Tweet about this project tagging two of your friends"
               class="ml-1"
-              >#mydatamyway #secureidentity [click here to auto generate]</a
-            >
+              >{{projectDetails.twitterPostTextFormat}}</a
+            > -->
             <div
               v-if="rule.showTweetInput && showInput"
               class="tweetUrlInput mt-2 d-flex align-items-center"
@@ -276,6 +288,9 @@ export default {
     projectDetails: {
       type: Object,
     },
+  },
+  created(){
+  
   },
   data() {
     return {

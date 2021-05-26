@@ -537,6 +537,9 @@ export default {
         this.projectDetails.twitterPostFormat = encodeURIComponent(
           this.projectDetails.twitterPostFormat
         );
+        this.projectDetails.twitterPostTextFormat = decodeURIComponent(
+           this.projectDetails.twitterPostFormat
+        )
         
         this.projectDetails.fromDate = this.formateDate(this.projectDetails.fromDate);
         this.projectDetails.toDate = this.formateDate(this.projectDetails.toDate);
