@@ -10,13 +10,13 @@
         <img width="120px" :src="projectDetails.logoUrl" />
       </div>
       <div class="text mx-auto  py-3 text-left">
-        <h4>
-          Apply to
-          <span class="text-uppercase">{{ projectDetails.projectName }}</span>
-          Whitelist
+        <h4 class="mb-4">
+          Welcome to
+          <span class="text-uppercase">{{ projectDetails.projectName || "Hypersign's" }}</span>
+          Token Sale  Registration
         </h4>
-        <p>{{ step == 0 ? stepOneData.line1 : stepTwoData.line1 }}</p>
-        <p>{{ step == 0 ? stepOneData.line2 : stepTwoData.line2 }}</p>
+        <p class="my-0">{{ step == 0 ? stepOneData.line1 : stepTwoData.line1 }}</p>
+        <p  class="my-0">{{ step == 0 ? stepOneData.line2 : stepTwoData.line2 }}</p>
       </div>
     </div>
 
@@ -30,8 +30,8 @@
             step + 1 == 1
               ? "Rules"
               : step + 1 == 2
-              ? "Please fill the form"
-              : "Please confirm your data"
+              ? "Please fill out the following information"
+              : "Please review your information before submission"
           }}
         </p>
 
@@ -136,6 +136,7 @@
     </div>
 
     <div class="footer">
+      <!-- <h5 class="text-white my-2"> You personal data is secure and encrypted</h5> -->
       <div class="rule w-75 mx-auto" />
       <div class="d-flex justify-content-between align-items-center">
         <div class="footer-logo">
@@ -177,7 +178,7 @@
             </a>
           </div>
         </div>
-        <div class="logo-partner"></div>
+        <div class="logo-partner "></div>
       </div>
     </div>
 
@@ -405,7 +406,6 @@ export default {
       });
     },
 
-
     async saveInvestor(data, recaptchaToken) {
       try {
         let investor = {};
@@ -631,10 +631,10 @@ export default {
 
 .header,
 .footer {
-  background-color: rgba(58, 58, 58, 1);
+  background-color:#494949;
 }
 .header {
-  height: 275px;
+  height: 210px;
 }
 .footer {
   padding: 10px 30px;
@@ -647,11 +647,11 @@ export default {
 }
 div.rule {
   border-bottom: 1px solid #ffffff;
-  padding-top: 20px;
+  padding-top: 14px;
   margin-bottom: 20px;
 }
 .steps-container {
-  min-height: 60vh;
+  min-height: 70vh;
   width: 60%;
   margin: 0 auto;
   display: flex;
@@ -675,7 +675,7 @@ div.rule {
 .btn-container button {
   border-radius: 25px;
   width: 120px;
-  background-color: rgb(58, 58, 58);
+  background-color: #494949;
   color: #ffffff !important;
 }
 .steps-indicator {
@@ -687,5 +687,40 @@ div.rule {
 }
 .steps-indicator .heading {
   font-size: 22px;
+}
+
+
+
+@media screen and (max-width: 990px) {
+ 
+}
+
+@media screen and (max-width: 768px) {
+  .header{
+    font-size: 14px;
+    height: auto;
+  }
+  .steps-container{
+    width: 80%;
+    min-height: 80vh;
+  }
+  .social{
+  margin-left: auto;
+}
+
+
+ 
+}
+
+@media screen and (max-width: 516px) {
+   .steps-indicator{
+     top: 30px;
+     flex-direction: column-reverse;
+   }
+
+.steps-indicator .heading{
+   margin-top: 10px !important;
+  }
+  
 }
 </style>

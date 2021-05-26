@@ -110,9 +110,9 @@ export default {
     return {
       stepOneData: {
         line1:
-          "In order to get on the whitelist, please follow the given rules carefully.",
+          "To get selected and to enter the private token sale please follow the rules carefully",
         line2:
-          "Of all the members, who full-fill the requirements, 50 will be selected for a public sale allocation. All themembers will receive a token allocation worth $40. Allocation would be awarded to the most active & engagingcommunity members.",
+          "All information needs to be provided in order to get whitelisted for the Presale",
 
         rules: [
           {
@@ -122,7 +122,7 @@ export default {
           },
           {
             id: 2,
-            text: "Retweet projectName's last post and add ",
+            text: 'Tweet  "Take back Control of Out Personal Data with @hypersignchain"',
             checked: false,
             showTweetInput: true,
             tweetUrl: "",
@@ -137,9 +137,9 @@ export default {
 
       stepTwoData: {
         line1:
-          "In order to be successfully chosen to the whitelist, please ensure that you fill out the following form with the correct and relevant information.",
+          "To get selected and to enter the private token sale please follow the rules carefully",
         line2:
-          "Note: Please use the same email address that you used to sign up to the PAID-Ignition platform, we will use this as a key identifier for your profile.",
+          "All information needs to be provided in order to get whitelisted for the Presale",
         imgLink: avatarLabel,
         formData: [
           {

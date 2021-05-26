@@ -149,6 +149,44 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
   padding: 2px 5px;
   outline: none;
 }
+
+
+@media screen and (max-width: 990px) {
+ 
+}
+
+@media screen and (max-width: 768px) {
+ ol{
+   margin-top: 100px;
+ }
+ .tweetInput-container{
+  
+  width: 80% !important;
+  margin: 10px auto !important;
+ }
+ .text-container{
+
+   flex-direction: column !important;
+ }
+}
+
+@media screen and (max-width: 516px) {
+  .tweetUrlInput{
+    flex-direction: column;
+    width: 100%;
+  }
+  .tweetUrlInput input{
+    width: 100% !important;
+    margin: 10px 0;
+    text-align: center;
+  }
+   .tweetInput-container{
+     width: 100%;
+     text-align: center;
+   }
+}
+
+
 </style>
 <template>
   <div>
@@ -159,8 +197,10 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
           v-for="(rule, idx) in stepOneData.rules"
           :key="rule.id"
         >
-          <div class="position-relative d-flex" style="width: 95%">
+          <div class="position-relative d-flex text-container" style="width: 95%">
+            <div>
             {{ rule.id + ". " + rule.text }}
+            </div>
 
             <div v-if="rule.id == 1" class="ml-2">
               <a
@@ -174,28 +214,6 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
               >
             </div>
 
-            <div class="d-flex ml-2" v-if="rule.id == 2" for="checkbox-2">
-              <a
-                @click="handleInputShow"
-                target="_blank"
-                :href="
-                  `https://twitter.com/intent/tweet?text=${projectDetails.twitterPostFormat}`
-                "
-                title="Tweet about this project tagging two of your friends"
-                class="ml-1"
-                >#mydatamyway</a
-              >
-              <div
-                v-if="rule.showTweetInput && showInput"
-                class="tweetUrlInput ml-4"
-              >
-                <input
-                  placeholder="Your Tweet Url"
-                  v-model="stepOneData.rules[idx].tweetUrl"
-                  type="url"
-                />
-              </div>
-            </div>
 
             <div class="ml-2" v-if="rule.id == 3" for="checkbox-3">
               <a
@@ -215,6 +233,31 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
               type="checkbox"
             />
           </div>
+
+
+           <div class="w-100 ml-2 tweetInput-container" v-if="rule.id == 2">
+            <a
+              @click="handleInputShow"
+              target="_blank"
+              href="https://twitter.com/intent/tweet?text=I%20am%20happy%20with%20%23hypersign%20%23pollkadot%20%40hypersignchain%20"
+              title="Tweet about this project tagging two of your friends"
+              class="ml-1"
+              >#mydatamyway #secureidentity [click here to auto generate]</a
+            >
+            <div
+              v-if="rule.showTweetInput && showInput"
+              class="tweetUrlInput mt-2 d-flex align-items-center"
+            >
+              <p class="flex-1 m-0 mr-2">Paste your tweet URL here:</p>
+              <input
+                placeholder="Your Tweet Url"
+                v-model="stepOneData.rules[idx].tweetUrl"
+                type="url"
+                class="w-50"
+              />
+            </div>
+          </div>
+          
         </li>
       </ol>
     </div>
