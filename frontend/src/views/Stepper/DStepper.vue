@@ -385,6 +385,26 @@ export default {
       this.loading = status;
       //if (!status) this.nextStepAction();
     },
+
+    notifySuccess(msg) {
+      this.isLoading = false;
+      this.$notify({
+        group: "foo",
+        title: "Information",
+        type: "success",
+        text: msg,
+      });
+    },
+
+    notifyErr(msg) {
+      this.isLoading = false;
+      this.$notify({
+        group: "foo",
+        title: "Error",
+        type: "error",
+        text: msg,
+      });
+    },
     async saveInvestor(data, recaptchaToken) {
       try {
         let investor = {};
@@ -420,20 +440,10 @@ export default {
 
         this.isLoading = false;
         this.slideToNextPage(true);
-        this.$notify({
-          group: "foo",
-          title: "Success",
-          type: "success",
-          text: "Successfully Signed Up",
-        });
+        this.notifySuccess("Successfully Signed Up for whitelisting");
       } catch (err) {
         console.log("ERROR", err);
-        this.$notify({
-          group: "foo",
-          title: "Something went wrong",
-          type: "error",
-          text: err.message,
-        });
+        this.notifyErr(err.message);
         this.isLoading = false;
       } finally {
         console.log("FINALLY ");
@@ -465,6 +475,7 @@ export default {
           this.step = 3;
         }
       } catch (e) {
+        this.notifyErr(err.message);
         console.log(e);
       } finally {
         // this.isLoading = false;
@@ -475,6 +486,9 @@ export default {
     onCaptchaExpired: function() {
       console.log("Captcha expired");
       this.$refs.recaptcha.reset();
+    },
+    formateDate(d) {
+      return new Date(d).toLocaleString();
     },
 
     onCaptchaVerified: function(recaptchaToken) {
@@ -523,16 +537,15 @@ export default {
           this.projectDetails.twitterPostFormat
         );
         
-        this.project.fromDate = this.formateDate(this.project.fromDate);
-        this.project.toDate = this.formateDate(this.project.toDate);
+        this.projectDetails.fromDate = this.formateDate(this.projectDetails.fromDate);
+        this.projectDetails.toDate = this.formateDate(this.projectDetails.toDate);
         this.projectFetched = true;
-        this.notifySuccess(
-          "Project is fetched. ProjectName " + json.projectName
-        );
+
+        this.notifySuccess("Project is fetched. ProjectName " + this.projectDetails.projectName);
       } catch (e) {
         this.showStepper = false;
-        this.errorMessage = "Sorry, no project found :( !"
-        this.notifyErr(e.message);
+        this.errorMessage = e.message
+        this.notifyErr(err.message);
       } finally {
         this.isLoading = false;
       }
