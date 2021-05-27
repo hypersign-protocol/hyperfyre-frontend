@@ -74,6 +74,7 @@ div.form > div {
                 class="form-control w-100"
                 :placeholder="data.placeholder"
               />
+              <span v-if="data.errMsg && !data.fullWidth">{{data.errMsg}}</span>
               <img
                 v-if="data.fullWidth && showFox"
                 src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2Fa-%2FAAuE7mC1z-HXEKxL4YhAhc7WDHWA6Rnly1I592T5ag%3Ds900-mo-c-c0xffffffff-rj-k-no&f=1&nofb=1"
@@ -81,7 +82,10 @@ div.form > div {
                 @click="getCurrentAccount()"
               />
             </div>
+              <span v-if="data.errMsg && data.fullWidth">{{data.errMsg}}</span>
+          
           </div>
+          
 
           <div class="w-100">
             <!-- <div class="d-flex align-items-end">

@@ -343,7 +343,38 @@ export default {
         }
       } else if (step == 2) {
         const isAllFilled = data.formData.every((input) => input.value.length);
-        if (isAllFilled) {
+        const twitterHandle = data.formData.filter(x =>  x.label.toLowerCase().includes("twitter"))[0]
+        const telegramHandle = data.formData.filter(x =>  x.label.toLowerCase().includes("telegram"))[0]
+        const ethAddress = data.formData.filter(x =>  x.label.toLowerCase().includes("eth"))[0];
+        const ethAddressValidate =  ethAddress.value.startsWith("0x");
+        let twitterHandleValidate = false
+         let telegramHandleValidate = false
+
+       
+        if(twitterHandle.value.match(/^[a-zA-Z0-9_]{1,15}/) !== null && twitterHandle.value.match(/^[a-zA-Z0-9_]{1,15}/)[0] == twitterHandle.value ){
+            data.formData[2].errMsg = ""
+            twitterHandleValidate = true
+        }else{
+          data.formData[2].errMsg = "Please enter a valid username (without @)"
+          twitterHandleValidate = false
+        }
+      
+        if(telegramHandle.value.match(/^[a-zA-Z0-9_]{5,15}/) !== null && telegramHandle.value.match(/^[a-zA-Z0-9_]{5,15}/)[0] == telegramHandle.value){
+            data.formData[3].errMsg = ""
+        telegramHandleValidate = true
+        }else {
+          data.formData[3].errMsg = "Please Enter a valud (without @)"
+          telegramHandleValidate = false
+        }
+
+        if(!ethAddressValidate){
+          data.formData[4].errMsg =  "Please enter a valid Eth Address"
+        } else{
+          data.formData[4].errMsg =  ""
+        }
+
+
+        if (isAllFilled && twitterHandleValidate && telegramHandleValidate && ethAddressValidate) {
           gotoNextPage = true;
           this.slideToNextPage(gotoNextPage);
         } else {

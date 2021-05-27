@@ -161,12 +161,14 @@ export default {
             placeholder: "@mytwitterhandle",
             value: "",
             id: "twitterHandle",
+            errMsg: ""
           },
           {
             label: "Telegram Handle*",
             placeholder: "@mytelegramhandle",
             value: "",
             id: "telegramHandle",
+            errMsg: ""
           },
           {
             label: "Ethereum  Address*",
@@ -174,6 +176,7 @@ export default {
             fullWidth: true,
             value: "",
             id: "ethAddress",
+            errMsg: ""
           },
         ],
 
