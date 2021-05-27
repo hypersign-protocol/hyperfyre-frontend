@@ -180,9 +180,11 @@ h5 span {
   }
   .hypersign-logo-footer {
     font-size: 14px;
+    display: none;
   }
   .hypersign-logo-footer img {
     width: 90px;
+    display: none;
   }
   .app-links img {
     height: 40px;
@@ -233,7 +235,7 @@ h5 span {
         <p class="mt-4">Instructions</p>
         <ol class="px-3">
           
-          <li>Login with the Hypersign Mobile App or Web Wallet</li>
+          <li>Login with the Hypersign</li>
           <li>Follow the steps provided in the next screens</li>
           <li>Submit additional information as requested</li>
           <li>Wait for winners announcement.</li>
