@@ -104,9 +104,24 @@ h5 span {
   width: 100%;
 }
 
-.openMobileAppWrapper a{
+/* .openMobileAppWrapper a{
   width: 90%;
+} */
+
+
+.btn-hypersign{
+  background-color: #494949;
+  border-color: #494949;
+  padding: 7px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  min-width: 320px;
 }
+
+/* .btn-hypersign:hover{
+  background-color: white;
+  text-decoration: none;
+} */
+
 @media screen and (max-width: 990px) {
   .loginPage {
     flex-direction: column;
@@ -182,9 +197,9 @@ h5 span {
   .scan-qr-message{
     display: none;
   }
-  .openWebWalletWrapper .btn{
+  /* .openWebWalletWrapper{
     width: 90%;
-  }
+  } */
   .loginInNow-text{
     font-size: 18px;
   } 
@@ -293,38 +308,25 @@ h5 span {
             </p>
 
             <div class="mb-2 openMobileAppWrapper">
-                <a 
-                :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`"
-                class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill"
-      
-              >
-                <div>
-                  <img
-                    style="height:50px"
-                    :src="require('../assets/hypersign_logo_short_white.png')"
-                    class="ml-0 rounded rounded-circle p-1"
-                  />
-                </div>
-                <div class="btn-text">USE HYPERSIGN MOBILE WALLET</div>
-              </a>
+              <a type="button" class="btn btn-hypersign text-white rounded  rounded-pill" :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`" >
+                <img style="height:40px" 
+                :src="require('../assets/hypersignSmallLogo.png')"
+                class="ml-0 rounded rounded-circle  left"/>
+                <span style="font-size: medium;">HYPERSIGN MOBILE WALLET</span>
+              </a>  
             </div>
 
             <h6>OR</h6>
-            <p class=" openWebWalletWrapper text-center">
-              <button
-                class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill"
-                @click="openWallet()"
-              >
-                <div>
-                  <img
-                    style="height:50px"
-                    :src="require('../assets/hypersign_logo_short_white.png')"
-                    class="ml-0 rounded rounded-circle p-1"
-                  />
-                </div>
-                <div class="btn-text">USE HYPERSIGN WEB WALLET</div>
-              </button>
-            </p>
+
+            <div class="mb-2 ">
+              <a type="button" class="btn btn-hypersign text-white rounded  rounded-pill" href="#"                
+                @click.prevent="openWallet()" >
+                <img style="height:40px" 
+                :src="require('../assets/hypersignSmallLogo.png')"
+                class="ml-0 rounded rounded-circle  left"/>
+                <span style="font-size: medium;">HYPERSIGN WEB WALLET</span>
+              </a>  
+            </div>
           </div>
           <span v-if="!value || value == ''" style="color:red; font-size:small"
             >Error in fetching QR data...</span
@@ -456,6 +458,8 @@ export default {
           "popUpWindow",
           `height=800,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`
         );
+      }else{
+        console.log("this value is not")
       }
     },
 
