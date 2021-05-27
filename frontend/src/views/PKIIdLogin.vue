@@ -283,29 +283,29 @@ h5 span {
             
 
             <p class="mt-1 scan-qr-message">
-              <span style="font-size:small"
+              <span style="font-size:small; color:grey"
                 >Scan QR code with the Hypersign Mobile App</span
               >
             </p>
 
             <div class="mb-2 openMobileAppWrapper">
-              <a v-if="this.value != ''" type="button" class="btn btn-hypersign text-white rounded  rounded-pill" :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`" >
+              <a v-if="this.value != ''" type="button" class="btn btn-hypersign text-white " :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`" >
                 <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
                 class="ml-0 rounded rounded-circle  left"/>
-                <div style="font-size: medium; margin-top: 10px;">USE MOBILE WALLET</div>
+                <div style="font-size: smaller; margin-top: 10px; ">USE MOBILE WALLET</div>
               </a>  
             </div>
 
             <h6>OR</h6>
 
             <div class="mb-2 ">
-              <a v-if="this.value != ''" type="button" class="btn btn-hypersign text-white rounded  rounded-pill" href="#"                
+              <a v-if="this.value != ''" type="button" class="btn btn-hypersign text-white " href="#"                
                 @click.prevent="openWallet()" >
                 <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
                 class="ml-0 rounded rounded-circle  left"/>
-                <div style="font-size: medium; margin-top: 10px;">USE WEB WALLET</div>
+                <div style="font-size: smaller; margin-top: 10px;">USE WEB WALLET</div>
               </a>  
             </div>
           </div>
