@@ -239,31 +239,10 @@ h5 span {
           <li>Wait for winners announcement.</li>
         </ol>
 
-        <p class="mt-5 text-center ">
-          Get The Hypersign App
-        </p>
-        <div class=" d-flex w-75 mx-auto app-links justify-content-around">
-          <div>
-            <a
-              href="https://play.google.com/store/apps/details?id=com.hypersign.cordova"
-              target="_blank"
-            >
-              <img
-                :src="require(`../assets/play_store.png`)"
-                alt="play-store"
-              />
-            </a>
-          </div>
-          <div title="Coming soon">
-            <img
-              class="w-90"
-              :src="require(`../assets/app_store.png`)"
-              alt="app-store"
-            />
-          </div>
-        </div>
+        
+        
 
-           <div class="hypersign-logo-footer">
+     <div class="hypersign-logo-footer">
       <div>
         <p class="text-white my-0 fw-bolder">Powered By</p>
         <img
@@ -333,13 +312,12 @@ h5 span {
           >
           <!-- <p class="mt-3">Scanner not working ?</p> -->
         </div>
-        <a
-          style="font-weight:600"
-          class="mb-3 text-dark fw-bolder text-reset"
-          href="https://hypersign.id/"
-          target="_blank"
-          >https://hypersign.id/</a
-        >
+
+        <span style="font-size: medium; color:grey; padding: 10px">
+          Get the app on 
+          <a href="https://play.google.com/store/apps/details?id=com.hypersign.cordova" target="__blank">Android</a>, 
+          <a :href="$config.webWalletAddress" target="__blank">Web</a>
+        </span>
       </div>
     </div>
 
@@ -361,7 +339,7 @@ export default {
   },
   data() {
     return {
-      src2: require("../assets/hypersign_logo_short_black.png"),
+      src2: require('../assets/icon.png'),
 
       active: 0,
       host: location.hostname,
