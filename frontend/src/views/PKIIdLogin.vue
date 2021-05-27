@@ -264,7 +264,7 @@ h5 span {
           >HELP ?</a
         >
         <div>
-          <p class="loginInNow-text">LOG IN NOW</p>
+          <p class="loginInNow-text">LOGIN WITH HYPERSIGN</p>
           <div v-if="value && value != ''">
             <!-- <div> -->
 
@@ -291,7 +291,7 @@ h5 span {
                 <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
                 class="ml-0 rounded rounded-circle  left"/>
-                <div style="font-size: medium; margin-top: 10px;">HYPERSIGN MOBILE WALLET</div>
+                <div style="font-size: medium; margin-top: 10px;">USE MOBILE WALLET</div>
               </a>  
             </div>
 
@@ -303,7 +303,7 @@ h5 span {
                 <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
                 class="ml-0 rounded rounded-circle  left"/>
-                <div style="font-size: medium; margin-top: 10px;">HYPERSIGN WEB WALLET</div>
+                <div style="font-size: medium; margin-top: 10px;">USE WEB WALLET</div>
               </a>  
             </div>
           </div>
