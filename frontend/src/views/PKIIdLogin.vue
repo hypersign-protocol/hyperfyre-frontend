@@ -114,7 +114,7 @@ h5 span {
   border-color: #494949;
   padding: 7px;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
-  min-width: 320px;
+  min-width: 300px;
 }
 
 /* .btn-hypersign:hover{
@@ -308,23 +308,23 @@ h5 span {
             </p>
 
             <div class="mb-2 openMobileAppWrapper">
-              <a type="button" class="btn btn-hypersign text-white rounded  rounded-pill" :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`" >
-                <img style="height:40px" 
+              <a v-if="this.value != ''" type="button" class="btn btn-hypersign text-white rounded  rounded-pill" :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`" >
+                <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
                 class="ml-0 rounded rounded-circle  left"/>
-                <span style="font-size: medium;">HYPERSIGN MOBILE WALLET</span>
+                <div style="font-size: medium; margin-top: 10px;">HYPERSIGN MOBILE WALLET</div>
               </a>  
             </div>
 
             <h6>OR</h6>
 
             <div class="mb-2 ">
-              <a type="button" class="btn btn-hypersign text-white rounded  rounded-pill" href="#"                
+              <a v-if="this.value != ''" type="button" class="btn btn-hypersign text-white rounded  rounded-pill" href="#"                
                 @click.prevent="openWallet()" >
-                <img style="height:40px" 
+                <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
                 class="ml-0 rounded rounded-circle  left"/>
-                <span style="font-size: medium;">HYPERSIGN WEB WALLET</span>
+                <div style="font-size: medium; margin-top: 10px;">HYPERSIGN WEB WALLET</div>
               </a>  
             </div>
           </div>
