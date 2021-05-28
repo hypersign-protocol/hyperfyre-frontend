@@ -287,7 +287,7 @@ h5 span {
             </p>
 
             <div class="mb-2 openMobileAppWrapper">
-              <a v-if="this.value != ''" type="button" class="btn btn-hypersign text-white " :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`" >
+              <a v-if="this.value != ''"  class="btn btn-hypersign text-white " :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`" >
                 <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
                 class="ml-0 rounded rounded-circle  left"/>
@@ -298,7 +298,7 @@ h5 span {
             <h6>OR</h6>
 
             <div class="mb-2 ">
-              <a v-if="this.value != ''" type="button" class="btn btn-hypersign text-white " href="#"                
+              <a v-if="this.value != ''" class="btn btn-hypersign text-white " href="#"                
                 @click.prevent="openWallet()" >
                 <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
