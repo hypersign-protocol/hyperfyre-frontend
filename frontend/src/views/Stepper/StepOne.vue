@@ -242,10 +242,19 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
 
             <div class="ml-2 links" v-if="rule.id == 3" for="checkbox-3">
               <a
-                :href="`https://telegram.im/@${projectDetails.telegramHandle}`"
+                :href="`https://t.me/${projectDetails.telegramHandle}`"
                 target="_blank"
                 title="Join our telegram channel for latest updates"
                 ><i></i> @{{ projectDetails.telegramHandle }}</a
+              >
+            </div>
+
+
+             <div class="ml-2 links" v-if="rule.id == 4" for="checkbox-4">
+              <a
+                href="https://t.me/hypersign_ann"
+                target="_blank"
+                ><i></i>@channel</a
               >
             </div>
           </div>

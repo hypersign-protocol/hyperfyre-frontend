@@ -67,20 +67,22 @@ export const template =
 <body>
     <div id='body' class="center">
         <p class='center'><h3>Hi @@RECEIVERNAME@@,</h3></p>
-        <p class='center' style='width:100%'><h5>Welcome to @@APPNAME@@!</h5></p>
         <p class='colored'>
-            @@APPNAME@@ credential is being issued to you. 
+            Here is your @@APPNAME@@ credential. Click here to receieve the credential in your Hypersign Identity Wallet.
         </p>
-        <p class='colored'>Tap 'Get Credential' button (or link) to receieve the credential in your Hypersign Identity Wallet.</p>
-        <br/>
-        <p><a href='@@DEEPLINKURL@@' class="button">Get credential</a></p>
-        <p>If the 'Get Credential' button (or link) does not work, then copy paste the url text in your browser</p>
         
+        <p><a href='@@DEEPLINKURL@@' class="button">Get credential</a></p>
+        <p>If the 'Get Credential' button (or link) does not work, then copy paste the url on your browser.</p>
+
         <p>@@URLTEXT@@</p>
+
+        <p>This email is is only for receiving your verifiable credential, which you can re-use in the future in many other places including  whitelisting events.</p>
+        <p>You will get a seperate email if you qualify for the event.</p>
 
         <br/>
         <br/>
-        <p>Thanks & Regards, <br />Team @@APPNAME@@!</p>
+
+        <p>Thanks & Regards <br /> Team Hypersign</p>
         <p></p>
     </div>
 </body>

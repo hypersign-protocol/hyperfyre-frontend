@@ -231,18 +231,16 @@ h5 span {
       class="col col-lg-8 col-md-12 col-sm-12 d-flex justify-content-center align-items-center border border-1 bg-dark shadow text-left text-white login-inst-container"
     >
       <div>
-        <h3>Register for Hypersign's Private Token Sale</h3>
+        <h3>Whitelist for Hypersign Data Defenders Program</h3>
         <p class="mt-4">Instructions</p>
-        <ol class="px-3">
-          
+        <ol class="px-3">          
           <li>Login with the Hypersign</li>
           <li>Follow the steps provided in the next screens</li>
           <li>Submit additional information as requested</li>
           <li>Wait for winners announcement.</li>
         </ol>
 
-        
-        
+
 
      <div class="hypersign-logo-footer">
       <div>

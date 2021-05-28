@@ -6,7 +6,7 @@ h3 {
 <template>
   <div>
     <h2>Thank You!</h2>
-    <h3>Your data has been successfully saved and is under verfication.<h3></h3>Once verified, you will receive whitelisting credential in your email.</h3>
+    <h3>You are successfully registered,<h3></h3>You will receive a confirmation email if you qualify.</h3>
   </div>
 </template>
 

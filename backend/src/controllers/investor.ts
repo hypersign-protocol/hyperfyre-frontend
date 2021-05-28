@@ -192,7 +192,7 @@ async function sendEmail(data){
   mailTemplateTemp = mailTemplateTemp.replace("@@URLTEXT@@", deepLinkUrl);
 
   const mailService = new MailService({ ...mail });
-  await mailService.sendEmail(data.email, mailTemplateTemp, `${mail.name} Credential Issuance`);
+  await mailService.sendEmail(data.email, mailTemplateTemp, `Congratulations! You are successfully verified with Hypersign`);
   return link;
 }
 
