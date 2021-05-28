@@ -13,7 +13,6 @@
         <h4 class="mb-4">
           Welcome to
           <span class="">{{ projectDetails.projectName }}</span>
-          Data Defenders Program
           <!-- Token Sale  Registration -->
         </h4>
         <p class="my-0">{{ step == 0 ? stepOneData.line1 : stepTwoData.line1 }}</p>
