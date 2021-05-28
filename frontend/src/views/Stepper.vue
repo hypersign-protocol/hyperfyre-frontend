@@ -142,7 +142,7 @@ export default {
 
       stepTwoData: {
         line1:
-          "Please follow the instructions below to get qualified for Data defenders program",
+           "Please follow these instructions below to get qualified for this program",
         line2:
           "You will need to complete all steps to get qualified.",
         imgLink: avatarLabel,
