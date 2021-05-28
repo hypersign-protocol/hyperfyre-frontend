@@ -34,7 +34,7 @@ export default class MailService {
         const info = await this.transporter.sendMail({
             from: `${this.name} <${this.user}>`,
             to,
-            subject: 'No reply: ' + subject,
+            subject: subject,
             html: message
         });
         return info;
