@@ -30,7 +30,7 @@ export default {
       localStorage.removeItem("user");
       localStorage.removeItem("credentials");
       localStorage.removeItem("userData");
-      window.location.href = "/";
+      this.$router.push("/studio/login");
     },
   },
 };
