@@ -307,10 +307,8 @@ h5 span {
               </a>  
             </div>
           </div>
-          <span v-if="!value || value == ''" style="color:red; font-size:small"
-            >Error in fetching QR data...</span
-          >
-          <!-- <p class="mt-3">Scanner not working ?</p> -->
+
+          <span v-if="socketMessage" style="color:grey; font-size:small">{{socketMessage}}</span>
         </div>
 
         <span style="font-size: medium; color:grey; padding: 10px">
@@ -340,7 +338,8 @@ export default {
   data() {
     return {
       src2: require('../assets/icon.png'),
-
+      error: "",
+      socketMessage: "",
       active: 0,
       host: location.hostname,
       domain: location.host,
@@ -372,25 +371,27 @@ export default {
         parsedUrl.protocol === "https:"
           ? `wss://${parsedUrl.host}`
           : `ws://${parsedUrl.host}`;
-      console.log(websocketUrl);
     } catch (e) {
       websocketUrl = "ws://localhost:3003";
     }
     if (websocketUrl[websocketUrl.length - 1] == "/") {
       websocketUrl = websocketUrl.substring(0, websocketUrl.length - 1);
     }
-    console.log(websocketUrl);
 
-    // take it in the env
-    this.connection = new WebSocket(this.$config.websocketUrl);
-    this.connection.onopen = function() {
-      console.log("Websocket connection is open");
-    };
 
     this.isLoading = true;
     var _this = this;
 
-    this.connection.onmessage = function({ data }) {
+    // take it in the env
+    _this.socketMessage = "Connecting to auth server...";
+    this.connection = new WebSocket(this.$config.websocketUrl);
+    this.connection.onopen = function() {
+      _this.socketMessage = "Connected to auth server..."
+      console.log("Websocket connection is open");
+    };
+
+
+    this.connection.onmessage = function({ data }) {      
       console.log("Websocket connection messag receieved ", data);
       let messageData = JSON.parse(data);
       console.log(messageData);
@@ -398,6 +399,7 @@ export default {
         _this.isLoading = false;
         console.log(messageData.data);
         _this.value = JSON.stringify(messageData.data);
+        _this.socketMessage = null;
       } else if (messageData.op == "end") {
         _this.connection.close();
         const authorizationToken = messageData.data.token;
@@ -422,6 +424,8 @@ export default {
       }
     };
     this.connection.onerror = function(error) {
+      _this.error = true;
+      _this.socketMessage = "Error while fetching the QR data :(";
       console.log("Websocket connection error ", error);
     };
   },
