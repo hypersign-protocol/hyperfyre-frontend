@@ -1,6 +1,11 @@
 # whitelisting
 A platform to automate the IDO whitelisting process using Hypersign SSI infrastructure.
 
+## System architecture
+
+![whitelist_architecture](https://user-images.githubusercontent.com/15328561/120107212-c1b6fd80-c17d-11eb-81fd-a8304ffbb9b1.png)
+
+
 ## System Flow
 
 ### Hypersign Auth Credential Issuance Flow
