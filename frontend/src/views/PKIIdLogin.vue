@@ -141,6 +141,9 @@ h5 span {
   display: none;
 }
 
+.btn-img-dark{
+  display: none;
+}
 @media screen and (max-width: 990px) {
   .loginPage {
     flex-direction: row;
@@ -205,14 +208,33 @@ h5 span {
   .loginInNow-text{
     font-size: 18px;
   } 
-  .with-hypersign-btn .btn-text{
-    padding: 0 0 0 3px;
-
+  .with-hypersign-btn{
+    width: 70% !important;
+    
   }
-   .with-hypersign-btn  img{
-     height: 40px !important;
-   }
+  .with-hypersign-btn .btn-text{
+    text-align: center;
+    width: 100%;
+    padding: 0;
+  }
+  .with-hypersign-btn {
+    position: relative;
+    padding: 10px;
+  }
+   .with-hypersign-btn  .btn-img{
+     display: none;
+    }
+  
 
+}
+@media screen and (max-width: 375px){
+  .with-hypersign-btn  img{
+     display: none;
+   }
+   .with-hypersign-btn{
+    width: 80% !important;
+    
+  }
 }
 /* .with-hypersign-btn  */
 </style>
@@ -278,8 +300,7 @@ h5 span {
                 logoCornerRadius="2"
               ></vue-qr>
             </div>
-            
-
+  
             <p class="mt-1 scan-qr-message">
               <span style="font-size:small; color:grey"
                 >Scan QR code with the Hypersign Mobile App</span

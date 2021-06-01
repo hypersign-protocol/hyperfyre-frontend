@@ -166,12 +166,14 @@ export default {
             placeholder: "mytwitterhandle",
             value: "",
             id: "twitterHandle",
+            errMsg: ""
           },
           {
             label: "Telegram Handle*",
             placeholder: "mytelegramhandle",
             value: "",
             id: "telegramHandle",
+            errMsg: ""
           },
           {
             label: "ERC-20 Address (Do not add exchange address)*",
@@ -179,6 +181,7 @@ export default {
             fullWidth: true,
             value: "",
             id: "ethAddress",
+            errMsg: ""
           },
         ],
 
