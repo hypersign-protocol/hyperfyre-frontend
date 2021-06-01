@@ -104,9 +104,24 @@ h5 span {
   width: 100%;
 }
 
-.openMobileAppWrapper a{
+/* .openMobileAppWrapper a{
   width: 90%;
+} */
+
+
+.btn-hypersign{
+  background-color: #494949;
+  border-color: #494949;
+  padding: 7px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  min-width: 300px;
 }
+
+/* .btn-hypersign:hover{
+  background-color: white;
+  text-decoration: none;
+} */
+
 @media screen and (max-width: 990px) {
   .loginPage {
     flex-direction: column;
@@ -168,9 +183,11 @@ h5 span {
   }
   .hypersign-logo-footer {
     font-size: 14px;
+    display: none;
   }
   .hypersign-logo-footer img {
     width: 90px;
+    display: none;
   }
   .app-links img {
     height: 40px;
@@ -185,9 +202,9 @@ h5 span {
   .scan-qr-message{
     display: none;
   }
-  .openWebWalletWrapper .btn{
+  /* .openWebWalletWrapper{
     width: 90%;
-  }
+  } */
   .loginInNow-text{
     font-size: 18px;
   } 
@@ -236,41 +253,18 @@ h5 span {
       class="col col-lg-8 col-md-12 col-sm-12 d-flex justify-content-center align-items-center border border-1 bg-dark shadow text-left text-white login-inst-container"
     >
       <div>
-        <h3>Register for Hypersign's Private Token Sale</h3>
+        <h3>Whitelist for Hypersign Data Defenders Program</h3>
         <p class="mt-4">Instructions</p>
-        <ol class="px-3">
-          
-          <li>Login with the Hypersign Mobile App or Web Wallet</li>
+        <ol class="px-3">          
+          <li>Login with the Hypersign</li>
           <li>Follow the steps provided in the next screens</li>
           <li>Submit additional information as requested</li>
           <li>Wait for winners announcement.</li>
         </ol>
 
-        <p class="mt-5 text-center ">
-          Get The Hypersign App
-        </p>
-        <div class=" d-flex w-75 mx-auto app-links justify-content-around">
-          <div>
-            <a
-              href="https://play.google.com/store/apps/details?id=com.hypersign.cordova"
-              target="_blank"
-            >
-              <img
-                :src="require(`../assets/play_store.png`)"
-                alt="play-store"
-              />
-            </a>
-          </div>
-          <div title="Coming soon">
-            <img
-              class="w-90"
-              :src="require(`../assets/app_store.png`)"
-              alt="app-store"
-            />
-          </div>
-        </div>
 
-           <div class="hypersign-logo-footer">
+
+     <div class="hypersign-logo-footer">
       <div>
         <p class="text-white my-0 fw-bolder">Powered By</p>
         <img
@@ -292,7 +286,7 @@ h5 span {
           >HELP ?</a
         >
         <div>
-          <p class="loginInNow-text">LOG IN NOW</p>
+          <p class="loginInNow-text">LOGIN WITH HYPERSIGN</p>
           <div v-if="value && value != ''">
             <!-- <div> -->
 
@@ -308,64 +302,41 @@ h5 span {
             </div>
   
             <p class="mt-1 scan-qr-message">
-              <span style="font-size:small"
+              <span style="font-size:small; color:grey"
                 >Scan QR code with the Hypersign Mobile App</span
               >
             </p>
 
             <div class="mb-2 openMobileAppWrapper">
-                <a 
-                :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`"
-                class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill"
-      
-              >
-                <div class="btn-img">
-                  <img
-                    style="height:50px"
-                    :src="require('../assets/hypersign_logo_short_black.png')"
-                    class="ml-0 rounded rounded-circle p-1"
-                  />
-                </div>
-                <div class="btn-text">USE HYPERSIGN MOBILE WALLET</div>
-              </a>
+              <a v-if="this.value != ''"  class="btn btn-hypersign text-white " :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`" >
+                <img style="height:40px; float: left;" 
+                :src="require('../assets/hypersignSmallLogo.png')"
+                class="ml-0 rounded rounded-circle  left"/>
+                <div style="font-size: smaller; margin-top: 10px; ">USE MOBILE WALLET</div>
+              </a>  
             </div>
 
             <h6>OR</h6>
-            <p class=" openWebWalletWrapper text-center">
-              <button
-                class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill"
-                @click="openWallet()"
-              >
-                <div class="btn-img btn-img-white">
-                  <img
-                    style="height:50px"
-                    :src="require('../assets/hypersign_logo_short_white.png')"
-                    class="ml-0 rounded rounded-circle p-1"
-                  />
-                </div>
-                <div class="btn-img-dark">
-                  <img
-                    style="height:50px"
-                    :src="require('../assets/hypersign_logo_short_black.png')"
-                    class="ml-0 rounded rounded-circle p-1"
-                  />
-                </div>
-                <div class="btn-text">USE HYPERSIGN WEB WALLET</div>
-              </button>
-            </p>
+
+            <div class="mb-2 ">
+              <a v-if="this.value != ''" class="btn btn-hypersign text-white " href="#"                
+                @click.prevent="openWallet()" >
+                <img style="height:40px; float: left;" 
+                :src="require('../assets/hypersignSmallLogo.png')"
+                class="ml-0 rounded rounded-circle  left"/>
+                <div style="font-size: smaller; margin-top: 10px;">USE WEB WALLET</div>
+              </a>  
+            </div>
           </div>
-          <span v-if="!value || value == ''" style="color:red; font-size:small"
-            >Error in fetching QR data...</span
-          >
-          <!-- <p class="mt-3">Scanner not working ?</p> -->
+
+          <span v-if="socketMessage" style="color:grey; font-size:small">{{socketMessage}}</span>
         </div>
-        <a
-          style="font-weight:600"
-          class="mb-3 text-dark fw-bolder text-reset"
-          href="https://hypersign.id/"
-          target="_blank"
-          >https://hypersign.id/</a
-        >
+
+        <span style="font-size: medium; color:grey; padding: 10px">
+          Get the app on 
+          <a href="https://play.google.com/store/apps/details?id=com.hypersign.cordova" target="__blank">Android</a>, 
+          <a :href="$config.webWalletAddress" target="__blank">Web</a>
+        </span>
       </div>
     </div>
 
@@ -387,8 +358,9 @@ export default {
   },
   data() {
     return {
-      src2: require("../assets/hypersign_logo_short_black.png"),
-
+      src2: require('../assets/icon.png'),
+      error: "",
+      socketMessage: "",
       active: 0,
       host: location.hostname,
       domain: location.host,
@@ -420,25 +392,27 @@ export default {
         parsedUrl.protocol === "https:"
           ? `wss://${parsedUrl.host}`
           : `ws://${parsedUrl.host}`;
-      console.log(websocketUrl);
     } catch (e) {
       websocketUrl = "ws://localhost:3003";
     }
     if (websocketUrl[websocketUrl.length - 1] == "/") {
       websocketUrl = websocketUrl.substring(0, websocketUrl.length - 1);
     }
-    console.log(websocketUrl);
 
-    // take it in the env
-    this.connection = new WebSocket(this.$config.websocketUrl);
-    this.connection.onopen = function() {
-      console.log("Websocket connection is open");
-    };
 
     this.isLoading = true;
     var _this = this;
 
-    this.connection.onmessage = function({ data }) {
+    // take it in the env
+    _this.socketMessage = "Connecting to auth server...";
+    this.connection = new WebSocket(this.$config.websocketUrl);
+    this.connection.onopen = function() {
+      _this.socketMessage = "Connected to auth server..."
+      console.log("Websocket connection is open");
+    };
+
+
+    this.connection.onmessage = function({ data }) {      
       console.log("Websocket connection messag receieved ", data);
       let messageData = JSON.parse(data);
       console.log(messageData);
@@ -446,6 +420,7 @@ export default {
         _this.isLoading = false;
         console.log(messageData.data);
         _this.value = JSON.stringify(messageData.data);
+        _this.socketMessage = null;
       } else if (messageData.op == "end") {
         _this.connection.close();
         const authorizationToken = messageData.data.token;
@@ -470,6 +445,8 @@ export default {
       }
     };
     this.connection.onerror = function(error) {
+      _this.error = true;
+      _this.socketMessage = "Error while fetching the QR data :(";
       console.log("Websocket connection error ", error);
     };
   },
@@ -484,6 +461,8 @@ export default {
           "popUpWindow",
           `height=800,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`
         );
+      }else{
+        console.log("this value is not")
       }
     },
 

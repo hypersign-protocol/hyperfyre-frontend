@@ -2,11 +2,20 @@
 h3 {
   font-size: 15px;
 }
+.btn{
+  border: 1px solid #494949;
+  margin: 20px 0;
+  bottom: 0;
+  right: 0;
+}
 </style>
 <template>
-  <div>
+  <div >
     <h2>Thank You!</h2>
-    <h3>Your data has been successfully saved and is under verfication.<h3></h3>Once verified, you will receive whitelisting credential in your email.</h3>
+    <h3>You are successfully registered,<h3></h3>You will receive a confirmation email if you qualify.</h3>
+    <button @click="logout" class="btn text-dark">
+      Logout
+    </button>
   </div>
 </template>
 
@@ -21,7 +30,7 @@ export default {
       localStorage.removeItem("user");
       localStorage.removeItem("credentials");
       localStorage.removeItem("userData");
-      window.location.href = "/";
+      this.$router.push("/studio/login");
     },
   },
 };
