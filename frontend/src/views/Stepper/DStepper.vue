@@ -672,6 +672,7 @@ export default {
 }
 .footer {
   padding: 10px 30px;
+  
 }
 .header .logo {
   border-bottom-right-radius: 20px;
@@ -725,9 +726,7 @@ div.rule {
 
 
 
-@media screen and (max-width: 990px) {
- 
-}
+
 
 @media screen and (max-width: 768px) {
   .header{
@@ -757,4 +756,13 @@ div.rule {
   }
   
 }
+@media screen and (min-height: 1070px) {
+  .footer {
+  
+   position: absolute;
+  width: 100%;
+  bottom: 0;
+  }
+}
+
 </style>
