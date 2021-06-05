@@ -172,13 +172,6 @@ export default {
       },
 
       columns: [
-        {
-          field: "did",
-          key: "a",
-          title: "Investor DID",
-          align: "left",
-          sortBy: "",
-        },
         { field: "name", key: "b", title: "Name", align: "left", sortBy: "" },
         {
           field: "email",
