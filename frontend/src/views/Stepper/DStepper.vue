@@ -345,7 +345,7 @@ export default {
         const isAllFilled = data.formData.every((input) => input.value.length);
         const twitterHandle = data.formData.filter(x =>  x.label.toLowerCase().includes("twitter"))[0]
         const telegramHandle = data.formData.filter(x =>  x.label.toLowerCase().includes("telegram"))[0]
-        const ethAddress = data.formData.filter(x =>  x.label.toLowerCase().includes("eth"))[0];
+        const ethAddress = data.formData.filter(x =>   x.id.toLowerCase().includes("eth"))[0];
         const ethAddressValidate =  ethAddress.value.startsWith("0x");
         let twitterHandleValidate = false
          let telegramHandleValidate = false
@@ -363,7 +363,7 @@ export default {
             data.formData[3].errMsg = ""
         telegramHandleValidate = true
         }else {
-          data.formData[3].errMsg = "Please Enter a valud (without @)"
+          data.formData[3].errMsg = "Please Enter a valid Telegram Id (without @)"
           telegramHandleValidate = false
         }
 
@@ -672,6 +672,7 @@ export default {
 }
 .footer {
   padding: 10px 30px;
+  
 }
 .header .logo {
   border-bottom-right-radius: 20px;
@@ -725,9 +726,7 @@ div.rule {
 
 
 
-@media screen and (max-width: 990px) {
- 
-}
+
 
 @media screen and (max-width: 768px) {
   .header{
@@ -757,4 +756,13 @@ div.rule {
   }
   
 }
+@media screen and (min-height: 1070px) {
+  .footer {
+  
+   position: absolute;
+  width: 100%;
+  bottom: 0;
+  }
+}
+
 </style>

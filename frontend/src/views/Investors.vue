@@ -172,13 +172,6 @@ export default {
       },
 
       columns: [
-        {
-          field: "did",
-          key: "a",
-          title: "Investor DID",
-          align: "left",
-          sortBy: "",
-        },
         { field: "name", key: "b", title: "Name", align: "left", sortBy: "" },
         {
           field: "email",
@@ -197,7 +190,7 @@ export default {
           renderBodyCell: ({ row, column, rowIndex }, h) => {
             return (
               <span class="text-bold" style="color:#1890ff;">
-                <a href={`https://etherscan.io/address/${row.ethAddress}`}>
+                <a href={`https://etherscan.io/address/${row.ethAddress}`} target="_blank">
                   {row.ethAddress}
                 </a>
               </span>
@@ -214,7 +207,7 @@ export default {
           renderBodyCell: ({ row, column, rowIndex }, h) => {
             return (
               <span class="text-bold" style="color:#1890ff;">
-                <a href={`https://twitter.com/${row.twitterHandle}`}>
+                <a href={`https://twitter.com/${row.twitterHandle}`} target="_blank">
                   @{row.twitterHandle}
                 </a>
               </span>
@@ -231,7 +224,7 @@ export default {
           renderBodyCell: ({ row, column, rowIndex }, h) => {
             return (
               <span class="text-bold" style="color:#1890ff;">
-                <a href={`https://t.me/${row.telegramHandle}`}>
+                <a href={`https://t.me/${row.telegramHandle}`} target="_blank">
                   @{row.telegramHandle}
                 </a>
               </span>
@@ -247,7 +240,7 @@ export default {
           renderBodyCell: ({ row, column, rowIndex }, h) => {
             return (
               <span class="text-bold" style="color:#1890ff;">
-                <a href={`${row.tweetUrl}`}>Tweet</a>
+                <a href={`${row.tweetUrl}`} target="_blank">Tweet</a>
               </span>
             );
           },
