@@ -141,6 +141,9 @@ h5 span {
   display: none;
 }
 
+.btn-img-dark{
+  display: none;
+}
 @media screen and (max-width: 990px) {
   .loginPage {
     flex-direction: row;
@@ -205,14 +208,33 @@ h5 span {
   .loginInNow-text{
     font-size: 18px;
   } 
-  .with-hypersign-btn .btn-text{
-    padding: 0 0 0 3px;
-
+  .with-hypersign-btn{
+    width: 70% !important;
+    
   }
-   .with-hypersign-btn  img{
-     height: 40px !important;
-   }
+  .with-hypersign-btn .btn-text{
+    text-align: center;
+    width: 100%;
+    padding: 0;
+  }
+  .with-hypersign-btn {
+    position: relative;
+    padding: 10px;
+  }
+   .with-hypersign-btn  .btn-img{
+     display: none;
+    }
+  
 
+}
+@media screen and (max-width: 375px){
+  .with-hypersign-btn  img{
+     display: none;
+   }
+   .with-hypersign-btn{
+    width: 80% !important;
+    
+  }
 }
 /* .with-hypersign-btn  */
 </style>
@@ -231,18 +253,16 @@ h5 span {
       class="col col-lg-8 col-md-12 col-sm-12 d-flex justify-content-center align-items-center border border-1 bg-dark shadow text-left text-white login-inst-container"
     >
       <div>
-        <h3>Register for Hypersign's Private Token Sale</h3>
+        <h3>Whitelist for Hypersign Data Defenders Program</h3>
         <p class="mt-4">Instructions</p>
-        <ol class="px-3">
-          
+        <ol class="px-3">          
           <li>Login with the Hypersign</li>
           <li>Follow the steps provided in the next screens</li>
           <li>Submit additional information as requested</li>
           <li>Wait for winners announcement.</li>
         </ol>
 
-        
-        
+
 
      <div class="hypersign-logo-footer">
       <div>
@@ -280,8 +300,7 @@ h5 span {
                 logoCornerRadius="2"
               ></vue-qr>
             </div>
-            
-
+  
             <p class="mt-1 scan-qr-message">
               <span style="font-size:small; color:grey"
                 >Scan QR code with the Hypersign Mobile App</span
@@ -289,7 +308,7 @@ h5 span {
             </p>
 
             <div class="mb-2 openMobileAppWrapper">
-              <a v-if="this.value != ''" type="button" class="btn btn-hypersign text-white " :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`" >
+              <a v-if="this.value != ''"  class="btn btn-hypersign text-white " :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`" >
                 <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
                 class="ml-0 rounded rounded-circle  left"/>
@@ -300,7 +319,7 @@ h5 span {
             <h6>OR</h6>
 
             <div class="mb-2 ">
-              <a v-if="this.value != ''" type="button" class="btn btn-hypersign text-white " href="#"                
+              <a v-if="this.value != ''" class="btn btn-hypersign text-white " href="#"                
                 @click.prevent="openWallet()" >
                 <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
@@ -309,10 +328,8 @@ h5 span {
               </a>  
             </div>
           </div>
-          <span v-if="!value || value == ''" style="color:red; font-size:small"
-            >Error in fetching QR data...</span
-          >
-          <!-- <p class="mt-3">Scanner not working ?</p> -->
+
+          <span v-if="socketMessage" style="color:grey; font-size:small">{{socketMessage}}</span>
         </div>
 
         <span style="font-size: medium; color:grey; padding: 10px">
@@ -342,7 +359,8 @@ export default {
   data() {
     return {
       src2: require('../assets/icon.png'),
-
+      error: "",
+      socketMessage: "",
       active: 0,
       host: location.hostname,
       domain: location.host,
@@ -374,25 +392,27 @@ export default {
         parsedUrl.protocol === "https:"
           ? `wss://${parsedUrl.host}`
           : `ws://${parsedUrl.host}`;
-      console.log(websocketUrl);
     } catch (e) {
       websocketUrl = "ws://localhost:3003";
     }
     if (websocketUrl[websocketUrl.length - 1] == "/") {
       websocketUrl = websocketUrl.substring(0, websocketUrl.length - 1);
     }
-    console.log(websocketUrl);
 
-    // take it in the env
-    this.connection = new WebSocket(this.$config.websocketUrl);
-    this.connection.onopen = function() {
-      console.log("Websocket connection is open");
-    };
 
     this.isLoading = true;
     var _this = this;
 
-    this.connection.onmessage = function({ data }) {
+    // take it in the env
+    _this.socketMessage = "Connecting to auth server...";
+    this.connection = new WebSocket(this.$config.websocketUrl);
+    this.connection.onopen = function() {
+      _this.socketMessage = "Connected to auth server..."
+      console.log("Websocket connection is open");
+    };
+
+
+    this.connection.onmessage = function({ data }) {      
       console.log("Websocket connection messag receieved ", data);
       let messageData = JSON.parse(data);
       console.log(messageData);
@@ -400,6 +420,7 @@ export default {
         _this.isLoading = false;
         console.log(messageData.data);
         _this.value = JSON.stringify(messageData.data);
+        _this.socketMessage = null;
       } else if (messageData.op == "end") {
         _this.connection.close();
         const authorizationToken = messageData.data.token;
@@ -424,6 +445,8 @@ export default {
       }
     };
     this.connection.onerror = function(error) {
+      _this.error = true;
+      _this.socketMessage = "Error while fetching the QR data :(";
       console.log("Websocket connection error ", error);
     };
   },

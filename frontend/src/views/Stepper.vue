@@ -109,27 +109,32 @@ export default {
   data() {
     return {
       stepOneData: {
-        line1:
-          "To get selected and to enter the private token sale please follow the rules carefully",
+         line1:
+          "Please follow these instructions below to get qualified for this program",
         line2:
-          "All information needs to be provided in order to get whitelisted for the Presale",
+          "You will need to complete all steps to get qualified.",
 
         rules: [
           {
             id: 1,
-            text: "Please follow projectName on twitter",
+            text: "Please follow us on Twitter ",
             checked: false,
           },
           {
             id: 2,
-            text: "Tweet ",
+            text: "Tweet this and tag 3 friends ",
             checked: false,
             showTweetInput: true,
             tweetUrl: "",
           },
           {
             id: 3,
-            text: "Join the projectName's telegram group ",
+            text: "Join our Telegram group ",
+            checked: false,
+          },
+          {
+            id: 4,
+            text: "Follow our announcement channel ",
             checked: false,
           },
         ],
@@ -137,9 +142,9 @@ export default {
 
       stepTwoData: {
         line1:
-          "To get selected and to enter the private token sale please follow the rules carefully",
+           "Please follow these instructions below to get qualified for this program",
         line2:
-          "All information needs to be provided in order to get whitelisted for the Presale",
+          "You will need to complete all steps to get qualified.",
         imgLink: avatarLabel,
         formData: [
           {
@@ -158,22 +163,25 @@ export default {
           },
           {
             label: "Twitter Handle*",
-            placeholder: "@mytwitterhandle",
+            placeholder: "mytwitterhandle",
             value: "",
             id: "twitterHandle",
+            errMsg: ""
           },
           {
             label: "Telegram Handle*",
-            placeholder: "@mytelegramhandle",
+            placeholder: "mytelegramhandle",
             value: "",
             id: "telegramHandle",
+            errMsg: ""
           },
           {
-            label: "Ethereum  Address*",
+            label: "ERC-20 Address (Do not add exchange address)*",
             placeholder: "0x",
             fullWidth: true,
             value: "",
             id: "ethAddress",
+            errMsg: ""
           },
         ],
 
