@@ -41,9 +41,9 @@ if (dbConnUrl) {
     { useNewUrlParser: true, useUnifiedTopology: true },
     (err) => {
       if (err) {
-        console.error("Error: could not connect to mongo database");
+        logger.error("Error: could not connect to mongo database");
       } else {
-        console.log("Connected to mongo database");
+        logger.info("Connected to mongo database");
       }
     }
   );
