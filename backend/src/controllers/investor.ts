@@ -74,11 +74,6 @@ async function getInvestorByDID(req: Request, res: Response, next: NextFunction)
     logger.info("InvestorController:: getInvestorByDID method start..");
     const { did } = req.params;
     
-    // if(!did) {
-    //   res.statusMessage = "Please pass the did in the paramater";
-    //   res.status(400).end()
-    // }
-
     const investors:Array<IInvestor> = await InvestorModel.where({did: did}).find(); // one investor can participate into multiple projects
     res.send(investors);
   } catch (e) {
@@ -110,19 +105,6 @@ async function updateInvestor(req: Request, res: Response, next: NextFunction){
     const projectId: any = req.query.projectId;
     logger.info("InvestorController:: updateInvestor(): projectId = "+ projectId);
     logger.info("InvestorController:: updateInvestor(): did = "+ did);
-
-    ///// Do all validation in middleware using express-validator
-    /////////////////////////
-    // if(!did){
-    //   res.statusMessage = "Investor did must be passed";      
-    //   return res.status(400).end();
-    // }
-
-    // if(!projectId){
-    //   res.statusMessage = "ProjectId must be passed in query";
-    //   return res.status(400).end();
-    // }
-    /////////////////////////
 
     const filter = { did, projectId };
     const updateParams = req.body;
@@ -188,7 +170,6 @@ async function getCredential(req: Request, res: Response, next: NextFunction) {
       message:signedCredential,
       error: null
     });
-
 
 
     // Finally (in backgroud) update that this investor is verifed by Hypersign
