@@ -14,7 +14,7 @@ if (!fs.existsSync(log_dir)) fs.mkdirSync(log_dir);
 // LOGGING
 const log_path = path.resolve(
   __dirname,
-  process.env.LOG_FILEPATH || "ssi-infra.log"
+  process.env.LOG_FILEPATH || "whitelist-backend.log"
 );
 const logger = log.createSimpleLogger({
   logFilePath: log_path,
