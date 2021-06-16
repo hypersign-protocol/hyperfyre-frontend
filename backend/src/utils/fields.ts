@@ -4,10 +4,17 @@ const URL_REGX = new RegExp(
 
 export function validateURL(url) {
   return new Promise((resolve, reject) => {
-    if (URL_REGX.test(url)) {
-      resolve(true);
-    } else {
-      reject("invalid url");
+    if (!URL_REGX.test(url)) {
+      reject(true); 
     }
   });
+}
+
+
+export function validateDate(date){
+  return new Promise((resolve, reject) => {
+    if(isNaN(Date.parse(date))){
+      reject("invalid date");
+    }
+  })
 }

@@ -17,24 +17,22 @@ async function addProject(req: Request, res: Response) {
       userData
     } = req.body;
 
-    console.log(userData);
+    // if (
+    //   projectName == "" ||
+    //   logoUrl == "" ||
+    //   fromDate == "" ||
+    //   toDate == "" ||
+    //   twitterPostFormat == ""
+    // ) {
+    //   res.statusMessage =
+    //     "projectName, logoUrl, fromDate, toDate can not be empty";
+    //   return res.status(400).end();
+    // }
 
-    if (
-      projectName == "" ||
-      logoUrl == "" ||
-      fromDate == "" ||
-      toDate == "" ||
-      twitterPostFormat == ""
-    ) {
-      res.statusMessage =
-        "projectName, logoUrl, fromDate, toDate can not be empty";
-      return res.status(400).end();
-    }
-
-    if (isNaN(Date.parse(fromDate)) || isNaN(Date.parse(toDate))) {
-      res.statusMessage = "Invalid fromDate or toDate";
-      return res.status(400).end();
-    }
+    // if (isNaN(Date.parse(fromDate)) || isNaN(Date.parse(toDate))) {
+    //   res.statusMessage = "Invalid fromDate or toDate";
+    //   return res.status(400).end();
+    // }
 
     if (Date.parse(fromDate) > Date.parse(toDate)) {
       res.statusMessage = "fromDate can not be greater than toDate";
