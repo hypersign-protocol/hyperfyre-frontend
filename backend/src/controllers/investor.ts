@@ -1,15 +1,16 @@
 import { logger, hypersignSDK, whitelistingSchemaId, nodeServer, hostnameurl, hsAuthServerEp } from "../config";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import InvestorModel, { IInvestor } from "../models/investor";
 let { template :credentialMailTemplate} = require('../services/mail.template');
 import MailService from '../services/mail.service';
+import ApiError from '../error/apiError';
 
 
 const jsonWebToken = require('jsonwebtoken');
 
 const { keys: issuerKeyPair,  mail, jwt } = require("../../hypersign.json");
 
-async function addInvestor(req: Request, res: Response) {
+async function addInvestor(req: Request, res: Response, next: NextFunction) {
   try {
     
     const { did, email, name, ethAddress, twitterHandle, telegramHandle, hasTwitted, hasJoinedTGgroup,  projectId, tweetUrl  } = req.body;
@@ -18,14 +19,12 @@ async function addInvestor(req: Request, res: Response) {
 
     const investor_email:IInvestor = await InvestorModel.where({ email: email, projectId: projectId }).findOne();
 
-    if(investor != null){
-      res.statusMessage = "More than one submition is not allowed from this did";
-      return res.status(400).end();
+    if(investor != null){ 
+      return next(ApiError.badRequest('More than one submition is not allowed from this did'));
     }
 
     if(investor_email != null){
-      res.statusMessage = "More than one submition is not allowed from this emailId";
-      return res.status(400).end();
+      return next(ApiError.badRequest('More than one submition is not allowed from this emailId'));
     }
 
     const new_investor: IInvestor = await InvestorModel.create({
@@ -46,23 +45,21 @@ async function addInvestor(req: Request, res: Response) {
     res.send(new_investor);
   } catch (e) {
     logger.error("InvestorCtrl:: addInvestor(): Error " + e);
-    res.statusMessage = e.message;
-    res.status(500).send(e.message);
+    return next(ApiError.internal(e.message));
   }
 }
 
-async function getAllInvestor(req: Request, res: Response) {
+async function getAllInvestor(req: Request, res: Response, next: NextFunction) {
   try {
     const employeeList:Array<IInvestor> = await InvestorModel.find(req.query);
     res.send(employeeList);
   } catch (e) {
     logger.error('InvestorCtrl:: getAllInvestor(): Error ' + e);
-    res.statusMessage = e.message;
-    res.status(500).send(e.message);
+    return next(ApiError.internal(e.message));
   }
 }
 
-async function getInvestorByDID(req: Request, res: Response) {
+async function getInvestorByDID(req: Request, res: Response, next: NextFunction) {
   try {
     const { did } = req.params;
     
@@ -75,8 +72,7 @@ async function getInvestorByDID(req: Request, res: Response) {
     res.send(investors);
   } catch (e) {
     logger.error('InvestorCtrl:: getInvestorByDID(): Error ' + e);
-    res.statusMessage = e.message;
-    res.status(500).send(e.message);
+    return next(ApiError.internal(e.message));
   }
 }
 
@@ -93,7 +89,7 @@ async function updateInvestorInDb(filter, updateParams){
 
 }
 
-async function updateInvestor(req: Request, res: Response){
+async function updateInvestor(req: Request, res: Response, next: NextFunction){
   try{
     const { did  } = req.params;
     const projectId: any = req.query.projectId;
@@ -120,25 +116,22 @@ async function updateInvestor(req: Request, res: Response){
 
   } catch (e){
     logger.error('InvestorCtrl:: updateInvestor(): Error ' + e);
-    res.statusMessage = e.message;
-    res.status(500).send(e.message);  
+    return next(ApiError.internal(e.message)); 
   }
 }
 
-async function getCredential(req: Request, res: Response) {
+async function getCredential(req: Request, res: Response, next: NextFunction) {
   try{
 
     const { token } =  req.query;
 
     if(!token){
-      res.statusMessage = "WT token is not passed in query params";
-      return res.status(400).end();
+      return next(ApiError.badRequest("WT token is not passed in query params"));
     }
     const attributesMap = await jsonWebToken.verify(token, jwt.secret);
 
     if(!attributesMap){
-      res.statusMessage = "Could not verify JWT token";
-      return res.status(400).end();
+      return next(ApiError.badRequest("Could not verify JWT token"));
     }
   
     const { did, projectId } = attributesMap;
@@ -172,8 +165,7 @@ async function getCredential(req: Request, res: Response) {
 
   } catch (e){
     logger.error('InvestorCtrl:: verifyAndIssueCredential(): Error ' + e);
-    res.statusMessage = e.message;
-    return res.status(500).send(e.message);
+    return next(ApiError.internal(e.message));
   }
 
 }
@@ -200,7 +192,7 @@ async function sendEmail(data){
 }
 
 
-async function issueCredential(req: Request, res: Response){
+async function issueCredential(req: Request, res: Response, next: NextFunction){
   try{
     
     const { did,  projectId  } = req.body;
@@ -208,18 +200,15 @@ async function issueCredential(req: Request, res: Response){
     const investor:IInvestor = await InvestorModel.where({ did: did, projectId: projectId }).findOne();
 
     if(!investor || !investor["_doc"]){
-      res.statusMessage = "No investor foun";
-      return res.status(400).end();
+      return next(ApiError.badRequest("no investor foun"));
     }
 
     if(!(investor.hasTwitted && investor.hasJoinedTGgroup && investor.isVerificationComplete)){
-      res.statusMessage = "Investor has not yet verifed";
-      return res.status(400).end();
+      return next(ApiError.badRequest("Investor has not yet verifed"));
     }
 
     if(investor && investor.isVerfiedByHypersign === true){
-      res.statusMessage = "Investor has already been verifed";
-      return res.status(400).end();
+      return next(ApiError.badRequest("Investor has already been verifed"));
     }
 
     let attributesMap = {
@@ -241,8 +230,7 @@ async function issueCredential(req: Request, res: Response){
 
   } catch (e){
     logger.error('InvestorCtrl:: verifyAndIssueCredential(): Error ' + e);
-    res.statusMessage = e.message;
-    return res.status(500).send(e.message);
+    return next(ApiError.internal(e.message));
   }
 
 }
