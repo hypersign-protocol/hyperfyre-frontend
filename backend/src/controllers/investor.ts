@@ -11,23 +11,24 @@ const { keys: issuerKeyPair,  mail, jwt } = require("../../hypersign.json");
 
 async function addInvestor(req: Request, res: Response) {
   try {
+    
     const { did, email, name, ethAddress, twitterHandle, telegramHandle, hasTwitted, hasJoinedTGgroup,  projectId, tweetUrl  } = req.body;
     
     const investor:IInvestor = await InvestorModel.where({ did: did, projectId: projectId }).findOne();
 
     const investor_email:IInvestor = await InvestorModel.where({ email: email, projectId: projectId }).findOne();
 
-    // if(investor != null){
-    //   res.statusMessage = "More than one submition is not allowed from this did";
-    //   return res.status(400).end();
-    // }
+    if(investor != null){
+      res.statusMessage = "More than one submition is not allowed from this did";
+      return res.status(400).end();
+    }
 
     if(investor_email != null){
       res.statusMessage = "More than one submition is not allowed from this emailId";
       return res.status(400).end();
     }
 
-    const newEmp: IInvestor = await InvestorModel.create({
+    const new_investor: IInvestor = await InvestorModel.create({
       did, 
       email, 
       name, 
@@ -41,7 +42,8 @@ async function addInvestor(req: Request, res: Response) {
       projectId,
       tweetUrl
     });
-    res.send(newEmp);
+
+    res.send(new_investor);
   } catch (e) {
     logger.error("InvestorCtrl:: addInvestor(): Error " + e);
     res.statusMessage = e.message;
@@ -63,10 +65,12 @@ async function getAllInvestor(req: Request, res: Response) {
 async function getInvestorByDID(req: Request, res: Response) {
   try {
     const { did } = req.params;
-    if(!did) {
-      res.statusMessage = "Please pass the did in the paramater";
-      res.status(400).end()
-    }
+    
+    // if(!did) {
+    //   res.statusMessage = "Please pass the did in the paramater";
+    //   res.status(400).end()
+    // }
+
     const investors:Array<IInvestor> = await InvestorModel.where({did: did}).find(); // one investor can participate into multiple projects
     res.send(investors);
   } catch (e) {
@@ -79,13 +83,13 @@ async function getInvestorByDID(req: Request, res: Response) {
 async function updateInvestorInDb(filter, updateParams){
 
   const opts = { new: true, useFindAndModify: true };
-  console.log({filter, updateParams})
+  
   const investor: IInvestor = await InvestorModel.findOneAndUpdate(filter, updateParams, opts);
 
   if(!investor){
     throw new Error("No investor found")
   }
- return investor;
+  return investor;
 
 }
 
@@ -94,15 +98,18 @@ async function updateInvestor(req: Request, res: Response){
     const { did  } = req.params;
     const projectId: any = req.query.projectId;
 
-    if(!did){
-      res.statusMessage = "Investor did must be passed";      
-      return res.status(400).end();
-    }
+    ///// Do all validation in middleware using express-validator
+    /////////////////////////
+    // if(!did){
+    //   res.statusMessage = "Investor did must be passed";      
+    //   return res.status(400).end();
+    // }
 
-    if(!projectId){
-      res.statusMessage = "ProjectId must be passed in query";
-      return res.status(400).end();
-    }
+    // if(!projectId){
+    //   res.statusMessage = "ProjectId must be passed in query";
+    //   return res.status(400).end();
+    // }
+    /////////////////////////
 
     const filter = { did, projectId };
     const updateParams = req.body;
@@ -163,16 +170,12 @@ async function getCredential(req: Request, res: Response) {
     const updateParams = { isVerfiedByHypersign: true };
     updateInvestorInDb(filter, updateParams);
 
-
-
   } catch (e){
     logger.error('InvestorCtrl:: verifyAndIssueCredential(): Error ' + e);
     res.statusMessage = e.message;
     return res.status(500).send(e.message);
   }
 
-
-  
 }
 
 

@@ -7,13 +7,13 @@ import http from 'http';
 import https from 'https';
 import HypersignAuth from 'hypersign-auth-js-sdk';
 import routes from './routes';
-import { getCerts, corsOptionsDelegate } from './utils';
+import { getCerts, corsOptionsDelegate } from './utils/https';
 
 
 let server;
 async function setupApp() {
     try {
-
+        
         const app = express();
         if (httpsEnabled == 'true') {
             const cert = await getCerts();
