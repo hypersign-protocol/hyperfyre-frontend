@@ -17,8 +17,8 @@ export = (hypersign) => {
     "/",
     verifyReCaptcha,
     hypersign.authorize.bind(hypersign),
-    // InvestorSchemaBody,
-    // validateRequestSchema,
+    InvestorSchemaBody,
+    validateRequestSchema,
     InvestorController.addInvestor
   );
 
@@ -31,18 +31,18 @@ export = (hypersign) => {
   router.get(
     "/:did",
     hypersign.authorize.bind(hypersign),
-    // InvestorSchemaPrams,
-    // validateRequestSchema,
+    InvestorSchemaPrams,
+    validateRequestSchema,
     InvestorController.getInvestorByDID
   );
 
   router.put(
     "/:did",
     hypersign.authorize.bind(hypersign),
-    // InvestorSchemaPrams,
-    // InvestorSchemaQuery,
-    // InvestorSchemaBody,
-    // validateRequestSchema,
+    InvestorSchemaPrams,
+    InvestorSchemaQuery,
+    InvestorSchemaBody,
+    validateRequestSchema,
     InvestorController.updateInvestor
   );
 

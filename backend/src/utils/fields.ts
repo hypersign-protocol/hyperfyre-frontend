@@ -5,8 +5,9 @@ const URL_REGX = new RegExp(
 export function validateURL(url) {
   return new Promise((resolve, reject) => {
     if (!URL_REGX.test(url)) {
-      reject(true); 
+      reject(false); 
     }
+    resolve(true);
   });
 }
 
@@ -14,7 +15,8 @@ export function validateURL(url) {
 export function validateDate(date){
   return new Promise((resolve, reject) => {
     if(isNaN(Date.parse(date))){
-      reject("invalid date");
+      reject(false);
     }
+    resolve(true);
   })
 }
