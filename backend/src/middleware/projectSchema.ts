@@ -16,7 +16,6 @@ export const ProjectSchemaBody = [
   body("logoUrl")
     .exists({ checkFalsy: true })
     .trim()
-    .custom((value) => validateURL(value))
     .withMessage("logoUrl can not be null or empty"),
 
   body("fromDate")
