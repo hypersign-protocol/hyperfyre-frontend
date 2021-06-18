@@ -14,16 +14,16 @@ export = (hypersign) => {
   router.post(
     "/",
     hypersign.authorize.bind(hypersign),
-    ProjectSchemaBody,
-    validateRequestSchema,
+    // ProjectSchemaBody,
+    // validateRequestSchema,
     ProjectController.addProject
   );
 
   router.put(
     "/",
     hypersign.authorize.bind(hypersign),
-    ProjectSchemaBody,
-    validateRequestSchema,
+    // ProjectSchemaBody,
+    // validateRequestSchema,
     ProjectController.updateProject
   );
 
@@ -43,8 +43,8 @@ export = (hypersign) => {
         hypersign.authorize(req, res, next);
       }
     },
-    ProjectSchemaPrams,
-    validateRequestSchema,
+    // ProjectSchemaPrams,
+    // validateRequestSchema,
     ProjectController.getProjectById
   );
 
@@ -52,8 +52,8 @@ export = (hypersign) => {
   router.delete(
     "/:id",
     hypersign.authorize.bind(hypersign),
-    ProjectSchemaPrams,
-    validateRequestSchema,
+    // ProjectSchemaPrams,
+    // validateRequestSchema,
     ProjectController.deleteProjectById
   );
 
