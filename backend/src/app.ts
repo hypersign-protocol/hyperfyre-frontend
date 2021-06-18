@@ -7,13 +7,14 @@ import http from 'http';
 import https from 'https';
 import HypersignAuth from 'hypersign-auth-js-sdk';
 import routes from './routes';
-import { getCerts, corsOptionsDelegate } from './utils';
+import { getCerts, corsOptionsDelegate } from './utils/https';
+import apiErrorHandler from './error/apiErrorHandler';
 
 
 let server;
 async function setupApp() {
     try {
-
+        
         const app = express();
         if (httpsEnabled == 'true') {
             const cert = await getCerts();
@@ -37,6 +38,9 @@ async function setupApp() {
         app.use('/api/v1/investors', routes.investors(hypersign));
         app.use('/api/v1/project', routes.project(hypersign));
         app.use("/hs/api/v2/auth", routes.auth(hypersign));
+
+
+        app.use(apiErrorHandler);
 
         return true;
 

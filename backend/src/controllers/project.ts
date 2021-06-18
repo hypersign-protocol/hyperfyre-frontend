@@ -1,9 +1,10 @@
 import { logger } from "../config";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import ProjectModel, { IProject } from "../models/project";
 import InvestorModel, { IInvestor } from "../models/investor";
+import ApiError from '../error/apiError';
 
-async function addProject(req: Request, res: Response) {
+async function addProject(req: Request, res: Response, next: NextFunction) {
   try {
     const {
       projectName,
@@ -17,28 +18,25 @@ async function addProject(req: Request, res: Response) {
       userData
     } = req.body;
 
-    console.log(userData);
+    // if (
+    //   projectName == "" ||
+    //   logoUrl == "" ||
+    //   fromDate == "" ||
+    //   toDate == "" ||
+    //   twitterPostFormat == ""
+    // ) {
+    //   res.statusMessage =
+    //     "projectName, logoUrl, fromDate, toDate can not be empty";
+    //   return res.status(400).end();
+    // }
 
-    if (
-      projectName == "" ||
-      logoUrl == "" ||
-      fromDate == "" ||
-      toDate == "" ||
-      twitterPostFormat == ""
-    ) {
-      res.statusMessage =
-        "projectName, logoUrl, fromDate, toDate can not be empty";
-      return res.status(400).end();
-    }
-
-    if (isNaN(Date.parse(fromDate)) || isNaN(Date.parse(toDate))) {
-      res.statusMessage = "Invalid fromDate or toDate";
-      return res.status(400).end();
-    }
+    // if (isNaN(Date.parse(fromDate)) || isNaN(Date.parse(toDate))) {
+    //   res.statusMessage = "Invalid fromDate or toDate";
+    //   return res.status(400).end();
+    // }
 
     if (Date.parse(fromDate) > Date.parse(toDate)) {
-      res.statusMessage = "fromDate can not be greater than toDate";
-      return res.status(400).end();
+      return next(ApiError.badRequest("fromDate can not be greater than toDate"));
     }
 
     const newProject: IProject = await ProjectModel.create({
@@ -55,12 +53,11 @@ async function addProject(req: Request, res: Response) {
     res.send(newProject);
   } catch (e) {
     logger.error("ProjectCtrl:: addProject(): Error " + e);
-    res.statusMessage = e.message;
-    res.status(500).send(e.message);
+    return next(ApiError.internal(e.message));
   }
 }
 
-async function getAllProject(req: Request, res: Response) {
+async function getAllProject(req: Request, res: Response, next: NextFunction) {
   try {
     const { owner } = req.query;
     const { userData } = req.body;
@@ -73,12 +70,11 @@ async function getAllProject(req: Request, res: Response) {
     res.send(employeeList);
   } catch (e) {
     logger.error("InvestorCtrl:: getAllProject(): Error " + e);
-    res.statusMessage = e.message;
-    res.status(500).send(e.message);
+    return next(ApiError.internal(e.message));
   }
 }
 
-async function getProjectById(req: Request, res: Response) {
+async function getProjectById(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params;
 
@@ -86,8 +82,7 @@ async function getProjectById(req: Request, res: Response) {
     const project: IProject = await ProjectModel.findById({ _id: id });
 
     if (project == null) {
-      res.statusMessage = "No project found for id = " + id;
-      return res.status(400).end();
+      return next(ApiError.badRequest("No project found for id = " + id));
     }
 
     let projectInfo = {
@@ -134,12 +129,11 @@ async function getProjectById(req: Request, res: Response) {
     res.send(projectInfo);
   } catch (e) {
     logger.error("InvestorCtrl:: getProjectById(): Error " + e);
-    res.statusMessage = e.message;
-    res.status(500).send(e.message);
+    return next(ApiError.internal(e.message));
   }
 }
 
-async function deleteProjectById(req: Request, res: Response) {
+async function deleteProjectById(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params;
     const project: IProject = await ProjectModel.findByIdAndDelete(id);
@@ -148,12 +142,11 @@ async function deleteProjectById(req: Request, res: Response) {
     });
   } catch (e) {
     logger.error("InvestorCtrl:: deleteProjectById(): Error " + e);
-    res.statusMessage = e.message;
-    res.status(500).send(e.message);
+    return next(ApiError.internal(e.message));
   }
 }
 
-async function updateProject(req: Request, res: Response) {
+async function updateProject(req: Request, res: Response, next: NextFunction) {
   try {
     const {
       projectName,
@@ -187,8 +180,7 @@ async function updateProject(req: Request, res: Response) {
     });
   } catch (e) {
     logger.error("InvestorCtrl:: updateProject(): Error " + e);
-    res.statusMessage = e.message;
-    res.status(500).send(e.message);
+    return next(ApiError.internal(e.message));
   }
 }
 

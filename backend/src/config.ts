@@ -14,7 +14,7 @@ if (!fs.existsSync(log_dir)) fs.mkdirSync(log_dir);
 // LOGGING
 const log_path = path.resolve(
   __dirname,
-  process.env.LOG_FILEPATH || "ssi-infra.log"
+  process.env.LOG_FILEPATH || "whitelist-backend.log"
 );
 const logger = log.createSimpleLogger({
   logFilePath: log_path,
@@ -41,9 +41,9 @@ if (dbConnUrl) {
     { useNewUrlParser: true, useUnifiedTopology: true },
     (err) => {
       if (err) {
-        console.error("Error: could not connect to mongo database");
+        logger.error("Error: could not connect to mongo database");
       } else {
-        console.log("Connected to mongo database");
+        logger.info("Connected to mongo database");
       }
     }
   );
