@@ -162,6 +162,7 @@ import VueQr from "vue-qr";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import url from "url";
+import notificationMixins from '../mixins/notificationMixins';
 
 export default {
   name: "Login",
@@ -274,25 +275,11 @@ export default {
       localStorage.removeItem("credentials");
       localStorage.removeItem("userData");
     },
-    notifySuccess(msg) {
-      this.$notify({
-        group: "foo",
-        title: "Information",
-        type: "success",
-        text: msg,
-      });
-    },
-    notifyErr(msg) {
-      this.$notify({
-        group: "foo",
-        title: "Error",
-        type: "error",
-        text: msg,
-      });
-    },
+  
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
     },
   },
+  mixins: [notificationMixins]
 };
 </script>

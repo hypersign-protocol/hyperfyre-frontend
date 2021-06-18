@@ -145,6 +145,7 @@ import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import Paginate from "vuejs-paginate";
+import notificationMixins from '../mixins/notificationMixins';
 
 const issuedImgLink = require("../assets/issued-icon.png");
 
@@ -495,26 +496,6 @@ export default {
       this.fetchProjectData(skip, this.perPage);
     },
 
-    notifySuccess(msg) {
-      this.isLoading = false;
-      this.$notify({
-        group: "foo",
-        title: "Information",
-        type: "success",
-        text: msg,
-      });
-    },
-
-    notifyErr(msg) {
-      this.isLoading = false;
-      this.$notify({
-        group: "foo",
-        title: "Error",
-        type: "error",
-        text: msg,
-      });
-    },
-
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
     },
@@ -674,5 +655,7 @@ export default {
       };
     },
   },
+
+  mixins: [notificationMixins]
 };
 </script>

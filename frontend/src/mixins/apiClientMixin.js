@@ -1,24 +1,21 @@
 const axios = require("axios");
 
 class APICalls {
-  handleResponse(response) {
-    if(response.message = "Network Error"){
-      return {
-        err: new Error("Please check your connection"),
-      };
+  handleResponse(response) { 
+    if(response.message == "Network Error"){
+      return new Error("Please check your connection"); 
     }
     
     if (
       response.code &&
       (response.code == "ECONNREFUSED" || response.code == "ENOTFOUND")
     ) {
-      return {
-        err: new Error("Please check your connection"),
-      };
+      return new Error("Please check your connection");
+      
     }
 
     if (!response) {
-      return { err: new Error("No repsonse") };
+      return  new Error("No repsonse");
     }
     if (
       (response.status >= 300 && response.status < 400) ||
@@ -26,7 +23,7 @@ class APICalls {
         response.response.status >= 300 &&
         response.response.status < 400)
     ) {
-      return { err: new Error("REDIRECTING") };
+      return  new Error("REDIRECTING") ;
     }
 
     if (
@@ -35,7 +32,7 @@ class APICalls {
         response.response.status >= 400 &&
         response.response.status < 500)
     ) {
-      return { err: new Error("BAD REQUEST: Please check your request") };
+      return   new Error("BAD REQUEST: Please check your request") 
     }
 
     if (
@@ -44,17 +41,15 @@ class APICalls {
         response.response.status >= 500 &&
         response.response.status < 600)
     ) {
-      return {
-        err: new Error(
-          "INTERNAL SERVER ERROR: Please try agan after some time"
-        ),
-      };
+      return new Error("INTERNAL SERVER ERROR: Please try agan after some time") 
     }
+
 
     return response;
   }
 
   makeCall({ method, url, body, header }) {
+    console.log(method, url, body, header)
     if (validateParameters(method, url, body, header).err) {
       return validateParameters(method, url, body, header);
     }
@@ -62,7 +57,9 @@ class APICalls {
     let res;
     return new Promise((resolve, reject) => {
       if (method == "GET") {
-        res = axios.get(url);
+        res = axios.get(url, {
+          headers: header
+        });
       }
 
       if (method == "POST") {
@@ -73,11 +70,12 @@ class APICalls {
 
       res
         .then((res) => {
+          console.log(res);
           const handledRes = this.handleResponse(res);
           resolve(handledRes);
         })
         .catch((err) => {
-          resolve(this.handleResponse(err));
+          reject(this.handleResponse(err));
         });
     });
   }

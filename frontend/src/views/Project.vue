@@ -354,6 +354,7 @@ import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import Datepicker from "vuejs-datepicker";
+import notificationMixins from '../mixins/notificationMixins';
 export default {
   name: "Investor",
   components: { Loading, Datepicker },
@@ -449,24 +450,6 @@ export default {
         this.isLoading = false;
       }
     },
-    notifySuccess(msg) {
-      this.isLoading = false;
-      this.$notify({
-        group: "foo",
-        title: "Information",
-        type: "success",
-        text: msg,
-      });
-    },
-    notifyErr(msg) {
-      this.isLoading = false;
-      this.$notify({
-        group: "foo",
-        title: "Error",
-        type: "error",
-        text: msg,
-      });
-    },
 
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
@@ -493,18 +476,19 @@ export default {
           method = "PUT";
         }
 
+       
+
         const resp = await fetch(url, {
           method,
           body: JSON.stringify(this.project),
           headers,
         });
 
-        console.log(resp);
+        console.log("RESP", resp);
 
         if (!resp.ok) {
           return this.notifyErr(resp.statusText);
         }
-
         const json = await resp.json();
         this.whitelistingLink = `${window.location.origin}/studio/form?projectId=${json._id}`;
         setTimeout(() => {
@@ -513,6 +497,7 @@ export default {
         this.notifySuccess("Project is saved. Id = " + json._id);
         await this.fetchProjects();
       } catch (e) {
+        console.log("ERROR", e);
         this.notifyErr(e.message);
       } finally {
         this.isLoading = false;
@@ -533,5 +518,6 @@ export default {
       };
     },
   },
+  mixins: [notificationMixins]
 };
 </script>

@@ -198,8 +198,11 @@
 import Loading from "vue-loading-overlay";
 import VueRecaptcha from "vue-recaptcha";
 import "vue-loading-overlay/dist/vue-loading.css";
-import validationMixin from "./validationMixin";
+import validationMixin from "../../mixins/validationMixin";
 import apiCall from "../../mixins/apiClientMixin"
+import notificationMixin from "../../mixins/notificationMixins.js";
+import fetchProjectDataMixin from "../../mixins/fetchProjectDataMixin";
+import apiClinet  from "../../mixins/apiClientMixin";
 
 export default {
   name: "DStepper",
@@ -242,6 +245,7 @@ export default {
   },
 
   created() {
+    
     if (
       !this.$route.query.projectId ||
       this.$route.query.projectId == "undefined"
@@ -252,22 +256,25 @@ export default {
     }
 
 
+    this.projectId = this.$route.query.projectId;
+    const userDid = JSON.parse(localStorage.getItem("user")).id;
+    
+    // this.checkIfAlreadyFilled(userDid);
 
+    if(!this.$route.params.projectDetails){
+      this.fetchProjectData({isAuthTokenAvailable: true});
+      return;
+    } 
+
+    this.projectDetails = this.$route.params.projectDetails
+    // this.formatTweet()
   },
   mounted() {
 
     this.data =
       this.step == 0 || this.step == 0 ? this.stepOneData : this.stepTwoData;
 
-    
-    this.projectId = this.$route.query.projectId;
-    
-    // const userDid = JSON.parse(localStorage.getItem("user")).id;
-   const userDid = "sdfsdfsdfsdfsdfsdf";
-    
-    this.checkIfAlreadyFilled(userDid);
-
-    this.fetchProjectData();
+   
   },
 
   computed: {
@@ -353,25 +360,7 @@ export default {
       //if (!status) this.nextStepAction();
     },
 
-    notifySuccess(msg) {
-      this.isLoading = false;
-      this.$notify({
-        group: "foo",
-        title: "Information",
-        type: "success",
-        text: msg,
-      });
-    },
-
-    notifyErr(msg) {
-      this.isLoading = false;
-      this.$notify({
-        group: "foo",
-        title: "Error",
-        type: "error",
-        text: msg,
-      });
-    },
+   
 
     async saveInvestor(data, recaptchaToken) {
       try {
@@ -388,6 +377,8 @@ export default {
         investor.did = did;
 
         investor.tweetUrl = this.stepOneData.rules[1].tweetUrl;
+
+        console.log(investor);
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${recaptchaToken}`;
         let headers = {
@@ -467,67 +458,10 @@ export default {
       self.status = "submitting";
       self.$refs.recaptcha.reset();
       this.saveInvestor(this.stepTwoData.formData, recaptchaToken);
-    },
-    async fetchProjectData() {
-      try {
-          
-        this.isLoading = true;
-
-        if (!this.$route.query.projectId) throw new Error("No project found");
-
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.projectId}`;
-
-        let headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
-        };
-        const resp = await fetch(url, {
-          headers,
-          method: "GET",
-        });
-
-        console.log("RESP", resp);
-        if (resp.status != 200) {
-          throw new Error(resp.statusText);
-        }
-
-        const json = await resp.json();
-        this.projectDetails = { ...json };
-
-        if(!this.projectDetails.projectStatus || this.projectDetails.projectStatus === false){
-          this.showStepper = false;
-          this.errorMessage = "Sorry, whitelisting process for this project has been over :( !"
-          return;
-        }
-
-        for (let i in this.stepOneData.rules) {
-          this.stepOneData.rules[i].text = this.stepOneData.rules[
-            i
-          ].text.replace("projectName", this.projectDetails.projectName);
-        }
-        this.projectDetails.twitterPostFormat = encodeURIComponent(
-          this.projectDetails.twitterPostFormat
-        );
-        this.projectDetails.twitterPostTextFormat = decodeURIComponent(
-           this.projectDetails.twitterPostFormat
-        )
-        
-        this.projectDetails.fromDate = this.formateDate(this.projectDetails.fromDate);
-        this.projectDetails.toDate = this.formateDate(this.projectDetails.toDate);
-        this.projectFetched = true;
-
-        this.notifySuccess("Project is fetched. ProjectName " + this.projectDetails.projectName);
-      } catch (e) {
-        this.showStepper = false;
-        this.errorMessage = e.message
-        this.notifyErr(e.message);
-      } finally {
-        this.isLoading = false;
-      }
-    },
+    },   
   },
 
-  mixins: [validationMixin]
+  mixins: [validationMixin, notificationMixin, fetchProjectDataMixin]
 };
 </script>
 

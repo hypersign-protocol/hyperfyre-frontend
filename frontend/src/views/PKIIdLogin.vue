@@ -243,7 +243,8 @@ h5 span {
     <div class="cmp-logo">
       <div>
         <img
-          src="https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png"
+         src="https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png"
+         
           style="max-width: 150px;"
         />
       </div>
@@ -253,7 +254,8 @@ h5 span {
       class="col col-lg-8 col-md-12 col-sm-12 d-flex justify-content-center align-items-center border border-1 bg-dark shadow text-left text-white login-inst-container"
     >
       <div>
-        <h3>Whitelist for Hypersign Data Defenders Program</h3>
+          <h3>Whitelist for Hypersign Data Defenders Program</h3>
+        <!-- <h3>Whitelist for {{this.projectDetails.projectName}}</h3> -->
         <p class="mt-4">Instructions</p>
         <ol class="px-3">          
           <li>Login with the Hypersign</li>
@@ -347,8 +349,11 @@ h5 span {
 <script>
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import url from "url";
+import url, { format } from "url";
 import VueQr from "vue-qr";
+import notificationMixins from '../mixins/notificationMixins';
+import apiClinet from "../mixins/apiClientMixin";
+import fetchProjectDataMixin from '../mixins/fetchProjectDataMixin';
 
 export default {
   name: "Login",
@@ -372,11 +377,13 @@ export default {
       fullPage: true,
       isLoading: false,
       connection: null,
+        projectDetails: {},
       qrConfig: {
         value: "test",
         imagePath: "/apple-icon-57x57.png",
         filter: "color",
       },
+      projectId: localStorage.getItem("projectId")
     };
   },
   created() {
@@ -412,7 +419,7 @@ export default {
     };
 
 
-    this.connection.onmessage = function({ data }) {      
+    this.connection.onmessage = ({ data }) =>  {      
       console.log("Websocket connection messag receieved ", data);
       let messageData = JSON.parse(data);
       console.log(messageData);
@@ -427,19 +434,29 @@ export default {
         console.log(authorizationToken);
         localStorage.setItem("authToken", authorizationToken);
 
+
         if (localStorage.getItem("authToken") != null) {
           if (_this.$route.params.nextUrl != null) {
             _this.$router.push(_this.$route.params.nextUrl);
           } else {
-            console.log(_this.$router);
+           
             let path = "";
             const projectId = localStorage.getItem("projectId");
+            console.log(projectId)
+
             if (projectId) {
               path = "form?projectId=" + projectId;
             } else {
               path = "form";
             }
-            _this.$router.push(path);
+            
+            
+            _this.$router.push({
+               path: path,
+               name:"investor",
+               query: {projectId: projectId},
+              params: { projectDetails: this.projectDetails },
+            });
           }
         }
       }
@@ -449,6 +466,8 @@ export default {
       _this.socketMessage = "Error while fetching the QR data :(";
       console.log("Websocket connection error ", error);
     };
+
+    this.fetchProjectData({isAuthTokenAvailable: false});
   },
   mounted() {
     this.clean();
@@ -476,25 +495,15 @@ export default {
       localStorage.removeItem("credentials");
       localStorage.removeItem("userData");
     },
-    notifySuccess(msg) {
-      this.$notify({
-        group: "foo",
-        title: "Information",
-        type: "success",
-        text: msg,
-      });
-    },
-    notifyErr(msg) {
-      this.$notify({
-        group: "foo",
-        title: "Error",
-        type: "error",
-        text: msg,
-      });
-    },
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
     },
+
+    formateDate(d) {
+      return new Date(d).toLocaleString();
+    },
+    
   },
+  mixins: [notificationMixins, fetchProjectDataMixin]
 };
 </script>
