@@ -50,6 +50,7 @@ export = (hypersign) => {
 
   router.get(
     "/:id/lottery",
+    hypersign.authorize.bind(hypersign),
     ProjectSchemaPrams,
     validateRequestSchema,
     ProjectController.getRandomInvestors
