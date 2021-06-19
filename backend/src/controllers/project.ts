@@ -71,7 +71,7 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
     }
     res.send(employeeList);
   } catch (e) {
-    logger.error("InvestorCtrl:: getAllProject(): Error " + e);
+    logger.error("ProjectCtrl:: getAllProject(): Error " + e);
     return next(ApiError.internal(e.message));
   }
 }
@@ -146,7 +146,7 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
     }
     res.send(projectInfo);
   } catch (e) {
-    logger.error("InvestorCtrl:: getProjectById(): Error " + e);
+    logger.error("ProjectCtrl:: getProjectById(): Error " + e);
     return next(ApiError.internal(e.message));
   }
 }
@@ -159,7 +159,7 @@ async function deleteProjectById(req: Request, res: Response, next: NextFunction
       ...project["_doc"],
     });
   } catch (e) {
-    logger.error("InvestorCtrl:: deleteProjectById(): Error " + e);
+    logger.error("ProjectCtrl:: deleteProjectById(): Error " + e);
     return next(ApiError.internal(e.message));
   }
 }
@@ -197,7 +197,7 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       ...project["_doc"],
     });
   } catch (e) {
-    logger.error("InvestorCtrl:: updateProject(): Error " + e);
+    logger.error("ProjectCtrl:: updateProject(): Error " + e);
     return next(ApiError.internal(e.message));
   }
 }
@@ -232,30 +232,26 @@ async function getRandomInvestors(req: Request, res: Response, next: NextFunctio
       randomInvestorList = await InvestorModel.where(query).find();
     }
 
-    // if investorCount =  1000 and limitRecordInt = 100 thne 900 record
-    const skipRecords = getRandomArbitrary(1, investorCount - limitRecordInt);
-
-
-randomInvestorList =  await InvestorModel.aggregate([
+    randomInvestorList =  await InvestorModel.aggregate([
       { $match: query },
       { $sample: { size: limitRecordInt } }
     ])    
 
-    //    randomInvestorList = await InvestorModel.where(query).find().skip(skipRecords).limit(limitRecordInt);
 
-    // const filePath = await writeInvestorsToFile(`${id}_investorList_${new Date().getTime()}`, randomInvestorList);
-    // if(filePath){
-    //   res.sendFile(filePath, ()=>{
-    //     // delete the file when tranfer is complete.
-    //     deleteFile(filePath);
-    //   });
-    //   return;
-    // }
+    const filePath = await writeInvestorsToFile(`${id}_investorList_${new Date().getTime()}`, randomInvestorList);
+    if(filePath){
+      res.sendFile(filePath, ()=>{
+        // delete the file when tranfer is complete.
+        deleteFile(filePath);
+      });
+      return;
+    }
 
-    res.send(randomInvestorList);
+    
 
   }catch(e){
-
+    logger.error("ProjectCtrl:: getRandomInvestors(): Error " + e);
+    return next(ApiError.internal(e.message));
   }
 
 
