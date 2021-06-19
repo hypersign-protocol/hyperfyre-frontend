@@ -4,6 +4,7 @@ import ProjectModel, { IProject } from "../models/project";
 import InvestorModel, { IInvestor } from "../models/investor";
 import ApiError from '../error/apiError';
 import { writeInvestorsToFile, deleteFile } from '../utils/files';
+import { getRandomArbitrary } from '../utils/https';
 
 async function addProject(req: Request, res: Response, next: NextFunction) {
   try {
@@ -201,10 +202,67 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+
+
+async function getRandomInvestors(req: Request, res: Response, next: NextFunction) {
+
+  try{
+
+    let { limitRecord } = req.query;
+    const { id } = req.params;
+
+    if(!limitRecord || limitRecord == ""){
+      limitRecord = "1";
+    } 
+    console.log(limitRecord.toString());
+    let limitRecordInt = parseInt(limitRecord.toString());
+    
+    // get count of total investors for this projectId
+    // query: projectId, isVerificationComplete = true
+    // check limitRecord < investorCount
+    const query = { projectId: id,isVerificationComplete: true };
+    const investorCount = await InvestorModel.countDocuments(query).then((count) => count);
+
+    if(limitRecordInt > investorCount){
+      return next(ApiError.badRequest("lottery can not be executed for records more than total verified records count"));
+    }
+    let randomInvestorList: Array<IInvestor> = [];
+    
+    if(limitRecordInt == investorCount){
+      randomInvestorList = await InvestorModel.where(query).find();
+    }
+
+    // if investorCount =  1000 and limitRecordInt = 100 thne 900 record
+    const skipRecords = getRandomArbitrary(1, investorCount - limitRecordInt);
+    
+
+    randomInvestorList = await InvestorModel.where(query).find().skip(skipRecords);
+
+    // const filePath = await writeInvestorsToFile(`${id}_investorList_${new Date().getTime()}`, randomInvestorList);
+    // if(filePath){
+    //   res.sendFile(filePath, ()=>{
+    //     // delete the file when tranfer is complete.
+    //     deleteFile(filePath);
+    //   });
+    //   return;
+    // }
+
+    res.send(randomInvestorList);
+
+  }catch(e){
+
+  }
+
+
+}
+  
+
+
 export default {
   addProject,
   getProjectById,
   getAllProject,
   updateProject,
   deleteProjectById,
+  getRandomInvestors
 };

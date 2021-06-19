@@ -48,6 +48,15 @@ export = (hypersign) => {
     ProjectController.getProjectById
   );
 
+  router.get(
+    "/:id/lottery",
+    ProjectSchemaPrams,
+    validateRequestSchema,
+    ProjectController.getRandomInvestors
+  );
+  
+
+
   // Delete
   router.delete(
     "/:id",

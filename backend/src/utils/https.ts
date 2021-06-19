@@ -24,4 +24,6 @@ export function corsOptionsDelegate (req, callback) {
     callback(null, corsOptions) // callback expects two parameters: error and options
   }
 
-
+export function getRandomArbitrary(min, max) {
+    return Math.ceil(Math.random() * (max - min) + min);
+  }
