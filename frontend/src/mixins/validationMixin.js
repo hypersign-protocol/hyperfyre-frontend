@@ -15,12 +15,8 @@ export default {
           gotoNextPage = true;
           this.slideToNextPage(gotoNextPage);
         } else {
-          this.$notify({
-            group: "foo",
-            title: "Error",
-            type: "error",
-            text: "Please follow all the rules and provide a tweet URL",
-          });
+          this.notifyError("Please follow all the rules and provide a tweet URL")
+        
         }
       } else if (step == 2) {
         const isAllFilled = data.formData.every((input) => input.value.length);
@@ -76,13 +72,8 @@ export default {
         ) {
           gotoNextPage = true;
           this.slideToNextPage(gotoNextPage);
-        } else {
-          this.$notify({
-            group: "foo",
-            title: "Error",
-            type: "error",
-            text: "Please fill the form properly",
-          });
+        } else {;
+          this.notifyError("Please follow all the rules and provide a tweet URL");
         }
       } else if (step == 3) {
         this.$refs.recaptcha.execute();
