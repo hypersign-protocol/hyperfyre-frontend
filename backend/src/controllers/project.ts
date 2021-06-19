@@ -223,8 +223,12 @@ async function getRandomInvestors(req: Request, res: Response, next: NextFunctio
     const query = { projectId: id,isVerificationComplete: true };
     const investorCount = await InvestorModel.countDocuments(query).then((count) => count);
 
+    if(investorCount == 0){
+      return next(ApiError.badRequest("no record found for this project to perform lottery"));
+    }
+
     if(limitRecordInt > investorCount){
-      return next(ApiError.badRequest("lottery can not be executed for records more than total verified records count"));
+      return next(ApiError.badRequest("lottery can not be executed for records more than total verified records"));
     }
     let randomInvestorList: Array<IInvestor> = [];
     
