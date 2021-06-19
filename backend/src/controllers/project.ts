@@ -234,9 +234,14 @@ async function getRandomInvestors(req: Request, res: Response, next: NextFunctio
 
     // if investorCount =  1000 and limitRecordInt = 100 thne 900 record
     const skipRecords = getRandomArbitrary(1, investorCount - limitRecordInt);
-    
 
-    randomInvestorList = await InvestorModel.where(query).find().skip(skipRecords);
+
+randomInvestorList =  await InvestorModel.aggregate([
+      { $match: query },
+      { $sample: { size: limitRecordInt } }
+    ])    
+
+    //    randomInvestorList = await InvestorModel.where(query).find().skip(skipRecords).limit(limitRecordInt);
 
     // const filePath = await writeInvestorsToFile(`${id}_investorList_${new Date().getTime()}`, randomInvestorList);
     // if(filePath){
