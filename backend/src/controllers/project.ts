@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import ProjectModel, { IProject } from "../models/project";
 import InvestorModel, { IInvestor } from "../models/investor";
 import ApiError from '../error/apiError';
+import { writeInvestorsToFile, deleteFile } from '../utils/files';
 
 async function addProject(req: Request, res: Response, next: NextFunction) {
   try {
@@ -78,7 +79,7 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params;
 
-    const { fetchInvestors, limit, skip, searchQuery, isPublic } = req.query;
+    const { fetchInvestors, limit, skip, searchQuery, isPublic, isExport } = req.query;
     const project: IProject = await ProjectModel.findById({ _id: id });
 
     if (project == null) {
@@ -124,6 +125,22 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
         projectInfo.count = await InvestorModel.countDocuments({
           projectId: id,
         }).then((count) => count);
+
+        // check if export option is enabled
+        // if yes then
+        // create excel sheet
+        // write investors data to it
+        // send the file in the UI and return here.
+        if(isExport){
+          const filePath = await writeInvestorsToFile(`${id}_investorList_${new Date().getTime()}`, investorList);
+          if(filePath){
+            res.sendFile(filePath, ()=>{
+              // delete the file when tranfer is complete.
+              deleteFile(filePath);
+            });
+            return;
+          }
+        }
       }
     }
     res.send(projectInfo);
