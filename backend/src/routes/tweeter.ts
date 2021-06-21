@@ -6,6 +6,7 @@ import { validateRequestSchema } from "../middleware/validateRequestSchema";
 import {
   TweeterSchemaBody,
   TweeterSchemaPrams,
+  TweeterFollowerBody
 } from "../middleware/tweeter";
 export = (hypersign) => {
   const router = Router();
@@ -19,10 +20,17 @@ export = (hypersign) => {
     async (req, res, next) => {
       try{
         logger.info("Inside tweeer verify");
-        const { tweetUrl, userId, tweetText, needUserDetails } =  req.body;
-        logger.info({ tweetUrl, userId, tweetText, needUserDetails });
+        const { tweetUrl, userId, tweetText, needUserDetails, checkIfFollowed, sourceScreenName } =  req.body;
+        
+        if(checkIfFollowed){
+          if(!sourceScreenName || sourceScreenName == ""){
+            return next(ApiError.badRequest("sourceScreenName can not be null or empty"));
+          }
+        }
+
+        logger.info({ tweetUrl, userId, tweetText, needUserDetails, checkIfFollowed, sourceScreenName });
         logger.info("Before calling tService.validateTweetUrl")
-        const verifedData: any = await tService.validateTweetUrl(tweetUrl, userId, tweetText, needUserDetails);
+        const verifedData: any = await tService.validateTweetUrl(tweetUrl, userId, tweetText, needUserDetails, checkIfFollowed, sourceScreenName);
         logger.info("After calling tService.validateTweetUrl " + JSON.stringify(verifedData))
         res.send(verifedData);
       }catch(e){
@@ -40,9 +48,25 @@ export = (hypersign) => {
     async (req, res, next) => {
       try{
         const { userId } =  req.params;
-        console.log(userId)
         const userDetails = await tService.getUserDetails(userId);
         res.send(userDetails);
+      }catch(e){
+        logger.error("InvestorController:: addInvestor(): Error " + e);
+        next(ApiError.internal(e.message));
+      }
+    }
+  );
+
+  router.post(
+    "/follower",
+    hypersign.authorize.bind(hypersign),
+    TweeterFollowerBody,
+    validateRequestSchema,
+    async (req, res, next) => {
+      try{
+        const { sourceScreenName, targetScreenName } =  req.body;
+        const hasFollowed = await tService.hasFollowed(sourceScreenName, targetScreenName);
+        res.send(hasFollowed);
       }catch(e){
         logger.error("InvestorController:: addInvestor(): Error " + e);
         next(ApiError.internal(e.message));

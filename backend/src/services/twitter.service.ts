@@ -7,6 +7,11 @@ export default class TwitterService {
     this.tweeterClient = new Twit({...tweeterConfig});
   }
   
+  /**
+   * Fetches user details using id_str
+   * @param userId 
+   * @returns user detials
+   */
   getUserDetails(userId: string) {
     return new Promise( async(resolve, reject) => {
       const response = await this.tweeterClient.get("users/show", {
@@ -27,11 +32,21 @@ export default class TwitterService {
     });
   }
 
+  /**
+   * Validate tweet url and returns user detials as well
+   * @param tweetUrl tweet url
+   * @param loggedInUserId id_str
+   * @param tweetText tweeted text
+   * @param needUserDetails returns 
+   * @returns object 
+   */
   validateTweetUrl(
     tweetUrl: string,
     loggedInUserId: string,
     tweetText: string,
-    needUserDetails: boolean = false
+    needUserDetails: boolean = false,
+    checkIfFollowed: boolean = false,
+    sourceScreenName: string = ""
   ) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -93,6 +108,15 @@ export default class TwitterService {
             description: data["user"]["description"],
           };
         }
+
+        if(needUserDetails && checkIfFollowed){
+          const followed = await this.hasFollowed(sourceScreenName, returnObj["user"]["screen_name"]);
+          returnObj["user"]["followed"] = {
+            to: sourceScreenName,
+            hasFollowed: followed,
+          }
+        }
+
         logger.info(returnObj);
         resolve(returnObj);
 
@@ -106,5 +130,42 @@ export default class TwitterService {
     });
   }
 
-  get;
+  /**
+   * Verifes whether target follows source
+   * @param sourceScreenName user who get followed
+   * @param targetScreenName user who follows
+   * @returns boolean
+   */
+  hasFollowed(sourceScreenName: string, targetScreenName: string): Promise<boolean>{
+    return new Promise(async (resolve, reject) => {
+      try{
+        const response = await this.tweeterClient.get("friendships/show", { source_screen_name: sourceScreenName, target_screen_name: targetScreenName });
+        const { data } = response;
+
+        if(!data) {
+          throw new Error("could not fetch friendship information");
+        } 
+
+        const { relationship } = data;
+        
+        if(!relationship){
+          throw new Error("no relationship found");
+        }
+
+        const { source, target } = relationship;
+        if(!source || !target){
+          throw new Error("no source or target object found");
+        }
+        
+        if(source.followed_by && target.following){
+          resolve(true)
+        }else{
+          resolve(false)
+        }
+
+      }catch(e){
+        reject(e.message)
+      }
+    })
+  }
 }

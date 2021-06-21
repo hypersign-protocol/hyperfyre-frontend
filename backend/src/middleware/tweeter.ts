@@ -27,4 +27,16 @@ export const TweeterSchemaPrams = [
       .custom((value) => validateURL(value))
       .withMessage("invalid tweet url"),
   ];
+
+  export const TweeterFollowerBody = [
+    body("sourceScreenName")
+    .exists({ checkFalsy: true })
+    .trim()
+    .withMessage("sourceScreenName can not be null or empty"),
+
+   body("targetScreenName")
+    .exists({ checkFalsy: true })
+    .trim()
+    .withMessage("targetScreenName can not be null or empty"),
+  ]
   
