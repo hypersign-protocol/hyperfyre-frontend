@@ -13,6 +13,7 @@
     "predeploy": "npm run build"
   },
   "dependencies": {
+    "auth0-js": "^9.16.2",
     "axios": "^0.21.1",
     "bootstrap-vue": "^2.0.0-rc.11",
     "node-fetch": "^2.6.0",

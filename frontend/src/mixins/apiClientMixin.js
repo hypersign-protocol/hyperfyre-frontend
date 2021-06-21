@@ -2,6 +2,8 @@ const axios = require("axios");
 
 class APICalls {
   handleResponse(response) { 
+
+ 
     if(response.message == "Network Error"){
       return new Error("Please check your connection"); 
     }
@@ -32,7 +34,8 @@ class APICalls {
         response.response.status >= 400 &&
         response.response.status < 500)
     ) {
-      return   new Error("BAD REQUEST: Please check your request") 
+      console.log(response.response)
+      return response.response.data || new Error("BAD REQUEST: Please check your request") 
     }
 
     if (
@@ -66,8 +69,8 @@ class APICalls {
         res = axios.post(url, body, {
           headers: header,
         });
+        
       }
-
       res
         .then((res) => {
           console.log(res);

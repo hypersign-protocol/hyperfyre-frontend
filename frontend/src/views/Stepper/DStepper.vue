@@ -20,6 +20,14 @@
       </div>
     </div>
 
+
+  <b-modal id="err-modal" title="BootstrapVue">
+    <p v-for="errors in serverErrors" :key="errors.param" class="my-4">{{errors.param}}:  {{errors.msg}}</p>
+
+    
+  </b-modal>
+   
+
     <div v-if="showStepper" class="steps-container">
       <div
         v-if="step + 1 !== 4"
@@ -182,6 +190,7 @@
       </div>
     </div>
 
+
     <vue-recaptcha
       v-if="step + 1 == 3"
       ref="recaptcha"
@@ -240,7 +249,8 @@ export default {
       authToken: localStorage.getItem("authToken"),
       fullPage: true,
       projectDetails: {},
-      projectId: ""
+      projectId: "",
+      serverErrors: []
     };
   },
 
@@ -255,9 +265,9 @@ export default {
       return;
     }
 
-
     this.projectId = this.$route.query.projectId;
     const userDid = JSON.parse(localStorage.getItem("user")).id;
+    // const userDid.id = "234234234234234" 
     
     // this.checkIfAlreadyFilled(userDid);
 
@@ -360,12 +370,14 @@ export default {
       //if (!status) this.nextStepAction();
     },
 
-   
-
+  
     async saveInvestor(data, recaptchaToken) {
+
+
       try {
         let investor = {};
         const did = JSON.parse(localStorage.getItem("user")).id;
+        // const did = "nsjdnfkdsnf34234"
 
         this.isLoading = true;
 
@@ -377,8 +389,8 @@ export default {
         investor.did = did;
 
         investor.tweetUrl = this.stepOneData.rules[1].tweetUrl;
-
-        console.log(investor);
+        investor.hasJoinedTGgroup = true
+        investor.hasTwitted = true
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${recaptchaToken}`;
         let headers = {
@@ -386,27 +398,29 @@ export default {
            "Authorization": `Bearer ${this.authToken}`
         };
 
-        const resp = await fetch(url, {
+        console.log(investor);
+
+        const resp = await apiClinet.makeCall({
+          url: url,
           method: "POST",
-          body: JSON.stringify(investor),
-          headers,
+          body: investor,
+          header: headers,
         });
-        if (resp.status !== 200) {
-          throw new Error(resp.statusText);
-        }
-        const json = await resp.json();
-        console.log(json);
 
         this.isLoading = false;
         this.slideToNextPage(true);
         this.notifySuccess("Successfully Signed Up for whitelisting");
       } catch (err) {
-        console.log("ERROR", err);
-        this.notifyErr(err.message);
         this.isLoading = false;
+        if(typeof err.errors == "object"){
+          this.serverErrors = err.errors;
+          this.$bvModal.show("err-modal")
+        }
+        this.notifyErr(err);
+      
       } finally {
-        console.log("FINALLY ");
-        // this.isLoading = false;
+        
+        this.isLoading = false;
         // this.clear();
       }
     },
@@ -420,20 +434,13 @@ export default {
           "Authorization": `Bearer ${this.authToken}`
         };
 
-        console.log(apiCall)
-      
-        const res = await fetch(url, {
-          headers,
+        const res = await apiClinet.makeCall({
+          url,
+          header: headers,
           method: "GET"
-        });
-
-        if (res.status !== 200) {
-          throw new Error(res.statusText);
-        }
-
-        const resData = await res.json();
-        
-        if (resData.length > 0) {
+        })
+      
+        if (res.data.length > 0) {
           this.step = 3;
         }
       } catch (e) {

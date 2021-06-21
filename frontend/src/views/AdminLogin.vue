@@ -163,6 +163,7 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import url from "url";
 import notificationMixins from '../mixins/notificationMixins';
+import localStorageMixin from '../mixins/localStorageMixin';
 
 export default {
   name: "Login",
@@ -269,17 +270,11 @@ export default {
     push(path) {
       this.$router.push(path);
     },
-    clean() {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("user");
-      localStorage.removeItem("credentials");
-      localStorage.removeItem("userData");
-    },
   
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
     },
   },
-  mixins: [notificationMixins]
+  mixins: [notificationMixins, localStorageMixin]
 };
 </script>
