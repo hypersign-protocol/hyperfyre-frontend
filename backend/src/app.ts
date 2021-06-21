@@ -38,6 +38,7 @@ async function setupApp() {
         app.use('/api/v1/investors', routes.investors(hypersign));
         app.use('/api/v1/project', routes.project(hypersign));
         app.use("/hs/api/v2/auth", routes.auth(hypersign));
+        app.use("/api/v1/twitter", routes.twitter(hypersign));
 
 
         app.use(apiErrorHandler);

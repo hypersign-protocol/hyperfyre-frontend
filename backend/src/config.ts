@@ -80,6 +80,13 @@ const hsAuthServerEp = process.env.HS_AUTH_SERVER_URL || "https://ssi.hypermine.
 
 
 const whitelist = process.env.WHITELISTED_CORS || ['*'];
+
+const tweeterConfig = {
+  consumer_key: process.env.TWEETER_CONSUMER_KEY || "q1hSjffihVvO025rGNT8PNch5",
+  consumer_secret: process.env.TWEETER_CONSUMER_SECRET || "1L8OAB9J4FXPtF2TvAYr7AMJG6ioLFB0gCfK3szgR9p7VPbn3B",
+  access_token: process.env.TWEETER_ACCESS_TOKEN || "910185786330423296-w15MIwdFQoHjAHPzriQsiolUWyvbsUL",
+  access_token_secret: process.env.TWEETER_ACCESS_TOKEN_SECRET || "uuMl1yj4KIu1OeF7SHwoseLRahwa9ycXTunx7GOXlLw8f"
+}
 export {
   port,
   host,
@@ -95,5 +102,6 @@ export {
   recaptchaUri,
   httpsEnabled,
   whitelist,
-  hsAuthServerEp
+  hsAuthServerEp,
+  tweeterConfig
 };
