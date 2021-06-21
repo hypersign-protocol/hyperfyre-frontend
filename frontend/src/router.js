@@ -20,10 +20,16 @@ const router = new Router({
       path: "/studio",
       redirect: "/studio/login",
     },
+    
     {
       path: "/studio/login",
       name: "PKIIdLogin",
       component: () => import(/* webpackChunkName: "investorLogin" */ './views/PKIIdLogin.vue'),
+    },
+    {
+      path: "/studio/connectwithtwitter",
+      name: "ConnectWithTwitter",
+      component: () => import(/* webpackChunkName: "investorLogin" */ './views/connectWIthTwitter.vue'),
     },
     {
       path: "/studio/form",

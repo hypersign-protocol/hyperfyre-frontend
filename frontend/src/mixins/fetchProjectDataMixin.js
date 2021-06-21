@@ -46,9 +46,10 @@ export default{
     
               this.notifySuccess("Project is fetched. ProjectName " + this.projectDetails.projectName);
             } catch (e) {
+             console.log("ERROR",)
               this.showStepper = false;
-              this.errorMessage = e.message
-              this.notifyErr(e.message);
+              this.errorMessage = e
+              this.notifyErr(e);
             } finally {
               this.isLoading = false;
             }

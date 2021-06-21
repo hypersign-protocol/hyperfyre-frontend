@@ -354,6 +354,7 @@ import VueQr from "vue-qr";
 import notificationMixins from '../mixins/notificationMixins';
 import apiClinet from "../mixins/apiClientMixin";
 import fetchProjectDataMixin from '../mixins/fetchProjectDataMixin';
+import localStorageMixin from '../mixins/localStorageMixin';
 
 export default {
   name: "Login",
@@ -489,12 +490,7 @@ export default {
     push(path) {
       this.$router.push(path);
     },
-    clean() {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("user");
-      localStorage.removeItem("credentials");
-      localStorage.removeItem("userData");
-    },
+  
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
     },
@@ -504,6 +500,6 @@ export default {
     },
     
   },
-  mixins: [notificationMixins, fetchProjectDataMixin]
+  mixins: [notificationMixins, fetchProjectDataMixin, localStorageMixin]
 };
 </script>
