@@ -34,7 +34,7 @@ class APICalls {
         response.response.status >= 400 &&
         response.response.status < 500)
     ) {
-      console.log(response.response)
+    
       return response.response.data || new Error("BAD REQUEST: Please check your request") 
     }
 
@@ -44,7 +44,8 @@ class APICalls {
         response.response.status >= 500 &&
         response.response.status < 600)
     ) {
-      return new Error("INTERNAL SERVER ERROR: Please try agan after some time") 
+      
+      return response.response.data || new Error("INTERNAL SERVER ERROR: Please try agan after some time") 
     }
 
 
@@ -52,7 +53,7 @@ class APICalls {
   }
 
   makeCall({ method, url, body, header }) {
-    console.log(method, url, body, header)
+    
     if (validateParameters(method, url, body, header).err) {
       return validateParameters(method, url, body, header);
     }
@@ -73,7 +74,7 @@ class APICalls {
       }
       res
         .then((res) => {
-          console.log(res);
+  
           const handledRes = this.handleResponse(res);
           resolve(handledRes);
         })

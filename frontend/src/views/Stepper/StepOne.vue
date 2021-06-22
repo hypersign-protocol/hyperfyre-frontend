@@ -155,6 +155,11 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
   outline: none;
 }
 
+a{
+  cursor: pointer;
+}
+
+
 
 @media screen and (max-width: 990px) {
  
@@ -222,12 +227,11 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
 
             <div v-if="rule.id == 1" class="ml-2 links">
               <a
-                :href="
-                  'https://twitter.com/' +
+              class="links"
+               target="_blank"
+               @click="handleTwitterLogin('https://twitter.com/' +
                     projectDetails.twitterHandle +
-                    '?ref_src=twsrc%5Etfw'
-                "
-                target="_blank"
+                    '?ref_src=twsrc%5Etfw', idx)"
                 >@{{ projectDetails.twitterHandle }}</a
               >
             </div>
@@ -235,9 +239,9 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
 
             <div class=" ml-2 links" v-if="rule.id == 2">
                   <a
-                    @click="handleInputShow"
+                    @click="handleTwitterLogin('https://twitter.com/intent/tweet?text=' + projectDetails.twitterPostFormat, idx)"
                     target="_blank"
-                    :href="'https://twitter.com/intent/tweet?text=' + projectDetails.twitterPostFormat"
+                 
                     title="Tweet about this project tagging two of your friends"
                     class="ml-1"
                     >"{{projectDetails.twitterPostTextFormat}}"</a
@@ -304,6 +308,7 @@ input.large.custom[type="checkbox"]:not(:disabled):checked:hover:after {
 </template>
 
 <script>
+import webAuth from '../../mixins/twitterLogin';
 // This components will have the content for each stepper step.
 
 export default {
@@ -315,19 +320,50 @@ export default {
     projectDetails: {
       type: Object,
     },
+
   },
-  created(){
+    
   
-  },
+
   data() {
     return {
       showInput: true,
+      urlToRedirectTo: "",
     };
   },
+  mounted(){
+    console.log(this.stepOneData)
+  },
+
   methods: {
     handleInputShow() {
       this.showInput = true;
     },
+
+    handleTwitterLogin(urlToRedirect, idx){
+   
+      
+      if(!localStorage.getItem("twitterId")){
+          webAuth.popup.authorize(
+            {
+              connection: "twitter",    
+              owp: true,   
+            },
+             (err, authRes) => {   
+              webAuth.client.userInfo(authRes.accessToken, (err, user) =>  {
+                const twitterId = user["https://hasura.io/jwt/claims"]["x-hasura-user-id"].split("|")[1]
+                this.stepOneData.rules[idx].checked = true;
+                localStorage.setItem("twitterId", twitterId);              
+                window.open(urlToRedirect, "_blank");
+              });
+            }
+          );
+      } else{
+        window.open(urlToRedirect, "_blank");
+        this.stepOneData.rules[idx].checked = true;
+      }
+     
+    }
   },
 };
 </script>

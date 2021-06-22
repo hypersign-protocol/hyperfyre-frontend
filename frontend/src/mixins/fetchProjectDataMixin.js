@@ -21,7 +21,7 @@ export default{
               }
 
               const resp =  await apiClinet.makeCall({method: "GET", url: url, header: headers})
-              
+      
 
               // I CAN SAFELY ACCESS resp.data here
             
@@ -32,6 +32,7 @@ export default{
                 this.errorMessage = "Sorry, whitelisting process for this project has been over :( !"
                 return;
               }
+
       
                  this.projectDetails.twitterPostFormat = encodeURIComponent(
                    this.projectDetails.twitterPostFormat
@@ -46,7 +47,8 @@ export default{
     
               this.notifySuccess("Project is fetched. ProjectName " + this.projectDetails.projectName);
             } catch (e) {
-             console.log("ERROR",)
+         
+                console.log(e);
               this.showStepper = false;
               this.errorMessage = e
               this.notifyErr(e);

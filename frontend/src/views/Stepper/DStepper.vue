@@ -99,6 +99,7 @@
                       @fatal-error="blockStepper"
                       @can-continue="nextStepAction"
                       @set-step="setStep"
+                      @handleTwitterLogin="handleTwitterLogin"
                     />
                   </keep-alive>
                 </transition>
@@ -207,7 +208,6 @@
 import Loading from "vue-loading-overlay";
 import VueRecaptcha from "vue-recaptcha";
 import "vue-loading-overlay/dist/vue-loading.css";
-import validationMixin from "../../mixins/validationMixin";
 import apiCall from "../../mixins/apiClientMixin"
 import notificationMixin from "../../mixins/notificationMixins.js";
 import fetchProjectDataMixin from "../../mixins/fetchProjectDataMixin";
@@ -267,7 +267,6 @@ export default {
 
     this.projectId = this.$route.query.projectId;
     const userDid = JSON.parse(localStorage.getItem("user")).id;
-    // const userDid.id = "234234234234234" 
     
     // this.checkIfAlreadyFilled(userDid);
 
@@ -275,6 +274,7 @@ export default {
       this.fetchProjectData({isAuthTokenAvailable: true});
       return;
     } 
+  
 
     this.projectDetails = this.$route.params.projectDetails
     // this.formatTweet()
@@ -302,6 +302,138 @@ export default {
   },
 
   methods: {
+
+    async nextStep() {
+      const step = this.step + 1;
+      const data = step == 1 ? this.stepOneData : this.stepTwoData;
+
+      let gotoNextPage = false;
+
+      if (step == 1) {
+        const isAllChecked = data.rules.every((rule) => rule.checked);
+        
+        const tweetFilled =
+          data.rules[1].tweetUrl.trim().length !== 0 ? true : false;
+
+
+   
+        if (isAllChecked && tweetFilled) {
+             console.log("PROJECT DETAILS", this.projectDetails);
+          try{
+
+            const url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
+            let headers = {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${this.authToken}`
+            };
+            
+            const body = {
+                tweetUrl: data.rules[1].tweetUrl,
+                userId:  localStorage.getItem("twitterId"),
+                tweetText:  this.projectDetails.twitterPostTextFormat,
+                needUserDetails : true,
+                checkIfFollowed: true,
+                sourceScreenName: this.projectDetails.twitterHandle
+            }
+
+            const res = await apiClinet.makeCall({method: "POST", body: body, header: headers, url})
+
+  
+
+            if(!res.data.user.followed.hasFollowed){
+              return   this.notifyErr(`Please Follow our twitter handle (@${res.data.user.followed.to})`)
+            }
+            if(res.data.hasTweetUrlVerified && res.data.user.followed.hasFollowed){
+              const twitterHandle = this.stepTwoData.formData.filter(x => x.id == "twitterHandle")[0]
+              twitterHandle.value = res.data.user.screen_name
+              twitterHandle.disabled = true
+
+              // console.log("ABLE TO GOTO NEXT PAGE")
+              gotoNextPage = true;
+              this.slideToNextPage(gotoNextPage);
+            }
+          }catch(e){
+            console.log(e);
+            if(e.error){
+             return  this.notifyErr(e.error)
+            }
+            console.log(e);
+            if(!e.hasTweetUrlVerified){
+              return this.notifyErr("Please check your tweet URL")
+            }
+            if(e.errors){
+              return alert(JSON.stringify(e.errors))
+            }
+          }
+
+
+         
+        } else {
+          this.notifyErr("Please follow all the rules and provide a tweet URL")
+        
+        }
+      } else if (step == 2) {
+        const isAllFilled = data.formData.every((input) => input.value.length);
+        const twitterHandle = data.formData.filter((x) =>
+          x.label.toLowerCase().includes("twitter")
+        )[0];
+        const telegramHandle = data.formData.filter((x) =>
+          x.label.toLowerCase().includes("telegram")
+        )[0];
+        const ethAddress = data.formData.filter((x) =>
+          x.id.toLowerCase().includes("eth")
+        )[0];
+        const ethAddressValidate = ethAddress.value.startsWith("0x");
+        let twitterHandleValidate = false;
+        let telegramHandleValidate = false;
+
+        if (
+          twitterHandle.value.match(/^[a-zA-Z0-9_]{1,15}/) !== null &&
+          twitterHandle.value.match(/^[a-zA-Z0-9_]{1,15}/)[0] ==
+            twitterHandle.value
+        ) {
+          data.formData[2].errMsg = "";
+          twitterHandleValidate = true;
+        } else {
+          data.formData[2].errMsg = "Please enter a valid username (without @)";
+          twitterHandleValidate = false;
+        }
+
+        if (
+          telegramHandle.value.match(/^[a-zA-Z0-9_]{5,15}/) !== null &&
+          telegramHandle.value.match(/^[a-zA-Z0-9_]{5,15}/)[0] ==
+            telegramHandle.value
+        ) {
+          data.formData[3].errMsg = "";
+          telegramHandleValidate = true;
+        } else {
+          data.formData[3].errMsg =
+            "Please Enter a valid Telegram Id (without @)";
+          telegramHandleValidate = false;
+        }
+
+        if (!ethAddressValidate) {
+          data.formData[4].errMsg = "Please enter a valid Eth Address";
+        } else {
+          data.formData[4].errMsg = "";
+        }
+
+        if (
+          isAllFilled &&
+          twitterHandleValidate &&
+          telegramHandleValidate &&
+          ethAddressValidate
+        ) {
+          gotoNextPage = true;
+          this.slideToNextPage(gotoNextPage);
+        } else {;
+          this.notifyErr("Please follow all the rules and provide a tweet URL");
+        }
+      } else if (step == 3) {
+        this.$refs.recaptcha.execute();
+      }
+    },
+
     setStep(step) {
       if (step >= 1 && step <= this.steps.length) this.step = step - 1;
     },
@@ -468,7 +600,7 @@ export default {
     },   
   },
 
-  mixins: [validationMixin, notificationMixin, fetchProjectDataMixin]
+  mixins: [notificationMixin, fetchProjectDataMixin]
 };
 </script>
 
