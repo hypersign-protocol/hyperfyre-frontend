@@ -44,7 +44,7 @@
 <script>
 
 
-import {login} from "../mixins/twitterLogin";
+import webAuth from "../mixins/twitterLogin";
 
 export default {
   name: "PanelPage",
@@ -60,11 +60,37 @@ export default {
         error: null
       };
     },
+
+    mounted(){
+      //  webAuth.parseHash((err, authResult) => {
+      //   console.log(err, authResult)
+      //   });
+      //   webAuth.popup.callback()  
+    },
+   
+     
+    
     methods: {
     
     loginClick(){
-        login();
+      webAuth.popup.authorize(
+      {
+        connection: "twitter", 
+        owp: true,    
+      },
+      function (err, authRes) {
+        console.log(authRes, err)
+        webAuth.client.userInfo(authRes.accessToken, function(err, user) {
+    console.log(err, user)
+  });
+      }
+    );
+
+
+         
     },
+
+    
 
     //   /** Authenticates the user using a popup window */
     //   async loginWithPopup(options, config) {
