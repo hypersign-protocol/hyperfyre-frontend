@@ -34,7 +34,6 @@ class APICalls {
         response.response.status >= 400 &&
         response.response.status < 500)
     ) {
-      console.log(response.response)
       return response.response.data || new Error("BAD REQUEST: Please check your request") 
     }
 
@@ -51,8 +50,8 @@ class APICalls {
     return response;
   }
 
-  makeCall({ method, url, body, header }) {
-    console.log(method, url, body, header)
+  makeCall({ method, url, body, header, isFile }) {
+    
     if (validateParameters(method, url, body, header).err) {
       return validateParameters(method, url, body, header);
     }
@@ -61,7 +60,8 @@ class APICalls {
     return new Promise((resolve, reject) => {
       if (method == "GET") {
         res = axios.get(url, {
-          headers: header
+          headers: header,
+          //  responseType: isFile ? 'blob': ""
         });
       }
 
