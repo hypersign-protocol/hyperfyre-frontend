@@ -15,18 +15,20 @@
           <span class="">{{ projectDetails.projectName }}</span>
           <!-- Token Sale  Registration -->
         </h4>
-        <p class="my-0">{{ step == 0 ? stepOneData.line1 : stepTwoData.line1 }}</p>
-        <p  class="my-0">{{ step == 0 ? stepOneData.line2 : stepTwoData.line2 }}</p>
+        <p class="my-0">
+          {{ step == 0 ? stepOneData.line1 : stepTwoData.line1 }}
+        </p>
+        <p class="my-0">
+          {{ step == 0 ? stepOneData.line2 : stepTwoData.line2 }}
+        </p>
       </div>
     </div>
 
-
-  <b-modal id="err-modal" title="BootstrapVue">
-    <p v-for="errors in serverErrors" :key="errors.param" class="my-4">{{errors.param}}:  {{errors.msg}}</p>
-
-    
-  </b-modal>
-   
+    <b-modal id="err-modal" title="BootstrapVue">
+      <p v-for="errors in serverErrors" :key="errors.param" class="my-4">
+        {{ errors.param }}: {{ errors.msg }}
+      </p>
+    </b-modal>
 
     <div v-if="showStepper" class="steps-container">
       <div
@@ -191,7 +193,6 @@
       </div>
     </div>
 
-
     <vue-recaptcha
       v-if="step + 1 == 3"
       ref="recaptcha"
@@ -211,7 +212,7 @@ import "vue-loading-overlay/dist/vue-loading.css";
 import apiCall from "../../mixins/apiClientMixin"
 import notificationMixin from "../../mixins/notificationMixins.js";
 import fetchProjectDataMixin from "../../mixins/fetchProjectDataMixin";
-import apiClinet  from "../../mixins/apiClientMixin";
+import apiClinet from "../../mixins/apiClientMixin";
 
 export default {
   name: "DStepper",
@@ -250,41 +251,37 @@ export default {
       fullPage: true,
       projectDetails: {},
       projectId: "",
-      serverErrors: []
+      serverErrors: [],
     };
   },
 
   created() {
-    
     if (
       !this.$route.query.projectId ||
       this.$route.query.projectId == "undefined"
     ) {
       this.showStepper = false;
-      this.errorMessage = "Sorry, no project found :( !"
+      this.errorMessage = "Sorry, no project found :( !";
       return;
     }
 
     this.projectId = this.$route.query.projectId;
     const userDid = JSON.parse(localStorage.getItem("user")).id;
+
     
     // this.checkIfAlreadyFilled(userDid);
 
-    if(!this.$route.params.projectDetails){
-      this.fetchProjectData({isAuthTokenAvailable: true});
+    if (!this.$route.params.projectDetails) {
+      this.fetchProjectData({ isAuthTokenAvailable: true });
       return;
     } 
   
-
-    this.projectDetails = this.$route.params.projectDetails
+    this.projectDetails = this.$route.params.projectDetails;
     // this.formatTweet()
   },
   mounted() {
-
     this.data =
       this.step == 0 || this.step == 0 ? this.stepOneData : this.stepTwoData;
-
-   
   },
 
   computed: {
@@ -502,10 +499,7 @@ export default {
       //if (!status) this.nextStepAction();
     },
 
-  
     async saveInvestor(data, recaptchaToken) {
-
-
       try {
         let investor = {};
         const did = JSON.parse(localStorage.getItem("user")).id;
@@ -521,13 +515,13 @@ export default {
         investor.did = did;
 
         investor.tweetUrl = this.stepOneData.rules[1].tweetUrl;
-        investor.hasJoinedTGgroup = true
-        investor.hasTwitted = true
+        investor.hasJoinedTGgroup = true;
+        investor.hasTwitted = true;
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${recaptchaToken}`;
         let headers = {
           "Content-Type": "application/json",
-           "Authorization": `Bearer ${this.authToken}`
+          Authorization: `Bearer ${this.authToken}`,
         };
 
         console.log(investor);
@@ -544,34 +538,31 @@ export default {
         this.notifySuccess("Successfully Signed Up for whitelisting");
       } catch (err) {
         this.isLoading = false;
-        if(typeof err.errors == "object"){
+        if (typeof err.errors == "object") {
           this.serverErrors = err.errors;
-          this.$bvModal.show("err-modal")
+          this.$bvModal.show("err-modal");
         }
         this.notifyErr(err);
-      
       } finally {
-        
         this.isLoading = false;
         // this.clear();
       }
     },
 
     async checkIfAlreadyFilled(userDid) {
-  
       try {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?did=${userDid}&projectId=${this.projectId}`;
         let headers = {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.authToken}`
+          Authorization: `Bearer ${this.authToken}`,
         };
 
         const res = await apiClinet.makeCall({
           url,
           header: headers,
-          method: "GET"
-        })
-      
+          method: "GET",
+        });
+
         if (res.data.length > 0) {
           this.step = 3;
         }
@@ -597,7 +588,7 @@ export default {
       self.status = "submitting";
       self.$refs.recaptcha.reset();
       this.saveInvestor(this.stepTwoData.formData, recaptchaToken);
-    },   
+    },
   },
 
   mixins: [notificationMixin, fetchProjectDataMixin]
@@ -680,14 +671,13 @@ export default {
 
 .header,
 .footer {
-  background-color:#494949;
+  background-color: #494949;
 }
 .header {
   height: 210px;
 }
 .footer {
   padding: 10px 30px;
-  
 }
 .header .logo {
   border-bottom-right-radius: 20px;
@@ -739,45 +729,37 @@ div.rule {
   font-size: 16px;
 }
 
-
-
-
-
 @media screen and (max-width: 768px) {
-  .header{
+  .header {
     font-size: 14px;
     height: auto;
   }
-  .steps-container{
+  .steps-container {
     width: 80%;
     min-height: 80vh;
   }
-  .social{
-  margin-left: auto;
-}
- 
+  .social {
+    margin-left: auto;
+  }
 }
 @media screen and (max-width: 516px) {
-   .steps-indicator{
-     top: 30px;
-     flex-direction: column-reverse;
-   }
+  .steps-indicator {
+    top: 30px;
+    flex-direction: column-reverse;
+  }
 
-.steps-indicator .heading{
-   margin-top: 10px !important;
+  .steps-indicator .heading {
+    margin-top: 10px !important;
   }
   div.form {
     font-size: 12px;
   }
-  
 }
 @media screen and (min-height: 1070px) {
   .footer {
-  
-   position: absolute;
-  width: 100%;
-  bottom: 0;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
   }
 }
-
 </style>
