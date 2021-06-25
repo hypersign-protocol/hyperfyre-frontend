@@ -340,6 +340,17 @@ export default {
             if(!res.data.user.followed.hasFollowed){
               return   this.notifyErr(`Please Follow our twitter handle (@${res.data.user.followed.to})`)
             }
+
+            if(!localStorage.getItem("telegramId")){
+              return this.notifyErr("Please authenticate Telegram")
+            }
+
+             const TGHandle = this.stepTwoData.formData.filter(x => x.id == "telegramHandle")[0]
+             TGHandle.value = localStorage.getItem("telegramId")
+             TGHandle.disabled = true
+
+
+
             if(res.data.hasTweetUrlVerified && res.data.user.followed.hasFollowed){
               const twitterHandle = this.stepTwoData.formData.filter(x => x.id == "twitterHandle")[0]
               twitterHandle.value = res.data.user.screen_name
@@ -354,7 +365,6 @@ export default {
             if(e.error){
              return  this.notifyErr(e.error)
             }
-            console.log(e);
             if(!e.hasTweetUrlVerified){
               return this.notifyErr("Please check your tweet URL")
             }
