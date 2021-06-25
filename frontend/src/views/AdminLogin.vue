@@ -267,7 +267,7 @@ export default {
           } else {
             console.log(_this.$router);
             window.location.href =
-              window.location.origin + "/studio/admin/dashboard";
+              window.location.origin + "/admin/dashboard";
             // _this.$router.push("dashboard");
           }
         }

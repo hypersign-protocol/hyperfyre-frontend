@@ -181,10 +181,10 @@ export default {
         this.projects = json;
         this.projects.map((x) => {
           x["whitelisting_link"] =
-            window.location.origin + "/studio/form?projectId=" + x._id;
+            window.location.origin + "/form?projectId=" + x._id;
           x["investors_link"] =
             window.location.origin +
-            "/studio/admin/investors?projectId=" +
+            "/admin/investors?projectId=" +
             x._id;
         });
         this.projectCount = this.projects.length;

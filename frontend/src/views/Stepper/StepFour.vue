@@ -30,7 +30,7 @@ export default {
       localStorage.removeItem("user");
       localStorage.removeItem("credentials");
       localStorage.removeItem("userData");
-      this.$router.push("/studio/login");
+      this.$router.push("/login");
     },
   },
 };

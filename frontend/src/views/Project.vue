@@ -300,7 +300,7 @@ i {
                     title="Investor List"
                   >
                     <i class="fas fa-users"></i
-                    ><a :href="`/studio/admin/investors?projectId=${project._id}`"
+                    ><a :href="`/admin/investors?projectId=${project._id}`"
                       >Investor List</a
                     >
                   </li>
@@ -439,10 +439,10 @@ export default {
         this.projects = json;
         this.projects.map((x) => {
           x["whitelisting_link"] =
-            window.location.origin + "/studio/form?projectId=" + x._id;
+            window.location.origin + "/form?projectId=" + x._id;
           x["investors_link"] =
             window.location.origin +
-            "/studio/admin/investors?projectId=" +
+            "/admin/investors?projectId=" +
             x._id;
         });
         this.notifySuccess("No. of projects fetched " + this.projects.length);
