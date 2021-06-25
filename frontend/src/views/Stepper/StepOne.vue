@@ -319,6 +319,7 @@ a{
 <script>
 import webAuth from '../../mixins/twitterLogin';
 import notificationMixins from '../../mixins/notificationMixins';
+import config from "../../config";
 // This components will have the content for each stepper step.
 
 export default {
@@ -343,7 +344,8 @@ export default {
     };
   },
   mounted(){
-  
+
+ 
     if(localStorage.getItem("telegramId")){
       this.telegramAuthDone = true
     }
@@ -384,8 +386,9 @@ export default {
       console.log(urlToRedirect);
         if(!localStorage.getItem("telegamId")){
 
+
           window.Telegram.Login.auth(
-            { bot_id: '1873399686', request_access: true },
+            { bot_id: config.telegramBotId, request_access: true },
             (data) => {
 
               if (!data) {
