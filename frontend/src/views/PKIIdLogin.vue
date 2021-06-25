@@ -243,7 +243,7 @@ h5 span {
     <div class="cmp-logo">
       <div>
         <img
-         src="https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png"
+         :src="projectDetails.logoUrl || 'https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png'"
          
           style="max-width: 150px;"
         />
@@ -254,8 +254,8 @@ h5 span {
       class="col col-lg-8 col-md-12 col-sm-12 d-flex justify-content-center align-items-center border border-1 bg-dark shadow text-left text-white login-inst-container"
     >
       <div>
-          <h3>Whitelist for Hypersign Data Defenders Program</h3>
-        <!-- <h3>Whitelist for {{this.projectDetails.projectName}}</h3> -->
+          <!-- <h3>Whitelist for Hypersign Data Defenders Program</h3> -->
+        <h3>Whitelist for {{projectDetails.projectName}}</h3>
         <p class="mt-4">Instructions</p>
         <ol class="px-3">          
           <li>Login with the Hypersign</li>
@@ -469,10 +469,12 @@ export default {
     };
 
     this.fetchProjectData({isAuthTokenAvailable: false});
+
   },
   mounted() {
     this.clean();
   },
+
   methods: {
     openWallet() {
       if (this.value != "") {
