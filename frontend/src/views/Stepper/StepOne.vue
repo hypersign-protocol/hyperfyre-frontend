@@ -248,23 +248,32 @@ a{
                   >
             </div>
 
+            
 
             <div class="ml-2 links" v-if="rule.id == 3" for="checkbox-3">
-              <a
-                :href="`https://t.me/${projectDetails.telegramHandle}`"
-                target="_blank"
-                title="Join our telegram channel for latest updates"
-                ><i></i> @{{ projectDetails.telegramHandle }}</a
-              >
+              <div class="d-flex align-items-center">
+                <a
+                class="links"
+                @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramHandle}`, idx)"
+            
+                  target="_blank"
+                  title="Join our telegram channel for latest updates"
+                  ><i></i> @{{ projectDetails.telegramHandle }}channel </a
+                >
+               
+              </div>
+              
             </div>
 
 
              <div class="ml-2 links" v-if="rule.id == 4" for="checkbox-4">
               <a
-                href="https://t.me/hypersign_ann"
+              class="links"
+                @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramHandle}`, idx)"
                 target="_blank"
                 ><i></i>@channel</a
               >
+             
             </div>
           </div>
 
@@ -309,6 +318,7 @@ a{
 
 <script>
 import webAuth from '../../mixins/twitterLogin';
+import notificationMixins from '../../mixins/notificationMixins';
 // This components will have the content for each stepper step.
 
 export default {
@@ -329,19 +339,24 @@ export default {
     return {
       showInput: true,
       urlToRedirectTo: "",
+      telegramAuthDone: false,
     };
   },
   mounted(){
-    console.log(this.stepOneData)
+  
+    if(localStorage.getItem("telegramId")){
+      this.telegramAuthDone = true
+    }
   },
 
   methods: {
+
     handleInputShow() {
       this.showInput = true;
     },
 
     handleTwitterLogin(urlToRedirect, idx){
-   
+  
       
       if(!localStorage.getItem("twitterId")){
           webAuth.popup.authorize(
@@ -363,7 +378,33 @@ export default {
         this.stepOneData.rules[idx].checked = true;
       }
      
+    },
+
+    handleTelegramLogin(urlToRedirect, idx){
+      console.log(urlToRedirect);
+        if(!localStorage.getItem("telegamId")){
+
+          window.Telegram.Login.auth(
+            { bot_id: '1873399686', request_access: true },
+            (data) => {
+
+              if (!data) {
+                this.notifyErr("Authentication Failed! Try again")
+              }
+              console.log(data)
+
+              // this.stepOneData.rules[idx].checked = true;
+              //   localStorage.setItem("telegramId", data.username);              
+              //   window.open(urlToRedirect, "_blank");
+            }
+          );
+
+      } else{
+        window.open(urlToRedirect, "_blank");
+        this.stepOneData.rules[idx].checked = true;
+      }
     }
   },
+  mixins: [notificationMixins]
 };
 </script>
