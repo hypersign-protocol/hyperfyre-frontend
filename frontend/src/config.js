@@ -10,7 +10,10 @@ const config = {
     recaptchaSiteKey: process.env.VUE_APP_RECAPTCHA_SITE_KEY,
     webWalletAddress: process.env.VUE_APP_WEBWALLET_URL,
     mobileWalletAddress: process.env.VUE_APP_MOBILEWALLET_URL,
-    websocketUrl: process.env.VUE_APP_SERVER_WEBSOCKET_URL
+    websocketUrl: process.env.VUE_APP_SERVER_WEBSOCKET_URL,
+    auth0Domain: process.env.VUE_APP_AUTH0_DOMAIN,
+    auth0ClinetId: process.env.VUE_APP_AUTH0_CLIENT_ID,
+    telegramBotId: process.env.VUE_APP_TELEGRAM_BOT_ID
 }
 
 
