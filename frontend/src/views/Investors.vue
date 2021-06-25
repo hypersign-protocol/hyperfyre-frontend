@@ -117,12 +117,13 @@ label {
       <div class="d-flex justify-content-between col-md-12">
         <div>
           
-          <select @change="fetchProjectInvestors">
+          <select  @change="fetchProjectInvestors">
           <option value="">Select Project</option>
           <option
             v-for="project in projects"
             :key="project._id"
             :value="project._id"
+            :selected="project._id == selectedProjectId ? true : false"
             >{{ project.projectName }}</option
           >
         </select >
@@ -189,6 +190,7 @@ export default {
 
   data() {
     return {
+      selectedProjectId: "",
       recordsForLottery: 0,
       issuedImgLink: issuedImgLink,
       cancelToken: undefined,
@@ -417,9 +419,18 @@ export default {
     };
   },
   async mounted() {
+
+  if(this.$route.query.projectId){
+    console.log("HAII");
+    this.selectedProjectId = this.$route.query.projectId;
+    this.investor.projectId = this.$route.query.projectId
+    this.fetchProjectData(0, this.perPage)
+  }
+
     const userProjectStr = localStorage.getItem("userProjects");
     const userProjectsData = JSON.parse(userProjectStr);
-    this.projects = userProjectsData.projects;
+    console.log(userProjectsData)
+    this.projects = userProjectsData.projects;  
   },
 
   beforeRouteEnter(to, from, next) {
@@ -672,6 +683,8 @@ export default {
         this.notifySuccess(
           "Project is fetched. ProjectName " + json.projectName
         );
+
+
       } catch (e) {
         this.notifyErr(e.message);
       } finally {

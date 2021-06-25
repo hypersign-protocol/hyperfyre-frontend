@@ -23,7 +23,6 @@
   float: right;
 }
 .card-header {
-  background: aliceblue;
   padding: 0px;
 }
 .sm-tiles {
@@ -66,16 +65,8 @@ i {
       :is-full-page="fullPage"
     ></loading>
 
-    <div class="row">
-      <div class="col-md-12" style="text-align: left">
-        <div class="card">
-          <div class="card-header">
-            <b-button v-b-toggle.collapse-1 variant="link"
-              ><i class="fas fa-plus"></i> CREATE OR EDIT A PROJECT</b-button
-            >
-          </div>
-          <b-collapse id="collapse-1" class="mt-2">
-            <div class="card-body">
+     <b-modal  hide-footer size="lg"  id="create-project-modal" title="Create a Project">
+      <div class="card-body">
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
@@ -198,6 +189,16 @@ i {
                 </div>
               </div>
             </div>
+    </b-modal>
+
+    <div class="row">
+      <div class="col-md-12" style="text-align: left">
+        <div class="">
+          <div class="text-right">
+            <button v-b-modal.create-project-modal   class="btn btn-primary ">Create <i class="fas fa-plus text-white"></i> </button>
+          </div>
+          <b-collapse id="collapse-1" class="mt-2">
+          
           </b-collapse>
         </div>
       </div>
@@ -299,7 +300,7 @@ i {
                     title="Investor List"
                   >
                     <i class="fas fa-users"></i
-                    ><a :href="`/studio/admin/investors?${project._id}`"
+                    ><a :href="`/studio/admin/investors?projectId=${project._id}`"
                       >Investor List</a
                     >
                   </li>
@@ -340,10 +341,11 @@ i {
               data-toggle="tooltip"
               data-placement="bottom"
               title="Edit this project"
-              ><i class="fas fa-pencil-alt" @click="editProject(project)"></i
+              ><i class="fas fa-pencil-alt" v-b-modal.create-project-modal  @click="editProject(project)"></i
             ></span>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -476,7 +478,7 @@ export default {
           method = "PUT";
         }
 
-       
+
 
         const resp = await fetch(url, {
           method,
@@ -490,12 +492,24 @@ export default {
           return this.notifyErr(resp.statusText);
         }
         const json = await resp.json();
-        this.whitelistingLink = `${window.location.origin}/studio/form?projectId=${json._id}`;
+        this.whitelistingLink = `${window.location.origin}/form?projectId=${json._id}`;
         setTimeout(() => {
           this.whitelistingLink = "";
         }, 10000);
         this.notifySuccess("Project is saved. Id = " + json._id);
+      
+        console.log("PROEJCT", json)
+        const userProjects = JSON.parse(localStorage.getItem("userProjects"));
+        userProjects.count += 1
+        userProjects.projects.push(json)
+        localStorage.setItem("userProjects", JSON.stringify(userProjects))
         await this.fetchProjects();
+        this.$bvModal.hide("create-project-modal");
+          
+      
+
+       
+       
       } catch (e) {
         console.log("ERROR", e);
         this.notifyErr(e.message);

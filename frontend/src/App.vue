@@ -210,7 +210,7 @@ export default {
       authRoutes: ["register", "PKIIdLogin"],
       showNavbar: true,
 
-      menu: [
+        menu: [
         {
           href: "/studio/admin/dashboard",
           title: "Dashboard",
@@ -236,15 +236,18 @@ export default {
   },
 
   mounted() {
-    console.log("MOUNTED");
-    this.showNavbar =
+ 
+  },
+
+
+updated(){
+     this.showNavbar =
       window.location.pathname.includes("investors") ||
       window.location.pathname.includes("project") ||
       window.location.pathname.includes("dashboard")
         ? true
-        : false;
-  },
-
+        : false;  
+},
   methods: {
     goToNextPage(route) {
       const r = this.menu.find((x) => x.name === route);
