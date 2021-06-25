@@ -75,6 +75,9 @@ label {
   background-color: #007bff;
   margin: 1px 0;
 }
+ .modal-text{
+   font-size: 12px;
+ }
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -85,30 +88,61 @@ label {
     ></loading>
 
 
+  <b-modal  hide-footer id="modal-1" title="Lottery!">
+    <p class="my-4 bg-info border rounded-lg p-2 text-white modal-text">Lottery is
+        process of randomly selecting records
+        Cless than total records). clicking
+        on "Execute button', the
+        lottery process begins, which may take time and screen might
+        freeze. Once done you will set selected records in excel sheet.</p>
+
+        <div class="d-flex mx-auto  justify-content-between px-4">
+          <div class="bold">Total Records</div>
+          <div class="bold">{{project.investors.length}}</div>
+        </div>
+        <div class="d-flex mx-auto  justify-content-between px-4 mt-4">
+          <div class="bold">Enter number of records to get selected for lottery</div>
+          <div class="bold">
+             <input v-model="recordsForLottery" type="number" class="form-control" placeholder="No. of records" />
+          </div>
+        </div>
+        
+        <div class="mt-5 text-center">
+          <button @click="handleLottery" type="button" class="btn btn-primary">Execute</button>
+        </div>
+  </b-modal>
+
+
     <div class="row " style="margin-top: 2%">
       <div class="d-flex justify-content-between col-md-12">
         <div>
           
-          <select @change="fetchProjectInvestors">
+          <select  @change="fetchProjectInvestors">
           <option value="">Select Project</option>
           <option
             v-for="project in projects"
             :key="project._id"
             :value="project._id"
+            :selected="project._id == selectedProjectId ? true : false"
             >{{ project.projectName }}</option
           >
         </select >
         </div>
-        <div>
-          <b-form-input
-            @input.native="handleTableSearch"
-            v-model="tableSearch"
-            placeholder="Search"
-            type="search"
-          ></b-form-input>
-        </div>
-        <div>
-          <button class="btn btn-primary btn-sm">Export</button>
+        <div class="d-flex ml-auto align-items-center">
+          <div>
+            <b-form-input
+              @input.native="handleTableSearch"
+              v-model="tableSearch"
+              placeholder="Search"
+              type="search"
+            ></b-form-input>
+          </div>
+          <div class="mx-3">
+            <button @click="handleExport" :disabled='project.investors.length ? false : true' class="btn btn-primary btn-sm">Export</button>
+          </div>
+          <div>
+            <button :disabled='project.investors.length ? false : true' v-b-modal.modal-1 class="btn btn-primary btn-sm">Lottery</button>
+          </div>
         </div>
       </div>
     </div>
@@ -145,7 +179,9 @@ import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import Paginate from "vuejs-paginate";
-
+import notificationMixins from '../mixins/notificationMixins';
+import apiClientMixin from '../mixins/apiClientMixin';
+import FileDownload from "js-file-download";
 const issuedImgLink = require("../assets/issued-icon.png");
 
 export default {
@@ -154,6 +190,8 @@ export default {
 
   data() {
     return {
+      selectedProjectId: "",
+      recordsForLottery: 0,
       issuedImgLink: issuedImgLink,
       cancelToken: undefined,
       sortOption: {
@@ -381,9 +419,18 @@ export default {
     };
   },
   async mounted() {
+
+  if(this.$route.query.projectId){
+    console.log("HAII");
+    this.selectedProjectId = this.$route.query.projectId;
+    this.investor.projectId = this.$route.query.projectId
+    this.fetchProjectData(0, this.perPage)
+  }
+
     const userProjectStr = localStorage.getItem("userProjects");
     const userProjectsData = JSON.parse(userProjectStr);
-    this.projects = userProjectsData.projects;
+    console.log(userProjectsData)
+    this.projects = userProjectsData.projects;  
   },
 
   beforeRouteEnter(to, from, next) {
@@ -392,6 +439,42 @@ export default {
     });
   },
   methods: {
+    async handleExport(){
+      try{
+       const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.project._id}?fetchInvestors=true&isExport=true`;
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+
+        const res = await apiClientMixin.makeCall({method: "GET", url, header: headers})
+        FileDownload(res.data, "Investor_Data.xls");
+      }catch(e){
+        console.log(e);
+        this.notifyErr(e)
+      }
+    },
+    async handleLottery(){
+      if(this.recordsForLottery > this.project.investors.length || this.recordsForLottery <= 0){
+        return this.notifyErr("No of records must be less or equal to total")
+      }
+      try{
+          let url = `https://stage.hypermine.in/whitelist/api/v1/project/${this.project._id}/lottery?limitRecord=${this.recordsForLottery}`
+
+          const headers = {
+
+            "Authorization": `Bearer ${this.authToken}`,
+          };
+
+          const res = await apiClientMixin.makeCall({method:"GET", header: headers, url}) 
+          FileDownload(res.data,  "Lottery.xls")
+
+        }catch(e){
+          console.log(e);
+          this.notifyErr(e)
+        }
+      
+    },
     sortChange(params) {
       this.project.investors.sort((a, b) => {
         if (params.name) {
@@ -495,26 +578,6 @@ export default {
       this.fetchProjectData(skip, this.perPage);
     },
 
-    notifySuccess(msg) {
-      this.isLoading = false;
-      this.$notify({
-        group: "foo",
-        title: "Information",
-        type: "success",
-        text: msg,
-      });
-    },
-
-    notifyErr(msg) {
-      this.isLoading = false;
-      this.$notify({
-        group: "foo",
-        title: "Error",
-        type: "error",
-        text: msg,
-      });
-    },
-
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
     },
@@ -616,11 +679,12 @@ export default {
         this.project.toDate = this.formateDate(this.project.toDate);
         this.projectFetched = true;
 
-        console.log(this.project);
-
+       
         this.notifySuccess(
           "Project is fetched. ProjectName " + json.projectName
         );
+
+
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
@@ -674,5 +738,7 @@ export default {
       };
     },
   },
+
+  mixins: [notificationMixins]
 };
 </script>

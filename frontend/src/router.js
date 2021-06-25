@@ -10,23 +10,29 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      redirect: "/studio/login",
+      redirect: "/login",
     },
+    // {
+    //   path: "/login",
+    //   redirect: "/login",
+    // },
+    // {
+    //   path: "/studio",
+    //   redirect: "/login",
+    // },
+    
     {
       path: "/login",
-      redirect: "/studio/login",
-    },
-    {
-      path: "/studio",
-      redirect: "/studio/login",
-    },
-    {
-      path: "/studio/login",
       name: "PKIIdLogin",
       component: () => import(/* webpackChunkName: "investorLogin" */ './views/PKIIdLogin.vue'),
     },
     {
-      path: "/studio/form",
+      path: "/connectwithtwitter",
+      name: "ConnectWithTwitter",
+      component: () => import(/* webpackChunkName: "investorLogin" */ './views/connectWIthTwitter.vue'),
+    },
+    {
+      path: "/form",
       name: "investor",
       component: () => import(/* webpackChunkName: "investor" */ './views/Investor.vue') ,
       meta: {
@@ -34,16 +40,16 @@ const router = new Router({
       },
     },
     {
-      path: "/studio/admin",
-      redirect: "/studio/admin/login",
+      path: "/admin",
+      redirect: "/admin/login",
     },
     {
-      path: "/studio/admin/login",
+      path: "/admin/login",
       name: "AdminLogin",
       component: () => import(/* webpackChunkName: "adminLogin" */ './views/AdminLogin.vue'),
     },
     {
-      path: "/studio/admin/dashboard",
+      path: "/admin/dashboard",
       name: "Dashboard",
       component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue') ,
       meta: {
@@ -52,7 +58,7 @@ const router = new Router({
       },
     },
     {
-      path: "/studio/admin/investors",
+      path: "/admin/investors",
       name: "investors",
       component: () => import(/* webpackChunkName: "investors" */ './views/Investors.vue') ,
       meta: {
@@ -61,7 +67,7 @@ const router = new Router({
       },
     },
     {
-      path: "/studio/admin/project",
+      path: "/admin/project",
       name: "project",
       component: () => import(/* webpackChunkName: "project" */ './views/Project.vue') ,
       meta: {
@@ -89,7 +95,7 @@ router.beforeEach((to, from, next) => {
         .then((json) => {
           if (json.status == 403) {
             next({
-              path: to.meta.admin ? "/studio/admin/login" : "/studio/login",
+              path: to.meta.admin ? "/admin/login" : "/login",
               params: { nextUrl: to.fullPath },
             });
           } else {
@@ -99,7 +105,7 @@ router.beforeEach((to, from, next) => {
         })
         .catch((e) => {
           next({
-            path: to.meta.admin ? "/studio/admin/login" : "/studio/login",
+            path: to.meta.admin ? "/admin/login" : "/login",
             params: { nextUrl: to.fullPath },
           });
         });
@@ -107,7 +113,7 @@ router.beforeEach((to, from, next) => {
       console.log("No auth token");
       localStorage.setItem("projectId", to.query["projectId"]);
       next({
-        path: to.meta.admin ? "/studio/admin/login" : "/studio/login",
+        path: to.meta.admin ? "/admin/login" : "/login",
         params: { nextUrl: to.fullPath },
       });
     }

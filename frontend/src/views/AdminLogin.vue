@@ -69,6 +69,15 @@ h5 span {
   text-transform: uppercase;
 }
 
+.btn-hypersign{
+  background-color: #494949;
+  border-color: #494949;
+  padding: 7px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  min-width: 300px;
+}
+
+
 .loginContent{
   height: 100%;
 width: 22%;
@@ -133,7 +142,7 @@ border-top: 2px solid rgb(120, 120, 243);
                 <h5><span>Or</span></h5>
               
 
-              <p class="text-center">
+              <!-- <p class="text-center">
                 <button
                   type="button"
                   class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill"
@@ -148,8 +157,22 @@ border-top: 2px solid rgb(120, 120, 243);
                   </div>
                   <div class="btn-text">USE Web Wallet</div>
                 </button>
-              </p>
+              </p> -->
+
+
+            <div class="mb-2 ">
+              <a v-if="this.value != ''" class="btn btn-hypersign text-white " href="#"                
+                @click.prevent="openWallet()" >
+                <img style="height:40px; float: left;" 
+                :src="require('../assets/hypersignSmallLogo.png')"
+                class="ml-0 rounded rounded-circle  left"/>
+                <div style="font-size: smaller; margin-top: 10px;">USE WEB WALLET</div>
+              </a>  
+            </div>
+
             </form>
+
+
           </div>
       </b-card>
     
@@ -162,6 +185,8 @@ import VueQr from "vue-qr";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import url from "url";
+import notificationMixins from '../mixins/notificationMixins';
+import localStorageMixin from '../mixins/localStorageMixin';
 
 export default {
   name: "Login",
@@ -242,7 +267,7 @@ export default {
           } else {
             console.log(_this.$router);
             window.location.href =
-              window.location.origin + "/studio/admin/dashboard";
+              window.location.origin + "/admin/dashboard";
             // _this.$router.push("dashboard");
           }
         }
@@ -268,31 +293,11 @@ export default {
     push(path) {
       this.$router.push(path);
     },
-    clean() {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("user");
-      localStorage.removeItem("credentials");
-      localStorage.removeItem("userData");
-    },
-    notifySuccess(msg) {
-      this.$notify({
-        group: "foo",
-        title: "Information",
-        type: "success",
-        text: msg,
-      });
-    },
-    notifyErr(msg) {
-      this.$notify({
-        group: "foo",
-        title: "Error",
-        type: "error",
-        text: msg,
-      });
-    },
+  
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
     },
   },
+  mixins: [notificationMixins, localStorageMixin]
 };
 </script>

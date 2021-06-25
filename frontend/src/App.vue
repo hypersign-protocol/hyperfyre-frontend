@@ -208,26 +208,26 @@ export default {
     return {
       isSidebarCollapsed: false,
       authRoutes: ["register", "PKIIdLogin"],
-      showNavbar: true,
+      showNavbar: false,
 
-      menu: [
+        menu: [
         {
-          href: "/studio/admin/dashboard",
+          href: "/admin/dashboard",
           title: "Dashboard",
           icon: "fas fa-tachometer-alt",
         },
         {
-          href: "/studio/admin/project",
+          href: "/admin/project",
           title: "Projects",
           icon: "fas fa-plane-departure",
         },
         {
-          href: "/studio/admin/investors",
+          href: "/admin/investors",
           title: "Investors",
           icon: "fas fa-users",
         },
         {
-          href: "/studio/admin/login",
+          href: "/admin/login",
           title: "Logout",
           icon: "fas fa-sign-out-alt",
         },
@@ -236,15 +236,18 @@ export default {
   },
 
   mounted() {
-    console.log("MOUNTED");
-    this.showNavbar =
-      window.location.pathname.includes("investors") ||
-      window.location.pathname.includes("project") ||
-      window.location.pathname.includes("dashboard")
-        ? true
-        : false;
+ 
   },
 
+
+updated(){
+     this.showNavbar =
+      window.location.pathname.includes("/admin/investors") ||
+      window.location.pathname.includes("/admin/project") ||
+      window.location.pathname.includes("/admin/dashboard")
+        ? true
+        : false;  
+},
   methods: {
     goToNextPage(route) {
       const r = this.menu.find((x) => x.name === route);

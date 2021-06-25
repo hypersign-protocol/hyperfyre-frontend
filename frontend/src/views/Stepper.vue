@@ -98,6 +98,7 @@ import StepTwo from "./Stepper/StepTwo.vue";
 import DStepper from "./Stepper/DStepper.vue";
 import StepThree from "./Stepper/StepThree.vue";
 import StepFour from "./Stepper/StepFour.vue";
+
 const avatarLabel = require("../assets/avatarUploadLabel.png");
 
 export default {
@@ -185,10 +186,6 @@ export default {
           },
         ],
 
-        handleImageChange: (e) => {
-          const file = e.target.files[0];
-          this.stepTwoData.imgLink = URL.createObjectURL(file);
-        },
       },
 
       steps: [
@@ -216,6 +213,7 @@ export default {
     };
   },
 
+ 
   mounted() {
     const usrStr =
       localStorage.getItem("user") ||

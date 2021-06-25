@@ -14,7 +14,7 @@ if (!fs.existsSync(log_dir)) fs.mkdirSync(log_dir);
 // LOGGING
 const log_path = path.resolve(
   __dirname,
-  process.env.LOG_FILEPATH || "ssi-infra.log"
+  process.env.LOG_FILEPATH || "whitelist-backend.log"
 );
 const logger = log.createSimpleLogger({
   logFilePath: log_path,
@@ -41,9 +41,9 @@ if (dbConnUrl) {
     { useNewUrlParser: true, useUnifiedTopology: true },
     (err) => {
       if (err) {
-        console.error("Error: could not connect to mongo database");
+        logger.error("Error: could not connect to mongo database");
       } else {
-        console.log("Connected to mongo database");
+        logger.info("Connected to mongo database");
       }
     }
   );
@@ -80,6 +80,13 @@ const hsAuthServerEp = process.env.HS_AUTH_SERVER_URL || "https://ssi.hypermine.
 
 
 const whitelist = process.env.WHITELISTED_CORS || ['*'];
+
+const tweeterConfig = {
+  consumer_key: process.env.TWEETER_CONSUMER_KEY || "q1hSjffihVvO025rGNT8PNch5",
+  consumer_secret: process.env.TWEETER_CONSUMER_SECRET || "1L8OAB9J4FXPtF2TvAYr7AMJG6ioLFB0gCfK3szgR9p7VPbn3B",
+  access_token: process.env.TWEETER_ACCESS_TOKEN || "910185786330423296-w15MIwdFQoHjAHPzriQsiolUWyvbsUL",
+  access_token_secret: process.env.TWEETER_ACCESS_TOKEN_SECRET || "uuMl1yj4KIu1OeF7SHwoseLRahwa9ycXTunx7GOXlLw8f"
+}
 export {
   port,
   host,
@@ -95,5 +102,6 @@ export {
   recaptchaUri,
   httpsEnabled,
   whitelist,
-  hsAuthServerEp
+  hsAuthServerEp,
+  tweeterConfig
 };
