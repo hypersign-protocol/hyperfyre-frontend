@@ -398,11 +398,10 @@ export default {
               if (!data) {
                 this.notifyErr("Authentication Failed! Try again")
               }
-              console.log(data)
 
-              // this.stepOneData.rules[idx].checked = true;
-              //   localStorage.setItem("telegramId", data.username);              
-              //   window.open(urlToRedirect, "_blank");
+              this.stepOneData.rules[idx].checked = true;
+                localStorage.setItem("telegramId", data.username);              
+                window.open(urlToRedirect, "_blank");
             }
           );
 
