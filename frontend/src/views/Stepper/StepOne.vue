@@ -367,12 +367,16 @@ export default {
               owp: true,   
             },
              (err, authRes) => {   
-              webAuth.client.userInfo(authRes.accessToken, (err, user) =>  {
+               console.log(err);
+               if(!err){
+                  webAuth.client.userInfo(authRes.accessToken, (err, user) =>  {
                 const twitterId = user["https://hasura.io/jwt/claims"]["x-hasura-user-id"].split("|")[1]
                 this.stepOneData.rules[idx].checked = true;
                 localStorage.setItem("twitterId", twitterId);              
                 window.open(urlToRedirect, "_blank");
               });
+               }
+              
             }
           );
       } else{

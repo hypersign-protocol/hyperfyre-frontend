@@ -195,7 +195,7 @@ i {
       <div class="col-md-12" style="text-align: left">
         <div class="">
           <div class="text-right">
-            <button v-b-modal.create-project-modal   class="btn btn-primary ">Create <i class="fas fa-plus text-white"></i> </button>
+            <button  @click="openCreateModal"  class="btn btn-primary ">Create <i class="fas fa-plus text-white"></i> </button>
           </div>
           <b-collapse id="collapse-1" class="mt-2">
           
@@ -412,6 +412,10 @@ export default {
     });
   },
   methods: {
+    openCreateModal() {
+      this.project = {}
+      this.$bvModal.show("create-project-modal")
+    },
     changeProjectStatus (event) {
       this.project.projectStatus = event.target.options[event.target.options.selectedIndex].value === "false" ? false : true ;
     },
