@@ -52,7 +52,7 @@ class APICalls {
     return response;
   }
 
-  makeCall({ method, url, body, header }) {
+  makeCall({ method, url, body, header, isFile }) {
     
     if (validateParameters(method, url, body, header).err) {
       return validateParameters(method, url, body, header);
@@ -63,7 +63,7 @@ class APICalls {
       if (method == "GET") {
         res = axios.get(url, {
           headers: header,
-          //  responseType: isFile ? 'blob': ""
+           responseType: isFile ? 'blob': ""
         });
       }
 
@@ -71,8 +71,17 @@ class APICalls {
         res = axios.post(url, body, {
           headers: header,
         });
-        
       }
+
+
+      if (method == "PUT") {
+        res = axios.put(url, body, {
+          headers: header,
+        });
+      }
+
+
+
       res
         .then((res) => {
   
@@ -97,7 +106,7 @@ function validateParameters(method, url, body, header) {
     return {
       err: new Error("Please specify a call type [GET, POST, PUT, DELETE]"),
     };
-  } else if (method !== "GET" && method !== "POST") {
+  } else if (method !== "GET" && method !== "POST" && method !== "PUT") {
     return {
       err: new Error("Please pass a valid call type"),
     };
