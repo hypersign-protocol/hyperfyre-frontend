@@ -195,7 +195,7 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       telegramHandle,
       twitterPostFormat,
       projectStatus,
-      telegramAnnouncementChannel
+      telegramAnnouncementChannel: !telegramAnnouncementChannel ? "" : telegramAnnouncementChannel
     });
     const project: IProject = await ProjectModel.findById({ _id: _id });
 
