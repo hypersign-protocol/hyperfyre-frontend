@@ -10,6 +10,7 @@ export interface IProject extends Document{
     telegramHandle: string;
     twitterPostFormat: string;
     projectStatus: Boolean;
+    telegramAnnouncementChannel: string;
 
 }
 
@@ -22,7 +23,8 @@ const ProjectSchema = new Schema({
     twitterHandle:{ type: String, required: true},
     telegramHandle:{ type: String, required: true},
     twitterPostFormat: { type: String, required: true},
-    projectStatus: { type: Boolean, required: true}
+    projectStatus: { type: Boolean, required: true},
+    telegramAnnouncementChannel: { type: String}
 })
 
 export default mongoose.model<IProject>("Project", ProjectSchema);
