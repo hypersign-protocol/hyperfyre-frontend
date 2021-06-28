@@ -43,7 +43,7 @@ export const ProjectSchemaBody = [
     .withMessage("twitterPostFormat is null or empty"),
 
   body("projectStatus")
-    .exists({ checkFalsy: true })
-    .trim()
-    .withMessage("projectStatus must be selected"),
+    .exists()
+    .isBoolean()
+    .withMessage("projectStatus must be be boolean"),
 ];
