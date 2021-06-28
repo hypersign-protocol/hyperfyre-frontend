@@ -32,6 +32,28 @@ export default class TwitterService {
     });
   }
 
+  getTweetIDFromUrl(tweetUrl){
+    if(!tweetUrl) throw new Error("tweetUrl can not be blank")
+    
+      const t = tweetUrl.trim();
+      const url = new Url(tweetUrl);
+      logger.info("Parsed tweetURl");
+      const pathName = url.pathname;
+      logger.info("pathName = " + pathName);
+      if (!pathName) throw new Error("invalid tweeter url");
+
+      const paths: Array<string> = pathName.split("/status");
+        logger.info(paths);
+        if (!paths || paths.length <= 0 ||  paths[1] == undefined ||  paths[1] == "") {
+          throw new Error("invalid tweeter url");
+        }
+
+        const tweetId = paths[1].replace("/", "").trim();
+
+        return tweetId;
+    
+  }
+
   /**
    * Validate tweet url and returns user detials as well
    * @param tweetUrl tweet url
@@ -50,18 +72,18 @@ export default class TwitterService {
   ) {
     return new Promise(async (resolve, reject) => {
       try {
-        const url = new Url(tweetUrl);
-        logger.info("Parsed tweetURl");
-        const pathName = url.pathname;
-        logger.info("pathName = " + pathName);
-        if (!pathName) throw new Error("invalid tweeter url");
-        const paths: Array<string> = pathName.split("/status");
-        logger.info(paths);
-        if (!paths || paths.length <= 0 ||  paths[1] == undefined ||  paths[1] == "") {
-          throw new Error("invalid tweeter url");
-        }
+        // const url = new Url(tweetUrl);
+        // logger.info("Parsed tweetURl");
+        // const pathName = url.pathname;
+        // logger.info("pathName = " + pathName);
+        // if (!pathName) throw new Error("invalid tweeter url");
+        // const paths: Array<string> = pathName.split("/status");
+        // logger.info(paths);
+        // if (!paths || paths.length <= 0 ||  paths[1] == undefined ||  paths[1] == "") {
+        //   throw new Error("invalid tweeter url");
+        // }
 
-        const tweetId = paths[1].replace("/", "").trim();
+        const tweetId = this.getTweetIDFromUrl(tweetUrl)// paths[1].replace("/", "").trim();
         logger.info("tweetId = " + tweetId);
 
         const response = await this.tweeterClient.get("statuses/show", {
@@ -81,7 +103,7 @@ export default class TwitterService {
           logger.info("this is someone else's tweet");
           throw new Error("this is someone else's tweet");
         }
-
+        
         const text = data["text"];
 
         if (!text) {
@@ -89,14 +111,30 @@ export default class TwitterService {
           throw new Error("no tweet found in id " + tweetId);
         }
 
-        if (text.indexOf(tweetText) <= -1) {
-          logger.info(
-            "tweet did not match with tweet text for id " + tweetId
-          );
-          throw new Error(
-            "tweet did not match with tweet text for id " + tweetId
-          );
+        if(!data["is_quote_status"]){
+          if (text.indexOf(tweetText) <= -1) {
+            logger.info(
+              "tweet did not match with tweet text for id " + tweetId
+            );
+            throw new Error(
+              "tweet did not match with tweet text for id " + tweetId
+            );
+          }
+        }else{
+          const quotedTweetId = data["quoted_status_id_str"];
+          let t = tweetText;
+          t = t.split("/status/")[1].split("?")[0];
+          // const tweetId = this.getTweetIDFromUrl(tweetUrl)
+          if(quotedTweetId != t){
+            logger.info(
+              "invalid tweet; make sure you quoted our tweet"
+            );
+            throw new Error(
+              "invalid tweet; make sure you quoted our tweet"
+            );
+          }
         }
+        
 
         let returnObj = {};
         returnObj["hasTweetUrlVerified"] = true;
