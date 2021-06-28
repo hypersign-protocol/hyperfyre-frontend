@@ -173,6 +173,7 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       toDate,
       twitterHandle,
       telegramHandle,
+      twitterPostFormat,
       _id,
       userData,
       projectStatus
@@ -189,6 +190,7 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       ownerDid,
       twitterHandle,
       telegramHandle,
+      twitterPostFormat,
       projectStatus
     });
     const project: IProject = await ProjectModel.findById({ _id: _id });
