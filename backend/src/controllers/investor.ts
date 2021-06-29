@@ -32,7 +32,6 @@ async function addInvestor(req: Request, res: Response, next: NextFunction) {
     }
 
     logger.info("InvestorController:: addInvestor(): before creating a new investor into db");
-    const isVerfiedByHypersign = hasTwitted && hasJoinedTGgroup;
     const isVerificationComplete = hasTwitted && hasJoinedTGgroup;
     const new_investor: IInvestor = await InvestorModel.create({
       did, 
@@ -43,7 +42,7 @@ async function addInvestor(req: Request, res: Response, next: NextFunction) {
       telegramHandle, 
       hasTwitted, 
       hasJoinedTGgroup, 
-      isVerfiedByHypersign,
+      isVerfiedByHypersign: false,
       isVerificationComplete,
       projectId,
       tweetUrl
