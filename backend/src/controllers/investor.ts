@@ -154,8 +154,15 @@ async function getCredential(req: Request, res: Response, next: NextFunction) {
     delete attributesMap["exp"];
 
     const schemaUrl = nodeServer.baseURl + nodeServer.schemaGetEp + whitelistingSchemaId;
-
+    logger.info("InvestorController:: getCredential(): schemaUrl = " + schemaUrl);
     logger.info("InvestorController:: getCredential(): before generaating raw Credential");
+
+    logger.info({
+      subjectDid: did,
+      issuerDid: issuerKeyPair.publicKey.id,
+      expirationDate: new Date().toISOString(),
+      attributesMap
+    });
     const rawCredential = await hypersignSDK.credential.generateCredential(schemaUrl, {
       subjectDid: did,
       issuerDid: issuerKeyPair.publicKey.id,
