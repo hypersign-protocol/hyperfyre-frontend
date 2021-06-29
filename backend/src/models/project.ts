@@ -3,8 +3,8 @@ import mongoose, {Schema, Document} from "mongoose";
 export interface IProject extends Document{
     projectName: string;
     logoUrl: string;
-    fromDate: string;
-    toDate: string;
+    fromDate: string; // data and time both
+    toDate: string; // data and time both
     ownerDid: string;
     twitterHandle: string;
     telegramHandle: string;

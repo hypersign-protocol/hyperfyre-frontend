@@ -4,7 +4,6 @@ import ProjectModel, { IProject } from "../models/project";
 import InvestorModel, { IInvestor } from "../models/investor";
 import ApiError from '../error/apiError';
 import { writeInvestorsToFile, deleteFile } from '../utils/files';
-import { getRandomArbitrary } from '../utils/https';
 
 async function addProject(req: Request, res: Response, next: NextFunction) {
   try {
@@ -65,16 +64,35 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
   try {
     const { owner } = req.query;
     const { userData } = req.body;
-    let employeeList: Array<IProject>;
+    let projectList: Array<IProject>;
     if ( userData.id ) {
-      employeeList = await ProjectModel.find({}).where({ ownerDid: userData.id });
+      projectList = await ProjectModel.find({}).where({ ownerDid: userData.id });
     } else {
-      employeeList = []// await ProjectModel.find({});
+      projectList = []// await ProjectModel.find({});
     }
-    res.send(employeeList);
+    res.send(projectList);
   } catch (e) {
     logger.error("ProjectCtrl:: getAllProject(): Error " + e);
     return next(ApiError.internal(e.message));
+  }
+}
+
+function checkUpdateIfProjectExpired(projectInfo: IProject){
+  if(!projectInfo){
+    throw new Error("Invaild project info object")
+  }
+  
+  if(!projectInfo.projectStatus){
+    if(new Date().getTime() > Date.parse(projectInfo.toDate)){
+      projectInfo.projectStatus = false;
+      // update the project in background
+      ProjectModel.findByIdAndUpdate(projectInfo._id, { ...projectInfo });
+      return true;
+    }else{
+    return false;
+    }  
+  }else{
+    return false;
   }
 }
 
@@ -92,6 +110,12 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
     let projectInfo = {
       ...project["_doc"],
     };
+
+    if(checkUpdateIfProjectExpired(projectInfo)){
+      projectInfo.projectStatus = false; 
+    }
+    //// Implement project expiry
+    // If currentTime is more than that
 
     if ((fetchInvestors) && (!isPublic)) {
       if (searchQuery) {
