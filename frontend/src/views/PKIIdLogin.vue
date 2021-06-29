@@ -355,6 +355,7 @@ import notificationMixins from '../mixins/notificationMixins';
 import apiClinet from "../mixins/apiClientMixin";
 import fetchProjectDataMixin from '../mixins/fetchProjectDataMixin';
 import localStorageMixin from '../mixins/localStorageMixin';
+import checkTelegramAnnouncemntMixin from '../mixins/checkTelegramAnnChannel';
 
 export default {
   name: "Login",
@@ -502,6 +503,6 @@ export default {
     },
     
   },
-  mixins: [notificationMixins, fetchProjectDataMixin, localStorageMixin]
+  mixins: [notificationMixins, fetchProjectDataMixin, localStorageMixin, checkTelegramAnnouncemntMixin]
 };
 </script>

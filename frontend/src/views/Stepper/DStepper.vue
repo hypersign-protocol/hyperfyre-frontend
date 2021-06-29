@@ -213,6 +213,7 @@ import apiCall from "../../mixins/apiClientMixin"
 import notificationMixin from "../../mixins/notificationMixins.js";
 import fetchProjectDataMixin from "../../mixins/fetchProjectDataMixin";
 import apiClinet from "../../mixins/apiClientMixin";
+import checkTelegramAnnouncemntMixin from "../../mixins/checkTelegramAnnChannel";
 
 export default {
   name: "DStepper",
@@ -269,16 +270,20 @@ export default {
     const userDid = JSON.parse(localStorage.getItem("user")).id;
 
     
-    // this.checkIfAlreadyFilled(userDid);
+    this.checkIfAlreadyFilled(userDid);
 
     if (!this.$route.params.projectDetails) {
       this.fetchProjectData({ isAuthTokenAvailable: true });
+   
       return;
     } 
   
     this.projectDetails = this.$route.params.projectDetails;
+    
     // this.formatTweet()
   },
+
+
   mounted() {
     this.data =
       this.step == 0 || this.step == 0 ? this.stepOneData : this.stepTwoData;
@@ -299,6 +304,8 @@ export default {
   },
 
   methods: {
+
+
 
     async nextStep() {
       const step = this.step + 1;
@@ -601,7 +608,7 @@ export default {
     },
   },
 
-  mixins: [notificationMixin, fetchProjectDataMixin]
+  mixins: [notificationMixin, fetchProjectDataMixin, checkTelegramAnnouncemntMixin]
 };
 </script>
 

@@ -64,8 +64,14 @@ i {
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
+    <b-modal   size="lg"  id="err-modal" title="Errors !">
+      <p v-for="err in errors">
+          {{err.param.toUpperCase()}} : {{err.msg}}
+      </p>
 
-     <b-modal  hide-footer size="lg"  id="create-project-modal" title="Create a Project">
+    </b-modal>
+
+     <b-modal  hide-footer size="lg"  id="create-project-modal" :title=" isProjectEditing ? 'Edit a project ': 'Create a Project'">
       <div class="card-body">
               <div class="row">
                 <div class="col-md-6">
@@ -176,6 +182,24 @@ i {
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label style="margin-right: 8%"
+                      >Telegram Announcement Channel (optional):</label
+                    >
+                    <input
+                      type="text"
+                      v-model="project.telegramAnnouncementChannel"
+                      size="30"
+                      placeholder="Enter telegram ann. channel"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              
+              </div>
+
 
               <div class="row">
                 <div class="col-md-12">
@@ -357,6 +381,7 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import Datepicker from "vuejs-datepicker";
 import notificationMixins from '../mixins/notificationMixins';
+import apiClientMixin from '../mixins/apiClientMixin';
 export default {
   name: "Investor",
   components: { Loading, Datepicker },
@@ -393,6 +418,7 @@ export default {
       isLoading: false,
       fullPage: true,
       user: {},
+      errors: []
     };
   },
   async mounted() {
@@ -413,6 +439,7 @@ export default {
   },
   methods: {
     openCreateModal() {
+      this.isProjectEditing = false;
       this.project = {}
       this.$bvModal.show("create-project-modal")
     },
@@ -421,6 +448,7 @@ export default {
     },
     async fetchProjects() {
       try {
+        
         this.isLoading = true;
 
         if (!this.project.ownerDid) throw new Error("No project found");
@@ -467,8 +495,16 @@ export default {
       this.project = { ...project };
       this.isProjectEditing = true;
     },
+    
     async saveProject() {
+      
       try {
+
+
+        if(this.checkIfEverythingIsFilled() !==  true){
+            return this.notifyErr( this.checkIfEverythingIsFilled());   
+        }
+
         this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
@@ -484,44 +520,59 @@ export default {
 
 
 
-        const resp = await fetch(url, {
-          method,
-          body: JSON.stringify(this.project),
-          headers,
-        });
+        const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
-        console.log("RESP", resp);
-
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
-        }
-        const json = await resp.json();
-        this.whitelistingLink = `${window.location.origin}/form?projectId=${json._id}`;
+      
+        this.whitelistingLink = `${window.location.origin}/form?projectId=${resp.data._id}`;
         setTimeout(() => {
           this.whitelistingLink = "";
         }, 10000);
-        this.notifySuccess("Project is saved. Id = " + json._id);
-      
-        console.log("PROEJCT", json)
+        this.notifySuccess("Project is saved. Id = " + resp.data._id);
+    
+        console.log("PROEJCT", resp.data)
         const userProjects = JSON.parse(localStorage.getItem("userProjects"));
         userProjects.count += 1
-        userProjects.projects.push(json)
+        userProjects.projects.push(resp.data)
         localStorage.setItem("userProjects", JSON.stringify(userProjects))
         await this.fetchProjects();
         this.$bvModal.hide("create-project-modal");
-          
-      
-
-       
-       
+        
       } catch (e) {
-        console.log("ERROR", e);
+        if(e.errors){
+            this.errors = e.errors
+            this.$bvModal.show("err-modal");
+        }
         this.notifyErr(e.message);
       } finally {
         this.isLoading = false;
-        this.clear();
+        // this.clear();
       }
     },
+    checkIfEverythingIsFilled () {
+
+        if(!this.project.projectName){
+          return "Please Specify a project name"
+        }   
+        if(!this.project.logoUrl){
+          return "Please specify a Logo Url"
+        }
+        if(! (this.project.fromDate && this.project.toDate)){
+          return "Please specify a start and end date"
+        }
+        if(!this.project.twitterHandle){
+          return "Please provide a twitter handle"
+        }
+        if(!this.project.telegramHandle){
+          return "Please provide a telegram handle"
+        }
+         if(!this.project.twitterPostFormat){
+          return "Please provide a Twitter Post Format"
+        }
+
+        return true
+
+      
+    },  
     clear() {
       this.isProjectEditing = false;
       this.project = {

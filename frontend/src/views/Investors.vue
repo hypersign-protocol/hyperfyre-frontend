@@ -116,17 +116,30 @@ label {
     <div class="row " style="margin-top: 2%">
       <div class="d-flex justify-content-between col-md-12">
         <div>
+
           
-          <select  @change="fetchProjectInvestors">
-          <option value="">Select Project</option>
-          <option
-            v-for="project in projects"
-            :key="project._id"
-            :value="project._id"
-            :selected="project._id == selectedProjectId ? true : false"
-            >{{ project.projectName }}</option
-          >
-        </select >
+          
+           <b-dropdown variant="primary" id="dropdown-1" text="Select a project" class="m-md-2">
+               <b-dropdown-item
+                @click="fetchProjectInvestors(project)"
+                  v-for="project in projects"
+                  :key="project._id"
+                  :value="project._id"
+                  :selected="project._id == selectedProjectId ? true : false"
+                  >{{ project.projectName }}</b-dropdown-item>              
+               </b-dropdown>
+
+          <!-- <select class="form-select form-select-lg mb-3"  @change="fetchProjectInvestors">
+                <option value="">Select Project</option>
+                <option
+                  v-for="project in projects"
+                  :key="project._id"
+                  :value="project._id"
+                  :selected="project._id == selectedProjectId ? true : false"
+                  >{{ project.projectName }}</option
+                >
+          </select > -->
+
         </div>
         <div class="d-flex ml-auto align-items-center">
           <div>
@@ -283,104 +296,104 @@ export default {
             );
           },
         },
-        {
-          field: "isVerificationComplete",
-          key: "h",
-          title: "Verification",
-          align: "left",
-          width: 120,
-          filter: {
-            filterList: [
-              {
-                value: "onlyVerified",
-                label: "Only Verified",
-                selected: false,
-              },
-              {
-                value: "onlyNotVerified",
-                label: "Only Not Verified",
-                selected: false,
-              },
-            ],
-            filterConfirm: (filterList) => {
-              const labels = filterList
-                .filter((x) => x.selected)
-                .map((x) => x.value);
-              this.filterVerified(labels[0]);
-            },
-            filterReset: (filterList) => {
-              this.filterVerified("");
-            },
-          },
+        // {
+        //   field: "isVerificationComplete",
+        //   key: "h",
+        //   title: "Verification",
+        //   align: "left",
+        //   width: 120,
+        //   filter: {
+        //     filterList: [
+        //       {
+        //         value: "onlyVerified",
+        //         label: "Only Verified",
+        //         selected: false,
+        //       },
+        //       {
+        //         value: "onlyNotVerified",
+        //         label: "Only Not Verified",
+        //         selected: false,
+        //       },
+        //     ],
+        //     filterConfirm: (filterList) => {
+        //       const labels = filterList
+        //         .filter((x) => x.selected)
+        //         .map((x) => x.value);
+        //       this.filterVerified(labels[0]);
+        //     },
+        //     filterReset: (filterList) => {
+        //       this.filterVerified("");
+        //     },
+        //   },
 
-          renderBodyCell: ({ row, column, rowIndex }, h) => {
-            return (
-              <span class="text-bold d-flex justify-content-center">
-                {row.isVerificationComplete ? (
-                  <span class="d-flex align-items-center justify-content-center">
-                    <i style="font-size:20px" class="far fa-check-circle"></i>
-                  </span>
-                ) : (
-                  <button
-                    class="btn btn-primary btn-sm"
-                    on-click={() => this.verifyInvestor(row)}
-                  >
-                    Verify Now
-                  </button>
-                )}
-              </span>
-            );
-          },
-        },
-        {
-          field: "Issue",
-          key: "i",
-          title: "Issue",
-          align: "left",
-          width: 70,
-          filter: {
-            filterList: [
-              {
-                value: "onlyIssued",
-                label: "Only Issued",
-                selected: false,
-              },
-              {
-                value: "onlyNotIssued",
-                label: "Only Not Issued",
-                selected: false,
-              },
-            ],
-            filterConfirm: (filterList) => {
-              const labels = filterList
-                .filter((x) => x.selected)
-                .map((x) => x.value);
-              this.filterIssued(labels[0]);
-            },
-            filterReset: (filterList) => {
-              this.filterIssued("");
-            },
-          },
+        //   renderBodyCell: ({ row, column, rowIndex }, h) => {
+        //     return (
+        //       <span class="text-bold d-flex justify-content-center">
+        //         {row.isVerificationComplete ? (
+        //           <span class="d-flex align-items-center justify-content-center">
+        //             <i style="font-size:20px" class="far fa-check-circle"></i>
+        //           </span>
+        //         ) : (
+        //           <button
+        //             class="btn btn-primary btn-sm"
+        //             on-click={() => this.verifyInvestor(row)}
+        //           >
+        //             Verify Now
+        //           </button>
+        //         )}
+        //       </span>
+        //     );
+        //   },
+        // },
+        // {
+        //   field: "Issue",
+        //   key: "i",
+        //   title: "Issue",
+        //   align: "left",
+        //   width: 70,
+        //   filter: {
+        //     filterList: [
+        //       {
+        //         value: "onlyIssued",
+        //         label: "Only Issued",
+        //         selected: false,
+        //       },
+        //       {
+        //         value: "onlyNotIssued",
+        //         label: "Only Not Issued",
+        //         selected: false,
+        //       },
+        //     ],
+        //     filterConfirm: (filterList) => {
+        //       const labels = filterList
+        //         .filter((x) => x.selected)
+        //         .map((x) => x.value);
+        //       this.filterIssued(labels[0]);
+        //     },
+        //     filterReset: (filterList) => {
+        //       this.filterIssued("");
+        //     },
+        //   },
 
-          renderBodyCell: ({ row, column, rowIndex }, h) => {
-            return (
-              <span class="text-bold d-flex justify-content-center">
-                {row.isVerfiedByHypersign ? (
-                  <span class="text-bold" title="issued">
-                    <i style="font-size:20px" class="far fa-calendar-check"></i>
-                  </span>
-                ) : (
-                  <button
-                    class="btn btn-white border border-1 btn-sm"
-                    on-click={() => this.issueCredential(row, rowIndex)}
-                  >
-                    <i style="font-size:20px" class="far fa-clock"></i>
-                  </button>
-                )}
-              </span>
-            );
-          },
-        },
+        //   renderBodyCell: ({ row, column, rowIndex }, h) => {
+        //     return (
+        //       <span class="text-bold d-flex justify-content-center">
+        //         {row.isVerfiedByHypersign ? (
+        //           <span class="text-bold" title="issued">
+        //             <i style="font-size:20px" class="far fa-calendar-check"></i>
+        //           </span>
+        //         ) : (
+        //           <button
+        //             class="btn btn-white border border-1 btn-sm"
+        //             on-click={() => this.issueCredential(row, rowIndex)}
+        //           >
+        //             <i style="font-size:20px" class="far fa-clock"></i>
+        //           </button>
+        //         )}
+        //       </span>
+        //     );
+        //   },
+        // },
       ],
 
       investor: {
@@ -447,7 +460,7 @@ export default {
           Authorization: `Bearer ${this.authToken}`,
         };
 
-        const res = await apiClientMixin.makeCall({method: "GET", url, header: headers})
+        const res = await apiClientMixin.makeCall({method: "GET", url, header: headers, isFile: true})
         FileDownload(res.data, "Investor_Data.xls");
       }catch(e){
         console.log(e);
@@ -466,7 +479,7 @@ export default {
             "Authorization": `Bearer ${this.authToken}`,
           };
 
-          const res = await apiClientMixin.makeCall({method:"GET", header: headers, url}) 
+          const res = await apiClientMixin.makeCall({method:"GET", header: headers, url, isFile: true}) 
           FileDownload(res.data,  "Lottery.xls")
 
         }catch(e){
@@ -533,8 +546,8 @@ export default {
       this.fetchProjectData(0, this.perPage);
     },
     async fetchProjectInvestors(e) {
-      // this.investor.projectId = this.projects[1]._id;
-      this.investor.projectId = e.target.value;
+  
+      this.investor.projectId = e._id;
       await this.fetchProjectData(0, this.perPage);
     },
 

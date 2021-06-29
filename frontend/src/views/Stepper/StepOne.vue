@@ -241,10 +241,9 @@ a{
                   <a
                     @click="handleTwitterLogin('https://twitter.com/intent/tweet?text=' + projectDetails.twitterPostFormat, idx)"
                     target="_blank"
-                 
                     title="Tweet about this project tagging two of your friends"
                     class="ml-1"
-                    >"{{projectDetails.twitterPostTextFormat}}"</a
+                    >"Tweet"</a
                   >
             </div>
 
@@ -269,9 +268,9 @@ a{
              <div class="ml-2 links" v-if="rule.id == 4" for="checkbox-4">
               <a
               class="links"
-                @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramHandle}`, idx)"
+                @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramAnnouncementChannel}`, idx)"
                 target="_blank"
-                ><i></i>@channel</a
+                ><i></i>@{{projectDetails.telegramAnnouncementChannel}}</a
               >
              
             </div>
@@ -349,6 +348,8 @@ export default {
     if(localStorage.getItem("telegramId")){
       this.telegramAuthDone = true
     }
+
+    
   },
 
   methods: {

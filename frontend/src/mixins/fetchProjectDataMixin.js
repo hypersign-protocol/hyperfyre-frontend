@@ -46,6 +46,8 @@ export default{
               this.projectFetched = true;
     
               this.notifySuccess("Project is fetched. ProjectName " + this.projectDetails.projectName);
+              this.checkTelegramAnnouncementChannel();
+              
             } catch (e) {
          
                 console.log(e);

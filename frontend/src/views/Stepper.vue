@@ -133,11 +133,7 @@ export default {
             text: "Join our Telegram group ",
             checked: false,
           },
-          {
-            id: 4,
-            text: "Follow our announcement channel ",
-            checked: false,
-          },
+         
         ],
       },
 
@@ -222,6 +218,8 @@ export default {
 
     this.stepTwoData.formData[0].value = user.name;
     this.stepTwoData.formData[1].value = user.email;
+
+    
   },
 };
 </script>
