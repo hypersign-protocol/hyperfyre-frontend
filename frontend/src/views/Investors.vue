@@ -78,6 +78,9 @@ label {
  .modal-text{
    font-size: 12px;
  }
+ .projectSelector{
+   min-width: 220px;
+ }
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -115,9 +118,9 @@ label {
 
     <div class="row " style="margin-top: 2%">
       <div class="d-flex justify-content-between col-md-12">
-        <div>
 
-          
+
+        <div class="projectSelector">  
           
            <b-form-select v-model="selectedProject"  @change="fetchProjectInvestors"  placeholder="Select a project"    value-field="_id" text-field="projectName" :options="projects"></b-form-select>
          

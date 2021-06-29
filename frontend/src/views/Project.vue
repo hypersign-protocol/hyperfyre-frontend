@@ -516,10 +516,7 @@ export default {
         if (this.isProjectEditing) {
           method = "PUT";
         }
-
-
-console.log(this.project)
-
+        
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
       
@@ -528,8 +525,13 @@ console.log(this.project)
           this.whitelistingLink = "";
         }, 10000);
         this.notifySuccess("Project is saved. Id = " + resp.data._id);
+
+        if(this.isProjectEditing){
+          return;
+        }
     
         console.log("PROEJCT", resp.data)
+        
         const userProjects = JSON.parse(localStorage.getItem("userProjects"));
         userProjects.count += 1
         userProjects.projects.push(resp.data)
@@ -542,7 +544,8 @@ console.log(this.project)
             this.errors = e.errors
             this.$bvModal.show("err-modal");
         }
-        this.notifyErr(e.message);
+        
+        this.notifyErr(e || e.message);
       } finally {
         this.isLoading = false;
         // this.clear();
