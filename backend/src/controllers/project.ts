@@ -223,6 +223,10 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
     });
     const project: IProject = await ProjectModel.findById({ _id: _id });
 
+    if(new Date().getTime() > Date.parse(project.toDate)){
+      return next(ApiError.badRequest("You can not edit the project information after project expiry"));
+    }
+
     res.send({
       ...project["_doc"],
     });
