@@ -106,11 +106,9 @@ i {
                     <label style="margin-right: 8%"
                       >Whitelisting Start Date:</label
                     >
-                    <datepicker
-                      v-model="project.fromDate"
+                    <Datepicker v-model="project.fromDate"
                       name="uniquename"
-                      input-class="form-control"
-                    ></datepicker>
+                      input-class="form-control" format="YYYY-MM-DD h:i:s" width="100%"/>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -121,6 +119,7 @@ i {
                     <datepicker
                       v-model="project.toDate"
                       name="uniquename"
+                      format="YYYY-MM-DD h:i:s"
                       input-class="form-control"
                     ></datepicker>
                   </div>
@@ -379,7 +378,7 @@ i {
 import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import Datepicker from "vuejs-datepicker";
+import Datepicker from 'vuejs-datetimepicker'
 import notificationMixins from '../mixins/notificationMixins';
 import apiClientMixin from '../mixins/apiClientMixin';
 export default {
@@ -519,6 +518,7 @@ export default {
         }
 
 
+console.log(this.project)
 
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
