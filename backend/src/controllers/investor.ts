@@ -32,6 +32,8 @@ async function addInvestor(req: Request, res: Response, next: NextFunction) {
     }
 
     logger.info("InvestorController:: addInvestor(): before creating a new investor into db");
+    const isVerfiedByHypersign = hasTwitted && hasJoinedTGgroup;
+    const isVerificationComplete = hasTwitted && hasJoinedTGgroup;
     const new_investor: IInvestor = await InvestorModel.create({
       did, 
       email, 
@@ -41,13 +43,15 @@ async function addInvestor(req: Request, res: Response, next: NextFunction) {
       telegramHandle, 
       hasTwitted, 
       hasJoinedTGgroup, 
-      isVerfiedByHypersign : false,
-      isVerificationComplete : false,
+      isVerfiedByHypersign,
+      isVerificationComplete,
       projectId,
       tweetUrl
     });
     logger.info("InvestorController:: addInvestor(): after creating a new investor into db id = " + new_investor["_id"]);
-    res.send(new_investor);
+
+    issueCredential(req, res, next);
+    // res.send(new_investor);
   } catch (e) {
     logger.error("InvestorController:: addInvestor(): Error " + e);
     next(ApiError.internal(e.message));
