@@ -43,7 +43,6 @@ export const InvestorSchemaBody = [
   body("ethAddress")
     .exists({ checkFalsy: true })
     .trim()
-    .custom((value) => validateEthAddress(value))
     .withMessage("invalid ethereum address"),
 
   body("twitterHandle")
