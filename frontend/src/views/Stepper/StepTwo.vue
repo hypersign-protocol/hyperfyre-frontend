@@ -69,10 +69,12 @@ div.form > div {
             <label class="form-label">{{ data.label }}</label>
             <div :class="[data.fullWidth ? 'd-flex' : '']">
               <input
+              @keyup="handleInputChange(data, idx)"
               :disabled="stepTwoData.formData[idx].disabled"
                 v-model="stepTwoData.formData[idx].value"
                 class="form-control w-100"
                 :placeholder="data.placeholder"
+                :name="data.id"
               />
               <span v-if="data.errMsg && !data.fullWidth">{{data.errMsg}}</span>
               <img
@@ -132,20 +134,40 @@ export default {
     stepTwoData: {
       type: Object,
     },
+    isTezos:{
+      type: Boolean
+    }
   },
   data() {
     return {
       showFox: false,
     };
   },
+
   created() {
+
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum);
       window.ethereum.enable();
       this.showFox = true;
     }
   },
+
   methods: {
+    handleInputChange(data, idx){     
+      if(data.id == "ethAddress"){
+        if(data.value.startsWith("tz1")){
+          data.label = "Tezos Account Address"
+          this.isTezos = true
+          this.showFox = false
+        } else{
+          data.label = "ERC-20 Address (Do not add exchange address)*";
+          this.isTezos = false,
+          this.showFox = true
+        }
+      }
+    },
+
     async getCurrentAccount() {
       const accounts = await window.web3.eth.getAccounts();
       this.stepTwoData.formData.find((x) => {

@@ -87,6 +87,7 @@
                 <transition :name="effect" mode="out-in">
                   <keep-alive>
                     <component
+                      :isTezos="isTezos"
                       :projectDetails="projectDetails"
                       :stepOneData="stepOneData"
                       :stepTwoData="stepTwoData"
@@ -253,6 +254,7 @@ export default {
       projectDetails: {},
       projectId: "",
       serverErrors: [],
+      isTezos: false
     };
   },
 
@@ -304,8 +306,6 @@ export default {
   },
 
   methods: {
-
-
 
     async nextStep() {
       const step = this.step + 1;
@@ -386,6 +386,8 @@ export default {
           this.notifyErr("Please follow all the rules and provide a tweet URL")
         
         }
+        //  this.slideToNextPage(true);
+
       } else if (step == 2) {
         const isAllFilled = data.formData.every((input) => input.value.length);
         const twitterHandle = data.formData.filter((x) =>
@@ -397,7 +399,15 @@ export default {
         const ethAddress = data.formData.filter((x) =>
           x.id.toLowerCase().includes("eth")
         )[0];
-        const ethAddressValidate = ethAddress.value.startsWith("0x");
+
+        let ethAddressValidate;
+
+        if(this.isTezos){
+          ethAddressValidate =  ethAddress.value.startsWith("tz1");
+        }else{
+          ethAddressValidate =  ethAddress.value.startsWith("0x");
+        }
+      
         let twitterHandleValidate = false;
         let telegramHandleValidate = false;
 
@@ -426,10 +436,12 @@ export default {
           telegramHandleValidate = false;
         }
 
-        if (!ethAddressValidate) {
+        if (!ethAddressValidate && !this.isTezos) {
           data.formData[4].errMsg = "Please enter a valid Eth Address";
-        } else {
-          data.formData[4].errMsg = "";
+        } else if(!!ethAddressValidate && this.isTezos) {
+          data.formData[4].errMsg = "Please enter a valida Tezos Address";
+        } else{
+           data.formData[4].errMsg = ""
         }
 
         if (

@@ -449,10 +449,13 @@ export default {
       try {
         
         this.isLoading = true;
+        console.log("THIS USER", )
 
-        if (!this.project.ownerDid) throw new Error("No project found");
+        // if (!this.project.ownerDid) throw new Error("No project found");
+        if (!this.user.id) throw new Error("No project found");
+       
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.project.ownerDid}`;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.user.id}`;
 
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
@@ -516,17 +519,21 @@ export default {
         if (this.isProjectEditing) {
           method = "PUT";
         }
-        
+
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
-      
-        this.whitelistingLink = `${window.location.origin}/form?projectId=${resp.data._id}`;
+          if(!this.isProjectEditing){
+            this.whitelistingLink = `${window.location.origin}/form?projectId=${resp.data._id}`;
+          }
+        
+
         setTimeout(() => {
           this.whitelistingLink = "";
         }, 10000);
         this.notifySuccess("Project is saved. Id = " + resp.data._id);
 
         if(this.isProjectEditing){
+           await this.fetchProjects();
           return;
         }
     
