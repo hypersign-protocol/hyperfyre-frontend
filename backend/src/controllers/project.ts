@@ -70,10 +70,12 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
       projectList = await ProjectModel.find({}).where({ ownerDid: userData.id });
 
       projectList.forEach((project: IProject) => {
-        if(checkUpdateIfProjectExpired(project)){
+        if(checkUpdateIfProjectExpired(project) === true){
           logger.info("Project is expired");
           logger.info(project);
           project.projectStatus = false; 
+        }else{
+          logger.info("Project NOt expired");
         }
         projectListTmp.push(project);
       });
@@ -121,10 +123,12 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
       ...project["_doc"],
     };
 
-    if(checkUpdateIfProjectExpired(projectInfo)){
+    if(checkUpdateIfProjectExpired(projectInfo) === true){
       logger.info("Project is expired");
       logger.info(projectInfo);
       projectInfo.projectStatus = false; 
+    }else{
+      logger.info("Project NOt expired");
     }
     //// Implement project expiry
     // If currentTime is more than that
