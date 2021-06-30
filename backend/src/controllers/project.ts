@@ -71,6 +71,8 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
 
       projectList.forEach((project: IProject) => {
         if(checkUpdateIfProjectExpired(project)){
+          logger.info("Project is expired");
+          logger.info(project);
           project.projectStatus = false; 
         }
         projectListTmp.push(project);
@@ -120,6 +122,8 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
     };
 
     if(checkUpdateIfProjectExpired(projectInfo)){
+      logger.info("Project is expired");
+      logger.info(projectInfo);
       projectInfo.projectStatus = false; 
     }
     //// Implement project expiry
