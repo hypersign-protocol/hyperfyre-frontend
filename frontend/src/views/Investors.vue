@@ -78,6 +78,9 @@ label {
  .modal-text{
    font-size: 12px;
  }
+ .projectSelector{
+   min-width: 220px;
+ }
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -115,31 +118,12 @@ label {
 
     <div class="row " style="margin-top: 2%">
       <div class="d-flex justify-content-between col-md-12">
-        <div>
 
+
+        <div class="projectSelector">  
           
-          
-           <b-dropdown variant="primary" id="dropdown-1" text="Select a project" class="m-md-2">
-               <b-dropdown-item
-                @click="fetchProjectInvestors(project)"
-                  v-for="project in projects"
-                  :key="project._id"
-                  :value="project._id"
-                  :selected="project._id == selectedProjectId ? true : false"
-                  >{{ project.projectName }}</b-dropdown-item>              
-               </b-dropdown>
-
-          <!-- <select class="form-select form-select-lg mb-3"  @change="fetchProjectInvestors">
-                <option value="">Select Project</option>
-                <option
-                  v-for="project in projects"
-                  :key="project._id"
-                  :value="project._id"
-                  :selected="project._id == selectedProjectId ? true : false"
-                  >{{ project.projectName }}</option
-                >
-          </select > -->
-
+           <b-form-select v-model="selectedProject"  @change="fetchProjectInvestors"  placeholder="Select a project"    value-field="_id" text-field="projectName" :options="projects"></b-form-select>
+         
         </div>
         <div class="d-flex ml-auto align-items-center">
           <div>
@@ -203,7 +187,7 @@ export default {
 
   data() {
     return {
-      selectedProjectId: "",
+      selectedProject: null,
       recordsForLottery: 0,
       issuedImgLink: issuedImgLink,
       cancelToken: undefined,
@@ -433,8 +417,9 @@ export default {
   },
   async mounted() {
 
+    
+
   if(this.$route.query.projectId){
-    console.log("HAII");
     this.selectedProjectId = this.$route.query.projectId;
     this.investor.projectId = this.$route.query.projectId
     this.fetchProjectData(0, this.perPage)
@@ -442,8 +427,11 @@ export default {
 
     const userProjectStr = localStorage.getItem("userProjects");
     const userProjectsData = JSON.parse(userProjectStr);
-    console.log(userProjectsData)
     this.projects = userProjectsData.projects;  
+    this.projects.unshift({
+      _id: null,
+      projectName: "Select a Project"
+    })
   },
 
   beforeRouteEnter(to, from, next) {
@@ -451,6 +439,7 @@ export default {
       vm.prevRoute = from;
     });
   },
+  
   methods: {
     async handleExport(){
       try{
@@ -546,9 +535,11 @@ export default {
       this.fetchProjectData(0, this.perPage);
     },
     async fetchProjectInvestors(e) {
-  
-      this.investor.projectId = e._id;
-      await this.fetchProjectData(0, this.perPage);
+      if(e){
+        this.investor.projectId = e;
+        await this.fetchProjectData(0, this.perPage);
+      }
+      
     },
 
     filterVerified(label) {

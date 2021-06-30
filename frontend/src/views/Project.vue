@@ -106,11 +106,9 @@ i {
                     <label style="margin-right: 8%"
                       >Whitelisting Start Date:</label
                     >
-                    <datepicker
-                      v-model="project.fromDate"
+                    <Datepicker v-model="project.fromDate"
                       name="uniquename"
-                      input-class="form-control"
-                    ></datepicker>
+                      input-class="form-control" format="YYYY-MM-DD h:i:s" width="100%"/>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -121,6 +119,7 @@ i {
                     <datepicker
                       v-model="project.toDate"
                       name="uniquename"
+                      format="YYYY-MM-DD h:i:s"
                       input-class="form-control"
                     ></datepicker>
                   </div>
@@ -379,7 +378,7 @@ i {
 import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import Datepicker from "vuejs-datepicker";
+import Datepicker from 'vuejs-datetimepicker'
 import notificationMixins from '../mixins/notificationMixins';
 import apiClientMixin from '../mixins/apiClientMixin';
 export default {
@@ -450,10 +449,13 @@ export default {
       try {
         
         this.isLoading = true;
+        console.log("THIS USER", )
 
-        if (!this.project.ownerDid) throw new Error("No project found");
+        // if (!this.project.ownerDid) throw new Error("No project found");
+        if (!this.user.id) throw new Error("No project found");
+       
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.project.ownerDid}`;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.user.id}`;
 
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
@@ -518,18 +520,25 @@ export default {
           method = "PUT";
         }
 
-
-
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
-      
-        this.whitelistingLink = `${window.location.origin}/form?projectId=${resp.data._id}`;
+          if(!this.isProjectEditing){
+            this.whitelistingLink = `${window.location.origin}/form?projectId=${resp.data._id}`;
+          }
+        
+
         setTimeout(() => {
           this.whitelistingLink = "";
         }, 10000);
         this.notifySuccess("Project is saved. Id = " + resp.data._id);
+
+        if(this.isProjectEditing){
+           await this.fetchProjects();
+          return;
+        }
     
         console.log("PROEJCT", resp.data)
+        
         const userProjects = JSON.parse(localStorage.getItem("userProjects"));
         userProjects.count += 1
         userProjects.projects.push(resp.data)
@@ -542,7 +551,8 @@ export default {
             this.errors = e.errors
             this.$bvModal.show("err-modal");
         }
-        this.notifyErr(e.message);
+        
+        this.notifyErr(e || e.message);
       } finally {
         this.isLoading = false;
         // this.clear();

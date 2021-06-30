@@ -73,6 +73,7 @@ div.form > div {
                 v-model="stepTwoData.formData[idx].value"
                 class="form-control w-100"
                 :placeholder="data.placeholder"
+                :name="data.id"
               />
               <span v-if="data.errMsg && !data.fullWidth">{{data.errMsg}}</span>
               <img
@@ -123,6 +124,7 @@ div.form > div {
 
 <script>
 import Web3 from "web3";
+import config from "../../config";
 // This components will have the content for each stepper step.
 
 export default {
@@ -135,17 +137,21 @@ export default {
   },
   data() {
     return {
-      showFox: false,
+      showFox:  config.isTezos() ?  false : true,
     };
   },
+
   created() {
-    if (window.ethereum) {
+
+    if (window.ethereum && !config.isTezos() ) {
       window.web3 = new Web3(window.ethereum);
       window.ethereum.enable();
       this.showFox = true;
     }
   },
+
   methods: {
+   
     async getCurrentAccount() {
       const accounts = await window.web3.eth.getAccounts();
       this.stepTwoData.formData.find((x) => {
