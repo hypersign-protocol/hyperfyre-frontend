@@ -313,79 +313,79 @@ export default {
       let gotoNextPage = false;
 
       if (step == 1) {
-        // const isAllChecked = data.rules.every((rule) => rule.checked);
+        const isAllChecked = data.rules.every((rule) => rule.checked);
         
-        // const tweetFilled =
-        //   data.rules[1].tweetUrl.trim().length !== 0 ? true : false;
+        const tweetFilled =
+          data.rules[1].tweetUrl.trim().length !== 0 ? true : false;
 
 
    
-        // if (isAllChecked && tweetFilled) {
-        //      console.log("PROJECT DETAILS", this.projectDetails);
-        //   try{
+        if (isAllChecked && tweetFilled) {
+             console.log("PROJECT DETAILS", this.projectDetails);
+          try{
 
-        //     const url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
-        //     let headers = {
-        //       "Content-Type": "application/json",
-        //       "Authorization": `Bearer ${this.authToken}`
-        //     };
+            const url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
+            let headers = {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${this.authToken}`
+            };
             
-        //     const body = {
-        //         tweetUrl: data.rules[1].tweetUrl,
-        //         userId:  localStorage.getItem("twitterId"),
-        //         tweetText:  this.projectDetails.twitterPostTextFormat,
-        //         needUserDetails : true,
-        //         checkIfFollowed: true,
-        //         sourceScreenName: this.projectDetails.twitterHandle
-        //     }
+            const body = {
+                tweetUrl: data.rules[1].tweetUrl,
+                userId:  localStorage.getItem("twitterId"),
+                tweetText:  this.projectDetails.twitterPostTextFormat,
+                needUserDetails : true,
+                checkIfFollowed: true,
+                sourceScreenName: this.projectDetails.twitterHandle
+            }
 
-        //     const res = await apiClinet.makeCall({method: "POST", body: body, header: headers, url})
+            const res = await apiClinet.makeCall({method: "POST", body: body, header: headers, url})
 
   
 
-        //     if(!res.data.user.followed.hasFollowed){
-        //       return   this.notifyErr(`Please Follow our twitter handle (@${res.data.user.followed.to})`)
-        //     }
+            if(!res.data.user.followed.hasFollowed){
+              return   this.notifyErr(`Please Follow our twitter handle (@${res.data.user.followed.to})`)
+            }
 
-        //     if(!localStorage.getItem("telegramId")){
-        //       return this.notifyErr("Please authenticate Telegram")
-        //     }
+            if(!localStorage.getItem("telegramId")){
+              return this.notifyErr("Please authenticate Telegram")
+            }
 
-        //      const TGHandle = this.stepTwoData.formData.filter(x => x.id == "telegramHandle")[0]
-        //      TGHandle.value = localStorage.getItem("telegramId")
-        //      TGHandle.disabled = true
+             const TGHandle = this.stepTwoData.formData.filter(x => x.id == "telegramHandle")[0]
+             TGHandle.value = localStorage.getItem("telegramId")
+             TGHandle.disabled = true
 
 
 
-        //     if(res.data.hasTweetUrlVerified && res.data.user.followed.hasFollowed){
-        //       const twitterHandle = this.stepTwoData.formData.filter(x => x.id == "twitterHandle")[0]
-        //       twitterHandle.value = res.data.user.screen_name
-        //       twitterHandle.disabled = true
+            if(res.data.hasTweetUrlVerified && res.data.user.followed.hasFollowed){
+              const twitterHandle = this.stepTwoData.formData.filter(x => x.id == "twitterHandle")[0]
+              twitterHandle.value = res.data.user.screen_name
+              twitterHandle.disabled = true
 
-        //       // console.log("ABLE TO GOTO NEXT PAGE")
-        //       gotoNextPage = true;
-        //       this.slideToNextPage(gotoNextPage);
-        //     }
-        //   }catch(e){
-        //     console.log(e);
-        //     if(e.error){
-        //      return  this.notifyErr(e.error)
-        //     }
-        //     if(!e.hasTweetUrlVerified){
-        //       return this.notifyErr("Please check your tweet URL")
-        //     }
-        //     if(e.errors){
-        //       return alert(JSON.stringify(e.errors))
-        //     }
-        //   }
+              // console.log("ABLE TO GOTO NEXT PAGE")
+              gotoNextPage = true;
+              this.slideToNextPage(gotoNextPage);
+            }
+          }catch(e){
+            console.log(e);
+            if(e.error){
+             return  this.notifyErr(e.error)
+            }
+            if(!e.hasTweetUrlVerified){
+              return this.notifyErr("Please check your tweet URL")
+            }
+            if(e.errors){
+              return alert(JSON.stringify(e.errors))
+            }
+          }
 
 
          
-        // } else {
-        //   this.notifyErr("Please follow all the rules and provide a tweet URL")
+        } else {
+          this.notifyErr("Please follow all the rules and provide a tweet URL")
         
-        // }
-         this.slideToNextPage(true);
+        }
+        //  this.slideToNextPage(true);
 
       } else if (step == 2) {
         const isAllFilled = data.formData.every((input) => input.value.length);
