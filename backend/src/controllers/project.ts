@@ -65,7 +65,7 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
     const { owner } = req.query;
     const { userData } = req.body;
     let projectList: Array<IProject>;
-    let projectListTmp: Array<IProject>;
+    let projectListTmp = [];
     if ( userData.id ) {
       projectList = await ProjectModel.find({}).where({ ownerDid: userData.id });
 
