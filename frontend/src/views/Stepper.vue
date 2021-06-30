@@ -98,6 +98,7 @@ import StepTwo from "./Stepper/StepTwo.vue";
 import DStepper from "./Stepper/DStepper.vue";
 import StepThree from "./Stepper/StepThree.vue";
 import StepFour from "./Stepper/StepFour.vue";
+import config from "../config";
 
 const avatarLabel = require("../assets/avatarUploadLabel.png");
 
@@ -173,8 +174,8 @@ export default {
             errMsg: ""
           },
           {
-            label: "ERC-20 Address (Do not add exchange address)*",
-            placeholder: "0x",
+            label: config.isTezos() ? "Tezos Account Address" : "ERC-20 Address (Do not add exchange address)*",
+            placeholder: config.isTezos() ? "tz1" : "0x",
             fullWidth: true,
             value: "",
             id: "ethAddress",
@@ -211,6 +212,7 @@ export default {
 
  
   mounted() {
+    console.log("TEZOS", config.isTezos())
     const usrStr =
       localStorage.getItem("user") ||
       '{"name": "Hypersign", "email": "hypersign@email.com" }';
