@@ -24,7 +24,7 @@ export function validateDate(date){
 
 export function notLessThanCurrent(dateTime){
   return new Promise((resolve, reject) => {
-    if(new Date().getTime() < Date.parse(dateTime)){
+    if(new Date().getTime() > Date.parse(dateTime)){
       reject("You can not set from date time before present time");
     }
     resolve(true);
