@@ -65,12 +65,20 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
     const { owner } = req.query;
     const { userData } = req.body;
     let projectList: Array<IProject>;
+    let projectListTmp: Array<IProject>;
     if ( userData.id ) {
       projectList = await ProjectModel.find({}).where({ ownerDid: userData.id });
+
+      projectList.forEach((project: IProject) => {
+        if(checkUpdateIfProjectExpired(project)){
+          project.projectStatus = false; 
+        }
+        projectListTmp.push(project);
+      });
     } else {
       projectList = []// await ProjectModel.find({});
     }
-    res.send(projectList);
+    res.send(projectListTmp);
   } catch (e) {
     logger.error("ProjectCtrl:: getAllProject(): Error " + e);
     return next(ApiError.internal(e.message));
@@ -82,7 +90,7 @@ function checkUpdateIfProjectExpired(projectInfo: IProject){
     throw new Error("Invaild project info object")
   }
   
-  if(!projectInfo.projectStatus){
+  if(projectInfo.projectStatus){
     if(new Date().getTime() > Date.parse(projectInfo.toDate)){
       projectInfo.projectStatus = false;
       // update the project in background
