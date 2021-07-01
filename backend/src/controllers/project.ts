@@ -40,17 +40,7 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
     if (Date.parse(fromDate) > Date.parse(toDate)) {
       return next(ApiError.badRequest("fromDate can not be greater than toDate"));
     }
-    logger.info({
-      fromDate: {
-        original: fromDate, 
-        iso: new Date(fromDate).toISOString()
-      },
-      toDate: {
-        original: toDate, 
-        iso : new Date(toDate).toISOString()
-      }
-    })
-
+    
     const newProject: IProject = await ProjectModel.create({
       projectName,
       logoUrl,
@@ -80,7 +70,6 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
       projectList = await ProjectModel.find({}).where({ ownerDid: userData.id });
 
       projectList.forEach((project: IProject) => {
-        logger.info(project);
         if(checkUpdateIfProjectExpired(project) === true){
           logger.info("Project is expired");
           project.projectStatus = false; 
@@ -133,7 +122,6 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
       ...project["_doc"],
     };
 
-    logger.info(projectInfo);
     if(checkUpdateIfProjectExpired(projectInfo) === true){
       logger.info("Project is expired");
       projectInfo.projectStatus = false; 
