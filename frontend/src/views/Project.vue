@@ -296,14 +296,14 @@ i {
                     title="Start Date"
                   >
                     <i class="fas fa-hourglass-start"></i>
-                    {{ project.fromDate }}
+                    {{ new Date(project.fromDate).toLocaleString() }}
                   </li>
                   <li
                     data-toggle="tooltip"
                     data-placement="bottom"
                     title="End Date"
                   >
-                    <i class="fas fa-hourglass-end"></i> {{ project.toDate }}
+                    <i class="fas fa-hourglass-end"></i> {{ new Date(project.toDate).toLocaleString() }}
                   </li>
 
                   <li
@@ -519,6 +519,9 @@ export default {
         if (this.isProjectEditing) {
           method = "PUT";
         }
+
+        this.project.toDate = new Date(this.project.toDate).toISOString();
+        this.project.fromDate = new Date(this.project.fromDate).toISOString();
 
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
