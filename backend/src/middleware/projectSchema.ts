@@ -24,9 +24,9 @@ export const ProjectSchemaBody = [
     .custom((value) => validateDate(value))
     .withMessage("fromDate is invalid or empty"),
 
-  body("fromDate")
-    .custom((value) => notLessThanCurrent(value))
-    .withMessage("start date time can not be less than current time"),
+  // body("fromDate")
+  //   .custom((value) => notLessThanCurrent(value))
+  //   .withMessage("start date time can not be less than current time"),
 
   body("toDate")
     .exists({ checkFalsy: true })
@@ -34,9 +34,9 @@ export const ProjectSchemaBody = [
     .custom((value) => validateDate(value))
     .withMessage("toDate is invlaid or empty"),
 
-  body("toDate")
-    .custom((value) => notLessThanCurrent(value))
-    .withMessage("end date time can not be less than current time"),
+  // body("toDate")
+  //   .custom((value) => notLessThanCurrent(value))
+  //   .withMessage("end date time can not be less than current time"),
 
 
   body("twitterHandle")
