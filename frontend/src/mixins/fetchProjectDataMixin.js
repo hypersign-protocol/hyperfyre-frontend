@@ -50,7 +50,7 @@ export default{
               
             } catch (e) {
          
-                console.log(e);
+                // console.log(e);
               this.showStepper = false;
               this.errorMessage = e
               this.notifyErr(e);

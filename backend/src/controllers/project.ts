@@ -262,7 +262,6 @@ async function getRandomInvestors(req: Request, res: Response, next: NextFunctio
     if(!limitRecord || limitRecord == ""){
       limitRecord = "1";
     } 
-    console.log(limitRecord.toString());
     let limitRecordInt = parseInt(limitRecord.toString());
     
     // get count of total investors for this projectId

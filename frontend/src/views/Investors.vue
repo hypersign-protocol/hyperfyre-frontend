@@ -205,7 +205,7 @@ export default {
       cancelToken: undefined,
       sortOption: {
         sortChange: (params) => {
-          console.log("sortChange::", params);
+          // console.log("sortChange::", params);
           this.sortChange(params);
         },
       },
@@ -555,7 +555,7 @@ export default {
     },
 
     filterVerified(label) {
-      console.log(label);
+      // console.log(label);
 
       if (label == "onlyVerified") {
         this.project.investors = this.sourceData.investors.filter(
@@ -571,7 +571,7 @@ export default {
     },
 
     filterIssued(label) {
-      console.log(label);
+      // console.log(label);
 
       if (label == "onlyIssued") {
         this.project.investors = this.sourceData.investors.filter(
@@ -674,7 +674,7 @@ export default {
         if (!this.investor.projectId) throw new Error("No project found");
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.investor.projectId}?fetchInvestors=true&limit=${limit}&skip=${skip}&searchQuery=${this.tableSearch}`;
-        console.log(url);
+        // console.log(url);
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,

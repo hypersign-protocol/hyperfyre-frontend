@@ -1,7 +1,7 @@
 import auth0 from "auth0-js";
 import config from "../config";
 
-console.log(config);
+// console.log(config);
 const webAuth = new auth0.WebAuth({
   domain: config.auth0Domain,
   clientID: config.auth0ClinetId,

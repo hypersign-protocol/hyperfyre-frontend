@@ -321,7 +321,7 @@ export default {
 
    
         if (isAllChecked && tweetFilled) {
-             console.log("PROJECT DETAILS", this.projectDetails);
+            //  console.log("PROJECT DETAILS", this.projectDetails);
           try{
 
             const url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
@@ -400,7 +400,7 @@ export default {
         )[0];
 
         let ethAddressValidate;
-        console.log(ethAddress);
+        // console.log(ethAddress);
 
         if(config.isTezos()){
           ethAddressValidate =  ethAddress.value.startsWith("tz1");
@@ -553,7 +553,7 @@ export default {
           Authorization: `Bearer ${this.authToken}`,
         };
 
-        console.log(investor);
+        // console.log(investor);
 
         const resp = await apiClinet.makeCall({
           url: url,
@@ -605,7 +605,7 @@ export default {
     },
 
     onCaptchaExpired: function() {
-      console.log("Captcha expired");
+      // console.log("Captcha expired");
       this.$refs.recaptcha.reset();
     },
     formateDate(d) {

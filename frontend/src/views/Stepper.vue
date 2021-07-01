@@ -212,7 +212,7 @@ export default {
 
  
   mounted() {
-    console.log("TEZOS", config.isTezos())
+    // console.log("TEZOS", config.isTezos())
     const usrStr =
       localStorage.getItem("user") ||
       '{"name": "Hypersign", "email": "hypersign@email.com" }';

@@ -389,14 +389,14 @@ export default {
     };
   },
   created() {
-    console.log("Beofer creating websoceket connection");
+    // console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
     let websocketUrl = "ws://localhost:3003";
 
     let parsedUrl = {};
     try {
       parsedUrl = url.parse(baseUrl);
-      console.log(parsedUrl);
+      // console.log(parsedUrl);
       websocketUrl =
         parsedUrl.protocol === "https:"
           ? `wss://${parsedUrl.host}`
@@ -417,23 +417,23 @@ export default {
     this.connection = new WebSocket(this.$config.websocketUrl);
     this.connection.onopen = function() {
       _this.socketMessage = "Connected to auth server..."
-      console.log("Websocket connection is open");
+      // console.log("Websocket connection is open");
     };
 
 
     this.connection.onmessage = ({ data }) =>  {      
       console.log("Websocket connection messag receieved ", data);
       let messageData = JSON.parse(data);
-      console.log(messageData);
+      // console.log(messageData);
       if (messageData.op == "init") {
         _this.isLoading = false;
-        console.log(messageData.data);
+        // console.log(messageData.data);
         _this.value = JSON.stringify(messageData.data);
         _this.socketMessage = null;
       } else if (messageData.op == "end") {
         _this.connection.close();
         const authorizationToken = messageData.data.token;
-        console.log(authorizationToken);
+        // console.log(authorizationToken);
         localStorage.setItem("authToken", authorizationToken);
 
 
@@ -444,7 +444,7 @@ export default {
            
             let path = "";
             const projectId = localStorage.getItem("projectId");
-            console.log(projectId)
+            // console.log(projectId)
 
             if (projectId) {
               path = "form?projectId=" + projectId;

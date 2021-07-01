@@ -79,9 +79,9 @@ export default {
         owp: true,    
       },
       function (err, authRes) {
-        console.log(authRes, err)
+        // console.log(authRes, err)
         webAuth.client.userInfo(authRes.accessToken, function(err, user) {
-    console.log(err, user)
+    // console.log(err, user)
   });
       }
     );

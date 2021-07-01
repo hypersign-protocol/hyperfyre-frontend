@@ -80,10 +80,10 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    console.log("Requires auth");
+    // console.log("Requires auth");
     const authToken = localStorage.getItem("authToken");
     if (authToken) {
-      console.log("Yes auth token");
+      // console.log("Yes auth token");
       const url = `${config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
       fetch(url, {
         headers: {
@@ -110,7 +110,7 @@ router.beforeEach((to, from, next) => {
           });
         });
     } else {
-      console.log("No auth token");
+      // console.log("No auth token");
       localStorage.setItem("projectId", to.query["projectId"]);
       next({
         path: to.meta.admin ? "/admin/login" : "/login",

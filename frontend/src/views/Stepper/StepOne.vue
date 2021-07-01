@@ -388,7 +388,7 @@ export default {
     },
 
     handleTelegramLogin(urlToRedirect, idx){
-      console.log(urlToRedirect);
+      // console.log(urlToRedirect);
         if(!localStorage.getItem("telegamId")){
 
 

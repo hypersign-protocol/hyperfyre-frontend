@@ -79,7 +79,7 @@ export default {
       this.$router.push(`${id}`);
     },
     logout(){
-      console.log("Dashboard:: Logout method...")
+      // console.log("Dashboard:: Logout method...")
       // localStorage.removeItem('authToken')
       // localStorage.removeItem('user')
       // localStorage.removeItem("credentials")

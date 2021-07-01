@@ -449,7 +449,7 @@ export default {
       try {
         
         this.isLoading = true;
-        console.log("THIS USER", )
+        // console.log("THIS USER", )
 
         // if (!this.project.ownerDid) throw new Error("No project found");
         if (!this.user.id) throw new Error("No project found");
@@ -540,7 +540,7 @@ export default {
           return;
         }
     
-        console.log("PROEJCT", resp.data)
+        // console.log("PROEJCT", resp.data)
         
         const userProjects = JSON.parse(localStorage.getItem("userProjects"));
         userProjects.count += 1

@@ -217,26 +217,26 @@ export default {
     };
   },
   created() {
-    console.log("Beofer creating websoceket connection");
+    // console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
     let websocketUrl = "ws://localhost:3003";
 
     let parsedUrl = {};
     try {
       parsedUrl = url.parse(baseUrl);
-      console.log(parsedUrl);
+      // console.log(parsedUrl);
       websocketUrl =
         parsedUrl.protocol === "https:"
           ? `wss://${parsedUrl.host}`
           : `ws://${parsedUrl.host}`;
-      console.log(websocketUrl);
+      // console.log(websocketUrl);
     } catch (e) {
       websocketUrl = "ws://localhost:3003";
     }
     if (websocketUrl[websocketUrl.length - 1] == "/") {
       websocketUrl = websocketUrl.substring(0, websocketUrl.length - 1);
     }
-    console.log(websocketUrl);
+    // console.log(websocketUrl);
 
     // take it in the env
     this.connection = new WebSocket(this.$config.websocketUrl);
@@ -250,22 +250,22 @@ export default {
     this.connection.onmessage = function({ data }) {
       console.log("Websocket connection messag receieved ", data);
       let messageData = JSON.parse(data);
-      console.log(messageData);
+      // console.log(messageData);
       if (messageData.op == "init") {
         _this.isLoading = false;
-        console.log(messageData.data);
+        // console.log(messageData.data);
         _this.value = JSON.stringify(messageData.data);
       } else if (messageData.op == "end") {
         _this.connection.close();
         const authorizationToken = messageData.data.token;
-        console.log(authorizationToken);
+        // console.log(authorizationToken);
         localStorage.setItem("authToken", authorizationToken);
 
         if (localStorage.getItem("authToken") != null) {
           if (_this.$route.params.nextUrl != null) {
             _this.$router.push(_this.$route.params.nextUrl);
           } else {
-            console.log(_this.$router);
+            // console.log(_this.$router);
             window.location.href =
               window.location.origin + "/admin/dashboard";
             // _this.$router.push("dashboard");

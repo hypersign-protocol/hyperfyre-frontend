@@ -139,8 +139,8 @@ export default {
   },
 
   mounted() {
-    console.log(this.$config);
-    console.log(this.stepTwoData);
+    // console.log(this.$config);
+    // console.log(this.stepTwoData);
   },
 };
 </script>
