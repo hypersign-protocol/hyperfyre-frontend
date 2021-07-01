@@ -84,17 +84,13 @@
                 <img
                   src="../assets/avatarUploadLabel.png"
                   alt="John"
-                  style="width: 100%; height: 100%"
+                  style="width: 100%; height: 100%; opacity: 0.2"
                 />
               </div>
-              <div class="col-md-6" style="flex-wrap: wrap; padding: 20px">
+              <div class="col-md-8" style="flex-wrap: wrap; padding: 20px">
                 <p>DID</p>
                 <p class="fVal">
                   <a
-                    :href="
-                      `/` +
-                      user.id
-                    "
                     target="_blank"
                     >{{ user.id }}</a
                   >

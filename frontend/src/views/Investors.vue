@@ -81,6 +81,18 @@ label {
  .projectSelector{
    min-width: 220px;
  }
+ .lotteryImage{
+    -webkit-filter: brightness(0) invert(1);
+ filter: brightness(0) invert(1); 
+ }
+ .cta_btns{
+   display: flex;
+   align-items: center;
+ }
+ .cta_btns i{
+    font-size: 22px;
+    margin-left: 10px;
+ }
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -135,10 +147,10 @@ label {
             ></b-form-input>
           </div>
           <div class="mx-3">
-            <button @click="handleExport" :disabled='project.investors.length ? false : true' class="btn btn-primary btn-sm">Export</button>
+            <button @click="handleExport" :disabled='project.investors.length ? false : true' class="cta_btns btn btn-primary btn-md">Export All <i class="fas fa-file-export"></i></button>
           </div>
           <div>
-            <button :disabled='project.investors.length ? false : true' v-b-modal.modal-1 class="btn btn-primary btn-sm">Lottery</button>
+            <button  :disabled='project.investors.length ? false : true' v-b-modal.modal-1 class="cta_btns btn btn-primary btn-md">Lottery <i class="fas fa-dharmachakra"></i></button>
           </div>
         </div>
       </div>
