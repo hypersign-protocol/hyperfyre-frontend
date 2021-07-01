@@ -42,8 +42,14 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
     }
 
     logger.info({
-      fromDate: new Date(fromDate).toISOString(),
-      toDate: new Date(toDate).toISOString()
+      fromDate: {
+        original: fromDate, 
+        iso: new Date(fromDate).toISOString()
+      },
+      toDate: {
+        original: fromDate, 
+        iso : new Date(toDate).toISOString()
+      }
     })
 
     const newProject: IProject = await ProjectModel.create({
