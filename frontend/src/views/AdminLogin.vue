@@ -69,6 +69,15 @@ h5 span {
   text-transform: uppercase;
 }
 
+.btn-hypersign{
+  background-color: #494949;
+  border-color: #494949;
+  padding: 7px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  min-width: 300px;
+}
+
+
 .loginContent{
   height: 100%;
 width: 22%;
@@ -133,7 +142,7 @@ border-top: 2px solid rgb(120, 120, 243);
                 <h5><span>Or</span></h5>
               
 
-              <p class="text-center">
+              <!-- <p class="text-center">
                 <button
                   type="button"
                   class="btn with-hypersign-btn d-flex mx-auto align-items-center btn-sm  text-white rounded rounded-pill"
@@ -148,8 +157,22 @@ border-top: 2px solid rgb(120, 120, 243);
                   </div>
                   <div class="btn-text">USE Web Wallet</div>
                 </button>
-              </p>
+              </p> -->
+
+
+            <div class="mb-2 ">
+              <a v-if="this.value != ''" class="btn btn-hypersign text-white " href="#"                
+                @click.prevent="openWallet()" >
+                <img style="height:40px; float: left;" 
+                :src="require('../assets/hypersignSmallLogo.png')"
+                class="ml-0 rounded rounded-circle  left"/>
+                <div style="font-size: smaller; margin-top: 10px;">USE WEB WALLET</div>
+              </a>  
+            </div>
+
             </form>
+
+
           </div>
       </b-card>
     
@@ -162,6 +185,8 @@ import VueQr from "vue-qr";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import url from "url";
+import notificationMixins from '../mixins/notificationMixins';
+import localStorageMixin from '../mixins/localStorageMixin';
 
 export default {
   name: "Login",
@@ -192,26 +217,26 @@ export default {
     };
   },
   created() {
-    console.log("Beofer creating websoceket connection");
+    // console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
     let websocketUrl = "ws://localhost:3003";
 
     let parsedUrl = {};
     try {
       parsedUrl = url.parse(baseUrl);
-      console.log(parsedUrl);
+      // console.log(parsedUrl);
       websocketUrl =
         parsedUrl.protocol === "https:"
           ? `wss://${parsedUrl.host}`
           : `ws://${parsedUrl.host}`;
-      console.log(websocketUrl);
+      // console.log(websocketUrl);
     } catch (e) {
       websocketUrl = "ws://localhost:3003";
     }
     if (websocketUrl[websocketUrl.length - 1] == "/") {
       websocketUrl = websocketUrl.substring(0, websocketUrl.length - 1);
     }
-    console.log(websocketUrl);
+    // console.log(websocketUrl);
 
     // take it in the env
     this.connection = new WebSocket(this.$config.websocketUrl);
@@ -225,24 +250,24 @@ export default {
     this.connection.onmessage = function({ data }) {
       console.log("Websocket connection messag receieved ", data);
       let messageData = JSON.parse(data);
-      console.log(messageData);
+      // console.log(messageData);
       if (messageData.op == "init") {
         _this.isLoading = false;
-        console.log(messageData.data);
+        // console.log(messageData.data);
         _this.value = JSON.stringify(messageData.data);
       } else if (messageData.op == "end") {
         _this.connection.close();
         const authorizationToken = messageData.data.token;
-        console.log(authorizationToken);
+        // console.log(authorizationToken);
         localStorage.setItem("authToken", authorizationToken);
 
         if (localStorage.getItem("authToken") != null) {
           if (_this.$route.params.nextUrl != null) {
             _this.$router.push(_this.$route.params.nextUrl);
           } else {
-            console.log(_this.$router);
+            // console.log(_this.$router);
             window.location.href =
-              window.location.origin + "/studio/admin/dashboard";
+              window.location.origin + "/admin/dashboard";
             // _this.$router.push("dashboard");
           }
         }
@@ -268,31 +293,11 @@ export default {
     push(path) {
       this.$router.push(path);
     },
-    clean() {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("user");
-      localStorage.removeItem("credentials");
-      localStorage.removeItem("userData");
-    },
-    notifySuccess(msg) {
-      this.$notify({
-        group: "foo",
-        title: "Information",
-        type: "success",
-        text: msg,
-      });
-    },
-    notifyErr(msg) {
-      this.$notify({
-        group: "foo",
-        title: "Error",
-        type: "error",
-        text: msg,
-      });
-    },
+  
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
     },
   },
+  mixins: [notificationMixins, localStorageMixin]
 };
 </script>

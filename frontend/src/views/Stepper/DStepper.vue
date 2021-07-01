@@ -15,10 +15,20 @@
           <span class="">{{ projectDetails.projectName }}</span>
           <!-- Token Sale  Registration -->
         </h4>
-        <p class="my-0">{{ step == 0 ? stepOneData.line1 : stepTwoData.line1 }}</p>
-        <p  class="my-0">{{ step == 0 ? stepOneData.line2 : stepTwoData.line2 }}</p>
+        <p class="my-0">
+          {{ step == 0 ? stepOneData.line1 : stepTwoData.line1 }}
+        </p>
+        <p class="my-0">
+          {{ step == 0 ? stepOneData.line2 : stepTwoData.line2 }}
+        </p>
       </div>
     </div>
+
+    <b-modal id="err-modal" title="BootstrapVue">
+      <p v-for="errors in serverErrors" :key="errors.param" class="my-4">
+        {{ errors.param }}: {{ errors.msg }}
+      </p>
+    </b-modal>
 
     <div v-if="showStepper" class="steps-container">
       <div
@@ -91,6 +101,7 @@
                       @fatal-error="blockStepper"
                       @can-continue="nextStepAction"
                       @set-step="setStep"
+                      @handleTwitterLogin="handleTwitterLogin"
                     />
                   </keep-alive>
                 </transition>
@@ -198,6 +209,12 @@
 import Loading from "vue-loading-overlay";
 import VueRecaptcha from "vue-recaptcha";
 import "vue-loading-overlay/dist/vue-loading.css";
+import apiCall from "../../mixins/apiClientMixin"
+import notificationMixin from "../../mixins/notificationMixins.js";
+import fetchProjectDataMixin from "../../mixins/fetchProjectDataMixin";
+import apiClinet from "../../mixins/apiClientMixin";
+import checkTelegramAnnouncemntMixin from "../../mixins/checkTelegramAnnChannel";
+import config from "../../config";
 
 export default {
   name: "DStepper",
@@ -235,7 +252,8 @@ export default {
       authToken: localStorage.getItem("authToken"),
       fullPage: true,
       projectDetails: {},
-      projectId: ""
+      projectId: "",
+      serverErrors: [],
     };
   },
 
@@ -245,23 +263,31 @@ export default {
       this.$route.query.projectId == "undefined"
     ) {
       this.showStepper = false;
-      this.errorMessage = "Sorry, no project found :( !"
+      this.errorMessage = "Sorry, no project found :( !";
       return;
     }
 
-
     this.projectId = this.$route.query.projectId;
     const userDid = JSON.parse(localStorage.getItem("user")).id;
-    
 
+    
     this.checkIfAlreadyFilled(userDid);
-    this.fetchProjectData();
+
+    if (!this.$route.params.projectDetails) {
+      this.fetchProjectData({ isAuthTokenAvailable: true });
+   
+      return;
+    } 
+  
+    this.projectDetails = this.$route.params.projectDetails;
+    
+    // this.formatTweet()
   },
+
+
   mounted() {
     this.data =
       this.step == 0 || this.step == 0 ? this.stepOneData : this.stepTwoData;
-
-    
   },
 
   computed: {
@@ -279,6 +305,161 @@ export default {
   },
 
   methods: {
+
+    async nextStep() {
+      const step = this.step + 1;
+      const data = step == 1 ? this.stepOneData : this.stepTwoData;
+
+      let gotoNextPage = false;
+
+      if (step == 1) {
+        const isAllChecked = data.rules.every((rule) => rule.checked);
+        
+        const tweetFilled =
+          data.rules[1].tweetUrl.trim().length !== 0 ? true : false;
+
+
+   
+        if (isAllChecked && tweetFilled) {
+            //  console.log("PROJECT DETAILS", this.projectDetails);
+          try{
+
+            const url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
+            let headers = {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${this.authToken}`
+            };
+            
+            const body = {
+                tweetUrl: data.rules[1].tweetUrl,
+                userId:  localStorage.getItem("twitterId"),
+                tweetText:  this.projectDetails.twitterPostTextFormat,
+                needUserDetails : true,
+                checkIfFollowed: true,
+                sourceScreenName: this.projectDetails.twitterHandle
+            }
+
+            const res = await apiClinet.makeCall({method: "POST", body: body, header: headers, url})
+
+  
+
+            if(!res.data.user.followed.hasFollowed){
+              return   this.notifyErr(`Please Follow our twitter handle (@${res.data.user.followed.to})`)
+            }
+
+            if(!localStorage.getItem("telegramId")){
+              return this.notifyErr("Please authenticate Telegram")
+            }
+
+             const TGHandle = this.stepTwoData.formData.filter(x => x.id == "telegramHandle")[0]
+             TGHandle.value = localStorage.getItem("telegramId")
+             TGHandle.disabled = true
+
+
+
+            if(res.data.hasTweetUrlVerified && res.data.user.followed.hasFollowed){
+              const twitterHandle = this.stepTwoData.formData.filter(x => x.id == "twitterHandle")[0]
+              twitterHandle.value = res.data.user.screen_name
+              twitterHandle.disabled = true
+
+              // console.log("ABLE TO GOTO NEXT PAGE")
+              gotoNextPage = true;
+              this.slideToNextPage(gotoNextPage);
+            }
+          }catch(e){
+            console.log(e);
+            if(e.error){
+             return  this.notifyErr(e.error)
+            }
+            if(!e.hasTweetUrlVerified){
+              return this.notifyErr("Please check your tweet URL")
+            }
+            if(e.errors){
+              return alert(JSON.stringify(e.errors))
+            }
+          }
+
+
+         
+        } else {
+          this.notifyErr("Please follow all the rules and provide a tweet URL")
+        
+        }
+        //  this.slideToNextPage(true);
+
+      } else if (step == 2) {
+        const isAllFilled = data.formData.every((input) => input.value.length);
+        const twitterHandle = data.formData.filter((x) =>
+          x.label.toLowerCase().includes("twitter")
+        )[0];
+        const telegramHandle = data.formData.filter((x) =>
+          x.label.toLowerCase().includes("telegram")
+        )[0];
+        const ethAddress = data.formData.filter((x) =>
+          x.id.toLowerCase().includes("eth")
+        )[0];
+
+        let ethAddressValidate;
+        // console.log(ethAddress);
+
+        if(config.isTezos()){
+          ethAddressValidate =  ethAddress.value.startsWith("tz1");
+        }else{
+          ethAddressValidate =  ethAddress.value.startsWith("0x");
+        }
+      
+
+      
+        let twitterHandleValidate = false;
+        let telegramHandleValidate = false;
+
+        if (
+          twitterHandle.value.match(/^[a-zA-Z0-9_]{1,15}/) !== null &&
+          twitterHandle.value.match(/^[a-zA-Z0-9_]{1,15}/)[0] ==
+            twitterHandle.value
+        ) {
+          data.formData[2].errMsg = "";
+          twitterHandleValidate = true;
+        } else {
+          data.formData[2].errMsg = "Please enter a valid username (without @)";
+          twitterHandleValidate = false;
+        }
+
+        if (
+          telegramHandle.value.match(/^[a-zA-Z0-9_]{5,15}/) !== null &&
+          telegramHandle.value.match(/^[a-zA-Z0-9_]{5,15}/)[0] ==
+            telegramHandle.value
+        ) {
+          data.formData[3].errMsg = "";
+          telegramHandleValidate = true;
+        } else {
+          data.formData[3].errMsg =
+            "Please Enter a valid Telegram Id (without @)";
+          telegramHandleValidate = false;
+        }
+
+        if (!ethAddressValidate && !config.isTezos()) {
+          data.formData[4].errMsg = "Please enter a valid Eth Address";
+        } else if(!ethAddressValidate && config.isTezos()) {
+          data.formData[4].errMsg = "Please enter a valida Tezos Address";
+        } else{
+           data.formData[4].errMsg = ""
+        }
+
+        if (
+          isAllFilled &&
+          twitterHandleValidate &&
+          telegramHandleValidate &&
+          ethAddressValidate
+        ) {
+          gotoNextPage = true;
+          this.slideToNextPage(gotoNextPage);
+        } 
+      } else if (step == 3) {
+        this.$refs.recaptcha.execute();
+      }
+    },
+
     setStep(step) {
       if (step >= 1 && step <= this.steps.length) this.step = step - 1;
     },
@@ -319,76 +500,6 @@ export default {
         "text-primary": this.step < i,
       };
     },
-    nextStep() {
-      const step = this.step + 1;
-      const data = step == 1 ? this.stepOneData : this.stepTwoData;
-
-      let gotoNextPage = false;
-
-      if (step == 1) {
-        const isAllChecked = data.rules.every((rule) => rule.checked);
-        const tweetFilled =
-          data.rules[1].tweetUrl.trim().length !== 0 ? true : false;
-
-        if (isAllChecked && tweetFilled) {
-          gotoNextPage = true;
-          this.slideToNextPage(gotoNextPage);
-        } else {
-          this.$notify({
-            group: "foo",
-            title: "Error",
-            type: "error",
-            text: "Please follow all the rules and provide a tweet URL",
-          });
-        }
-      } else if (step == 2) {
-        const isAllFilled = data.formData.every((input) => input.value.length);
-        const twitterHandle = data.formData.filter(x =>  x.label.toLowerCase().includes("twitter"))[0]
-        const telegramHandle = data.formData.filter(x =>  x.label.toLowerCase().includes("telegram"))[0]
-        const ethAddress = data.formData.filter(x =>   x.id.toLowerCase().includes("eth"))[0];
-        const ethAddressValidate =  ethAddress.value.startsWith("0x");
-        let twitterHandleValidate = false
-         let telegramHandleValidate = false
-
-       
-        if(twitterHandle.value.match(/^[a-zA-Z0-9_]{1,15}/) !== null && twitterHandle.value.match(/^[a-zA-Z0-9_]{1,15}/)[0] == twitterHandle.value ){
-            data.formData[2].errMsg = ""
-            twitterHandleValidate = true
-        }else{
-          data.formData[2].errMsg = "Please enter a valid username (without @)"
-          twitterHandleValidate = false
-        }
-      
-        if(telegramHandle.value.match(/^[a-zA-Z0-9_]{5,15}/) !== null && telegramHandle.value.match(/^[a-zA-Z0-9_]{5,15}/)[0] == telegramHandle.value){
-            data.formData[3].errMsg = ""
-        telegramHandleValidate = true
-        }else {
-          data.formData[3].errMsg = "Please Enter a valid Telegram Id (without @)"
-          telegramHandleValidate = false
-        }
-
-        if(!ethAddressValidate){
-          data.formData[4].errMsg =  "Please enter a valid Eth Address"
-        } else{
-          data.formData[4].errMsg =  ""
-        }
-
-
-        if (isAllFilled && twitterHandleValidate && telegramHandleValidate && ethAddressValidate) {
-          gotoNextPage = true;
-          this.slideToNextPage(gotoNextPage);
-        } else {
-          this.$notify({
-            group: "foo",
-            title: "Error",
-            type: "error",
-            text: "Please fill the form properly",
-          });
-        }
-      } else if (step == 3) {
-        this.$refs.recaptcha.execute();
-      }
-    },
 
     slideToNextPage(gotoNextPage) {
       if (gotoNextPage) {
@@ -417,30 +528,11 @@ export default {
       //if (!status) this.nextStepAction();
     },
 
-    notifySuccess(msg) {
-      this.isLoading = false;
-      this.$notify({
-        group: "foo",
-        title: "Information",
-        type: "success",
-        text: msg,
-      });
-    },
-
-    notifyErr(msg) {
-      this.isLoading = false;
-      this.$notify({
-        group: "foo",
-        title: "Error",
-        type: "error",
-        text: msg,
-      });
-    },
-
     async saveInvestor(data, recaptchaToken) {
       try {
         let investor = {};
         const did = JSON.parse(localStorage.getItem("user")).id;
+        // const did = "nsjdnfkdsnf34234"
 
         this.isLoading = true;
 
@@ -452,34 +544,36 @@ export default {
         investor.did = did;
 
         investor.tweetUrl = this.stepOneData.rules[1].tweetUrl;
+        investor.hasJoinedTGgroup = true;
+        investor.hasTwitted = true;
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${recaptchaToken}`;
         let headers = {
           "Content-Type": "application/json",
-           "Authorization": `Bearer ${this.authToken}`
+          Authorization: `Bearer ${this.authToken}`,
         };
 
-        const resp = await fetch(url, {
+        // console.log(investor);
+
+        const resp = await apiClinet.makeCall({
+          url: url,
           method: "POST",
-          body: JSON.stringify(investor),
-          headers,
+          body: investor,
+          header: headers,
         });
-        if (resp.status !== 200) {
-          throw new Error(resp.statusText);
-        }
-        const json = await resp.json();
-        console.log(json);
 
         this.isLoading = false;
         this.slideToNextPage(true);
         this.notifySuccess("Successfully Signed Up for whitelisting");
       } catch (err) {
-        console.log("ERROR", err);
-        this.notifyErr(err.message);
         this.isLoading = false;
+        if (typeof err.errors == "object") {
+          this.serverErrors = err.errors;
+          this.$bvModal.show("err-modal");
+        }
+        this.notifyErr(err);
       } finally {
-        console.log("FINALLY ");
-        // this.isLoading = false;
+        this.isLoading = false;
         // this.clear();
       }
     },
@@ -489,21 +583,16 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?did=${userDid}&projectId=${this.projectId}`;
         let headers = {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.authToken}`
+          Authorization: `Bearer ${this.authToken}`,
         };
 
-        const res = await fetch(url, {
-          headers,
-          method: "GET"
+        const res = await apiClinet.makeCall({
+          url,
+          header: headers,
+          method: "GET",
         });
 
-        if (res.status !== 200) {
-          throw new Error(res.statusText);
-        }
-
-        const resData = await res.json();
-        
-        if (resData.length > 0) {
+        if (res.data.length > 0) {
           this.step = 3;
         }
       } catch (e) {
@@ -516,7 +605,7 @@ export default {
     },
 
     onCaptchaExpired: function() {
-      console.log("Captcha expired");
+      // console.log("Captcha expired");
       this.$refs.recaptcha.reset();
     },
     formateDate(d) {
@@ -529,63 +618,9 @@ export default {
       self.$refs.recaptcha.reset();
       this.saveInvestor(this.stepTwoData.formData, recaptchaToken);
     },
-    async fetchProjectData() {
-      try {
-        this.isLoading = true;
-
-        if (!this.$route.query.projectId) throw new Error("No project found");
-
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.projectId}`;
-
-        let headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
-        };
-        const resp = await fetch(url, {
-          headers,
-          method: "GET",
-        });
-
-        console.log("RESP", resp);
-        if (resp.status != 200) {
-          throw new Error(resp.statusText);
-        }
-
-        const json = await resp.json();
-        this.projectDetails = { ...json };
-
-        if(!this.projectDetails.projectStatus || this.projectDetails.projectStatus === false){
-          this.showStepper = false;
-          this.errorMessage = "Sorry, whitelisting process for this project has been over :( !"
-          return;
-        }
-
-        for (let i in this.stepOneData.rules) {
-          this.stepOneData.rules[i].text = this.stepOneData.rules[
-            i
-          ].text.replace("projectName", this.projectDetails.projectName);
-        }
-        this.projectDetails.twitterPostFormat = encodeURIComponent(
-          this.projectDetails.twitterPostFormat
-        );
-        this.projectDetails.twitterPostTextFormat = decodeURIComponent(
-           this.projectDetails.twitterPostFormat
-        )
-        
-        this.projectDetails.fromDate = this.formateDate(this.projectDetails.fromDate);
-        this.projectDetails.toDate = this.formateDate(this.projectDetails.toDate);
-        this.projectFetched = true;
-
-        this.notifySuccess("Project is fetched. ProjectName " + this.projectDetails.projectName);
-      } catch (e) {
-        this.showStepper = false;
-        this.errorMessage = e.message
-        this.notifyErr(e.message);
-      } finally {
-        this.isLoading = false;
-      }
-    },
   },
+
+  mixins: [notificationMixin, fetchProjectDataMixin, checkTelegramAnnouncemntMixin]
 };
 </script>
 
@@ -665,14 +700,13 @@ export default {
 
 .header,
 .footer {
-  background-color:#494949;
+  background-color: #494949;
 }
 .header {
   height: 210px;
 }
 .footer {
   padding: 10px 30px;
-  
 }
 .header .logo {
   border-bottom-right-radius: 20px;
@@ -724,45 +758,37 @@ div.rule {
   font-size: 16px;
 }
 
-
-
-
-
 @media screen and (max-width: 768px) {
-  .header{
+  .header {
     font-size: 14px;
     height: auto;
   }
-  .steps-container{
+  .steps-container {
     width: 80%;
     min-height: 80vh;
   }
-  .social{
-  margin-left: auto;
-}
- 
+  .social {
+    margin-left: auto;
+  }
 }
 @media screen and (max-width: 516px) {
-   .steps-indicator{
-     top: 30px;
-     flex-direction: column-reverse;
-   }
+  .steps-indicator {
+    top: 30px;
+    flex-direction: column-reverse;
+  }
 
-.steps-indicator .heading{
-   margin-top: 10px !important;
+  .steps-indicator .heading {
+    margin-top: 10px !important;
   }
   div.form {
     font-size: 12px;
   }
-  
 }
 @media screen and (min-height: 1070px) {
   .footer {
-  
-   position: absolute;
-  width: 100%;
-  bottom: 0;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
   }
 }
-
 </style>

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { logger } from '../config';
 
 export = (hypersign) => {
     const router = Router();
@@ -10,7 +11,7 @@ export = (hypersign) => {
             if (!userModel) throw new Error(`Could not fetch usermodel from Hypersign auth`)
             res.status(200).send({ status: 200, message: "Success", error: null });
         } catch (e) {
-            console.log(e)
+            logger.error(e)
             res.status(500).send({ status: 500, message: null, error: e.message });
         }
     })

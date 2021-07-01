@@ -243,7 +243,8 @@ h5 span {
     <div class="cmp-logo">
       <div>
         <img
-          src="https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png"
+         :src="projectDetails.logoUrl || 'https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png'"
+         
           style="max-width: 150px;"
         />
       </div>
@@ -253,7 +254,8 @@ h5 span {
       class="col col-lg-8 col-md-12 col-sm-12 d-flex justify-content-center align-items-center border border-1 bg-dark shadow text-left text-white login-inst-container"
     >
       <div>
-        <h3>Whitelist for Hypersign Data Defenders Program</h3>
+          <!-- <h3>Whitelist for Hypersign Data Defenders Program</h3> -->
+        <h3>Whitelist for {{projectDetails.projectName}}</h3>
         <p class="mt-4">Instructions</p>
         <ol class="px-3">          
           <li>Login with the Hypersign</li>
@@ -347,8 +349,13 @@ h5 span {
 <script>
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import url from "url";
+import url, { format } from "url";
 import VueQr from "vue-qr";
+import notificationMixins from '../mixins/notificationMixins';
+import apiClinet from "../mixins/apiClientMixin";
+import fetchProjectDataMixin from '../mixins/fetchProjectDataMixin';
+import localStorageMixin from '../mixins/localStorageMixin';
+import checkTelegramAnnouncemntMixin from '../mixins/checkTelegramAnnChannel';
 
 export default {
   name: "Login",
@@ -372,22 +379,24 @@ export default {
       fullPage: true,
       isLoading: false,
       connection: null,
+        projectDetails: {},
       qrConfig: {
         value: "test",
         imagePath: "/apple-icon-57x57.png",
         filter: "color",
       },
+      projectId: localStorage.getItem("projectId")
     };
   },
   created() {
-    console.log("Beofer creating websoceket connection");
+    // console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
     let websocketUrl = "ws://localhost:3003";
 
     let parsedUrl = {};
     try {
       parsedUrl = url.parse(baseUrl);
-      console.log(parsedUrl);
+      // console.log(parsedUrl);
       websocketUrl =
         parsedUrl.protocol === "https:"
           ? `wss://${parsedUrl.host}`
@@ -408,38 +417,48 @@ export default {
     this.connection = new WebSocket(this.$config.websocketUrl);
     this.connection.onopen = function() {
       _this.socketMessage = "Connected to auth server..."
-      console.log("Websocket connection is open");
+      // console.log("Websocket connection is open");
     };
 
 
-    this.connection.onmessage = function({ data }) {      
+    this.connection.onmessage = ({ data }) =>  {      
       console.log("Websocket connection messag receieved ", data);
       let messageData = JSON.parse(data);
-      console.log(messageData);
+      // console.log(messageData);
       if (messageData.op == "init") {
         _this.isLoading = false;
-        console.log(messageData.data);
+        // console.log(messageData.data);
         _this.value = JSON.stringify(messageData.data);
         _this.socketMessage = null;
       } else if (messageData.op == "end") {
         _this.connection.close();
         const authorizationToken = messageData.data.token;
-        console.log(authorizationToken);
+        // console.log(authorizationToken);
         localStorage.setItem("authToken", authorizationToken);
+
 
         if (localStorage.getItem("authToken") != null) {
           if (_this.$route.params.nextUrl != null) {
             _this.$router.push(_this.$route.params.nextUrl);
           } else {
-            console.log(_this.$router);
+           
             let path = "";
             const projectId = localStorage.getItem("projectId");
+            // console.log(projectId)
+
             if (projectId) {
               path = "form?projectId=" + projectId;
             } else {
               path = "form";
             }
-            _this.$router.push(path);
+            
+            
+            _this.$router.push({
+               path: path,
+               name:"investor",
+               query: {projectId: projectId},
+              params: { projectDetails: this.projectDetails },
+            });
           }
         }
       }
@@ -449,10 +468,14 @@ export default {
       _this.socketMessage = "Error while fetching the QR data :(";
       console.log("Websocket connection error ", error);
     };
+
+    this.fetchProjectData({isAuthTokenAvailable: false});
+
   },
   mounted() {
     this.clean();
   },
+
   methods: {
     openWallet() {
       if (this.value != "") {
@@ -470,31 +493,16 @@ export default {
     push(path) {
       this.$router.push(path);
     },
-    clean() {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("user");
-      localStorage.removeItem("credentials");
-      localStorage.removeItem("userData");
-    },
-    notifySuccess(msg) {
-      this.$notify({
-        group: "foo",
-        title: "Information",
-        type: "success",
-        text: msg,
-      });
-    },
-    notifyErr(msg) {
-      this.$notify({
-        group: "foo",
-        title: "Error",
-        type: "error",
-        text: msg,
-      });
-    },
+  
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
     },
+
+    formateDate(d) {
+      return new Date(d).toLocaleString();
+    },
+    
   },
+  mixins: [notificationMixins, fetchProjectDataMixin, localStorageMixin, checkTelegramAnnouncemntMixin]
 };
 </script>

@@ -23,7 +23,6 @@
   float: right;
 }
 .card-header {
-  background: aliceblue;
   padding: 0px;
 }
 .sm-tiles {
@@ -65,17 +64,15 @@ i {
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
+    <b-modal   size="lg"  id="err-modal" title="Errors !">
+      <p v-for="err in errors">
+          {{err.param.toUpperCase()}} : {{err.msg}}
+      </p>
 
-    <div class="row">
-      <div class="col-md-12" style="text-align: left">
-        <div class="card">
-          <div class="card-header">
-            <b-button v-b-toggle.collapse-1 variant="link"
-              ><i class="fas fa-plus"></i> CREATE OR EDIT A PROJECT</b-button
-            >
-          </div>
-          <b-collapse id="collapse-1" class="mt-2">
-            <div class="card-body">
+    </b-modal>
+
+     <b-modal  hide-footer size="lg"  id="create-project-modal" :title=" isProjectEditing ? 'Edit a project ': 'Create a Project'">
+      <div class="card-body">
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
@@ -109,11 +106,9 @@ i {
                     <label style="margin-right: 8%"
                       >Whitelisting Start Date:</label
                     >
-                    <datepicker
-                      v-model="project.fromDate"
+                    <Datepicker v-model="project.fromDate"
                       name="uniquename"
-                      input-class="form-control"
-                    ></datepicker>
+                      input-class="form-control" format="YYYY-MM-DD h:i:s" width="100%"/>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -124,6 +119,7 @@ i {
                     <datepicker
                       v-model="project.toDate"
                       name="uniquename"
+                      format="YYYY-MM-DD h:i:s"
                       input-class="form-control"
                     ></datepicker>
                   </div>
@@ -185,6 +181,24 @@ i {
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label style="margin-right: 8%"
+                      >Telegram Announcement Channel (optional):</label
+                    >
+                    <input
+                      type="text"
+                      v-model="project.telegramAnnouncementChannel"
+                      size="30"
+                      placeholder="Enter telegram ann. channel"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              
+              </div>
+
 
               <div class="row">
                 <div class="col-md-12">
@@ -198,6 +212,16 @@ i {
                 </div>
               </div>
             </div>
+    </b-modal>
+
+    <div class="row">
+      <div class="col-md-12" style="text-align: left">
+        <div class="">
+          <div class="text-right">
+            <button  @click="openCreateModal"  class="btn btn-primary ">Create <i class="fas fa-plus text-white"></i> </button>
+          </div>
+          <b-collapse id="collapse-1" class="mt-2">
+          
           </b-collapse>
         </div>
       </div>
@@ -272,14 +296,14 @@ i {
                     title="Start Date"
                   >
                     <i class="fas fa-hourglass-start"></i>
-                    {{ project.fromDate }}
+                    {{ new Date(project.fromDate).toLocaleString() }}
                   </li>
                   <li
                     data-toggle="tooltip"
                     data-placement="bottom"
                     title="End Date"
                   >
-                    <i class="fas fa-hourglass-end"></i> {{ project.toDate }}
+                    <i class="fas fa-hourglass-end"></i> {{ new Date(project.toDate).toLocaleString() }}
                   </li>
 
                   <li
@@ -299,7 +323,7 @@ i {
                     title="Investor List"
                   >
                     <i class="fas fa-users"></i
-                    ><a :href="`/studio/admin/investors?${project._id}`"
+                    ><a :href="`/admin/investors?projectId=${project._id}`"
                       >Investor List</a
                     >
                   </li>
@@ -340,10 +364,11 @@ i {
               data-toggle="tooltip"
               data-placement="bottom"
               title="Edit this project"
-              ><i class="fas fa-pencil-alt" @click="editProject(project)"></i
+              ><i class="fas fa-pencil-alt" v-b-modal.create-project-modal  @click="editProject(project)"></i
             ></span>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -353,7 +378,9 @@ i {
 import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import Datepicker from "vuejs-datepicker";
+import Datepicker from 'vuejs-datetimepicker'
+import notificationMixins from '../mixins/notificationMixins';
+import apiClientMixin from '../mixins/apiClientMixin';
 export default {
   name: "Investor",
   components: { Loading, Datepicker },
@@ -390,6 +417,7 @@ export default {
       isLoading: false,
       fullPage: true,
       user: {},
+      errors: []
     };
   },
   async mounted() {
@@ -409,16 +437,25 @@ export default {
     });
   },
   methods: {
+    openCreateModal() {
+      this.isProjectEditing = false;
+      this.project = {}
+      this.$bvModal.show("create-project-modal")
+    },
     changeProjectStatus (event) {
       this.project.projectStatus = event.target.options[event.target.options.selectedIndex].value === "false" ? false : true ;
     },
     async fetchProjects() {
       try {
+        
         this.isLoading = true;
+        // console.log("THIS USER", )
 
-        if (!this.project.ownerDid) throw new Error("No project found");
+        // if (!this.project.ownerDid) throw new Error("No project found");
+        if (!this.user.id) throw new Error("No project found");
+       
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.project.ownerDid}`;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.user.id}`;
 
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
@@ -436,10 +473,10 @@ export default {
         this.projects = json;
         this.projects.map((x) => {
           x["whitelisting_link"] =
-            window.location.origin + "/studio/form?projectId=" + x._id;
+            window.location.origin + "/form?projectId=" + x._id;
           x["investors_link"] =
             window.location.origin +
-            "/studio/admin/investors?projectId=" +
+            "/admin/investors?projectId=" +
             x._id;
         });
         this.notifySuccess("No. of projects fetched " + this.projects.length);
@@ -448,24 +485,6 @@ export default {
       } finally {
         this.isLoading = false;
       }
-    },
-    notifySuccess(msg) {
-      this.isLoading = false;
-      this.$notify({
-        group: "foo",
-        title: "Information",
-        type: "success",
-        text: msg,
-      });
-    },
-    notifyErr(msg) {
-      this.isLoading = false;
-      this.$notify({
-        group: "foo",
-        title: "Error",
-        type: "error",
-        text: msg,
-      });
     },
 
     gotosubpage: (id) => {
@@ -478,8 +497,16 @@ export default {
       this.project = { ...project };
       this.isProjectEditing = true;
     },
+    
     async saveProject() {
+      
       try {
+
+
+        if(this.checkIfEverythingIsFilled() !==  true){
+            return this.notifyErr( this.checkIfEverythingIsFilled());   
+        }
+
         this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
@@ -493,32 +520,72 @@ export default {
           method = "PUT";
         }
 
-        const resp = await fetch(url, {
-          method,
-          body: JSON.stringify(this.project),
-          headers,
-        });
+        this.project.toDate = new Date(this.project.toDate).toISOString();
+        this.project.fromDate = new Date(this.project.fromDate).toISOString();
 
-        console.log(resp);
+        const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
-        }
+          if(!this.isProjectEditing){
+            this.whitelistingLink = `${window.location.origin}/form?projectId=${resp.data._id}`;
+          }
+        
 
-        const json = await resp.json();
-        this.whitelistingLink = `${window.location.origin}/studio/form?projectId=${json._id}`;
         setTimeout(() => {
           this.whitelistingLink = "";
         }, 10000);
-        this.notifySuccess("Project is saved. Id = " + json._id);
+        this.notifySuccess("Project is saved. Id = " + resp.data._id);
+
+        if(this.isProjectEditing){
+           await this.fetchProjects();
+          return;
+        }
+    
+        // console.log("PROEJCT", resp.data)
+        
+        const userProjects = JSON.parse(localStorage.getItem("userProjects"));
+        userProjects.count += 1
+        userProjects.projects.push(resp.data)
+        localStorage.setItem("userProjects", JSON.stringify(userProjects))
         await this.fetchProjects();
+        this.$bvModal.hide("create-project-modal");
+        
       } catch (e) {
-        this.notifyErr(e.message);
+        if(e.errors){
+            this.errors = e.errors
+            this.$bvModal.show("err-modal");
+        }
+        
+        this.notifyErr(e || e.message);
       } finally {
         this.isLoading = false;
-        this.clear();
+        // this.clear();
       }
     },
+    checkIfEverythingIsFilled () {
+
+        if(!this.project.projectName){
+          return "Please Specify a project name"
+        }   
+        if(!this.project.logoUrl){
+          return "Please specify a Logo Url"
+        }
+        if(! (this.project.fromDate && this.project.toDate)){
+          return "Please specify a start and end date"
+        }
+        if(!this.project.twitterHandle){
+          return "Please provide a twitter handle"
+        }
+        if(!this.project.telegramHandle){
+          return "Please provide a telegram handle"
+        }
+         if(!this.project.twitterPostFormat){
+          return "Please provide a Twitter Post Format"
+        }
+
+        return true
+
+      
+    },  
     clear() {
       this.isProjectEditing = false;
       this.project = {
@@ -533,5 +600,6 @@ export default {
       };
     },
   },
+  mixins: [notificationMixins]
 };
 </script>

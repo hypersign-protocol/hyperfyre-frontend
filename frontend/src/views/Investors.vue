@@ -75,6 +75,24 @@ label {
   background-color: #007bff;
   margin: 1px 0;
 }
+ .modal-text{
+   font-size: 12px;
+ }
+ .projectSelector{
+   min-width: 220px;
+ }
+ .lotteryImage{
+    -webkit-filter: brightness(0) invert(1);
+ filter: brightness(0) invert(1); 
+ }
+ .cta_btns{
+   display: flex;
+   align-items: center;
+ }
+ .cta_btns i{
+    font-size: 22px;
+    margin-left: 10px;
+ }
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -85,30 +103,55 @@ label {
     ></loading>
 
 
+  <b-modal  hide-footer id="modal-1" title="Lottery!">
+    <p class="my-4 bg-info border rounded-lg p-2 text-white modal-text">Lottery is
+        process of randomly selecting records
+        Cless than total records). clicking
+        on "Execute button', the
+        lottery process begins, which may take time and screen might
+        freeze. Once done you will set selected records in excel sheet.</p>
+
+        <div class="d-flex mx-auto  justify-content-between px-4">
+          <div class="bold">Total Records</div>
+          <div class="bold">{{project.investors.length}}</div>
+        </div>
+        <div class="d-flex mx-auto  justify-content-between px-4 mt-4">
+          <div class="bold">Enter number of records to get selected for lottery</div>
+          <div class="bold">
+             <input v-model="recordsForLottery" type="number" class="form-control" placeholder="No. of records" />
+          </div>
+        </div>
+        
+        <div class="mt-5 text-center">
+          <button @click="handleLottery" type="button" class="btn btn-primary">Execute</button>
+        </div>
+  </b-modal>
+
+
     <div class="row " style="margin-top: 2%">
       <div class="d-flex justify-content-between col-md-12">
-        <div>
+
+
+        <div class="projectSelector">  
           
-          <select @change="fetchProjectInvestors">
-          <option value="">Select Project</option>
-          <option
-            v-for="project in projects"
-            :key="project._id"
-            :value="project._id"
-            >{{ project.projectName }}</option
-          >
-        </select >
+           <b-form-select v-model="selectedProject"  @change="fetchProjectInvestors"  placeholder="Select a project"    value-field="_id" text-field="projectName" :options="projects"></b-form-select>
+         
         </div>
-        <div>
-          <b-form-input
-            @input.native="handleTableSearch"
-            v-model="tableSearch"
-            placeholder="Search"
-            type="search"
-          ></b-form-input>
-        </div>
-        <div>
-          <button class="btn btn-primary btn-sm">Export</button>
+        <div class="d-flex ml-auto align-items-center">
+          <div>
+            <b-form-input
+              @input.native="handleTableSearch"
+              v-model="tableSearch"
+              placeholder="Search"
+              type="search"
+            ></b-form-input>
+          </div>
+          <div class="mx-3">
+            <button @click="handleExport" :disabled='project.investors.length ? false : true' class="cta_btns btn btn-primary btn-md">Export All <i class="fas fa-file-export"></i></button>
+          </div>
+          <div>
+            <button  :disabled='project.investors.length ? false : true' v-b-modal.modal-1 class="cta_btns btn btn-primary btn-md">Lottery <i class="fas fa-dharmachakra"></i></button>
+          </div>
         </div>
       </div>
     </div>
@@ -145,7 +188,9 @@ import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import Paginate from "vuejs-paginate";
-
+import notificationMixins from '../mixins/notificationMixins';
+import apiClientMixin from '../mixins/apiClientMixin';
+import FileDownload from "js-file-download";
 const issuedImgLink = require("../assets/issued-icon.png");
 
 export default {
@@ -154,11 +199,13 @@ export default {
 
   data() {
     return {
+      selectedProject: null,
+      recordsForLottery: 0,
       issuedImgLink: issuedImgLink,
       cancelToken: undefined,
       sortOption: {
         sortChange: (params) => {
-          console.log("sortChange::", params);
+          // console.log("sortChange::", params);
           this.sortChange(params);
         },
       },
@@ -245,104 +292,104 @@ export default {
             );
           },
         },
-        {
-          field: "isVerificationComplete",
-          key: "h",
-          title: "Verification",
-          align: "left",
-          width: 120,
-          filter: {
-            filterList: [
-              {
-                value: "onlyVerified",
-                label: "Only Verified",
-                selected: false,
-              },
-              {
-                value: "onlyNotVerified",
-                label: "Only Not Verified",
-                selected: false,
-              },
-            ],
-            filterConfirm: (filterList) => {
-              const labels = filterList
-                .filter((x) => x.selected)
-                .map((x) => x.value);
-              this.filterVerified(labels[0]);
-            },
-            filterReset: (filterList) => {
-              this.filterVerified("");
-            },
-          },
+        // {
+        //   field: "isVerificationComplete",
+        //   key: "h",
+        //   title: "Verification",
+        //   align: "left",
+        //   width: 120,
+        //   filter: {
+        //     filterList: [
+        //       {
+        //         value: "onlyVerified",
+        //         label: "Only Verified",
+        //         selected: false,
+        //       },
+        //       {
+        //         value: "onlyNotVerified",
+        //         label: "Only Not Verified",
+        //         selected: false,
+        //       },
+        //     ],
+        //     filterConfirm: (filterList) => {
+        //       const labels = filterList
+        //         .filter((x) => x.selected)
+        //         .map((x) => x.value);
+        //       this.filterVerified(labels[0]);
+        //     },
+        //     filterReset: (filterList) => {
+        //       this.filterVerified("");
+        //     },
+        //   },
 
-          renderBodyCell: ({ row, column, rowIndex }, h) => {
-            return (
-              <span class="text-bold d-flex justify-content-center">
-                {row.isVerificationComplete ? (
-                  <span class="d-flex align-items-center justify-content-center">
-                    <i style="font-size:20px" class="far fa-check-circle"></i>
-                  </span>
-                ) : (
-                  <button
-                    class="btn btn-primary btn-sm"
-                    on-click={() => this.verifyInvestor(row)}
-                  >
-                    Verify Now
-                  </button>
-                )}
-              </span>
-            );
-          },
-        },
-        {
-          field: "Issue",
-          key: "i",
-          title: "Issue",
-          align: "left",
-          width: 70,
-          filter: {
-            filterList: [
-              {
-                value: "onlyIssued",
-                label: "Only Issued",
-                selected: false,
-              },
-              {
-                value: "onlyNotIssued",
-                label: "Only Not Issued",
-                selected: false,
-              },
-            ],
-            filterConfirm: (filterList) => {
-              const labels = filterList
-                .filter((x) => x.selected)
-                .map((x) => x.value);
-              this.filterIssued(labels[0]);
-            },
-            filterReset: (filterList) => {
-              this.filterIssued("");
-            },
-          },
+        //   renderBodyCell: ({ row, column, rowIndex }, h) => {
+        //     return (
+        //       <span class="text-bold d-flex justify-content-center">
+        //         {row.isVerificationComplete ? (
+        //           <span class="d-flex align-items-center justify-content-center">
+        //             <i style="font-size:20px" class="far fa-check-circle"></i>
+        //           </span>
+        //         ) : (
+        //           <button
+        //             class="btn btn-primary btn-sm"
+        //             on-click={() => this.verifyInvestor(row)}
+        //           >
+        //             Verify Now
+        //           </button>
+        //         )}
+        //       </span>
+        //     );
+        //   },
+        // },
+        // {
+        //   field: "Issue",
+        //   key: "i",
+        //   title: "Issue",
+        //   align: "left",
+        //   width: 70,
+        //   filter: {
+        //     filterList: [
+        //       {
+        //         value: "onlyIssued",
+        //         label: "Only Issued",
+        //         selected: false,
+        //       },
+        //       {
+        //         value: "onlyNotIssued",
+        //         label: "Only Not Issued",
+        //         selected: false,
+        //       },
+        //     ],
+        //     filterConfirm: (filterList) => {
+        //       const labels = filterList
+        //         .filter((x) => x.selected)
+        //         .map((x) => x.value);
+        //       this.filterIssued(labels[0]);
+        //     },
+        //     filterReset: (filterList) => {
+        //       this.filterIssued("");
+        //     },
+        //   },
 
-          renderBodyCell: ({ row, column, rowIndex }, h) => {
-            return (
-              <span class="text-bold d-flex justify-content-center">
-                {row.isVerfiedByHypersign ? (
-                  <span class="text-bold" title="issued">
-                    <i style="font-size:20px" class="far fa-calendar-check"></i>
-                  </span>
-                ) : (
-                  <button
-                    class="btn btn-white border border-1 btn-sm"
-                    on-click={() => this.issueCredential(row, rowIndex)}
-                  >
-                    <i style="font-size:20px" class="far fa-clock"></i>
-                  </button>
-                )}
-              </span>
-            );
-          },
-        },
+        //   renderBodyCell: ({ row, column, rowIndex }, h) => {
+        //     return (
+        //       <span class="text-bold d-flex justify-content-center">
+        //         {row.isVerfiedByHypersign ? (
+        //           <span class="text-bold" title="issued">
+        //             <i style="font-size:20px" class="far fa-calendar-check"></i>
+        //           </span>
+        //         ) : (
+        //           <button
+        //             class="btn btn-white border border-1 btn-sm"
+        //             on-click={() => this.issueCredential(row, rowIndex)}
+        //           >
+        //             <i style="font-size:20px" class="far fa-clock"></i>
+        //           </button>
+        //         )}
+        //       </span>
+        //     );
+        //   },
+        // },
       ],
 
       investor: {
@@ -381,9 +428,22 @@ export default {
     };
   },
   async mounted() {
+
+    
+
+  if(this.$route.query.projectId){
+    this.selectedProjectId = this.$route.query.projectId;
+    this.investor.projectId = this.$route.query.projectId
+    this.fetchProjectData(0, this.perPage)
+  }
+
     const userProjectStr = localStorage.getItem("userProjects");
     const userProjectsData = JSON.parse(userProjectStr);
-    this.projects = userProjectsData.projects;
+    this.projects = userProjectsData.projects;  
+    this.projects.unshift({
+      _id: null,
+      projectName: "Select a Project"
+    })
   },
 
   beforeRouteEnter(to, from, next) {
@@ -391,7 +451,44 @@ export default {
       vm.prevRoute = from;
     });
   },
+  
   methods: {
+    async handleExport(){
+      try{
+       const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.project._id}?fetchInvestors=true&isExport=true`;
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+
+        const res = await apiClientMixin.makeCall({method: "GET", url, header: headers, isFile: true})
+        FileDownload(res.data, "Investor_Data.xls");
+      }catch(e){
+        console.log(e);
+        this.notifyErr(e)
+      }
+    },
+    async handleLottery(){
+      if(this.recordsForLottery > this.project.investors.length || this.recordsForLottery <= 0){
+        return this.notifyErr("No of records must be less or equal to total")
+      }
+      try{
+          let url = `https://stage.hypermine.in/whitelist/api/v1/project/${this.project._id}/lottery?limitRecord=${this.recordsForLottery}`
+
+          const headers = {
+
+            "Authorization": `Bearer ${this.authToken}`,
+          };
+
+          const res = await apiClientMixin.makeCall({method:"GET", header: headers, url, isFile: true}) 
+          FileDownload(res.data,  "Lottery.xls")
+
+        }catch(e){
+          console.log(e);
+          this.notifyErr(e)
+        }
+      
+    },
     sortChange(params) {
       this.project.investors.sort((a, b) => {
         if (params.name) {
@@ -450,13 +547,15 @@ export default {
       this.fetchProjectData(0, this.perPage);
     },
     async fetchProjectInvestors(e) {
-      // this.investor.projectId = this.projects[1]._id;
-      this.investor.projectId = e.target.value;
-      await this.fetchProjectData(0, this.perPage);
+      if(e){
+        this.investor.projectId = e;
+        await this.fetchProjectData(0, this.perPage);
+      }
+      
     },
 
     filterVerified(label) {
-      console.log(label);
+      // console.log(label);
 
       if (label == "onlyVerified") {
         this.project.investors = this.sourceData.investors.filter(
@@ -472,7 +571,7 @@ export default {
     },
 
     filterIssued(label) {
-      console.log(label);
+      // console.log(label);
 
       if (label == "onlyIssued") {
         this.project.investors = this.sourceData.investors.filter(
@@ -493,26 +592,6 @@ export default {
       const skip = this.perPage * (this.currentPage - 1);
 
       this.fetchProjectData(skip, this.perPage);
-    },
-
-    notifySuccess(msg) {
-      this.isLoading = false;
-      this.$notify({
-        group: "foo",
-        title: "Information",
-        type: "success",
-        text: msg,
-      });
-    },
-
-    notifyErr(msg) {
-      this.isLoading = false;
-      this.$notify({
-        group: "foo",
-        title: "Error",
-        type: "error",
-        text: msg,
-      });
     },
 
     gotosubpage: (id) => {
@@ -595,7 +674,7 @@ export default {
         if (!this.investor.projectId) throw new Error("No project found");
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.investor.projectId}?fetchInvestors=true&limit=${limit}&skip=${skip}&searchQuery=${this.tableSearch}`;
-        console.log(url);
+        // console.log(url);
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
@@ -616,11 +695,12 @@ export default {
         this.project.toDate = this.formateDate(this.project.toDate);
         this.projectFetched = true;
 
-        console.log(this.project);
-
+       
         this.notifySuccess(
           "Project is fetched. ProjectName " + json.projectName
         );
+
+
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
@@ -674,5 +754,7 @@ export default {
       };
     },
   },
+
+  mixins: [notificationMixins]
 };
 </script>

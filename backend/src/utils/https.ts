@@ -1,5 +1,5 @@
 const httpsLocalhost = require("https-localhost")();
-import { whitelist } from './config';
+import { whitelist } from '../config';
 
 // Ref: https://github.com/daquinoaldo/https-localhost#use-as-module
 export function getCerts(){
@@ -24,4 +24,6 @@ export function corsOptionsDelegate (req, callback) {
     callback(null, corsOptions) // callback expects two parameters: error and options
   }
 
-
+export function getRandomArbitrary(min, max) {
+    return Math.ceil(Math.random() * (max - min) + min);
+  }

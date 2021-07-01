@@ -50,6 +50,7 @@
 
 <script>
 import Profile from '@/components/Profile.vue'
+import notificationMixins from '../mixins/notificationMixins';
 export default {
   name: "PanelPage",
   mounted() {
@@ -74,28 +75,11 @@ export default {
      }
   },
   methods: {
-    
-    notifySuccess(msg){
-      this.$notify({
-          group: 'foo',
-          title: 'Information',
-          type: 'success',
-          text: msg
-        });
-    },
-    notifyErr(msg){
-      this.$notify({
-          group: 'foo',
-          title: 'Error',
-          type: 'error',
-          text: msg
-        });
-    },
     gotosubpage: id => {
       this.$router.push(`${id}`);
     },
     logout(){
-      console.log("Dashboard:: Logout method...")
+      // console.log("Dashboard:: Logout method...")
       // localStorage.removeItem('authToken')
       // localStorage.removeItem('user')
       // localStorage.removeItem("credentials")
@@ -107,6 +91,8 @@ export default {
       //   this.$router.push('/login')
       //           }
     },
-  }
+  },
+  mixins: [notificationMixins]
+  
 };
 </script>

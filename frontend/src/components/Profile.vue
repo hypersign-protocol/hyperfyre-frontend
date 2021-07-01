@@ -84,17 +84,13 @@
                 <img
                   src="../assets/avatarUploadLabel.png"
                   alt="John"
-                  style="width: 100%; height: 100%"
+                  style="width: 100%; height: 100%; opacity: 0.2"
                 />
               </div>
-              <div class="col-md-6" style="flex-wrap: wrap; padding: 20px">
+              <div class="col-md-8" style="flex-wrap: wrap; padding: 20px">
                 <p>DID</p>
                 <p class="fVal">
                   <a
-                    :href="
-                      `/` +
-                      user.id
-                    "
                     target="_blank"
                     >{{ user.id }}</a
                   >
@@ -181,10 +177,10 @@ export default {
         this.projects = json;
         this.projects.map((x) => {
           x["whitelisting_link"] =
-            window.location.origin + "/studio/form?projectId=" + x._id;
+            window.location.origin + "/form?projectId=" + x._id;
           x["investors_link"] =
             window.location.origin +
-            "/studio/admin/investors?projectId=" +
+            "/admin/investors?projectId=" +
             x._id;
         });
         this.projectCount = this.projects.length;

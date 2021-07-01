@@ -1,3 +1,5 @@
+import { logger } from '../config';
+
 const nodemailer = require('nodemailer');
 export default class MailService {
     host: any;
@@ -25,7 +27,7 @@ export default class MailService {
 
         this.transporter.verify((err, success) => {
             if (err) console.error(err);
-            console.log('HS-AUTH:: Your config is correct');
+            logger.info('mainServeice:: Your email config is correct');
         });
 
     }
