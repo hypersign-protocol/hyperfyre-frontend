@@ -40,14 +40,13 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
     if (Date.parse(fromDate) > Date.parse(toDate)) {
       return next(ApiError.badRequest("fromDate can not be greater than toDate"));
     }
-
     logger.info({
       fromDate: {
         original: fromDate, 
         iso: new Date(fromDate).toISOString()
       },
       toDate: {
-        original: fromDate, 
+        original: toDate, 
         iso : new Date(toDate).toISOString()
       }
     })
@@ -106,7 +105,7 @@ function checkUpdateIfProjectExpired(projectInfo: IProject){
   }
   
   if(projectInfo.projectStatus){
-    if(new Date().getTime() > Date.parse(projectInfo.toDate)){
+    if(new Date().toISOString() > new Date(projectInfo.toDate).toISOString()){
       projectInfo.projectStatus = false;
       // update the project in background
       ProjectModel.findByIdAndUpdate(projectInfo._id, { ...projectInfo });
@@ -250,7 +249,7 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
     });
     const project: IProject = await ProjectModel.findById({ _id: _id });
 
-    if(new Date().getTime() > Date.parse(project.toDate)){
+    if(new Date().toISOString() > new Date(project.toDate).toISOString()){
       return next(ApiError.badRequest("You can not edit the project information after project expiry"));
     }
 
