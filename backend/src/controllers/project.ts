@@ -41,6 +41,11 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       return next(ApiError.badRequest("fromDate can not be greater than toDate"));
     }
 
+    logger.info({
+      fromDate: new Date(fromDate).toISOString(),
+      toDate: new Date(toDate).toISOString()
+    })
+
     const newProject: IProject = await ProjectModel.create({
       projectName,
       logoUrl,
