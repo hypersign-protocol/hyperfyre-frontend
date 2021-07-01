@@ -44,8 +44,8 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
     const newProject: IProject = await ProjectModel.create({
       projectName,
       logoUrl,
-      fromDate,
-      toDate,
+      fromDate: new Date(fromDate).toISOString(),
+      toDate: new Date(toDate).toISOString(),
       ownerDid: userData.id,
       twitterHandle,
       telegramHandle,
