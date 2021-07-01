@@ -454,9 +454,7 @@ export default {
         ) {
           gotoNextPage = true;
           this.slideToNextPage(gotoNextPage);
-        } else {;
-          this.notifyErr("Please follow all the rules and provide a tweet URL");
-        }
+        } 
       } else if (step == 3) {
         this.$refs.recaptcha.execute();
       }
