@@ -709,7 +709,7 @@ export default {
   background-color: #494949;
 }
 .header {
-  height: 210px;
+  height: 220px;
 
 }
 .footer {
@@ -721,7 +721,7 @@ export default {
 .header .logo {
   border-bottom-right-radius: 20px;
   height: 80px;
-  width: 200px;
+  width: 20% !important;
   text-align: center;
   padding: 15px;
   
@@ -735,7 +735,7 @@ export default {
 
 }
 .header .text {
-  width: 70%;
+  width: 60%;
 }
 div.rule {
   border-bottom: 1px solid #ffffff;
