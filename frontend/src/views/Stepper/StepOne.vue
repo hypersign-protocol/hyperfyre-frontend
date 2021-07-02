@@ -257,7 +257,7 @@ a{
             
                   target="_blank"
                   title="Join our telegram channel for latest updates"
-                  ><i></i> @{{ projectDetails.telegramHandle }}channel </a
+                  ><i></i> @{{ projectDetails.telegramHandle }} </a
                 >
                
               </div>
