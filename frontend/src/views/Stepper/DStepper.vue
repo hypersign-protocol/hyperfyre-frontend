@@ -6,8 +6,8 @@
       :is-full-page="fullPage"
     ></loading>
     <div class="header w-100 text-left text-white">
-      <div class="logo bg-white d-inline-block p-3 px-5">
-        <img width="120px" :src="projectDetails.logoUrl" />
+      <div class="logo bg-white d-inline-block">
+        <img  :src="projectDetails.logoUrl" />
       </div>
       <div class="text mx-auto  py-3 text-left" v-if="step != 3">
         <h4 class="mb-4">
@@ -153,7 +153,7 @@
         <div class="footer-logo">
           <p class="m-0 text-white" style="font-weight: bold">Powered By</p>
           <a href="">
-            <img width="120px" :src="require('../../assets/footerLogo.png')" />
+            <img width="80px" :src="require('../../assets/footerLogo.png')" />
           </a>
         </div>
         <div class="social d-flex ">
@@ -216,6 +216,7 @@ import apiClinet from "../../mixins/apiClientMixin";
 import checkTelegramAnnouncemntMixin from "../../mixins/checkTelegramAnnChannel";
 import config from "../../config";
 
+
 export default {
   name: "DStepper",
 
@@ -257,7 +258,7 @@ export default {
     };
   },
 
-  created() {
+  async created() {
     if (
       !this.$route.query.projectId ||
       this.$route.query.projectId == "undefined"
@@ -270,16 +271,19 @@ export default {
     this.projectId = this.$route.query.projectId;
     const userDid = JSON.parse(localStorage.getItem("user")).id;
 
-    
     this.checkIfAlreadyFilled(userDid);
 
     if (!this.$route.params.projectDetails) {
-      this.fetchProjectData({ isAuthTokenAvailable: true });
-   
+
+      this.projectDetails = await this.fetchProjectData({ isAuthTokenAvailable: true })  
+      console.log("AFTER FETCHING", this.projectDetails)
+      this.checkTelegramAnnouncementChannel();
       return;
     } 
   
     this.projectDetails = this.$route.params.projectDetails;
+    console.log(this.stepOneData, this.projectDetails)
+    this.checkTelegramAnnouncementChannel();
     
     // this.formatTweet()
   },
@@ -288,6 +292,8 @@ export default {
   mounted() {
     this.data =
       this.step == 0 || this.step == 0 ? this.stepOneData : this.stepTwoData;
+
+
   },
 
   computed: {
@@ -704,12 +710,29 @@ export default {
 }
 .header {
   height: 210px;
+
 }
 .footer {
   padding: 10px 30px;
 }
+.footer .footer-logo p{
+  font-size: 10px;
+}
 .header .logo {
   border-bottom-right-radius: 20px;
+  height: 80px;
+  width: 200px;
+  text-align: center;
+  padding: 15px;
+  
+  
+}
+.header .logo  img{
+ 
+   max-height: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+
 }
 .header .text {
   width: 70%;

@@ -248,7 +248,7 @@ export default {
     var _this = this;
 
     this.connection.onmessage = function({ data }) {
-      console.log("Websocket connection messag receieved ", data);
+      // console.log("Websocket connection messag receieved ", data);
       let messageData = JSON.parse(data);
       // console.log(messageData);
       if (messageData.op == "init") {

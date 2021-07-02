@@ -371,6 +371,7 @@ export default {
                console.log(err);
                if(!err){
                   webAuth.client.userInfo(authRes.accessToken, (err, user) =>  {
+                    console.log(user, err);
                 const twitterId = user["https://hasura.io/jwt/claims"]["x-hasura-user-id"].split("|")[1]
                 this.stepOneData.rules[idx].checked = true;
                 localStorage.setItem("twitterId", twitterId);              

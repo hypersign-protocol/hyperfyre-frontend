@@ -73,6 +73,7 @@ h5 span {
 }
 .hypersign-logo-footer p {
   font-weight: 600;
+  font-size: 10px;
 }
 .with-hypersign-btn {
   background-color: #494949;
@@ -84,9 +85,12 @@ h5 span {
   text-transform: uppercase;
 }
 .loginInNow-text {
-  font-size: 25px;
+  font-size: 18px;
   margin-bottom: 20px;
 }
+ .scan-qr-message{
+   font-size: 10px;
+ }
 
 @media screen and (max-width: 990px) {
   .loginPage {
@@ -97,8 +101,9 @@ h5 span {
 .qrWrapper {
   padding: 10px;
   border: 1px solid rgba(128, 128, 128, 0.37);
-  width: 55%;
-  margin-left: 22%;
+  width: 48% !important;
+  margin: 0 auto !important;  
+
 }
 .qrWrapper img {
   width: 100%;
@@ -112,9 +117,11 @@ h5 span {
 .btn-hypersign{
   background-color: #494949;
   border-color: #494949;
-  padding: 7px;
+  padding: 10px 7px;
+  width: 48% !important;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
-  min-width: 300px;
+  /* min-width: 300px; */
+  
 }
 
 /* .btn-hypersign:hover{
@@ -255,8 +262,8 @@ h5 span {
     >
       <div>
           <!-- <h3>Whitelist for Hypersign Data Defenders Program</h3> -->
-        <h3>Whitelist for {{projectDetails.projectName}}</h3>
-        <p class="mt-4">Instructions</p>
+        <h3>{{projectDetails.projectName}}</h3>
+        <p class="mt-4">Instructions:</p>
         <ol class="px-3">          
           <li>Login with the Hypersign</li>
           <li>Follow the steps provided in the next screens</li>
@@ -268,10 +275,10 @@ h5 span {
 
      <div class="hypersign-logo-footer">
       <div>
-        <p class="text-white my-0 fw-bolder">Powered By</p>
+        <p class="text-white my-0 ">Powered By</p>
         <img
           :src="require(`../assets/footerLogo.png`)"
-          style="max-width: 150px;"
+          style="max-width: 80px;"
         />
       </div>
     </div>
@@ -284,7 +291,7 @@ h5 span {
           class="text-right mt-3  text-dark text-reset fw-bold"
           style="font-weight:600"
           target="_blank"
-          href="https://t.me/hypersignchain"
+          :href="`https://t.me/${projectDetails.telegramHandle}`"
           >HELP ?</a
         >
         <div>
@@ -294,6 +301,7 @@ h5 span {
 
             <div class="qrWrapper">
               <vue-qr
+                
                 v-if="value != ''"
                 :logoSrc="src2"
                 margin="1"
@@ -304,17 +312,17 @@ h5 span {
             </div>
   
             <p class="mt-1 scan-qr-message">
-              <span style="font-size:small; color:grey"
+              <span style="color:grey"
                 >Scan QR code with the Hypersign Mobile App</span
               >
             </p>
 
             <div class="mb-2 openMobileAppWrapper">
               <a v-if="this.value != ''"  class="btn btn-hypersign text-white " :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`" >
-                <img style="height:40px; float: left;" 
+                <!-- <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
-                class="ml-0 rounded rounded-circle  left"/>
-                <div style="font-size: smaller; margin-top: 10px; ">USE MOBILE WALLET</div>
+                class="ml-0 rounded rounded-circle  left"/> -->
+                <div style="font-size: smaller;  ">USE MOBILE WALLET</div>
               </a>  
             </div>
 
@@ -323,10 +331,10 @@ h5 span {
             <div class="mb-2 ">
               <a v-if="this.value != ''" class="btn btn-hypersign text-white " href="#"                
                 @click.prevent="openWallet()" >
-                <img style="height:40px; float: left;" 
+                <!-- <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
-                class="ml-0 rounded rounded-circle  left"/>
-                <div style="font-size: smaller; margin-top: 10px;">USE WEB WALLET</div>
+                class="ml-0 rounded rounded-circle  left"/> -->
+                <div style="font-size: smaller; ">USE WEB WALLET</div>
               </a>  
             </div>
           </div>
@@ -355,7 +363,7 @@ import notificationMixins from '../mixins/notificationMixins';
 import apiClinet from "../mixins/apiClientMixin";
 import fetchProjectDataMixin from '../mixins/fetchProjectDataMixin';
 import localStorageMixin from '../mixins/localStorageMixin';
-import checkTelegramAnnouncemntMixin from '../mixins/checkTelegramAnnChannel';
+import checkTelegramAnnouncementChannelMixin from '../mixins/checkTelegramAnnChannel';
 
 export default {
   name: "Login",
@@ -388,7 +396,7 @@ export default {
       projectId: localStorage.getItem("projectId")
     };
   },
-  created() {
+  async created() {
     // console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
     let websocketUrl = "ws://localhost:3003";
@@ -422,7 +430,7 @@ export default {
 
 
     this.connection.onmessage = ({ data }) =>  {      
-      console.log("Websocket connection messag receieved ", data);
+      // console.log("Websocket connection messag receieved ", data);
       let messageData = JSON.parse(data);
       // console.log(messageData);
       if (messageData.op == "init") {
@@ -469,7 +477,7 @@ export default {
       console.log("Websocket connection error ", error);
     };
 
-    this.fetchProjectData({isAuthTokenAvailable: false});
+    this.projectDetails = await  this.fetchProjectData({isAuthTokenAvailable: false});
 
   },
   mounted() {
@@ -503,6 +511,6 @@ export default {
     },
     
   },
-  mixins: [notificationMixins, fetchProjectDataMixin, localStorageMixin, checkTelegramAnnouncemntMixin]
+  mixins: [notificationMixins, fetchProjectDataMixin, localStorageMixin, checkTelegramAnnouncementChannelMixin]
 };
 </script>
