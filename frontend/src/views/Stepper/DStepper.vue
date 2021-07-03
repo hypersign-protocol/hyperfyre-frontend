@@ -6,8 +6,8 @@
       :is-full-page="fullPage"
     ></loading>
     <div class="header w-100 text-left text-white">
-      <div class="logo bg-white d-inline-block p-3 px-5">
-        <img width="120px" :src="projectDetails.logoUrl" />
+      <div class="logo bg-white d-inline-block">
+        <img  :src="projectDetails.logoUrl" />
       </div>
       <div class="text mx-auto  py-3 text-left" v-if="step != 3">
         <h4 class="mb-4">
@@ -153,7 +153,7 @@
         <div class="footer-logo">
           <p class="m-0 text-white" style="font-weight: bold">Powered By</p>
           <a href="">
-            <img width="120px" :src="require('../../assets/footerLogo.png')" />
+            <img width="80px" :src="require('../../assets/footerLogo.png')" />
           </a>
         </div>
         <div class="social d-flex ">
@@ -216,6 +216,7 @@ import apiClinet from "../../mixins/apiClientMixin";
 import checkTelegramAnnouncemntMixin from "../../mixins/checkTelegramAnnChannel";
 import config from "../../config";
 
+
 export default {
   name: "DStepper",
 
@@ -254,10 +255,11 @@ export default {
       projectDetails: {},
       projectId: "",
       serverErrors: [],
+      hasTgVerfied: false
     };
   },
 
-  created() {
+  async created() {
     if (
       !this.$route.query.projectId ||
       this.$route.query.projectId == "undefined"
@@ -270,16 +272,19 @@ export default {
     this.projectId = this.$route.query.projectId;
     const userDid = JSON.parse(localStorage.getItem("user")).id;
 
-    
     this.checkIfAlreadyFilled(userDid);
 
     if (!this.$route.params.projectDetails) {
-      this.fetchProjectData({ isAuthTokenAvailable: true });
-   
+
+      this.projectDetails = await this.fetchProjectData({ isAuthTokenAvailable: true })  
+      console.log("AFTER FETCHING", this.projectDetails)
+      this.checkTelegramAnnouncementChannel();
       return;
     } 
   
     this.projectDetails = this.$route.params.projectDetails;
+    console.log(this.stepOneData, this.projectDetails)
+    this.checkTelegramAnnouncementChannel();
     
     // this.formatTweet()
   },
@@ -288,6 +293,8 @@ export default {
   mounted() {
     this.data =
       this.step == 0 || this.step == 0 ? this.stepOneData : this.stepTwoData;
+
+
   },
 
   computed: {
@@ -324,6 +331,7 @@ export default {
             //  console.log("PROJECT DETAILS", this.projectDetails);
           try{
 
+            /// Doing tweeter verfication business
             const url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
             let headers = {
               "Content-Type": "application/json",
@@ -341,28 +349,30 @@ export default {
 
             const res = await apiClinet.makeCall({method: "POST", body: body, header: headers, url})
 
-  
-
             if(!res.data.user.followed.hasFollowed){
               return   this.notifyErr(`Please Follow our twitter handle (@${res.data.user.followed.to})`)
             }
 
-            if(!localStorage.getItem("telegramId")){
+
+            /// Doing telegram verfication business
+            const tgId = localStorage.getItem("telegramId")
+
+            if(!tgId || tgId === "undefined"){
               return this.notifyErr("Please authenticate Telegram")
             }
 
              const TGHandle = this.stepTwoData.formData.filter(x => x.id == "telegramHandle")[0]
-             TGHandle.value = localStorage.getItem("telegramId")
-             TGHandle.disabled = true
+             TGHandle.value = tgId;
+             TGHandle.disabled = true;
+             this.hasTgVerfied = true;
 
 
 
-            if(res.data.hasTweetUrlVerified && res.data.user.followed.hasFollowed){
+            if(res.data.hasTweetUrlVerified && res.data.user.followed.hasFollowed && this.hasTgVerfied){
               const twitterHandle = this.stepTwoData.formData.filter(x => x.id == "twitterHandle")[0]
               twitterHandle.value = res.data.user.screen_name
               twitterHandle.disabled = true
-
-              // console.log("ABLE TO GOTO NEXT PAGE")
+              
               gotoNextPage = true;
               this.slideToNextPage(gotoNextPage);
             }
@@ -703,16 +713,32 @@ export default {
   background-color: #494949;
 }
 .header {
-  height: 210px;
+  height: 220px;
+
 }
 .footer {
   padding: 10px 30px;
 }
+.footer .footer-logo p{
+  font-size: 10px;
+}
 .header .logo {
   border-bottom-right-radius: 20px;
+  height: 80px;
+  width: 20% !important;
+  text-align: center;
+  padding: 15px;
+  
+}
+.header .logo  img{
+ 
+   max-height: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+
 }
 .header .text {
-  width: 70%;
+  width: 60%;
 }
 div.rule {
   border-bottom: 1px solid #ffffff;

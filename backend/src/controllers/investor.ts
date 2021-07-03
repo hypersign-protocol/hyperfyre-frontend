@@ -246,7 +246,7 @@ async function issueCredential(req: Request, res: Response, next: NextFunction){
     let attributesMap = {
       name: "",
       email: "",
-      ethAddress: "",
+      blockchainAddress: "",
       twitterHandle: "",
       telegramHandle: "",
       did: "",
