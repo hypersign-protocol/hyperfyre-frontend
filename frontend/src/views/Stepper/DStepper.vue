@@ -255,6 +255,7 @@ export default {
       projectDetails: {},
       projectId: "",
       serverErrors: [],
+      hasTgVerfied: false
     };
   },
 
@@ -330,6 +331,7 @@ export default {
             //  console.log("PROJECT DETAILS", this.projectDetails);
           try{
 
+            /// Doing tweeter verfication business
             const url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
             let headers = {
               "Content-Type": "application/json",
@@ -347,28 +349,30 @@ export default {
 
             const res = await apiClinet.makeCall({method: "POST", body: body, header: headers, url})
 
-  
-
             if(!res.data.user.followed.hasFollowed){
               return   this.notifyErr(`Please Follow our twitter handle (@${res.data.user.followed.to})`)
             }
 
-            if(!localStorage.getItem("telegramId")){
+
+            /// Doing telegram verfication business
+            const tgId = localStorage.getItem("telegramId")
+
+            if(!tgId || tgId === "undefined"){
               return this.notifyErr("Please authenticate Telegram")
             }
 
              const TGHandle = this.stepTwoData.formData.filter(x => x.id == "telegramHandle")[0]
-             TGHandle.value = localStorage.getItem("telegramId")
-             TGHandle.disabled = true
+             TGHandle.value = tgId;
+             TGHandle.disabled = true;
+             this.hasTgVerfied = true;
 
 
 
-            if(res.data.hasTweetUrlVerified && res.data.user.followed.hasFollowed){
+            if(res.data.hasTweetUrlVerified && res.data.user.followed.hasFollowed && this.hasTgVerfied){
               const twitterHandle = this.stepTwoData.formData.filter(x => x.id == "twitterHandle")[0]
               twitterHandle.value = res.data.user.screen_name
               twitterHandle.disabled = true
-
-              // console.log("ABLE TO GOTO NEXT PAGE")
+              
               gotoNextPage = true;
               this.slideToNextPage(gotoNextPage);
             }
