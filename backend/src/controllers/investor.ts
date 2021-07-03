@@ -256,8 +256,10 @@ async function issueCredential(req: Request, res: Response, next: NextFunction){
     Object.keys(attributesMap).map(x => {
       attributesMap[x] = investor["_doc"][x]
     })
+
+    attributesMap.blockchainAddress = investor["_doc"]["ethAddress"];
       
-    logger.info("InvestorController:: issueCredential(): before sending email to " + attributesMap["email"]);
+    logger.info("InvestorController:: issueCredential(): before sending email to " + JSON.stringify(attributesMap));
     const link = await sendEmail(attributesMap);
     logger.info("InvestorController:: issueCredential(): after sending email");
 
