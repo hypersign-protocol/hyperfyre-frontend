@@ -462,7 +462,7 @@ export default {
         };
 
         const res = await apiClientMixin.makeCall({method: "GET", url, header: headers, isFile: true})
-        FileDownload(res.data, "Investor_Data.xls");
+        FileDownload(res.data, "Investor_Data.csv");
       }catch(e){
         console.log(e);
         this.notifyErr(e)
@@ -473,7 +473,8 @@ export default {
         return this.notifyErr("No of records must be less or equal to total")
       }
       try{
-          let url = `https://stage.hypermine.in/whitelist/api/v1/project/${this.project._id}/lottery?limitRecord=${this.recordsForLottery}`
+        
+          let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.project._id}/lottery?token=${this.authToken}&limitRecord=${this.recordsForLottery}`
 
           const headers = {
 
@@ -481,7 +482,7 @@ export default {
           };
 
           const res = await apiClientMixin.makeCall({method:"GET", header: headers, url, isFile: true}) 
-          FileDownload(res.data,  "Lottery.xls")
+          FileDownload(res.data,  "Lottery.csv")
 
         }catch(e){
           console.log(e);
