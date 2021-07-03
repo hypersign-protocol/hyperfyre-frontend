@@ -344,8 +344,9 @@ export default {
   },
   mounted(){
 
- 
-    if(localStorage.getItem("telegramId")){
+   const tgId = localStorage.getItem("telegramId")
+
+    if(tgId && tgId != "undefined"){
       this.telegramAuthDone = true
     }
 
