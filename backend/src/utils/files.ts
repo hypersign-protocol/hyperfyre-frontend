@@ -2,6 +2,7 @@ import excel from "exceljs";
 import path from "path";
 import fs from "fs";
 import { IInvestor } from "../models/investor";
+import { logger } from "../config";
 
 const folder = "temp";
 export function writeInvestorsToFile(
@@ -46,10 +47,13 @@ export function writeInvestorsToFile(
           worksheet.addRows(data);
           worksheet.getRow(1).font = {bold: true}
       
-          const fname = path.join(folder, filename + ".xlsx");
-          await workbook.xlsx.writeFile(fname);
+          const fname = path.join(folder, filename + ".csv");
+          logger.info("File.ts:: writeInvestorsToFile(): fname = "+ fname);
+
+          await workbook.csv.writeFile(fname);
           
           const filePath = path.resolve(__dirname,"../../" , fname);
+          logger.info("File.ts:: writeInvestorsToFile(): filePath = "+ filePath);
           resolve(filePath);
       }catch(e){
           reject(e)
