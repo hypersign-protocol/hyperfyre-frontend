@@ -725,7 +725,6 @@ export default {
   text-align: center;
   padding: 15px;
   
-  
 }
 .header .logo  img{
  

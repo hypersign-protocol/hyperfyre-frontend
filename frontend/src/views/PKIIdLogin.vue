@@ -56,7 +56,7 @@ h5 span {
 .nav-style {
   display: none;
 }
-.cmp-logo {
+/* .cmp-logo {
   position: absolute;
   z-index: 10;
   background-color: #fff;
@@ -64,6 +64,22 @@ h5 span {
   text-align: center;
   padding: 15px;
   border-bottom-right-radius: 20px;
+} */
+.cmp-logo  {
+  border-bottom-right-radius: 20px;
+  position: absolute;
+  background-color: #fff;
+  z-index: 10;
+  height: 80px;
+  width: 21% !important;
+  text-align: center;
+  padding: 15px;
+}
+.cmp-logo  img{
+   max-height: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+
 }
 .hypersign-logo-footer {
   position: absolute;
@@ -85,7 +101,7 @@ h5 span {
   text-transform: uppercase;
 }
 .loginInNow-text {
-  font-size: 18px;
+  font-size: 15px !important;
   margin-bottom: 20px;
 }
  .scan-qr-message{
@@ -101,7 +117,7 @@ h5 span {
 .qrWrapper {
   padding: 10px;
   border: 1px solid rgba(128, 128, 128, 0.37);
-  width: 48% !important;
+  width: 100% !important;
   margin: 0 auto !important;  
 
 }
@@ -118,7 +134,7 @@ h5 span {
   background-color: #494949;
   border-color: #494949;
   padding: 10px 7px;
-  width: 48% !important;
+  width: 100% !important;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   /* min-width: 300px; */
   
@@ -128,6 +144,10 @@ h5 span {
   background-color: white;
   text-decoration: none;
 } */
+
+.loginWrapper{
+  width: 50% ;
+}
 
 @media screen and (max-width: 990px) {
   .loginPage {
@@ -213,7 +233,8 @@ h5 span {
     width: 90%;
   } */
   .loginInNow-text{
-    font-size: 18px;
+    font-size: 14px;
+    
   } 
   .with-hypersign-btn{
     width: 70% !important;
@@ -248,13 +269,13 @@ h5 span {
 <template>
   <div class="row vh-100 loginPage">
     <div class="cmp-logo">
-      <div>
+      
         <img
          :src="projectDetails.logoUrl || 'https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png'"
          
-          style="max-width: 150px;"
+         
         />
-      </div>
+     
     </div>
 
     <div
@@ -294,7 +315,7 @@ h5 span {
           :href="`https://t.me/${projectDetails.telegramHandle}`"
           >HELP ?</a
         >
-        <div>
+        <div class=" loginWrapper mx-auto">
           <p class="loginInNow-text">LOGIN WITH HYPERSIGN</p>
           <div v-if="value && value != ''">
             <!-- <div> -->
