@@ -325,10 +325,10 @@ h5 span {
                 
                 v-if="value != ''"
                 :logoSrc="src2"
-                margin="1"
+                margin=1
                 :text="value"
                 logoBackgroundColor="white"
-                logoCornerRadius="2"
+                logoCornerRadius=2
               ></vue-qr>
             </div>
   
