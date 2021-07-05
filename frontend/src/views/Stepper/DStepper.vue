@@ -121,7 +121,7 @@
             variant="dark"
             :disabled="loading"
             class="text-primary back-btn"
-         
+           :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important`"
             @click="backStep"
           >
             <i class="fas fa-angle-double-left"></i> Back
@@ -132,7 +132,7 @@
             variant="dark"
             class="ml-2 next-btn"
             @click="nextStep"
-            :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`"
+            :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important`"
             :disabled="loading"
           >
             {{ step + 1 == 3 ? "Submit" : "Next" }}
