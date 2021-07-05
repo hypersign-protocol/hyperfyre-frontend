@@ -164,7 +164,7 @@ i {
                       >Project Status:</label
                     >
                     <select class="form-control" v-model="project.projectStatus"  @change="changeProjectStatus($event)">
-                      <option value="true">OPEN</option>
+                      <option value="true" selected>OPEN</option>
                       <option value="false">CLOSE</option>
                     </select >
                   </div>
@@ -205,7 +205,7 @@ i {
                       >Blockchain Type:</label
                     >
                     <select class="form-control" v-model="project.blockchainType">
-                      <option value="ETHEREUM">ETHEREUM</option>
+                      <option value="ETHEREUM" selected>ETHEREUM</option>
                       <option value="TEZOS">TEZOS</option>
                     </select >
                   </div>
