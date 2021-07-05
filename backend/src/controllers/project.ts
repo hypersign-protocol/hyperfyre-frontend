@@ -73,18 +73,21 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
 
       projectList.forEach(async (project) => {
         if(checkUpdateIfProjectExpired(project) === true){
-          logger.info("Project is expired");
+          // logger.info("Project is expired");
           project.projectStatus = false; 
         }else{
-          logger.info("Project NOt expired");
+          // logger.info("Project NOt expired");
         }
 
+        
         logger.info("Before fetching investos cound");
         project.investorsCount = await InvestorModel.countDocuments({ projectId: project["_id"] });
         logger.info("After fetching investos cound = " + project.investorsCount);
 
         projectListTmp.push(project);
       });
+
+      logger.info(projectListTmp)
     } else {
       projectList = []// await ProjectModel.find({});
     }
