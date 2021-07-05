@@ -255,7 +255,8 @@ export default {
       projectDetails: {},
       projectId: "",
       serverErrors: [],
-      hasTgVerfied: false
+      hasTgVerfied: false,
+      blockchainType : "",
     };
   },
 
@@ -273,18 +274,17 @@ export default {
     const userDid = JSON.parse(localStorage.getItem("user")).id;
 
     this.checkIfAlreadyFilled(userDid);
-
     if (!this.$route.params.projectDetails) {
-
       this.projectDetails = await this.fetchProjectData({ isAuthTokenAvailable: true })  
-      console.log("AFTER FETCHING", this.projectDetails)
       this.checkTelegramAnnouncementChannel();
+      this.checkBlockChainType();
       return;
     } 
   
     this.projectDetails = this.$route.params.projectDetails;
-    console.log(this.stepOneData, this.projectDetails)
+    
     this.checkTelegramAnnouncementChannel();
+    this.checkBlockChainType();
     
     // this.formatTweet()
   },
@@ -312,6 +312,19 @@ export default {
   },
 
   methods: {
+
+  checkBlockChainType(){
+
+
+    this.blockchainType = this.projectDetails.blockchainType;
+
+    if(this.blockchainType == "ETHEREUM") {
+       const ethAddress =  this.stepTwoData.formData.find(x => x.id == "ethAddress")
+       ethAddress.label = "ERC-20 Address (Do not add exchange address)*";
+       ethAddress.placeholder = "0x"
+    }
+  }, 
+
 
     async nextStep() {
       const step = this.step + 1;
@@ -412,11 +425,14 @@ export default {
         let ethAddressValidate;
         // console.log(ethAddress);
 
-        if(config.isTezos()){
+
+        if(this.blockchainType == "TEZOS"){
           ethAddressValidate =  ethAddress.value.startsWith("tz1");
         }else{
           ethAddressValidate =  ethAddress.value.startsWith("0x");
         }
+
+        
       
 
       
@@ -448,13 +464,15 @@ export default {
           telegramHandleValidate = false;
         }
 
-        if (!ethAddressValidate && !config.isTezos()) {
+        if (!ethAddressValidate && this.blockchainType == "ETHEREUM") {
           data.formData[4].errMsg = "Please enter a valid Eth Address";
-        } else if(!ethAddressValidate && config.isTezos()) {
-          data.formData[4].errMsg = "Please enter a valida Tezos Address";
+        } else if(!ethAddressValidate && this.blockchainType == "TEZOS") {
+          data.formData[4].errMsg = "Please enter a valid Tezos  Address ";
         } else{
            data.formData[4].errMsg = ""
         }
+
+
 
         if (
           isAllFilled &&

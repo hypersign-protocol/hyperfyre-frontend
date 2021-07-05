@@ -399,7 +399,7 @@ export default {
             (data) => {
 
               if (!data) {
-                this.notifyErr("Authentication Failed! Try again")
+                return this.notifyErr("Authentication Failed! Try again")
               }
 
               this.stepOneData.rules[idx].checked = true;
