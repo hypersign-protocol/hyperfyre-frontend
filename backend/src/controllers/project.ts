@@ -70,8 +70,9 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
     let projectListTmp = [];
     if ( userData.id ) {
       projectList = await ProjectModel.find({}).where({ ownerDid: userData.id });
-
-      projectList.forEach(async (project) => {
+      let i;
+      for(i = 0; i < projectList.length; i++){
+        const project = projectList[i];
         if(checkUpdateIfProjectExpired(project) === true){
           // logger.info("Project is expired");
           project.projectStatus = false; 
@@ -88,7 +89,11 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
         logger.info("After fetching investos cound = " + project.investorsCount);
 
         projectListTmp.push(project);
-      });
+      }
+
+      // projectList.forEach((project) => {
+        
+      // });
 
       logger.info(projectListTmp)
     } else {
