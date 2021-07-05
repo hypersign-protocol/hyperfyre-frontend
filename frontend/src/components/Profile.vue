@@ -174,8 +174,11 @@ export default {
         }
 
         const json = await resp.json();
+        let investorCount  = 0;
+        console.log("JSON", json)
         this.projects = json;
         this.projects.map((x) => {
+          investorCount += x.investorsCount
           x["whitelisting_link"] =
             window.location.origin + "/form?projectId=" + x._id;
           x["investors_link"] =
@@ -183,7 +186,9 @@ export default {
             "/admin/investors?projectId=" +
             x._id;
         });
+        
         this.projectCount = this.projects.length;
+        this.schemaCount = investorCount
         localStorage.setItem('userProjects', JSON.stringify({
           projects: this.projects,
           count: this.projectCount
