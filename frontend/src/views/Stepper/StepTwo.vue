@@ -134,16 +134,23 @@ export default {
     stepTwoData: {
       type: Object,
     },
+    blockchainType: {
+      type: String
+    },
+    projectDetails: {
+      type: Object
+    }
   },
   data() {
     return {
-      showFox:  config.isTezos() ?  false : true,
+      showFox: false, 
+      // true
     };
   },
 
   created() {
 
-    if (window.ethereum && !config.isTezos() ) {
+    if (window.ethereum && this.projectDetails.blockchainType == "ETHEREUM") {
       window.web3 = new Web3(window.ethereum);
       window.ethereum.enable();
       this.showFox = true;

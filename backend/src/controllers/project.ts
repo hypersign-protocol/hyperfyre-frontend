@@ -1,6 +1,6 @@
 import { logger } from "../config";
 import { Request, Response, NextFunction } from "express";
-import ProjectModel, { IProject } from "../models/project";
+import ProjectModel, { IProject, EBlockchainType } from "../models/project";
 import InvestorModel, { IInvestor } from "../models/investor";
 import ApiError from '../error/apiError';
 import { writeInvestorsToFile, deleteFile } from '../utils/files';
@@ -17,7 +17,11 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       telegramHandle,
       twitterPostFormat,
       userData,
-      telegramAnnouncementChannel
+      telegramAnnouncementChannel,
+      blockchainType,
+      themeColor,
+      fontColor
+
     } = req.body;
 
     // if (
@@ -51,7 +55,10 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       telegramHandle,
       twitterPostFormat,
       projectStatus: true,
-      telegramAnnouncementChannel
+      telegramAnnouncementChannel,
+      blockchainType: !blockchainType || blockchainType == "" ? EBlockchainType.ETHEREUM : blockchainType,
+      themeColor: !themeColor || themeColor == "" ? "#494949" : themeColor,
+      fontColor: !fontColor || fontColor == "" ? "#ffffff" : fontColor
     });
     res.send(newProject);
   } catch (e) {
@@ -68,16 +75,32 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
     let projectListTmp = [];
     if ( userData.id ) {
       projectList = await ProjectModel.find({}).where({ ownerDid: userData.id });
-
-      projectList.forEach((project: IProject) => {
+      let i;
+      for(i = 0; i < projectList.length; i++){
+        const project = projectList[i];
         if(checkUpdateIfProjectExpired(project) === true){
-          logger.info("Project is expired");
+          // logger.info("Project is expired");
           project.projectStatus = false; 
         }else{
-          logger.info("Project NOt expired");
+          // logger.info("Project NOt expired");
         }
+
+        
+        logger.info("Before fetching investos cound");
+        // project.investorsCount = await InvestorModel.countDocuments({ projectId: project["_id"] });
+        project.investorsCount = await InvestorModel.countDocuments({
+          projectId: project["_id"],
+        }).then((count) => count);
+        logger.info("After fetching investos cound = " + project.investorsCount);
+
         projectListTmp.push(project);
-      });
+      }
+
+      // projectList.forEach((project) => {
+        
+      // });
+
+      logger.info(projectListTmp)
     } else {
       projectList = []// await ProjectModel.find({});
     }
@@ -217,7 +240,10 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       _id,
       userData,
       projectStatus,
-      telegramAnnouncementChannel
+      telegramAnnouncementChannel,
+      blockchainType,
+      themeColor,
+      fontColor
     } = req.body;
 
     const { id: ownerDid } = userData;
@@ -233,7 +259,10 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       telegramHandle,
       twitterPostFormat,
       projectStatus,
-      telegramAnnouncementChannel: !telegramAnnouncementChannel ? "" : telegramAnnouncementChannel
+      telegramAnnouncementChannel: !telegramAnnouncementChannel ? "" : telegramAnnouncementChannel,
+      blockchainType,
+      themeColor,
+      fontColor
     });
     const project: IProject = await ProjectModel.findById({ _id: _id });
 

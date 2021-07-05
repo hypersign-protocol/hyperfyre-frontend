@@ -23,7 +23,7 @@
   float: right;
 }
 .card-header {
-  background: aliceblue;
+ 
   padding: 0px;
 }
 .sm-tiles {
@@ -174,8 +174,10 @@ export default {
             errMsg: ""
           },
           {
-            label: config.isTezos() ? "Tezos Account Address" : "ERC-20 Address (Do not add exchange address)*",
-            placeholder: config.isTezos() ? "tz1" : "0x",
+            label: "Tezos Account Address" ,
+            // : "ERC-20 Address (Do not add exchange address)*",
+            placeholder: "tz1" ,
+            // : "0x",
             fullWidth: true,
             value: "",
             id: "ethAddress",
@@ -212,7 +214,7 @@ export default {
 
  
   mounted() {
-    // console.log("TEZOS", config.isTezos())
+  
     const usrStr =
       localStorage.getItem("user") ||
       '{"name": "Hypersign", "email": "hypersign@email.com" }';

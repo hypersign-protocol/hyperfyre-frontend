@@ -1,13 +1,16 @@
 <template>
-  <div class="d-stepper">
+
+  <div class="d-stepper" style="background-color: #fff">
+    <!---:style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`" --->
     <loading
       :active="isLoading"
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-    <div class="header w-100 text-left text-white">
-      <div class="logo bg-white d-inline-block">
-        <img  :src="projectDetails.logoUrl" />
+
+    <div class="header w-100 text-left" :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`">
+      <div class="logo  d-inline-block">
+        <img  :src="projectDetails.logoUrl"  />
       </div>
       <div class="text mx-auto  py-3 text-left" v-if="step != 3">
         <h4 class="mb-4">
@@ -87,6 +90,7 @@
                 <transition :name="effect" mode="out-in">
                   <keep-alive>
                     <component
+                      class="stepper-comp"
                       :projectDetails="projectDetails"
                       :stepOneData="stepOneData"
                       :stepTwoData="stepTwoData"
@@ -117,6 +121,7 @@
             variant="dark"
             :disabled="loading"
             class="text-primary back-btn"
+           :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important; border-color: ${projectDetails.fontColor}`"
             @click="backStep"
           >
             <i class="fas fa-angle-double-left"></i> Back
@@ -127,6 +132,7 @@
             variant="dark"
             class="ml-2 next-btn"
             @click="nextStep"
+            :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important; border-color:${projectDetails.fontColor}`"
             :disabled="loading"
           >
             {{ step + 1 == 3 ? "Submit" : "Next" }}
@@ -146,7 +152,7 @@
       <h2 class="text-center w-100 text-danger">{{ errorMessage }}</h2>
     </div>
 
-    <div class="footer">
+    <div class="footer" :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`">
       <!-- <h5 class="text-white my-2"> You personal data is secure and encrypted</h5> -->
       <div class="rule w-75 mx-auto" />
       <div class="d-flex justify-content-between align-items-center">
@@ -255,7 +261,8 @@ export default {
       projectDetails: {},
       projectId: "",
       serverErrors: [],
-      hasTgVerfied: false
+      hasTgVerfied: false,
+      blockchainType : "",
     };
   },
 
@@ -273,18 +280,17 @@ export default {
     const userDid = JSON.parse(localStorage.getItem("user")).id;
 
     this.checkIfAlreadyFilled(userDid);
-
     if (!this.$route.params.projectDetails) {
-
       this.projectDetails = await this.fetchProjectData({ isAuthTokenAvailable: true })  
-      console.log("AFTER FETCHING", this.projectDetails)
       this.checkTelegramAnnouncementChannel();
+      this.checkBlockChainType();
       return;
     } 
   
     this.projectDetails = this.$route.params.projectDetails;
-    console.log(this.stepOneData, this.projectDetails)
+    
     this.checkTelegramAnnouncementChannel();
+    this.checkBlockChainType();
     
     // this.formatTweet()
   },
@@ -312,6 +318,19 @@ export default {
   },
 
   methods: {
+
+  checkBlockChainType(){
+
+
+    this.blockchainType = this.projectDetails.blockchainType;
+
+    if(this.blockchainType == "ETHEREUM") {
+       const ethAddress =  this.stepTwoData.formData.find(x => x.id == "ethAddress")
+       ethAddress.label = "ERC-20 Address (Do not add exchange address)*";
+       ethAddress.placeholder = "0x"
+    }
+  }, 
+
 
     async nextStep() {
       const step = this.step + 1;
@@ -412,11 +431,14 @@ export default {
         let ethAddressValidate;
         // console.log(ethAddress);
 
-        if(config.isTezos()){
+
+        if(this.blockchainType == "TEZOS"){
           ethAddressValidate =  ethAddress.value.startsWith("tz1");
         }else{
           ethAddressValidate =  ethAddress.value.startsWith("0x");
         }
+
+        
       
 
       
@@ -448,13 +470,15 @@ export default {
           telegramHandleValidate = false;
         }
 
-        if (!ethAddressValidate && !config.isTezos()) {
+        if (!ethAddressValidate && this.blockchainType == "ETHEREUM") {
           data.formData[4].errMsg = "Please enter a valid Eth Address";
-        } else if(!ethAddressValidate && config.isTezos()) {
-          data.formData[4].errMsg = "Please enter a valida Tezos Address";
+        } else if(!ethAddressValidate && this.blockchainType == "TEZOS") {
+          data.formData[4].errMsg = "Please enter a valid Tezos  Address ";
         } else{
            data.formData[4].errMsg = ""
         }
+
+
 
         if (
           isAllFilled &&
@@ -708,7 +732,7 @@ export default {
   border: 0;
 }
 
-.header,
+
 .footer {
   background-color: #494949;
 }
@@ -725,9 +749,12 @@ export default {
 .header .logo {
   border-bottom-right-radius: 20px;
   height: 80px;
-  width: 20% !important;
+  /* width: 10% !important; */
+  /* margin-left: 20px; */
   text-align: center;
-  padding: 15px;
+  padding: 2px 0;
+  margin-left: 5px;
+  margin-top: 5px;
   
 }
 .header .logo  img{
@@ -759,6 +786,9 @@ div.rule {
 }
 .steps-container .steps {
   width: 100%;
+}
+.steps-container .card{
+  background-color:  #fff !important;
 }
 
 .btn-container {
