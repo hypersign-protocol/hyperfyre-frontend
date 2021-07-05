@@ -12,6 +12,7 @@ export interface IProject extends Document{
     projectStatus: Boolean;
     telegramAnnouncementChannel: string;
     blockchainType: string;
+    investorsCount: number;
 
 }
 

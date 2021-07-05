@@ -71,13 +71,16 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
     if ( userData.id ) {
       projectList = await ProjectModel.find({}).where({ ownerDid: userData.id });
 
-      projectList.forEach((project: IProject) => {
+      projectList.forEach(async (project) => {
         if(checkUpdateIfProjectExpired(project) === true){
           logger.info("Project is expired");
           project.projectStatus = false; 
         }else{
           logger.info("Project NOt expired");
         }
+
+        project.investorsCount = await InvestorModel.countDocuments({ projectId: project["_id"] });
+
         projectListTmp.push(project);
       });
     } else {
