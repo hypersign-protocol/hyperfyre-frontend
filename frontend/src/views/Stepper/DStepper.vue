@@ -750,10 +750,11 @@ export default {
   border-bottom-right-radius: 20px;
   height: 80px;
   /* width: 10% !important; */
-  margin-left: 20px;
+  /* margin-left: 20px; */
   text-align: center;
- padding: 2px 0;
-
+  padding: 2px 0;
+  margin-left: 5px;
+  margin-top: 5px;
   
 }
 .header .logo  img{
