@@ -68,12 +68,12 @@ h5 span {
 .cmp-logo  {
   border-bottom-right-radius: 20px;
   position: absolute;
-  background-color: #fff;
   z-index: 10;
   height: 80px;
-  width: 21% !important;
+  /* width: 21% !important; */
+  margin-left: 20px;
   text-align: center;
-  padding: 15px;
+  
 }
 .cmp-logo  img{
    max-height: 100% !important;
@@ -268,7 +268,7 @@ h5 span {
 </style>
 <template>
   <div class="row vh-100 loginPage">
-    <div class="cmp-logo">
+    <div class="cmp-logo" >
       
         <img
          :src="projectDetails.logoUrl || 'https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png'"
@@ -279,7 +279,8 @@ h5 span {
     </div>
 
     <div
-      class="col col-lg-8 col-md-12 col-sm-12 d-flex justify-content-center align-items-center border border-1 bg-dark shadow text-left text-white login-inst-container"
+   :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`"
+      class="col col-lg-8 col-md-12 col-sm-12 d-flex justify-content-center align-items-center border border-1 shadow text-left  login-inst-container"
     >
       <div>
           <!-- <h3>Whitelist for Hypersign Data Defenders Program</h3> -->

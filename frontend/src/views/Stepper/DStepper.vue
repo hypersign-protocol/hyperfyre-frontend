@@ -1,13 +1,16 @@
 <template>
-  <div class="d-stepper">
+
+  <div class="d-stepper" style="background-color: #fff">
+    <!---:style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`" --->
     <loading
       :active="isLoading"
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-    <div class="header w-100 text-left text-white">
-      <div class="logo bg-white d-inline-block">
-        <img  :src="projectDetails.logoUrl" />
+
+    <div class="header w-100 text-left" :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`">
+      <div class="logo  d-inline-block">
+        <img  :src="projectDetails.logoUrl"  />
       </div>
       <div class="text mx-auto  py-3 text-left" v-if="step != 3">
         <h4 class="mb-4">
@@ -87,6 +90,7 @@
                 <transition :name="effect" mode="out-in">
                   <keep-alive>
                     <component
+                      class="stepper-comp"
                       :projectDetails="projectDetails"
                       :stepOneData="stepOneData"
                       :stepTwoData="stepTwoData"
@@ -117,6 +121,7 @@
             variant="dark"
             :disabled="loading"
             class="text-primary back-btn"
+         
             @click="backStep"
           >
             <i class="fas fa-angle-double-left"></i> Back
@@ -127,6 +132,7 @@
             variant="dark"
             class="ml-2 next-btn"
             @click="nextStep"
+            :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`"
             :disabled="loading"
           >
             {{ step + 1 == 3 ? "Submit" : "Next" }}
@@ -146,7 +152,7 @@
       <h2 class="text-center w-100 text-danger">{{ errorMessage }}</h2>
     </div>
 
-    <div class="footer">
+    <div class="footer" :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`">
       <!-- <h5 class="text-white my-2"> You personal data is secure and encrypted</h5> -->
       <div class="rule w-75 mx-auto" />
       <div class="d-flex justify-content-between align-items-center">
@@ -726,7 +732,7 @@ export default {
   border: 0;
 }
 
-.header,
+
 .footer {
   background-color: #494949;
 }
@@ -743,9 +749,10 @@ export default {
 .header .logo {
   border-bottom-right-radius: 20px;
   height: 80px;
-  width: 20% !important;
+  /* width: 10% !important; */
+  margin-left: 20px;
   text-align: center;
-  padding: 15px;
+
   
 }
 .header .logo  img{
@@ -777,6 +784,9 @@ div.rule {
 }
 .steps-container .steps {
   width: 100%;
+}
+.steps-container .card{
+  background-color:  #fff !important;
 }
 
 .btn-container {

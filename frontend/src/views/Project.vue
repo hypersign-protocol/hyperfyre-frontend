@@ -168,6 +168,19 @@ i {
                       <option value="false">CLOSE</option>
                     </select >
                   </div>
+                   <div class="form-group">
+                    <label style="margin-right: 8%"
+                      >Telegram Announcement Channel (optional):</label
+                    >
+                    <input
+                      type="text"
+                      v-model="project.telegramAnnouncementChannel"
+                      size="30"
+                      placeholder="Enter telegram ann. channel"
+                      class="form-control"
+                    />
+                  </div>
+
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
@@ -181,21 +194,10 @@ i {
                   </div>
                 </div>
               </div>
+              
               <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label style="margin-right: 8%"
-                      >Telegram Announcement Channel (optional):</label
-                    >
-                    <input
-                      type="text"
-                      v-model="project.telegramAnnouncementChannel"
-                      size="30"
-                      placeholder="Enter telegram ann. channel"
-                      class="form-control"
-                    />
-                  </div>
-                </div>
+
+               
               
               <div class="col-md-6">
                   <div class="form-group">
@@ -207,9 +209,40 @@ i {
                       <option value="TEZOS">TEZOS</option>
                     </select >
                   </div>
-                  </div>
                 </div>
-              
+
+                 <div class="col-md-6">
+                   <div class="row">
+                   <div class=" col-md-6 form-group">
+                    <label style="margin-right: 8%"
+                      >Theme Color :</label
+                    >
+                  
+                    <input
+                      type="text"
+                      v-model="project.themeColor"    
+                      size="30"
+                      class="form-control w-75"
+                  placeholder="#494949"
+                    />
+                  </div>
+                   <div class=" col-md-6 form-group">
+                    <label style="margin-right: 8%"
+                      >Font Color :</label
+                    >
+                    <input
+                      type="text"
+                      v-model="project.fontColor"
+                      size="20"
+                      class="form-control w-75"
+                      placeholder="#ffffff"
+                    />
+                  </div>
+                   </div>
+                </div>
+              </div>
+
+               
 
               
 
@@ -411,6 +444,10 @@ export default {
         telegramHandle: "",
         twitterPostFormat: "I am happy with #hypersign @hypersignchain",
         projectStatus: true,
+        themeColor: "#494949",
+        fontColor: "#ffffff",
+        blockchainType: "ETHEREUM",
+        projectStatus: true,
       },
       isProjectEditing: false,
       projects: [],
@@ -599,6 +636,13 @@ export default {
           return "Please provide Blockchain Type"
         }
 
+        if(this.project.themeColor == "#ffffff"){
+          return "Theme color cannot be white"
+        }
+
+      if(this.project.themeColor == this.project.fontColor){
+          return "Theme color and font color cannot be same"
+        }
         return true
 
       
