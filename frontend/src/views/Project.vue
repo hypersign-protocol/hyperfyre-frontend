@@ -197,7 +197,21 @@ i {
                   </div>
                 </div>
               
-              </div>
+              <div class="col-md-6">
+                  <div class="form-group">
+                     <label style="margin-right: 8%"
+                      >Blockchain Type:</label
+                    >
+                    <select class="form-control" v-model="project.blockchainType">
+                      <option value="ETHEREUM">ETHEREUM</option>
+                      <option value="TEZOS">TEZOS</option>
+                    </select >
+                  </div>
+                  </div>
+                </div>
+              
+
+              
 
 
               <div class="row">
@@ -540,7 +554,7 @@ export default {
           return;
         }
     
-        // console.log("PROEJCT", resp.data)
+        console.log("PROEJCT", resp.data)
         
         const userProjects = JSON.parse(localStorage.getItem("userProjects"));
         userProjects.count += 1
@@ -580,6 +594,9 @@ export default {
         }
          if(!this.project.twitterPostFormat){
           return "Please provide a Twitter Post Format"
+        }
+         if(!this.project.blockchainType){
+          return "Please provide Blockchain Type"
         }
 
         return true

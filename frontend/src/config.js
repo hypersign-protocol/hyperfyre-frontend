@@ -14,7 +14,6 @@ const config = {
     auth0Domain: process.env.VUE_APP_AUTH0_DOMAIN,
     auth0ClinetId: process.env.VUE_APP_AUTH0_CLIENT_ID,
     telegramBotId: process.env.VUE_APP_TELEGRAM_BOT_ID,
-    isTezos: () =>  process.env.VUE_APP_IS_TEZOS == "true"
 }
 
 
