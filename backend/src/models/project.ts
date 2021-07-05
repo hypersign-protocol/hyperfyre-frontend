@@ -31,7 +31,8 @@ const ProjectSchema = new Schema({
     twitterPostFormat: { type: String, required: true},
     projectStatus: { type: Boolean, required: true},
     telegramAnnouncementChannel: { type: String},
-    blockchainType: {type: EBlockchainType, required: true}
+    blockchainType: {type: EBlockchainType, required: true},
+    investorsCount: {type: Number}
 })
 
 export default mongoose.model<IProject>("Project", ProjectSchema);
