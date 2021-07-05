@@ -71,6 +71,7 @@ h5 span {
   z-index: 10;
   height: 80px;
   /* width: 21% !important; */
+  margin-top: 5px;
   margin-left: 20px;
   text-align: center;
   padding: 2px 0;
