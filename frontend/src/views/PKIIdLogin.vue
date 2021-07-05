@@ -73,6 +73,7 @@ h5 span {
   /* width: 21% !important; */
   margin-left: 20px;
   text-align: center;
+  padding: 15px 0;
   
 }
 .cmp-logo  img{

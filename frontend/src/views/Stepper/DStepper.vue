@@ -752,6 +752,7 @@ export default {
   /* width: 10% !important; */
   margin-left: 20px;
   text-align: center;
+  padding: 15px 0;
 
   
 }
