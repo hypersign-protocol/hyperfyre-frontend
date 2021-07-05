@@ -82,6 +82,9 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
         
         logger.info("Before fetching investos cound");
         // project.investorsCount = await InvestorModel.countDocuments({ projectId: project["_id"] });
+        project.investorsCount = await InvestorModel.countDocuments({
+          projectId: project["_id"],
+        }).then((count) => count);
         logger.info("After fetching investos cound = " + project.investorsCount);
 
         projectListTmp.push(project);
