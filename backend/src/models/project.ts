@@ -11,9 +11,14 @@ export interface IProject extends Document{
     twitterPostFormat: string;
     projectStatus: Boolean;
     telegramAnnouncementChannel: string;
+    blockchainType: string;
 
 }
 
+export enum EBlockchainType {
+    ETHEREUM = "ETHEREUM",
+    TEZOS = "TEZOS"
+}
 const ProjectSchema = new Schema({
     projectName:{ type: String, required: true },
     logoUrl:{ type: String, required: true },
@@ -24,7 +29,8 @@ const ProjectSchema = new Schema({
     telegramHandle:{ type: String, required: true},
     twitterPostFormat: { type: String, required: true},
     projectStatus: { type: Boolean, required: true},
-    telegramAnnouncementChannel: { type: String}
+    telegramAnnouncementChannel: { type: String},
+    blockchainType: {type: EBlockchainType, required: true}
 })
 
 export default mongoose.model<IProject>("Project", ProjectSchema);

@@ -1,6 +1,6 @@
 import { logger } from "../config";
 import { Request, Response, NextFunction } from "express";
-import ProjectModel, { IProject } from "../models/project";
+import ProjectModel, { IProject, EBlockchainType } from "../models/project";
 import InvestorModel, { IInvestor } from "../models/investor";
 import ApiError from '../error/apiError';
 import { writeInvestorsToFile, deleteFile } from '../utils/files';
@@ -17,7 +17,8 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       telegramHandle,
       twitterPostFormat,
       userData,
-      telegramAnnouncementChannel
+      telegramAnnouncementChannel,
+      blockchainType
     } = req.body;
 
     // if (
@@ -51,7 +52,8 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       telegramHandle,
       twitterPostFormat,
       projectStatus: true,
-      telegramAnnouncementChannel
+      telegramAnnouncementChannel,
+      blockchainType: !blockchainType ? EBlockchainType.ETHEREUM : blockchainType
     });
     res.send(newProject);
   } catch (e) {
@@ -217,7 +219,8 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       _id,
       userData,
       projectStatus,
-      telegramAnnouncementChannel
+      telegramAnnouncementChannel,
+      blockchainType
     } = req.body;
 
     const { id: ownerDid } = userData;
@@ -233,7 +236,8 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       telegramHandle,
       twitterPostFormat,
       projectStatus,
-      telegramAnnouncementChannel: !telegramAnnouncementChannel ? "" : telegramAnnouncementChannel
+      telegramAnnouncementChannel: !telegramAnnouncementChannel ? "" : telegramAnnouncementChannel,
+      blockchainType
     });
     const project: IProject = await ProjectModel.findById({ _id: _id });
 
