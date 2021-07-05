@@ -18,7 +18,10 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       twitterPostFormat,
       userData,
       telegramAnnouncementChannel,
-      blockchainType
+      blockchainType,
+      themeColor,
+      fontColor
+
     } = req.body;
 
     // if (
@@ -53,7 +56,9 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       twitterPostFormat,
       projectStatus: true,
       telegramAnnouncementChannel,
-      blockchainType: !blockchainType ? EBlockchainType.ETHEREUM : blockchainType
+      blockchainType: !blockchainType || blockchainType == "" ? EBlockchainType.ETHEREUM : blockchainType,
+      themeColor: !themeColor || themeColor == "" ? "#494949" : themeColor,
+      fontColor: !fontColor || fontColor == "" ? "#ffffff" : fontColor
     });
     res.send(newProject);
   } catch (e) {
@@ -236,7 +241,9 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       userData,
       projectStatus,
       telegramAnnouncementChannel,
-      blockchainType
+      blockchainType,
+      themeColor,
+      fontColor
     } = req.body;
 
     const { id: ownerDid } = userData;
@@ -253,7 +260,9 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       twitterPostFormat,
       projectStatus,
       telegramAnnouncementChannel: !telegramAnnouncementChannel ? "" : telegramAnnouncementChannel,
-      blockchainType
+      blockchainType,
+      themeColor,
+      fontColor
     });
     const project: IProject = await ProjectModel.findById({ _id: _id });
 

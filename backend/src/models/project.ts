@@ -13,6 +13,8 @@ export interface IProject extends Document{
     telegramAnnouncementChannel: string;
     blockchainType: string;
     investorsCount: number;
+    themeColor: string;
+    fontColor: string;
 
 }
 
@@ -32,7 +34,9 @@ const ProjectSchema = new Schema({
     projectStatus: { type: Boolean, required: true},
     telegramAnnouncementChannel: { type: String},
     blockchainType: {type: EBlockchainType, required: true},
-    investorsCount: {type: Number}
+    investorsCount: {type: Number},
+    themeColor: { type: String, required: true},
+    fontColor: { type: String, required: true},
 })
 
 export default mongoose.model<IProject>("Project", ProjectSchema);
