@@ -73,7 +73,7 @@ h5 span {
   /* width: 21% !important; */
   margin-left: 20px;
   text-align: center;
-  padding: 15px 0;
+  padding: 2px 0;
   
 }
 .cmp-logo  img{
@@ -341,7 +341,9 @@ h5 span {
             </p>
 
             <div class="mb-2 openMobileAppWrapper">
-              <a v-if="this.value != ''"  class="btn btn-hypersign text-white " :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`" >
+              <a
+               :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important; border-color:${projectDetails.fontColor}`"
+               v-if="this.value != ''"  class="btn btn-hypersign text-white " :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`" >
                 <!-- <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
                 class="ml-0 rounded rounded-circle  left"/> -->
@@ -353,6 +355,7 @@ h5 span {
 
             <div class="mb-2 ">
               <a v-if="this.value != ''" class="btn btn-hypersign text-white " href="#"                
+              :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important; border-color:${projectDetails.fontColor}`"
                 @click.prevent="openWallet()" >
                 <!-- <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
