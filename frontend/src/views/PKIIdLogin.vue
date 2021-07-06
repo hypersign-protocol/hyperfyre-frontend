@@ -495,7 +495,7 @@ export default {
                 // path = "form?projectId=" + projectId; 
               }
             }else{
-              route["params"] = projectSlug;
+              route["params"] = { slug: projectSlug};
               // path = "form/" + projectSlug;
             }
             
