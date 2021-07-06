@@ -500,11 +500,11 @@ export default {
             }
             
 
-            console.log({
-              projectSlug,
-              projectId,
-              path
-            });
+            // console.log({
+            //   projectSlug,
+            //   projectId,
+            //   path
+            // });
 
             _this.$router.push(path);
           }
