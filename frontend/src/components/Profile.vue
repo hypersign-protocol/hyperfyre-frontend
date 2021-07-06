@@ -175,7 +175,7 @@ export default {
 
         const json = await resp.json();
         let investorCount  = 0;
-        console.log("JSON", json)
+        // console.log("JSON", json)
         this.projects = json;
         this.projects.map((x) => {
           investorCount += x.investorsCount
