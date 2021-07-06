@@ -4,6 +4,7 @@ import ProjectModel, { IProject, EBlockchainType } from "../models/project";
 import InvestorModel, { IInvestor } from "../models/investor";
 import ApiError from '../error/apiError';
 import { writeInvestorsToFile, deleteFile } from '../utils/files';
+import dashify from 'dashify';
 
 async function addProject(req: Request, res: Response, next: NextFunction) {
   try {
@@ -21,7 +22,6 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       blockchainType,
       themeColor,
       fontColor
-
     } = req.body;
 
     // if (
@@ -44,7 +44,7 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
     if (Date.parse(fromDate) > Date.parse(toDate)) {
       return next(ApiError.badRequest("fromDate can not be greater than toDate"));
     }
-    
+    const slug = dashify(projectName);
     const newProject: IProject = await ProjectModel.create({
       projectName,
       logoUrl,
@@ -58,7 +58,8 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       telegramAnnouncementChannel,
       blockchainType: !blockchainType || blockchainType == "" ? EBlockchainType.ETHEREUM : blockchainType,
       themeColor: !themeColor || themeColor == "" ? "#494949" : themeColor,
-      fontColor: !fontColor || fontColor == "" ? "#ffffff" : fontColor
+      fontColor: !fontColor || fontColor == "" ? "#ffffff" : fontColor,
+      slug
     });
     res.send(newProject);
   } catch (e) {
@@ -247,7 +248,6 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
     } = req.body;
 
     const { id: ownerDid } = userData;
-
     // FindbyIdupdate returns the old object, however the value has been updated in the db
     await ProjectModel.findByIdAndUpdate(_id, {
       projectName,
