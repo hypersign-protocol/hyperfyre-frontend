@@ -477,7 +477,7 @@ export default {
             _this.$router.push(_this.$route.params.nextUrl);
           } else {
            
-            let path = "form";
+            let path = "/form";
             // let route = {}
             
             const projectSlug = localStorage.getItem("projectSlug")
