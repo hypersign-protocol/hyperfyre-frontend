@@ -15,6 +15,7 @@ export interface IProject extends Document{
     investorsCount: number;
     themeColor: string;
     fontColor: string;
+    slug: string;
 
 }
 
@@ -37,6 +38,7 @@ const ProjectSchema = new Schema({
     investorsCount: {type: Number},
     themeColor: { type: String, required: true},
     fontColor: { type: String, required: true},
+    slug: { type: String, required: true},
 })
 
 export default mongoose.model<IProject>("Project", ProjectSchema);

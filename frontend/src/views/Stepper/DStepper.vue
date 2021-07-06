@@ -260,6 +260,7 @@ export default {
       fullPage: true,
       projectDetails: {},
       projectId: "",
+      projectSlug: "",
       serverErrors: [],
       hasTgVerfied: false,
       blockchainType : "",
@@ -267,21 +268,25 @@ export default {
   },
 
   async created() {
-    if (
-      !this.$route.query.projectId ||
-      this.$route.query.projectId == "undefined"
-    ) {
-      this.showStepper = false;
-      this.errorMessage = "Sorry, no project found :( !";
-      return;
+    if(!this.$route.params.slug || this.$route.params.slug == "undefined"){
+      if(!this.$route.query.projectId || this.$route.query.projectId == "undefined"){
+        this.showStepper = false;
+        this.errorMessage = "Sorry, no project found!";
+        return;
+      }else{
+        this.projectId = this.$route.query.projectId
+      }
+    }else{
+      this.projectSlug = this.$route.params.slug
     }
-
-    this.projectId = this.$route.query.projectId;
+    
+    // this.projectId = this.$route.params.slug ? this.$route.params.slug : this.$route.query.projectId;
     const userDid = JSON.parse(localStorage.getItem("user")).id;
 
     this.checkIfAlreadyFilled(userDid);
     if (!this.$route.params.projectDetails) {
       this.projectDetails = await this.fetchProjectData({ isAuthTokenAvailable: true })  
+      this.projectId = this.projectDetails["_id"];
       this.checkTelegramAnnouncementChannel();
       this.checkBlockChainType();
       return;

@@ -420,7 +420,8 @@ export default {
         imagePath: "/apple-icon-57x57.png",
         filter: "color",
       },
-      projectId: localStorage.getItem("projectId")
+      projectId: localStorage.getItem("projectId"),
+      projectSlug: localStorage.getItem("projectSlug")
     };
   },
   async created() {
@@ -478,14 +479,23 @@ export default {
           } else {
            
             let path = "";
+            const projectSlug = localStorage.getItem("projectSlug")
             const projectId = localStorage.getItem("projectId");
             // console.log(projectId)
-
-            if (projectId) {
-              path = "form?projectId=" + projectId;
-            } else {
-              path = "form";
+            if(!projectSlug){
+              if(!projectId){
+                path = "form";  
+              }else{
+                path = "form?projectId=" + projectId; 
+              }
+            }else{
+              path = "form/" + projectSlug;
             }
+            // if (projectId) {
+            //   path = "form?projectId=" + projectId;
+            // } else {
+            //   path = "form";
+            // }
             
             
             _this.$router.push({
@@ -520,7 +530,7 @@ export default {
           `height=800,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`
         );
       }else{
-        console.log("this value is not")
+        // console.log("this value is not")
       }
     },
 
