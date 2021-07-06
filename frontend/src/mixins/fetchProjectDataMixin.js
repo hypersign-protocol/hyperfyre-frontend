@@ -5,18 +5,27 @@ export default{
             try {
                 
               this.isLoading = true;
-            
+              let idOrSlugForUrl = "";
+              if(!this.projectSlug || this.projectSlug == "" || this.projectSlug == "undefined"){
+                if (!this.projectId || this.projectId == "" || this.projectId == "undefined"){
+                  throw new Error("No project found");
+                }else{
+                  idOrSlugForUrl = this.projectId;
+                }
+              }else{
+                idOrSlugForUrl = this.projectSlug
+              }
               
-              if (!this.projectId || this.projectId == "" ) throw new Error("No project found");
+              // if (!this.projectId || this.projectId == "" ) 
                 
-              let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.projectId}`;
+              let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${idOrSlugForUrl}`;
               let headers = {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${this.authToken}`,
               };
       
               if(!isAuthTokenAvailable){
-                url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.projectId}?isPublic=true`;
+                url = `${this.$config.studioServer.BASE_URL}api/v1/project/${idOrSlugForUrl}?isPublic=true`;
               }
 
               const resp =  await apiClinet.makeCall({method: "GET", url: url, header: headers})

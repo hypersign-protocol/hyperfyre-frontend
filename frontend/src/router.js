@@ -119,7 +119,16 @@ router.beforeEach((to, from, next) => {
         });
     } else {
       // console.log("No auth token");
-      localStorage.setItem("projectId", to.query["projectId"]);
+      if(!to.params["slug"]){
+        if(!to.query["projectId"]){
+          // i guess no need to do anything here
+        }else{
+          localStorage.setItem("projectId", to.query["projectId"]);
+        }
+      }else{
+        localStorage.setItem("projectSlug", to.params["slug"]);  
+      }
+      
       next({
         path: to.meta.admin ? "/admin/login" : "/login",
         params: { nextUrl: to.fullPath },
