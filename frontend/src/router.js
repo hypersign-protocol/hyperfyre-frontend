@@ -118,7 +118,10 @@ router.beforeEach((to, from, next) => {
           });
         });
     } else {
-      // console.log("No auth token");
+      console.log({
+        param_slug: to.params["slug"],
+        queryProjID : to.query["projectId"]
+      })
       if(!to.params["slug"]){
         if(!to.query["projectId"]){
           // i guess no need to do anything here

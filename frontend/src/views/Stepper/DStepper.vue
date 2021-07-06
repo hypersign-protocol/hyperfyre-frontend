@@ -259,8 +259,8 @@ export default {
       authToken: localStorage.getItem("authToken"),
       fullPage: true,
       projectDetails: {},
-      projectId: "",
-      projectSlug: "",
+      projectId: localStorage.getItem("projectId"),
+      projectSlug: localStorage.getItem("projectSlug"),
       serverErrors: [],
       hasTgVerfied: false,
       blockchainType : "",
@@ -268,6 +268,14 @@ export default {
   },
 
   async created() {
+    console.log("Inside created.....")
+    console.log({
+      projectId,
+      projectSlug
+    })
+
+    
+
     if(!this.$route.params.slug || this.$route.params.slug == "undefined"){
       if(!this.$route.query.projectId || this.$route.query.projectId == "undefined"){
         this.showStepper = false;

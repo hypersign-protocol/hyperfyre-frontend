@@ -491,6 +491,12 @@ export default {
             }else{
               path = "form/" + projectSlug;
             }
+
+            console.log({
+              projectSlug,
+              projectId,
+              path
+            })
             // if (projectId) {
             //   path = "form?projectId=" + projectId;
             // } else {
