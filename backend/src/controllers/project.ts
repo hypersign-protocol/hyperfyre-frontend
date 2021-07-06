@@ -142,10 +142,14 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
 
     const { fetchInvestors, limit, skip, searchQuery, isPublic, isExport } = req.query;
-    const project: IProject = await ProjectModel.findById({ _id: id });
+    let project: IProject = await ProjectModel.findById({ _id: id });
+
+    if(!project){
+      project = await ProjectModel.where({ slug: id }).findOne();
+    }
 
     if (project == null) {
-      return next(ApiError.badRequest("No project found for id = " + id));
+      return next(ApiError.badRequest("No project found for id or slug = " + id));
     }
 
     let projectInfo = {
