@@ -45,6 +45,12 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       return next(ApiError.badRequest("fromDate can not be greater than toDate"));
     }
     const slug = dashify(projectName);
+
+    const project:IProject = await ProjectModel.where({ slug }).findOne();
+    if(project){
+      return next(ApiError.badRequest("Choose different project name. This project name is already taken"));
+    }
+
     const newProject: IProject = await ProjectModel.create({
       projectName,
       logoUrl,
