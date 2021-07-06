@@ -478,36 +478,35 @@ export default {
           } else {
            
             let path = "form";
-            let route = {}
+            // let route = {}
             
             const projectSlug = localStorage.getItem("projectSlug")
             const projectId = localStorage.getItem("projectId");
             // console.log(projectId)
 
-            route["name"] = "investor";
-            route["path"] = path;
+            // route["name"] = "investor";
+            // route["path"] = path;
 
             if(!projectSlug){
               if(!projectId){
                 path = "form";  
               }else{
-                route["query"] = { projectId }
-                // path = "form?projectId=" + projectId; 
+                // route["query"] = { projectId }
+                path += "?projectId=" + projectId; 
               }
             }else{
-              route["params"] = { slug: projectSlug};
-              // path = "form/" + projectSlug;
+              // route["params"] = { slug: projectSlug};
+              path += "/" + projectSlug;
             }
             
 
             console.log({
               projectSlug,
               projectId,
-              path,
-              route
+              path
             });
 
-            _this.$router.push(route);
+            _this.$router.push(path);
           }
         }
       }
