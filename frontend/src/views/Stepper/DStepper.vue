@@ -270,8 +270,13 @@ export default {
   async created() {
     console.log("Inside created.....")
     console.log({
-      projectId,
-      projectSlug
+      projectId: this.projectId,
+      projectSlug:  this.projectSlug
+    })
+
+    console.log({
+      RouteSslug: this.$route.params.slug ,
+      RouteProjecTId: this.$route.query.projectId
     })
 
     
