@@ -507,8 +507,8 @@ export default {
             _this.$router.push({
                path: path,
                name:"investor",
-               query: {projectId: projectId},
-              params: { projectDetails: this.projectDetails },
+               query: projectId? {projectId} : {projectId: this.projectDetails["_id"]},
+               params: { projectDetails: this.projectDetails },
             });
           }
         }
