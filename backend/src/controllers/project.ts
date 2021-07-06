@@ -142,10 +142,14 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
 
     const { fetchInvestors, limit, skip, searchQuery, isPublic, isExport } = req.query;
-    let project: IProject = await ProjectModel.findById({ _id: id });
+    let project: IProject; 
 
-    if(!project){
-      project = await ProjectModel.where({ slug: id }).findOne();
+    try{
+      project = await ProjectModel.findById({ _id: id });
+    }catch(e){
+      if(!project){
+        project = await ProjectModel.where({ slug: id }).findOne();
+      }
     }
 
     if (project == null) {
