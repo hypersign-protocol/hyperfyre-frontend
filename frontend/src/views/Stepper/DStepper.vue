@@ -281,31 +281,33 @@ export default {
 
     
 
-    if(!this.$route.params.slug || this.$route.params.slug == "undefined"){
-      if(!this.$route.query.projectId || this.$route.query.projectId == "undefined"){
-        this.showStepper = false;
-        this.errorMessage = "Sorry, no project found!";
-        return;
-      }else{
-        this.projectId = this.$route.query.projectId
-      }
-    }else{
-      this.projectSlug = this.$route.params.slug
-    }
+    // if(!this.$route.params.slug || this.$route.params.slug == "undefined"){
+    //   if(!this.$route.query.projectId || this.$route.query.projectId == "undefined"){
+    //     this.showStepper = false;
+    //     this.errorMessage = "Sorry, no project found!";
+    //     return;
+    //   }else{
+    //     this.projectId = this.$route.query.projectId
+    //   }
+    // }else{
+    //   this.projectSlug = this.$route.params.slug
+    // }
     
     // this.projectId = this.$route.params.slug ? this.$route.params.slug : this.$route.query.projectId;
     const userDid = JSON.parse(localStorage.getItem("user")).id;
+    this.projectDetails = localStorage.getItem("projectDetails");
 
     this.checkIfAlreadyFilled(userDid);
-    if (!this.$route.params.projectDetails) {
+    if (!this.projectDetails || this.projectDetails == {}) {
       this.projectDetails = await this.fetchProjectData({ isAuthTokenAvailable: true })  
       this.projectId = this.projectDetails["_id"];
       this.checkTelegramAnnouncementChannel();
       this.checkBlockChainType();
       return;
     } 
+
+    this.projectId = this.projectDetails["_id"];
   
-    this.projectDetails = this.$route.params.projectDetails;
     
     this.checkTelegramAnnouncementChannel();
     this.checkBlockChainType();

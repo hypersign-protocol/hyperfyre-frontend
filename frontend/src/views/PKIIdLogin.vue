@@ -456,7 +456,6 @@ export default {
       // console.log("Websocket connection is open");
     };
 
-
     this.connection.onmessage = ({ data }) =>  {      
       // console.log("Websocket connection messag receieved ", data);
       let messageData = JSON.parse(data);
@@ -478,49 +477,50 @@ export default {
             _this.$router.push(_this.$route.params.nextUrl);
           } else {
            
-            let path = "";
+            let path = "form";
+            let route = {}
+            
             const projectSlug = localStorage.getItem("projectSlug")
             const projectId = localStorage.getItem("projectId");
             // console.log(projectId)
+
+            route["name"] = "investor";
+            route["path"] = path;
+
             if(!projectSlug){
               if(!projectId){
                 path = "form";  
               }else{
-                path = "form?projectId=" + projectId; 
+                route["query"] = { projectId }
+                // path = "form?projectId=" + projectId; 
               }
             }else{
-              path = "form/" + projectSlug;
+              route["params"] = projectSlug;
+              // path = "form/" + projectSlug;
             }
+            
 
             console.log({
               projectSlug,
               projectId,
-              path
-            })
-            // if (projectId) {
-            //   path = "form?projectId=" + projectId;
-            // } else {
-            //   path = "form";
-            // }
-            
-            
-            _this.$router.push({
-               path: path,
-               name:"investor",
-               query: projectId? {projectId} : {projectId: this.projectDetails["_id"]},
-               params: { projectDetails: this.projectDetails },
+              path,
+              route
             });
+
+            _this.$router.push(route);
           }
         }
       }
     };
+
     this.connection.onerror = function(error) {
       _this.error = true;
       _this.socketMessage = "Error while fetching the QR data :(";
       console.log("Websocket connection error ", error);
     };
 
-    this.projectDetails = await  this.fetchProjectData({isAuthTokenAvailable: false});
+    this.projectDetails = await this.fetchProjectData({isAuthTokenAvailable: false});
+    localStorage.setItem("projectDetails", this.projectDetails);
 
   },
   mounted() {
