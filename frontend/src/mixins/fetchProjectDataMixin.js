@@ -5,11 +5,10 @@ export default{
             try {
                 
               this.isLoading = true;
-      
-              if(isAuthTokenAvailable){
-                if (!this.$route.query.projectId) throw new Error("No project found");
-              }
+            
               
+              if (!this.projectId || this.projectId == "" ) throw new Error("No project found");
+                
               let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.projectId}`;
               let headers = {
                 "Content-Type": "application/json",

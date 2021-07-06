@@ -32,6 +32,14 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "investorLogin" */ './views/connectWIthTwitter.vue'),
     },
     {
+      path: "/form/:slug",
+      name: "investor",
+      component: () => import(/* webpackChunkName: "investor" */ './views/Investor.vue') ,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
       path: "/form",
       name: "investor",
       component: () => import(/* webpackChunkName: "investor" */ './views/Investor.vue') ,

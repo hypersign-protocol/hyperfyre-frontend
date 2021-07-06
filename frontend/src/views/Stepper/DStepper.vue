@@ -267,16 +267,15 @@ export default {
   },
 
   async created() {
-    if (
-      !this.$route.query.projectId ||
-      this.$route.query.projectId == "undefined"
-    ) {
-      this.showStepper = false;
-      this.errorMessage = "Sorry, no project found :( !";
-      return;
+    if(!this.$route.params.slug){
+      if(!this.$route.query.projectId){
+        this.showStepper = false;
+        this.errorMessage = "Sorry, no project found!";
+        return;
+      }
     }
-
-    this.projectId = this.$route.query.projectId;
+    
+    this.projectId = this.$route.params.slug ? this.$route.params.slug : this.$route.query.projectId;
     const userDid = JSON.parse(localStorage.getItem("user")).id;
 
     this.checkIfAlreadyFilled(userDid);
