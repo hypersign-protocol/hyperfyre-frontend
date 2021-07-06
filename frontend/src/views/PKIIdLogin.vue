@@ -520,7 +520,7 @@ export default {
     };
 
     this.projectDetails = await this.fetchProjectData({isAuthTokenAvailable: false});
-    localStorage.setItem("projectDetails", this.projectDetails);
+    localStorage.setItem("projectDetails", JSON.stringify(this.projectDetails));
 
   },
   mounted() {

@@ -295,7 +295,7 @@ export default {
     
     // this.projectId = this.$route.params.slug ? this.$route.params.slug : this.$route.query.projectId;
     const userDid = JSON.parse(localStorage.getItem("user")).id;
-    this.projectDetails = localStorage.getItem("projectDetails");
+    this.projectDetails = JSON.parse(localStorage.getItem("projectDetails"));
 
     this.checkIfAlreadyFilled(userDid);
     if (!this.projectDetails || this.projectDetails == {}) {
