@@ -60,7 +60,7 @@ export default{
           getProjectIdOrSlug(){
             let idOrSlugForUrl;
 
-            if(!this.projectId || this.projectId == ""){
+            if(!this.projectId || this.projectId == "" || this.projectId == null || this.projectId == "undefined"){
               idOrSlugForUrl = this.projectDetails ? this.projectDetails["_id"] : this.projectSlug;
             }else{
               idOrSlugForUrl  = this.projectId;
