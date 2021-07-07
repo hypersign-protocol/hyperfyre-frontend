@@ -58,16 +58,23 @@ export default{
             }
           },
           getProjectIdOrSlug(){
-            let idOrSlugForUrl = "";
-              if(!this.projectSlug || this.projectSlug == "" || this.projectSlug == "undefined"){
-                if (!this.projectId || this.projectId == "" || this.projectId == "undefined"){
-                  throw new Error("No projectId or project slug is set");
-                }else{
-                  idOrSlugForUrl = this.projectId;
-                }
-              }else{
-                idOrSlugForUrl = this.projectSlug
-              }
+            let idOrSlugForUrl;
+
+            if(!this.projectId || this.projectId == ""){
+              idOrSlugForUrl = this.projectDetails ? this.projectDetails["_id"] : this.projectSlug;
+            }else{
+              idOrSlugForUrl  = this.projectId;
+            }
+
+              // if(!this.projectSlug || this.projectSlug == "" || this.projectSlug == "undefined"){
+              //   if (!this.projectId || this.projectId == "" || this.projectId == "undefined"){
+              //     throw new Error("No projectId or project slug is set");
+              //   }else{
+              //     idOrSlugForUrl = this.projectId;
+              //   }
+              // }else{
+              //   idOrSlugForUrl = this.projectSlug
+              // }
 
               return idOrSlugForUrl;
           }
