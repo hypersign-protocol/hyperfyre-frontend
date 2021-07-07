@@ -414,14 +414,14 @@ export default {
       fullPage: true,
       isLoading: false,
       connection: null,
-        projectDetails: {},
+      projectDetails: {},
       qrConfig: {
         value: "test",
         imagePath: "/apple-icon-57x57.png",
         filter: "color",
       },
-      projectId: localStorage.getItem("projectId"),
-      projectSlug: localStorage.getItem("projectSlug")
+      projectId: "",
+      projectSlug: ""
     };
   },
   async created() {
@@ -518,9 +518,10 @@ export default {
       console.log("Websocket connection error ", error);
     };
 
-    this.projectDetails = await this.fetchProjectData({isAuthTokenAvailable: false});
-    localStorage.setItem("projectDetails", JSON.stringify(this.projectDetails));
-
+    if (!this.projectDetails || this.projectDetails == {}) {
+      this.projectDetails = await this.fetchProjectData({isAuthTokenAvailable: false});
+      localStorage.setItem("projectDetails", JSON.stringify(this.projectDetails));
+    }
   },
   mounted() {
     this.clean();

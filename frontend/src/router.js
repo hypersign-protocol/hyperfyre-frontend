@@ -122,16 +122,33 @@ router.beforeEach((to, from, next) => {
         param_slug: to.params["slug"],
         queryProjID : to.query["projectId"]
       })
-      if(!to.params["slug"]){
-        if(!to.query["projectId"]){
-          // i guess no need to do anything here
-        }else{
-          localStorage.setItem("projectId", to.query["projectId"]);
-        }
-      }else{
-        localStorage.setItem("projectSlug", to.params["slug"]);  
-      }
+
+      // we first check if the url has projectId or slug
+      // Then remove the old store
+      // then depending upon what is present  in route,
+      // create the store
+      // When the call come ffrom logout
+      // we dont do anything. 
       
+      if((to.params["slug"] || to.query["projectId"]) && (to.params["slug"] != "" || to.query["projectId"] != "")){
+        localStorage.removeItem("projectDetails");
+        localStorage.removeItem("projectSlug");
+        localStorage.removeItem("projectId");
+        if(!to.params["slug"]){
+          if(!to.query["projectId"]){
+            // i guess no need to do anything here
+          }else{
+            localStorage.setItem("projectId", to.query["projectId"]);
+          }
+        }else{        
+          localStorage.setItem("projectSlug", to.params["slug"]);  
+        }
+        
+      }else{
+        console.log("ProjectId or slug is blank");
+        console.log("Not doing anything but just sending to next route");
+      }
+
       next({
         path: to.meta.admin ? "/admin/login" : "/login",
         params: { nextUrl: to.fullPath },
