@@ -585,7 +585,7 @@ export default {
         this.project.blockchainType = this.blockchainType
         this.project.projectStatus = this.projectStatus
 
-         console.log(this.project)
+        //  console.log(this.project)
 
 
 
@@ -607,7 +607,7 @@ export default {
           return;
         }
     
-        console.log("PROEJCT", resp.data)
+        // console.log("PROEJCT", resp.data) 
         
         const userProjects = JSON.parse(localStorage.getItem("userProjects"));
         userProjects.count += 1

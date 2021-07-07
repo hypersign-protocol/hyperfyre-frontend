@@ -118,10 +118,10 @@ router.beforeEach((to, from, next) => {
           });
         });
     } else {
-      console.log({
-        param_slug: to.params["slug"],
-        queryProjID : to.query["projectId"]
-      })
+      // console.log({
+      //   param_slug: to.params["slug"],
+      //   queryProjID : to.query["projectId"]
+      // })
 
       // we first check if the url has projectId or slug
       // Then remove the old store
