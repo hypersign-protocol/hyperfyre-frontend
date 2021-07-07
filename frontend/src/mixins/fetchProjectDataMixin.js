@@ -71,6 +71,9 @@ export default{
               console.log("setting projectUrl as slug")
               console.log(this.projectDetails);
               idOrSlugForUrl = this.projectDetails != "undefined" && this.projectDetails != {} ? this.projectDetails["_id"] : this.projectSlug;
+              if(idOrSlugForUrl == "undefined" || !idOrSlugForUrl){
+                idOrSlugForUrl = this.projectSlug;
+              }
               console.log("ProjectSlug = " + idOrSlugForUrl)
             }else{
               idOrSlugForUrl  = this.projectId;
