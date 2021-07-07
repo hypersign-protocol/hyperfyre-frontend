@@ -611,7 +611,10 @@ export default {
 
     async checkIfAlreadyFilled(userDid) {
       try {
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?did=${userDid}&projectId=${this.projectId}`;
+        
+        let idOrSlugForUrl = this.getProjectIdOrSlug();
+
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?did=${userDid}&projectId=${idOrSlugForUrl}`;
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,

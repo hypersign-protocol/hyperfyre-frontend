@@ -5,17 +5,8 @@ export default{
             try {
                 
               this.isLoading = true;
-              let idOrSlugForUrl = "";
-              if(!this.projectSlug || this.projectSlug == "" || this.projectSlug == "undefined"){
-                if (!this.projectId || this.projectId == "" || this.projectId == "undefined"){
-                  throw new Error("No project found");
-                }else{
-                  idOrSlugForUrl = this.projectId;
-                }
-              }else{
-                idOrSlugForUrl = this.projectSlug
-              }
               
+              const idOrSlugForUrl = this.getProjectIdOrSlug();
               // if (!this.projectId || this.projectId == "" ) 
                 
               let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${idOrSlugForUrl}`;
@@ -66,5 +57,19 @@ export default{
               this.isLoading = false;
             }
           },
+          getProjectIdOrSlug(){
+            let idOrSlugForUrl = "";
+              if(!this.projectSlug || this.projectSlug == "" || this.projectSlug == "undefined"){
+                if (!this.projectId || this.projectId == "" || this.projectId == "undefined"){
+                  throw new Error("No projectId or project slug is set");
+                }else{
+                  idOrSlugForUrl = this.projectId;
+                }
+              }else{
+                idOrSlugForUrl = this.projectSlug
+              }
+
+              return idOrSlugForUrl;
+          }
     }
 }
