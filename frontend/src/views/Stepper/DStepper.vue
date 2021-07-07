@@ -268,32 +268,6 @@ export default {
   },
 
   async created() {
-    // console.log("Inside created.....")
-    // console.log({
-    //   projectId: this.projectId,
-    //   projectSlug:  this.projectSlug
-    // })
-
-    // console.log({
-    //   RouteSslug: this.$route.params.slug ,
-    //   RouteProjecTId: this.$route.query.projectId
-    // })
-
-    
-
-    // if(!this.$route.params.slug || this.$route.params.slug == "undefined"){
-    //   if(!this.$route.query.projectId || this.$route.query.projectId == "undefined"){
-    //     this.showStepper = false;
-    //     this.errorMessage = "Sorry, no project found!";
-    //     return;
-    //   }else{
-    //     this.projectId = this.$route.query.projectId
-    //   }
-    // }else{
-    //   this.projectSlug = this.$route.params.slug
-    // }
-    
-    // this.projectId = this.$route.params.slug ? this.$route.params.slug : this.$route.query.projectId;
     const userDid = JSON.parse(localStorage.getItem("user")).id;
     this.projectDetails = JSON.parse(localStorage.getItem("projectDetails"));
 
@@ -304,9 +278,12 @@ export default {
       this.checkTelegramAnnouncementChannel();
       this.checkBlockChainType();
       return;
-    } 
+    } else{
+      if(!this.projectId || this.projectId == ""){
+        this.projectId = this.projectDetails["_id"];
+      }
+    }
 
-    this.projectId = this.projectDetails["_id"];
   
     
     this.checkTelegramAnnouncementChannel();
@@ -634,7 +611,10 @@ export default {
 
     async checkIfAlreadyFilled(userDid) {
       try {
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?did=${userDid}&projectId=${this.projectId}`;
+        
+        let idOrSlugForUrl = this.getProjectIdOrSlug();
+
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?did=${userDid}&projectId=${idOrSlugForUrl}`;
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,

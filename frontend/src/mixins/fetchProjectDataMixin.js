@@ -5,18 +5,12 @@ export default{
             try {
                 
               this.isLoading = true;
-              let idOrSlugForUrl = "";
-              if(!this.projectSlug || this.projectSlug == "" || this.projectSlug == "undefined"){
-                if (!this.projectId || this.projectId == "" || this.projectId == "undefined"){
-                  throw new Error("No project found");
-                }else{
-                  idOrSlugForUrl = this.projectId;
-                }
-              }else{
-                idOrSlugForUrl = this.projectSlug
-              }
               
-              // if (!this.projectId || this.projectId == "" ) 
+              const idOrSlugForUrl = this.getProjectIdOrSlug();
+              console.log(idOrSlugForUrl)
+              if (!idOrSlugForUrl) {
+                throw new Error("Invalid projectId or projectSlug")
+              }
                 
               let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${idOrSlugForUrl}`;
               let headers = {
@@ -66,5 +60,36 @@ export default{
               this.isLoading = false;
             }
           },
+          getProjectIdOrSlug(){
+            let idOrSlugForUrl;
+
+            console.log({
+              projectId: this.projectId,
+              projectSsluf : this.projectSlug
+            })
+            if(!this.projectId || this.projectId == "" || this.projectId == null || this.projectId == "undefined"){
+              console.log("setting projectUrl as slug")
+              console.log(this.projectDetails);
+              idOrSlugForUrl = this.projectDetails != "undefined" && this.projectDetails != {} ? this.projectDetails["_id"] : this.projectSlug;
+              if(idOrSlugForUrl == "undefined" || !idOrSlugForUrl){
+                idOrSlugForUrl = this.projectSlug;
+              }
+              console.log("ProjectSlug = " + idOrSlugForUrl)
+            }else{
+              idOrSlugForUrl  = this.projectId;
+            }
+
+              // if(!this.projectSlug || this.projectSlug == "" || this.projectSlug == "undefined"){
+              //   if (!this.projectId || this.projectId == "" || this.projectId == "undefined"){
+              //     throw new Error("No projectId or project slug is set");
+              //   }else{
+              //     idOrSlugForUrl = this.projectId;
+              //   }
+              // }else{
+              //   idOrSlugForUrl = this.projectSlug
+              // }
+
+              return idOrSlugForUrl;
+          }
     }
 }

@@ -414,7 +414,7 @@ export default {
       fullPage: true,
       isLoading: false,
       connection: null,
-        projectDetails: {},
+      projectDetails: {},
       qrConfig: {
         value: "test",
         imagePath: "/apple-icon-57x57.png",
@@ -480,8 +480,8 @@ export default {
             let path = "/form";
             // let route = {}
             
-            const projectSlug = localStorage.getItem("projectSlug")
-            const projectId = localStorage.getItem("projectId");
+            const projectSlug = this.projectSlug; //localStorage.getItem("projectSlug")
+            const projectId = this.projectId; //localStorage.getItem("projectId");
             // console.log(projectId)
 
             // route["name"] = "investor";
@@ -518,9 +518,12 @@ export default {
       console.log("Websocket connection error ", error);
     };
 
-    this.projectDetails = await this.fetchProjectData({isAuthTokenAvailable: false});
-    localStorage.setItem("projectDetails", JSON.stringify(this.projectDetails));
-
+    // if (this.projectId || this.projectSlug ) {
+      console.log("Fetching projectDetails...");    
+      this.projectDetails = await this.fetchProjectData({isAuthTokenAvailable: false});
+      console.log("Setting projectDetails...");
+      localStorage.setItem("projectDetails", JSON.stringify(this.projectDetails));
+    // }
   },
   mounted() {
     this.clean();

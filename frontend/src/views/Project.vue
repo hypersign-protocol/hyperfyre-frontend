@@ -163,8 +163,8 @@ i {
                     <label style="margin-right: 8%"
                       >Project Status:</label
                     >
-                    <select class="form-control" v-model="project.projectStatus"  @change="changeProjectStatus($event)">
-                      <option value="true" selected>OPEN</option>
+                    <select class="form-control" v-model="projectStatus"  @change="changeProjectStatus($event)">
+                      <option value="true" :selected="true">OPEN</option>
                       <option value="false">CLOSE</option>
                     </select >
                   </div>
@@ -204,7 +204,7 @@ i {
                      <label style="margin-right: 8%"
                       >Blockchain Type:</label
                     >
-                    <select class="form-control" v-model="project.blockchainType">
+                    <select class="form-control" v-model="blockchainType">
                       <option value="ETHEREUM" selected>ETHEREUM</option>
                       <option value="TEZOS">TEZOS</option>
                     </select >
@@ -219,11 +219,13 @@ i {
                     >
                   
                     <input
+
                       type="text"
-                      v-model="project.themeColor"    
+                      v-model="themeColor"
                       size="30"
                       class="form-control w-75"
-                  placeholder="#494949"
+                      :placeholder="themeColorDefault"
+                  
                     />
                   </div>
                    <div class=" col-md-6 form-group">
@@ -232,10 +234,10 @@ i {
                     >
                     <input
                       type="text"
-                      v-model="project.fontColor"
+                     v-model="fontColor"
                       size="20"
                       class="form-control w-75"
-                      placeholder="#ffffff"
+                      :placeholder="fontColorDefault"
                     />
                   </div>
                    </div>
@@ -443,12 +445,16 @@ export default {
         twitterHandle: "",
         telegramHandle: "",
         twitterPostFormat: "I am happy with #hypersign @hypersignchain",
-        projectStatus: true,
-        themeColor: "#494949",
-        fontColor: "#ffffff",
-        blockchainType: "ETHEREUM",
-        projectStatus: true,
-      },
+      },    
+      
+      projectStatus: true,
+      blockchainType: "ETHEREUM",
+
+      themeColor: "#494949",
+      themeColorDefault: "#494949",
+      fontColor: "#ffffff",
+      fontColorDefault: "#ffffff",
+
       isProjectEditing: false,
       projects: [],
       cols: [
@@ -488,6 +494,9 @@ export default {
     });
   },
   methods: {
+    handleThemeChange(e) {
+      this.themeColor = e.target.value
+    },
     openCreateModal() {
       this.isProjectEditing = false;
       this.project = {}
@@ -552,12 +561,9 @@ export default {
     async saveProject() {
       
       try {
-
-
         if(this.checkIfEverythingIsFilled() !==  true){
             return this.notifyErr( this.checkIfEverythingIsFilled());   
         }
-
         this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
@@ -573,6 +579,15 @@ export default {
 
         this.project.toDate = new Date(this.project.toDate).toISOString();
         this.project.fromDate = new Date(this.project.fromDate).toISOString();
+       
+        this.project.themeColor = this.themeColor.trim().length ?  this.themeColor :  this.themeColorDefault
+        this.project.fontColor = this.fontColor.trim().length ?  this.fontColor :  this.fontColorDefault
+        this.project.blockchainType = this.blockchainType
+        this.project.projectStatus = this.projectStatus
+
+         console.log(this.project)
+
+
 
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
@@ -633,15 +648,15 @@ export default {
          if(!this.project.twitterPostFormat){
           return "Please provide a Twitter Post Format"
         }
-         if(!this.project.blockchainType){
+         if(!this.blockchainType){
           return "Please provide Blockchain Type"
         }
 
-        if(this.project.themeColor == "#ffffff"){
+        if(this.themeColor == "#ffffff"){
           return "Theme color cannot be white"
         }
 
-      if(this.project.themeColor == this.project.fontColor){
+        if(this.themeColor == this.fontColor && (this.themeColor.trim().length && this.themeColor.trim().length) ){
           return "Theme color and font color cannot be same"
         }
         return true
