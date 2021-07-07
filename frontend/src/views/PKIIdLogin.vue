@@ -518,12 +518,12 @@ export default {
       console.log("Websocket connection error ", error);
     };
 
-    if (this.projectId || this.projectSlug ) {
+    // if (this.projectId || this.projectSlug ) {
       console.log("Fetching projectDetails...");    
       this.projectDetails = await this.fetchProjectData({isAuthTokenAvailable: false});
       console.log("Setting projectDetails...");
       localStorage.setItem("projectDetails", JSON.stringify(this.projectDetails));
-    }
+    // }
   },
   mounted() {
     this.clean();
