@@ -63,6 +63,10 @@ export default{
           getProjectIdOrSlug(){
             let idOrSlugForUrl;
 
+            console.log({
+              projectId: this.projectId,
+              projectSsluf : this.projectSlug
+            })
             if(!this.projectId || this.projectId == "" || this.projectId == null || this.projectId == "undefined"){
               idOrSlugForUrl = this.projectDetails ? this.projectDetails["_id"] : this.projectSlug;
             }else{
