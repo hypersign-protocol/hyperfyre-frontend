@@ -420,8 +420,8 @@ export default {
         imagePath: "/apple-icon-57x57.png",
         filter: "color",
       },
-      projectId: "",
-      projectSlug: ""
+      projectId: localStorage.getItem("projectId"),
+      projectSlug: localStorage.getItem("projectSlug")
     };
   },
   async created() {
@@ -480,8 +480,8 @@ export default {
             let path = "/form";
             // let route = {}
             
-            const projectSlug = localStorage.getItem("projectSlug")
-            const projectId = localStorage.getItem("projectId");
+            const projectSlug = this.projectSlug; //localStorage.getItem("projectSlug")
+            const projectId = this.projectId; //localStorage.getItem("projectId");
             // console.log(projectId)
 
             // route["name"] = "investor";
@@ -518,10 +518,12 @@ export default {
       console.log("Websocket connection error ", error);
     };
 
-    if (!this.projectDetails || this.projectDetails == {}) {
+    // if (!this.projectDetails || this.projectDetails == {}) {
+      console.log("Fetching projectDetails...");    
       this.projectDetails = await this.fetchProjectData({isAuthTokenAvailable: false});
+      console.log("Setting projectDetails...");
       localStorage.setItem("projectDetails", JSON.stringify(this.projectDetails));
-    }
+    // }
   },
   mounted() {
     this.clean();
