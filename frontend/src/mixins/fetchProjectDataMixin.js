@@ -7,7 +7,10 @@ export default{
               this.isLoading = true;
               
               const idOrSlugForUrl = this.getProjectIdOrSlug();
-              // if (!this.projectId || this.projectId == "" ) 
+              console.log(idOrSlugForUrl)
+              if (!idOrSlugForUrl) {
+                throw new Error("Invalid projectId or projectSlug")
+              }
                 
               let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${idOrSlugForUrl}`;
               let headers = {
