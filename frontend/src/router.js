@@ -127,7 +127,7 @@ router.beforeEach((to, from, next) => {
             // i guess no need to do anything here
           }else{
             localStorage.setItem("projectId", to.query["projectId"]);
-          }q
+          }
         }else{        
           localStorage.setItem("projectSlug", to.params["slug"]);  
         }
