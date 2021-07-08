@@ -414,6 +414,7 @@ export default {
          
         } else {
           this.notifyErr("Please follow all the rules and provide a tweet URL")
+          this.btnBlocked = false
         
         }
         //  this.slideToNextPage(true);
