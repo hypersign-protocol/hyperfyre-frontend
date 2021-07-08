@@ -117,7 +117,6 @@ router.beforeEach((to, from, next) => {
           });
         });
     } else {
-
       if((to.params["slug"] || to.query["projectId"]) && (to.params["slug"] != "" || to.query["projectId"] != "")){
         console.log("first we need to remove all these items projectDetails, projectSlug, projectId")
         localStorage.removeItem("projectDetails");
@@ -128,7 +127,7 @@ router.beforeEach((to, from, next) => {
             // i guess no need to do anything here
           }else{
             localStorage.setItem("projectId", to.query["projectId"]);
-          }
+          }q
         }else{        
           localStorage.setItem("projectSlug", to.params["slug"]);  
         }
@@ -137,7 +136,7 @@ router.beforeEach((to, from, next) => {
         console.log("ProjectId or slug is blank");
         console.log("Not doing anything but just sending to next route");
       }
-      
+
       next({
         path: to.meta.admin ? "/admin/login" : "/login",
         params: { nextUrl: to.fullPath },
