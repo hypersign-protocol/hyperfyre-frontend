@@ -788,7 +788,7 @@ background: whitesmoke;
   padding: 2px 0;
   margin-left: 5px;
   margin-top: 5px;
-  
+  padding-right: 10px;
 }
 .header .logo  img{
  
