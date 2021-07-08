@@ -369,6 +369,7 @@ export default {
             const res = await apiClinet.makeCall({method: "POST", body: body, header: headers, url})
 
             if(!res.data.user.followed.hasFollowed){
+                      this.btnBlocked = false;
               return   this.notifyErr(`Please Follow our twitter handle (@${res.data.user.followed.to})`)
             }
 
@@ -377,6 +378,7 @@ export default {
             const tgId = localStorage.getItem("telegramId")
 
             if(!tgId || tgId === "undefined"){
+                      this.btnBlocked = false;
               return this.notifyErr("Please authenticate Telegram")
             }
 
