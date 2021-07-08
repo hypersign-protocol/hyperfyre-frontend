@@ -9,8 +9,11 @@
     ></loading>
 
     <div class="header w-100 text-left" :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`">
-      <div class="logo  d-inline-block">
-        <img  :src="projectDetails.logoUrl"  />
+      <div class="logo  d-inline-block" style="width:100%">
+        <img :src="projectDetails.logoUrl" style="float:left"/>
+        <button @click="logout" class="btn" style="float:right">
+          Logout
+        </button>
       </div>
       <div class="text mx-auto  py-3 text-left" v-if="step != 3">
         <h4 class="mb-4">
@@ -315,6 +318,14 @@ export default {
   },
 
   methods: {
+
+    logout() {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
+      localStorage.removeItem("credentials");
+      localStorage.removeItem("userData");
+      this.$router.push("/login");
+    },
 
   checkBlockChainType(){
 
@@ -672,6 +683,15 @@ export default {
 </script>
 
 <style>
+.btn{
+  border: 1px solid #fff;
+bottom: 0;
+right: 0;
+background: whitesmoke;
+/* color: #fff; */
+}
+
+
 .d-stepper .d-stepper-header {
   max-width: 600px;
   margin: 0 auto;
@@ -768,7 +788,7 @@ export default {
   padding: 2px 0;
   margin-left: 5px;
   margin-top: 5px;
-  
+  padding-right: 10px;
 }
 .header .logo  img{
  

@@ -421,7 +421,8 @@ export default {
         filter: "color",
       },
       projectId: localStorage.getItem("projectId"),
-      projectSlug: localStorage.getItem("projectSlug")
+      projectSlug: localStorage.getItem("projectSlug"),
+      walletWindow: null
     };
   },
   async created() {
@@ -506,6 +507,11 @@ export default {
             //   path
             // });
 
+            // close the wallet window after authentication
+            if(this.walletWindow) {
+              this.walletWindow.close();
+            }
+
             _this.$router.push(path);
           }
         }
@@ -532,7 +538,7 @@ export default {
   methods: {
     openWallet() {
       if (this.value != "") {
-        window.open(
+        this.walletWindow = window.open(
           `${this.$config.webWalletAddress}/deeplink?url=${this.value}`,
           "popUpWindow",
           `height=800,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`

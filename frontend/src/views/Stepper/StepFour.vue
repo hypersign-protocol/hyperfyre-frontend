@@ -13,9 +13,9 @@ h3 {
   <div >
     <h2>Thank You!</h2>
     <h3>You are successfully registered,<h3></h3>You will receive a confirmation email if you qualify.</h3>
-    <button @click="logout" class="btn text-dark">
+    <!-- <button @click="logout" class="btn text-dark">
       Logout
-    </button>
+    </button> -->
   </div>
 </template>
 
