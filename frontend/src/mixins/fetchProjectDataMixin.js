@@ -7,7 +7,7 @@ export default{
               this.isLoading = true;
               
               const idOrSlugForUrl = this.getProjectIdOrSlug();
-              console.log(idOrSlugForUrl)
+              // console.log(idOrSlugForUrl)
               if (!idOrSlugForUrl) {
                 throw new Error("Invalid projectId or projectSlug")
               }
@@ -63,18 +63,18 @@ export default{
           getProjectIdOrSlug(){
             let idOrSlugForUrl;
 
-            console.log({
-              projectId: this.projectId,
-              projectSsluf : this.projectSlug
-            })
+            // console.log({
+            //   projectId: this.projectId,
+            //   projectSsluf : this.projectSlug
+            // })
             if(!this.projectId || this.projectId == "" || this.projectId == null || this.projectId == "undefined"){
-              console.log("setting projectUrl as slug")
-              console.log(this.projectDetails);
+              // console.log("setting projectUrl as slug")
+              // console.log(this.projectDetails);
               idOrSlugForUrl = this.projectDetails != "undefined" && this.projectDetails != {} ? this.projectDetails["_id"] : this.projectSlug;
               if(idOrSlugForUrl == "undefined" || !idOrSlugForUrl){
                 idOrSlugForUrl = this.projectSlug;
               }
-              console.log("ProjectSlug = " + idOrSlugForUrl)
+              // console.log("ProjectSlug = " + idOrSlugForUrl)
             }else{
               idOrSlugForUrl  = this.projectId;
             }

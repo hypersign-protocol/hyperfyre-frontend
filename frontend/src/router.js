@@ -88,7 +88,6 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    // console.log("Requires auth");
     const authToken = localStorage.getItem("authToken");
     if (authToken) {
       // console.log("Yes auth token");
@@ -118,19 +117,8 @@ router.beforeEach((to, from, next) => {
           });
         });
     } else {
-      console.log({
-        param_slug: to.params["slug"],
-        queryProjID : to.query["projectId"]
-      })
-
-      // we first check if the url has projectId or slug
-      // Then remove the old store
-      // then depending upon what is present  in route,
-      // create the store
-      // When the call come ffrom logout
-      // we dont do anything. 
-      
       if((to.params["slug"] || to.query["projectId"]) && (to.params["slug"] != "" || to.query["projectId"] != "")){
+        // console.log("first we need to remove all these items projectDetails, projectSlug, projectId")
         localStorage.removeItem("projectDetails");
         localStorage.removeItem("projectSlug");
         localStorage.removeItem("projectId");

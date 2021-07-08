@@ -176,7 +176,7 @@ export default {
           {
             label: "Tezos Account Address" ,
             // : "ERC-20 Address (Do not add exchange address)*",
-            placeholder: "tz1" ,
+            placeholder: "tz or kt" ,
             // : "0x",
             fullWidth: true,
             value: "",
