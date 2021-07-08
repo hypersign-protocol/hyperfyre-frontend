@@ -11,7 +11,7 @@
     <div class="header w-100 text-left" :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`">
       <div class="logo  d-inline-block" style="width:100%">
         <img :src="projectDetails.logoUrl" style="float:left"/>
-        <button @click="logout" class="btn text-dark" style="float:right">
+        <button @click="logout" class="btn" style="float:right">
           Logout
         </button>
       </div>
@@ -684,10 +684,11 @@ export default {
 
 <style>
 .btn{
-  border: 1px solid #494949;
-  margin: 20px 0;
-  bottom: 0;
-  right: 0;
+  border: 1px solid #fff;
+bottom: 0;
+right: 0;
+background: whitesmoke;
+/* color: #fff; */
 }
 
 
