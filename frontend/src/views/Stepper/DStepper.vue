@@ -103,8 +103,6 @@
                       @loading="loadingAction"
                       @error="errorHandler"
                       @fatal-error="blockStepper"
-                      @can-continue="nextStepAction"
-                      @set-step="setStep"
                       @handleTwitterLogin="handleTwitterLogin"
                     />
                   </keep-alive>
@@ -132,8 +130,9 @@
             variant="dark"
             class="ml-2 next-btn"
             @click="nextStep"
+
             :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important; border-color:${projectDetails.fontColor}`"
-            :disabled="loading"
+            :disabled="this.btnBlocked"
           >
             {{ step + 1 == 3 ? "Submit" : "Next" }}
           </b-button>
@@ -264,6 +263,7 @@ export default {
       serverErrors: [],
       hasTgVerfied: false,
       blockchainType : "",
+      btnBlocked: false
     };
   },
 
@@ -330,17 +330,20 @@ export default {
 
 
     async nextStep() {
+      
       const step = this.step + 1;
+      
       const data = step == 1 ? this.stepOneData : this.stepTwoData;
 
       let gotoNextPage = false;
+      
+      
 
       if (step == 1) {
+        this.btnBlocked = true;
         const isAllChecked = data.rules.every((rule) => rule.checked);
-        
         const tweetFilled =
           data.rules[1].tweetUrl.trim().length !== 0 ? true : false;
-
 
    
         if (isAllChecked && tweetFilled) {
@@ -384,16 +387,18 @@ export default {
 
 
 
-            if(res.data.hasTweetUrlVerified && res.data.user.followed.hasFollowed && this.hasTgVerfied){
+            if(res.data.hasTweetUrlVerified && res.data.user.followed.hasFollowed && this.hasTgVerfied && step ==1 ){
               const twitterHandle = this.stepTwoData.formData.filter(x => x.id == "twitterHandle")[0]
               twitterHandle.value = res.data.user.screen_name
               twitterHandle.disabled = true
               
+              this.btnBlocked = false;
               gotoNextPage = true;
-              this.slideToNextPage(gotoNextPage);
+              return this.slideToNextPage(gotoNextPage);
             }
           }catch(e){
             console.log(e);
+            this.btnBlocked = false;
             if(e.error){
              return  this.notifyErr(e.error)
             }
@@ -414,6 +419,7 @@ export default {
         //  this.slideToNextPage(true);
 
       } else if (step == 2) {
+
         const isAllFilled = data.formData.every((input) => input.value.length);
         const twitterHandle = data.formData.filter((x) =>
           x.label.toLowerCase().includes("twitter")
@@ -428,16 +434,11 @@ export default {
         let ethAddressValidate;
         // console.log(ethAddress);
 
-
         if(this.blockchainType == "TEZOS"){
           ethAddressValidate =  ethAddress.value.startsWith("tz1");
         }else{
           ethAddressValidate =  ethAddress.value.startsWith("0x");
         }
-
-        
-      
-
       
         let twitterHandleValidate = false;
         let telegramHandleValidate = false;
@@ -481,19 +482,19 @@ export default {
           isAllFilled &&
           twitterHandleValidate &&
           telegramHandleValidate &&
-          ethAddressValidate
+          ethAddressValidate && step == 2
         ) {
+
+          
           gotoNextPage = true;
-          this.slideToNextPage(gotoNextPage);
+          return this.slideToNextPage(gotoNextPage);
         } 
       } else if (step == 3) {
-        this.$refs.recaptcha.execute();
+          return this.$refs.recaptcha.execute();
       }
     },
 
-    setStep(step) {
-      if (step >= 1 && step <= this.steps.length) this.step = step - 1;
-    },
+   
     resetState() {
       this.store.state = {
         ...this.initialState,
@@ -593,18 +594,24 @@ export default {
           header: headers,
         });
 
+        console.log("RESP", resp);
+
+
+
         this.isLoading = false;
         this.slideToNextPage(true);
         this.notifySuccess("Successfully Signed Up for whitelisting");
+
       } catch (err) {
-        this.isLoading = false;
+        // this.isLoading = false;
+        console.log("ERROR", err);
         if (typeof err.errors == "object") {
           this.serverErrors = err.errors;
           this.$bvModal.show("err-modal");
         }
         this.notifyErr(err);
       } finally {
-        this.isLoading = false;
+        // this.isLoading = false;
         // this.clear();
       }
     },
@@ -650,7 +657,10 @@ export default {
       const self = this;
       self.status = "submitting";
       self.$refs.recaptcha.reset();
-      this.saveInvestor(this.stepTwoData.formData, recaptchaToken);
+      
+        this.saveInvestor(this.stepTwoData.formData, recaptchaToken);   
+      
+     
     },
   },
 
