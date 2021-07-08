@@ -519,9 +519,9 @@ export default {
     };
 
     // if (this.projectId || this.projectSlug ) {
-      console.log("Fetching projectDetails...");    
+      // console.log("Fetching projectDetails...");    
       this.projectDetails = await this.fetchProjectData({isAuthTokenAvailable: false});
-      console.log("Setting projectDetails...");
+      // console.log("Setting projectDetails...");
       localStorage.setItem("projectDetails", JSON.stringify(this.projectDetails));
     // }
   },

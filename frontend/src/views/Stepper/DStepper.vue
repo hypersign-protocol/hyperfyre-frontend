@@ -595,7 +595,7 @@ export default {
           header: headers,
         });
 
-        console.log("RESP", resp);
+        // console.log("RESP", resp);
 
 
 
@@ -605,7 +605,7 @@ export default {
 
       } catch (err) {
         // this.isLoading = false;
-        console.log("ERROR", err);
+        // console.log("ERROR", err);
         if (typeof err.errors == "object") {
           this.serverErrors = err.errors;
           this.$bvModal.show("err-modal");

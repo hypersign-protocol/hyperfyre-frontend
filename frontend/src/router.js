@@ -118,7 +118,7 @@ router.beforeEach((to, from, next) => {
         });
     } else {
       if((to.params["slug"] || to.query["projectId"]) && (to.params["slug"] != "" || to.query["projectId"] != "")){
-        console.log("first we need to remove all these items projectDetails, projectSlug, projectId")
+        // console.log("first we need to remove all these items projectDetails, projectSlug, projectId")
         localStorage.removeItem("projectDetails");
         localStorage.removeItem("projectSlug");
         localStorage.removeItem("projectId");
