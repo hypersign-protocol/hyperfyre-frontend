@@ -436,7 +436,7 @@ export default {
         // console.log(ethAddress);
 
         if(this.blockchainType == "TEZOS"){
-          ethAddressValidate =  ethAddress.value.startsWith("tz1");
+          ethAddressValidate =  ethAddress.value.startsWith("tz") || ethAddress.value.startsWith("kt");
         }else{
           ethAddressValidate =  ethAddress.value.startsWith("0x");
         }
