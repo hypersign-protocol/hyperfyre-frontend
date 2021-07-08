@@ -129,8 +129,11 @@ router.beforeEach((to, from, next) => {
       // create the store
       // When the call come ffrom logout
       // we dont do anything. 
-      
+      console.log({
+        slug:to.params["slug"]
+      })
       if((to.params["slug"] || to.query["projectId"]) && (to.params["slug"] != "" || to.query["projectId"] != "")){
+        console.log("first we need to remove all these items projectDetails, projectSlug, projectId")
         localStorage.removeItem("projectDetails");
         localStorage.removeItem("projectSlug");
         localStorage.removeItem("projectId");
