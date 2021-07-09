@@ -324,6 +324,8 @@ export default {
       localStorage.removeItem("user");
       localStorage.removeItem("credentials");
       localStorage.removeItem("userData");
+            localStorage.removeItem("telegramId");
+            localStorage.removeItem("twitterId");
       this.$router.push("/login");
     },
 
