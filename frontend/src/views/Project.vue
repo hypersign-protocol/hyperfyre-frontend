@@ -500,6 +500,10 @@ export default {
     openCreateModal() {
       this.isProjectEditing = false;
       this.project = {}
+      this.blockchainType = "ETHEREUM";
+      this.fontColor = this.fontColorDefault;
+      this.themeColor = this.themeColorDefault;
+      this.projectStatus = true;
       this.$bvModal.show("create-project-modal")
     },
     changeProjectStatus (event) {
@@ -555,6 +559,11 @@ export default {
     },
     editProject(project) {
       this.project = { ...project };
+      console.log("PROJECT", project);
+      this.blockchainType = project.blockchainType
+      this.themeColor = project.themeColor
+      this.fontColor = project.fontColor
+      this.projectStatus = project.projectStatus
       this.isProjectEditing = true;
     },
     
