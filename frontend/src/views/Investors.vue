@@ -170,16 +170,20 @@ label {
         </div>
       </div>
     </div>
-
-    <paginate
-      :pageCount="Math.ceil(this.project.count / this.perPage)"
-      :clickHandler="paginateChange"
-      :prevText="'Prev'"
-      :nextText="'Next'"
-      :containerClass="'paginationContainer'"
-      :page-class="'paginationItem'"
-    >
-    </paginate>
+    <div class="d-flex mt-5">
+      <paginate
+        :pageCount="Math.ceil(this.project.count / this.perPage)"
+        :clickHandler="paginateChange"
+        :prevText="'Prev'"
+        :nextText="'Next'"
+        :containerClass="'paginationContainer'"
+        :page-class="'paginationItem'"
+      >
+      </paginate>
+      <div class="ml-auto">
+        <b-form-select  :options="this.pageSelectDropdown" @change="paginateChange"></b-form-select>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -217,6 +221,8 @@ export default {
           return this.items.length;
         },
       },
+
+      pageSelectDropdown: [],
 
       columns: [
         { field: "name", key: "b", title: "Name", align: "left", sortBy: "" },
@@ -427,6 +433,7 @@ export default {
       fullPage: true,
     };
   },
+
   async mounted() {
 
     
@@ -445,7 +452,10 @@ export default {
       _id: null,
       projectName: "Select a Project"
     })
+  
+ 
   },
+
 
   beforeRouteEnter(to, from, next) {
     next((vm) => {
@@ -589,7 +599,11 @@ export default {
     },
 
     paginateChange(e) {
-      this.currentPage = e;
+      if(typeof e == "number"){
+        this.currentPage = e;
+      } else{
+        this.currentPage = e.target.value;
+      }
 
       const skip = this.perPage * (this.currentPage - 1);
 
@@ -697,7 +711,10 @@ export default {
         this.project.toDate = this.formateDate(this.project.toDate);
         this.projectFetched = true;
 
-       
+
+        this.pageSelectDropdown = Array.from({length: Math.ceil(this.project.count / this.perPage)}, (_, i) => i + 1)
+
+      
         this.notifySuccess(
           "Project is fetched. ProjectName " + json.projectName
         );
