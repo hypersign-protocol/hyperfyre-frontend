@@ -53,7 +53,7 @@ async function addInvestor(req: Request, res: Response, next: NextFunction) {
       isVerificationComplete,
       projectId,
       tweetUrl,
-      numberOfReferals: !isComingFromReferal ? 0 : 0.5  
+      numberOfReferals: !isComingFromReferal ? 0 : 0.5 * REFFERAL_MULTIPLIER
     });
     logger.info("InvestorController:: addInvestor(): after creating a new investor into db id = " + new_investor["_id"]);
 
@@ -68,7 +68,7 @@ async function addInvestor(req: Request, res: Response, next: NextFunction) {
       
       // update the refere followers
       const updateParams = {
-        numberOfReferals: investor.numberOfReferals + 1 
+        numberOfReferals: (investor.numberOfReferals + 1) * REFFERAL_MULTIPLIER
       };
       logger.info("InvestorController:: addInvestor(): before updating an investor into db");
       updateInvestorInDb(filter, updateParams);
