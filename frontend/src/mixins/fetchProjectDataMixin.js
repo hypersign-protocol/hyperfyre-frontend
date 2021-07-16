@@ -60,36 +60,42 @@ export default{
               this.isLoading = false;
             }
           },
-          getProjectIdOrSlug(){
-            let idOrSlugForUrl;
 
-            // console.log({
-            //   projectId: this.projectId,
-            //   projectSsluf : this.projectSlug
-            // })
-            if(!this.projectId || this.projectId == "" || this.projectId == null || this.projectId == "undefined"){
-              // console.log("setting projectUrl as slug")
-              // console.log(this.projectDetails);
-              idOrSlugForUrl = this.projectDetails != "undefined" && this.projectDetails != {} ? this.projectDetails["_id"] : this.projectSlug;
-              if(idOrSlugForUrl == "undefined" || !idOrSlugForUrl){
-                idOrSlugForUrl = this.projectSlug;
-              }
-              // console.log("ProjectSlug = " + idOrSlugForUrl)
-            }else{
-              idOrSlugForUrl  = this.projectId;
+          getProjectIdOrSlug(){
+
+            if(this.$route.params.projectSlug)   {
+              return this.$route.params.projectSlug;
             }
 
-              // if(!this.projectSlug || this.projectSlug == "" || this.projectSlug == "undefined"){
-              //   if (!this.projectId || this.projectId == "" || this.projectId == "undefined"){
-              //     throw new Error("No projectId or project slug is set");
-              //   }else{
-              //     idOrSlugForUrl = this.projectId;
-              //   }
-              // }else{
-              //   idOrSlugForUrl = this.projectSlug
-              // }
+          //   let idOrSlugForUrl;
 
-              return idOrSlugForUrl;
+          //   // console.log({
+          //   //   projectId: this.projectId,
+          //   //   projectSsluf : this.projectSlug
+          //   // })
+          //   if(!this.projectId || this.projectId == "" || this.projectId == null || this.projectId == "undefined"){
+          //     // console.log("setting projectUrl as slug")
+          //     // console.log(this.projectDetails);
+          //     idOrSlugForUrl = this.projectDetails != "undefined" && this.projectDetails != {} ? this.projectDetails["_id"] : this.projectSlug;
+          //     if(idOrSlugForUrl == "undefined" || !idOrSlugForUrl){
+          //       idOrSlugForUrl = this.projectSlug;
+          //     }
+          //     // console.log("ProjectSlug = " + idOrSlugForUrl)
+          //   }else{
+          //     idOrSlugForUrl  = this.projectId;
+          //   }
+
+          //     // if(!this.projectSlug || this.projectSlug == "" || this.projectSlug == "undefined"){
+          //     //   if (!this.projectId || this.projectId == "" || this.projectId == "undefined"){
+          //     //     throw new Error("No projectId or project slug is set");
+          //     //   }else{
+          //     //     idOrSlugForUrl = this.projectId;
+          //     //   }
+          //     // }else{
+          //     //   idOrSlugForUrl = this.projectSlug
+          //     // }
+
+          //     return idOrSlugForUrl;
           }
     }
 }

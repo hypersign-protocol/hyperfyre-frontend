@@ -22,14 +22,9 @@ const router = new Router({
     // },
     
     {
-      path: "/login",
+      path: "/login/:projectSlug",
       name: "PKIIdLogin",
       component: () => import(/* webpackChunkName: "investorLogin" */ './views/PKIIdLogin.vue'),
-    },
-    {
-      path: "/connectwithtwitter",
-      name: "ConnectWithTwitter",
-      component: () => import(/* webpackChunkName: "investorLogin" */ './views/connectWIthTwitter.vue'),
     },
     {
       path: "/form/:slug",
@@ -138,7 +133,7 @@ router.beforeEach((to, from, next) => {
       }
 
       next({
-        path: to.meta.admin ? "/admin/login" : "/login",
+        path: to.meta.admin ? "/admin/login" : `/login/${to.params["slug"]}`,
         params: { nextUrl: to.fullPath },
       });
     }
