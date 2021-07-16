@@ -10,10 +10,17 @@ const jsonWebToken = require('jsonwebtoken');
 
 const { keys: issuerKeyPair,  mail, jwt } = require("../../hypersign.json");
 
+function isHypersignDid(did){
+  if(!did || did === "") return false;
+  return (did.indexOf('did:hs:') > -1);
+}
+
 async function addInvestor(req: Request, res: Response, next: NextFunction) {
   try {
     logger.info("InvestorController:: addInvestor() method start..");
     const { did, email, name, ethAddress, twitterHandle, telegramHandle, hasTwitted, hasJoinedTGgroup,  projectId, tweetUrl  } = req.body;
+    const { referrer } = req.query; // did of guy who have refered
+    const isComingFromReferal = referrer && isHypersignDid(referrer); 
 
     logger.info("InvestorController:: addInvestor(): before findning investor by did = " + did);
     const investor:IInvestor = await InvestorModel.where({ did: did, projectId: projectId }).findOne();
@@ -45,9 +52,28 @@ async function addInvestor(req: Request, res: Response, next: NextFunction) {
       isVerfiedByHypersign: false,
       isVerificationComplete,
       projectId,
-      tweetUrl
+      tweetUrl,
+      numberOfReferals: !isComingFromReferal ? 0 : 0.5  
     });
     logger.info("InvestorController:: addInvestor(): after creating a new investor into db id = " + new_investor["_id"]);
+
+    // update the followers if refere is present in query
+    if(isComingFromReferal){
+      const filter = { did: referrer, projectId };
+
+      // find the refere 
+      logger.info("InvestorController:: addInvestor(): before fetchin the refer from db");
+      const investor:IInvestor = await InvestorModel.where(filter).findOne();
+      logger.info("InvestorController:: addInvestor(): after fetchin the refer from db");
+      
+      // update the refere followers
+      const updateParams = {
+        numberOfReferals: investor.numberOfReferals + 1 
+      };
+      logger.info("InvestorController:: addInvestor(): before updating an investor into db");
+      updateInvestorInDb(filter, updateParams);
+      logger.info("InvestorController:: addInvestor(): after updating an investor into db");
+    }
 
     issueCredential(req, res, next);
     // res.send(new_investor);
