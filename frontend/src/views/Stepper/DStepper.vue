@@ -656,7 +656,7 @@ export default {
 
 
         if (res.data.length > 0) {
-          this.localStorage.setItem("investorPoints", res.data && res.data.numberOfReferals ? res.data.numberOfReferals : 0);
+          localStorage.setItem("investorPoints", res.data && res.data.numberOfReferals ? res.data.numberOfReferals : 0);
           this.step = 3;
         }
       } catch (e) {
