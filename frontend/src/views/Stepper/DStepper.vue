@@ -319,6 +319,8 @@ export default {
       localStorage.removeItem("credentials");
       localStorage.removeItem("userData");
       this.$router.push(`/login/${this.projectDetails.slug}`);
+      localStorage.removeItem("telegramId");
+      localStorage.removeItem("twitterId");
     },
 
   checkBlockChainType(){

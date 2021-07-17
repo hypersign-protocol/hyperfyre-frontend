@@ -225,6 +225,7 @@ export default {
           href: "/admin/investors",
           title: "Investors",
           icon: "fas fa-users",
+          exactPath: true,
         },
         {
           href: "/admin/login",
