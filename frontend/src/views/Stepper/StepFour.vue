@@ -47,11 +47,7 @@ export default {
       userDid = JSON.parse(localStorage.getItem("user")).id;
     }
    if(userDid){
-     if(!this.$route.query.referrer){
-        this.referalLink = `${window.location}?referrer=${userDid}`
-      }else{
-        this.referalLink = window.location; 
-      }
+     this.referalLink = `${window.location.protocol + "//" + window.location.host + window.location.pathname}?referrer=${userDid}`
    }
 
    if(localStorage.getItem("investorPoints")){
