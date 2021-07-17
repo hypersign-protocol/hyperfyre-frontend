@@ -81,7 +81,8 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
     let projectList: Array<IProject>;
     let projectListTmp = [];
     if ( userData.id ) {
-      projectList = await ProjectModel.find({}).where({ ownerDid: userData.id });
+      const sortyByFromDateTimeDesc = { fromDate: -1 };
+      projectList = await ProjectModel.find({}).where({ ownerDid: userData.id }).sort(sortyByFromDateTimeDesc);
       let i;
       for(i = 0; i < projectList.length; i++){
         const project = projectList[i];
