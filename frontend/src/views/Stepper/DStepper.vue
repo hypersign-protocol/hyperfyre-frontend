@@ -327,10 +327,16 @@ export default {
       localStorage.removeItem("user");
       localStorage.removeItem("credentials");
       localStorage.removeItem("userData");
-      this.$router.push(`/login/${this.projectDetails.slug}`);
+      
       localStorage.removeItem("telegramId");
       localStorage.removeItem("twitterId");
       localStorage.removeItem("investorPoints");
+
+      if(this.$route.query.referrer){
+        this.$router.push(`/login/${this.$route.params.slug}?referrer=${this.$route.query.referrer}`)
+      }else{
+        this.$router.push(`/login/${this.projectDetails.slug}`);
+      }
     },
 
   checkBlockChainType(){
