@@ -23,6 +23,7 @@
   float: right;
 }
 .card-header {
+  background: aliceblue;
   padding: 0px;
 }
 .sm-tiles {
