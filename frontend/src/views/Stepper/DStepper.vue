@@ -271,6 +271,8 @@ export default {
   async created() {
     
     if(!localStorage.getItem("user") || !localStorage.getItem("projectDetails")){
+      console.log(this.$route.query)
+      console.log(this.$route.query.referrer)
       if(this.$route.query.referrer){
         return this.$router.push(`/login/${this.$route.params.slug}?referrer=${this.$route.query.referrer}`)
       }
