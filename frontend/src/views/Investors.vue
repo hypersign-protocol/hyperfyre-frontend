@@ -298,6 +298,13 @@ export default {
             );
           },
         },
+        {
+          field: "numberOfReferals",
+          key: "h",
+          titile: "Points Earned",
+          align: "right",
+          sortBy: "desc",
+        }
         // {
         //   field: "isVerificationComplete",
         //   key: "h",
@@ -411,6 +418,7 @@ export default {
         isVerfiedByHypersign: false,
         isVerificationComplete: false,
         tweetUrl: "",
+        numberOfReferals: 0,
       },
       project: {
         count: 20,
@@ -617,72 +625,72 @@ export default {
       return new Date(d).toLocaleString();
     },
 
-    async verifyInvestor(investor) {
-      try {
-        this.isLoading = true;
+    // async verifyInvestor(investor) {
+    //   try {
+    //     this.isLoading = true;
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor/${investor.did}?projectId=${this.investor.projectId}`;
+    //     const url = `${this.$config.studioServer.BASE_URL}api/v1/investor/${investor.did}?projectId=${this.investor.projectId}`;
 
-        investor.hasJoinedTGgroup = true;
-        investor.isVerificationComplete = true;
-        investor.hasTwitted = true;
+    //     investor.hasJoinedTGgroup = true;
+    //     investor.isVerificationComplete = true;
+    //     investor.hasTwitted = true;
 
-        if (investor["_id"]) delete investor["_id"];
+    //     if (investor["_id"]) delete investor["_id"];
 
-        const headers = {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.authToken}`,
-        };
+    //     const headers = {
+    //       "Content-Type": "application/json",
+    //       "Authorization": `Bearer ${this.authToken}`,
+    //     };
 
-        const resp = await fetch(url, {
-          method: "PUT",
-          body: JSON.stringify(investor),
-          headers,
-        });
+    //     const resp = await fetch(url, {
+    //       method: "PUT",
+    //       body: JSON.stringify(investor),
+    //       headers,
+    //     });
 
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
-        }
+    //     if (!resp.ok) {
+    //       return this.notifyErr(resp.statusText);
+    //     }
 
-        const json = await resp.json();
-        this.notifySuccess("Investor verified successfully");
-      } catch (e) {
-        this.notifyErr(e.message);
-      } finally {
-        this.isLoading = false;
-      }
-    },
-    async issueCredential(investor, idx) {
-      try {
-        this.isLoading = true;
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investors/issue`;
-        const body = {
-          did: investor.did,
-          projectId: this.investor.projectId,
-        };
-        const headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
-        };
+    //     const json = await resp.json();
+    //     this.notifySuccess("Investor verified successfully");
+    //   } catch (e) {
+    //     this.notifyErr(e.message);
+    //   } finally {
+    //     this.isLoading = false;
+    //   }
+    // },
+    // async issueCredential(investor, idx) {
+    //   try {
+    //     this.isLoading = true;
+    //     const url = `${this.$config.studioServer.BASE_URL}api/v1/investors/issue`;
+    //     const body = {
+    //       did: investor.did,
+    //       projectId: this.investor.projectId,
+    //     };
+    //     const headers = {
+    //       "Content-Type": "application/json",
+    //       Authorization: `Bearer ${this.authToken}`,
+    //     };
 
-        const resp = await fetch(url, {
-          method: "POST",
-          body: JSON.stringify(body),
-          headers,
-        });
+    //     const resp = await fetch(url, {
+    //       method: "POST",
+    //       body: JSON.stringify(body),
+    //       headers,
+    //     });
 
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
-        }
-        const json = await resp.json();
-        this.notifySuccess(json.message);
-        this.project.investors[idx].isVerfiedByHypersign = true;
-      } catch (e) {
-        this.notifyErr(e.message);
-      } finally {
-        this.isLoading = false;
-      }
-    },
+    //     if (!resp.ok) {
+    //       return this.notifyErr(resp.statusText);
+    //     }
+    //     const json = await resp.json();
+    //     this.notifySuccess(json.message);
+    //     this.project.investors[idx].isVerfiedByHypersign = true;
+    //   } catch (e) {
+    //     this.notifyErr(e.message);
+    //   } finally {
+    //     this.isLoading = false;
+    //   }
+    // },
     async fetchProjectData(skip, limit) {
       try {
         this.isLoading = true;
