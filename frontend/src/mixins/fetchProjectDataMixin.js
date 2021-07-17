@@ -29,11 +29,7 @@ export default{
             
               this.projectDetails = { ...resp.data };
       
-              if(!this.projectDetails.projectStatus || this.projectDetails.projectStatus === false){
-                this.showStepper = false;
-                this.errorMessage = "This event has ended, please contact the team to know about winners!"
-                // return;
-              }
+              
 
       
                  this.projectDetails.twitterPostFormat = encodeURIComponent(
