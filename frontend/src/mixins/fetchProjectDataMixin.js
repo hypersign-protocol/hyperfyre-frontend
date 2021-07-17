@@ -32,7 +32,7 @@ export default{
               if(!this.projectDetails.projectStatus || this.projectDetails.projectStatus === false){
                 this.showStepper = false;
                 this.errorMessage = "This event has ended, please contact the team to know about winners!"
-                return;
+                // return;
               }
 
       
