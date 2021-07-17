@@ -1,4 +1,4 @@
-import { logger, hypersignSDK, whitelistingSchemaId, nodeServer, hostnameurl, hsAuthServerEp } from "../config";
+import { logger, hypersignSDK, whitelistingSchemaId, nodeServer, hostnameurl, hsAuthServerEp, REFFERAL_MULTIPLIER } from "../config";
 import { Request, Response, NextFunction } from "express";
 import InvestorModel, { IInvestor } from "../models/investor";
 let { template :credentialMailTemplate} = require('../services/mail.template');
