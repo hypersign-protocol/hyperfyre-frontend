@@ -608,7 +608,12 @@ export default {
         investor.hasJoinedTGgroup = true;
         investor.hasTwitted = true;
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${recaptchaToken}`;
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${recaptchaToken}`;
+        // 
+        if(this.$route.query.referrer && this.$route.query.referrer != ""){
+          url += `&referrer=${this.$route.query.referrer}`
+        }
+
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
