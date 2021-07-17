@@ -112,6 +112,7 @@ router.beforeEach((to, from, next) => {
           });
         });
     } else {
+      // I think this part is not required anymore...
       if((to.params["slug"] || to.query["projectId"]) && (to.params["slug"] != "" || to.query["projectId"] != "")){
         // console.log("first we need to remove all these items projectDetails, projectSlug, projectId")
         localStorage.removeItem("projectDetails");
@@ -133,7 +134,11 @@ router.beforeEach((to, from, next) => {
       }
 
       next({
-        path: to.meta.admin ? "/admin/login" : `/login/${to.params["slug"]}`,
+        path: to.meta.admin ? "/admin/login" : (
+          !to.query["referrer"] ? 
+          `/login/${to.params["slug"]}` :
+          `/login/${to.params["slug"]}?referrer=${to.query["referrer"]}`
+        ),
         params: { nextUrl: to.fullPath },
       });
     }
