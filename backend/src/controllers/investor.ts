@@ -66,15 +66,21 @@ async function addInvestor(req: Request, res: Response, next: NextFunction) {
       // find the refere 
       logger.info("InvestorController:: addInvestor(): before fetchin the refer from db");
       const investor:IInvestor = await InvestorModel.where(filter).findOne();
-      logger.info("InvestorController:: addInvestor(): after fetchin the refer from db");
-      
-      // update the refere followers
-      const updateParams = {
-        numberOfReferals: (investor.numberOfReferals + 1) * REFFERAL_MULTIPLIER
-      };
-      logger.info("InvestorController:: addInvestor(): before updating an investor into db");
-      updateInvestorInDb(filter, updateParams);
-      logger.info("InvestorController:: addInvestor(): after updating an investor into db");
+      if(investor){
+        logger.info("InvestorController:: addInvestor(): after fetchin the refer from db id = " + investor.did);
+        
+        // update the refere followers
+        const updateParams = {
+          numberOfReferals: (investor.numberOfReferals + 1) * REFFERAL_MULTIPLIER
+        };
+  
+        logger.info("InvestorController:: addInvestor(): updateParams = " + JSON.stringify(updateParams));
+        logger.info("InvestorController:: addInvestor(): before updating an investor into db");
+        updateInvestorInDb(filter, updateParams);
+        logger.info("InvestorController:: addInvestor(): after updating an investor into db");
+      }else{
+        logger.info("InvestorController:: addInvestor(): could not fetch investor. filter = " + JSON.stringify(filter));
+      }
     }
 
     issueCredential(req, res, next);
