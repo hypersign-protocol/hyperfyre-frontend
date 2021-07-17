@@ -420,8 +420,6 @@ export default {
         imagePath: "/apple-icon-57x57.png",
         filter: "color",
       },
-      projectId: localStorage.getItem("projectId"),
-      projectSlug: localStorage.getItem("projectSlug"),
       walletWindow: null
     };
   },
@@ -480,9 +478,11 @@ export default {
            
             let path = "/form";
             // let route = {}
+
+            console.log(this.$route);
             
-            const projectSlug = this.projectSlug; //localStorage.getItem("projectSlug")
-            const projectId = this.projectId; //localStorage.getItem("projectId");
+            const projectSlug = this.$route.params.projectSlug; //localStorage.getItem("projectSlug")
+            // const projectId = this.projectId; //localStorage.getItem("projectId");
             // console.log(projectId)
 
             // route["name"] = "investor";
@@ -525,7 +525,8 @@ export default {
     };
 
     // if (this.projectId || this.projectSlug ) {
-      // console.log("Fetching projectDetails...");    
+      // console.log("Fetching projectDetails...");  
+           
       this.projectDetails = await this.fetchProjectData({isAuthTokenAvailable: false});
       // console.log("Setting projectDetails...");
       localStorage.setItem("projectDetails", JSON.stringify(this.projectDetails));

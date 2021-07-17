@@ -261,8 +261,6 @@ export default {
       authToken: localStorage.getItem("authToken"),
       fullPage: true,
       projectDetails: {},
-      projectId: localStorage.getItem("projectId"),
-      projectSlug: localStorage.getItem("projectSlug"),
       serverErrors: [],
       hasTgVerfied: false,
       blockchainType : "",
@@ -271,36 +269,31 @@ export default {
   },
 
   async created() {
-    const userDid = JSON.parse(localStorage.getItem("user")).id;
-    this.projectDetails = JSON.parse(localStorage.getItem("projectDetails"));
 
-    this.checkIfAlreadyFilled(userDid);
-    if (!this.projectDetails || this.projectDetails == {}) {
-      this.projectDetails = await this.fetchProjectData({ isAuthTokenAvailable: true })  
-      this.projectId = this.projectDetails["_id"];
-      this.checkTelegramAnnouncementChannel();
-      this.checkBlockChainType();
-      return;
-    } else{
-      if(!this.projectId || this.projectId == ""){
-        this.projectId = this.projectDetails["_id"];
+
+      if(!localStorage.getItem("user") || !localStorage.getItem("projectDetails")){
+        return this.$router.push(`/login/${this.$route.params.slug}`)
       }
+    let userDid
+    if(localStorage.getItem("user")){
+      userDid = JSON.parse(localStorage.getItem("user")).id;
     }
 
-  
-    
+    if(localStorage.getItem("projectDetails")){
+         this.projectDetails = JSON.parse(localStorage.getItem("projectDetails"));
+    }
+
     this.checkTelegramAnnouncementChannel();
     this.checkBlockChainType();
-    
-    // this.formatTweet()
+
+    this.checkIfAlreadyFilled(userDid);
+  
   },
 
 
   mounted() {
     this.data =
       this.step == 0 || this.step == 0 ? this.stepOneData : this.stepTwoData;
-
-
   },
 
   computed: {
@@ -321,16 +314,16 @@ export default {
 
     logout() {
       localStorage.removeItem("authToken");
+      localStorage.removeItem("projectDetails");
       localStorage.removeItem("user");
       localStorage.removeItem("credentials");
       localStorage.removeItem("userData");
-            localStorage.removeItem("telegramId");
-            localStorage.removeItem("twitterId");
-      this.$router.push("/login");
+      this.$router.push(`/login/${this.projectDetails.slug}`);
+      localStorage.removeItem("telegramId");
+      localStorage.removeItem("twitterId");
     },
 
   checkBlockChainType(){
-
 
     this.blockchainType = this.projectDetails.blockchainType;
 
@@ -430,9 +423,7 @@ export default {
         } else {
           this.notifyErr("Please follow all the rules and provide a tweet URL")
           this.btnBlocked = false
-        
         }
-        //  this.slideToNextPage(true);
 
       } else if (step == 2) {
 
@@ -448,13 +439,15 @@ export default {
         )[0];
 
         let ethAddressValidate;
-        // console.log(ethAddress);
+
 
         if(this.blockchainType == "TEZOS"){
           ethAddressValidate =  ethAddress.value.startsWith("tz") || ethAddress.value.startsWith("kt");
         }else{
           ethAddressValidate =  ethAddress.value.startsWith("0x");
         }
+
+        console.log(this.blockchainType, ethAddress);
       
         let twitterHandleValidate = false;
         let telegramHandleValidate = false;
@@ -493,15 +486,13 @@ export default {
         }
 
 
-
         if (
           isAllFilled &&
           twitterHandleValidate &&
           telegramHandleValidate &&
           ethAddressValidate && step == 2
         ) {
-
-          
+        
           gotoNextPage = true;
           return this.slideToNextPage(gotoNextPage);
         } 
@@ -588,7 +579,13 @@ export default {
         for (let i in data) {
           investor[data[i].id] = data[i].value;
         }
-        investor.projectId = this.projectId;
+
+         if(localStorage.getItem("projectDetails")){
+           investor.projectId = JSON.parse(localStorage.getItem("projectDetails"))._id
+          
+         } 
+
+
         investor.did = did;
 
         investor.tweetUrl = this.stepOneData.rules[1].tweetUrl;
@@ -634,9 +631,9 @@ export default {
 
     async checkIfAlreadyFilled(userDid) {
       try {
-        
-        let idOrSlugForUrl = this.getProjectIdOrSlug();
-
+             
+            
+        let idOrSlugForUrl =  this.projectDetails._id; 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?did=${userDid}&projectId=${idOrSlugForUrl}`;
         let headers = {
           "Content-Type": "application/json",
@@ -648,6 +645,8 @@ export default {
           header: headers,
           method: "GET",
         });
+        console.log(res);
+
 
         if (res.data.length > 0) {
           this.step = 3;
