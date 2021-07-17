@@ -301,9 +301,9 @@ export default {
         {
           field: "numberOfReferals",
           key: "h",
-          titile: "Points Earned",
+          title: "Points Earned",
           align: "right",
-          sortBy: "desc",
+          sortBy: "dsc",
         }
         // {
         //   field: "isVerificationComplete",
