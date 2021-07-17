@@ -373,7 +373,7 @@ i {
                   >
                     <i class="fas fa-users"></i
                     ><a :href="`/admin/investors?projectId=${project._id}`"
-                      >Investor List</a
+                      >Investor List ({{project.investorsCount}})</a
                     >
                   </li>
 
@@ -445,6 +445,7 @@ export default {
         twitterHandle: "",
         telegramHandle: "",
         twitterPostFormat: "I am happy with #hypersign @hypersignchain",
+        investorsCount: 0,
       },    
       
       projectStatus: true,
