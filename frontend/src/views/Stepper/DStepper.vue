@@ -269,11 +269,14 @@ export default {
   },
 
   async created() {
-
-
-      if(!localStorage.getItem("user") || !localStorage.getItem("projectDetails")){
-        return this.$router.push(`/login/${this.$route.params.slug}`)
+    
+    if(!localStorage.getItem("user") || !localStorage.getItem("projectDetails")){
+      if(this.$route.query.referrer){
+        return this.$router.push(`/login/${this.$route.params.slug}?referrer=${this.$route.query.referrer}`)
       }
+      return this.$router.push(`/login/${this.$route.params.slug}`)
+    }
+
     let userDid
     if(localStorage.getItem("user")){
       userDid = JSON.parse(localStorage.getItem("user")).id;
@@ -291,9 +294,7 @@ export default {
 
     this.checkTelegramAnnouncementChannel();
     this.checkBlockChainType();
-
     this.checkIfAlreadyFilled(userDid);
-  
   },
 
 

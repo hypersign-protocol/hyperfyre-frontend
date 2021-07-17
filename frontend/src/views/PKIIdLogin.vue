@@ -497,7 +497,11 @@ export default {
               }
             }else{
               // route["params"] = { slug: projectSlug};
-              path += "/" + projectSlug;
+              if(this.$route.query.referrer){
+                path += "/" + projectSlug + `?referrer=${this.$route.query.referrer}`;
+              }else{
+                path += "/" + projectSlug;
+              }
             }
             
 

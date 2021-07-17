@@ -16,7 +16,7 @@ h3 {
     <h3>You are successfully registered,<h3></h3>You will receive a confirmation email if you qualify.</h3>
   </div>
   <div style="padding:20px; float:right">
-    <h2>Referal</h2>
+    <h2>Referal!!!</h2>
     <p>
       Total points gained: {{this.totalInvestorsPoints}}
     </p>
