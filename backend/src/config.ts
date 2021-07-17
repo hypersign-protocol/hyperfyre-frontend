@@ -87,6 +87,8 @@ const tweeterConfig = {
   access_token: process.env.TWEETER_ACCESS_TOKEN || "910185786330423296-w15MIwdFQoHjAHPzriQsiolUWyvbsUL",
   access_token_secret: process.env.TWEETER_ACCESS_TOKEN_SECRET || "uuMl1yj4KIu1OeF7SHwoseLRahwa9ycXTunx7GOXlLw8f"
 }
+
+const REFFERAL_MULTIPLIER = 10;
 export {
   port,
   host,
@@ -103,5 +105,6 @@ export {
   httpsEnabled,
   whitelist,
   hsAuthServerEp,
-  tweeterConfig
+  tweeterConfig,
+  REFFERAL_MULTIPLIER
 };
