@@ -669,8 +669,9 @@ export default {
         console.log(res);
 
 
-        if (res.data.length > 0) {
-          localStorage.setItem("investorPoints", res.data && res.data.numberOfReferals ? res.data.numberOfReferals : 0);
+        if (res.data && res.data.length > 0) {
+          const points  = res.data[0] && res.data[0].numberOfReferals ? res.data[0].numberOfReferals : 0;
+          localStorage.setItem("investorPoints", points);
           this.step = 3;
         }
       } catch (e) {
