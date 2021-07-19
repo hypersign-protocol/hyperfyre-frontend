@@ -325,7 +325,7 @@ i {
           <div class="card-body">
             <div class="row">
               <div class="col-md-4">
-                <img :src="project.logoUrl" style="max-width: 150px" />
+                <img :src="project.logoUrl" style="max-width: 150px; min-width: 150px;" />
               </div>
               <div class="col-md-8">
                 <ul style="list-style-type: none">
