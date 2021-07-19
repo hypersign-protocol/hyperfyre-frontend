@@ -265,7 +265,6 @@ i {
     </b-modal>
 
     <div class="row">
-      <div class="col-md-12" style="text-align: left">
         <div class="col-md-8">
         </div>
         <div class="col-md-4">
@@ -273,7 +272,6 @@ i {
             <button  @click="openCreateModal"  class="btn btn-primary ">Create <i class="fas fa-plus text-white"></i> </button>
           </div>
         </div>
-      </div>
     </div>
 
     <div class="row" v-if="whitelistingLink != ''" style="margin-top: 2%">
