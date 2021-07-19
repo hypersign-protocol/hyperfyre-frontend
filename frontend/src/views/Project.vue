@@ -310,7 +310,7 @@ i {
     </div>
 
     <div class="row" style="margin-top: 2%">
-      <div class="col-md-12 w-100" style="text-align: left;">
+      <div class="col-md-12 my-5 w-100" style="text-align: left;max-height:660px; overflow-y:scroll">
         <div
           class="card"
           v-for="project in projectsToShow"
@@ -320,6 +320,7 @@ i {
             max-width: 60rem;
             margin-right: 3%;
             margin-bottom: 1%;
+          
           "
         >
           <div
@@ -440,11 +441,12 @@ i {
 
 
        <paginate
-        v-if="!this.searchQuery.length"
+      
         :pageCount="Math.ceil(this.projects.length / this.perPage)"
          :clickHandler="paginateChange"
         :prevText="'Prev'"
         :nextText="'Next'"
+        :force-page="currentPage"
         :containerClass="'paginationContainer'"
         :page-class="'paginationItem'"
         
@@ -485,6 +487,7 @@ export default {
       perPage: 10,
       projectStatus: true,
       blockchainType: "ETHEREUM",
+      currentPage: 1,
 
       themeColor: "#494949",
       themeColorDefault: "#494949",
@@ -533,15 +536,18 @@ export default {
   methods: {
     handleSearch(e){
 
-        if(e.target.value.trim().length){
+        if(e.target.value.length){
           this.searchQuery = e.target.value.trim();
           return this.projectsToShow = this.projects.filter(x => x.projectName.includes(e.target.value));
         } else{
           this.searchQuery = ""
+          this.paginateChange(this.currentPage)
         }
 
     },
     paginateChange(e){
+
+      this.currentPage = e
        const skip = this.perPage * (e - 1);
        console.log(this.projects, skip, this.perPage);
        this.projectsToShow  = this.projects.slice(skip, this.perPage + skip);
