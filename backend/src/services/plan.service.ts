@@ -5,9 +5,9 @@ export default class Plan{
         
     }
 
-    add({ planName, totalNoOfRequests, price }): Promise<IPlan>{
+    add({ planName, description, totalNoOfRequests, price }): Promise<IPlan>{
         return new Promise(async (resolve, reject) => {
-            const newPlan: IPlan = await PlanModel.create({ planName, totalNoOfRequests, price });
+            const newPlan: IPlan = await PlanModel.create({ planName, description, totalNoOfRequests, price });
             resolve(newPlan);
         })
     }

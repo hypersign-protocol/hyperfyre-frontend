@@ -8,10 +8,11 @@ const planService = new PlanService();
 async function addPlan(req: Request, res: Response, next: NextFunction) {
   try {
     logger.info("PlanController:: addPlan() method start..");
-    const { planName, totalNoOfRequests, price } = req.body;
+    const { planName, description, totalNoOfRequests, price } = req.body;
 
     const newPlan = await planService.add({
       planName,
+      description, 
       totalNoOfRequests,
       price,
     });
