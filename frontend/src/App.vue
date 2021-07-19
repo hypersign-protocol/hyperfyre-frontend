@@ -230,7 +230,7 @@ export default {
         {
           href: "/admin/subscription",
           title: "Subscription",
-          icon: "fas fa-sign-out-alt",
+          icon: "fas fa-tags",
         },
         {
           href: "/admin/login",
