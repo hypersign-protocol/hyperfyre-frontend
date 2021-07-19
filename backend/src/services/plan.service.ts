@@ -13,7 +13,7 @@ export default class Plan{
                 resolve(newPlan);
             }catch(e){
                 logger.error("PlanService:: add(): e = " + e);
-                reject(null)
+                reject(e)
             }
         })
     }
@@ -25,7 +25,7 @@ export default class Plan{
                 resolve(allPlans);
             }catch(e){
                 logger.error("PlanService:: list(): e = " + e);
-                reject(null)
+                reject(e)
             }
            
         })
@@ -38,7 +38,7 @@ export default class Plan{
                 resolve(plan);
             }catch(e){
                 logger.error("PlanService:: getById(): e = " + e);
-                reject(null);
+                reject(e);
             }
         })
     }
