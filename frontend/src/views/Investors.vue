@@ -448,7 +448,7 @@ export default {
 
   if(this.$route.query.projectId){
     this.selectedProjectId = this.$route.query.projectId;
-    // console.log("PROJECTS", this.projects);
+    this.selectedProject = this.$route.query.projectId;
     this.investor.projectId = this.$route.query.projectId
     this.fetchProjectData(0, this.perPage)
   }
@@ -485,6 +485,7 @@ export default {
       }catch(e){
         console.log(e);
         this.notifyErr(e)
+      
       }
     },
     async handleLottery(){
