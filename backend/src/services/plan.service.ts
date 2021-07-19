@@ -18,4 +18,11 @@ export default class Plan{
             resolve(allPlans);
         })
     }
+
+    getById({id}): Promise<IPlan>{
+        return new Promise(async(resolve)=> {
+            const plan: IPlan = await PlanModel.findById({ _id: id})
+            resolve(plan);
+        })
+    }
 }
