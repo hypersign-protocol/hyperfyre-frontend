@@ -12,7 +12,7 @@ export default class Plan{
                 const newPlan: IPlan = await PlanModel.create({ planName, description, totalNoOfRequests, price });
                 resolve(newPlan);
             }catch(e){
-                logger.error("PlanService:: add(): e = " + e.message);
+                logger.error("PlanService:: add(): e = " + e);
                 reject(null)
             }
         })
@@ -24,7 +24,7 @@ export default class Plan{
                 const allPlans: Array<IPlan> = await PlanModel.find({});
                 resolve(allPlans);
             }catch(e){
-                logger.error("PlanService:: list(): e = " + e.message);
+                logger.error("PlanService:: list(): e = " + e);
                 reject(null)
             }
            
@@ -37,7 +37,7 @@ export default class Plan{
                 const plan: IPlan = await PlanModel.findById({ _id: id})
                 resolve(plan);
             }catch(e){
-                logger.error("PlanService:: getById(): e = " + e.message);
+                logger.error("PlanService:: getById(): e = " + e);
                 reject(null);
             }
         })
