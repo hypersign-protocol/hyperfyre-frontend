@@ -3,6 +3,7 @@ import ApiError from "../error/apiError";
 import { logger } from "../config";
 import SubscriptionService from "../services/subscription.service";
 import PlanService from "../services/plan.service";
+import { IPlan } from "../models/plan";
 
 const planService = new PlanService();
 const subscriptionService = new SubscriptionService();
@@ -10,9 +11,9 @@ const subscriptionService = new SubscriptionService();
 async function addSubscription(req: Request, res: Response, next: NextFunction) {
   try {
     logger.info("SubscriptionController:: addSubscription() method start..");
-    const { planId, userDid, subscriptionDate, isActive, hasExpired, leftOverNoRequests } = req.body;
+    const { planId, userDid } = req.body; //need to remove userDid as well... it will come from hypersign auth
 
-    const planFromDb =  await planService.getById({id: planId});
+    const planFromDb:IPlan =  await planService.getById({id: planId});
     if(!planFromDb){
       return next(ApiError.badRequest("invalid plan id")); 
     }
@@ -20,7 +21,14 @@ async function addSubscription(req: Request, res: Response, next: NextFunction) 
     logger.info(
       "SubscriptionController:: addSubscription(): before creating a new subscrption into db"
       );
-    const newSub = await subscriptionService.add({planId, userDid, subscriptionDate, isActive, hasExpired, leftOverNoRequests });
+    
+    const newSub = await subscriptionService.add({planId, userDid, 
+      subscriptionDate: new Date().toISOString(), 
+      isActive: false, 
+      hasExpired: false, 
+      leftOverNoRequests: planFromDb.totalNoOfRequests
+    });
+
     res.send(newSub);
   } catch (e) {
     logger.error("SubscriptionController:: addSubscription(): Error " + e);
@@ -33,7 +41,7 @@ async function addSubscription(req: Request, res: Response, next: NextFunction) 
 async function getSubscriptionByDid(req: Request, res: Response, next: NextFunction) {
   try {    
     logger.info("SubscriptionController:: getSubscriptionByDid method start..");
-    const { did }= req.query; // need to use from hypersign auth ... ///this is only for testing 
+    const { did } = req.query; // need to use from hypersign auth ... ///this is only for testing 
     const employeeList = await subscriptionService.list({ did });
     res.send(employeeList);
   } catch (e) {
