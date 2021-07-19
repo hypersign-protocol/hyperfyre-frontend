@@ -74,7 +74,16 @@ const router = new Router({
       name: "project",
       component: () => import(/* webpackChunkName: "project" */ './views/Project.vue') ,
       meta: {
-        requiresAuth: false,
+        requiresAuth: true,
+        admin: true,
+      },
+    },
+    {
+      path: "/admin/subscription",
+      name: "subscription",
+      component: () => import(/* webpackChunkName: "subscription" */ './views/Subscription.vue') ,
+      meta: {
+        requiresAuth: true,
         admin: true,
       },
     },

@@ -228,6 +228,11 @@ export default {
           exactPath: true,
         },
         {
+          href: "/admin/subscription",
+          title: "Subscription",
+          icon: "fas fa-sign-out-alt",
+        },
+        {
           href: "/admin/login",
           title: "Logout",
           icon: "fas fa-sign-out-alt",
