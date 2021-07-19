@@ -266,13 +266,12 @@ i {
 
     <div class="row">
       <div class="col-md-12" style="text-align: left">
-        <div class="">
+        <div class="col-md-8">
+        </div>
+        <div class="col-md-4">
           <div class="text-right">
             <button  @click="openCreateModal"  class="btn btn-primary ">Create <i class="fas fa-plus text-white"></i> </button>
           </div>
-          <b-collapse id="collapse-1" class="mt-2">
-          
-          </b-collapse>
         </div>
       </div>
     </div>
@@ -294,7 +293,7 @@ i {
     </div>
 
     <div class="row" style="margin-top: 2%">
-      <div class="col-md-12 w-100" style="text-align: left">
+      <div class="col-md-12 w-100" style="text-align: left; max-height: 700px; overflow-y: auto;">
         <div
           class="card"
           v-for="project in projects"
