@@ -2,19 +2,25 @@ import { Request, Response, NextFunction } from "express";
 import ApiError from "../error/apiError";
 import { logger } from "../config";
 import SubscriptionService from "../services/subscription.service";
+import PlanService from "../services/plan.service";
 
+const planService = new PlanService();
 const subscriptionService = new SubscriptionService();
 
 async function addSubscription(req: Request, res: Response, next: NextFunction) {
   try {
     logger.info("SubscriptionController:: addSubscription() method start..");
-    const {planId, userDid, subscritionDate, isActive, hasExpired, leftOverNoRequests } = req.body;
+    const { planId, userDid, subscriptionDate, isActive, hasExpired, leftOverNoRequests } = req.body;
+
+    const planFromDb =  await planService.getById({id: planId});
+    if(!planFromDb){
+      return next(ApiError.badRequest("invalid plan id")); 
+    }
 
     logger.info(
       "SubscriptionController:: addSubscription(): before creating a new subscrption into db"
       );
-
-    const newSub = await subscriptionService.add({planId, userDid, subscritionDate, isActive, hasExpired, leftOverNoRequests });
+    const newSub = await subscriptionService.add({planId, userDid, subscriptionDate, isActive, hasExpired, leftOverNoRequests });
     res.send(newSub);
   } catch (e) {
     logger.error("SubscriptionController:: addSubscription(): Error " + e);
