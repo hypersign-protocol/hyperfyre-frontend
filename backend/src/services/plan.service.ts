@@ -1,4 +1,5 @@
 import PlanModel, { IPlan } from "../models/plan";
+import { logger } from "../config";
 
 export default class Plan{
     constructor(){
@@ -7,22 +8,38 @@ export default class Plan{
 
     add({ planName, description, totalNoOfRequests, price }): Promise<IPlan>{
         return new Promise(async (resolve, reject) => {
-            const newPlan: IPlan = await PlanModel.create({ planName, description, totalNoOfRequests, price });
-            resolve(newPlan);
+            try{
+                const newPlan: IPlan = await PlanModel.create({ planName, description, totalNoOfRequests, price });
+                resolve(newPlan);
+            }catch(e){
+                logger.error("PlanService:: add(): e = " + e.message);
+                reject(null)
+            }
         })
     }
 
     list(): Promise<Array<IPlan>>{
-        return new Promise(async (resolve) => {
-            const allPlans: Array<IPlan> = await PlanModel.find({});
-            resolve(allPlans);
+        return new Promise(async (resolve, reject) => {
+            try{
+                const allPlans: Array<IPlan> = await PlanModel.find({});
+                resolve(allPlans);
+            }catch(e){
+                logger.error("PlanService:: list(): e = " + e.message);
+                reject(null)
+            }
+           
         })
     }
 
     getById({id}): Promise<IPlan>{
-        return new Promise(async(resolve)=> {
-            const plan: IPlan = await PlanModel.findById({ _id: id})
-            resolve(plan);
+        return new Promise(async(resolve, reject)=> {
+            try{
+                const plan: IPlan = await PlanModel.findById({ _id: id})
+                resolve(plan);
+            }catch(e){
+                logger.error("PlanService:: getById(): e = " + e.message);
+                reject(null);
+            }
         })
     }
 }
