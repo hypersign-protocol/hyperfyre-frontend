@@ -57,6 +57,21 @@ i {
   color: grey;
   padding: 5px;
 }
+.paginationContainer {
+  display: flex;
+  list-style: none;
+
+  justify-content: center;
+}
+.paginationContainer >>> li {
+  padding: 2px 10px;
+  margin: 0 2px;
+  border-radius: 3px;
+}
+.paginationContainer >>> li.active {
+  background-color: #007bff;
+  color: #fff;
+}
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -266,7 +281,11 @@ i {
 
     <div class="row">
         <div class="col-md-8">
+            <div class="form-group">
+              <input  @keyup="handleSearch" type="text" class="form-control w-25" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Search Project">
+            </div>
         </div>
+
         <div class="col-md-4">
           <div class="text-right">
             <button  @click="openCreateModal"  class="btn btn-primary ">Create <i class="fas fa-plus text-white"></i> </button>
@@ -291,10 +310,10 @@ i {
     </div>
 
     <div class="row" style="margin-top: 2%">
-      <div class="col-md-12 w-100" style="text-align: left; max-height: 700px; overflow-y: auto;">
+      <div class="col-md-12 w-100" style="text-align: left;">
         <div
           class="card"
-          v-for="project in projects"
+          v-for="project in projectsToShow"
           v-bind:key="project"
           style="
             float: left;
@@ -418,6 +437,19 @@ i {
 
       </div>
     </div>
+
+
+       <paginate
+        v-if="!this.searchQuery.length"
+        :pageCount="Math.ceil(this.projects.length / this.perPage)"
+         :clickHandler="paginateChange"
+        :prevText="'Prev'"
+        :nextText="'Next'"
+        :containerClass="'paginationContainer'"
+        :page-class="'paginationItem'"
+        
+      >
+      </paginate>
   </div>
 </template>
 
@@ -426,11 +458,13 @@ import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import Datepicker from 'vuejs-datetimepicker'
+import Paginate from "vuejs-paginate";
 import notificationMixins from '../mixins/notificationMixins';
 import apiClientMixin from '../mixins/apiClientMixin';
 export default {
   name: "Investor",
-  components: { Loading, Datepicker },
+  components: { Loading, Datepicker, Paginate },
+
   data() {
     return {
       project: {
@@ -446,6 +480,9 @@ export default {
         investorsCount: 0,
       },    
       
+      searchQuery: "",
+      projectsToShow : [],
+      perPage: 10,
       projectStatus: true,
       blockchainType: "ETHEREUM",
 
@@ -476,6 +513,7 @@ export default {
       errors: []
     };
   },
+
   async mounted() {
     //const usrStr = localStorage.getItem("user");
     //this.user = null; JSON.parse(usrStr);
@@ -493,6 +531,22 @@ export default {
     });
   },
   methods: {
+    handleSearch(e){
+
+        if(e.target.value.trim().length){
+          this.searchQuery = e.target.value.trim();
+          return this.projectsToShow = this.projects.filter(x => x.projectName.includes(e.target.value));
+        } else{
+          this.searchQuery = ""
+        }
+
+    },
+    paginateChange(e){
+       const skip = this.perPage * (e - 1);
+       console.log(this.projects, skip, this.perPage);
+       this.projectsToShow  = this.projects.slice(skip, this.perPage + skip);
+    },
+
     handleThemeChange(e) {
       this.themeColor = e.target.value
     },
@@ -534,6 +588,7 @@ export default {
 
         const json = await resp.json();
         this.projects = json;
+        this.projectsToShow = this.projects.slice(0, this.perPage);
         this.projects.map((x) => {
           x["whitelisting_link"] =
             window.location.origin + ( x.slug && x.slug != "" ?  "/form/" + x.slug :  "/form?projectId=" + x._id ) ;
