@@ -6,10 +6,10 @@ export default class Subscription{
     }
 
     
-    add({planId, userDid, subscritionDate, isActive, hasExpired, leftOverNoRequests}): Promise<ISubscription>{
+    add({planId, userDid, subscriptionDate, isActive, hasExpired, leftOverNoRequests}): Promise<ISubscription>{
         return new Promise(async (resolve, reject) => {
             const newPlan: ISubscription = await SubscriptionModel.create({
-                planId, userDid, subscritionDate, isActive, hasExpired, leftOverNoRequests          
+                planId, userDid, subscriptionDate, isActive, hasExpired, leftOverNoRequests          
             });
             resolve(newPlan);
         })
