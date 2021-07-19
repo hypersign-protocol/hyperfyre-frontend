@@ -151,7 +151,7 @@ export default {
 
         // if (!this.user.id) throw new Error("No project owner found");
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/plan?authToken=${this.authToken}&did=${this.user.id}`;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription?authToken=${this.authToken}&did=${this.user.id}`;
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
         };
