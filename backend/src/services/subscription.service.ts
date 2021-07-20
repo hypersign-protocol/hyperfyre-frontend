@@ -22,7 +22,7 @@ export default class Subscription{
     list({did}): Promise<Array<ISubscription>>{
         return new Promise(async (resolve, reject) => {
             try{
-                const allSubscriptionForUser: Array<ISubscription> = await SubscriptionModel.where({did: did}).find();
+                const allSubscriptionForUser: Array<ISubscription> = await SubscriptionModel.where({userDid: did}).find();
                 resolve(allSubscriptionForUser);
             }catch(e){
                 reject(e)
