@@ -1,3 +1,64 @@
+<style scoped>
+.addmargin {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.vue-logo-back {
+  background-color: black;
+}
+
+.logo {
+  width: 144px;
+}
+
+.fullbody {
+  width: 100%;
+}
+
+.floatLeft {
+  float: left;
+}
+.floatRight {
+  float: right;
+}
+.card-header {
+  background: aliceblue;
+  padding: 0px;
+}
+.sm-tiles {
+  float: left;
+  padding: 5px;
+  border: 1px solid #8080807d;
+  margin: 1%;
+  border-radius: 5px;
+  background: #f5dda71c;
+  color: #888b8f;
+}
+.sm-tiles:hover {
+  float: left;
+  padding: 5px;
+  border: 1px solid #8080807d;
+  margin: 1%;
+  border-radius: 5px;
+  background: #f5dda7a3;
+  font-style: bold;
+  color: #888b8f;
+}
+
+label {
+  font-weight: bold;
+}
+.card {
+  border-radius: 10px;
+}
+
+i {
+  color: grey;
+  padding: 5px;
+}
+
+</style>
 <template>
   <div class="home marginLeft marginRight">
     <loading
@@ -9,7 +70,7 @@
     <div class="row" style="margin-top: 2%">
       <div
         class="col-md-12 my-5 w-100"
-        style="text-align: left;max-height:660px; overflow-y:scroll"
+        style="text-align: left;"
       >
         <div
           class="card"
@@ -46,6 +107,12 @@
           >
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top: 2%">
+      <div class="col-md-12">
+
       </div>
     </div>
   </div>
