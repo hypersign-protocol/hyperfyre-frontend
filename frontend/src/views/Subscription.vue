@@ -212,8 +212,7 @@ export default {
         const resp = await fetch(url, {
           method: "POST",
           body: JSON.stringify({
-            planId,
-            userDid: this.user.id
+            planId
           }),
           headers,
         });

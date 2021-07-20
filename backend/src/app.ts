@@ -40,7 +40,7 @@ async function setupApp() {
         app.use("/hs/api/v2/auth", routes.auth(hypersign));
         app.use("/api/v1/twitter", routes.twitter(hypersign));
         app.use("/api/v1/plan", routes.plan());
-        app.use("/api/v1/subscription", routes.subscrition());
+        app.use("/api/v1/subscription", routes.subscrition(hypersign));
 
         app.use(apiErrorHandler);
 
