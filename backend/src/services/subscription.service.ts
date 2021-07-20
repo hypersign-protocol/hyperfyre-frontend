@@ -23,7 +23,7 @@ export default class Subscription{
                 update = { $set: updateParam};
             }
             
-            UsageModel.updateOne(filter,  update)
+            await UsageModel.updateOne(filter,  update);
         }
     }
     
