@@ -40,9 +40,9 @@
         <div class="col-md-6">
             <Profile/>
         </div>
-        <!-- <div class="col-md-6">
+        <div class="col-md-6">
             <Charts/>
-        </div> -->
+        </div>
      </div>    
   </div>
 </template>
@@ -50,14 +50,15 @@
 
 <script>
 import Profile from '@/components/Profile.vue'
+import Charts from '@/components/Charts.vue'
 import notificationMixins from '../mixins/notificationMixins';
 export default {
   name: "PanelPage",
   mounted() {
   },
   components: { 
-        Profile,
-    
+    Profile,
+    Charts
   },
   data() {
     return {

@@ -6,7 +6,8 @@ import Notifications from "vue-notification";
 import config from "./config";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
-
+import Donut from 'vue-css-donut-chart';
+import 'vue-css-donut-chart/dist/vcdonut.css';
 
 import {
   VeTable,
@@ -38,6 +39,9 @@ Vue.prototype.$veLoading = VeLoading;
 Vue.prototype.$veLocale = VeLocale;
 
 //// VUE EASY TABLE ////
+
+//// CHARTS ON DASHBAORD
+Vue.use(Donut);
 
 Vue.prototype.$config = config;
 
