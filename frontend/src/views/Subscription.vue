@@ -131,7 +131,7 @@ i {
                 {{row._id}}
               </th>
               <td>{{row.subscriptionDate}}</td>
-              <td>{{row.planName}}</td>
+              <td>{{ getPlanName(row.planId) }}</td>
               <td>{{row.leftOverNoRequests}}</td>
               <td>{{row.leftOverNoRequests}}</td>
               <td>{{row.isActive}}</td>
@@ -165,6 +165,14 @@ export default {
     };
   },
 
+   computed: {
+    // a computed getter
+    getPlanName: function (subPlanId) {
+      const subPlan = this.plans.find(plan =>  plan === subPlanId);
+      return subPlan["planName"];
+    }
+  },
+
   created() {
     const usrStr = localStorage.getItem("user");
     if(usrStr){
@@ -184,49 +192,8 @@ export default {
     }
 
   },
-  async mounted() {},
-
+  
   methods: {
-    async fetchProjectData(skip, limit) {
-      try {
-        this.isLoading = true;
-
-        // if (!this.investor.projectId) throw new Error("No project found");
-
-        // const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.investor.projectId}?fetchInvestors=true&limit=${limit}&skip=${skip}&searchQuery=${this.tableSearch}`;
-        // // console.log(url);
-        // const headers = {
-        //   "Content-Type": "application/json",
-        //   Authorization: `Bearer ${this.authToken}`,
-        // };
-        // const resp = await fetch(url, {
-        //   headers,
-        //   method: "GET",
-        // });
-
-        // if (!resp.ok) {
-        //   return this.notifyErr(resp.statusText);
-        // }
-        // const json = await resp.json();
-
-        // this.project = { ...json };
-        // this.sourceData = { ...json };
-        // this.project.fromDate = this.formateDate(this.project.fromDate);
-        // this.project.toDate = this.formateDate(this.project.toDate);
-        // this.projectFetched = true;
-
-        // this.pageSelectDropdown = Array.from({length: Math.ceil(this.project.count / this.perPage)}, (_, i) => i + 1)
-
-        // this.notifySuccess(
-        //   "Project is fetched. ProjectName " + json.projectName
-        // );
-      } catch (e) {
-        this.notifyErr(e.message);
-      } finally {
-        this.isLoading = false;
-      }
-    },
-
     async subscribe(planId) {
       try {
         if(!planId){
