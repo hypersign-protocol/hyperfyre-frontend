@@ -41,7 +41,7 @@ async function addSubscription(req: Request, res: Response, next: NextFunction) 
 async function getSubscriptionByDid(req: Request, res: Response, next: NextFunction) {
   try {    
     logger.info("SubscriptionController:: getSubscriptionByDid method start..");
-    const { userData } = req.query; // need to use from hypersign auth ... ///this is only for testing 
+    const { userData } = req.body; // need to use from hypersign auth ... ///this is only for testing 
     const employeeList = await subscriptionService.list({ did: userData["id"] });
     res.send(employeeList);
   } catch (e) {
