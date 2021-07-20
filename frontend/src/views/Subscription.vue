@@ -131,7 +131,7 @@ i {
                 {{row._id}}
               </th>
               <td>{{row.subscriptionDate}}</td>
-              <td>{{ row.planId }}</td>
+              <td>{{ getPlanName(row.planId) }}</td>
               <td>{{row.leftOverNoRequests}}</td>
               <td>{{row.leftOverNoRequests}}</td>
               <td>{{row.isActive}}</td>
@@ -167,10 +167,7 @@ export default {
 
    computed: {
     // a computed getter
-    // getPlanName: function (subPlanId) {
-    //   const subPlan = this.plans.find(plan =>  plan["_id"] === subPlanId);
-    //   return subPlan? subPlan["planName"]:  "";
-    // }
+   
   },
 
   created() {
@@ -194,6 +191,10 @@ export default {
   },
   
   methods: {
+    getPlanName (subPlanId) {
+      const subPlan = this.plans.find(plan =>  plan["_id"] === subPlanId);
+      return subPlan? subPlan["planName"]:  "";
+    },
     async subscribe(planId) {
       try {
         if(!planId){
