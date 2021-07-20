@@ -185,10 +185,10 @@ export default {
     if (plansInStorage) {
     this.plans = JSON.parse(plansInStorage);
     }
-
+                                                         
     const subscriptionsInStorage = localStorage.getItem("subscriptions");
     if(!subscriptionsInStorage){
-    this.subscriptions = JSON.parse(subscriptions);
+    this.subscriptions = JSON.parse(subscriptionsInStorage);
     }
 
   },
