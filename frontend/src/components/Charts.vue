@@ -52,7 +52,13 @@ export default {
       this.totalAvailable = parsedSub && parsedSub.usage ? parsedSub.usage["totalAvailable"]: 0;
       this.totalUsed = parsedSub && parsedSub.usage ? parsedSub.usage["totalUsed"]: 0;
       this.unused = this.totalAvailable - this.totalUsed;
+      
       this.sections[0].value = this.totalUsed;
+      console.log({
+        avl : this.totalAvailable,
+        usd: this.totalUsed,
+        sec: this.sections[0].value
+      })
     }    
   },
   methods: {
