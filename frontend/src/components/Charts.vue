@@ -15,7 +15,7 @@
         :auto-adjust-text-size="true"
         @section-click="handleSectionClick"
       >
-        <h1>{{ totalUsed }}</h1>
+        <h1>{{ unused }}</h1>
       </vc-donut>
     </div>
     
@@ -27,9 +27,9 @@ export default {
     return {
       totalAvailable: 0,
       totalUsed: 0,
+      unused: 0,
       user: {},
-      sections: [{ label: "Used Requests", value: 0, color: "#ed5c5c" }],
-      sectionsApps: [{ label: "Apps Created", value: 0, color: "#ed5c5c" }],
+      sections: [{ label: "Requests consumed", value: 0, color: "#ed5c5c" }]
     };
   },
   created() {
@@ -51,6 +51,8 @@ export default {
       const parsedSub = JSON.parse(subscriptionsInStorage)
       this.totalAvailable = parsedSub && parsedSub.usage ? parsedSub.usage["totalAvailable"]: 0;
       this.totalUsed = parsedSub && parsedSub.usage ? parsedSub.usage["totalUsed"]: 0;
+      this.unused = this.totalAvailable - this.totalUsed;
+      this.sections[0].value = this.totalUsed;
     }    
   },
   methods: {
