@@ -10,12 +10,12 @@
         has-legend
         legend-placement="top"
         :sections="sections"
-        :total="subscriptionDetials.maxAuthCount"
+        :total="totalAvailable"
         :start-angle="0"
         :auto-adjust-text-size="true"
         @section-click="handleSectionClick"
       >
-        <h1>{{ leftAuthPercentage }}</h1>
+        <h1>{{ totalUsed }}</h1>
       </vc-donut>
     </div>
     
@@ -25,31 +25,20 @@
 export default {
   data() {
     return {
-      leftAuthPercentage: 0,
+      totalAvailable: 0,
+      totalUsed: 0,
       user: {},
-      subscriptionDetials: {},
-      leftApps: 0,
-      sections: [{ label: "Used Auth Requests", value: 0, color: "#ed5c5c" }],
+      sections: [{ label: "Used Requests", value: 0, color: "#ed5c5c" }],
       sectionsApps: [{ label: "Apps Created", value: 0, color: "#ed5c5c" }],
     };
   },
   created() {
-    const usrStr = localStorage.getItem("user");
-    // this.user = JSON.parse(usrStr);
-    // this.subscriptionDetials = { ...this.user.subscriptionDetail };
-    // this.subscriptionDetials.authCount = this.subscriptionDetials.authCount == ""  ? 0  : parseInt(this.subscriptionDetials.authCount);
-    // this.subscriptionDetials.maxAuthCount =
-    //   this.subscriptionDetials.maxAuthCount == ""
-    //     ? 0
-    //     : parseInt(this.subscriptionDetials.maxAuthCount);
-    
-    // this.sections[0].value = this.subscriptionDetials.authCount;
-    // this.leftAuthPercentage =
-    //   this.subscriptionDetials.maxAuthCount -
-    //   this.subscriptionDetials.authCount;
-    
-    
-    
+    const subscriptionsInStorage = localStorage.getItem("subscriptions");
+    if(subscriptionsInStorage){
+      const parsedSub = JSON.parse(subscriptionsInStorage)
+      this.totalAvailable = parsedSub && parsedSub.usage ? parsedSub.usage["totalAvailable"]: 0;
+      this.totalUsed = parsedSub && parsedSub.usage ? parsedSub.usage["totalUsed"]: 0;
+    }    
   },
   methods: {
     handleSectionClick(section, event) {

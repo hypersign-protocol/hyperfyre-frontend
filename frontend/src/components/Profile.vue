@@ -116,16 +116,7 @@ export default {
       appList: [],
       schemaCount: 0,
       projectCount: 0,
-      user: {
-        id: "did:hs:QWERTlkasd090123SWEE12322",
-        publicKey: "0x2123ASSD12312",
-        email: "vishu.anand1@gmail.com",
-        phoneNumber: "+91-12312312",
-        fname: "vishwas",
-        Email: "vishu.anand1@gmail.com",
-        Name: "Vishwas",
-      },
-
+      user: {},
       authToken: localStorage.getItem("authToken"),
       projects: [],
     };
@@ -135,11 +126,7 @@ export default {
     this.user = {
       ...JSON.parse(usrStr),
     };
-    // const usrStr = localStorage.getItem("user");
-    // this.user = { ...JSON.parse(usrStr) };
-    // this.userKeys = Object.keys(this.user);
-    // this.pollData();
-
+    
     await this.fetchProjects();
     this.fetchPlan();
     this.fetchSubscription();
@@ -151,7 +138,7 @@ export default {
 
         // if (!this.user.id) throw new Error("No project owner found");
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription`;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription?usage=true`;
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
         };

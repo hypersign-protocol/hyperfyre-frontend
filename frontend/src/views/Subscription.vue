@@ -185,7 +185,8 @@ export default {
                                                          
     const subscriptionsInStorage = localStorage.getItem("subscriptions");
     if(subscriptionsInStorage){
-      this.subscriptions = JSON.parse(subscriptionsInStorage);
+      const parsedSub = JSON.parse(subscriptionsInStorage)
+      this.subscriptions = parsedSub ? parsedSub["subscriptions"] : [];
     }
 
   },
