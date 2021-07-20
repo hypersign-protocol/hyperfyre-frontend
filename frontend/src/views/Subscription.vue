@@ -187,8 +187,8 @@ export default {
     }
                                                          
     const subscriptionsInStorage = localStorage.getItem("subscriptions");
-    if(!subscriptionsInStorage){
-    this.subscriptions = JSON.parse(subscriptionsInStorage);
+    if(subscriptionsInStorage){
+      this.subscriptions = JSON.parse(subscriptionsInStorage);
     }
 
   },
