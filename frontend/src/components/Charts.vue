@@ -29,7 +29,8 @@ export default {
       totalUsed: 0,
       unused: 0,
       user: {},
-      sections: [{ label: "Requests consumed", value: 0, color: "#ed5c5c" }]
+      sections: [{ label: "Requests consumed", value: 0, color: "#ed5c5c" }],
+      authToken: localStorage.getItem("authToken"),
     };
   },
   async created() {
