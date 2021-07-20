@@ -168,8 +168,8 @@ export default {
    computed: {
     // a computed getter
     getPlanName: function (subPlanId) {
-      const subPlan = this.plans.find(plan =>  plan === subPlanId);
-      return subPlan["planName"];
+      const subPlan = this.plans.find(plan =>  plan["_id"] === subPlanId);
+      return subPlan? subPlan["planName"]:  "";
     }
   },
 
