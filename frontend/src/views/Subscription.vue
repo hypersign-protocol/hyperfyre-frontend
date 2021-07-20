@@ -122,7 +122,7 @@ i {
               <th>Plan Name</th>
               <th>Limit</th>
               <th>Left</th>
-              <th>Status</th>
+              <th>Is Active</th>
             </tr>
           </thead>
           <tbody>
