@@ -81,7 +81,7 @@ i {
             max-width: 60rem;
             margin-right: 3%;
             margin-bottom: 1%;
-            widht:350px;
+            width:350px;
           "
         >
           <div
@@ -105,7 +105,7 @@ i {
             class="card-header"
             style="padding: 5px; background-color: #8080801f"
           >
-              <button class="btn btn-outline-primary btn-sm"  @click="subscribe(plan)">Subscribe</button>
+              <button class="btn btn-outline-primary btn-sm"  @click="subscribe(plan['_id'])">Subscribe</button>
           </div>
         </div>
       </div>
@@ -197,8 +197,14 @@ export default {
       }
     },
 
-    async subscribe() {
+    async subscribe(planId) {
       try {
+        if(!planId){
+          return;
+        }
+
+        console.log(planId);
+
         this.isLoading = true;
 
         // const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
