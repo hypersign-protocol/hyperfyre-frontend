@@ -32,7 +32,7 @@ export default {
       sections: [{ label: "Requests consumed", value: 0, color: "#ed5c5c" }]
     };
   },
-  created() {
+  async created() {
 
     const usrStr = localStorage.getItem("user");
     this.user = {
