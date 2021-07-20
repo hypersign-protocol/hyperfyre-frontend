@@ -6,8 +6,48 @@
       :is-full-page="fullPage"
     ></loading>
 
-
-    
+    <div class="row" style="margin-top: 2%">
+      <div
+        class="col-md-12 my-5 w-100"
+        style="text-align: left;max-height:660px; overflow-y:scroll"
+      >
+        <div
+          class="card"
+          v-for="plan in plans"
+          v-bind:key="plan"
+          style="
+            float: left;
+            max-width: 60rem;
+            margin-right: 3%;
+            margin-bottom: 1%;
+          "
+        >
+          <div
+            class="card-header"
+            style="padding: 5px; text-align: center; font-weight: bold"
+          >
+            <span style="">{{ plan.planName }}</span>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <p>{{plan.description}}</p>
+                <p>Get {{plan.totalNoOfRequests}} requests</p>
+                <p>Only for ${{plan.price}} !!</p>
+                <p>
+                  <button class="btn" @click="subscribe(plan)">Subscribe</button>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="card-header"
+            style="padding: 5px; background-color: #8080801f"
+          >
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -15,8 +55,8 @@
 import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import notificationMixins from '../mixins/notificationMixins';
-import apiClientMixin from '../mixins/apiClientMixin';
+import notificationMixins from "../mixins/notificationMixins";
+import apiClientMixin from "../mixins/apiClientMixin";
 
 export default {
   name: "Subscription",
@@ -27,12 +67,18 @@ export default {
       authToken: localStorage.getItem("authToken"),
       isLoading: false,
       fullPage: true,
+      plans: [],
     };
   },
 
-  async mounted() {
- 
+  created() {
+    const plansInStorage = localStorage.getItem("plans");
+    if (!plansInStorage) {
+      return;
+    }
+    this.plans = JSON.parse(plansInStorage);
   },
+  async mounted() {},
 
   methods: {
     async fetchProjectData(skip, limit) {
@@ -63,15 +109,11 @@ export default {
         // this.project.toDate = this.formateDate(this.project.toDate);
         // this.projectFetched = true;
 
-
         // this.pageSelectDropdown = Array.from({length: Math.ceil(this.project.count / this.perPage)}, (_, i) => i + 1)
 
-      
         // this.notifySuccess(
         //   "Project is fetched. ProjectName " + json.projectName
         // );
-
-
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
@@ -79,7 +121,7 @@ export default {
       }
     },
 
-    async saveInvestor() {
+    async subscribe() {
       try {
         this.isLoading = true;
 
@@ -110,6 +152,6 @@ export default {
     },
   },
 
-  mixins: [notificationMixins]
+  mixins: [notificationMixins],
 };
 </script>

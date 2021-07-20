@@ -165,7 +165,7 @@ export default {
         }
         const json = await resp.json();
         
-        localStorage.setItem("subscriptions", json);
+        localStorage.setItem("subscriptions", JSON.stringify(json));
         // this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {
         this.notifyErr(e.message);
@@ -192,8 +192,8 @@ export default {
           return this.notifyErr(resp.statusText);
         }
         const json = await resp.json();
-        
-        localStorage.setItem("plans", json);
+        console.log(json);
+        localStorage.setItem("plans", JSON.stringify(json));
         // this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {
         this.notifyErr(e.message);
