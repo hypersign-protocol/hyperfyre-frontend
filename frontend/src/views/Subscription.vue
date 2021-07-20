@@ -265,7 +265,6 @@ export default {
         this.notifyErr(e.message);
       } finally {
         this.isLoading = false;
-        this.clear();
       }
     },
   },
