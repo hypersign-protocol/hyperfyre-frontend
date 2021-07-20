@@ -18,12 +18,12 @@ export default class Subscription{
             // update
             let update; 
             if(Object.keys(updateParam).length === 0){
-                update = { totalAvailable: usageInDb.totalAvailable + totalAvailable }
+                update = { $set: { totalAvailable: usageInDb.totalAvailable + totalAvailable }};
             }else{
-                update = updateParam;
+                update = { $set: updateParam};
             }
             
-            UsageModel.updateOne(filter,  updateParam)
+            UsageModel.updateOne(filter,  update)
         }
     }
     
