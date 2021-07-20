@@ -160,22 +160,28 @@ export default {
       isLoading: false,
       fullPage: true,
       plans: [],
-      subscriptions: []
+      subscriptions: [],
+      user: {},
     };
   },
 
   created() {
-    const plansInStorage = localStorage.getItem("plans");
-    if (!plansInStorage) {
-      return;
+    const usrStr = localStorage.getItem("user");
+    if(usrStr){
+      this.user = {
+        ...JSON.parse(usrStr),
+      };
     }
+
+    const plansInStorage = localStorage.getItem("plans");
+    if (plansInStorage) {
     this.plans = JSON.parse(plansInStorage);
+    }
 
     const subscriptionsInStorage = localStorage.getItem("subscriptions");
     if(!subscriptionsInStorage){
-      return;
-    }
     this.subscriptions = JSON.parse(subscriptions);
+    }
 
   },
   async mounted() {},
@@ -231,24 +237,30 @@ export default {
 
         this.isLoading = true;
 
-        // const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
-        // let headers = {
-        //   "Content-Type": "application/json",
-        //   "Authorization": `Bearer ${this.authToken}`,
-        // };
-        // const resp = await fetch(url, {
-        //   method: "POST",
-        //   body: JSON.stringify(this.investor),
-        //   headers,
-        // });
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription`;
+        let headers = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.authToken}`,
+        };
+        const resp = await fetch(url, {
+          method: "POST",
+          body: JSON.stringify({
+            planId,
+            userDid: this.user.id
+          }),
+          headers,
+        });
 
-        // if (!resp.ok) {
-        //   return this.notifyErr(resp.statusText);
-        // }
+        if (!resp.ok) {
+          return this.notifyErr(resp.statusText);
+        }
 
-        // const json = await resp.json();
-        // this.isDataSaved = true;
-        // this.notifySuccess("Your data is saved. Id = " + json._id);
+        const json = await resp.json();
+        this.subscriptions.push(json);
+
+        localStorage.setItem("subscriptions", JSON.stringify(this.subscriptions));
+
+        this.notifySuccess("Your are subscribed. SubscriptionId = " + json._id);
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
