@@ -96,7 +96,7 @@ i {
                 <p>Get {{plan.totalNoOfRequests}} requests</p>
                 <p>Only for ${{plan.price}} !!</p>
                 <p>
-                  <button class="btn" @click="subscribe(plan)">Subscribe</button>
+                  <button class="btn btn-outline-primary"  @click="subscribe(plan)">Subscribe</button>
                 </p>
               </div>
             </div>
