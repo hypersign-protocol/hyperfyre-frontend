@@ -111,9 +111,33 @@ i {
       </div>
     </div>
 
-    <div class="row" style="margin-top: 2%">
-      <div class="col-md-12">
 
+    <div class="row" style="margin-top: 2%;">
+      <div class="col-md-12">        
+        <table class="table table-bordered" style="background:#FFFF">
+          <thead class="thead-light">
+            <tr>
+              <th>Subscription Id</th>
+              <th>Subscription Date</th>
+              <th>Plan Name</th>
+              <th>Limit</th>
+              <th>Left</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in subscriptions" :key="row">
+              <th>
+                {{row._id}}
+              </th>
+              <td>{{row.subscriptionDate}}</td>
+              <td>{{row.planName}}</td>
+              <td>{{row.leftOverNoRequests}}</td>
+              <td>{{row.leftOverNoRequests}}</td>
+              <td>{{row.isActive}}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
