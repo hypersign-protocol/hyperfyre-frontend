@@ -250,7 +250,8 @@ updated(){
      this.showNavbar =
       window.location.pathname.includes("/admin/investors") ||
       window.location.pathname.includes("/admin/project") ||
-      window.location.pathname.includes("/admin/dashboard")
+      window.location.pathname.includes("/admin/dashboard") || 
+      window.location.pathname.includes("/admin/subscription")
         ? true
         : false;  
 },
