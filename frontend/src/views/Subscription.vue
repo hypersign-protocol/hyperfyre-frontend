@@ -70,7 +70,7 @@ i {
     <div class="row" style="margin-top: 2%">
       <div
         class="col-md-12 my-5 w-100"
-        style="text-align: left;"
+        style="text-align: center;"
       >
         <div
           class="card"
@@ -81,6 +81,7 @@ i {
             max-width: 60rem;
             margin-right: 3%;
             margin-bottom: 1%;
+            widht:350px;
           "
         >
           <div
@@ -96,7 +97,6 @@ i {
                 <p>Get {{plan.totalNoOfRequests}} requests</p>
                 <p>Only for ${{plan.price}} !!</p>
                 <p>
-                  <button class="btn btn-outline-primary"  @click="subscribe(plan)">Subscribe</button>
                 </p>
               </div>
             </div>
@@ -105,6 +105,7 @@ i {
             class="card-header"
             style="padding: 5px; background-color: #8080801f"
           >
+              <button class="btn btn-outline-primary btn-sm"  @click="subscribe(plan)">Subscribe</button>
           </div>
         </div>
       </div>
@@ -135,6 +136,7 @@ export default {
       isLoading: false,
       fullPage: true,
       plans: [],
+      subscriptions: []
     };
   },
 
@@ -144,6 +146,13 @@ export default {
       return;
     }
     this.plans = JSON.parse(plansInStorage);
+
+    const subscriptionsInStorage = localStorage.getItem("subscriptions");
+    if(!subscriptionsInStorage){
+      return;
+    }
+    this.subscriptions = JSON.parse(subscriptions);
+
   },
   async mounted() {},
 
