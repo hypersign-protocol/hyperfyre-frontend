@@ -120,8 +120,7 @@ i {
               <th>Subscription Id</th>
               <th>Subscription Date</th>
               <th>Plan Name</th>
-              <th>Limit</th>
-              <th>Left</th>
+              <th>Limit</th>              
               <th>Is Active</th>
             </tr>
           </thead>
@@ -132,7 +131,6 @@ i {
               </th>
               <td>{{row.subscriptionDate}}</td>
               <td>{{ getPlanName(row.planId) }}</td>
-              <td>{{row.leftOverNoRequests}}</td>
               <td>{{row.leftOverNoRequests}}</td>
               <td>{{row.isActive}}</td>
             </tr>
