@@ -111,7 +111,7 @@ export default class Subscription{
             try{
                 // check if 
                 // owner has active subscriptions or not
-                const subscriptionList: Array<ISubscription> = await this.list({did: did, isActive: true});
+                const subscriptionList: Array<ISubscription> = await this.list({userDid: did, isActive: true});
                 if(!subscriptionList){
                     throw new Error("Could not fetch subscription for admin did " + did)
                 }
