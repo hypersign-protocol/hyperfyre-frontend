@@ -116,7 +116,7 @@ export default class Subscription{
                     throw new Error("Could not fetch subscription for admin did " + did)
                 }
                 if(subscriptionList.length === 0){
-                    resolve(false);
+                    return resolve(false);
                 }
 
                 // has some requests left or not
@@ -126,7 +126,7 @@ export default class Subscription{
                 }
     
                 if(usage.totalUsed > usage.totalAvailable){
-                    resolve(false);
+                    return resolve(false);
                 }
 
                 resolve(true);
