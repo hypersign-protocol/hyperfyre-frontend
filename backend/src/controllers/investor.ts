@@ -3,12 +3,15 @@ import { Request, Response, NextFunction } from "express";
 import InvestorModel, { IInvestor } from "../models/investor";
 let { template :credentialMailTemplate} = require('../services/mail.template');
 import MailService from '../services/mail.service';
+import SubscriptionService from "../services/subscription.service";
 import ApiError from '../error/apiError';
 
 
 const jsonWebToken = require('jsonwebtoken');
 
 const { keys: issuerKeyPair,  mail, jwt } = require("../../hypersign.json");
+
+const subscriptionService = new SubscriptionService();
 
 function isHypersignDid(did){
   if(!did || did === "") return false;
@@ -298,7 +301,9 @@ async function issueCredential(req: Request, res: Response, next: NextFunction){
     logger.info("InvestorController:: issueCredential(): after sending email");
 
 
-    res.send({message: "Whitelisting credential has been successfully sent to the investor email", credentialUrl: link})
+    // res.send({message: "Whitelisting credential has been successfully sent to the investor email", credentialUrl: link})
+    req.body["result"] = {message: "Whitelisting credential has been successfully sent to the investor email", credentialUrl: link}
+    return next()
 
   } catch (e){
     logger.error('InvestorController:: issueCredential(): Error ' + e);
