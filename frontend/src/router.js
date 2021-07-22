@@ -111,7 +111,14 @@ router.beforeEach((to, from, next) => {
             });
           } else {
             localStorage.setItem("user", JSON.stringify(json.message));
-            next();
+            if (to.meta.admin && !json.message.isSubscribed) {
+              next({
+                  path: '/admin/subscription',
+                  params: { nextUrl: to.fullPath }
+              })
+            } else {
+                next()
+            }
           }
         })
         .catch((e) => {
