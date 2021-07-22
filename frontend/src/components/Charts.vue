@@ -29,6 +29,7 @@ export default {
       totalUsed: 0,
       unused: 0,
       user: {},
+      usage: {},
       sections: [{ label: "Requests consumed", value: 0, color: "#ed5c5c" }],
       authToken: localStorage.getItem("authToken"),
     };
@@ -46,21 +47,21 @@ export default {
     
     await this.fetchSubscription();
     
-    
-    const subscriptionsInStorage = localStorage.getItem("subscriptions");
-    if(subscriptionsInStorage){
-      const parsedSub = JSON.parse(subscriptionsInStorage)
-      this.totalAvailable = parsedSub && parsedSub.usage ? parsedSub.usage["totalAvailable"]: 0;
-      this.totalUsed = parsedSub && parsedSub.usage ? parsedSub.usage["totalUsed"]: 0;
-      this.unused = this.totalAvailable - this.totalUsed;
+    this.totalAvailable = this.usage["totalAvailable"];
+    this.totalUsed = this.usage["totalUsed"];
+    this.unused = this.totalAvailable - this.totalUsed;
+    this.sections[0].value = this.totalUsed;
+
+    // const subscriptionsInStorage = localStorage.getItem("subscriptions");
+    // if(subscriptionsInStorage){
+    //   const parsedSub = JSON.parse(subscriptionsInStorage)
       
-      this.sections[0].value = this.totalUsed;
-      console.log({
-        avl : this.totalAvailable,
-        usd: this.totalUsed,
-        sec: this.sections[0].value
-      })
-    }    
+    //   console.log({
+    //     avl : this.totalAvailable,
+    //     usd: this.totalUsed,
+    //     sec: this.sections[0].value
+    //   })
+    // }    
   },
   methods: {
     handleSectionClick(section, event) {
@@ -84,8 +85,8 @@ export default {
           return this.notifyErr(resp.statusText);
         }
         const json = await resp.json();
-        
-        localStorage.setItem("subscriptions", JSON.stringify(json));
+        this.usage = json["usage"];
+        // localStorage.setItem("subscriptions", JSON.stringify(json));
         // this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {
         this.notifyErr(e.message);

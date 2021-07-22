@@ -181,14 +181,16 @@ export default {
     // if (plansInStorage) {
     // this.plans = JSON.parse(plansInStorage);
     // }
-                                                         
-    const subscriptionsInStorage = localStorage.getItem("subscriptions");
-    if(subscriptionsInStorage){
-      const parsedSub = JSON.parse(subscriptionsInStorage)
-      this.subscriptions = parsedSub ? parsedSub["subscriptions"] : [];
-    }else{
-      this.fetchSubscription();
-    }
+      
+    this.fetchSubscription();
+
+    // const subscriptionsInStorage = localStorage.getItem("subscriptions");
+    // if(subscriptionsInStorage){
+    //   const parsedSub = JSON.parse(subscriptionsInStorage)
+    //   this.subscriptions = parsedSub ? parsedSub["subscriptions"] : [];
+    // }else{
+      
+    // }
 
   },
   
@@ -245,8 +247,8 @@ export default {
           return this.notifyErr(resp.statusText);
         }
         const json = await resp.json();
-        this.subscriptions = json;
-        localStorage.setItem("subscriptions", JSON.stringify(json));
+        this.subscriptions = json["subscriptions"];
+        // localStorage.setItem("subscriptions", JSON.stringify(json));
         // this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {
         this.notifyErr(e.message);
@@ -284,7 +286,7 @@ export default {
         const json = await resp.json();
         this.subscriptions.push(json);
 
-        localStorage.setItem("subscriptions", JSON.stringify(this.subscriptions));
+        // localStorage.setItem("subscriptions", JSON.stringify(this.subscriptions));
 
         this.notifySuccess("Your are subscribed. SubscriptionId = " + json._id);
       } catch (e) {
