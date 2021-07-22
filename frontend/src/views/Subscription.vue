@@ -176,10 +176,11 @@ export default {
       };
     }
 
-    const plansInStorage = localStorage.getItem("plans");
-    if (plansInStorage) {
-    this.plans = JSON.parse(plansInStorage);
-    }
+    this.fetchPlan();
+    // const plansInStorage = localStorage.getItem("plans");
+    // if (plansInStorage) {
+    // this.plans = JSON.parse(plansInStorage);
+    // }
                                                          
     const subscriptionsInStorage = localStorage.getItem("subscriptions");
     if(subscriptionsInStorage){
@@ -193,6 +194,34 @@ export default {
     getPlanName (subPlanId) {
       const subPlan = this.plans.find(plan =>  plan["_id"] === subPlanId);
       return subPlan? subPlan["planName"]:  "";
+    },
+    async fetchPlan() {
+      try {
+        this.isLoading = true;
+
+        // if (!this.user.id) throw new Error("No project owner found");
+
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/plan?authToken=${this.authToken}`;
+        const headers = {
+          Authorization: `Bearer ${this.authToken}`,
+        };
+        const resp = await fetch(url, {
+          headers,
+          method: "GET",
+        });
+
+        if (!resp.ok) {
+          return this.notifyErr(resp.statusText);
+        }
+        const json = await resp.json();
+        console.log(json);
+        this.plans  = json;
+        // localStorage.setItem("plans", JSON.stringify(json));
+      } catch (e) {
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+      }
     },
     async subscribe(planId) {
       try {
