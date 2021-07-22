@@ -510,7 +510,7 @@ export default {
         selectedSocialMedia: null,
         addedSocialMedias: [],
         socialOptions: [
-            {value: null, label: "Select a Project"},
+            {value: null, label: "Select a Social Media"},
             {
                 label: "Twitter",
                 
