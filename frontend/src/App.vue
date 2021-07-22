@@ -115,11 +115,11 @@
         v-if="showNavbar"
       >
         <span slot="header">
-          <div class="ml-1 mt-3 mb-2">
+          <div class="ml-1 mt-3 mb-2" style="padding-left: 18px;">
             <img
               :src="require('./assets/Fidato_logo.png')"
               alt="logo"
-              width="175px"
+              width="150px"
             />
           </div>
           <!-- <p class="header-text">{{ $config.app.name }}</p> -->
