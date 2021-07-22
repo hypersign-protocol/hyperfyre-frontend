@@ -284,7 +284,8 @@ export default {
         }
 
         const json = await resp.json();
-        this.subscriptions.push(json);
+        // this.subscriptions.push(json);
+        this.fetchSubscription();
 
         // localStorage.setItem("subscriptions", JSON.stringify(this.subscriptions));
 
