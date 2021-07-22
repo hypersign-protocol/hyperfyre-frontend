@@ -14,7 +14,7 @@
 <template>
   <div>
       <div v-if="addedSocialMedias.length" class="selected-media-wrapper d-flex  p-2 mb-4">
-            <div class="card rounded m-1 p-1 d-flex flex-row align-items-center " v-for="(socialMedia, idx) in addedSocialMedias">
+            <div class="card rounded m-1 p-1 d-flex flex-row align-items-center " v-for="(socialMedia, idx) in addedSocialMedias" :key="idx">
                 <span class="mr-2 text-capitalize">{{socialMedia.media}}</span>
                 <i @click="removeSocialMedia(idx)" class="fas fa-minus-circle "></i>
             </div>
@@ -23,7 +23,7 @@
        <b-form-select v-model="selectedSocialMedia"    text-field="label"  :options="socialOptions"></b-form-select>
         <div v-if="selectedSocialMedia !==null" class="mt-4">
           
-                 <div  v-for="field in selectedSocialMedia.fields" class="mb-3 text-left">
+                 <div  v-for="field in selectedSocialMedia.fields" class="mb-3 text-left" :key="field.name">
                     <label :for="field.name" class="form-label"> {{field.placeholder}}: </label>
                     <input v-model="field.value" :type="field.type" :placeholder="field.placeholder" :id="field.name" class="form-control" />
                 </div>
@@ -58,27 +58,23 @@ export default {
                 value: {
                     media: "twitter",
                     fields: [ 
-                         {name: "twitterHandle", type: "text", placeholder: "Twitter Handle", value:"" } ,
+                        {name: "twitterHandle", type: "text", placeholder: "Twitter Handle", value:"" } ,
                         {name: "twitterPostFormat", type: "text", placeholder: "Twitter Post Format", value: "" }
-
                     ]
                 }, 
                 
             },
-                {
-                    label: "Telegram", 
-                    value: {
-                        media: "telegram",
-                        fields: [ 
-                            {name: "telegramHandle", type: "text", placeholder: "Telegram Handle", value: "" } ,
-                            {name: "telegramAnnChannel", type: "text", placeholder: "Telegram Announcement Channel", value: "" }
-                            
-                        ]
-                    }, 
-                    
-                }
-
-
+            {
+                label: "Telegram", 
+                value: {
+                    media: "telegram",
+                    fields: [ 
+                        {name: "telegramHandle", type: "text", placeholder: "Telegram Handle", value: "" } ,
+                        {name: "telegramAnnChannel", type: "text", placeholder: "Telegram Announcement Channel", value: "" }
+                    ]
+                }, 
+                
+            }
       ],
     }
       
@@ -119,8 +115,7 @@ export default {
              }) 
 
         this.project.social = { ...this.project.social, [media.media] :obj};
- 
-          
+
       },
   },
 

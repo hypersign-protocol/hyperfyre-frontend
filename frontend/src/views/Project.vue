@@ -500,7 +500,8 @@ export default {
         toDate: "",
         ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
         investorsCount: 0,
-        social: {}
+        social: {},
+        projectStatus: true
       },    
       
       searchQuery: "",
