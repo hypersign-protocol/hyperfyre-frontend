@@ -245,19 +245,28 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       logoUrl,
       fromDate,
       toDate,
-      twitterHandle,
-      telegramHandle,
-      twitterPostFormat,
+      social,
       _id,
       userData,
       projectStatus,
-      telegramAnnouncementChannel,
       blockchainType,
       themeColor,
       fontColor
     } = req.body;
 
     const { id: ownerDid } = userData;
+
+    const {
+      telegramHandle,
+      telegramAnnouncementChannel, 
+    } =  social.telegram;
+
+    const {
+      twitterHandle,
+      twitterPostFormat,
+    } =  social.twitter;
+
+
     // FindbyIdupdate returns the old object, however the value has been updated in the db
     await ProjectModel.findByIdAndUpdate(_id, {
       projectName,
