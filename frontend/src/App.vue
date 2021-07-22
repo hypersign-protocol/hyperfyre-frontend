@@ -122,7 +122,7 @@
               width="175px"
             />
           </div>
-          <p class="header-text">{{ $config.app.name }}</p>
+          <!-- <p class="header-text">{{ $config.app.name }}</p> -->
           <hr class="rule" />
         </span>
         <span slot="footer" class="text-center">{{ $config.app.version }}</span>
