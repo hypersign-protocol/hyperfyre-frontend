@@ -290,11 +290,11 @@ i {
 
         <div class="col-md-4">
           <div class="text-right">
-            <button  @click="openCreateModal"  class="btn btn-primary ">Create <i class="fas fa-plus text-white"></i> </button>
+            <button v-b-toggle.sidebar-right  class="btn btn-primary ">Create <i class="fas fa-plus text-white"></i> </button>
           </div>
 
           <div>
-            <b-button v-b-toggle.sidebar-right>Toggle Sidebar</b-button>
+            <!-- <b-button v-b-toggle.sidebar-right>Toggle Sidebar</b-button> -->
             
             <create-project-slide 
               :project="project"
