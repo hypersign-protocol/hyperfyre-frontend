@@ -72,6 +72,7 @@ i {
   background-color: #007bff;
   color: #fff;
 }
+
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -279,6 +280,7 @@ i {
             </div>
     </b-modal>
 
+
     <div class="row">
         <div class="col-md-8">
             <div class="form-group">
@@ -290,6 +292,26 @@ i {
           <div class="text-right">
             <button  @click="openCreateModal"  class="btn btn-primary ">Create <i class="fas fa-plus text-white"></i> </button>
           </div>
+
+          <div>
+            <b-button v-b-toggle.sidebar-right>Toggle Sidebar</b-button>
+            
+            <create-project-slide 
+
+              :project="project"
+              :themeColor="themeColor"
+              :themeColorDefault="themeColorDefault"
+              :fontColor="fontColor"
+              :fontColorDefault="fontColorDefault"
+              :blockChainType="blockchainType"
+              :saveProject="saveProject"
+
+             />
+
+          
+
+          </div>
+
         </div>
     </div>
 
@@ -463,9 +485,10 @@ import Datepicker from 'vuejs-datetimepicker'
 import Paginate from "vuejs-paginate";
 import notificationMixins from '../mixins/notificationMixins';
 import apiClientMixin from '../mixins/apiClientMixin';
+import CreateProjectSlide from './CreateProjectSlide/CreateProjectSlide.vue';
 export default {
   name: "Investor",
-  components: { Loading, Datepicker, Paginate },
+  components: { Loading, Datepicker, Paginate, CreateProjectSlide },
 
   data() {
     return {
@@ -476,10 +499,8 @@ export default {
         fromDate: "",
         toDate: "",
         ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
-        twitterHandle: "",
-        telegramHandle: "",
-        twitterPostFormat: "I am happy with #hypersign @hypersignchain",
         investorsCount: 0,
+        social: {}
       },    
       
       searchQuery: "",
@@ -630,6 +651,7 @@ export default {
     async saveProject() {
       
       try {
+       
         if(this.checkIfEverythingIsFilled() !==  true){
             return this.notifyErr( this.checkIfEverythingIsFilled());   
         }
@@ -652,12 +674,7 @@ export default {
         this.project.themeColor = this.themeColor.trim().length ?  this.themeColor :  this.themeColorDefault
         this.project.fontColor = this.fontColor.trim().length ?  this.fontColor :  this.fontColorDefault
         this.project.blockchainType = this.blockchainType
-        this.project.projectStatus = this.projectStatus
-
-        //  console.log(this.project)
-
-
-
+       
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
           if(!this.isProjectEditing){
@@ -697,7 +714,8 @@ export default {
         // this.clear();
       }
     },
-    checkIfEverythingIsFilled () {
+
+    checkIfEverythingIsFilled(){
 
         if(!this.project.projectName){
           return "Please Specify a project name"
@@ -708,15 +726,29 @@ export default {
         if(! (this.project.fromDate && this.project.toDate)){
           return "Please specify a start and end date"
         }
-        if(!this.project.twitterHandle){
-          return "Please provide a twitter handle"
+
+        if(!Object.keys(this.project.social).length){
+          return "Please fill in social configuration";
         }
-        if(!this.project.telegramHandle){
-          return "Please provide a telegram handle"
+
+        if(this.project.social.twitter){
+
+          console.log("TWITTER", this.project.social.twitter)
+            if(!this.project.social.twitter.twitterHandle){
+                return "Please provide a twitter handle"
+            }
+            if(!this.project.social.twitter.twitterPostFormat){
+                return "Please provide a Twitter Post Format"
+            }
         }
-         if(!this.project.twitterPostFormat){
-          return "Please provide a Twitter Post Format"
-        }
+
+
+        if(this.project.social.telegram){
+             if(!this.project.social.telegram.telegramHandle){
+                 return "Please provide a telegram handle"
+             }
+        }        
+       
          if(!this.blockchainType){
           return "Please provide Blockchain Type"
         }
