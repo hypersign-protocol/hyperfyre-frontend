@@ -3,15 +3,12 @@ import { Request, Response, NextFunction } from "express";
 import InvestorModel, { IInvestor } from "../models/investor";
 let { template :credentialMailTemplate} = require('../services/mail.template');
 import MailService from '../services/mail.service';
-import SubscriptionService from "../services/subscription.service";
 import ApiError from '../error/apiError';
 
 
 const jsonWebToken = require('jsonwebtoken');
 
 const { keys: issuerKeyPair,  mail, jwt } = require("../../hypersign.json");
-
-const subscriptionService = new SubscriptionService();
 
 function isHypersignDid(did){
   if(!did || did === "") return false;
