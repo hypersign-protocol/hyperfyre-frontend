@@ -245,7 +245,7 @@ export default {
           return this.notifyErr(resp.statusText);
         }
         const json = await resp.json();
-        
+        this.subscriptions = json;
         localStorage.setItem("subscriptions", JSON.stringify(json));
         // this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {
