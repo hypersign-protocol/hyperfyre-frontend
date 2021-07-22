@@ -674,7 +674,7 @@ export default {
       return new Date(d).toLocaleString();
     },
     editProject(project) {
-   
+      this.resetAllValues();
       this.project = { ...project };
 
       // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE

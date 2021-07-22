@@ -2,7 +2,7 @@
 .accordion > .card{
     overflow: inherit !important;
 }
-.card-header{
+/* .card-header{
   background-color: transparent;
 }
 .card-header.accordin-header{
@@ -15,7 +15,7 @@
 .accordion > .card{
   border: none !important;
   outline: none;
-}
+} */
 </style>
 <template>
   <div>
