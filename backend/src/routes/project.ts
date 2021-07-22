@@ -8,12 +8,17 @@ import {
 
 import { validateRequestSchema } from "../middleware/validateRequestSchema";
 
+import {
+  verifySubscriptionWithDid
+} from "../middleware/subscription";
+
 export = (hypersign) => {
   const router = Router();
 
   router.post(
     "/",
     hypersign.authorize.bind(hypersign),
+    verifySubscriptionWithDid, 
     ProjectSchemaBody,
     validateRequestSchema,
     ProjectController.addProject

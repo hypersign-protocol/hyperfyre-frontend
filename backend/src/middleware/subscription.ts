@@ -28,6 +28,24 @@ async function verifySubscription(req: Request, res: Response, next: NextFunctio
     }
 }
 
+async function verifySubscriptionWithDid(req: Request, res: Response, next: NextFunction){    
+    try{
+        console.log("call comes in verifySubscription middleware");
+        // get the prpjectId from request
+        const {  userData  } = req.body;
+        
+        const res = await subscriptionService.verify({did: userData.id});
+        if(!res){
+            // if not send the error response back  to user
+            return next(ApiError.badRequest("Subscription failed. Please contract the admin"));
+        }
+        // if yes then move to controller where user can filled the form
+        next();
+    }catch(e){
+        next(ApiError.internal(e.message));
+    }
+}
+
 async function updateSubscription(req: Request, res: Response, next: NextFunction){
     try{
         console.log("call comes in updateSubscription middleware");
@@ -45,5 +63,6 @@ async function updateSubscription(req: Request, res: Response, next: NextFunctio
 
 export {
     verifySubscription,
+    verifySubscriptionWithDid,
     updateSubscription
 }
