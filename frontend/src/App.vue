@@ -117,7 +117,7 @@
         <span slot="header">
           <div class="ml-1 mt-3 mb-2">
             <img
-              :src="require('./assets/hypersign.webp')"
+              :src="require('./assets/Fidato_logo.png')"
               alt="logo"
               width="175px"
             />
