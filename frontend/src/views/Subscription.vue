@@ -74,16 +74,16 @@ i {
         v-bind:key="plan"
       >
         <div class="card">
-          <div class="card-header">
+          <div class="card-header" style="padding-top: 10px">
             <h4>
               <b>{{ plan.planName }}</b>
             </h4>
-            <p>{{ plan.description }}</p>
+            <p style="color: gray;">{{ plan.description }}</p>
           </div>
           <div class="card-body" style="text-align:center; min-height:280px">
-            <p style="font-size:x-large">{{ plan.price }}</p>
-            <p>Get upto {{ plan.totalNoOfRequests }} users requests</p>
-            <p>
+            <p style="font-size:xx-large">${{ plan.price }}</p>
+            <p>Upto <span style="font-weight: bold">{{ plan.totalNoOfRequests }}</span> requests</p>
+            <p style="margin-top: 43%;">
               <button
                 class="btn btn-outline-primary btn-sm"
                 @click="subscribe(plan['_id'])"
