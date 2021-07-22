@@ -22,7 +22,7 @@ export default {
     return{
       selectedBlockChainType: this.blockChainType,
       options : [
-        {text: "Select Blockchain type", value:null, disabled: true},
+        {text: "Select Blockchain type", value:null},
         {text: "ETHEREUM", value: "ETHEREUM"},
         {text: "TEZOS", value: "TEZOS"}
       ]

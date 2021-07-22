@@ -1,7 +1,26 @@
 <style scoped>
-.datetimepicker{
-    border: 1px solid;
+
+
+.datetime-picker{
+   background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    
+    
 }
+.datetime-picker input#tj-datetime-input{
+    display: none;
+    border: none !important;
+    min-width: none !important;
+}
+input[data-v-4bd11526]{
+    display: none !important;   
+}
+
+
+
 </style>
 </style>
 <template>
@@ -29,11 +48,11 @@
             <div class="col-auto mr-auto">
                 <label for="startDate" class="col-form-label">Start Date: </label>
             </div>
-            <div class="col-auto">
+            <div class="col-auto ml-auto">
                 <Datepicker 
                       name="uniquename"
                       v-model="project.fromDate"
-                      input-class="form-control datetimepicker" format="YYYY-MM-DD h:i:s" width="100%"/>
+                       format="YYYY-MM-DD h:i:s"  />
             </div>  
     </div>
 
@@ -45,10 +64,13 @@
                 <label for="endDate" class="col-form-label">End Date: </label>
             </div>
             <div class="col-auto">
+                
                <Datepicker 
-                      name="uniquename"
+                      name="datetimepicker"
                        v-model="project.toDate"
-                      input-class="form-control datetimepicker" format="YYYY-MM-DD h:i:s" width="100%"/>
+                       
+                       placeholder="sndfkjn"
+                       format="YYYY-MM-DD h:i:s" />
             </div>  
     </div>
 

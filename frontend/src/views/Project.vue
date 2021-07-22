@@ -297,7 +297,6 @@ i {
             <b-button v-b-toggle.sidebar-right>Toggle Sidebar</b-button>
             
             <create-project-slide 
-
               :project="project"
               :themeColor="themeColor"
               :themeColorDefault="themeColorDefault"
@@ -305,6 +304,9 @@ i {
               :fontColorDefault="fontColorDefault"
               :blockChainType="blockchainType"
               :saveProject="saveProject"
+              :addedSocialMedias="addedSocialMedias"
+              :selectedSocialMedia="selectedSocialMedia"
+              :socialOptions="socialOptions"
 
              />
 
@@ -453,7 +455,7 @@ i {
               data-toggle="tooltip"
               data-placement="bottom"
               title="Edit this project"
-              ><i class="fas fa-pencil-alt" v-b-modal.create-project-modal  @click="editProject(project)"></i
+              ><i class="fas fa-pencil-alt"  @click="editProject(project)"></i
             ></span>
           </div>
         </div>
@@ -502,8 +504,40 @@ export default {
         investorsCount: 0,
         social: {},
         projectStatus: true
-      },    
+      }, 
+      projects: [],   
       
+        selectedSocialMedia: null,
+        addedSocialMedias: [],
+        socialOptions: [
+            {value: null, label: "Select a Project"},
+            {
+                label: "Twitter",
+                
+                value: {
+                    media: "twitter",
+                    icon: "fab fa-twitter",
+                    fields: [ 
+                        {name: "twitterHandle", type: "text", placeholder: "Twitter Handle", value:"" } ,
+                        {name: "twitterPostFormat", type: "text", placeholder: "Twitter Post Format", value: "" }
+                    ]
+                }, 
+                
+            },
+            {
+                label: "Telegram", 
+                value: {
+                    media: "telegram",
+                    icon:"fab fa-telegram-plane",
+                    fields: [ 
+                        {name: "telegramHandle", type: "text", placeholder: "Telegram Handle", value: "" } ,
+                        {name: "telegramAnnouncementChannel", type: "text", placeholder: "Telegram Announcement Channel", value: "", optional: true }
+                    ]
+                }, 
+                
+            }
+      ],
+
       searchQuery: "",
       projectsToShow : [],
       perPage: 10,
@@ -517,7 +551,7 @@ export default {
       fontColorDefault: "#ffffff",
 
       isProjectEditing: false,
-      projects: [],
+      
       cols: [
         "Project Id",
         "Project Name",
@@ -640,22 +674,56 @@ export default {
       return new Date(d).toLocaleString();
     },
     editProject(project) {
+   
       this.project = { ...project };
-      console.log("PROJECT", project);
+
+      // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
+      this.project.social = {
+        twitter: {
+          isEnabled: true,
+          twitterHandle: this.project.twitterHandle,
+          twitterPostFormat: this.project.twitterPostFormat
+        },
+        telegram: {
+           isEnabled: true,
+          telegramHandle: this.project.telegramHandle,
+          telegramAnnouncementChannel : this.project.telegramAnnouncementChannel
+        }
+
+      }
+    
+      this.socialOptions.forEach(media => {
+        if(media.value){
+          media.value.fields.map(field => {
+            field.value = this.project[field.name]
+          })
+        }
+      })
+
+      this.socialOptions.map(x =>{ 
+        if(x.value){
+            this.addedSocialMedias.push(x.value)
+        }
+      })
+
       this.blockchainType = project.blockchainType
       this.themeColor = project.themeColor
       this.fontColor = project.fontColor
       this.projectStatus = project.projectStatus
       this.isProjectEditing = true;
+
+      this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
     },
     
     async saveProject() {
       
       try {
-       
+
         if(this.checkIfEverythingIsFilled() !==  true){
             return this.notifyErr( this.checkIfEverythingIsFilled());   
         }
+       
+       console.log("CHECKED");
         this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
@@ -688,6 +756,7 @@ export default {
           this.whitelistingLink = "";
         }, 10000);
         this.notifySuccess("Project is saved. Id = " + resp.data._id);
+        this.resetAllValues();
 
         if(this.isProjectEditing){
            await this.fetchProjects();
@@ -704,11 +773,12 @@ export default {
         this.$bvModal.hide("create-project-modal");
         
       } catch (e) {
+        
         if(e.errors){
             this.errors = e.errors
             this.$bvModal.show("err-modal");
         }
-        
+        console.log(e);
         this.notifyErr(e || e.message);
       } finally {
         this.isLoading = false;
@@ -778,6 +848,51 @@ export default {
         telegramHandle: "",
       };
     },
+
+    resetAllValues(){
+       this.project = {
+        _id: "",
+        projectName: "",
+        logoUrl: "",
+        fromDate: "",
+        toDate: "",
+        ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
+        investorsCount: 0,
+        social: {},
+        projectStatus: true
+      }, 
+        this.selectedSocialMedia = null,
+        this.addedSocialMedias = [],
+        this.socialOptions = [
+            {value: null, label: "Select a Project"},
+            {
+                label: "Twitter",
+                
+                value: {
+                    media: "twitter",
+                    icon: "fab fa-twitter",
+                    fields: [ 
+                        {name: "twitterHandle", type: "text", placeholder: "Twitter Handle", value:"" } ,
+                        {name: "twitterPostFormat", type: "text", placeholder: "Twitter Post Format", value: "" }
+                    ]
+                }, 
+                
+            },
+            {
+                label: "Telegram", 
+                value: {
+                    media: "telegram",
+                    icon:"fab fa-telegram-plane",
+                    fields: [ 
+                        {name: "telegramHandle", type: "text", placeholder: "Telegram Handle", value: "" } ,
+                        {name: "telegramAnnouncementChannel", type: "text", placeholder: "Telegram Announcement Channel", value: "", optional: true }
+                    ]
+                }, 
+                
+            }
+      ]
+
+    }
   },
   mixins: [notificationMixins]
 };

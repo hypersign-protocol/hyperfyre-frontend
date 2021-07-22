@@ -4,23 +4,54 @@
     max-height: 100px;
     background-color: #f5f5f5;
     border-radius: 10px;
-    
 
 }
 .card i{
     cursor: pointer;
 }
+.card{
+    transition: all 0.5s;
+}
+.card i{
+    margin-right: 4px;
+}
+.flash{
+    background-color: #1FAA59;
+    color: #fff; 
+    animation: flash 0.4s cubic-bezier(1, 0, 0, 1);
+}
+
+.fa-minus-circle{
+    font-size: 14px;
+}
+@keyframes flash {
+    0%{
+        opacity: 0;
+      
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
 </style>
 <template>
   <div>
-      <div v-if="addedSocialMedias.length" class="selected-media-wrapper d-flex  p-2 mb-4">
-            <div class="card rounded m-1 p-1 d-flex flex-row align-items-center " v-for="(socialMedia, idx) in addedSocialMedias" :key="idx">
-                <span class="mr-2 text-capitalize">{{socialMedia.media}}</span>
-                <i @click="removeSocialMedia(idx)" class="fas fa-minus-circle "></i>
+      <div v-if="addedSocialMedias.length" class="selected-media-wrapper d-flex p-2 mb-4" >
+            <div :class="flash == idx ?  'flash card rounded m-1 p-1 d-flex flex-row align-items-center' : 'card rounded m-1 p-1 d-flex flex-row align-items-center'" v-for="(socialMedia, idx) in addedSocialMedias" :key="idx">
+                <span class="mr-2 text-capitalize"><i :class="socialMedia.icon"></i>  {{socialMedia.media}}</span>
+                <div class="ml-3" /><i @click="removeSocialMedia(idx)" class="fas fa-minus-circle"></i>
             </div>
       </div>
 
-       <b-form-select v-model="selectedSocialMedia"    text-field="label"  :options="socialOptions"></b-form-select>
+       <!-- <b-form-select v-model="selectedSocialMedia"    text-field="label"  :options="socialOptions"></b-form-select> -->
+
+       <select v-model="selectedSocialMedia"  class="form-select form-control">
+             <option v-for="option in socialOptions" :value="option.value" >
+                 {{option.label}}
+            </option>
+        </select>
+
         <div v-if="selectedSocialMedia !==null" class="mt-4">
           
                  <div  v-for="field in selectedSocialMedia.fields" class="mb-3 text-left" :key="field.name">
@@ -48,41 +79,26 @@ export default {
   components: {  },
   data(){
       return{
-        selectedSocialMedia: null,
+       
+        flash: null,
 
-        addedSocialMedias: [],
-        socialOptions: [
-            {value: null, label: "Select a Project", disabled: true},
-            {
-                label: "Twitter",
-                value: {
-                    media: "twitter",
-                    fields: [ 
-                        {name: "twitterHandle", type: "text", placeholder: "Twitter Handle", value:"" } ,
-                        {name: "twitterPostFormat", type: "text", placeholder: "Twitter Post Format", value: "" }
-                    ]
-                }, 
-                
-            },
-            {
-                label: "Telegram", 
-                value: {
-                    media: "telegram",
-                    fields: [ 
-                        {name: "telegramHandle", type: "text", placeholder: "Telegram Handle", value: "" } ,
-                        {name: "telegramAnnouncementChannel", type: "text", placeholder: "Telegram Announcement Channel", value: "" }
-                    ]
-                }, 
-                
-            }
-      ],
+      
     }
       
   },
   props:{
       project: {
           type: Object
-      }
+      },
+       addedSocialMedias: {
+      type: Array,
+    },
+    selectedSocialMedia: {
+      type: Object
+    },
+    socialOptions:{
+      type: Array
+    }
   },
   methods: {
       removeSocialMedia(index){
@@ -97,17 +113,30 @@ export default {
         const obj = { isEnabled: true}
         
           if(!this.addedSocialMedias.includes(media)){
-               if(media.fields[0].value == ""){
+               if(media.fields[0].value == "" && !media.fields[0].optional){
                         return this.notifyErr(`Please fill in ${media.fields[0].placeholder}`)
-                    }
-                       if(media.fields[1].value == ""){
+                }
+                
+              if(media.fields[1].value == "" && !media.fields[1].optional){
                         return this.notifyErr(`Please fill in ${media.fields[1].placeholder}`)
                 }    
             this.addedSocialMedias.push(media)  
+             this.selectedSocialMedia = null
           } else{
-            this.addedSocialMedias[this.addedSocialMedias.length -1].fields.map(field => {
-                obj[field.name] = field.value
-            }) 
+
+
+            this.addedSocialMedias[this.addedSocialMedias.indexOf(media)].fields.forEach(field => {
+                if(field.value == "" && !field.optional){
+                    return this.notifyErr(`Please fill in ${field.placeholder}`)
+                }
+                
+            })
+          
+
+            this.flash = this.addedSocialMedias.indexOf(media)
+            setTimeout(() => {
+                this.flash =  null
+            }, 500)
           }
 
            this.addedSocialMedias[this.addedSocialMedias.length -1].fields.map(field => {
@@ -115,6 +144,7 @@ export default {
              }) 
 
         this.project.social = { ...this.project.social, [media.media] :obj};
+       
 
       },
   },
