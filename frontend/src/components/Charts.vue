@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 card" style="border-radius: 5px; padding: 35px; margin-top: 10px;">
       <vc-donut
         background="white"
         foreground="#60c860"
