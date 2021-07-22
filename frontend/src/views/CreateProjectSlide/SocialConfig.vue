@@ -70,7 +70,7 @@ export default {
                     media: "telegram",
                     fields: [ 
                         {name: "telegramHandle", type: "text", placeholder: "Telegram Handle", value: "" } ,
-                        {name: "telegramAnnChannel", type: "text", placeholder: "Telegram Announcement Channel", value: "" }
+                        {name: "telegramAnnouncementChannel", type: "text", placeholder: "Telegram Announcement Channel", value: "" }
                     ]
                 }, 
                 
