@@ -57,7 +57,6 @@ i {
   color: grey;
   padding: 5px;
 }
-
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -69,70 +68,55 @@ i {
 
     <div class="row" style="margin-top: 2%">
       <div
-        class="col-md-12 my-5 w-100"
+        class="col-md-3"
         style="text-align: center;"
+        v-for="plan in plans"
+        v-bind:key="plan"
       >
-        <div
-          class="card"
-          v-for="plan in plans"
-          v-bind:key="plan"
-          style="
-            float: left;
-            max-width: 60rem;
-            margin-right: 3%;
-            margin-bottom: 1%;
-            width:350px;
-          "
-        >
-          <div
-            class="card-header"
-            style="padding: 5px; text-align: center; font-weight: bold"
-          >
-            <span style="">{{ plan.planName }}</span>
+        <div class="card">
+          <div class="card-header">
+            <h4>
+              <b>{{ plan.planName }}</b>
+            </h4>
+            <p>{{ plan.description }}</p>
           </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-12">
-                <p>{{plan.description}}</p>
-                <p>Get {{plan.totalNoOfRequests}} requests</p>
-                <p>Only for ${{plan.price}} !!</p>
-                <p>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div
-            class="card-header"
-            style="padding: 5px; background-color: #8080801f"
-          >
-              <button class="btn btn-outline-primary btn-sm"  @click="subscribe(plan['_id'])">Subscribe</button>
+          <div class="card-body" style="text-align:center; min-height:280px">
+            <p style="font-size:x-large">{{ plan.price }}</p>
+            <p>Get upto {{ plan.totalNoOfRequests }} users requests</p>
+            <p>
+              <button
+                class="btn btn-outline-primary btn-sm"
+                @click="subscribe(plan['_id'])"
+              >
+                Subscribe
+              </button>
+            </p>
           </div>
         </div>
       </div>
     </div>
 
-
     <div class="row" style="margin-top: 2%;">
-      <div class="col-md-12">        
+      <div class="col-md-12">
         <table class="table table-bordered" style="background:#FFFF">
           <thead class="thead-light">
             <tr>
               <th>Subscription Id</th>
               <th>Subscription Date</th>
               <th>Plan Name</th>
-              <th>Limit</th>              
+              <th>Limit</th>
               <th>Is Active</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="row in subscriptions" :key="row">
               <th>
-                {{row._id}}
+                {{ row._id }}
               </th>
-              <td>{{row.subscriptionDate}}</td>
+              <td>{{ row.subscriptionDate }}</td>
               <td>{{ getPlanName(row.planId) }}</td>
-              <td>{{row.leftOverNoRequests}}</td>
-              <td>{{row.isActive}}</td>
+              <td>{{ row.leftOverNoRequests }}</td>
+              <td>{{ row.isActive }}</td>
             </tr>
           </tbody>
         </table>
@@ -163,14 +147,13 @@ export default {
     };
   },
 
-   computed: {
+  computed: {
     // a computed getter
-   
   },
 
   created() {
     const usrStr = localStorage.getItem("user");
-    if(usrStr){
+    if (usrStr) {
       this.user = {
         ...JSON.parse(usrStr),
       };
@@ -181,7 +164,7 @@ export default {
     // if (plansInStorage) {
     // this.plans = JSON.parse(plansInStorage);
     // }
-      
+
     this.fetchSubscription();
 
     // const subscriptionsInStorage = localStorage.getItem("subscriptions");
@@ -189,15 +172,14 @@ export default {
     //   const parsedSub = JSON.parse(subscriptionsInStorage)
     //   this.subscriptions = parsedSub ? parsedSub["subscriptions"] : [];
     // }else{
-      
-    // }
 
+    // }
   },
-  
+
   methods: {
-    getPlanName (subPlanId) {
-      const subPlan = this.plans.find(plan =>  plan["_id"] === subPlanId);
-      return subPlan? subPlan["planName"]:  "";
+    getPlanName(subPlanId) {
+      const subPlan = this.plans.find((plan) => plan["_id"] === subPlanId);
+      return subPlan ? subPlan["planName"] : "";
     },
     async fetchPlan() {
       try {
@@ -219,7 +201,7 @@ export default {
         }
         const json = await resp.json();
         console.log(json);
-        this.plans  = json;
+        this.plans = json;
         // localStorage.setItem("plans", JSON.stringify(json));
       } catch (e) {
         this.notifyErr(e.message);
@@ -258,7 +240,7 @@ export default {
     },
     async subscribe(planId) {
       try {
-        if(!planId){
+        if (!planId) {
           return;
         }
 
@@ -269,12 +251,12 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription`;
         let headers = {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.authToken}`,
+          Authorization: `Bearer ${this.authToken}`,
         };
         const resp = await fetch(url, {
           method: "POST",
           body: JSON.stringify({
-            planId
+            planId,
           }),
           headers,
         });
