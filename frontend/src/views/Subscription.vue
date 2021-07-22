@@ -186,6 +186,8 @@ export default {
     if(subscriptionsInStorage){
       const parsedSub = JSON.parse(subscriptionsInStorage)
       this.subscriptions = parsedSub ? parsedSub["subscriptions"] : [];
+    }else{
+      this.fetchSubscription();
     }
 
   },
@@ -217,6 +219,35 @@ export default {
         console.log(json);
         this.plans  = json;
         // localStorage.setItem("plans", JSON.stringify(json));
+      } catch (e) {
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async fetchSubscription() {
+      try {
+        this.isLoading = true;
+
+        // if (!this.user.id) throw new Error("No project owner found");
+
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription?usage=true`;
+        const headers = {
+          Authorization: `Bearer ${this.authToken}`,
+        };
+        const resp = await fetch(url, {
+          headers,
+          method: "GET",
+        });
+
+        if (!resp.ok) {
+          return this.notifyErr(resp.statusText);
+        }
+        const json = await resp.json();
+        
+        localStorage.setItem("subscriptions", JSON.stringify(json));
+        // this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
