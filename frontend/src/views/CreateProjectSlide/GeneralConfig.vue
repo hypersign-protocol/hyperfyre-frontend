@@ -24,6 +24,14 @@ input[data-v-4bd11526]{
 </style>
 <template>
   <div>
+      <div v-if="isProjectEditing" class="row g-3 align-items-center w-100 mt-4">
+            <div class="col-auto mr-auto">
+                <label for="did" class="col-form-label">Project Id: </label>
+            </div>
+            <div class="col-auto">
+                <input disabled  v-model="project._id" type="text"   id="did" class="form-control w-100" >
+            </div>  
+    </div>
    <div class="row g-3 align-items-center w-100">
             <div class="col-auto mr-auto">
                 <label for="projectName" class="col-form-label">Project Name: </label>
@@ -31,6 +39,19 @@ input[data-v-4bd11526]{
             <div class="col-auto">
                 <input v-model="project.projectName" type="text" placeholder="Project Name" id="projectName" class="form-control w-100" >
             </div>   
+    </div>
+
+    <div v-if="isProjectEditing" class="row g-3 align-items-center w-100 mt-4">
+            <div class="col-auto mr-auto">
+                <label for="projectStatus" class="col-form-label">Project Status: </label>
+            </div>
+            <div class="col-auto">
+                
+                 <select class="form-control" v-model="project.projectStatus" style="width: 239px;">
+                      <option value="true" >OPEN</option>
+                      <option value="false">CLOSE</option>
+                </select >
+            </div>  
     </div>
 
     <div class="row g-3 align-items-center w-100 mt-4">
@@ -98,28 +119,10 @@ input[data-v-4bd11526]{
 
 
 
-    <div v-if="isProjectEditing" class="row g-3 align-items-center w-100 mt-4">
-            <div class="col-auto mr-auto">
-                <label for="projectStatus" class="col-form-label">Project Status: </label>
-            </div>
-            <div class="col-auto">
-                
-                 <select class="form-control" v-model="project.projectStatus">
-                      <option value="true" >OPEN</option>
-                      <option value="false">CLOSE</option>
-                </select >
-            </div>  
-    </div>
+    
 
 
-    <div v-if="isProjectEditing" class="row g-3 align-items-center w-100 mt-4">
-            <div class="col-auto mr-auto">
-                <label for="did" class="col-form-label">Project Id: </label>
-            </div>
-            <div class="col-auto">
-                <input disabled  v-model="project._id" type="text"   id="did" class="form-control w-100" >
-            </div>  
-    </div>
+    
 
     
 </b-form>
