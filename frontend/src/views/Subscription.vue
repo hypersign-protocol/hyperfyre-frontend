@@ -113,7 +113,7 @@ i {
               <th>
                 {{ row._id }}
               </th>
-              <td>{{ row.subscriptionDate }}</td>
+              <td>{{ new Date(row.subscriptionDate).toLocaleString()  }}</td>
               <td>{{ getPlanName(row.planId) }}</td>
               <td>{{ row.leftOverNoRequests }}</td>
               <td>{{ row.isActive }}</td>
