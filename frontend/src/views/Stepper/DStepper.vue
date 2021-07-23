@@ -889,7 +889,7 @@ div.rule {
 @media screen and (max-width: 768px) {
   .header {
     font-size: 14px;
-    height: auto;
+    height: 220px;
   }
   .steps-container {
     width: 80%;
@@ -903,7 +903,7 @@ div.rule {
 @media screen and (orientation: landscape) {
   .header {
     font-size: 14px;
-    height: auto;
+    height: 220px;
   }
 }
 

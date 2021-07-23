@@ -16,13 +16,13 @@ h3 {
     <h3>You are successfully registered,<h3></h3>You will receive a confirmation email if you qualify.</h3>
     <p><button class="btn btn-sm outline" @click="showReferalPopup()">Refer your friend</button></p>
   </div>
-  <b-modal hide-footer size="lg"  id="referal-modal" title="Referal" >
+  <b-modal hide-footer size="lg" centered id="referal-modal" title="Referal" >
     <div style="padding:10px; text-align: center; color: gray" >
       <p>
         <span style="font-size: xxx-large;font-weight: bold;">{{this.totalInvestorsPoints}}</span> points earned.
       </p>
       <p v-if="referalLink && referalLink != ''">
-        Refer your friends to each 10 points with this link, your friend will also earn 5.
+        Refer your friend to earn 10 points with this link, your friend will also earn 5.
       </p>
       <p v-if="referalLink && referalLink != ''" class="form-inline" style="margin-left: auto;margin-right: auto;width: 19em;"> 
         <input type="text" class="form-control"  disabled v-model="referalLink"  />
