@@ -11,22 +11,25 @@ h3 {
 </style>
 <template>
 <div>
-  <div style="padding:20px; float:left">
+  <div>
     <h2>Thank You!</h2>
     <h3>You are successfully registered,<h3></h3>You will receive a confirmation email if you qualify.</h3>
+    <p><button class="btn btn-sm outline" @click="showReferalPopup()">Refer your friend</button></p>
   </div>
-  <div style="padding:20px; float:right">
-    <h2>Referal!!!</h2>
-    <p>
-      Total points gained: {{this.totalInvestorsPoints}}
-    </p>
-    <p v-if="referalLink && referalLink != ''">
-      Refer your friends to earn 10 points each with this link. Your friend will also earn 5 points.
-    </p>
-    <p v-if="referalLink && referalLink != ''"> 
-      <input type="text" disabled v-model="referalLink" size="50" /><i class="far fa-copy" @click="copy" style="padding:10px; font-size: x-large; cursor: pointer;"></i>
-    </p>
-  </div>
+  <b-modal hide-footer size="sm"  id="referal-modal" title="Referal" >
+    <div style="padding:20px;" >
+      <p>
+        Total points gained: {{this.totalInvestorsPoints}}
+      </p>
+      <p v-if="referalLink && referalLink != ''">
+        Refer your friends to earn 10 points each with this link. Your friend will also earn 5 points.
+      </p>
+      <p v-if="referalLink && referalLink != ''"> 
+        <input type="text" disabled v-model="referalLink" size="50" /><i class="far fa-copy" @click="copy" style="padding:10px; font-size: x-large; cursor: pointer;"></i>
+      </p>
+    </div>
+  </b-modal>
+  
 </div>
 </template>
 
@@ -55,6 +58,9 @@ export default {
    }
   },
   methods: {
+    showReferalPopup(){
+      this.$bvModal.show("referal-modal")
+    },
     copy(){
       if(this.referalLink){
         navigator.clipboard.writeText(this.referalLink).then(() => {
