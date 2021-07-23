@@ -30,7 +30,7 @@ h3 {
       <!-- </div> -->
       <p v-if="referalLink && referalLink != ''" class="form-group"> 
         <input type="text" class="form-control"  disabled v-model="referalLink" size="50" />
-        <i class="far fa-copy" @click="copy" style="padding:10px; font-size: x-large; cursor: pointer;"></i>
+        <span @click="copy" style="padding:10px; font-size: x-large; cursor: pointer;"><i class="far fa-copy"></i></span>
       </p>
     </div>
   </b-modal>
