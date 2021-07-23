@@ -315,7 +315,7 @@ export default {
 
     this.checkTelegramAnnouncementChannel();
     this.checkBlockChainType();
-    // this.checkIfAlreadyFilled(userDid);
+    this.checkIfAlreadyFilled(userDid);
   },
 
   mounted() {
