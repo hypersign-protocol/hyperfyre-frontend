@@ -32,7 +32,8 @@ input[data-v-4bd11526]{
                 <input disabled  v-model="project._id" type="text"   id="did" class="form-control w-100" >
             </div>  
     </div>
-   <div class="row g-3 align-items-center w-100">
+
+   <div class="row g-3 align-items-center w-100  mt-4">
             <div class="col-auto mr-auto">
                 <label for="projectName" class="col-form-label">Project Name: </label>
             </div>
