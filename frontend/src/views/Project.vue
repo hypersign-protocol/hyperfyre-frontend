@@ -284,7 +284,7 @@ i {
     <div class="row">
         <div class="col-md-8">
             <div class="form-group">
-              <input v-if="projects.length"  @keyup="handleSearch" type="text" class="form-control w-25" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Search Project">
+              <input v-if="projects.length"  @keyup="handleSearch" type="text" class="form-control w-25" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Search projects by name">
             </div>
         </div>
 
