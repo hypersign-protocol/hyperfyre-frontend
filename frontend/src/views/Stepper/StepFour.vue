@@ -16,7 +16,7 @@ h3 {
     <h3>You are successfully registered,<h3></h3>You will receive a confirmation email if you qualify.</h3>
     <p><button class="btn btn-sm outline" @click="showReferalPopup()">Refer your friend</button></p>
   </div>
-  <b-modal hide-footer size="lg"  id="referal-modal" title="Referal" >
+  <b-modal hide-footer size="lg" centered id="referal-modal" title="Referal" >
     <div style="padding:10px; text-align: center; color: gray" >
       <p>
         <span style="font-size: xxx-large;font-weight: bold;">{{this.totalInvestorsPoints}}</span> points earned.
