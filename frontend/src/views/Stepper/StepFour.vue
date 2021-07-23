@@ -17,15 +17,20 @@ h3 {
     <p><button class="btn btn-sm outline" @click="showReferalPopup()">Refer your friend</button></p>
   </div>
   <b-modal hide-footer size="lg"  id="referal-modal" title="Referal" >
-    <div style="padding:10px;" >
+    <div style="padding:10px; text-align: center" >
       <p>
-        Total points gained: {{this.totalInvestorsPoints}}
+        <span style="font-size: xxx-large;font-weight: bold;">{{this.totalInvestorsPoints}}</span> points gained
       </p>
       <p v-if="referalLink && referalLink != ''">
         Refer your friends to earn 10 points each with this link. Your friend will also earn 5 points.
       </p>
-      <p v-if="referalLink && referalLink != ''"> 
-        <input type="text" disabled v-model="referalLink" size="50" /><i class="far fa-copy" @click="copy" style="padding:10px; font-size: x-large; cursor: pointer;"></i>
+      <!-- <div class="form-group"> -->
+        <!-- <label for="usr">Name:</label> -->
+        <!-- <input type="text" class="form-control"  disabled v-model="referalLink" size="50" /><i class="far fa-copy" @click="copy" style="padding:10px; font-size: x-large; cursor: pointer;"></i> -->
+      <!-- </div> -->
+      <p v-if="referalLink && referalLink != ''" class="form-group"> 
+        <input type="text" class="form-control"  disabled v-model="referalLink" size="50" />
+        <i class="far fa-copy" @click="copy" style="padding:10px; font-size: x-large; cursor: pointer;"></i>
       </p>
     </div>
   </b-modal>
