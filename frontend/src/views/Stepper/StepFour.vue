@@ -24,13 +24,9 @@ h3 {
       <p v-if="referalLink && referalLink != ''">
         Refer your friends to earn 10 points each with this link. Your friend will also earn 5 points.
       </p>
-      <!-- <div class="form-group"> -->
-        <!-- <label for="usr">Name:</label> -->
-        <!-- <input type="text" class="form-control"  disabled v-model="referalLink" size="50" /><i class="far fa-copy" @click="copy" style="padding:10px; font-size: x-large; cursor: pointer;"></i> -->
-      <!-- </div> -->
-      <p v-if="referalLink && referalLink != ''" class="form-group"> 
-        <input type="text" class="form-control"  disabled v-model="referalLink" size="50" />
-        <span @click="copy" style="padding:10px; font-size: x-large; cursor: pointer;"><i class="far fa-copy"></i></span>
+      <p v-if="referalLink && referalLink != ''" class="form-inline" style="margin-left: auto;margin-right: auto;width: 22em;"> 
+        <input type="text" class="form-control"  disabled v-model="referalLink"  />
+        <span @click="copy" style="padding:6px; font-size: x-large; cursor: pointer;"><i class="far fa-copy"></i></span>
       </p>
     </div>
   </b-modal>
