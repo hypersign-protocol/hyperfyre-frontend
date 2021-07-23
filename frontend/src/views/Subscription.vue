@@ -105,7 +105,7 @@ i {
               <th>Subscription Date</th>
               <th>Plan Name</th>
               <th>Limit</th>
-              <th>Is Active</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -116,7 +116,7 @@ i {
               <td>{{ new Date(row.subscriptionDate).toLocaleString()  }}</td>
               <td>{{ getPlanName(row.planId) }}</td>
               <td>{{ row.leftOverNoRequests }}</td>
-              <td>{{ row.isActive }}</td>
+              <td>{{ row.isActive ? "Active" : "Inactive" }}</td>
             </tr>
           </tbody>
         </table>
