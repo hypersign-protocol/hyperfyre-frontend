@@ -23,7 +23,7 @@
 <template>
   <div>
 
-     <b-sidebar  backdrop width="500px" id="sidebar-right" :title="isProjectEditing ? 'Edit project' : 'Create Project'" class="sidebarContainer background-transparent" right shadow>
+     <b-sidebar  backdrop width="500px" id="sidebar-right" :title="isProjectEditing ? 'Edit Project' : 'Create Project'" class="sidebarContainer background-transparent" right shadow>
               <div class=" px-3 py-2">
                  <div class="accordion" role="tablist">
                     <b-card  no-body class="mb-1 ">
