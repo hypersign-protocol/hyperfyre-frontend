@@ -2,6 +2,9 @@
 .accordion > .card{
     overflow: inherit !important;
 }
+.b-sidebar > .b-sidebar-header{
+  border: 1px solid #000 !important;
+}
 /* .card-header{
   background-color: transparent;
 }
@@ -20,7 +23,7 @@
 <template>
   <div>
 
-     <b-sidebar  backdrop width="500px" id="sidebar-right" title="Create Project" class="sidebarContainer background-transparent" right shadow>
+     <b-sidebar  backdrop width="500px" id="sidebar-right" :title="isProjectEditing ? 'Edit project' : 'Create Project'" class="sidebarContainer background-transparent" right shadow>
               <div class=" px-3 py-2">
                  <div class="accordion" role="tablist">
                     <b-card  no-body class="mb-1 ">
@@ -29,7 +32,7 @@
                       </b-card-header>
                       <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
                         <b-card-body>
-                            <general-config :themeColor="themeColor" :fontColor="fontColor" :fontColorDefault="fontColorDefault" :themeColorDefault="themeColorDefault" :project="project" />
+                            <general-config :isProjectEditing="isProjectEditing" :themeColor="themeColor" :fontColor="fontColor" :fontColorDefault="fontColorDefault" :themeColorDefault="themeColorDefault" :project="project" />
                           <!-- <b-card-text>I start opened because <code>visible</code> is <code>true</code></b-card-text> -->
                           <!-- <b-card-text>{{ text }}</b-card-text> -->
                         </b-card-body>
@@ -112,6 +115,9 @@ export default {
     },
     socialOptions:{
       type: Array
+    },
+    isProjectEditing: {
+      type: Boolean
     }
   }
 };

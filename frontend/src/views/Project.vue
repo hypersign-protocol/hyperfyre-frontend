@@ -284,19 +284,20 @@ i {
     <div class="row">
         <div class="col-md-8">
             <div class="form-group">
-              <input  @keyup="handleSearch" type="text" class="form-control w-25" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Search Project">
+              <input v-if="projects.length"  @keyup="handleSearch" type="text" class="form-control w-25" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Search Project">
             </div>
         </div>
 
         <div class="col-md-4">
           <div class="text-right">
-            <button v-b-toggle.sidebar-right  class="btn btn-primary ">Create <i class="fas fa-plus text-white"></i> </button>
+            <button @click="openCreateSidebar" class="btn btn-primary ">Create <i class="fas fa-plus text-white"></i> </button>
           </div>
 
           <div>
             <!-- <b-button v-b-toggle.sidebar-right>Toggle Sidebar</b-button> -->
             
             <create-project-slide 
+            :isProjectEditing="isProjectEditing"
               :project="project"
               :themeColor="themeColor"
               :themeColorDefault="themeColorDefault"
@@ -460,11 +461,16 @@ i {
           </div>
         </div>
 
+        <!-- <div v-if="!projectsToShow.length">
+          <h1>You dont have any projects yet,  start creating by clicking on create button</h1>
+        </div> -->
+
       </div>
     </div>
 
 
        <paginate
+       v-if="projectsToShow.length"
       
         :pageCount="Math.ceil(this.projects.length / this.perPage)"
          :clickHandler="paginateChange"
@@ -510,7 +516,7 @@ export default {
         selectedSocialMedia: null,
         addedSocialMedias: [],
         socialOptions: [
-            {value: null, label: "Select a Social Media"},
+            {value: null, label: "Select a Social Profile"},
             {
                 label: "Twitter",
                 
@@ -544,7 +550,6 @@ export default {
       projectStatus: true,
       blockchainType: "ETHEREUM",
       currentPage: 1,
-
       themeColor: "#494949",
       themeColorDefault: "#494949",
       fontColor: "#ffffff",
@@ -590,6 +595,11 @@ export default {
     });
   },
   methods: {
+    openCreateSidebar(){
+      this.isProjectEditing = false
+      this.resetAllValues();
+        this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+    },
     handleSearch(e){
 
         if(e.target.value.length){
@@ -675,7 +685,17 @@ export default {
     },
     editProject(project) {
       this.resetAllValues();
-      this.project = { ...project };
+
+
+
+    
+
+    
+      this.project = { ...project};
+  
+      console.log(this.project.toDate =  project.toDate)
+
+      
 
       // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
       this.project.social = {
@@ -689,7 +709,6 @@ export default {
           telegramHandle: this.project.telegramHandle,
           telegramAnnouncementChannel : this.project.telegramAnnouncementChannel
         }
-
       }
     
       this.socialOptions.forEach(media => {
@@ -802,20 +821,30 @@ export default {
           return "Please fill in social configuration";
         }
 
+        if(!Object.keys(this.project.social).includes("twitter")){
+          return "Add Twitter Info your project"
+        }
+
+        if(!Object.keys(this.project.social).includes("telegram")){
+          return "Add Telegram Info your project"
+        }
+        
         if(this.project.social.twitter){
 
-          console.log("TWITTER", this.project.social.twitter)
-            if(!this.project.social.twitter.twitterHandle){
+          console.log(this.project.social)
+
+            if(!this.project.social.twitter.twitterHandle || this.project.social.twitter.twitterHandle.trim() == ""){
                 return "Please provide a twitter handle"
             }
-            if(!this.project.social.twitter.twitterPostFormat){
+            if(!this.project.social.twitter.twitterPostFormat || this.project.social.twitter.twitterPostFormat.trim() == ""){
                 return "Please provide a Twitter Post Format"
             }
         }
 
 
         if(this.project.social.telegram){
-             if(!this.project.social.telegram.telegramHandle){
+
+             if(!this.project.social.telegram.telegramHandle || this.project.social.telegram.telegramHandle.trim() == ""){
                  return "Please provide a telegram handle"
              }
         }        
@@ -835,6 +864,7 @@ export default {
 
       
     },  
+
     clear() {
       this.isProjectEditing = false;
       this.project = {
@@ -864,7 +894,7 @@ export default {
         this.selectedSocialMedia = null,
         this.addedSocialMedias = [],
         this.socialOptions = [
-            {value: null, label: "Select a Project"},
+            {value: null, label: "Select a Social Profile"},
             {
                 label: "Twitter",
                 

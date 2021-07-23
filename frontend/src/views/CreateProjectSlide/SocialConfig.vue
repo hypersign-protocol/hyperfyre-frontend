@@ -47,7 +47,7 @@
        <!-- <b-form-select v-model="selectedSocialMedia"    text-field="label"  :options="socialOptions"></b-form-select> -->
 
        <select v-model="selectedSocialMedia"  class="form-select form-control">
-             <option v-for="option in socialOptions" :value="option.value" >
+             <option :key="idx" v-for="(option,idx) in socialOptions" :value="option.value" >
                  {{option.label}}
             </option>
         </select>
@@ -103,12 +103,23 @@ export default {
   methods: {
       removeSocialMedia(index){
          
+        
+          console.log(this.addedSocialMedias[index].media);
+          this.socialOptions.map(opt => {
+            if(opt.value &&   opt.value.media == this.addedSocialMedias[index].media){
+             
+                opt.value.fields.map(field => {
+                  field.value = ""
+                })
+            }
+          })
           delete this.project.social[this.addedSocialMedias[index].media];
           this.addedSocialMedias.splice(index, 1) 
-        //   delete this.project.social[this.addedSocialMedias[index].media] 
+  
 
       },
       handleSocialMediaAdd(media){
+
 
         const obj = { isEnabled: true}
         
@@ -125,6 +136,8 @@ export default {
           } else{
 
 
+  
+
             this.addedSocialMedias[this.addedSocialMedias.indexOf(media)].fields.forEach(field => {
                 if(field.value == "" && !field.optional){
                     return this.notifyErr(`Please fill in ${field.placeholder}`)
@@ -134,16 +147,26 @@ export default {
           
 
             this.flash = this.addedSocialMedias.indexOf(media)
+
+           
+          
             setTimeout(() => {
                 this.flash =  null
             }, 500)
           }
 
-           this.addedSocialMedias[this.addedSocialMedias.length -1].fields.map(field => {
+          this.addedSocialMedias[this.addedSocialMedias.indexOf(media)].fields.map(field => {
                 obj[field.name] = field.value
              }) 
 
+
+
+         
+         
+
         this.project.social = { ...this.project.social, [media.media] :obj};
+
+        console.log("PROJECT", this.project)
        
 
       },

@@ -20,7 +20,6 @@ input[data-v-4bd11526]{
 }
 
 
-
 </style>
 </style>
 <template>
@@ -50,7 +49,7 @@ input[data-v-4bd11526]{
             </div>
             <div class="col-auto ml-auto">
                 <Datepicker 
-                      name="uniquename"
+                     
                       v-model="project.fromDate"
                        format="YYYY-MM-DD h:i:s"  />
             </div>  
@@ -66,10 +65,11 @@ input[data-v-4bd11526]{
             <div class="col-auto">
                 
                <Datepicker 
-                      name="datetimepicker"
-                       v-model="project.toDate"
+    
+    
+                    v-model="project.toDate"
                        
-                       placeholder="sndfkjn"
+                       
                        format="YYYY-MM-DD h:i:s" />
             </div>  
     </div>
@@ -96,6 +96,31 @@ input[data-v-4bd11526]{
             </div>  
     </div>
 
+
+
+    <div v-if="isProjectEditing" class="row g-3 align-items-center w-100 mt-4">
+            <div class="col-auto mr-auto">
+                <label for="projectStatus" class="col-form-label">Project Status: </label>
+            </div>
+            <div class="col-auto">
+                
+                 <select class="form-control" v-model="project.projectStatus">
+                      <option value="true" >OPEN</option>
+                      <option value="false">CLOSE</option>
+                </select >
+            </div>  
+    </div>
+
+
+    <div v-if="isProjectEditing" class="row g-3 align-items-center w-100 mt-4">
+            <div class="col-auto mr-auto">
+                <label for="did" class="col-form-label">Project Id: </label>
+            </div>
+            <div class="col-auto">
+                <input disabled  v-model="project._id" type="text"   id="did" class="form-control w-100" >
+            </div>  
+    </div>
+
     
 </b-form>
 
@@ -110,6 +135,9 @@ import Datepicker from 'vuejs-datetimepicker'
 export default {
   name: "GeneralConfig",
   components: {Datepicker},
+  mounted() {
+      console.log(project)
+  },
   props:{
       project:{
           type: Object
@@ -125,12 +153,13 @@ export default {
       },
       themeColor: {
           type : String
-      }
-
-
+      },
+    isProjectEditing: {
+      type: Boolean
+    }
   }
-
-  
 };
+
+
 </script>
 
