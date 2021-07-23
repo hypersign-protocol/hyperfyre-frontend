@@ -24,7 +24,7 @@ h3 {
       <p v-if="referalLink && referalLink != ''">
         Refer your friends to earn 10 points each with this link. Your friend will also earn 5 points.
       </p>
-      <p v-if="referalLink && referalLink != ''" class="form-inline" style="margin-left: auto;margin-right: auto;width: 22em;"> 
+      <p v-if="referalLink && referalLink != ''" class="form-inline" style="margin-left: auto;margin-right: auto;width: 19em;"> 
         <input type="text" class="form-control"  disabled v-model="referalLink"  />
         <span @click="copy" style="padding:6px; font-size: x-large; cursor: pointer;"><i class="far fa-copy"></i></span>
       </p>
