@@ -237,18 +237,18 @@ export default {
         {
           field: "ethAddress",
           key: "d",
-          title: "Eth Address",
+          title: "Blockchain Address",
           align: "left",
 
-          renderBodyCell: ({ row, column, rowIndex }, h) => {
-            return (
-              <span class="text-bold" style="color:#1890ff;">
-                <a href={`https://etherscan.io/address/${row.ethAddress}`} target="_blank">
-                  {row.ethAddress}
-                </a>
-              </span>
-            );
-          },
+          // renderBodyCell: ({ row, column, rowIndex }, h) => {
+          //   return (
+          //     <span class="text-bold" style="color:#1890ff;">
+          //       <a href={`https://etherscan.io/address/${row.ethAddress}`} target="_blank">
+          //         {row.ethAddress}
+          //       </a>
+          //     </span>
+          //   );
+          // },
         },
         {
           field: "twitterHandle",
@@ -261,7 +261,7 @@ export default {
             return (
               <span class="text-bold" style="color:#1890ff;">
                 <a href={`https://twitter.com/${row.twitterHandle}`} target="_blank">
-                  @{row.twitterHandle}
+                  {row.twitterHandle}
                 </a>
               </span>
             );
@@ -278,7 +278,7 @@ export default {
             return (
               <span class="text-bold" style="color:#1890ff;">
                 <a href={`https://t.me/${row.telegramHandle}`} target="_blank">
-                  @{row.telegramHandle}
+                  {row.telegramHandle}
                 </a>
               </span>
             );
@@ -305,104 +305,6 @@ export default {
           align: "right",
           sortBy: "desc",
         }
-        // {
-        //   field: "isVerificationComplete",
-        //   key: "h",
-        //   title: "Verification",
-        //   align: "left",
-        //   width: 120,
-        //   filter: {
-        //     filterList: [
-        //       {
-        //         value: "onlyVerified",
-        //         label: "Only Verified",
-        //         selected: false,
-        //       },
-        //       {
-        //         value: "onlyNotVerified",
-        //         label: "Only Not Verified",
-        //         selected: false,
-        //       },
-        //     ],
-        //     filterConfirm: (filterList) => {
-        //       const labels = filterList
-        //         .filter((x) => x.selected)
-        //         .map((x) => x.value);
-        //       this.filterVerified(labels[0]);
-        //     },
-        //     filterReset: (filterList) => {
-        //       this.filterVerified("");
-        //     },
-        //   },
-
-        //   renderBodyCell: ({ row, column, rowIndex }, h) => {
-        //     return (
-        //       <span class="text-bold d-flex justify-content-center">
-        //         {row.isVerificationComplete ? (
-        //           <span class="d-flex align-items-center justify-content-center">
-        //             <i style="font-size:20px" class="far fa-check-circle"></i>
-        //           </span>
-        //         ) : (
-        //           <button
-        //             class="btn btn-primary btn-sm"
-        //             on-click={() => this.verifyInvestor(row)}
-        //           >
-        //             Verify Now
-        //           </button>
-        //         )}
-        //       </span>
-        //     );
-        //   },
-        // },
-        // {
-        //   field: "Issue",
-        //   key: "i",
-        //   title: "Issue",
-        //   align: "left",
-        //   width: 70,
-        //   filter: {
-        //     filterList: [
-        //       {
-        //         value: "onlyIssued",
-        //         label: "Only Issued",
-        //         selected: false,
-        //       },
-        //       {
-        //         value: "onlyNotIssued",
-        //         label: "Only Not Issued",
-        //         selected: false,
-        //       },
-        //     ],
-        //     filterConfirm: (filterList) => {
-        //       const labels = filterList
-        //         .filter((x) => x.selected)
-        //         .map((x) => x.value);
-        //       this.filterIssued(labels[0]);
-        //     },
-        //     filterReset: (filterList) => {
-        //       this.filterIssued("");
-        //     },
-        //   },
-
-        //   renderBodyCell: ({ row, column, rowIndex }, h) => {
-        //     return (
-        //       <span class="text-bold d-flex justify-content-center">
-        //         {row.isVerfiedByHypersign ? (
-        //           <span class="text-bold" title="issued">
-        //             <i style="font-size:20px" class="far fa-calendar-check"></i>
-        //           </span>
-        //         ) : (
-        //           <button
-        //             class="btn btn-white border border-1 btn-sm"
-        //             on-click={() => this.issueCredential(row, rowIndex)}
-        //           >
-        //             <i style="font-size:20px" class="far fa-clock"></i>
-        //           </button>
-        //         )}
-        //       </span>
-        //     );
-        //   },
-        // },
       ],
 
       investor: {
