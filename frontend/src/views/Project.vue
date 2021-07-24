@@ -82,7 +82,7 @@ i {
       :is-full-page="fullPage"
     ></loading>
     <b-modal   size="lg"  id="err-modal" title="Errors !">
-      <p v-for="err in errors">
+      <p v-for="err in errors" :key="err.msg">
           {{err.param.toUpperCase()}} : {{err.msg}}
       </p>
 
@@ -341,7 +341,7 @@ i {
         <div
           class="card"
           v-for="project in projectsToShow"
-          v-bind:key="project"
+          v-bind:key="project.projectName"
           style="
             float: left;
             max-width: 60rem;
