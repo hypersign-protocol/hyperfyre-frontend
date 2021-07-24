@@ -136,7 +136,7 @@ export default class Subscription{
                     throw new Error("Could not fetch usage for admin did " + did);
                 }
     
-                if(usage.totalUsed > usage.totalAvailable){
+                if(usage.totalUsed >= usage.totalAvailable){
                     return resolve(false);
                 }
 
