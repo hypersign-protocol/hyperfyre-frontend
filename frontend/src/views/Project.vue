@@ -695,6 +695,8 @@ export default {
       this.project = { ...project};
   
       console.log(this.project)
+      const { toDate , fromDate } = this.project;
+      console.log({ toDate , fromDate })
 
       
 
