@@ -70,13 +70,13 @@ input[data-v-4bd11526]{
                 <label for="startDate" class="col-form-label">Start Date: </label>
             </div>
             <div class="col-auto ml-auto">
-                <Datepicker v-model="project.fromDate"
+                <Datepicker v-model="fromDate"
                       name="fromDate"
                       format="YYYY-MM-DD h:i:s" 
                       width="100%"/>
                 <!-- <Datepicker 
                      
-                      v-model="project.fromDate"
+                      v-model="fromDate"
                        format="YYYY-MM-DD h:i:s"  /> -->
             </div>  
     </div>
@@ -90,7 +90,7 @@ input[data-v-4bd11526]{
             </div>
             <div class="col-auto">
                 
-                <Datepicker v-model="project.toDate"
+                <Datepicker v-model="toDate"
                       name="toDate"
                       format="YYYY-MM-DD h:i:s" 
                       width="100%"/>
@@ -147,9 +147,6 @@ import Datepicker from 'vuejs-datetimepicker'
 export default {
   name: "GeneralConfig",
   components: {Datepicker},
-  mounted() {
-      console.log(project)
-  },
   props:{
       project:{
           type: Object
@@ -169,6 +166,12 @@ export default {
     isProjectEditing: {
       type: Boolean
     }
+  },
+  data () {
+      return {
+          fromDate: "2021-07-24T08:32:00.000Z",
+          toDate: "2021-07-24T08:32:00.000Z"
+      }
   }
 };
 
