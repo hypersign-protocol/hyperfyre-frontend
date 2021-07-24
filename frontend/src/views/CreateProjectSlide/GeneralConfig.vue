@@ -169,8 +169,8 @@ export default {
   },
   data () {
       return {
-          fromDate: "2021-07-24T08:32:00.000Z",
-          toDate: "2021-07-24T08:32:00.000Z"
+          fromDate: this.project.fromDate, 
+          toDate: this.project.toDate, //"2021-07-24T08:32:00.000Z"
       }
   }
 };
