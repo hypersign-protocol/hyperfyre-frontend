@@ -125,7 +125,9 @@ i {
                     >
                     <Datepicker v-model="project.fromDate"
                       name="uniquename"
-                      input-class="form-control" format="YYYY-MM-DD h:i:s" width="100%"/>
+                      input-class="form-control" 
+                      format="YYYY-MM-DD h:i:s" 
+                      width="100%"/>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -691,10 +693,10 @@ export default {
 
     
 
-      console.log(project)
+      console.log(JSON.stringify(project))
       this.project = { ...project};
   
-      console.log(this.project)
+      console.log(JSON.stringify(this.project))
       const { toDate , fromDate } = this.project;
       console.log({ toDate , fromDate })
 
