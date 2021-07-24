@@ -70,10 +70,14 @@ input[data-v-4bd11526]{
                 <label for="startDate" class="col-form-label">Start Date: </label>
             </div>
             <div class="col-auto ml-auto">
-                <Datepicker 
+                <Datepicker v-model="project.fromDate"
+                      name="fromDate"
+                      format="YYYY-MM-DD h:i:s" 
+                      width="100%"/>
+                <!-- <Datepicker 
                      
                       v-model="project.fromDate"
-                       format="YYYY-MM-DD h:i:s"  />
+                       format="YYYY-MM-DD h:i:s"  /> -->
             </div>  
     </div>
 
@@ -86,13 +90,17 @@ input[data-v-4bd11526]{
             </div>
             <div class="col-auto">
                 
-               <Datepicker 
+                <Datepicker v-model="project.toDate"
+                      name="toDate"
+                      format="YYYY-MM-DD h:i:s" 
+                      width="100%"/>
+               <!-- <Datepicker 
     
     
                     v-model="project.toDate"
                        
                        
-                       format="YYYY-MM-DD h:i:s" />
+                       format="YYYY-MM-DD h:i:s" /> -->
             </div>  
     </div>
 
