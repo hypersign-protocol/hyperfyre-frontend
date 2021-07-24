@@ -73,7 +73,7 @@ input[data-v-4bd11526]{
             <div class="col-auto">
                 <!--     <input disabled  v-model="project.fromDate" type="text"   id="fromDate" class="form-control w-100" > -->
                 <datepicker 
-                    v-model="new Date(project.fromDate).toLocaleString()"
+                    v-model="project.fromDate"
                     name="fromDate"
                     format="YYYY-MM-DD h:i:s" 
                     width="100%"/>
@@ -89,11 +89,12 @@ input[data-v-4bd11526]{
                 <label for="endDate" class="col-form-label">End Date: </label>
             </div>
             <div class="col-auto">
-                <input disabled  v-model="project.toDate" type="text"   id="fromDate" class="form-control w-100" >
-                <!-- <Datepicker v-model="toDate"
-                      name="toDate"
-                      format="YYYY-MM-DD h:i:s" 
-                      width="100%"/> -->
+                <!-- <input disabled  v-model="project.toDate" type="text"   id="fromDate" class="form-control w-100" > -->
+                <Datepicker 
+                    v-model="project.toDate"
+                    name="toDate"
+                    format="YYYY-MM-DD h:i:s" 
+                    width="100%"/>
             </div>  
     </div>
 
