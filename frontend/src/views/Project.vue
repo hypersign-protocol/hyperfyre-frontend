@@ -684,16 +684,17 @@ export default {
       return new Date(d).toLocaleString();
     },
     editProject(project) {
+      console.log("Clicked on pensil")
       this.resetAllValues();
 
 
 
     
 
-    
+      console.log(project)
       this.project = { ...project};
   
-      console.log(this.project.toDate =  project.toDate)
+      console.log(this.project)
 
       
 
