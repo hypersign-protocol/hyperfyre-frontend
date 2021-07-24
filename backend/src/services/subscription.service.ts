@@ -93,6 +93,17 @@ export default class Subscription{
         })
     }
 
+    getById({id}): Promise<ISubscription>{
+        return new Promise(async(resolve, reject)=> {
+            try{
+                const plan: ISubscription = await SubscriptionModel.findById({ _id: id})
+                resolve(plan);
+            }catch(e){
+                reject(e);
+            }
+        })
+    }
+
     usage({did}): Promise<IUsage>{
         return new Promise(async (resolve, reject) => {
             try{
