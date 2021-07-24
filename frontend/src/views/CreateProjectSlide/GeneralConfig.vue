@@ -69,16 +69,15 @@ input[data-v-4bd11526]{
             <div class="col-auto mr-auto">
                 <label for="startDate" class="col-form-label">Start Date: </label>
             </div>
-            <div class="col-auto ml-auto">
-                <Datepicker v-model="fromDate"
+            
+            <div class="col-auto">
+                <input disabled  v-model="project.fromDate" type="text"   id="fromDate" class="form-control w-100" >
+                <!-- <Datepicker v-model="fromDate"
                       name="fromDate"
                       format="YYYY-MM-DD h:i:s" 
-                      width="100%"/>
-                <!-- <Datepicker 
-                     
-                      v-model="fromDate"
-                       format="YYYY-MM-DD h:i:s"  /> -->
+                      width="100%"/> -->
             </div>  
+            
     </div>
 
 
@@ -89,18 +88,11 @@ input[data-v-4bd11526]{
                 <label for="endDate" class="col-form-label">End Date: </label>
             </div>
             <div class="col-auto">
-                
-                <Datepicker v-model="toDate"
+                <input disabled  v-model="project.toDate" type="text"   id="fromDate" class="form-control w-100" >
+                <!-- <Datepicker v-model="toDate"
                       name="toDate"
                       format="YYYY-MM-DD h:i:s" 
-                      width="100%"/>
-               <!-- <Datepicker 
-    
-    
-                    v-model="project.toDate"
-                       
-                       
-                       format="YYYY-MM-DD h:i:s" /> -->
+                      width="100%"/> -->
             </div>  
     </div>
 
@@ -166,12 +158,6 @@ export default {
     isProjectEditing: {
       type: Boolean
     }
-  },
-  data () {
-      return {
-          fromDate: this.project.fromDate, 
-          toDate: this.project.toDate, //"2021-07-24T08:32:00.000Z"
-      }
   }
 };
 
