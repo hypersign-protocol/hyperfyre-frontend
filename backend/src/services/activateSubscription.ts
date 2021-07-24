@@ -2,7 +2,9 @@ import SubscriptionService from "./subscription.service";
 import PlanService from "./plan.service";
 import { ISubscription } from "../models/subscription";
 import { IPlan } from "../models/plan";
+import env from "dotenv";
 
+env.config();
 const subService = new SubscriptionService();
 const planService =  new PlanService();
 
