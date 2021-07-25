@@ -3,7 +3,7 @@
         <div class="row header">
             <div class="col-md-4">
                 <img
-                    :src="require('./assets/Fidato_logo.png')"
+                    :src="require('../assets/Fidato_logo.png')"
                     alt="logo"
                     width="150px"
                 />
