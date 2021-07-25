@@ -38,8 +38,8 @@
 <style scoped>
 
     .body{
-        background: black;
-        color: whitesmoke;
+        background: whitesmoke;
+        color: black;
         height: 100%;
         top: 0px;
         right: 0px;
