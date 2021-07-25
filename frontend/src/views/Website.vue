@@ -1,6 +1,6 @@
 <template>
     <div class="body">
-        <div class="row">
+        <div class="row header">
             <div class="col-md-4">
                 <img
                     :src="require('./assets/Fidato_logo.png')"
@@ -14,13 +14,22 @@
                 </button>
             </div>
         </div>
-        <div class="row">
+        <div class="row content">
             <div class="col-md-12" style="widht:100%; height:100%">
                 <h1>FIDATO</h1>
                 <h4>Build Resilient and Dependable Communities Securely</h4>
             </div>
         </div>
-        
+        <div class="row footer">
+            <div class="col-md-4">
+                <p>Powered By</p>
+                <img
+                    :src="require(`../assets/footerLogo.png`)"
+                    style="max-width: 80px;"
+                />
+            </div>
+            <div class="col-md-8"></div>
+        </div>
     </div>
 </template>
 <style lang="scss" scoped>
