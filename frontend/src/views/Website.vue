@@ -18,6 +18,9 @@
             <div class="col-md-12" style="widht:100%; height:100%">
                 <h1>FIDATO</h1>
                 <h4>Build Resilient and Dependable Communities Securely</h4>
+                <button class="btn btn-default btn-lg">
+                    <a href="/app" target="_blank">Try App Now</a>
+                </button>
             </div>
         </div>
         <div class="row footer">
@@ -32,7 +35,7 @@
         </div>
     </div>
 </template>
-<style lang="scss" scoped>
+<style scoped>
 
     .body{
         background: black;
