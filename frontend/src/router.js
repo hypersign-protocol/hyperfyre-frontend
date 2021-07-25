@@ -15,7 +15,7 @@ const router = new Router({
     },
      {
       path: "/app",
-      redirect: "/app/login",
+      redirect: "/app/admin/login",
     },
 
     {
@@ -41,7 +41,7 @@ const router = new Router({
     },
     {
       path: "/app/admin",
-      redirect: "/admin/login",
+      redirect: "/app/admin/login",
     },
     {
       path: "/app/admin/login",
