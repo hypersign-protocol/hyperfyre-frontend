@@ -5,7 +5,7 @@
                 <img
                     :src="require('../assets/Fidato_logo.png')"
                     alt="logo"
-                    width="150px"
+                    width="120px"
                 />
             </div>
             <!-- <div class="col-md-8">
