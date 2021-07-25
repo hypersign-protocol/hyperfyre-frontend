@@ -109,7 +109,7 @@ router.beforeEach((to, from, next) => {
           } else {
             localStorage.setItem("user", JSON.stringify(json.message));
             console.log(to.path);
-            if (to.meta.admin && !json.message.isSubscribed && to.path != "/admin/subscription") {
+            if (to.meta.admin && !json.message.isSubscribed && to.path != "/app/admin/subscription") {
               next({
                   path: '/app/admin/subscription',
                   params: { nextUrl: to.fullPath }
