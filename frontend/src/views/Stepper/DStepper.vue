@@ -351,10 +351,10 @@ export default {
 
       if (this.$route.query.referrer) {
         this.$router.push(
-          `/login/${this.$route.params.slug}?referrer=${this.$route.query.referrer}`
+          `/app/login/${this.$route.params.slug}?referrer=${this.$route.query.referrer}`
         );
       } else {
-        this.$router.push(`/login/${this.projectDetails.slug}`);
+        this.$router.push(`/app/login/${this.projectDetails.slug}`);
       }
     },
 

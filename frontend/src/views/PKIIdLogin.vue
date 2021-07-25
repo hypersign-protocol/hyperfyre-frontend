@@ -486,7 +486,7 @@ export default {
           if (_this.$route.params.nextUrl != null) {
             _this.$router.push(_this.$route.params.nextUrl);
           } else {
-            let path = "/form";
+            let path = "/app/form";
             // let route = {}
 
             console.log(this.$route);
@@ -500,7 +500,7 @@ export default {
 
             if (!projectSlug) {
               if (!projectId) {
-                path = "form";
+                path = "/app/form";
               } else {
                 // route["query"] = { projectId }
                 path += "?projectId=" + projectId;

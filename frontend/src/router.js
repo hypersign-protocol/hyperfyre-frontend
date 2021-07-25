@@ -7,27 +7,25 @@ Vue.use(Router);
 
 const router = new Router({
   mode: "history",
+  base: publicPath,
   routes: [
     {
       path: "/",
-      redirect: "/login",
+      name: "Website",
+      component: () => import(/* webpackChunkName: "investorLogin" */ './views/Website.vue'),
     },
-    // {
-    //   path: "/login",
-    //   redirect: "/login",
-    // },
-    // {
-    //   path: "/studio",
-    //   redirect: "/login",
-    // },
-    
+     {
+      path: "/app",
+      redirect: "/app/login",
+    },
+
     {
-      path: "/login/:projectSlug",
+      path: "/app/login/:projectSlug",
       name: "PKIIdLogin",
       component: () => import(/* webpackChunkName: "investorLogin" */ './views/PKIIdLogin.vue'),
     },
     {
-      path: "/form/:slug",
+      path: "/app/form/:slug",
       name: "investor",
       component: () => import(/* webpackChunkName: "investor" */ './views/Investor.vue') ,
       meta: {
@@ -35,7 +33,7 @@ const router = new Router({
       },
     },
     {
-      path: "/form",
+      path: "/app/form",
       name: "investor",
       component: () => import(/* webpackChunkName: "investor" */ './views/Investor.vue') ,
       meta: {
@@ -43,16 +41,16 @@ const router = new Router({
       },
     },
     {
-      path: "/admin",
+      path: "/app/admin",
       redirect: "/admin/login",
     },
     {
-      path: "/admin/login",
+      path: "/app/admin/login",
       name: "AdminLogin",
       component: () => import(/* webpackChunkName: "adminLogin" */ './views/AdminLogin.vue'),
     },
     {
-      path: "/admin/dashboard",
+      path: "/app/admin/dashboard",
       name: "Dashboard",
       component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue') ,
       meta: {
@@ -61,7 +59,7 @@ const router = new Router({
       },
     },
     {
-      path: "/admin/investors",
+      path: "/app/admin/investors",
       name: "investors",
       component: () => import(/* webpackChunkName: "investors" */ './views/Investors.vue') ,
       meta: {
@@ -70,7 +68,7 @@ const router = new Router({
       },
     },
     {
-      path: "/admin/project",
+      path: "/app/admin/project",
       name: "project",
       component: () => import(/* webpackChunkName: "project" */ './views/Project.vue') ,
       meta: {
@@ -79,7 +77,7 @@ const router = new Router({
       },
     },
     {
-      path: "/admin/subscription",
+      path: "/app/admin/subscription",
       name: "subscription",
       component: () => import(/* webpackChunkName: "subscription" */ './views/Subscription.vue') ,
       meta: {
@@ -106,7 +104,7 @@ router.beforeEach((to, from, next) => {
         .then((json) => {
           if (json.status == 403) {
             next({
-              path: to.meta.admin ? "/admin/login" : "/login",
+              path: to.meta.admin ? "/app/admin/login" : "/app/login",
               params: { nextUrl: to.fullPath },
             });
           } else {
@@ -114,7 +112,7 @@ router.beforeEach((to, from, next) => {
             console.log(to.path);
             if (to.meta.admin && !json.message.isSubscribed && to.path != "/admin/subscription") {
               next({
-                  path: '/admin/subscription',
+                  path: '/app/admin/subscription',
                   params: { nextUrl: to.fullPath }
               })
             } else {
@@ -124,7 +122,7 @@ router.beforeEach((to, from, next) => {
         })
         .catch((e) => {
           next({
-            path: to.meta.admin ? "/admin/login" : "/login",
+            path: to.meta.admin ? "/app/admin/login" : "/app/login",
             params: { nextUrl: to.fullPath },
           });
         });
@@ -151,10 +149,10 @@ router.beforeEach((to, from, next) => {
       }
 
       next({
-        path: to.meta.admin ? "/admin/login" : (
+        path: to.meta.admin ? "/app/admin/login" : (
           !to.query["referrer"] ? 
-          `/login/${to.params["slug"]}` :
-          `/login/${to.params["slug"]}?referrer=${to.query["referrer"]}`
+          `/app/login/${to.params["slug"]}` :
+          `/app/login/${to.params["slug"]}?referrer=${to.query["referrer"]}`
         ),
         params: { nextUrl: to.fullPath },
       });
