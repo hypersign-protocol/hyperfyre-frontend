@@ -212,28 +212,28 @@ export default {
 
         menu: [
         {
-          href: "/admin/dashboard",
+          href: "/app/admin/dashboard",
           title: "Dashboard",
           icon: "fas fa-tachometer-alt",
         },
         {
-          href: "/admin/project",
+          href: "/app/admin/project",
           title: "Projects",
           icon: "fas fa-plane-departure",
         },
         {
-          href: "/admin/investors",
+          href: "/app/admin/investors",
           title: "Investors",
           icon: "fas fa-users",
           exactPath: true,
         },
         {
-          href: "/admin/subscription",
+          href: "/app/admin/subscription",
           title: "Subscription",
           icon: "fas fa-tags",
         },
         {
-          href: "/admin/login",
+          href: "/app/admin/login",
           title: "Logout",
           icon: "fas fa-sign-out-alt",
         },
@@ -248,10 +248,10 @@ export default {
 
 updated(){
      this.showNavbar =
-      window.location.pathname.includes("/admin/investors") ||
-      window.location.pathname.includes("/admin/project") ||
-      window.location.pathname.includes("/admin/dashboard") || 
-      window.location.pathname.includes("/admin/subscription")
+      window.location.pathname.includes("/app/admin/investors") ||
+      window.location.pathname.includes("/app/admin/project") ||
+      window.location.pathname.includes("/app/admin/dashboard") || 
+      window.location.pathname.includes("/app/admin/subscription")
         ? true
         : false;  
 },
