@@ -7,7 +7,7 @@
         <ul>
             <li><a href="/app" target="_blank">Admin Dashboard</a></li>
             <li><a href="#" target="_blank">Docs</a></li>
-        <ul>
+        </ul>
     </p>
         
     </div>
