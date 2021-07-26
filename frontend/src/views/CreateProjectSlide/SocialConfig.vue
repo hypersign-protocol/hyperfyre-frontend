@@ -104,7 +104,7 @@ export default {
       removeSocialMedia(index){
          
         
-          console.log(this.addedSocialMedias[index].media);
+          // console.log(this.addedSocialMedias[index].media);
           this.socialOptions.map(opt => {
             if(opt.value &&   opt.value.media == this.addedSocialMedias[index].media){
              
@@ -166,7 +166,7 @@ export default {
 
         this.project.social = { ...this.project.social, [media.media] :obj};
 
-        console.log("PROJECT", this.project)
+        // console.log("PROJECT", this.project)
        
 
       },

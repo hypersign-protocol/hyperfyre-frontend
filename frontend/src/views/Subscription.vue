@@ -200,7 +200,7 @@ export default {
           return this.notifyErr(resp.statusText);
         }
         const json = await resp.json();
-        console.log(json);
+        // console.log(json);
         this.plans = json;
         // localStorage.setItem("plans", JSON.stringify(json));
       } catch (e) {
@@ -244,7 +244,7 @@ export default {
           return;
         }
 
-        console.log(planId);
+        // console.log(planId);
 
         this.isLoading = true;
 
