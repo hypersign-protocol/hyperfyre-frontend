@@ -88,7 +88,7 @@ i {
 
     </b-modal>
 
-     <b-modal  hide-footer size="lg"  id="create-project-modal" :title=" isProjectEditing ? 'Edit a project ': 'Create a Project'">
+     <!-- <b-modal  hide-footer size="lg"  id="create-project-modal" :title=" isProjectEditing ? 'Edit a project ': 'Create a Project'">
       <div class="card-body">
               <div class="row">
                 <div class="col-md-6">
@@ -280,7 +280,7 @@ i {
                 </div>
               </div>
             </div>
-    </b-modal>
+    </b-modal> -->
 
 
     <div class="row">
@@ -496,6 +496,7 @@ import Paginate from "vuejs-paginate";
 import notificationMixins from '../mixins/notificationMixins';
 import apiClientMixin from '../mixins/apiClientMixin';
 import CreateProjectSlide from './CreateProjectSlide/CreateProjectSlide.vue';
+import dayjs from "dayjs";
 export default {
   name: "Investor",
   components: { Loading, Datepicker, Paginate, CreateProjectSlide },
@@ -598,8 +599,8 @@ export default {
   },
   methods: {
     openCreateSidebar(){
-      this.isProjectEditing = false
       this.resetAllValues();
+      this.isProjectEditing = false
         this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
     },
     handleSearch(e){
@@ -625,6 +626,7 @@ export default {
       this.themeColor = e.target.value
     },
     openCreateModal() {
+      
       this.isProjectEditing = false;
       this.project = {}
       this.blockchainType = "ETHEREUM";
@@ -686,21 +688,13 @@ export default {
       return new Date(d).toLocaleString();
     },
     editProject(project) {
-      console.log("Clicked on pensil")
       this.resetAllValues();
+      this.isProjectEditing = true;
+      this.project = {...project};
 
+      this.project.fromDate  =  dayjs(project.fromDate).format("YYYY-MM-DD hh:mm:ss");
+      this.project.toDate  =  dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
 
-
-    
-
-      console.log(JSON.stringify(project))
-      this.project = { ...project};
-  
-      console.log(JSON.stringify(this.project))
-      const { toDate , fromDate } = this.project;
-      console.log({ toDate , fromDate })
-
-      
 
       // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
       this.project.social = {
@@ -734,8 +728,9 @@ export default {
       this.themeColor = project.themeColor
       this.fontColor = project.fontColor
       this.projectStatus = project.projectStatus
-      this.isProjectEditing = true;
 
+    
+    
       this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
     },
     
@@ -886,7 +881,7 @@ export default {
 
     resetAllValues(){
        this.project = {
-        _id: "",
+         _id: "",
         projectName: "",
         logoUrl: "",
         fromDate: "",

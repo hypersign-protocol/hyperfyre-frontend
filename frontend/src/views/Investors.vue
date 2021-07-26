@@ -93,6 +93,9 @@ label {
     font-size: 22px;
     margin-left: 10px;
  }
+ .paginationItem.active a{
+   color: #fff;
+ }
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -175,13 +178,14 @@ label {
         :pageCount="Math.ceil(this.project.count / this.perPage)"
         :clickHandler="paginateChange"
         :prevText="'Prev'"
+        v-model="paginateValue"
         :nextText="'Next'"
         :containerClass="'paginationContainer'"
         :page-class="'paginationItem'"
       >
       </paginate>
       <div class="ml-auto">
-        <b-form-select  :options="this.pageSelectDropdown" @change="paginateChange"></b-form-select>
+        <b-form-select v-model="paginateValue"  :options="this.pageSelectDropdown" @change="paginateChange"></b-form-select>
       </div>
     </div>
   </div>
@@ -203,6 +207,7 @@ export default {
 
   data() {
     return {
+      paginateValue: 1,
       selectedProject: null,
       recordsForLottery: 0,
       issuedImgLink: issuedImgLink,
@@ -512,8 +517,10 @@ export default {
     paginateChange(e) {
       if(typeof e == "number"){
         this.currentPage = e;
+        this.paginateValue = e
       } else{
         this.currentPage = e.target.value;
+        this.paginateValue = e
       }
 
       const skip = this.perPage * (this.currentPage - 1);
