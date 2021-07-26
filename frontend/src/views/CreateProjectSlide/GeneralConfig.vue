@@ -105,7 +105,7 @@ input[data-v-4bd11526]{
                 <label for="themeColor" class="col-form-label">Theme Color: </label>
             </div>
             <div class="col-auto">
-                <input v-model="themeColor" type="text" :placeholder="themeColorDefault" id="themeColor" class="form-control w-100" >
+                <input @change="handleColors"  v-model="themeColorLocal"  name="themeColor"    type="text" :placeholder="themeColorDefault" id="themeColor" class="form-control w-100" >
             </div>  
     </div>
 
@@ -116,16 +116,9 @@ input[data-v-4bd11526]{
                 <label for="fontColor" class="col-form-label">Font Color: </label>
             </div>
             <div class="col-auto">
-                <input  v-model="fontColor" type="text"  :placeholder="fontColorDefault" id="fontColor" class="form-control w-100" >
+                <input @change="handleColors"  name="fontColor" v-model="fontColorLocal" type="text"  :placeholder="fontColorDefault" id="fontColor" class="form-control w-100" >
             </div>  
     </div>
-
-
-
-    
-
-
-    
 
     
 </b-form>
@@ -141,6 +134,33 @@ import Datepicker from 'vuejs-datetimepicker'
 export default {
   name: "GeneralConfig",
   components: {Datepicker},
+  data(){
+      return{
+            themeColorLocal: this.themeColor,
+            fontColorLocal: this.fontColor
+      }
+      
+  },
+  methods:{
+      handleColors(e){
+  
+
+            if(!this.themeColorLocal.trim().length){
+                this.themeColorLocal = this.themeColorDefault;
+                    
+            }
+            if(!this.fontColorLocal.trim().length){
+                this.fontColorLocal = this.fontColorDefault; 
+            }
+
+        this.$parent.$parent.$parent.$emit("UpdateColors", {
+            themeColor: this.themeColorLocal,
+            fontColor: this.fontColorLocal
+        });
+
+      }
+  },
+
   props:{
       project:{
           type: Object

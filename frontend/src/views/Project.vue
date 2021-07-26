@@ -301,6 +301,7 @@ i {
             <create-project-slide 
             :isProjectEditing="isProjectEditing"
               :project="project"
+              @UpdateColors="UpdateColors"
               :themeColor="themeColor"
               :themeColorDefault="themeColorDefault"
               :fontColor="fontColor"
@@ -614,11 +615,17 @@ export default {
         }
 
     },
+    UpdateColors(e){
+
+     this.fontColor = e.fontColor
+    this.themeColor = e.themeColor
+
+    },
     paginateChange(e){
 
       this.currentPage = e
        const skip = this.perPage * (e - 1);
-       console.log(this.projects, skip, this.perPage);
+
        this.projectsToShow  = this.projects.slice(skip, this.perPage + skip);
     },
 
@@ -742,7 +749,7 @@ export default {
             return this.notifyErr( this.checkIfEverythingIsFilled());   
         }
        
-       console.log("CHECKED");
+    
         this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
@@ -762,6 +769,9 @@ export default {
         this.project.themeColor = this.themeColor.trim().length ?  this.themeColor :  this.themeColorDefault
         this.project.fontColor = this.fontColor.trim().length ?  this.fontColor :  this.fontColorDefault
         this.project.blockchainType = this.blockchainType
+
+    
+
        
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
@@ -779,17 +789,21 @@ export default {
 
         if(this.isProjectEditing){
            await this.fetchProjects();
+            this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
           return;
         }
     
-        // console.log("PROEJCT", resp.data) 
+      
         
         const userProjects = JSON.parse(localStorage.getItem("userProjects"));
         userProjects.count += 1
         userProjects.projects.push(resp.data)
         localStorage.setItem("userProjects", JSON.stringify(userProjects))
+       
         await this.fetchProjects();
         this.$bvModal.hide("create-project-modal");
+         this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+        
         
       } catch (e) {
         
@@ -831,7 +845,7 @@ export default {
         
         if(this.project.social.twitter){
 
-          console.log(this.project.social)
+
 
             if(!this.project.social.twitter.twitterHandle || this.project.social.twitter.twitterHandle.trim() == ""){
                 return "Please provide a twitter handle"

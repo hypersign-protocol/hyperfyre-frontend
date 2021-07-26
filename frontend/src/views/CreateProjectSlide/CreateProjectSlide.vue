@@ -32,7 +32,7 @@
                       </b-card-header>
                       <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
                         <b-card-body>
-                            <general-config :isProjectEditing="isProjectEditing" :themeColor="themeColor" :fontColor="fontColor" :fontColorDefault="fontColorDefault" :themeColorDefault="themeColorDefault" :project="project" />
+                            <general-config  :isProjectEditing="isProjectEditing" :themeColor="themeColor" :fontColor="fontColor" :fontColorDefault="fontColorDefault" :themeColorDefault="themeColorDefault" :project="project" />
                           <!-- <b-card-text>I start opened because <code>visible</code> is <code>true</code></b-card-text> -->
                           <!-- <b-card-text>{{ text }}</b-card-text> -->
                         </b-card-body>
@@ -85,6 +85,7 @@ import SocialConfig from './SocialConfig.vue';
 export default {
   name: "CreateProjectSlide",
   components: {SocialConfig, GeneralConfig, BlockchainCongif  },
+
   props:{
     project: {
       type: Object
@@ -119,7 +120,9 @@ export default {
     isProjectEditing: {
       type: Boolean
     }
-  }
+  },
+ 
+  
 };
 </script>
 
