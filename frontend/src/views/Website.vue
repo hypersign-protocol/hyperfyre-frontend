@@ -17,9 +17,11 @@
         <div class="row content">
             <div class="col-md-12" style="">
                 <h1 class="bold">FIDATO</h1>
-                <h4>Build Resilient and Dependable Communities Securely</h4>
-                <button class="btn btn-default btn-lg">
-                    <a href="/app" target="_blank">TRY APP NOW</a>
+                <div  class="typewriter"> 
+                <h4>Build Resilient and Dependable Communities, Securely</h4>
+                </div>
+                <button  class="btn btn-default btn-lg" style="margin-top:2%">
+                    <a href="/app" target="_blank">TRY THE APP NOW</a>
                 </button>
             </div>
         </div>
@@ -36,6 +38,35 @@
     </div>
 </template>
 <style scoped>
+
+
+/* DEMO-SPECIFIC STYLES */
+.typewriter h4 {
+  color: black;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: .15em solid orange; /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+  letter-spacing: .15em; /* Adjust as needed */
+  font-size: xx-large;
+  animation: 
+    typing 3.5s steps(30, end),
+    blink-caret .9s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 40% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: orange }
+}
+
 
     .body{
         background: whitesmoke;
