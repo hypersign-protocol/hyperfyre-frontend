@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { logger } from '../config';
+import SubscriptionService from "../services/subscription.service";
+const subscriptionService = new SubscriptionService();
 
 export = (hypersign) => {
     const router = Router();
@@ -21,6 +23,11 @@ export = (hypersign) => {
     router.post('/protected', hypersign.authorize.bind(hypersign), async (req, res) => {
         try {
             const user = req.body.userData;
+
+            // added is the user has any active subscription
+            const result = await subscriptionService.verify({did: user.id});
+            user["isSubscribed"] = result;
+
             res.status(200).send({ status: 200, message: user, error: null });
         } catch (e) {
             res.status(500).send({ status: 500, message: null, error: e.message });

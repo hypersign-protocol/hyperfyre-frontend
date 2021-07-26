@@ -93,6 +93,9 @@ label {
     font-size: 22px;
     margin-left: 10px;
  }
+ .paginationItem.active a{
+   color: #fff;
+ }
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -170,16 +173,21 @@ label {
         </div>
       </div>
     </div>
-
-    <paginate
-      :pageCount="Math.ceil(this.project.count / this.perPage)"
-      :clickHandler="paginateChange"
-      :prevText="'Prev'"
-      :nextText="'Next'"
-      :containerClass="'paginationContainer'"
-      :page-class="'paginationItem'"
-    >
-    </paginate>
+    <div class="d-flex mt-5">
+      <paginate
+        :pageCount="Math.ceil(this.project.count / this.perPage)"
+        :clickHandler="paginateChange"
+        :prevText="'Prev'"
+        v-model="paginateValue"
+        :nextText="'Next'"
+        :containerClass="'paginationContainer'"
+        :page-class="'paginationItem'"
+      >
+      </paginate>
+      <div class="ml-auto">
+        <b-form-select v-model="paginateValue"  :options="this.pageSelectDropdown" @change="paginateChange"></b-form-select>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -199,6 +207,7 @@ export default {
 
   data() {
     return {
+      paginateValue: 1,
       selectedProject: null,
       recordsForLottery: 0,
       issuedImgLink: issuedImgLink,
@@ -218,6 +227,8 @@ export default {
         },
       },
 
+      pageSelectDropdown: [],
+
       columns: [
         { field: "name", key: "b", title: "Name", align: "left", sortBy: "" },
         {
@@ -231,18 +242,18 @@ export default {
         {
           field: "ethAddress",
           key: "d",
-          title: "Eth Address",
+          title: "Blockchain Address",
           align: "left",
 
-          renderBodyCell: ({ row, column, rowIndex }, h) => {
-            return (
-              <span class="text-bold" style="color:#1890ff;">
-                <a href={`https://etherscan.io/address/${row.ethAddress}`} target="_blank">
-                  {row.ethAddress}
-                </a>
-              </span>
-            );
-          },
+          // renderBodyCell: ({ row, column, rowIndex }, h) => {
+          //   return (
+          //     <span class="text-bold" style="color:#1890ff;">
+          //       <a href={`https://etherscan.io/address/${row.ethAddress}`} target="_blank">
+          //         {row.ethAddress}
+          //       </a>
+          //     </span>
+          //   );
+          // },
         },
         {
           field: "twitterHandle",
@@ -255,7 +266,7 @@ export default {
             return (
               <span class="text-bold" style="color:#1890ff;">
                 <a href={`https://twitter.com/${row.twitterHandle}`} target="_blank">
-                  @{row.twitterHandle}
+                  {row.twitterHandle}
                 </a>
               </span>
             );
@@ -272,7 +283,7 @@ export default {
             return (
               <span class="text-bold" style="color:#1890ff;">
                 <a href={`https://t.me/${row.telegramHandle}`} target="_blank">
-                  @{row.telegramHandle}
+                  {row.telegramHandle}
                 </a>
               </span>
             );
@@ -292,104 +303,13 @@ export default {
             );
           },
         },
-        // {
-        //   field: "isVerificationComplete",
-        //   key: "h",
-        //   title: "Verification",
-        //   align: "left",
-        //   width: 120,
-        //   filter: {
-        //     filterList: [
-        //       {
-        //         value: "onlyVerified",
-        //         label: "Only Verified",
-        //         selected: false,
-        //       },
-        //       {
-        //         value: "onlyNotVerified",
-        //         label: "Only Not Verified",
-        //         selected: false,
-        //       },
-        //     ],
-        //     filterConfirm: (filterList) => {
-        //       const labels = filterList
-        //         .filter((x) => x.selected)
-        //         .map((x) => x.value);
-        //       this.filterVerified(labels[0]);
-        //     },
-        //     filterReset: (filterList) => {
-        //       this.filterVerified("");
-        //     },
-        //   },
-
-        //   renderBodyCell: ({ row, column, rowIndex }, h) => {
-        //     return (
-        //       <span class="text-bold d-flex justify-content-center">
-        //         {row.isVerificationComplete ? (
-        //           <span class="d-flex align-items-center justify-content-center">
-        //             <i style="font-size:20px" class="far fa-check-circle"></i>
-        //           </span>
-        //         ) : (
-        //           <button
-        //             class="btn btn-primary btn-sm"
-        //             on-click={() => this.verifyInvestor(row)}
-        //           >
-        //             Verify Now
-        //           </button>
-        //         )}
-        //       </span>
-        //     );
-        //   },
-        // },
-        // {
-        //   field: "Issue",
-        //   key: "i",
-        //   title: "Issue",
-        //   align: "left",
-        //   width: 70,
-        //   filter: {
-        //     filterList: [
-        //       {
-        //         value: "onlyIssued",
-        //         label: "Only Issued",
-        //         selected: false,
-        //       },
-        //       {
-        //         value: "onlyNotIssued",
-        //         label: "Only Not Issued",
-        //         selected: false,
-        //       },
-        //     ],
-        //     filterConfirm: (filterList) => {
-        //       const labels = filterList
-        //         .filter((x) => x.selected)
-        //         .map((x) => x.value);
-        //       this.filterIssued(labels[0]);
-        //     },
-        //     filterReset: (filterList) => {
-        //       this.filterIssued("");
-        //     },
-        //   },
-
-        //   renderBodyCell: ({ row, column, rowIndex }, h) => {
-        //     return (
-        //       <span class="text-bold d-flex justify-content-center">
-        //         {row.isVerfiedByHypersign ? (
-        //           <span class="text-bold" title="issued">
-        //             <i style="font-size:20px" class="far fa-calendar-check"></i>
-        //           </span>
-        //         ) : (
-        //           <button
-        //             class="btn btn-white border border-1 btn-sm"
-        //             on-click={() => this.issueCredential(row, rowIndex)}
-        //           >
-        //             <i style="font-size:20px" class="far fa-clock"></i>
-        //           </button>
-        //         )}
-        //       </span>
-        //     );
-        //   },
-        // },
+        {
+          field: "numberOfReferals",
+          key: "h",
+          title: "Score",
+          align: "right",
+          sortBy: "desc",
+        }
       ],
 
       investor: {
@@ -405,6 +325,7 @@ export default {
         isVerfiedByHypersign: false,
         isVerificationComplete: false,
         tweetUrl: "",
+        numberOfReferals: 0,
       },
       project: {
         count: 20,
@@ -427,13 +348,14 @@ export default {
       fullPage: true,
     };
   },
+
   async mounted() {
 
     
 
   if(this.$route.query.projectId){
     this.selectedProjectId = this.$route.query.projectId;
-    // console.log("PROJECTS", this.projects);
+    this.selectedProject = this.$route.query.projectId;
     this.investor.projectId = this.$route.query.projectId
     this.fetchProjectData(0, this.perPage)
   }
@@ -445,7 +367,10 @@ export default {
       _id: null,
       projectName: "Select a Project"
     })
+  
+ 
   },
+
 
   beforeRouteEnter(to, from, next) {
     next((vm) => {
@@ -467,6 +392,7 @@ export default {
       }catch(e){
         console.log(e);
         this.notifyErr(e)
+      
       }
     },
     async handleLottery(){
@@ -589,7 +515,13 @@ export default {
     },
 
     paginateChange(e) {
-      this.currentPage = e;
+      if(typeof e == "number"){
+        this.currentPage = e;
+        this.paginateValue = e
+      } else{
+        this.currentPage = e.target.value;
+        this.paginateValue = e
+      }
 
       const skip = this.perPage * (this.currentPage - 1);
 
@@ -603,72 +535,72 @@ export default {
       return new Date(d).toLocaleString();
     },
 
-    async verifyInvestor(investor) {
-      try {
-        this.isLoading = true;
+    // async verifyInvestor(investor) {
+    //   try {
+    //     this.isLoading = true;
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor/${investor.did}?projectId=${this.investor.projectId}`;
+    //     const url = `${this.$config.studioServer.BASE_URL}api/v1/investor/${investor.did}?projectId=${this.investor.projectId}`;
 
-        investor.hasJoinedTGgroup = true;
-        investor.isVerificationComplete = true;
-        investor.hasTwitted = true;
+    //     investor.hasJoinedTGgroup = true;
+    //     investor.isVerificationComplete = true;
+    //     investor.hasTwitted = true;
 
-        if (investor["_id"]) delete investor["_id"];
+    //     if (investor["_id"]) delete investor["_id"];
 
-        const headers = {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.authToken}`,
-        };
+    //     const headers = {
+    //       "Content-Type": "application/json",
+    //       "Authorization": `Bearer ${this.authToken}`,
+    //     };
 
-        const resp = await fetch(url, {
-          method: "PUT",
-          body: JSON.stringify(investor),
-          headers,
-        });
+    //     const resp = await fetch(url, {
+    //       method: "PUT",
+    //       body: JSON.stringify(investor),
+    //       headers,
+    //     });
 
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
-        }
+    //     if (!resp.ok) {
+    //       return this.notifyErr(resp.statusText);
+    //     }
 
-        const json = await resp.json();
-        this.notifySuccess("Investor verified successfully");
-      } catch (e) {
-        this.notifyErr(e.message);
-      } finally {
-        this.isLoading = false;
-      }
-    },
-    async issueCredential(investor, idx) {
-      try {
-        this.isLoading = true;
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investors/issue`;
-        const body = {
-          did: investor.did,
-          projectId: this.investor.projectId,
-        };
-        const headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
-        };
+    //     const json = await resp.json();
+    //     this.notifySuccess("Investor verified successfully");
+    //   } catch (e) {
+    //     this.notifyErr(e.message);
+    //   } finally {
+    //     this.isLoading = false;
+    //   }
+    // },
+    // async issueCredential(investor, idx) {
+    //   try {
+    //     this.isLoading = true;
+    //     const url = `${this.$config.studioServer.BASE_URL}api/v1/investors/issue`;
+    //     const body = {
+    //       did: investor.did,
+    //       projectId: this.investor.projectId,
+    //     };
+    //     const headers = {
+    //       "Content-Type": "application/json",
+    //       Authorization: `Bearer ${this.authToken}`,
+    //     };
 
-        const resp = await fetch(url, {
-          method: "POST",
-          body: JSON.stringify(body),
-          headers,
-        });
+    //     const resp = await fetch(url, {
+    //       method: "POST",
+    //       body: JSON.stringify(body),
+    //       headers,
+    //     });
 
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
-        }
-        const json = await resp.json();
-        this.notifySuccess(json.message);
-        this.project.investors[idx].isVerfiedByHypersign = true;
-      } catch (e) {
-        this.notifyErr(e.message);
-      } finally {
-        this.isLoading = false;
-      }
-    },
+    //     if (!resp.ok) {
+    //       return this.notifyErr(resp.statusText);
+    //     }
+    //     const json = await resp.json();
+    //     this.notifySuccess(json.message);
+    //     this.project.investors[idx].isVerfiedByHypersign = true;
+    //   } catch (e) {
+    //     this.notifyErr(e.message);
+    //   } finally {
+    //     this.isLoading = false;
+    //   }
+    // },
     async fetchProjectData(skip, limit) {
       try {
         this.isLoading = true;
@@ -697,7 +629,10 @@ export default {
         this.project.toDate = this.formateDate(this.project.toDate);
         this.projectFetched = true;
 
-       
+
+        this.pageSelectDropdown = Array.from({length: Math.ceil(this.project.count / this.perPage)}, (_, i) => i + 1)
+
+      
         this.notifySuccess(
           "Project is fetched. ProjectName " + json.projectName
         );

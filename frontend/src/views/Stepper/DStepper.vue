@@ -1,5 +1,4 @@
 <template>
-
   <div class="d-stepper" style="background-color: #fff">
     <!---:style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`" --->
     <loading
@@ -8,9 +7,14 @@
       :is-full-page="fullPage"
     ></loading>
 
-    <div class="header w-100 text-left" :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`">
+    <div
+      class="header w-100 text-left"
+      :style="
+        `background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`
+      "
+    >
       <div class="logo  d-inline-block" style="width:100%">
-        <img :src="projectDetails.logoUrl" style="float:left"/>
+        <img :src="projectDetails.logoUrl" style="float:left" />
         <button @click="logout" class="btn" style="float:right">
           Logout
         </button>
@@ -122,7 +126,9 @@
             variant="dark"
             :disabled="loading"
             class="text-primary back-btn"
-           :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important; border-color: ${projectDetails.fontColor}`"
+            :style="
+              `background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important; border-color: ${projectDetails.fontColor}`
+            "
             @click="backStep"
           >
             <i class="fas fa-angle-double-left"></i> Back
@@ -133,8 +139,9 @@
             variant="dark"
             class="ml-2 next-btn"
             @click="nextStep"
-
-            :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important; border-color:${projectDetails.fontColor}`"
+            :style="
+              `background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important; border-color:${projectDetails.fontColor}`
+            "
             :disabled="this.btnBlocked"
           >
             {{ step + 1 == 3 ? "Submit" : "Next" }}
@@ -154,7 +161,12 @@
       <h2 class="text-center w-100 text-danger">{{ errorMessage }}</h2>
     </div>
 
-    <div class="footer" :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`">
+    <div
+      class="footer"
+      :style="
+        `background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`
+      "
+    >
       <!-- <h5 class="text-white my-2"> You personal data is secure and encrypted</h5> -->
       <div class="rule w-75 mx-auto" />
       <div class="d-flex justify-content-between align-items-center">
@@ -217,13 +229,12 @@
 import Loading from "vue-loading-overlay";
 import VueRecaptcha from "vue-recaptcha";
 import "vue-loading-overlay/dist/vue-loading.css";
-import apiCall from "../../mixins/apiClientMixin"
+import apiCall from "../../mixins/apiClientMixin";
 import notificationMixin from "../../mixins/notificationMixins.js";
 import fetchProjectDataMixin from "../../mixins/fetchProjectDataMixin";
 import apiClinet from "../../mixins/apiClientMixin";
 import checkTelegramAnnouncemntMixin from "../../mixins/checkTelegramAnnChannel";
 import config from "../../config";
-
 
 export default {
   name: "DStepper",
@@ -261,46 +272,55 @@ export default {
       authToken: localStorage.getItem("authToken"),
       fullPage: true,
       projectDetails: {},
-      projectId: localStorage.getItem("projectId"),
-      projectSlug: localStorage.getItem("projectSlug"),
       serverErrors: [],
       hasTgVerfied: false,
-      blockchainType : "",
-      btnBlocked: false
+      blockchainType: "",
+      btnBlocked: false,
     };
   },
 
   async created() {
-    const userDid = JSON.parse(localStorage.getItem("user")).id;
-    this.projectDetails = JSON.parse(localStorage.getItem("projectDetails"));
-
-    this.checkIfAlreadyFilled(userDid);
-    if (!this.projectDetails || this.projectDetails == {}) {
-      this.projectDetails = await this.fetchProjectData({ isAuthTokenAvailable: true })  
-      this.projectId = this.projectDetails["_id"];
-      this.checkTelegramAnnouncementChannel();
-      this.checkBlockChainType();
-      return;
-    } else{
-      if(!this.projectId || this.projectId == ""){
-        this.projectId = this.projectDetails["_id"];
+    if (
+      !localStorage.getItem("user") ||
+      !localStorage.getItem("projectDetails")
+    ) {
+      // console.log(this.$route.query)
+      // console.log(this.$route.query.referrer)
+      if (this.$route.query.referrer) {
+        return this.$router.push(
+          `/login/${this.$route.params.slug}?referrer=${this.$route.query.referrer}`
+        );
       }
+      return this.$router.push(`/login/${this.$route.params.slug}`);
     }
 
-  
-    
+    let userDid;
+    if (localStorage.getItem("user")) {
+      userDid = JSON.parse(localStorage.getItem("user")).id;
+    }
+
+    if (localStorage.getItem("projectDetails")) {
+      this.projectDetails = JSON.parse(localStorage.getItem("projectDetails"));
+    }
+
+    if (
+      !this.projectDetails.projectStatus ||
+      this.projectDetails.projectStatus === false
+    ) {
+      this.showStepper = false;
+      this.errorMessage =
+        "This event has ended, please contact the team to know about winners!";
+      return;
+    }
+
     this.checkTelegramAnnouncementChannel();
     this.checkBlockChainType();
-    
-    // this.formatTweet()
+    this.checkIfAlreadyFilled(userDid);
   },
-
 
   mounted() {
     this.data =
       this.step == 0 || this.step == 0 ? this.stepOneData : this.stepTwoData;
-
-
   },
 
   computed: {
@@ -318,37 +338,44 @@ export default {
   },
 
   methods: {
-
     logout() {
       localStorage.removeItem("authToken");
+      localStorage.removeItem("projectDetails");
       localStorage.removeItem("user");
       localStorage.removeItem("credentials");
       localStorage.removeItem("userData");
-      this.$router.push("/login");
+
+      localStorage.removeItem("telegramId");
+      localStorage.removeItem("twitterId");
+      localStorage.removeItem("investorPoints");
+
+      if (this.$route.query.referrer) {
+        this.$router.push(
+          `/app/login/${this.$route.params.slug}?referrer=${this.$route.query.referrer}`
+        );
+      } else {
+        this.$router.push(`/app/login/${this.projectDetails.slug}`);
+      }
     },
 
-  checkBlockChainType(){
+    checkBlockChainType() {
+      this.blockchainType = this.projectDetails.blockchainType;
 
-
-    this.blockchainType = this.projectDetails.blockchainType;
-
-    if(this.blockchainType == "ETHEREUM") {
-       const ethAddress =  this.stepTwoData.formData.find(x => x.id == "ethAddress")
-       ethAddress.label = "ERC-20 Address (Do not add exchange address)*";
-       ethAddress.placeholder = "0x"
-    }
-  }, 
-
+      if (this.blockchainType == "ETHEREUM") {
+        const ethAddress = this.stepTwoData.formData.find(
+          (x) => x.id == "ethAddress"
+        );
+        ethAddress.label = "ERC-20 Address (Do not add exchange address)*";
+        ethAddress.placeholder = "0x";
+      }
+    },
 
     async nextStep() {
-      
       const step = this.step + 1;
-      
+
       const data = step == 1 ? this.stepOneData : this.stepTwoData;
 
       let gotoNextPage = false;
-      
-      
 
       if (step == 1) {
         this.btnBlocked = true;
@@ -356,84 +383,88 @@ export default {
         const tweetFilled =
           data.rules[1].tweetUrl.trim().length !== 0 ? true : false;
 
-   
         if (isAllChecked && tweetFilled) {
-            //  console.log("PROJECT DETAILS", this.projectDetails);
-          try{
-
+          //  console.log("PROJECT DETAILS", this.projectDetails);
+          try {
             /// Doing tweeter verfication business
             const url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
             let headers = {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${this.authToken}`
+              Authorization: `Bearer ${this.authToken}`,
             };
-            
+
             const body = {
-                tweetUrl: data.rules[1].tweetUrl,
-                userId:  localStorage.getItem("twitterId"),
-                tweetText:  this.projectDetails.twitterPostTextFormat,
-                needUserDetails : true,
-                checkIfFollowed: true,
-                sourceScreenName: this.projectDetails.twitterHandle
+              tweetUrl: data.rules[1].tweetUrl,
+              userId: localStorage.getItem("twitterId"),
+              tweetText: this.projectDetails.twitterPostTextFormat,
+              needUserDetails: true,
+              checkIfFollowed: true,
+              sourceScreenName: this.projectDetails.twitterHandle,
+            };
+
+            const res = await apiClinet.makeCall({
+              method: "POST",
+              body: body,
+              header: headers,
+              url,
+            });
+
+            if (!res.data.user.followed.hasFollowed) {
+              this.btnBlocked = false;
+              return this.notifyErr(
+                `Please Follow our twitter handle (@${res.data.user.followed.to})`
+              );
             }
-
-            const res = await apiClinet.makeCall({method: "POST", body: body, header: headers, url})
-
-            if(!res.data.user.followed.hasFollowed){
-                      this.btnBlocked = false;
-              return   this.notifyErr(`Please Follow our twitter handle (@${res.data.user.followed.to})`)
-            }
-
 
             /// Doing telegram verfication business
-            const tgId = localStorage.getItem("telegramId")
+            const tgId = localStorage.getItem("telegramId");
 
-            if(!tgId || tgId === "undefined"){
-                      this.btnBlocked = false;
-              return this.notifyErr("Please authenticate Telegram")
+            if (!tgId || tgId === "undefined") {
+              this.btnBlocked = false;
+              return this.notifyErr("Please authenticate Telegram");
             }
 
-             const TGHandle = this.stepTwoData.formData.filter(x => x.id == "telegramHandle")[0]
-             TGHandle.value = tgId;
-             TGHandle.disabled = true;
-             this.hasTgVerfied = true;
+            const TGHandle = this.stepTwoData.formData.filter(
+              (x) => x.id == "telegramHandle"
+            )[0];
+            TGHandle.value = tgId;
+            TGHandle.disabled = true;
+            this.hasTgVerfied = true;
 
+            if (
+              res.data.hasTweetUrlVerified &&
+              res.data.user.followed.hasFollowed &&
+              this.hasTgVerfied &&
+              step == 1
+            ) {
+              const twitterHandle = this.stepTwoData.formData.filter(
+                (x) => x.id == "twitterHandle"
+              )[0];
+              twitterHandle.value = res.data.user.screen_name;
+              twitterHandle.disabled = true;
 
-
-            if(res.data.hasTweetUrlVerified && res.data.user.followed.hasFollowed && this.hasTgVerfied && step ==1 ){
-              const twitterHandle = this.stepTwoData.formData.filter(x => x.id == "twitterHandle")[0]
-              twitterHandle.value = res.data.user.screen_name
-              twitterHandle.disabled = true
-              
               this.btnBlocked = false;
               gotoNextPage = true;
               return this.slideToNextPage(gotoNextPage);
             }
-          }catch(e){
+          } catch (e) {
             console.log(e);
             this.btnBlocked = false;
-            if(e.error){
-             return  this.notifyErr(e.error)
+            if (e.error) {
+              return this.notifyErr(e.error);
             }
-            if(!e.hasTweetUrlVerified){
-              return this.notifyErr("Please check your tweet URL")
+            if (!e.hasTweetUrlVerified) {
+              return this.notifyErr("Please check your tweet URL");
             }
-            if(e.errors){
-              return alert(JSON.stringify(e.errors))
+            if (e.errors) {
+              return alert(JSON.stringify(e.errors));
             }
           }
-
-
-         
         } else {
-          this.notifyErr("Please follow all the rules and provide a tweet URL")
-          this.btnBlocked = false
-        
+          this.notifyErr("Please follow all the rules and provide a tweet URL");
+          this.btnBlocked = false;
         }
-        //  this.slideToNextPage(true);
-
       } else if (step == 2) {
-
         const isAllFilled = data.formData.every((input) => input.value.length);
         const twitterHandle = data.formData.filter((x) =>
           x.label.toLowerCase().includes("twitter")
@@ -446,14 +477,17 @@ export default {
         )[0];
 
         let ethAddressValidate;
-        // console.log(ethAddress);
 
-        if(this.blockchainType == "TEZOS"){
-          ethAddressValidate =  ethAddress.value.startsWith("tz") || ethAddress.value.startsWith("kt");
-        }else{
-          ethAddressValidate =  ethAddress.value.startsWith("0x");
+        if (this.blockchainType == "TEZOS") {
+          ethAddressValidate =
+            ethAddress.value.startsWith("tz") ||
+            ethAddress.value.startsWith("kt");
+        } else {
+          ethAddressValidate = ethAddress.value.startsWith("0x");
         }
-      
+
+        console.log(this.blockchainType, ethAddress);
+
         let twitterHandleValidate = false;
         let telegramHandleValidate = false;
 
@@ -484,31 +518,27 @@ export default {
 
         if (!ethAddressValidate && this.blockchainType == "ETHEREUM") {
           data.formData[4].errMsg = "Please enter a valid Eth Address";
-        } else if(!ethAddressValidate && this.blockchainType == "TEZOS") {
+        } else if (!ethAddressValidate && this.blockchainType == "TEZOS") {
           data.formData[4].errMsg = "Please enter a valid Tezos  Address ";
-        } else{
-           data.formData[4].errMsg = ""
+        } else {
+          data.formData[4].errMsg = "";
         }
-
-
 
         if (
           isAllFilled &&
           twitterHandleValidate &&
           telegramHandleValidate &&
-          ethAddressValidate && step == 2
+          ethAddressValidate &&
+          step == 2
         ) {
-
-          
           gotoNextPage = true;
           return this.slideToNextPage(gotoNextPage);
-        } 
+        }
       } else if (step == 3) {
-          return this.$refs.recaptcha.execute();
+        return this.$refs.recaptcha.execute();
       }
     },
 
-   
     resetState() {
       this.store.state = {
         ...this.initialState,
@@ -586,14 +616,25 @@ export default {
         for (let i in data) {
           investor[data[i].id] = data[i].value;
         }
-        investor.projectId = this.projectId;
+
+        if (localStorage.getItem("projectDetails")) {
+          investor.projectId = JSON.parse(
+            localStorage.getItem("projectDetails")
+          )._id;
+        }
+
         investor.did = did;
 
         investor.tweetUrl = this.stepOneData.rules[1].tweetUrl;
         investor.hasJoinedTGgroup = true;
         investor.hasTwitted = true;
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${recaptchaToken}`;
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${recaptchaToken}`;
+        //
+        if (this.$route.query.referrer && this.$route.query.referrer != "") {
+          url += `&referrer=${this.$route.query.referrer}`;
+        }
+
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
@@ -610,12 +651,9 @@ export default {
 
         // console.log("RESP", resp);
 
-
-
         this.isLoading = false;
         this.slideToNextPage(true);
         this.notifySuccess("Successfully Signed Up for whitelisting");
-
       } catch (err) {
         // this.isLoading = false;
         // console.log("ERROR", err);
@@ -632,9 +670,7 @@ export default {
 
     async checkIfAlreadyFilled(userDid) {
       try {
-        
-        let idOrSlugForUrl = this.getProjectIdOrSlug();
-
+        let idOrSlugForUrl = this.projectDetails._id;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?did=${userDid}&projectId=${idOrSlugForUrl}`;
         let headers = {
           "Content-Type": "application/json",
@@ -646,8 +682,14 @@ export default {
           header: headers,
           method: "GET",
         });
+        console.log(res);
 
-        if (res.data.length > 0) {
+        if (res.data && res.data.length > 0) {
+          const points =
+            res.data[0] && res.data[0].numberOfReferals
+              ? res.data[0].numberOfReferals
+              : 0;
+          localStorage.setItem("investorPoints", points);
           this.step = 3;
         }
       } catch (e) {
@@ -671,26 +713,27 @@ export default {
       const self = this;
       self.status = "submitting";
       self.$refs.recaptcha.reset();
-      
-        this.saveInvestor(this.stepTwoData.formData, recaptchaToken);   
-      
-     
+
+      this.saveInvestor(this.stepTwoData.formData, recaptchaToken);
     },
   },
 
-  mixins: [notificationMixin, fetchProjectDataMixin, checkTelegramAnnouncemntMixin]
+  mixins: [
+    notificationMixin,
+    fetchProjectDataMixin,
+    checkTelegramAnnouncemntMixin,
+  ],
 };
 </script>
 
 <style>
-.btn{
+.btn {
   border: 1px solid #fff;
-bottom: 0;
-right: 0;
-background: whitesmoke;
-/* color: #fff; */
+  bottom: 0;
+  right: 0;
+  background: whitesmoke;
+  /* color: #fff; */
 }
-
 
 .d-stepper .d-stepper-header {
   max-width: 600px;
@@ -765,18 +808,16 @@ background: whitesmoke;
   border: 0;
 }
 
-
 .footer {
   background-color: #494949;
 }
 .header {
   height: 220px;
-
 }
 .footer {
   padding: 10px 30px;
 }
-.footer .footer-logo p{
+.footer .footer-logo p {
   font-size: 10px;
 }
 .header .logo {
@@ -790,12 +831,10 @@ background: whitesmoke;
   margin-top: 5px;
   padding-right: 10px;
 }
-.header .logo  img{
- 
-   max-height: 100% !important;
+.header .logo img {
+  max-height: 100% !important;
   max-width: 100% !important;
   margin: 0 auto !important;
-
 }
 .header .text {
   width: 60%;
@@ -820,8 +859,8 @@ div.rule {
 .steps-container .steps {
   width: 100%;
 }
-.steps-container .card{
-  background-color:  #fff !important;
+.steps-container .card {
+  background-color: #fff !important;
 }
 
 .btn-container {
@@ -850,7 +889,7 @@ div.rule {
 @media screen and (max-width: 768px) {
   .header {
     font-size: 14px;
-    height: auto;
+    height: 220px;
   }
   .steps-container {
     width: 80%;
@@ -860,6 +899,14 @@ div.rule {
     margin-left: auto;
   }
 }
+
+@media screen and (orientation: landscape) {
+  .header {
+    font-size: 14px;
+    height: 220px;
+  }
+}
+
 @media screen and (max-width: 516px) {
   .steps-indicator {
     top: 30px;
@@ -873,6 +920,7 @@ div.rule {
     font-size: 12px;
   }
 }
+
 @media screen and (min-height: 1070px) {
   .footer {
     position: absolute;

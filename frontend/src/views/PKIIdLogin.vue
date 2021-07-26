@@ -65,7 +65,7 @@ h5 span {
   padding: 15px;
   border-bottom-right-radius: 20px;
 } */
-.cmp-logo  {
+.cmp-logo {
   border-bottom-right-radius: 20px;
   position: absolute;
   z-index: 10;
@@ -75,13 +75,11 @@ h5 span {
   margin-left: 20px;
   text-align: center;
   padding: 2px 0;
-  
 }
-.cmp-logo  img{
-   max-height: 100% !important;
+.cmp-logo img {
+  max-height: 100% !important;
   max-width: 100% !important;
   margin: 0 auto !important;
-
 }
 .hypersign-logo-footer {
   position: absolute;
@@ -106,9 +104,9 @@ h5 span {
   font-size: 15px !important;
   margin-bottom: 20px;
 }
- .scan-qr-message{
-   font-size: 10px;
- }
+.scan-qr-message {
+  font-size: 10px;
+}
 
 @media screen and (max-width: 990px) {
   .loginPage {
@@ -120,8 +118,7 @@ h5 span {
   padding: 10px;
   border: 1px solid rgba(128, 128, 128, 0.37);
   width: 100% !important;
-  margin: 0 auto !important;  
-
+  margin: 0 auto !important;
 }
 .qrWrapper img {
   width: 100%;
@@ -131,15 +128,13 @@ h5 span {
   width: 90%;
 } */
 
-
-.btn-hypersign{
+.btn-hypersign {
   background-color: #494949;
   border-color: #494949;
   padding: 10px 7px;
   width: 100% !important;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   /* min-width: 300px; */
-  
 }
 
 /* .btn-hypersign:hover{
@@ -147,8 +142,8 @@ h5 span {
   text-decoration: none;
 } */
 
-.loginWrapper{
-  width: 50% ;
+.loginWrapper {
+  width: 50%;
 }
 
 @media screen and (max-width: 990px) {
@@ -166,17 +161,12 @@ h5 span {
 .qrWrapper img {
   width: 100%;
 }
-.openMobileAppWrapper{
+.openMobileAppWrapper {
   display: none;
 }
 
-.btn-img-dark{
+.btn-img-dark {
   display: none;
-}
-@media screen and (max-width: 990px) {
-  .loginPage {
-    flex-direction: row;
-  }
 }
 
 @media screen and (max-width: 768px) {
@@ -197,7 +187,16 @@ h5 span {
     padding: 100px 0px;
   }
 }
-
+@media screen and (max-width: 600px) {
+  .loginPage {
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 100vh !important;
+  }
+  .cmp-logo {
+    margin-top: 10px;
+  }
+}
 @media screen and (max-width: 516px) {
   .login-inst-container {
     padding: 100px 50px;
@@ -222,27 +221,25 @@ h5 span {
     height: 40px;
     margin: 0 10px;
   }
-  .qrWrapper{
+  .qrWrapper {
     display: none;
   }
-  .openMobileAppWrapper{
+  .openMobileAppWrapper {
     display: block;
   }
-  .scan-qr-message{
+  .scan-qr-message {
     display: none;
   }
   /* .openWebWalletWrapper{
     width: 90%;
   } */
-  .loginInNow-text{
+  .loginInNow-text {
     font-size: 14px;
-    
-  } 
-  .with-hypersign-btn{
-    width: 70% !important;
-    
   }
-  .with-hypersign-btn .btn-text{
+  .with-hypersign-btn {
+    width: 70% !important;
+  }
+  .with-hypersign-btn .btn-text {
     text-align: center;
     width: 100%;
     padding: 0;
@@ -251,66 +248,66 @@ h5 span {
     position: relative;
     padding: 10px;
   }
-   .with-hypersign-btn  .btn-img{
-     display: none;
-    }
-  
-
+  .with-hypersign-btn .btn-img {
+    display: none;
+  }
 }
-@media screen and (max-width: 375px){
-  .with-hypersign-btn  img{
-     display: none;
-   }
-   .with-hypersign-btn{
+@media screen and (max-width: 375px) {
+  .with-hypersign-btn img {
+    display: none;
+  }
+  .with-hypersign-btn {
     width: 80% !important;
-    
   }
 }
 /* .with-hypersign-btn  */
 </style>
 <template>
   <div class="row vh-100 loginPage">
-    <div class="cmp-logo" >
-      
-        <img
-         :src="projectDetails.logoUrl || 'https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png'"
-         
-         
-        />
-     
+    <div class="cmp-logo">
+      <img
+        :src="
+          projectDetails.logoUrl ||
+            'https://thumb.tildacdn.com/tild3065-3765-4865-b331-393637653931/-/resize/150x/-/format/webp/hypersign_Yellow.png'
+        "
+      />
     </div>
 
     <div
-   :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`"
+      :style="
+        `background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor}`
+      "
       class="col col-lg-8 col-md-12 col-sm-12 d-flex justify-content-center align-items-center border border-1 shadow text-left  login-inst-container"
     >
       <div>
-          <!-- <h3>Whitelist for Hypersign Data Defenders Program</h3> -->
-        <h3>{{projectDetails.projectName}}</h3>
+        <!-- <h3>Whitelist for Hypersign Data Defenders Program</h3> -->
+        <h3>{{ projectDetails.projectName }}</h3>
         <p class="mt-4">Instructions:</p>
-        <ol class="px-3">          
+        <ol class="px-3">
           <li>Login with the Hypersign</li>
           <li>Follow the steps provided in the next screens</li>
           <li>Submit additional information as requested</li>
           <li>Wait for winners announcement.</li>
         </ol>
 
-
-
-     <div class="hypersign-logo-footer">
-      <div>
-        <p class="text-white my-0 ">Powered By</p>
-        <img
-          :src="require(`../assets/footerLogo.png`)"
-          style="max-width: 80px;"
-        />
+        <div class="hypersign-logo-footer">
+          <div>
+            <p class="text-white my-0 ">Powered By</p>
+            <img
+              :src="require(`../assets/footerLogo.png`)"
+              style="max-width: 80px;"
+            />
+          </div>
+        </div>
       </div>
     </div>
-      </div>
-    </div>
 
-    <div class="col col-lg-4 col-md-12 col-sm-12 border border-1 bg-white border">
-      <div class="d-flex flex-column justify-content-between vh-100 px-3 login-container">
+    <div
+      class="col col-lg-4 col-md-12 col-sm-12 border border-1 bg-white border"
+    >
+      <div
+        class="d-flex flex-column justify-content-between vh-100 px-3 login-container"
+      >
         <a
           class="text-right mt-3  text-dark text-reset fw-bold"
           style="font-weight:600"
@@ -325,16 +322,15 @@ h5 span {
 
             <div class="qrWrapper">
               <vue-qr
-                
                 v-if="value != ''"
                 :logoSrc="src2"
-                margin=1
+                margin="1"
                 :text="value"
                 logoBackgroundColor="white"
-                logoCornerRadius=2
+                logoCornerRadius="2"
               ></vue-qr>
             </div>
-  
+
             <p class="mt-1 scan-qr-message">
               <span style="color:grey"
                 >Scan QR code with the Hypersign Mobile App</span
@@ -343,41 +339,58 @@ h5 span {
 
             <div class="mb-2 openMobileAppWrapper">
               <a
-               :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important; border-color:${projectDetails.fontColor}`"
-               v-if="this.value != ''"  class="btn btn-hypersign text-white " :href="`${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`" >
+                :style="
+                  `background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important; border-color:${projectDetails.fontColor}`
+                "
+                v-if="this.value != ''"
+                class="btn btn-hypersign text-white "
+                :href="
+                  `${this.$config.mobileWalletAddress}:deeplink?url=${this.value}`
+                "
+              >
                 <!-- <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
                 class="ml-0 rounded rounded-circle  left"/> -->
                 <div style="font-size: smaller;  ">USE MOBILE WALLET</div>
-              </a>  
+              </a>
             </div>
 
             <h6>OR</h6>
 
             <div class="mb-2 ">
-              <a v-if="this.value != ''" class="btn btn-hypersign text-white " href="#"                
-              :style="`background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important; border-color:${projectDetails.fontColor}`"
-                @click.prevent="openWallet()" >
+              <a
+                v-if="this.value != ''"
+                class="btn btn-hypersign text-white "
+                href="#"
+                :style="
+                  `background-color: ${projectDetails.themeColor}; color: ${projectDetails.fontColor} !important; border-color:${projectDetails.fontColor}`
+                "
+                @click.prevent="openWallet()"
+              >
                 <!-- <img style="height:40px; float: left;" 
                 :src="require('../assets/hypersignSmallLogo.png')"
                 class="ml-0 rounded rounded-circle  left"/> -->
                 <div style="font-size: smaller; ">USE WEB WALLET</div>
-              </a>  
+              </a>
             </div>
           </div>
 
-          <span v-if="socketMessage" style="color:grey; font-size:small">{{socketMessage}}</span>
+          <span v-if="socketMessage" style="color:grey; font-size:small">{{
+            socketMessage
+          }}</span>
         </div>
 
         <span style="font-size: medium; color:grey; padding: 10px">
-          Get the app on 
-          <a href="https://play.google.com/store/apps/details?id=com.hypersign.cordova" target="__blank">Android</a>, 
+          Get the app on
+          <a
+            href="https://play.google.com/store/apps/details?id=com.hypersign.cordova"
+            target="__blank"
+            >Android</a
+          >,
           <a :href="$config.webWalletAddress" target="__blank">Web</a>
         </span>
       </div>
     </div>
-
- 
   </div>
 </template>
 
@@ -386,11 +399,11 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import url, { format } from "url";
 import VueQr from "vue-qr";
-import notificationMixins from '../mixins/notificationMixins';
+import notificationMixins from "../mixins/notificationMixins";
 import apiClinet from "../mixins/apiClientMixin";
-import fetchProjectDataMixin from '../mixins/fetchProjectDataMixin';
-import localStorageMixin from '../mixins/localStorageMixin';
-import checkTelegramAnnouncementChannelMixin from '../mixins/checkTelegramAnnChannel';
+import fetchProjectDataMixin from "../mixins/fetchProjectDataMixin";
+import localStorageMixin from "../mixins/localStorageMixin";
+import checkTelegramAnnouncementChannelMixin from "../mixins/checkTelegramAnnChannel";
 
 export default {
   name: "Login",
@@ -400,7 +413,7 @@ export default {
   },
   data() {
     return {
-      src2: require('../assets/icon.png'),
+      src2: require("../assets/icon.png"),
       error: "",
       socketMessage: "",
       active: 0,
@@ -420,9 +433,7 @@ export default {
         imagePath: "/apple-icon-57x57.png",
         filter: "color",
       },
-      projectId: localStorage.getItem("projectId"),
-      projectSlug: localStorage.getItem("projectSlug"),
-      walletWindow: null
+      walletWindow: null,
     };
   },
   async created() {
@@ -445,7 +456,6 @@ export default {
       websocketUrl = websocketUrl.substring(0, websocketUrl.length - 1);
     }
 
-
     this.isLoading = true;
     var _this = this;
 
@@ -453,11 +463,11 @@ export default {
     _this.socketMessage = "Connecting to auth server...";
     this.connection = new WebSocket(this.$config.websocketUrl);
     this.connection.onopen = function() {
-      _this.socketMessage = "Connected to auth server..."
+      _this.socketMessage = "Connected to auth server...";
       // console.log("Websocket connection is open");
     };
 
-    this.connection.onmessage = ({ data }) =>  {      
+    this.connection.onmessage = ({ data }) => {
       // console.log("Websocket connection messag receieved ", data);
       let messageData = JSON.parse(data);
       // console.log(messageData);
@@ -472,34 +482,39 @@ export default {
         // console.log(authorizationToken);
         localStorage.setItem("authToken", authorizationToken);
 
-
         if (localStorage.getItem("authToken") != null) {
           if (_this.$route.params.nextUrl != null) {
             _this.$router.push(_this.$route.params.nextUrl);
           } else {
-           
-            let path = "/form";
+            let path = "/app/form";
             // let route = {}
-            
-            const projectSlug = this.projectSlug; //localStorage.getItem("projectSlug")
-            const projectId = this.projectId; //localStorage.getItem("projectId");
+
+            console.log(this.$route);
+
+            const projectSlug = this.$route.params.projectSlug; //localStorage.getItem("projectSlug")
+            // const projectId = this.projectId; //localStorage.getItem("projectId");
             // console.log(projectId)
 
             // route["name"] = "investor";
             // route["path"] = path;
 
-            if(!projectSlug){
-              if(!projectId){
-                path = "form";  
-              }else{
+            if (!projectSlug) {
+              if (!projectId) {
+                path = "/app/form";
+              } else {
                 // route["query"] = { projectId }
-                path += "?projectId=" + projectId; 
+                path += "?projectId=" + projectId;
               }
-            }else{
+            } else {
               // route["params"] = { slug: projectSlug};
-              path += "/" + projectSlug;
+              // console.log(this.$route.query)
+              if (this.$route.query.referrer) {
+                path +=
+                  "/" + projectSlug + `?referrer=${this.$route.query.referrer}`;
+              } else {
+                path += "/" + projectSlug;
+              }
             }
-            
 
             // console.log({
             //   projectSlug,
@@ -508,7 +523,7 @@ export default {
             // });
 
             // close the wallet window after authentication
-            if(this.walletWindow) {
+            if (this.walletWindow) {
               this.walletWindow.close();
             }
 
@@ -525,10 +540,13 @@ export default {
     };
 
     // if (this.projectId || this.projectSlug ) {
-      // console.log("Fetching projectDetails...");    
-      this.projectDetails = await this.fetchProjectData({isAuthTokenAvailable: false});
-      // console.log("Setting projectDetails...");
-      localStorage.setItem("projectDetails", JSON.stringify(this.projectDetails));
+    // console.log("Fetching projectDetails...");
+
+    this.projectDetails = await this.fetchProjectData({
+      isAuthTokenAvailable: false,
+    });
+    // console.log("Setting projectDetails...");
+    localStorage.setItem("projectDetails", JSON.stringify(this.projectDetails));
     // }
   },
   mounted() {
@@ -543,16 +561,15 @@ export default {
           "popUpWindow",
           `height=800,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`
         );
-      }else{
+      } else {
         // console.log("this value is not")
       }
     },
 
-
     push(path) {
       this.$router.push(path);
     },
-  
+
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
     },
@@ -560,8 +577,12 @@ export default {
     formateDate(d) {
       return new Date(d).toLocaleString();
     },
-    
   },
-  mixins: [notificationMixins, fetchProjectDataMixin, localStorageMixin, checkTelegramAnnouncementChannelMixin]
+  mixins: [
+    notificationMixins,
+    fetchProjectDataMixin,
+    localStorageMixin,
+    checkTelegramAnnouncementChannelMixin,
+  ],
 };
 </script>

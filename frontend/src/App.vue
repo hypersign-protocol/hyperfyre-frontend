@@ -115,14 +115,14 @@
         v-if="showNavbar"
       >
         <span slot="header">
-          <div class="ml-1 mt-3 mb-2">
+          <div class="ml-1 mt-3 mb-2" style="padding-left: 18px;">
             <img
-              :src="require('./assets/hypersign.webp')"
+              :src="require('./assets/Fidato_logo.png')"
               alt="logo"
-              width="175px"
+              width="150px"
             />
           </div>
-          <p class="header-text">{{ $config.app.name }}</p>
+          <!-- <p class="header-text">{{ $config.app.name }}</p> -->
           <hr class="rule" />
         </span>
         <span slot="footer" class="text-center">{{ $config.app.version }}</span>
@@ -212,22 +212,28 @@ export default {
 
         menu: [
         {
-          href: "/admin/dashboard",
+          href: "/app/admin/dashboard",
           title: "Dashboard",
           icon: "fas fa-tachometer-alt",
         },
         {
-          href: "/admin/project",
+          href: "/app/admin/project",
           title: "Projects",
           icon: "fas fa-plane-departure",
         },
         {
-          href: "/admin/investors",
+          href: "/app/admin/investors",
           title: "Investors",
           icon: "fas fa-users",
+          exactPath: true,
         },
         {
-          href: "/admin/login",
+          href: "/app/admin/subscription",
+          title: "Subscription",
+          icon: "fas fa-tags",
+        },
+        {
+          href: "/app/admin/login",
           title: "Logout",
           icon: "fas fa-sign-out-alt",
         },
@@ -242,9 +248,10 @@ export default {
 
 updated(){
      this.showNavbar =
-      window.location.pathname.includes("/admin/investors") ||
-      window.location.pathname.includes("/admin/project") ||
-      window.location.pathname.includes("/admin/dashboard")
+      window.location.pathname.includes("/app/admin/investors") ||
+      window.location.pathname.includes("/app/admin/project") ||
+      window.location.pathname.includes("/app/admin/dashboard") || 
+      window.location.pathname.includes("/app/admin/subscription")
         ? true
         : false;  
 },

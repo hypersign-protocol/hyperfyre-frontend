@@ -14,32 +14,12 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       fromDate,
       toDate,
       ownerDid,
-      twitterHandle,
-      telegramHandle,
-      twitterPostFormat,
+      social,      
       userData,
-      telegramAnnouncementChannel,
       blockchainType,
       themeColor,
       fontColor
     } = req.body;
-
-    // if (
-    //   projectName == "" ||
-    //   logoUrl == "" ||
-    //   fromDate == "" ||
-    //   toDate == "" ||
-    //   twitterPostFormat == ""
-    // ) {
-    //   res.statusMessage =
-    //     "projectName, logoUrl, fromDate, toDate can not be empty";
-    //   return res.status(400).end();
-    // }
-
-    // if (isNaN(Date.parse(fromDate)) || isNaN(Date.parse(toDate))) {
-    //   res.statusMessage = "Invalid fromDate or toDate";
-    //   return res.status(400).end();
-    // }
 
     if (Date.parse(fromDate) > Date.parse(toDate)) {
       return next(ApiError.badRequest("fromDate can not be greater than toDate"));
@@ -50,6 +30,16 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
     if(project){
       return next(ApiError.badRequest("Choose different project name. This project name is already taken"));
     }
+
+    const {
+      telegramHandle,
+      telegramAnnouncementChannel, 
+    } =  social.telegram;
+
+    const {
+      twitterHandle,
+      twitterPostFormat,
+    } =  social.twitter;
 
     const newProject: IProject = await ProjectModel.create({
       projectName,
@@ -81,7 +71,8 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
     let projectList: Array<IProject>;
     let projectListTmp = [];
     if ( userData.id ) {
-      projectList = await ProjectModel.find({}).where({ ownerDid: userData.id });
+      const sortyByFromDateTimeDesc = { fromDate: -1 };
+      projectList = await ProjectModel.find({}).where({ ownerDid: userData.id }).sort(sortyByFromDateTimeDesc);
       let i;
       for(i = 0; i < projectList.length; i++){
         const project = projectList[i];
@@ -254,19 +245,28 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       logoUrl,
       fromDate,
       toDate,
-      twitterHandle,
-      telegramHandle,
-      twitterPostFormat,
+      social,
       _id,
       userData,
       projectStatus,
-      telegramAnnouncementChannel,
       blockchainType,
       themeColor,
       fontColor
     } = req.body;
 
     const { id: ownerDid } = userData;
+
+    const {
+      telegramHandle,
+      telegramAnnouncementChannel, 
+    } =  social.telegram;
+
+    const {
+      twitterHandle,
+      twitterPostFormat,
+    } =  social.twitter;
+
+
     // FindbyIdupdate returns the old object, however the value has been updated in the db
     await ProjectModel.findByIdAndUpdate(_id, {
       projectName,

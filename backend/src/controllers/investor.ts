@@ -1,4 +1,4 @@
-import { logger, hypersignSDK, whitelistingSchemaId, nodeServer, hostnameurl, hsAuthServerEp } from "../config";
+import { logger, hypersignSDK, whitelistingSchemaId, nodeServer, hostnameurl, hsAuthServerEp, REFFERAL_MULTIPLIER } from "../config";
 import { Request, Response, NextFunction } from "express";
 import InvestorModel, { IInvestor } from "../models/investor";
 let { template :credentialMailTemplate} = require('../services/mail.template');
@@ -10,10 +10,19 @@ const jsonWebToken = require('jsonwebtoken');
 
 const { keys: issuerKeyPair,  mail, jwt } = require("../../hypersign.json");
 
+function isHypersignDid(did){
+  if(!did || did === "") return false;
+  return (did.indexOf('did:hs:') > -1);
+}
+
 async function addInvestor(req: Request, res: Response, next: NextFunction) {
   try {
     logger.info("InvestorController:: addInvestor() method start..");
     const { did, email, name, ethAddress, twitterHandle, telegramHandle, hasTwitted, hasJoinedTGgroup,  projectId, tweetUrl  } = req.body;
+    const { referrer } = req.query; // did of guy who have refered
+    logger.info("InvestorController:: addInvestor(): referrer = " + referrer)
+    const isComingFromReferal = referrer && isHypersignDid(referrer) && did != referrer; 
+    logger.info("InvestorController:: addInvestor(): isComingFromReferal = " + isComingFromReferal)
 
     logger.info("InvestorController:: addInvestor(): before findning investor by did = " + did);
     const investor:IInvestor = await InvestorModel.where({ did: did, projectId: projectId }).findOne();
@@ -45,9 +54,34 @@ async function addInvestor(req: Request, res: Response, next: NextFunction) {
       isVerfiedByHypersign: false,
       isVerificationComplete,
       projectId,
-      tweetUrl
+      tweetUrl,
+      numberOfReferals: !isComingFromReferal ? 0 : 0.5 * REFFERAL_MULTIPLIER
     });
     logger.info("InvestorController:: addInvestor(): after creating a new investor into db id = " + new_investor["_id"]);
+
+    // update the followers if refere is present in query
+    if(isComingFromReferal){
+      const filter = { did: referrer, projectId };
+
+      // find the refere 
+      logger.info("InvestorController:: addInvestor(): before fetchin the refer from db");
+      const investor:IInvestor = await InvestorModel.where(filter).findOne();
+      if(investor){
+        logger.info("InvestorController:: addInvestor(): after fetchin the refer from db id = " + investor.did);
+        
+        // update the refere followers
+        const updateParams = {
+          numberOfReferals: (investor.numberOfReferals + 1) * REFFERAL_MULTIPLIER
+        };
+  
+        logger.info("InvestorController:: addInvestor(): updateParams = " + JSON.stringify(updateParams));
+        logger.info("InvestorController:: addInvestor(): before updating an investor into db");
+        updateInvestorInDb(filter, updateParams);
+        logger.info("InvestorController:: addInvestor(): after updating an investor into db");
+      }else{
+        logger.info("InvestorController:: addInvestor(): could not fetch investor. filter = " + JSON.stringify(filter));
+      }
+    }
 
     issueCredential(req, res, next);
     // res.send(new_investor);
@@ -264,7 +298,9 @@ async function issueCredential(req: Request, res: Response, next: NextFunction){
     logger.info("InvestorController:: issueCredential(): after sending email");
 
 
-    res.send({message: "Whitelisting credential has been successfully sent to the investor email", credentialUrl: link})
+    // res.send({message: "Whitelisting credential has been successfully sent to the investor email", credentialUrl: link})
+    req.body["result"] = {message: "Whitelisting credential has been successfully sent to the investor email", credentialUrl: link}
+    return next()
 
   } catch (e){
     logger.error('InvestorController:: issueCredential(): Error ' + e);

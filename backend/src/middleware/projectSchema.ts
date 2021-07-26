@@ -39,18 +39,20 @@ export const ProjectSchemaBody = [
   //   .withMessage("end date time can not be less than current time"),
 
 
-  body("twitterHandle")
-    .exists({ checkFalsy: true })
-    .trim()
-    .withMessage("twitterHandle is null or empty"),
-  body("telegramHandle")
-    .exists({ checkFalsy: true })
-    .trim()
-    .withMessage("telegramHandle is null or empty"),
-  body("twitterPostFormat")
-    .exists({ checkFalsy: true })
-    .trim()
-    .withMessage("twitterPostFormat is null or empty"),
+  // body("twitterHandle")
+  //   .exists({ checkFalsy: true })
+  //   .trim()
+  //   .withMessage("twitterHandle is null or empty"),
+
+  // body("telegramHandle")
+  //   .exists({ checkFalsy: true })
+  //   .trim()
+  //   .withMessage("telegramHandle is null or empty"),
+
+  // body("twitterPostFormat")
+  //   .exists({ checkFalsy: true })
+  //   .trim()
+  //   .withMessage("twitterPostFormat is null or empty"),
 
   body("projectStatus")
     .exists()

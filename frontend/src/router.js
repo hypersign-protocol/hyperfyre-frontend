@@ -6,33 +6,25 @@ import fetch from "node-fetch";
 Vue.use(Router);
 
 const router = new Router({
-  mode: "history",
+  mode: "history",  
   routes: [
     {
       path: "/",
-      redirect: "/login",
+      name: "Website",
+      component: () => import(/* webpackChunkName: "investorLogin" */ './views/Website.vue'),
     },
-    // {
-    //   path: "/login",
-    //   redirect: "/login",
-    // },
-    // {
-    //   path: "/studio",
-    //   redirect: "/login",
-    // },
-    
+     {
+      path: "/app",
+      redirect: "/app/admin/login",
+    },
+
     {
-      path: "/login",
+      path: "/app/login/:projectSlug",
       name: "PKIIdLogin",
       component: () => import(/* webpackChunkName: "investorLogin" */ './views/PKIIdLogin.vue'),
     },
     {
-      path: "/connectwithtwitter",
-      name: "ConnectWithTwitter",
-      component: () => import(/* webpackChunkName: "investorLogin" */ './views/connectWIthTwitter.vue'),
-    },
-    {
-      path: "/form/:slug",
+      path: "/app/form/:slug",
       name: "investor",
       component: () => import(/* webpackChunkName: "investor" */ './views/Investor.vue') ,
       meta: {
@@ -40,7 +32,7 @@ const router = new Router({
       },
     },
     {
-      path: "/form",
+      path: "/app/form",
       name: "investor",
       component: () => import(/* webpackChunkName: "investor" */ './views/Investor.vue') ,
       meta: {
@@ -48,16 +40,16 @@ const router = new Router({
       },
     },
     {
-      path: "/admin",
-      redirect: "/admin/login",
+      path: "/app/admin",
+      redirect: "/app/admin/login",
     },
     {
-      path: "/admin/login",
+      path: "/app/admin/login",
       name: "AdminLogin",
       component: () => import(/* webpackChunkName: "adminLogin" */ './views/AdminLogin.vue'),
     },
     {
-      path: "/admin/dashboard",
+      path: "/app/admin/dashboard",
       name: "Dashboard",
       component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue') ,
       meta: {
@@ -66,7 +58,7 @@ const router = new Router({
       },
     },
     {
-      path: "/admin/investors",
+      path: "/app/admin/investors",
       name: "investors",
       component: () => import(/* webpackChunkName: "investors" */ './views/Investors.vue') ,
       meta: {
@@ -75,11 +67,20 @@ const router = new Router({
       },
     },
     {
-      path: "/admin/project",
+      path: "/app/admin/project",
       name: "project",
       component: () => import(/* webpackChunkName: "project" */ './views/Project.vue') ,
       meta: {
-        requiresAuth: false,
+        requiresAuth: true,
+        admin: true,
+      },
+    },
+    {
+      path: "/app/admin/subscription",
+      name: "subscription",
+      component: () => import(/* webpackChunkName: "subscription" */ './views/Subscription.vue') ,
+      meta: {
+        requiresAuth: true,
         admin: true,
       },
     },
@@ -102,21 +103,30 @@ router.beforeEach((to, from, next) => {
         .then((json) => {
           if (json.status == 403) {
             next({
-              path: to.meta.admin ? "/admin/login" : "/login",
+              path: to.meta.admin ? "/app/admin/login" : "/app/login",
               params: { nextUrl: to.fullPath },
             });
           } else {
             localStorage.setItem("user", JSON.stringify(json.message));
-            next();
+            console.log(to.path);
+            if (to.meta.admin && !json.message.isSubscribed && to.path != "/app/admin/subscription") {
+              next({
+                  path: '/app/admin/subscription',
+                  params: { nextUrl: to.fullPath }
+              })
+            } else {
+                next()
+            }
           }
         })
         .catch((e) => {
           next({
-            path: to.meta.admin ? "/admin/login" : "/login",
+            path: to.meta.admin ? "/app/admin/login" : "/app/login",
             params: { nextUrl: to.fullPath },
           });
         });
     } else {
+      // I think this part is not required anymore...
       if((to.params["slug"] || to.query["projectId"]) && (to.params["slug"] != "" || to.query["projectId"] != "")){
         // console.log("first we need to remove all these items projectDetails, projectSlug, projectId")
         localStorage.removeItem("projectDetails");
@@ -138,7 +148,11 @@ router.beforeEach((to, from, next) => {
       }
 
       next({
-        path: to.meta.admin ? "/admin/login" : "/login",
+        path: to.meta.admin ? "/app/admin/login" : (
+          !to.query["referrer"] ? 
+          `/app/login/${to.params["slug"]}` :
+          `/app/login/${to.params["slug"]}?referrer=${to.query["referrer"]}`
+        ),
         params: { nextUrl: to.fullPath },
       });
     }

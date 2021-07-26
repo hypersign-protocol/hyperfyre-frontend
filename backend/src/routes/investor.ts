@@ -8,6 +8,10 @@ import {
 } from "../middleware/investorSchema";
 
 import { validateRequestSchema } from "../middleware/validateRequestSchema";
+import {
+  verifySubscription,
+  updateSubscription
+} from "../middleware/subscription";
 
 export = (hypersign) => {
 
@@ -19,7 +23,9 @@ export = (hypersign) => {
     hypersign.authorize.bind(hypersign),
     InvestorSchemaBody,
     validateRequestSchema,
-    InvestorController.addInvestor
+    verifySubscription,
+    InvestorController.addInvestor,
+    updateSubscription
   );
 
   router.get(

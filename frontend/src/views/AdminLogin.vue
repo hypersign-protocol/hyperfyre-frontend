@@ -196,6 +196,7 @@ export default {
   },
   data() {
     return {
+      walletWindow: null,
       src2: require("../assets/icon.png"),
       active: 0,
       username: "",
@@ -262,12 +263,15 @@ export default {
         localStorage.setItem("authToken", authorizationToken);
 
         if (localStorage.getItem("authToken") != null) {
+          if(this.walletWindow){
+            this.walletWindow.close();
+          }
           if (_this.$route.params.nextUrl != null) {
             _this.$router.push(_this.$route.params.nextUrl);
           } else {
             // console.log(_this.$router);
             window.location.href =
-              window.location.origin + "/admin/dashboard";
+              window.location.origin + "/app/admin/dashboard";
             // _this.$router.push("dashboard");
           }
         }
@@ -283,7 +287,7 @@ export default {
   methods: {
     openWallet() {
       if (this.value != "") {
-        window.open(
+        this.walletWindow = window.open(
           `${this.$config.webWalletAddress}/deeplink?url=${this.value}`,
           "popUpWindow",
           `height=800,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`

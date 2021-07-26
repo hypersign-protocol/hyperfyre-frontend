@@ -6,11 +6,21 @@ export interface IProject extends Document{
     fromDate: string; // data and time both
     toDate: string; // data and time both
     ownerDid: string;
-    twitterHandle: string;
-    telegramHandle: string;
-    twitterPostFormat: string;
+
+    // social
+        // twitter
+        twitterHandle: string;
+        twitterPostFormat: string;
+        
+        // telegram
+        telegramHandle: string;
+        telegramAnnouncementChannel: string;
+
+        // facebook        
+
+        // instagram
+        
     projectStatus: Boolean;
-    telegramAnnouncementChannel: string;
     blockchainType: string;
     investorsCount: number;
     themeColor: string;
