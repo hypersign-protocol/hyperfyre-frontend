@@ -489,7 +489,7 @@ export default {
             let path = "/app/form";
             // let route = {}
 
-            console.log(this.$route);
+            // console.log(this.$route);
 
             const projectSlug = this.$route.params.projectSlug; //localStorage.getItem("projectSlug")
             // const projectId = this.projectId; //localStorage.getItem("projectId");

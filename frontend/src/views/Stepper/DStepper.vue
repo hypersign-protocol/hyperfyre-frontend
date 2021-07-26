@@ -486,7 +486,7 @@ export default {
           ethAddressValidate = ethAddress.value.startsWith("0x");
         }
 
-        console.log(this.blockchainType, ethAddress);
+        // console.log(this.blockchainType, ethAddress);
 
         let twitterHandleValidate = false;
         let telegramHandleValidate = false;
@@ -682,7 +682,7 @@ export default {
           header: headers,
           method: "GET",
         });
-        console.log(res);
+        // console.log(res);
 
         if (res.data && res.data.length > 0) {
           const points =

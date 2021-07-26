@@ -7,7 +7,7 @@ const subscriptionService = new SubscriptionService();
 
 async function verifySubscription(req: Request, res: Response, next: NextFunction){    
     try{
-        console.log("call comes in verifySubscription middleware");
+        // console.log("call comes in verifySubscription middleware");
         // get the prpjectId from request
         const {  projectId  } = req.body;
     
@@ -30,7 +30,7 @@ async function verifySubscription(req: Request, res: Response, next: NextFunctio
 
 async function verifySubscriptionWithDid(req: Request, res: Response, next: NextFunction){    
     try{
-        console.log("call comes in verifySubscription middleware");
+        // console.log("call comes in verifySubscription middleware");
         // get the prpjectId from request
         const {  userData  } = req.body;
         
@@ -48,7 +48,7 @@ async function verifySubscriptionWithDid(req: Request, res: Response, next: Next
 
 async function updateSubscription(req: Request, res: Response, next: NextFunction){
     try{
-        console.log("call comes in updateSubscription middleware");
+        // console.log("call comes in updateSubscription middleware");
         // if user has successfully filled the form then
         const { result,  ownerDid } = req.body;
         // updated the usage table for that admin
