@@ -272,7 +272,8 @@ export default {
         // localStorage.setItem("subscriptions", JSON.stringify(this.subscriptions));
 
         this.notifySuccess("Your are subscribed. SubscriptionId = " + json._id);
-        location.reload()
+        
+        window.location.href = window.location.hostname + "/app/admin/project";
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
