@@ -68,7 +68,7 @@ i {
 
     <div class="row" style="margin-top: 2%">
       <div
-        class="col-md-3"
+        class="col-md-4"
         style="text-align: center;"
         v-for="plan in plans"
         v-bind:key="plan.planName"
