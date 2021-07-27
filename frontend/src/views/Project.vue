@@ -286,7 +286,7 @@ i {
     <div class="row">
         <div class="col-md-8">
             <div class="form-group">
-              <input v-if="projects.length"  @keyup="handleSearch" type="text" class="form-control w-25" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Search projects by name">
+              <input v-if="projects.length"  @keyup="handleSearch" type="text" class="form-control w-25" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Search events by name">
             </div>
         </div>
 
@@ -326,8 +326,8 @@ i {
         <div class="card">
           <div class="card-body">
             <h4>
-              Congratulations!!! Your project is successfully created, you can
-              give this link to your investors for whitelisting.
+              Congratulations!!! Your event is successfully created, you can
+              give this link to your users for whitelisting.
               <a :href="whitelistingLink" target="_blank">{{
                 whitelistingLink
               }}</a>
@@ -338,7 +338,7 @@ i {
     </div>
 
       <div v-if="!projectsToShow.length">
-          <h3>No project found, click on "create" button to create a new project!</h3>
+          <h3>No events found, click on "create" button to create a new event!</h3>
       </div>
 
     <div class="row" style="margin-top: 2%">
@@ -423,7 +423,7 @@ i {
                   >
                     <i class="fas fa-users"></i
                     ><a :href="`/app/admin/investors?projectId=${project._id}`"
-                      >Investor List ({{project.investorsCount}})</a
+                      >User List ({{project.investorsCount}})</a
                     >
                   </li>
 
@@ -462,7 +462,7 @@ i {
               style="float: right; cursor: pointer"
               data-toggle="tooltip"
               data-placement="bottom"
-              title="Edit this project"
+              title="Edit this event"
               ><i class="fas fa-pencil-alt"  @click="editProject(project)"></i
             ></span>
           </div>

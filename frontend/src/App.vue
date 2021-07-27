@@ -218,18 +218,18 @@ export default {
         },
         {
           href: "/app/admin/project",
-          title: "Projects",
+          title: "Events",
           icon: "fas fa-plane-departure",
         },
         {
           href: "/app/admin/investors",
-          title: "Investors",
+          title: "Users",
           icon: "fas fa-users",
           exactPath: true,
         },
         {
           href: "/app/admin/subscription",
-          title: "Subscription",
+          title: "Subscriptions",
           icon: "fas fa-tags",
             exactPath: true,
         },
