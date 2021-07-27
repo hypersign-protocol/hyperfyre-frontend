@@ -98,7 +98,7 @@ i {
 
     <div class="row" style="margin-top: 2%;">
       <div class="col-md-12">
-        <table class="table table-bordered" style="background:#FFFF">
+        <table  v-if="subscriptions.length" class="table table-bordered" style="background:#FFFF">
           <thead class="thead-light">
             <tr>
               <th>Subscription Id</th>
