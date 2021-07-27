@@ -71,7 +71,7 @@ i {
         class="col-md-4"
         style="text-align: center;"
         v-for="plan in plans"
-        v-bind:key="plan.planName"
+        v-bind:key="plan._id"
       >
         <div class="card">
           <div class="card-header" style="padding-top: 10px">
@@ -109,7 +109,7 @@ i {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="row in subscriptions" :key="row.planId">
+            <tr v-for="row in subscriptions" :key="row._d">
               <th>
                 {{ row._id }}
               </th>

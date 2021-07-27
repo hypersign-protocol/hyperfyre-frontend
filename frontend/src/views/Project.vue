@@ -338,7 +338,7 @@ i {
     </div>
 
       <div v-if="!projectsToShow.length">
-          <h3>No project found, click on "create" button to create a project!</h3>
+          <h3>No project found, click on "create" button to create a new project!</h3>
       </div>
 
     <div class="row" style="margin-top: 2%">
