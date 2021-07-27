@@ -231,11 +231,14 @@ export default {
           href: "/app/admin/subscription",
           title: "Subscription",
           icon: "fas fa-tags",
+            exactPath: true,
         },
         {
           href: "/app/admin/login",
           title: "Logout",
           icon: "fas fa-sign-out-alt",
+          exactPath: true,
+        
         },
       ],
     };
