@@ -63,13 +63,13 @@
       <div class="col-md-6">
         <div class="card">
           <div class="card-body tile">{{ projectCount }}</div>
-          <div class="card-header">Projects</div>
+          <div class="card-header">Events</div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="card">
           <div class="card-body tile">{{ schemaCount }}</div>
-          <div class="card-header">Investors</div>
+          <div class="card-header">Users</div>
         </div>
       </div>
     </div>
