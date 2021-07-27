@@ -464,9 +464,9 @@ i {
           </div>
         </div>
 
-        <!-- <div v-if="!projectsToShow.length">
-          <h1>You dont have any projects yet,  start creating by clicking on create button</h1>
-        </div> -->
+        <div v-if="!projectsToShow.length">
+          <h3>You dont have any projects yet,  start creating by clicking on create button</h3>
+        </div>
 
       </div>
     </div>
