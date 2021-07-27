@@ -247,8 +247,6 @@ export default {
    
 
   mounted() {
-    console.log("MOUNTED")
-   
     setTimeout(() => {
       this.filterMenu()
     }, 500)
@@ -275,7 +273,7 @@ export default {
   
                   const user = JSON.parse(localStorage.getItem("user"))
 
-                  console.log(user);
+                  
                   if(user.isSubscribed){
                      return
                   
