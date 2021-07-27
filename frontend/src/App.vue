@@ -273,11 +273,13 @@ export default {
                   const user = JSON.parse(localStorage.getItem("user"))
 
                   console.log(user);
-                  if(!user.isSubscribed){
-                    return
+                  if(user.isSubscribed){
+                     return
+                  
                   }
+                  this.menu  = this.menu.filter(x => (x.title.toLowerCase().includes("subscription") || x.title.toLowerCase().includes("logout") ));
 
-                  this.menu  = this.menu.filter(x => !(x.title.toLowerCase().includes("subscription") || x.title.toLowerCase().includes("logout") ));
+                  
           }
       },
 
@@ -302,7 +304,8 @@ export default {
       if (
         window.location.pathname.includes("investors") ||
         window.location.pathname.includes("project") ||
-        window.location.pathname.includes("dashboard")
+        window.location.pathname.includes("dashboard") ||
+        window.location.pathname.includes("/app/admin/subscription")
       ) {
         this.showNavbar = true;
       } else {
