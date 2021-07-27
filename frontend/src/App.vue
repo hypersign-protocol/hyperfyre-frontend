@@ -241,12 +241,19 @@ export default {
     };
   },
 
+   
+
   mounted() {
- 
+    console.log("MOUNTED")
+   
+    setTimeout(() => {
+      this.filterMenu()
+    }, 500)
+      
   },
 
 
-updated(){
+  updated(){
      this.showNavbar =
       window.location.pathname.includes("/app/admin/investors") ||
       window.location.pathname.includes("/app/admin/project") ||
@@ -254,8 +261,26 @@ updated(){
       window.location.pathname.includes("/app/admin/subscription")
         ? true
         : false;  
-},
+
+        // this.filterMenu();
+  },
+
   methods: {
+
+      filterMenu(){
+          if(localStorage.getItem("user")){
+  
+                  const user = JSON.parse(localStorage.getItem("user"))
+
+                  console.log(user);
+                  if(!user.isSubscribed){
+                    return
+                  }
+
+                  this.menu  = this.menu.filter(x => !(x.title.toLowerCase().includes("subscription")));
+          }
+      },
+
     goToNextPage(route) {
       const r = this.menu.find((x) => x.name === route);
       if (r.name === "Logout") this.logout();
