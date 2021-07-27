@@ -365,7 +365,7 @@ export default {
     this.projects = userProjectsData.projects;  
     this.projects.unshift({
       _id: null,
-      projectName: "Select a Project"
+      projectName: "Select an event"
     })
   
  
