@@ -337,6 +337,10 @@ i {
       </div>
     </div>
 
+      <div v-if="!projectsToShow.length">
+          <h3>No project found, click on "create" button to create a project!n</h3>
+      </div>
+
     <div class="row" style="margin-top: 2%">
       <div class="col-md-12 my-5 w-100" style="text-align: left;max-height:660px; overflow-y:scroll">
         <div
@@ -464,9 +468,7 @@ i {
           </div>
         </div>
 
-        <div v-if="!projectsToShow.length">
-          <h3>You dont have any projects yet,  start creating by clicking on create button</h3>
-        </div>
+      
 
       </div>
     </div>
