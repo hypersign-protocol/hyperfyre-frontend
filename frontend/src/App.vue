@@ -277,7 +277,7 @@ export default {
                     return
                   }
 
-                  this.menu  = this.menu.filter(x => !(x.title.toLowerCase().includes("subscription")));
+                  this.menu  = this.menu.filter(x => !(x.title.toLowerCase().includes("subscription") || x.title.toLowerCase().includes("logout") ));
           }
       },
 
