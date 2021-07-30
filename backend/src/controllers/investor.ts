@@ -71,7 +71,7 @@ async function addInvestor(req: Request, res: Response, next: NextFunction) {
         
         // update the refere followers
         const updateParams = {
-          numberOfReferals: (investor.numberOfReferals + 1) * REFFERAL_MULTIPLIER
+          numberOfReferals: (investor.numberOfReferals + ( 1 * REFFERAL_MULTIPLIER))
         };
   
         logger.info("InvestorController:: addInvestor(): updateParams = " + JSON.stringify(updateParams));
