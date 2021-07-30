@@ -369,16 +369,20 @@ export default {
               owp: true,   
             },
              (err, authRes) => {   
-              //  console.log(err);
+           
+                                
                if(!err){
                   webAuth.client.userInfo(authRes.accessToken, (err, user) =>  {
-                    // console.log(user, err);
-                const twitterId = user["https://hasura.io/jwt/claims"]["x-hasura-user-id"].split("|")[1]
-                this.stepOneData.rules[idx].checked = true;
-                localStorage.setItem("twitterId", twitterId);              
-                window.open(urlToRedirect, "_blank");
+                    if(err){
+                      return alert("Something Went Wrong");
+                    }
+                    const twitterId = user.sub.split("|")[1]
+                    this.stepOneData.rules[idx].checked = true;
+                    localStorage.setItem("twitterId", twitterId);              
+                    window.open(urlToRedirect, "_blank");
               });
                }
+
               
             }
           );

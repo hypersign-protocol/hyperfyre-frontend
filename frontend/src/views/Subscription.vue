@@ -68,10 +68,10 @@ i {
 
     <div class="row" style="margin-top: 2%">
       <div
-        class="col-md-3"
+        class="col-md-4"
         style="text-align: center;"
         v-for="plan in plans"
-        v-bind:key="plan"
+        v-bind:key="plan._id"
       >
         <div class="card">
           <div class="card-header" style="padding-top: 10px">
@@ -98,7 +98,7 @@ i {
 
     <div class="row" style="margin-top: 2%;">
       <div class="col-md-12">
-        <table class="table table-bordered" style="background:#FFFF">
+        <table  v-if="subscriptions.length" class="table table-bordered" style="background:#FFFF">
           <thead class="thead-light">
             <tr>
               <th>Subscription Id</th>
@@ -109,7 +109,7 @@ i {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="row in subscriptions" :key="row">
+            <tr v-for="row in subscriptions" :key="row._d">
               <th>
                 {{ row._id }}
               </th>
@@ -272,6 +272,8 @@ export default {
         // localStorage.setItem("subscriptions", JSON.stringify(this.subscriptions));
 
         this.notifySuccess("Your are subscribed. SubscriptionId = " + json._id);
+        location.reload();
+        // window.location.href = window.location.origin + "/app/admin/project";
       } catch (e) {
         this.notifyErr(e.message);
       } finally {

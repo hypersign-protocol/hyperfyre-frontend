@@ -218,35 +218,43 @@ export default {
         },
         {
           href: "/app/admin/project",
-          title: "Projects",
+          title: "Events",
           icon: "fas fa-plane-departure",
         },
         {
           href: "/app/admin/investors",
-          title: "Investors",
+          title: "Users",
           icon: "fas fa-users",
           exactPath: true,
         },
         {
           href: "/app/admin/subscription",
-          title: "Subscription",
+          title: "Subscriptions",
           icon: "fas fa-tags",
+            exactPath: true,
         },
         {
           href: "/app/admin/login",
           title: "Logout",
           icon: "fas fa-sign-out-alt",
+          exactPath: true,
+        
         },
       ],
     };
   },
 
+   
+
   mounted() {
- 
+    setTimeout(() => {
+      this.filterMenu()
+    }, 500)
+      
   },
 
 
-updated(){
+  updated(){
      this.showNavbar =
       window.location.pathname.includes("/app/admin/investors") ||
       window.location.pathname.includes("/app/admin/project") ||
@@ -254,8 +262,28 @@ updated(){
       window.location.pathname.includes("/app/admin/subscription")
         ? true
         : false;  
-},
+
+        // this.filterMenu();
+  },
+
   methods: {
+
+      filterMenu(){
+          if(localStorage.getItem("user")){
+  
+                  const user = JSON.parse(localStorage.getItem("user"))
+
+                  
+                  if(user.isSubscribed){
+                     return
+                  
+                  }
+                  this.menu  = this.menu.filter(x => (x.title.toLowerCase().includes("subscription") || x.title.toLowerCase().includes("logout") ));
+
+                  
+          }
+      },
+
     goToNextPage(route) {
       const r = this.menu.find((x) => x.name === route);
       if (r.name === "Logout") this.logout();
@@ -277,7 +305,8 @@ updated(){
       if (
         window.location.pathname.includes("investors") ||
         window.location.pathname.includes("project") ||
-        window.location.pathname.includes("dashboard")
+        window.location.pathname.includes("dashboard") ||
+        window.location.pathname.includes("/app/admin/subscription")
       ) {
         this.showNavbar = true;
       } else {

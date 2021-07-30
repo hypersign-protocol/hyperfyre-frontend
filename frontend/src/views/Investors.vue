@@ -137,7 +137,7 @@ label {
 
         <div class="projectSelector">  
           
-           <b-form-select v-model="selectedProject"  @change="fetchProjectInvestors"  placeholder="Select a project"    value-field="_id" text-field="projectName" :options="projects"></b-form-select>
+           <b-form-select v-model="selectedProject"  @change="fetchProjectInvestors"  placeholder="Select an event"    value-field="_id" text-field="projectName" :options="projects"></b-form-select>
          
         </div>
         <div class="d-flex ml-auto align-items-center">
@@ -365,7 +365,7 @@ export default {
     this.projects = userProjectsData.projects;  
     this.projects.unshift({
       _id: null,
-      projectName: "Select a Project"
+      projectName: "Select an event"
     })
   
  
