@@ -79,7 +79,7 @@ h5 span {
 
 .loginContent {
   height: 100%;
-  width: 22%;
+  width: 350px;
   padding-right: 10px;
   padding-left: 10px;
   padding-top: 20px;
