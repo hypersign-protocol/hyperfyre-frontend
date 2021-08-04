@@ -796,15 +796,18 @@ export default {
         }
     
       
-        
+        /// WARNING:: This code is redundant it seems. 
+        /// Not removing but handling the condition.
         const userProjects = JSON.parse(localStorage.getItem("userProjects"));
-        userProjects.count += 1
-        userProjects.projects.push(resp.data)
-        localStorage.setItem("userProjects", JSON.stringify(userProjects))
+        if(userProjects){
+          userProjects.count += 1
+          userProjects.projects.push(resp.data)
+          localStorage.setItem("userProjects", JSON.stringify(userProjects))
+        }
        
         await this.fetchProjects();
         this.$bvModal.hide("create-project-modal");
-         this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+        this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
         
         
       } catch (e) {

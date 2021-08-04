@@ -1,6 +1,6 @@
 {
     "name": "whitelisting-backend",
-    "version": "1.0.0",
+    "version": "v3.0.4",
     "description": "Express backend server for whitelisting portal",
     "main": "dist/index",
     "typings": "dist/index",
