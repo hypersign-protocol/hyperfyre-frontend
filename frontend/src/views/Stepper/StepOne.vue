@@ -210,21 +210,141 @@ a{
 }
 
 
+.links{
+  width: 100%;
+   text-decoration: none;
+   color: currentColor;
+  
+}
+
+.lianchor{
+ border-bottom: 1px solid #80808042;
+          height: 40px;
+          border-radius: 5px;
+          border-right: 1px solid #80808042;
+          border-top: 1px solid #80808042;
+}
+
+.social-tile{
+  padding: 11px;
+  color: white;
+  border-radius: 5px 0px 0px 5px;
+}
+
+
+.social-text{
+  margin-left: 10px;
+}
+
+
+.twitter{
+  background:rgb(29, 161, 242); 
+}
+
+.telegram{
+  background: #0645ad; 
+}
+
 </style>
 <template>
   <div>
     <div>
       <ol class="px-0">
         <li
-          class="text-left w-100 d-flex flex-wrap align-items-center  my-3 rules-container"
+          class="text-left d-flex flex-wrap align-items-center  my-3 rules-container lianchor" 
+          style=""
           v-for="(rule, idx) in stepOneData.rules"
           :key="rule.id"
         >
-          <div class="text position-relative d-flex text-container" style="width: 95%">
-            <div class="text">
-            {{ rule.id + ". " + rule.text }}
-            </div>
+            <!-- <div v-if="rule.id == 1">
+              <span class="social-tile twitter"><i class="fab fa-twitter"></i></span>
+              <span class="social-text">
+                <a
 
+                class="links"
+                target="_blank"
+                @click="handleTwitterLogin('https://twitter.com/' +
+                      projectDetails.twitterHandle +
+                      '?ref_src=twsrc%5Etfw', idx)"
+                  >{{ rule.text }}</a
+                >
+              </span>
+            </div> -->
+
+            <a v-if="rule.id == 1" 
+                class="links"
+                target="_blank"
+                @click="handleTwitterLogin('https://twitter.com/' +
+                      projectDetails.twitterHandle +
+                      '?ref_src=twsrc%5Etfw', idx)"
+            >
+              <span class="social-tile twitter"><i class="fab fa-twitter"></i></span>
+              <span class="social-text">
+                {{ rule.text }}
+              </span>
+            </a>
+
+
+
+            <a v-if="rule.id == 2"
+             @click="handleTwitterLogin('https://twitter.com/intent/tweet?text=' + projectDetails.twitterPostFormat, idx)"
+                    target="_blank"
+                    title="Tweet about this project tagging two of your friends"
+                    class="links"
+                    >
+              <span class="social-tile twitter"><i class="fab fa-twitter"></i></span>
+              <span class="social-text">   
+                    {{rule.text}}
+              </span>
+            </a>
+
+            <div class="w-100 ml-2 tweetInput-container" v-if="rule.id == 2">
+              <div
+                v-if="rule.showTweetInput && showInput"
+                class="tweetUrlInput mt-2 d-flex align-items-center"
+              >
+                <span>Paste your Retweet URL:</span>
+                <input
+                  placeholder="Your Tweet Url"
+                  v-model="stepOneData.rules[idx].tweetUrl"
+                  type="url"
+                  class="w-50"
+                />
+              </div>
+          </div>
+           
+            
+
+            <a v-if="rule.id == 3" 
+            class="links"
+                @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramHandle}`, idx)"
+            
+                  target="_blank"
+                  title="Join our telegram channel for latest updates">
+              <span class="social-tile telegram"><i class="fab fa-telegram-plane"></i></span>
+              <span class="social-text">
+                
+                
+                 {{ rule.text }} 
+                
+              </span>
+               
+            </a>
+
+            <a v-if="rule.id == 4"
+            class="links"
+                @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramAnnouncementChannel}`, idx)"
+                target="_blank"
+                >
+              <span class="social-tile telegram"><i class="fab fa-telegram-plane"></i></span>
+              <span>
+                {{ rule.text }}
+              
+              </span>
+               
+            </a>
+
+<!-- 
             <div v-if="rule.id == 1" class="ml-2 links">
               <a
               class="links"
@@ -234,10 +354,10 @@ a{
                     '?ref_src=twsrc%5Etfw', idx)"
                 >@{{ projectDetails.twitterHandle }}</a
               >
-            </div>
+            </div> -->
 
 
-            <div class=" ml-2 links" v-if="rule.id == 2">
+            <!-- <div class=" ml-2 links" v-if="rule.id == 2">
                   <a
                     @click="handleTwitterLogin('https://twitter.com/intent/tweet?text=' + projectDetails.twitterPostFormat, idx)"
                     target="_blank"
@@ -245,11 +365,11 @@ a{
                     class="ml-1"
                     >"Tweet"</a
                   >
-            </div>
+            </div> -->
 
             
 
-            <div class="ml-2 links" v-if="rule.id == 3" for="checkbox-3">
+            <!-- <div class="ml-2 links" v-if="rule.id == 3" for="checkbox-3">
               <div class="d-flex align-items-center">
                 <a
                 class="links"
@@ -262,10 +382,10 @@ a{
                
               </div>
               
-            </div>
+            </div> -->
 
 
-             <div class="ml-2 links" v-if="rule.id == 4" for="checkbox-4">
+             <!-- <div class="ml-2 links" v-if="rule.id == 4" for="checkbox-4">
               <a
               class="links"
                 @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramAnnouncementChannel}`, idx)"
@@ -273,43 +393,25 @@ a{
                 ><i></i>@{{projectDetails.telegramAnnouncementChannel}}</a
               >
              
-            </div>
-          </div>
+            </div> -->
 
-          <div class="checkbox-cont">
+
+          
+
+          <!-- <div class="checkbox-cont">
             <input
               :id="'checkbox-' + rule.id"
               v-model="stepOneData.rules[idx].checked"
               class="checkbox large"
               type="checkbox"
             />
-          </div>
+          </div> -->
 
 
-           <div class="w-100 ml-2 tweetInput-container" v-if="rule.id == 2">
-            <!-- <a
-              @click="handleInputShow"
-              target="_blank"
-              href="https://twitter.com/intent/tweet?text=I%20am%20happy%20with%20%23hypersign%20%23pollkadot%20%40hypersignchain%20"
-              title="Tweet about this project tagging two of your friends"
-              class="ml-1"
-              >{{projectDetails.twitterPostTextFormat}}</a
-            > -->
-            <div
-              v-if="rule.showTweetInput && showInput"
-              class="tweetUrlInput mt-2 d-flex align-items-center"
-            >
-              <p class="flex-1 m-0 mr-2">Paste your tweet URL here:</p>
-              <input
-                placeholder="Your Tweet Url"
-                v-model="stepOneData.rules[idx].tweetUrl"
-                type="url"
-                class="w-50"
-              />
-            </div>
-          </div>
+           
           
         </li>
+         
       </ol>
     </div>
   </div>
