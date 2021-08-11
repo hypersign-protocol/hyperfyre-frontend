@@ -228,7 +228,7 @@ a{
 .social-tile{
   float: left;
   padding: 11px;
-  color: white;
+  color: grey;
   border-radius: 5px 0px 0px 5px;
 }
 
@@ -244,15 +244,21 @@ a{
 
 
 .twitter{
-  background:rgb(29, 161, 242); 
+  /* background:rgb(29, 161, 242);  */
+  color: rgb(29, 161, 242)
 }
 
 .telegram{
-  background: #0645ad; 
+  /* background: #6d6d6e;  */
+  color:  rgb(29, 161, 242);
 }
 
 .pad-0{
   padding: 0px;
+  margin-top: 2%;
+  border: 1px solid #8080804f;
+  border-radius: 5px;
+  text-align: left
 }
 </style>
 <template>
@@ -261,7 +267,7 @@ a{
       <ul class="list-group">
         <li
 
-          class="list-group-item d-flex justify-content-between align-items-center pad-0"
+          class="list-group-item d-flex justify-content-between pad-0"
           
           style=""
           v-for="(rule, idx) in stepOneData.rules"
@@ -290,10 +296,10 @@ a{
                       '?ref_src=twsrc%5Etfw', idx)"
             >
               <span class="social-tile twitter"><i class="fab fa-twitter"></i></span>
-              <span class="social-text">
-                {{ rule.text }}
-              </span>
-              
+              <!-- <span class="social-text">
+                
+              </span> -->
+              {{ rule.text }}
               <span class="social-tile plus"><i class="fas fa-plus-square"></i></span>
             </a>
 
@@ -306,9 +312,10 @@ a{
                     class="links"
                     >
               <span class="social-tile twitter"><i class="fab fa-twitter"></i></span>
-              <span class="social-text">   
+              <!-- <span class="social-text">   
                     {{rule.text}}
-              </span>
+              </span> -->
+              {{ rule.text }}
               <span class="social-tile plus"><i class="fas fa-plus-square"></i></span>
             </a>
 
@@ -336,12 +343,13 @@ a{
                   target="_blank"
                   title="Join our telegram channel for latest updates">
               <span class="social-tile telegram"><i class="fab fa-telegram-plane"></i></span>
-              <span class="social-text">
+              <!-- <span class="social-text">
                 
                 
                  {{ rule.text }} 
                 
-              </span>
+              </span> -->
+              {{ rule.text }}
               <span class="social-tile plus"><i class="fas fa-plus-square"></i></span>
                
             </a>
@@ -352,10 +360,11 @@ a{
                 target="_blank"
                 >
               <span class="social-tile telegram"><i class="fab fa-telegram-plane"></i></span>
-              <span>
+              <!-- <span>
                 {{ rule.text }}
               
-              </span>
+              </span> -->
+              {{ rule.text }}
               <span class="social-tile plus"><i class="fas fa-plus-square"></i></span>
                
             </a>
