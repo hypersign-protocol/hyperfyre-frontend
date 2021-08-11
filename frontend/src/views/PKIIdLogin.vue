@@ -549,10 +549,9 @@ export default {
           }
         }
       } else if (messageData.op == 'reload') {
-        console.log("Timeout for clientId: " + messageData.data.clientId)
-        // $("#qrcode").html("<img src='/loader.gif' />");
-        // ws.close(4001, messageData.data.clientId);
-        // window.location.reload()
+        // console.log("Timeout for clientId: " + messageData.data.clientId)
+        _this.QRRefresh = true;
+        _this.connection.close(4001, messageData.data.clientId);
       }
     };
 
