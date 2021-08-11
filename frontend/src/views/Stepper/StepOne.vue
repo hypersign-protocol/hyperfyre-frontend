@@ -226,13 +226,19 @@ a{
 }
 
 .social-tile{
+  float: left;
   padding: 11px;
   color: white;
   border-radius: 5px 0px 0px 5px;
 }
 
+.plus{
+  float: right;
+  color: grey;
+}
 
 .social-text{
+
   margin-left: 10px;
 }
 
@@ -245,13 +251,18 @@ a{
   background: #0645ad; 
 }
 
+.pad-0{
+  padding: 0px;
+}
 </style>
 <template>
   <div>
     <div>
-      <ol class="px-0">
+      <ul class="list-group">
         <li
-          class="text-left d-flex flex-wrap align-items-center  my-3 rules-container lianchor" 
+
+          class="list-group-item d-flex justify-content-between align-items-center pad-0"
+          
           style=""
           v-for="(rule, idx) in stepOneData.rules"
           :key="rule.id"
@@ -282,6 +293,8 @@ a{
               <span class="social-text">
                 {{ rule.text }}
               </span>
+              
+              <span class="social-tile plus"><i class="fas fa-plus-square"></i></span>
             </a>
 
 
@@ -296,9 +309,10 @@ a{
               <span class="social-text">   
                     {{rule.text}}
               </span>
+              <span class="social-tile plus"><i class="fas fa-plus-square"></i></span>
             </a>
 
-            <div class="w-100 ml-2 tweetInput-container" v-if="rule.id == 2">
+            <!-- <div class="w-100 ml-2 tweetInput-container" v-if="rule.id == 2">
               <div
                 v-if="rule.showTweetInput && showInput"
                 class="tweetUrlInput mt-2 d-flex align-items-center"
@@ -312,7 +326,7 @@ a{
                 />
               </div>
           </div>
-           
+            -->
             
 
             <a v-if="rule.id == 3" 
@@ -328,6 +342,7 @@ a{
                  {{ rule.text }} 
                 
               </span>
+              <span class="social-tile plus"><i class="fas fa-plus-square"></i></span>
                
             </a>
 
@@ -341,6 +356,7 @@ a{
                 {{ rule.text }}
               
               </span>
+              <span class="social-tile plus"><i class="fas fa-plus-square"></i></span>
                
             </a>
 
@@ -412,7 +428,7 @@ a{
           
         </li>
          
-      </ol>
+      </ul>
     </div>
   </div>
 </template>
