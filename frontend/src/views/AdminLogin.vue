@@ -78,6 +78,7 @@ h5 span {
 }
 
 .loginContent {
+  min-height: 350px;
   height: 100%;
   width: 350px;
   padding-right: 10px;
@@ -86,6 +87,14 @@ h5 span {
   padding-bottom: 10px;
   margin: 0 auto;
   border-top: 2px solid rgb(120, 120, 243);
+}
+
+.QRRefresh{
+  width:100%; 
+  align-content:center; 
+  height:100%; 
+  cursor: pointer;
+  margin-top: 14%;
 }
 </style>
 <template>
@@ -99,7 +108,13 @@ h5 span {
       ></loading>
       <h4>ADMIN LOGIN</h4>
       <div class="row" style="margin-top:3%">
-        <form class="col-md-12">
+        <div v-if="QRRefresh" class="QRRefresh">
+          <i @click="reloadQR" class="fas fa-redo" style="font-size: xx-large; color: gray;"></i>
+          <p><label style="font-size:small; color:grey; margin-top:1%">
+            Session expired. Click to reload.
+          </label></p>
+        </div>
+        <form class="col-md-12" v-else>
           <div class="form-group">
             <vue-qr
               v-if="value != ''"
@@ -148,6 +163,7 @@ h5 span {
             </a>
           </div>
         </form>
+       
       </div>
     </b-card>
   </div>
@@ -171,6 +187,7 @@ export default {
   data() {
     return {
       walletWindow: null,
+      QRRefresh: false,
       src2: require("../assets/icon.png"),
       active: 0,
       username: "",
@@ -249,6 +266,10 @@ export default {
             // _this.$router.push("dashboard");
           }
         }
+      } else if (messageData.op == "reload") {
+        // console.log("Timeout for clientId: " + messageData.data.clientId)
+        _this.QRRefresh = true;
+        _this.connection.close(4001, messageData.data.clientId);
       }
     };
     this.connection.onerror = function(error) {
@@ -259,6 +280,9 @@ export default {
     this.clean();
   },
   methods: {
+    reloadQR(){
+      window.location.reload()
+    },
     openWallet() {
       if (this.value != "") {
         this.walletWindow = window.open(
