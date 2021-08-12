@@ -1,6 +1,7 @@
 <style scoped>
 .show-menu-text{
   margin-left: 30px;
+  max-width: 210px;
 }
 
 .list-group-item {
@@ -302,6 +303,10 @@ display:inline;
 	color: rgb(255, 255, 255);
 	background-color: rgb(0, 136, 204);
 }
+.default {
+	color: rgb(255, 255, 255);
+	background-color: #34BF49;
+}
 
 .pad-0{
   padding: 0px;
@@ -366,6 +371,17 @@ display:inline;
               <i class="fas fa-plus"></i>
             </span>
           </template>
+          <template v-if="rule.id == 5" 
+          >
+            <span class="show-menu default">
+              <i class="fas fa-cog"></i>
+            </span>
+            <span class="show-menu-text">{{ rule.text }}</span>
+            <!-- <i class="fas fa-plus "></i> -->
+            <span class="right-menu">
+              <i class="fas fa-plus"></i>
+            </span>
+          </template>
         </a>
          <b-collapse  
           :key="rule.id" 
@@ -423,6 +439,17 @@ display:inline;
             >
               Join
             </b-button>
+            
+          </template>
+            
+          <template v-if="rule.id == 5" >
+            <p class="card-text">Paste your Blockchain Wallet address here, Make sure it's not from any exchange. </p>
+            <input
+                v-model="rule.value"
+                class="form-control w-100"
+                placeholder="Your Wallet Address"
+              />
+            
             
           </template>
             

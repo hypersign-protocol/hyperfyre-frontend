@@ -233,6 +233,7 @@ import notificationMixin from "../../mixins/notificationMixins.js";
 import fetchProjectDataMixin from "../../mixins/fetchProjectDataMixin";
 import apiClinet from "../../mixins/apiClientMixin";
 import checkTelegramAnnouncemntMixin from "../../mixins/checkTelegramAnnChannel";
+import checkChainTypeMixin from "../../mixins/checkChainType";
 import config from "../../config";
 
 export default {
@@ -313,7 +314,7 @@ export default {
     }
 
     this.checkTelegramAnnouncementChannel();
-    this.checkBlockChainType();
+    this.checkChainType();
     this.checkIfAlreadyFilled(userDid);
   },
 
@@ -721,6 +722,7 @@ export default {
     notificationMixin,
     fetchProjectDataMixin,
     checkTelegramAnnouncemntMixin,
+    checkChainTypeMixin,
   ],
 };
 </script>
