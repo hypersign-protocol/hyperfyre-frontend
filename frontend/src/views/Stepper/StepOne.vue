@@ -405,13 +405,13 @@ display:inline;
             </b-button>
           </template>
           <template v-if="rule.id == 3" >
-            <p class="card-text">Click on the FOLLOW button to follow the project TG page. </p>
+            <p class="card-text">Click on the JOIN button to follow the project TG page. </p>
             <b-button 
             size="sm" 
             class="btn-twitter telegram" 
             @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramHandle}`, idx)"
             >
-              Follow
+              Join
             </b-button> =>
             <b-button 
             size="sm" 
