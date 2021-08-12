@@ -21,7 +21,6 @@
       </div>
       <div class="text mx-auto  py-3 text-left" v-if="step != 3">
         <h4 class="mb-4">
-          Welcome to
           <span class="">{{ projectDetails.projectName }}</span>
           <!-- Token Sale  Registration -->
         </h4>
