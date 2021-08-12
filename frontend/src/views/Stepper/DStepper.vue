@@ -24,12 +24,12 @@
           <span class="">{{ projectDetails.projectName }}</span>
           <!-- Token Sale  Registration -->
         </h4>
-        <p class="my-0">
+        <!-- <p class="my-0">
           {{ step == 0 ? stepOneData.line1 : stepTwoData.line1 }}
         </p>
         <p class="my-0">
           {{ step == 0 ? stepOneData.line2 : stepTwoData.line2 }}
-        </p>
+        </p> -->
       </div>
     </div>
 

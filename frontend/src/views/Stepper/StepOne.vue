@@ -331,7 +331,7 @@ display:inline;
                   <i class="fab fa-twitter"></i>
           </span>
             <span class="show-menu-text">{{ rule.text }}</span>
-             <span class="right-menu" v-b-toggle.collapse-1 variant="primary">
+             <span class="right-menu" >
               <i class="fas fa-plus"></i>
             </span>   
           </template>
@@ -381,15 +381,12 @@ display:inline;
             @click="handleTwitterLogin('https://twitter.com/' +projectDetails.twitterHandle +'?ref_src=twsrc%5Etfw', idx)"
             >
               Follow
-            </b-button> =>
-            <b-button 
-            size="sm" 
-            class="twitter">
-              +1 
-            </b-button>
+            </b-button> 
+            
           </template>
           <template v-if="rule.id == 2" >
             <p class="card-text">Click on the RETWEET button to retweet and tag three friends. </p>
+            <p class="card-text">Then copy the re-tweet url and provide here. </p>
             <b-button 
             size="sm" 
             class="btn-twitter twitter" 
@@ -397,12 +394,13 @@ display:inline;
             projectDetails.twitterPostFormat, idx)"
             >
               Retweet
-            </b-button> =>
-            <b-button 
-            size="sm" 
-            class="twitter">
-              +1 
             </b-button>
+            <input
+                placeholder="Your Tweet Url"
+                v-model="stepOneData.rules[idx].tweetUrl"
+                type="url"
+                class="w-50"
+              />
           </template>
           <template v-if="rule.id == 3" >
             <p class="card-text">Click on the JOIN button to follow the project TG page. </p>
@@ -412,12 +410,8 @@ display:inline;
             @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramHandle}`, idx)"
             >
               Join
-            </b-button> =>
-            <b-button 
-            size="sm" 
-            class="twitter">
-              +1 
             </b-button>
+            
           </template>
             
           <template v-if="rule.id == 4" >
@@ -428,12 +422,8 @@ display:inline;
             @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramAnnouncementChannel}`, idx)"
             >
               Join
-            </b-button> =>
-            <b-button 
-            size="sm" 
-            class="twitter">
-              +1 
             </b-button>
+            
           </template>
             
           </b-card>
