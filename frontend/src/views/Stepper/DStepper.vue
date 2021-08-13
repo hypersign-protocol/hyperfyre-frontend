@@ -21,16 +21,15 @@
       </div>
       <div class="text mx-auto  py-3 text-left" v-if="step != 3">
         <h4 class="mb-4">
-          Welcome to
           <span class="">{{ projectDetails.projectName }}</span>
           <!-- Token Sale  Registration -->
         </h4>
-        <p class="my-0">
+        <!-- <p class="my-0">
           {{ step == 0 ? stepOneData.line1 : stepTwoData.line1 }}
         </p>
         <p class="my-0">
           {{ step == 0 ? stepOneData.line2 : stepTwoData.line2 }}
-        </p>
+        </p> -->
       </div>
     </div>
 
@@ -234,6 +233,7 @@ import notificationMixin from "../../mixins/notificationMixins.js";
 import fetchProjectDataMixin from "../../mixins/fetchProjectDataMixin";
 import apiClinet from "../../mixins/apiClientMixin";
 import checkTelegramAnnouncemntMixin from "../../mixins/checkTelegramAnnChannel";
+import checkChainTypeMixin from "../../mixins/checkChainType";
 import config from "../../config";
 
 export default {
@@ -314,6 +314,7 @@ export default {
     }
 
     this.checkTelegramAnnouncementChannel();
+    this.checkChainType();
     this.checkBlockChainType();
     this.checkIfAlreadyFilled(userDid);
   },
@@ -358,10 +359,46 @@ export default {
       }
     },
 
+    validateBlockchainAddress(blockchainType, value){
+      if(!blockchainType){
+        return this.notifyErr("blockchainType must be passed")
+      }
+
+      if(!value){
+        return this.notifyErr(`${blockchainType} blockchain address can not be empty`)
+      }
+
+      let ethAddressValidate;
+
+      if (blockchainType == "TEZOS") {
+        ethAddressValidate =
+          value.startsWith("tz") ||
+          value.startsWith("kt");
+      } else {
+        ethAddressValidate = value.startsWith("0x");
+      }
+
+
+console.log(ethAddressValidate)
+
+      if (!ethAddressValidate && blockchainType == "ETHEREUM") {
+          return this.notifyErr("Please enter a valid Eth Address");
+      } else if (!ethAddressValidate && blockchainType == "TEZOS") {
+          return this.notifyErr("Please enter a valid Tezos  Address ");
+      } 
+
+      return ethAddressValidate;
+
+    },
+
     checkBlockChainType() {
       this.blockchainType = this.projectDetails.blockchainType;
 
       if (this.blockchainType == "ETHEREUM") {
+        const blockchainDataIndex = this.stepOneData.rules.findIndex(x => x.id == 5);
+        this.stepOneData.rules[blockchainDataIndex].label = "ERC-20 Address";
+        this.stepOneData.rules[blockchainDataIndex].placeholder = "0x";
+
         const ethAddress = this.stepTwoData.formData.find(
           (x) => x.id == "ethAddress"
         );
@@ -379,6 +416,8 @@ export default {
 
       if (step == 1) {
         this.btnBlocked = true;
+
+      
         const isAllChecked = data.rules.every((rule) => rule.checked);
         const tweetFilled =
           data.rules[1].tweetUrl.trim().length !== 0 ? true : false;
@@ -461,9 +500,26 @@ export default {
             }
           }
         } else {
-          this.notifyErr("Please follow all the rules and provide a tweet URL");
+          this.notifyErr("Please follow all the rules, provide a tweet URL and add valid blockchain address");
           this.btnBlocked = false;
+          return;
         }
+
+        //// blockchian field validation id = 5
+        let blockchainValidated = false;
+        const blockchainDataIndex = data.rules.findIndex(x => x.id == 5);
+        console.log(blockchainDataIndex)
+        if(blockchainDataIndex) {
+          if(this.validateBlockchainAddress(this.blockchainType, data.rules[blockchainDataIndex].value)){
+            data.rules[blockchainDataIndex].checked = true;
+            blockchainValidated  =  true;
+          }else{
+            this.btnBlocked = false;
+            return;
+          }
+        }
+        ///
+
       } else if (step == 2) {
         const isAllFilled = data.formData.every((input) => input.value.length);
         const twitterHandle = data.formData.filter((x) =>
@@ -722,6 +778,7 @@ export default {
     notificationMixin,
     fetchProjectDataMixin,
     checkTelegramAnnouncemntMixin,
+    checkChainTypeMixin,
   ],
 };
 </script>

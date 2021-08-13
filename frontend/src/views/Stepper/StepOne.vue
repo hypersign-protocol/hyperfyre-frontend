@@ -1,4 +1,48 @@
 <style scoped>
+.show-menu-text{
+  margin-left: 30px;
+  max-width: 210px;
+}
+
+.list-group-item {
+  text-align: left;
+}
+.list-group-item > .show-menu {
+	position: absolute;
+	height: 100%; width:40px;
+	top: 0px; left: 0px;
+	/* background-color: rgba(51, 51, 51, 0.2); */
+  display: inline-flex;
+  align-items: center;	cursor: pointer;
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	-ms-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+.list-group-item > .right-menu {
+	position: absolute;
+	height: 100%; width:40px;
+	top: 0px; right: 0px;
+	background-color: rgba(51, 51, 51, 0.2);
+  /* color:#fff; */
+  display: inline-flex;
+  align-items: center;	cursor: pointer;
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	-ms-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+.list-group-item > .show-menu > i {
+	/* position: absolute; */
+	margin-left: 30%;
+}
+.list-group-item > .right-menu > i {
+	/* position: absolute; */
+	margin-left: 30%;
+}
+
 .addmargin {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -210,107 +254,209 @@ a{
 }
 
 
+.links{
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: currentColor;  
+    line-height: 150px;
+  }
+.links span {
+display:inline;
+    display:inline-table;
+    display:inline-block;
+    vertical-align:middle;
+    line-height: 20px;
+    *margin-top: expression(this.offsetHeight < this.parentNode.offsetHeight ? parseInt((this.parentNode.offsetHeight - this.offsetHeight) / 2) + "px" : "0");
+}
+.lianchor{
+ border-bottom: 1px solid #80808042;
+          height: 40px;
+          border-radius: 5px;
+          border-right: 1px solid #80808042;
+          border-top: 1px solid #80808042;
+}
+
+.social-tile{
+  float: left;
+  padding: 11px;
+  color: grey;
+  border-radius: 5px 0px 0px 5px;
+}
+
+.plus{
+  float: right;
+  color: grey;
+}
+
+.social-text{
+
+  margin-left: 10px;
+}
+
+.twitter {
+	color: rgb(255, 255, 255);
+	background-color: rgb(29, 161, 242);
+}
+.telegram {
+	color: rgb(255, 255, 255);
+	background-color: rgb(0, 136, 204);
+}
+.default {
+	color: rgb(255, 255, 255);
+	background-color: #34BF49;
+}
+
+.pad-0{
+  padding: 0px;
+  margin-top: 2%;
+  border: 1px solid #8080804f;
+  border-radius: 5px;
+  text-align: left
+}
 </style>
 <template>
   <div>
     <div>
-      <ol class="px-0">
-        <li
-          class="text-left w-100 d-flex flex-wrap align-items-center  my-3 rules-container"
-          v-for="(rule, idx) in stepOneData.rules"
-          :key="rule.id"
+      <div class="list-group">
+        <template
+        v-for="(rule, idx) in stepOneData.rules"
         >
-          <div class="text position-relative d-flex text-container" style="width: 95%">
-            <div class="text">
-            {{ rule.id + ". " + rule.text }}
-            </div>
-
-            <div v-if="rule.id == 1" class="ml-2 links">
-              <a
-              class="links"
-               target="_blank"
-               @click="handleTwitterLogin('https://twitter.com/' +
-                    projectDetails.twitterHandle +
-                    '?ref_src=twsrc%5Etfw', idx)"
-                >@{{ projectDetails.twitterHandle }}</a
-              >
-            </div>
-
-
-            <div class=" ml-2 links" v-if="rule.id == 2">
-                  <a
-                    @click="handleTwitterLogin('https://twitter.com/intent/tweet?text=' + projectDetails.twitterPostFormat, idx)"
-                    target="_blank"
-                    title="Tweet about this project tagging two of your friends"
-                    class="ml-1"
-                    >"Tweet"</a
-                  >
-            </div>
-
-            
-
-            <div class="ml-2 links" v-if="rule.id == 3" for="checkbox-3">
-              <div class="d-flex align-items-center">
-                <a
-                class="links"
-                @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramHandle}`, idx)"
-            
-                  target="_blank"
-                  title="Join our telegram channel for latest updates"
-                  ><i></i> @{{ projectDetails.telegramHandle }} </a
-                >
-               
-              </div>
+        <a 
+          target="_blank"
+          class="list-group-item d-flex justify-content-between list-group-item-action"
+          :key="rule.id"
+          v-b-toggle="'collapse-'+rule.id"          
+          variant="primary"
+          >
+          <template v-if="rule.id == 1" 
+          >
+          <span class="show-menu twitter">
+            <i class="fab fa-twitter"></i>
+          </span>
+            <span class="show-menu-text">{{ rule.text }}</span>
+             <span class="right-menu" >
+              <i class="fas fa-chevron-down"></i>
               
-            </div>
-
-
-             <div class="ml-2 links" v-if="rule.id == 4" for="checkbox-4">
-              <a
-              class="links"
-                @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramAnnouncementChannel}`, idx)"
-                target="_blank"
-                ><i></i>@{{projectDetails.telegramAnnouncementChannel}}</a
+            </span>   
+          </template>
+          <template v-if="rule.id == 2" 
+          >
+          <span class="show-menu twitter">
+                  <i class="fab fa-twitter"></i>
+          </span>
+            <span class="show-menu-text">{{ rule.text }}</span>
+             <span class="right-menu">
+              <i class="fas fa-chevron-down"></i>
+            </span>   
+          </template>
+          <template v-if="rule.id == 3" 
+           
+          >
+          <span class="show-menu telegram">
+            <i class="fab fa-telegram-plane"></i>
+          </span>
+            <span class="show-menu-text">{{ rule.text }}</span>
+            <span class="right-menu">
+              <i class="fas fa-chevron-down"></i>
+            </span>          </template>
+          <template v-if="rule.id == 4" 
+          >
+            <span class="show-menu telegram">
+              <i class="fab fa-telegram-plane"></i>
+            </span>
+            <span class="show-menu-text">{{ rule.text }}</span>
+            <span class="right-menu">
+              <i class="fas fa-chevron-down"></i>
+            </span>
+          </template>
+          <template v-if="rule.id == 5" 
+          >
+            <span class="show-menu default">
+              <i class="fas fa-cog"></i>
+            </span>
+            <span class="show-menu-text">{{ rule.text }}</span>
+            <span class="right-menu">
+              <i class="fas fa-chevron-down"></i>
+            </span>
+          </template>
+        </a>
+          <b-collapse  
+          :key="rule.id" 
+          :id="'collapse-' + rule.id"
+          >
+          <b-card style="margin-top:0px; margin-bottom: 10px; 
+          border-radius: 2px; border-top: unset; color: grey">
+            <template v-if="rule.id == 1" >
+              <p class="card-text">Click on the Twitter FOLLOW button to follow the page. </p>
+              <b-button 
+              size="sm" 
+              class="btn-twitter twitter" 
+              @click="handleTwitterLogin('https://twitter.com/' +projectDetails.twitterHandle +'?ref_src=twsrc%5Etfw', idx)"
               >
-             
-            </div>
-          </div>
-
-          <div class="checkbox-cont">
-            <input
-              :id="'checkbox-' + rule.id"
-              v-model="stepOneData.rules[idx].checked"
-              class="checkbox large"
-              type="checkbox"
-            />
-          </div>
-
-
-           <div class="w-100 ml-2 tweetInput-container" v-if="rule.id == 2">
-            <!-- <a
-              @click="handleInputShow"
-              target="_blank"
-              href="https://twitter.com/intent/tweet?text=I%20am%20happy%20with%20%23hypersign%20%23pollkadot%20%40hypersignchain%20"
-              title="Tweet about this project tagging two of your friends"
-              class="ml-1"
-              >{{projectDetails.twitterPostTextFormat}}</a
-            > -->
-            <div
-              v-if="rule.showTweetInput && showInput"
-              class="tweetUrlInput mt-2 d-flex align-items-center"
-            >
-              <p class="flex-1 m-0 mr-2">Paste your tweet URL here:</p>
+                <i class="fab fa-twitter"></i>
+                Follow @{{projectDetails.twitterHandle}}
+              </b-button> 
+              
+            </template>
+            <template v-if="rule.id == 2" >
+              <p class="card-text">Click on the RETWEET button to retweet and tag 3 of your friends. </p>
+              <p class="card-text">Then copy the re-tweet url and provide it here. </p>
+              <p style="margin-left:20%">
+                <b-button 
+                  size="sm" 
+                  style="float:left"
+                  class="btn-twitter twitter" 
+                  @click="handleTwitterLogin('https://twitter.com/intent/tweet?text=' + 
+                  projectDetails.twitterPostFormat, idx)"
+                >
+                  <i class="fab fa-twitter"></i> Retweet
+                </b-button>
+                <input
+                    placeholder="Paset your tweet url"
+                    v-model="stepOneData.rules[idx].tweetUrl"
+                    type="url"
+                    class="form-control w-50"
+                  />
+              </p>
+              
+            </template>
+            <template v-if="rule.id == 3" >
+              <p class="card-text">Click on the JOIN button to join the project's Telegram group. </p>
+              <b-button 
+              size="sm" 
+              class="btn-twitter telegram" 
+              @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramHandle}`, idx)"
+              >
+                <i class="fab fa-telegram-plane"></i> Join @ {{projectDetails.telegramHandle}}
+              </b-button>
+              
+            </template>
+            <template v-if="rule.id == 4" >
+              <p class="card-text">Click on the Subscribe button to JOIN the project TG Announcement Channel. </p>
+              <b-button 
+              size="sm" 
+              class="btn-twitter telegram" 
+              @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramAnnouncementChannel}`, idx)"
+              >
+                <i class="fab fa-telegram-plane"></i> Join @ {{projectDetails.telegramAnnouncementChannel}}
+              </b-button>
+              
+            </template>
+            <template v-if="rule.id == 5" >
+              <p class="card-text">Enter your wallet address here. Make sure it's not from any exchange. </p>
               <input
-                placeholder="Your Tweet Url"
-                v-model="stepOneData.rules[idx].tweetUrl"
-                type="url"
-                class="w-50"
-              />
-            </div>
-          </div>
-          
-        </li>
-      </ol>
+                  v-model="rule.value"
+                  class="form-control w-100"
+                  :placeholder="rule.placeholder"
+                />
+            </template>
+          </b-card>
+        </b-collapse>
+        </template>
+      </div>
+      
     </div>
   </div>
 </template>

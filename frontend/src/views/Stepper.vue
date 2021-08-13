@@ -119,12 +119,12 @@ export default {
         rules: [
           {
             id: 1,
-            text: "Please follow us on Twitter ",
+            text: "Follow us on Twitter",
             checked: false,
           },
           {
             id: 2,
-            text: "Tweet this and tag 3 friends ",
+            text: "Retweet and tag 3 friends",
             checked: false,
             showTweetInput: true,
             tweetUrl: "",

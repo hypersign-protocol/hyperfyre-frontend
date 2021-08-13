@@ -260,6 +260,14 @@ h5 span {
     width: 80% !important;
   }
 }
+
+.QRRefresh{
+  width:100%; 
+  align-content:center; 
+  height:100%; 
+  cursor: pointer;
+  margin-top: 14%;
+}
 /* .with-hypersign-btn  */
 </style>
 <template>
@@ -315,9 +323,18 @@ h5 span {
           :href="`https://t.me/${projectDetails.telegramHandle}`"
           >HELP ?</a
         >
+
+
         <div class=" loginWrapper mx-auto">
           <p class="loginInNow-text">LOGIN WITH HYPERSIGN</p>
-          <div v-if="value && value != ''">
+           <div v-if="QRRefresh" class="QRRefresh">
+            <i @click="reloadQR" class="fas fa-redo" style="font-size: xx-large; color: gray;"></i>
+            <p><label style="font-size:small; color:grey; margin-top:1%">
+              Session expired. Click to reload.
+            </label></p>
+          </div>
+
+          <div v-else-if="value && value != ''">
             <!-- <div> -->
 
             <div class="qrWrapper">
@@ -403,7 +420,9 @@ import notificationMixins from "../mixins/notificationMixins";
 import apiClinet from "../mixins/apiClientMixin";
 import fetchProjectDataMixin from "../mixins/fetchProjectDataMixin";
 import localStorageMixin from "../mixins/localStorageMixin";
-import checkTelegramAnnouncementChannelMixin from "../mixins/checkTelegramAnnChannel";
+// import checkTelegramAnnouncementChannelMixin from "../mixins/checkTelegramAnnChannel";
+// import checkChainTypeMixin from "../mixins/checkChainType";
+
 
 export default {
   name: "Login",
@@ -413,6 +432,7 @@ export default {
   },
   data() {
     return {
+      QRRefresh: false,
       src2: require("../assets/icon.png"),
       error: "",
       socketMessage: "",
@@ -530,6 +550,10 @@ export default {
             _this.$router.push(path);
           }
         }
+      } else if (messageData.op == 'reload') {
+        // console.log("Timeout for clientId: " + messageData.data.clientId)
+        _this.QRRefresh = true;
+        _this.connection.close(4001, messageData.data.clientId);
       }
     };
 
@@ -554,6 +578,9 @@ export default {
   },
 
   methods: {
+    reloadQR(){
+      window.location.reload()
+    },
     openWallet() {
       if (this.value != "") {
         this.walletWindow = window.open(
@@ -582,7 +609,8 @@ export default {
     notificationMixins,
     fetchProjectDataMixin,
     localStorageMixin,
-    checkTelegramAnnouncementChannelMixin,
+    // checkTelegramAnnouncementChannelMixin,
+    // checkChainTypeMixin
   ],
 };
 </script>
