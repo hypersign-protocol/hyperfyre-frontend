@@ -21,16 +21,15 @@
       </div>
       <div class="text mx-auto  py-3 text-left" v-if="step != 3">
         <h4 class="mb-4">
-          Welcome to
           <span class="">{{ projectDetails.projectName }}</span>
           <!-- Token Sale  Registration -->
         </h4>
-        <p class="my-0">
+        <!-- <p class="my-0">
           {{ step == 0 ? stepOneData.line1 : stepTwoData.line1 }}
         </p>
         <p class="my-0">
           {{ step == 0 ? stepOneData.line2 : stepTwoData.line2 }}
-        </p>
+        </p> -->
       </div>
     </div>
 
@@ -234,6 +233,7 @@ import notificationMixin from "../../mixins/notificationMixins.js";
 import fetchProjectDataMixin from "../../mixins/fetchProjectDataMixin";
 import apiClinet from "../../mixins/apiClientMixin";
 import checkTelegramAnnouncemntMixin from "../../mixins/checkTelegramAnnChannel";
+import checkChainTypeMixin from "../../mixins/checkChainType";
 import config from "../../config";
 
 export default {
@@ -314,7 +314,7 @@ export default {
     }
 
     this.checkTelegramAnnouncementChannel();
-    this.checkBlockChainType();
+    this.checkChainType();
     this.checkIfAlreadyFilled(userDid);
   },
 
@@ -722,6 +722,7 @@ export default {
     notificationMixin,
     fetchProjectDataMixin,
     checkTelegramAnnouncemntMixin,
+    checkChainTypeMixin,
   ],
 };
 </script>

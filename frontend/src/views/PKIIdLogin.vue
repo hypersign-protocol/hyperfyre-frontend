@@ -420,7 +420,9 @@ import notificationMixins from "../mixins/notificationMixins";
 import apiClinet from "../mixins/apiClientMixin";
 import fetchProjectDataMixin from "../mixins/fetchProjectDataMixin";
 import localStorageMixin from "../mixins/localStorageMixin";
-import checkTelegramAnnouncementChannelMixin from "../mixins/checkTelegramAnnChannel";
+// import checkTelegramAnnouncementChannelMixin from "../mixins/checkTelegramAnnChannel";
+// import checkChainTypeMixin from "../mixins/checkChainType";
+
 
 export default {
   name: "Login",
@@ -607,7 +609,8 @@ export default {
     notificationMixins,
     fetchProjectDataMixin,
     localStorageMixin,
-    checkTelegramAnnouncementChannelMixin,
+    // checkTelegramAnnouncementChannelMixin,
+    // checkChainTypeMixin
   ],
 };
 </script>
