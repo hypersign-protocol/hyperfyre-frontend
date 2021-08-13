@@ -6,7 +6,10 @@ export default{
              id: 5,
              checked: false,
              text: "Please share your " + this.projectDetails.blockchainType+" Address",
-             value:""
+             value:"",
+             label: "Tezos Account Address",
+             placeholder: "tz or kt",
+             type: this.projectDetails.blockchainType
            })
         }
      },
