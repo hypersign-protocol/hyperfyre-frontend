@@ -378,9 +378,6 @@ export default {
         ethAddressValidate = value.startsWith("0x");
       }
 
-
-console.log(ethAddressValidate)
-
       if (!ethAddressValidate && blockchainType == "ETHEREUM") {
           return this.notifyErr("Please enter a valid Eth Address");
       } else if (!ethAddressValidate && blockchainType == "TEZOS") {
@@ -416,6 +413,21 @@ console.log(ethAddressValidate)
 
       if (step == 1) {
         this.btnBlocked = true;
+
+        //// blockchian field validation id = 5
+        let blockchainValidated = false;
+        const blockchainDataIndex = data.rules.findIndex(x => x.id == 5);
+        console.log(blockchainDataIndex)
+        if(blockchainDataIndex) {
+          if(this.validateBlockchainAddress(this.blockchainType, data.rules[blockchainDataIndex].value)){
+            data.rules[blockchainDataIndex].checked = true;
+            blockchainValidated  =  true;
+          }else{
+            this.btnBlocked = false;
+            return;
+          }
+        }
+        ///
 
       
         const isAllChecked = data.rules.every((rule) => rule.checked);
@@ -505,20 +517,7 @@ console.log(ethAddressValidate)
           return;
         }
 
-        //// blockchian field validation id = 5
-        let blockchainValidated = false;
-        const blockchainDataIndex = data.rules.findIndex(x => x.id == 5);
-        console.log(blockchainDataIndex)
-        if(blockchainDataIndex) {
-          if(this.validateBlockchainAddress(this.blockchainType, data.rules[blockchainDataIndex].value)){
-            data.rules[blockchainDataIndex].checked = true;
-            blockchainValidated  =  true;
-          }else{
-            this.btnBlocked = false;
-            return;
-          }
-        }
-        ///
+        
 
       } else if (step == 2) {
         const isAllFilled = data.formData.every((input) => input.value.length);
