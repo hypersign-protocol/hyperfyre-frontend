@@ -337,7 +337,8 @@ display:inline;
           </span>
             <span class="show-menu-text">{{ rule.text }}</span>
              <span class="right-menu" >
-              <i class="fas fa-plus"></i>
+              <i class="fas fa-chevron-down"></i>
+              
             </span>   
           </template>
           <template v-if="rule.id == 2" 
@@ -347,7 +348,7 @@ display:inline;
           </span>
             <span class="show-menu-text">{{ rule.text }}</span>
              <span class="right-menu">
-              <i class="fas fa-plus"></i>
+              <i class="fas fa-chevron-down"></i>
             </span>   
           </template>
           <template v-if="rule.id == 3" 
@@ -358,7 +359,7 @@ display:inline;
           </span>
             <span class="show-menu-text">{{ rule.text }}</span>
             <span class="right-menu">
-              <i class="fas fa-plus"></i>
+              <i class="fas fa-chevron-down"></i>
             </span>          </template>
           <template v-if="rule.id == 4" 
           >
@@ -368,7 +369,7 @@ display:inline;
             <span class="show-menu-text">{{ rule.text }}</span>
             <!-- <i class="fas fa-plus "></i> -->
             <span class="right-menu">
-              <i class="fas fa-plus"></i>
+              <i class="fas fa-chevron-down"></i>
             </span>
           </template>
           <template v-if="rule.id == 5" 
@@ -379,16 +380,16 @@ display:inline;
             <span class="show-menu-text">{{ rule.text }}</span>
             <!-- <i class="fas fa-plus "></i> -->
             <span class="right-menu">
-              <i class="fas fa-plus"></i>
+              <i class="fas fa-chevron-down"></i>
             </span>
           </template>
         </a>
          <b-collapse  
           :key="rule.id" 
           :id="'collapse-' + rule.id"
-          class="mt-2"
+          
           >
-          <b-card>
+          <b-card style="margin-top:0px; margin-bottom: 10px; border-radius: 2px; border-top: unset;">
           <template v-if="rule.id == 1" >
             <p class="card-text">Click on the twitter FOLLOW button to follow the page. </p>
             <b-button 
