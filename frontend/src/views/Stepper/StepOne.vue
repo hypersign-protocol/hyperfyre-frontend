@@ -333,7 +333,7 @@ display:inline;
           <template v-if="rule.id == 1" 
           >
           <span class="show-menu twitter">
-                  <i class="fab fa-twitter"></i>
+            <i class="fab fa-twitter"></i>
           </span>
             <span class="show-menu-text">{{ rule.text }}</span>
              <span class="right-menu" >
@@ -367,7 +367,6 @@ display:inline;
               <i class="fab fa-telegram-plane"></i>
             </span>
             <span class="show-menu-text">{{ rule.text }}</span>
-            <!-- <i class="fas fa-plus "></i> -->
             <span class="right-menu">
               <i class="fas fa-chevron-down"></i>
             </span>
@@ -378,82 +377,81 @@ display:inline;
               <i class="fas fa-cog"></i>
             </span>
             <span class="show-menu-text">{{ rule.text }}</span>
-            <!-- <i class="fas fa-plus "></i> -->
             <span class="right-menu">
               <i class="fas fa-chevron-down"></i>
             </span>
           </template>
         </a>
-         <b-collapse  
+          <b-collapse  
           :key="rule.id" 
           :id="'collapse-' + rule.id"
-          
           >
-          <b-card style="margin-top:0px; margin-bottom: 10px; border-radius: 2px; border-top: unset;">
-          <template v-if="rule.id == 1" >
-            <p class="card-text">Click on the twitter FOLLOW button to follow the page. </p>
-            <b-button 
-            size="sm" 
-            class="btn-twitter twitter" 
-            @click="handleTwitterLogin('https://twitter.com/' +projectDetails.twitterHandle +'?ref_src=twsrc%5Etfw', idx)"
-            >
-              Follow
-            </b-button> 
-            
-          </template>
-          <template v-if="rule.id == 2" >
-            <p class="card-text">Click on the RETWEET button to retweet and tag three friends. </p>
-            <p class="card-text">Then copy the re-tweet url and provide here. </p>
-            <b-button 
-            size="sm" 
-            class="btn-twitter twitter" 
-            @click="handleTwitterLogin('https://twitter.com/intent/tweet?text=' + 
-            projectDetails.twitterPostFormat, idx)"
-            >
-              Retweet
-            </b-button>
-            <input
-                placeholder="Your Tweet Url"
-                v-model="stepOneData.rules[idx].tweetUrl"
-                type="url"
-                class="w-50"
-              />
-          </template>
-          <template v-if="rule.id == 3" >
-            <p class="card-text">Click on the JOIN button to follow the project TG page. </p>
-            <b-button 
-            size="sm" 
-            class="btn-twitter telegram" 
-            @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramHandle}`, idx)"
-            >
-              Join
-            </b-button>
-            
-          </template>
-            
-          <template v-if="rule.id == 4" >
-            <p class="card-text">Click on the Subscribe button to JOIN the project TG Announcement Channel. </p>
-            <b-button 
-            size="sm" 
-            class="btn-twitter telegram" 
-            @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramAnnouncementChannel}`, idx)"
-            >
-              Join
-            </b-button>
-            
-          </template>
-            
-          <template v-if="rule.id == 5" >
-            <p class="card-text">Paste your Blockchain Wallet address here, Make sure it's not from any exchange. </p>
-            <input
-                v-model="rule.value"
-                class="form-control w-100"
-                placeholder="Your Wallet Address"
-              />
-            
-            
-          </template>
-            
+          <b-card style="margin-top:0px; margin-bottom: 10px; 
+          border-radius: 2px; border-top: unset; color: grey">
+            <template v-if="rule.id == 1" >
+              <p class="card-text">Click on the Twitter FOLLOW button to follow the page. </p>
+              <b-button 
+              size="sm" 
+              class="btn-twitter twitter" 
+              @click="handleTwitterLogin('https://twitter.com/' +projectDetails.twitterHandle +'?ref_src=twsrc%5Etfw', idx)"
+              >
+                <i class="fab fa-twitter"></i>
+                Follow @{{projectDetails.twitterHandle}}
+              </b-button> 
+              
+            </template>
+            <template v-if="rule.id == 2" >
+              <p class="card-text">Click on the RETWEET button to retweet and tag 3 of your friends. </p>
+              <p class="card-text">Then copy the re-tweet url and provide it here. </p>
+              <p style="margin-left:20%">
+                <b-button 
+                  size="sm" 
+                  style="float:left"
+                  class="btn-twitter twitter" 
+                  @click="handleTwitterLogin('https://twitter.com/intent/tweet?text=' + 
+                  projectDetails.twitterPostFormat, idx)"
+                >
+                  <i class="fab fa-twitter"></i> Retweet
+                </b-button>
+                <input
+                    placeholder="Paset your tweet url"
+                    v-model="stepOneData.rules[idx].tweetUrl"
+                    type="url"
+                    class="form-control w-50"
+                  />
+              </p>
+              
+            </template>
+            <template v-if="rule.id == 3" >
+              <p class="card-text">Click on the JOIN button to join the project's Telegram group. </p>
+              <b-button 
+              size="sm" 
+              class="btn-twitter telegram" 
+              @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramHandle}`, idx)"
+              >
+                <i class="fab fa-telegram-plane"></i> Join @ {{projectDetails.telegramHandle}}
+              </b-button>
+              
+            </template>
+            <template v-if="rule.id == 4" >
+              <p class="card-text">Click on the Subscribe button to JOIN the project TG Announcement Channel. </p>
+              <b-button 
+              size="sm" 
+              class="btn-twitter telegram" 
+              @click="handleTelegramLogin(`https://t.me/${projectDetails.telegramAnnouncementChannel}`, idx)"
+              >
+                <i class="fab fa-telegram-plane"></i> Join @ {{projectDetails.telegramAnnouncementChannel}}
+              </b-button>
+              
+            </template>
+            <template v-if="rule.id == 5" >
+              <p class="card-text">Paste your Blockchain Wallet address here, Make sure it's not from any exchange. </p>
+              <input
+                  v-model="rule.value"
+                  class="form-control w-100"
+                  placeholder="Your Wallet Address"
+                />
+            </template>
           </b-card>
         </b-collapse>
         </template>
