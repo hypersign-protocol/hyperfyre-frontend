@@ -445,11 +445,11 @@ display:inline;
               
             </template>
             <template v-if="rule.id == 5" >
-              <p class="card-text">Paste your Blockchain Wallet address here, Make sure it's not from any exchange. </p>
+              <p class="card-text">Enter your wallet address here. Make sure it's not from any exchange. </p>
               <input
                   v-model="rule.value"
                   class="form-control w-100"
-                  placeholder="Your Wallet Address"
+                  :placeholder="rule.placeholder"
                 />
             </template>
           </b-card>
