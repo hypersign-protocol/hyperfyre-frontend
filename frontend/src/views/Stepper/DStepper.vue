@@ -24,12 +24,12 @@
           <span class="">{{ projectDetails.projectName }}</span>
           <!-- Token Sale  Registration -->
         </h4>
-        <!-- <p class="my-0">
+        <p class="my-0">
           {{ step == 0 ? stepOneData.line1 : stepTwoData.line1 }}
         </p>
         <p class="my-0">
           {{ step == 0 ? stepOneData.line2 : stepTwoData.line2 }}
-        </p> -->
+        </p>
       </div>
     </div>
 
@@ -999,7 +999,16 @@ div.rule {
   div.form {
     font-size: 12px;
   }
+
+  .logo img{
+    width: 26%;
+  }
+
+  .text .my-0{
+    font-size: 0.75em;
+  }
 }
+
 
 @media screen and (min-height: 1070px) {
   .footer {

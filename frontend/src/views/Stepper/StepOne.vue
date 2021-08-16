@@ -1,7 +1,7 @@
 <style scoped>
 .show-menu-text{
   margin-left: 30px;
-  max-width: 210px;
+  /* max-width: 210px; */
 }
 
 .list-group-item {
