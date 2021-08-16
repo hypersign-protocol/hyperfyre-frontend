@@ -54,7 +54,7 @@
           }}
         </p>
 
-        <p class="text-right ml-auto my-0">Step {{ step + 1 }} of 3</p>
+        <p class="text-right ml-auto my-0">Step {{ step == 2 ? 2: step + 1 }} of 2</p>
       </div>
       <div class="steps">
         <div class="d-stepper-header d-flex justify-content-around">
@@ -422,6 +422,8 @@ export default {
           if(this.validateBlockchainAddress(this.blockchainType, data.rules[blockchainDataIndex].value)){
             data.rules[blockchainDataIndex].checked = true;
             blockchainValidated  =  true;
+
+            this.stepTwoData.formData[4].value =  data.rules[blockchainDataIndex].value;
           }else{
             this.btnBlocked = false;
             return;
@@ -430,9 +432,10 @@ export default {
         ///
 
       
-        const isAllChecked = data.rules.every((rule) => rule.checked);
+        const isAllChecked = true; //data.rules.every((rule) => rule.checked);
         const tweetFilled =
           data.rules[1].tweetUrl.trim().length !== 0 ? true : false;
+
 
         if (isAllChecked && tweetFilled) {
           //  console.log("PROJECT DETAILS", this.projectDetails);
@@ -647,12 +650,33 @@ export default {
     nextStepAction() {
       this.effect = "in-out-translate-fade";
       this.resetParams();
-      if (this.step < this.steps.length - 1) this.step++;
+      
+      const nextStep = this.step + 1;
+            
+      // skipping step2
+      if(nextStep == 1){
+        this.step = nextStep + 1;
+        return;
+      }
+
+      if (this.step <= this.steps.length - 1) {
+        this.step = nextStep;
+      };
     },
     backStep() {
       this.effect = "out-in-translate-fade";
       this.resetParams();
-      if (this.step > 0) this.step--;
+      const previousStep = this.step - 1 ;
+
+      // skipping step2
+      if(previousStep == 1){
+        this.step = previousStep - 1;
+        return;
+      }
+
+      if (this.step >= 0) {
+        this.step = previousStep;
+      };
     },
     loadingAction(status) {
       this.loading = status;
