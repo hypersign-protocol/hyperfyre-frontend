@@ -381,7 +381,7 @@ export default {
   methods: {
     async handleExport(){
       try{
-       const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.project._id}?fetchInvestors=true&isExport=true`;
+       const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.project._id}?fetchInvestors=true&isExport=true&limit=${this.project.count}`;
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
