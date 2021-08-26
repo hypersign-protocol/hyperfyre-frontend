@@ -30,18 +30,7 @@ export function writeInvestorsToFile(
             { header: "telegramHandle", key: "telegramHandle", width: 20 },
             { header: "projectId", key: "projectId", width: 20 },
             { header: "tweetUrl", key: "tweetUrl", width: 40 },
-            { header: "hasTwitted", key: "hasTwitted", width: 10 },
-            { header: "hasJoinedTGgroup", key: "hasJoinedTGgroup", width: 10 },
-            {
-              header: "isVerfiedByHypersign",
-              key: "isVerfiedByHypersign",
-              width: 30,
-            },
-            {
-              header: "isVerificationComplete",
-              key: "isVerificationComplete",
-              width: 30,
-            },
+            { header: "numberOfReferals", key: "numberOfReferals",   width: 10 }            
           ];
       
           worksheet.addRows(data);
