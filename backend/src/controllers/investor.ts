@@ -21,7 +21,7 @@ async function addInvestor(req: Request, res: Response, next: NextFunction) {
     const { did, email, name, ethAddress, twitterHandle, telegramHandle, hasTwitted, hasJoinedTGgroup,  projectId, tweetUrl  } = req.body;
     const { referrer } = req.query; // did of guy who have refered
     logger.info("InvestorController:: addInvestor(): referrer = " + referrer)
-    const isComingFromReferal = referrer && isHypersignDid(referrer) && did != referrer; 
+    const isComingFromReferal = referrer && email != referrer; 
     logger.info("InvestorController:: addInvestor(): isComingFromReferal = " + isComingFromReferal)
 
     logger.info("InvestorController:: addInvestor(): before findning investor by did = " + did);
