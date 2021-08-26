@@ -56,13 +56,14 @@ export default class TwitterService {
 
   /**
    * Validate tweet url and returns user detials as well
+   * Note: DEPRECIATED: Not using this one because users were facing problem with tweet url
    * @param tweetUrl tweet url
    * @param loggedInUserId id_str
    * @param tweetText tweeted text
    * @param needUserDetails returns 
    * @returns object 
    */
-  validateTweetUrl(
+  validateTweetUrl_old(
     tweetUrl: string,
     loggedInUserId: string,
     tweetText: string,
@@ -167,6 +168,58 @@ export default class TwitterService {
       }
     });
   }
+
+  /**
+   * Validate tweet url and returns user detials as well
+   * @param tweetUrl tweet url
+   * @param loggedInUserId id_str
+   * @param tweetText tweeted text
+   * @param needUserDetails returns 
+   * @returns object 
+   */
+  validateTweetUrl(
+    tweetUrl: string,
+    loggedInUserId: string,
+    tweetText: string,
+    needUserDetails: boolean = false,
+    checkIfFollowed: boolean = false,
+    sourceScreenName: string = ""
+  ) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        
+        const userDetailsFromTwitter = await this.getUserDetails(loggedInUserId);
+
+        console.log(userDetailsFromTwitter);
+        
+        let returnObj = {};
+        returnObj["hasTweetUrlVerified"] = true;
+        if (needUserDetails) {
+          returnObj["user"] = userDetailsFromTwitter;
+        }
+
+        if(needUserDetails && checkIfFollowed){
+          const followed = await this.hasFollowed(sourceScreenName, returnObj["user"]["screen_name"]);
+          returnObj["user"]["followed"] = {
+            to: sourceScreenName,
+            hasFollowed: followed,
+          }
+        }
+
+        logger.info(returnObj);
+        resolve(returnObj);
+
+      } catch (e) {
+        logger.error(e.message);
+        reject({
+          hasTweetUrlVerified: false,
+          error: e.message,
+        });
+      }
+    });
+  }
+
+
 
   /**
    * Verifes whether target follows source
