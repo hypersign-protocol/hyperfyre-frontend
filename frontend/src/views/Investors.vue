@@ -116,7 +116,7 @@ label {
 
         <div class="d-flex mx-auto  justify-content-between px-4">
           <div class="bold">Total Records</div>
-          <div class="bold">{{project.investors.length}}</div>
+          <div class="bold">{{project.count}}</div>
         </div>
         <div class="d-flex mx-auto  justify-content-between px-4 mt-4">
           <div class="bold">Enter number of records to get selected for lottery</div>
@@ -396,7 +396,7 @@ export default {
       }
     },
     async handleLottery(){
-      if(this.recordsForLottery > this.project.investors.length || this.recordsForLottery <= 0){
+      if(this.recordsForLottery > this.project.count || this.recordsForLottery <= 0){
         return this.notifyErr("No of records must be less or equal to total")
       }
       try{
