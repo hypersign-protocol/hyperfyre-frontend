@@ -125,7 +125,7 @@ label {
         <div class="d-flex mx-auto  justify-content-between px-4 mt-4">
           <div class="bold">Check to choose randomly (optional) </div>
           <div class="bold">
-             <input v-model="isRandom" type="checkbox" class="form-control" title="Check to choose randomly" />
+             <input v-model="isRandom" type="checkbox" class="" title="Check to choose randomly" />
           </div>
         </div>
         
