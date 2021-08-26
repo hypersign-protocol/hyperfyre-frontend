@@ -48,7 +48,8 @@ export default {
   created(){
     let userDid
     if(localStorage.getItem("user")){
-      userDid = JSON.parse(localStorage.getItem("user")).id;
+      userDid = JSON.parse(localStorage.getItem("user")).email;
+      
     }
    if(userDid){
      this.referalLink = `${window.location.protocol + "//" + window.location.host + window.location.pathname}?referrer=${encodeURIComponent(userDid)}`
