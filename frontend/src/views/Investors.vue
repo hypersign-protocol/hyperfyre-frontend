@@ -388,7 +388,7 @@ export default {
         };
 
         const res = await apiClientMixin.makeCall({method: "GET", url, header: headers, isFile: true})
-        FileDownload(res.data, "Investor_Data.csv");
+        FileDownload(res.data, `Investors_${this.selectedProject}.csv`);
       }catch(e){
         console.log(e);
         this.notifyErr(e)

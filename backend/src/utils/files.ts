@@ -22,15 +22,15 @@ export function writeInvestorsToFile(
           let worksheet = workbook.addWorksheet("Investors"); //creating worksheet
       
           worksheet.columns = [
-            { header: "did", key: "did", width: 30 },
-            { header: "email", key: "email", width: 30 },
-            { header: "name", key: "name", width: 30 },
-            { header: "ethAddress", key: "ethAddress", width: 30 },
-            { header: "twitterHandle", key: "twitterHandle", width: 20 },
-            { header: "telegramHandle", key: "telegramHandle", width: 20 },
-            { header: "projectId", key: "projectId", width: 20 },
-            { header: "tweetUrl", key: "tweetUrl", width: 40 },
-            { header: "numberOfReferals", key: "numberOfReferals",   width: 10 }            
+            { header: "PROJECT ID", key: "projectId", width: 20 },
+            { header: "DID", key: "did", width: 30 },
+            { header: "EMAIL", key: "email", width: 30 },
+            { header: "NAME", key: "name", width: 30 },
+            { header: "BLOCKCHAIN ADDRESS", key: "ethAddress", width: 30 },
+            { header: "TWEETER HANDLE", key: "twitterHandle", width: 20 },
+            { header: "TELEGRAM HANDLE", key: "telegramHandle", width: 20 },
+            { header: "SCORE", key: "numberOfReferals",   width: 10 },     
+            { header: "TWEET URL", key: "tweetUrl", width: 40 },
           ];
       
           worksheet.addRows(data);
