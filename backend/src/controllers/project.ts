@@ -335,7 +335,9 @@ async function getRandomInvestors(req: Request, res: Response, next: NextFunctio
         { $sample:  { size: limitRecordInt } }
       ])    
     }else{
-      randomInvestorList =  await InvestorModel.where(query).sort({ numberOfReferals:  1 }).limit(limitRecordInt);
+      randomInvestorList =  await InvestorModel.where(query)
+                            .sort({ numberOfReferals:  -1 }) // decending 
+                            .limit(limitRecordInt);
     }
     
 
