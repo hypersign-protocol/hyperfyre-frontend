@@ -106,22 +106,26 @@ label {
     ></loading>
 
 
-  <b-modal  hide-footer id="modal-1" title="Lottery!">
-    <p class="my-4 bg-info border rounded-lg p-2 text-white modal-text">Lottery is
-        process of randomly selecting records
-        Cless than total records). clicking
-        on "Execute button', the
-        lottery process begins, which may take time and screen might
-        freeze. Once done you will set selected records in excel sheet.</p>
-
+  <b-modal  hide-footer id="modal-1" title="Lottery">
+    <p class="my-4  border rounded-lg p-2 modal-text" style="background:#f0f9ff"><b>Lottery</b> is
+        the process of selecting winners of an event. Upon clicking
+        on "<b>Execute button</b>", the
+        lottery process begins, which may take sometime and screen may
+        freeze. Once done, you will get selected records in excel sheet. The winner selection is primarly based on their "<b>score</b>" unless checked "<b>randomly</b>".</p>
         <div class="d-flex mx-auto  justify-content-between px-4">
           <div class="bold">Total Records</div>
           <div class="bold">{{project.count}}</div>
         </div>
         <div class="d-flex mx-auto  justify-content-between px-4 mt-4">
-          <div class="bold">Enter number of records to get selected for lottery</div>
+          <div class="bold">Number of winners to choose </div>
           <div class="bold">
              <input v-model="recordsForLottery" type="number" class="form-control" placeholder="No. of records" />
+          </div>
+        </div>
+        <div class="d-flex mx-auto  justify-content-between px-4 mt-4">
+          <div class="bold">Check to choose randomly (optional) </div>
+          <div class="bold">
+             <input v-model="isRandom" type="checkbox" class="form-control" title="Check to choose randomly" />
           </div>
         </div>
         
@@ -226,7 +230,7 @@ export default {
           return this.items.length;
         },
       },
-
+      isRandom :  false,
       pageSelectDropdown: [],
 
       columns: [
@@ -401,7 +405,7 @@ export default {
       }
       try{
         
-          let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.project._id}/lottery?token=${this.authToken}&limitRecord=${this.recordsForLottery}`
+          let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.project._id}/lottery?token=${this.authToken}&limitRecord=${this.recordsForLottery}&isRandom=${this.isRandom}`
 
           const headers = {
 

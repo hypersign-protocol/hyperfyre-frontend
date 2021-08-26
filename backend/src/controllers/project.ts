@@ -304,7 +304,7 @@ async function getRandomInvestors(req: Request, res: Response, next: NextFunctio
 
   try{
 
-    let { limitRecord } = req.query;
+    let { limitRecord, isRandom } = req.query;
     const { id } = req.params;
 
     if(!limitRecord || limitRecord == ""){
@@ -329,12 +329,15 @@ async function getRandomInvestors(req: Request, res: Response, next: NextFunctio
     
     if(limitRecordInt == investorCount){
       randomInvestorList = await InvestorModel.where(query).find();
+    }else if(isRandom === "true"){
+      randomInvestorList =  await InvestorModel.aggregate([
+        { $match: query },
+        { $sample:  { size: limitRecordInt } }
+      ])    
+    }else{
+      randomInvestorList =  await InvestorModel.where(query).sort({ numberOfReferals:  1 }).limit(limitRecordInt);
     }
-
-    randomInvestorList =  await InvestorModel.aggregate([
-      { $match: query },
-      { $sample: { size: limitRecordInt } }
-    ])    
+    
 
 
     const filePath = await writeInvestorsToFile(`${id}_investorList_${new Date().getTime()}`, randomInvestorList);
