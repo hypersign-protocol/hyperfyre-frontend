@@ -89,6 +89,7 @@ const tweeterConfig = {
 }
 
 const REFFERAL_MULTIPLIER = 10;
+const CRED_PARTNER_SECRET_KEY = process.env.CRED_PARTNER_SECRET_KEY ||  "06ea0b58b75eee270a7e9b42501d8ba2";
 export {
   port,
   host,
@@ -106,5 +107,6 @@ export {
   whitelist,
   hsAuthServerEp,
   tweeterConfig,
-  REFFERAL_MULTIPLIER
+  REFFERAL_MULTIPLIER,
+  CRED_PARTNER_SECRET_KEY
 };

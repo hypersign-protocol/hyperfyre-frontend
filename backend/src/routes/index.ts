@@ -5,6 +5,7 @@ import auth from './auth';
 import twitter from './tweeter';
 import subscrition from './subscription';
 import plan from './plan';
+import cred from './cred';
 export default {
     project,
     investor,
@@ -12,6 +13,7 @@ export default {
     auth,
     twitter,
     subscrition, 
-    plan
+    plan,
+    cred
 }
 

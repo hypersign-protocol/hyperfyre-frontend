@@ -41,6 +41,7 @@ async function setupApp() {
         app.use("/api/v1/twitter", routes.twitter(hypersign));
         app.use("/api/v1/plan", routes.plan());
         app.use("/api/v1/subscription", routes.subscrition(hypersign));
+        app.use("/api/v1/cred", routes.cred(hypersign));
 
         app.use(apiErrorHandler);
 
