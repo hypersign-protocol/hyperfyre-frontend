@@ -318,6 +318,11 @@ display:inline;
 </style>
 <template>
   <div>
+    <loading
+      :active="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    ></loading>
     <div>
       <div class="list-group">
         <template
@@ -330,7 +335,7 @@ display:inline;
           v-b-toggle="'collapse-'+rule.id"          
           variant="primary"
           >
-          <template v-if="rule.id == 1" 
+          <!-- <template v-if="rule.id == 1" 
           >
           <span class="show-menu twitter">
             <i class="fab fa-twitter"></i>
@@ -370,7 +375,20 @@ display:inline;
             <span class="right-menu">
               <i class="fas fa-chevron-down"></i>
             </span>
+          </template> -->
+          
+          <template v-if="rule.id == 6" 
+          >
+          <span class="show-menu" style="background: black;">
+            <!-- <i class="fab fa-twitter"></i> -->
+            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.whizsky.com%2Fwp-content%2Fuploads%2F2018%2F12%2Fcred-image.jpg&f=1&nofb=1" width="40px" height="34px" />
+          </span>
+            <span class="show-menu-text">{{ rule.text }}</span>
+             <span class="right-menu" >
+              <i class="fas fa-chevron-down"></i>
+            </span>   
           </template>
+          
           <template v-if="rule.id == 5" 
           >
             <span class="show-menu default">
@@ -381,6 +399,8 @@ display:inline;
               <i class="fas fa-chevron-down"></i>
             </span>
           </template>
+
+          
         </a>
           <b-collapse  
           :key="rule.id" 
@@ -445,12 +465,112 @@ display:inline;
               
             </template>
             <template v-if="rule.id == 5" >
-              <p class="card-text">Enter your wallet address here. Make sure it's not from any exchange. </p>
-              <input
-                  v-model="rule.value"
-                  class="form-control w-100"
-                  :placeholder="rule.placeholder"
-                />
+              <form >
+                <div class="form-group row">                  
+                  <input
+                        type="text"
+                        v-model="rule.value"
+                        class="col-md-6 form-control"
+                        :placeholder="`Enter Solano address. Make sure its not from any exchange`" 
+                    />
+                  <div class="col-sm-6">
+                    <button 
+                    type="button"
+                      class="btn default" 
+                      @click="connectSolana(idx)"
+                      >
+                    Connect  
+                  </button>
+                  </div>
+                </div>
+              </form>
+            </template>
+            <template v-if="rule.id == 6" >
+              <div v-if="!ifCredAuthenticated">
+
+              
+              <form v-if="!ifOTPGenerated">
+                <div class="form-group row">                  
+                  <input
+                        type="text"
+                        v-model="rule.phoneNumber"
+                        class="col-md-6 form-control"
+                        :placeholder="rule.placeholder"
+                    />
+                  <div class="col-sm-6">
+                    <button 
+                    type="button"
+                      class="btn default" 
+                      @click="handleCred('GENERATE_OTP', idx)"
+                      >
+                    Authorize 
+                  </button>
+                  </div>
+                </div>
+              </form>
+
+              <form  v-else>
+                <div class="form-group row">                  
+                  <input
+                        type="text"
+                        v-model="otp"
+                        class="col-md-6 form-control"
+                        placeholder="Enter 4 digit OTP"
+                    />
+                  <div class="col-sm-6">
+                    <button 
+                    type="button"
+                      class="btn default" 
+                      @click="handleCred('VERIFY_OTP', idx)"
+                      >
+                    Verify 
+                  </button>
+                  </div>
+                </div>
+              </form>
+
+              </div>
+              
+              <div v-else>
+
+              
+
+               <form v-if="ifCredAuthenticated && rule.credProfile != {}">
+                <!-- <div class="form-group row" v-for="key in Object.keys(rule.credProfile)" v-bind="key">   
+                  
+                    <label class="col-sm-6">{{key}}</label>
+                    <label class="col-sm-6 form-control">{{rule.credProfile[key]}}</label>
+                  
+                </div> -->
+
+                <div class="form-group row">   
+                    <label class="col-sm-6">Full Name</label>
+                    <label class="col-sm-6 ">{{rule.credProfile.first_name + " " + rule.credProfile.last_name}}</label>
+                </div>
+                <div class="form-group row">   
+                    <label class="col-sm-6">Phone Number</label>
+                    <label class="col-sm-6 ">{{rule.credProfile.phone}}</label>
+                </div>
+
+                <div class="form-group row">   
+                    <label class="col-sm-6">Email</label>
+                    <label class="col-sm-6 ">{{rule.credProfile.email}}</label>
+                </div>
+
+                <div class="form-group row">   
+                    <label class="col-sm-6">Trust Score</label>
+                    <label class="col-sm-6 ">{{rule.credProfile.trust_score}}</label>
+                </div>
+
+                <div class="form-group row">   
+                    <label class="col-sm-6">Cred Coins</label>
+                    <label class="col-sm-6 ">{{rule.credProfile.coins}}</label>
+                </div>
+
+
+              </form>
+              </div>
+              
             </template>
           </b-card>
         </b-collapse>
@@ -465,10 +585,14 @@ display:inline;
 import webAuth from '../../mixins/twitterLogin';
 import notificationMixins from '../../mixins/notificationMixins';
 import config from "../../config";
+import apiClientMixin from '../../mixins/apiClientMixin';
 // This components will have the content for each stepper step.
-
+import Loading from "vue-loading-overlay";
 export default {
   name: "StepOne",
+  components: {
+    Loading
+  },
   props: {
     stepOneData: {
       type: Object,
@@ -486,6 +610,12 @@ export default {
       showInput: true,
       urlToRedirectTo: "",
       telegramAuthDone: false,
+      otp: "",
+      ifOTPGenerated: false,
+      token: "",
+      isLoading: false,
+      fullPage: true,
+      ifCredAuthenticated: false
     };
   },
   mounted(){
@@ -501,9 +631,110 @@ export default {
 
   methods: {
 
+      connectSolana(idx) {
+        /* console.log(this.getProvider()) */;
+        let provider = this.getSolanaProvider()
+        provider.connect()
+        const _that = this
+        window.solana.on("connect", () => {
+          _that.stepOneData.rules[idx].value = window.solana.publicKey.toString()
+        })
+        /* this.address = provider.publicKey.toString() */
+    },
+    getSolanaProvider() {
+      if ("solana" in window) {
+      const provider = window.solana;
+      if (provider.isPhantom) {
+        return provider;
+      }
+    }
+  	window.open("https://phantom.app/", "_blank");
+    } ,
+
+
     handleInputShow() {
       this.showInput = true;
     },
+
+    async handleCred(type, idx){
+      try{
+        this.isLoading = true;
+
+        if(!this.stepOneData.rules[idx].phoneNumber){
+          throw new Error("Enter phone number")
+        }
+
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+
+        if(type === "GENERATE_OTP"){
+          
+          
+          const url = "https://stage.hypermine.in/whitelist/api/v1/cred/generateOTP";
+        
+          const resp = await apiClientMixin.makeCall({url, body: {
+            phoneNumber: this.stepOneData.rules[idx].phoneNumber
+          }, method: "POST", header: headers })
+
+
+          console.log(resp)
+          if(resp && resp.data && resp.data.token){
+            this.token =  resp.data.token;
+            this.ifOTPGenerated = true;
+          }else{
+            alert("Could not generate OTP")
+          }
+
+        }else if(type === "VERIFY_OTP"){
+          if(this.token) {
+            const url = "https://stage.hypermine.in/whitelist/api/v1/cred/verifyOTP"
+            const resp = await apiClientMixin.makeCall({url, body: {
+              otp: this.otp,
+              token: this.token
+            }, method: "POST", header: headers })
+
+            console.log(resp)
+
+            if(resp && resp.data){
+              if(resp.data.existing_user){
+                this.stepOneData.rules[idx].credProfile = resp.data;
+                console.log(JSON.stringify(this.stepOneData.rules[idx].credProfile))
+                this.ifCredAuthenticated = true;
+                
+              }else{
+                alert("User not registered")
+                this.resetCred()  
+              }
+            }else{
+              alert("Could not verify the OTP")
+              this.resetCred()
+            }
+
+            
+          }else{
+            alert("First generate Cred OTP")
+            this.resetCred()
+          }
+        }
+      }catch(e){
+          alert(e)
+          this.resetCred()
+
+      }finally{
+        this.isLoading = false;
+      }
+       
+    },
+
+    resetCred(){
+      this.ifCredAuthenticated = false;
+      this.ifOTPGenerated = false;
+      this.otp = "";
+      this.toke = "";
+    },
+
 
     handleTwitterLogin(urlToRedirect, idx){
   

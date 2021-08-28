@@ -105,7 +105,7 @@ const avatarLabel = require("../assets/avatarUploadLabel.png");
 export default {
   name: "Stepper",
   components: {
-    DStepper,
+    DStepper
   },
 
   data() {
@@ -117,22 +117,31 @@ export default {
           "You will need to complete all steps to get qualified.",
 
         rules: [
-          {
-            id: 1,
-            text: "Follow us on Twitter",
+          // {
+          //   id: 1,
+          //   text: "Follow us on Twitter",
+          //   checked: false,
+          // },
+          // {
+          //   id: 2,
+          //   text: "Retweet and tag 3 friends",
+          //   checked: false,
+          //   showTweetInput: true,
+          //   tweetUrl: "",
+          // },
+          // {
+          //   id: 3,
+          //   text: "Join our Telegram group ",
+          //   checked: false,
+          // },
+
+           {
+            id: 6,
+            text: "Authorize your Cred profile",
             checked: false,
-          },
-          {
-            id: 2,
-            text: "Retweet and tag 3 friends",
-            checked: false,
-            showTweetInput: true,
-            tweetUrl: "",
-          },
-          {
-            id: 3,
-            text: "Join our Telegram group ",
-            checked: false,
+            placeholder: "Enter registered phone number (i.e 999999999)",
+            phoneNumber: "",
+            credProfile: {}
           },
          
         ],
