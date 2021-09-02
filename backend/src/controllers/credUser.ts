@@ -9,21 +9,21 @@ const { keys: issuerKeyPair,  mail, jwt } = require("../../hypersign.json");
 
 async function getCredential(req: Request, res: Response, next: NextFunction) {
   try{
-    logger.info("InvestorController:: getCredential method start..");
+    logger.info("CredController:: getCredential method start..");
 
     const { token } =  req.query;
 
     if(!token){
-      logger.info("InvestorController:: getCredential(): token is null");
+      logger.info("CredController:: getCredential(): token is null");
       return next(ApiError.badRequest("WT token is not passed in query params"));
     }
 
-    logger.info("InvestorController:: getCredential(): before jwt verification");
+    logger.info("CredController:: getCredential(): before jwt verification");
     const attributesMap = await jsonWebToken.verify(token, jwt.secret);
-    logger.info("InvestorController:: getCredential(): after jwt verification");
+    logger.info("CredController:: getCredential(): after jwt verification");
 
     if(!attributesMap){
-      logger.info("InvestorController:: getCredential(): attributesMap is null");
+      logger.info("CredController:: getCredential(): attributesMap is null");
       return next(ApiError.badRequest("Could not verify JWT token"));
     }
   
@@ -33,8 +33,8 @@ async function getCredential(req: Request, res: Response, next: NextFunction) {
     delete attributesMap["exp"];
 
     const schemaUrl = nodeServer.baseURl + nodeServer.schemaGetEp + credSchemaId;
-    logger.info("InvestorController:: getCredential(): schemaUrl = " + schemaUrl);
-    logger.info("InvestorController:: getCredential(): before generaating raw Credential");
+    logger.info("CredController:: getCredential(): schemaUrl = " + schemaUrl);
+    logger.info("CredController:: getCredential(): before generaating raw Credential");
 
     logger.info({
       subjectDid: did,
@@ -51,11 +51,11 @@ async function getCredential(req: Request, res: Response, next: NextFunction) {
       attributesMap
     });
 
-    logger.info("InvestorController:: getCredential(): after generaating raw Credential");
+    logger.info("CredController:: getCredential(): after generaating raw Credential");
 
-    logger.info("InvestorController:: getCredential(): before signCredential issuerKeyPair.publicKey.id = " + issuerKeyPair.publicKey.id);
+    logger.info("CredController:: getCredential(): before signCredential issuerKeyPair.publicKey.id = " + issuerKeyPair.publicKey.id);
     const signedCredential = await hypersignSDK.credential.signCredential(rawCredential, issuerKeyPair.publicKey.id, issuerKeyPair.privateKeyBase58)
-    logger.info("InvestorController:: getCredential(): after signCredential");
+    logger.info("CredController:: getCredential(): after signCredential");
 
     res.send({
       status: 200,
@@ -64,10 +64,10 @@ async function getCredential(req: Request, res: Response, next: NextFunction) {
     });    
     
   } catch (e){
-    logger.error('InvestorController:: getCredential(): Error ' + e);
+    logger.error('CredController:: getCredential(): Error ' + e);
     next(ApiError.internal(e.message));
   } finally {
-    logger.info("InvestorController:: getCredential method ends.");
+    logger.info("CredController:: getCredential method ends.");
   }
 }
 
@@ -93,7 +93,7 @@ async function sendEmail(data){
 
 async function issueCredential(req: Request, res: Response, next: NextFunction){
   try{
-    logger.info("InvestorController:: issueCredential method starts...");
+    logger.info("CredController:: issueCredential method starts...");
     
     // const { name ,    email ,    phoneNumber ,    trustScore ,    credCoin ,    blockchainAddress   } = req.body;
 
@@ -113,9 +113,9 @@ async function issueCredential(req: Request, res: Response, next: NextFunction){
 
     // attributesMap.blockchainAddress = investor["_doc"]["ethAddress"];
       
-    logger.info("InvestorController:: issueCredential(): before sending email to " + JSON.stringify(req.body));
+    logger.info("CredController:: issueCredential(): before sending email to " + JSON.stringify(req.body));
     const link = await sendEmail(req.body);
-    logger.info("InvestorController:: issueCredential(): after sending email");
+    logger.info("CredController:: issueCredential(): after sending email");
 
 
     // res.send({message: "Whitelisting credential has been successfully sent to the investor email", credentialUrl: link})
@@ -123,10 +123,10 @@ async function issueCredential(req: Request, res: Response, next: NextFunction){
     return next()
 
   } catch (e){
-    logger.error('InvestorController:: issueCredential(): Error ' + e);
+    logger.error('CredController:: issueCredential(): Error ' + e);
     next(ApiError.internal(e.message));
   }finally{
-    logger.info("InvestorController:: issueCredential method ends.");
+    logger.info("CredController:: issueCredential method ends.");
   }
 }
 
