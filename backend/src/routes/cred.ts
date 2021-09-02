@@ -2,6 +2,7 @@ import { Router } from "express";
 import { logger } from "../config";
 import ApiError from '../error/apiError';
 import CredService from "../services/cred.service";
+import InvestorController from "../controllers/credUser";
 
 
 export = (hypersign) => {
@@ -57,6 +58,12 @@ export = (hypersign) => {
       }
     }
   );
+
+  router.post("/issue",  hypersign.authorize.bind(hypersign), InvestorController.issueCredential);
+
+  // Since this will be called by mobile wallet, you need hypersign authorization middleware here...
+  router.get("/credential",  InvestorController.getCredential);
+
 
   return router;
 };
