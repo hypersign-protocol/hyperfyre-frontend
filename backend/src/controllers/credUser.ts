@@ -73,7 +73,7 @@ async function getCredential(req: Request, res: Response, next: NextFunction) {
 
 async function sendEmail(data){
   const token = await jsonWebToken.sign(data, jwt.secret, { expiresIn: jwt.expiryTime })
-  let link = `${hostnameurl}/api/v1/investors/credential?token=${token}`;
+  let link = `${hostnameurl}/api/v1/cred/credential?token=${token}`;
   let mailTemplateTemp = credentialMailTemplate;
   mailTemplateTemp = mailTemplateTemp.replace(/@@APPNAME@@/g, mail.name);
   mailTemplateTemp = mailTemplateTemp.replace('@@RECEIVERNAME@@', data.name);
