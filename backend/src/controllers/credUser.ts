@@ -108,13 +108,15 @@ async function issueCredential(req: Request, res: Response, next: NextFunction){
     }
 
     Object.keys(attributesMap).map(x => {
-      attributesMap[x] = req.body
+      attributesMap[x] = req.body[x]
     })
 
     attributesMap.did = req.body.userData.id;
+
+    console.log(attributesMap);
       
-    logger.info("CredController:: issueCredential(): before sending email to " + JSON.stringify(req.body));
-    const link = await sendEmail(req.body);
+    logger.info("CredController:: issueCredential(): before sending email to " + JSON.stringify(attributesMap));
+    const link = await sendEmail(attributesMap);
     logger.info("CredController:: issueCredential(): after sending email");
 
 
