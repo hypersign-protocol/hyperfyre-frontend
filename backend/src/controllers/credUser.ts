@@ -97,21 +97,21 @@ async function issueCredential(req: Request, res: Response, next: NextFunction){
     
     // const { name ,    email ,    phoneNumber ,    trustScore ,    credCoin ,    blockchainAddress   } = req.body;
 
-    // let attributesMap = {
-    //   name: "",
-    //   email: "",
-    //   blockchainAddress: "",
-    //   twitterHandle: "",
-    //   telegramHandle: "",
-    //   did: "",
-    //   projectId: ""
-    // }
+    let attributesMap = {
+      name: "",
+        email: "",
+        phoneNumber: "",
+        trustScore: "",
+        credCoin: "",
+        blockchainAddress: "",
+        did: "",
+    }
 
-    // Object.keys(attributesMap).map(x => {
-    //   attributesMap[x] = req.body
-    // })
+    Object.keys(attributesMap).map(x => {
+      attributesMap[x] = req.body
+    })
 
-    // attributesMap.blockchainAddress = investor["_doc"]["ethAddress"];
+    attributesMap.did = req.body.userData.id;
       
     logger.info("CredController:: issueCredential(): before sending email to " + JSON.stringify(req.body));
     const link = await sendEmail(req.body);
