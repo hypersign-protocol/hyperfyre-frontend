@@ -276,6 +276,7 @@ export default {
       hasTgVerfied: false,
       blockchainType: "",
       btnBlocked: false,
+      user: {}
     };
   },
 
@@ -296,6 +297,8 @@ export default {
 
     let userDid;
     if (localStorage.getItem("user")) {
+      this.user = JSON.parse(localStorage.getItem("user"))
+      
       userDid = JSON.parse(localStorage.getItem("user")).id;
     }
 
@@ -726,7 +729,8 @@ export default {
     async checkIfAlreadyFilled(userDid) {
       try {
         let idOrSlugForUrl = this.projectDetails._id;
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?did=${userDid}&projectId=${idOrSlugForUrl}`;
+        // const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?did=${userDid}&projectId=${idOrSlugForUrl}`;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?email=${this.user.email}&projectId=${idOrSlugForUrl}`;
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
