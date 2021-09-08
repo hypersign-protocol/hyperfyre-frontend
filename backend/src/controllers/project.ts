@@ -1,6 +1,6 @@
 import { logger } from "../config";
 import { Request, Response, NextFunction } from "express";
-import ProjectModel, { IProject, EBlockchainType } from "../models/project";
+import ProjectModel, { IProject, EBlockchainType, EventActionType } from "../models/project";
 import InvestorModel, { IInvestor } from "../models/investor";
 import ApiError from '../error/apiError';
 import { writeInvestorsToFile, deleteFile } from '../utils/files';
@@ -18,7 +18,8 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       userData,
       blockchainType,
       themeColor,
-      fontColor
+      fontColor,
+      actions
     } = req.body;
 
     if (Date.parse(fromDate) > Date.parse(toDate)) {
@@ -41,6 +42,12 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       twitterPostFormat,
     } =  social.twitter;
 
+    if(actions && actions.length > 0){
+      // if(actions.findOne(x => typeof(x.type) != EventActionType)){
+      //   return next(ApiError.badRequest("Invalid action type"));
+      // }
+    }
+
     const newProject: IProject = await ProjectModel.create({
       projectName,
       logoUrl,
@@ -55,7 +62,8 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       blockchainType: !blockchainType || blockchainType == "" ? EBlockchainType.ETHEREUM : blockchainType,
       themeColor: !themeColor || themeColor == "" ? "#494949" : themeColor,
       fontColor: !fontColor || fontColor == "" ? "#ffffff" : fontColor,
-      slug
+      slug,
+      actions
     });
     res.send(newProject);
   } catch (e) {
