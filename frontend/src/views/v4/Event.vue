@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import Child from "../../components/v4/Child.vue";
 import Banner from "../../components/v4/Banner.vue";
 import Login from "../../components/v4/Login.vue";
 import Action from "../../components/v4/Action.vue";
