@@ -307,11 +307,12 @@ i {
               :fontColor="fontColor"
               :fontColorDefault="fontColorDefault"
               :blockChainType="blockchainType"
+              :eventActionType="eventActionType"
               :saveProject="saveProject"
               :addedSocialMedias="addedSocialMedias"
               :selectedSocialMedia="selectedSocialMedia"
               :socialOptions="socialOptions"
-
+              :eventActionList="eventActionList"
              />
 
           
@@ -519,35 +520,36 @@ export default {
       }, 
       projects: [],   
       
-        selectedSocialMedia: null,
-        addedSocialMedias: [],
-        socialOptions: [
-            {value: null, label: "Select a Social Profile"},
-            {
-                label: "Twitter",
-                
-                value: {
-                    media: "twitter",
-                    icon: "fab fa-twitter",
-                    fields: [ 
-                        {name: "twitterHandle", type: "text", placeholder: "Twitter Handle", value:"" } ,
-                        {name: "twitterPostFormat", type: "text", placeholder: "Twitter Post Format", value: "" }
-                    ]
-                }, 
-                
-            },
-            {
-                label: "Telegram", 
-                value: {
-                    media: "telegram",
-                    icon:"fab fa-telegram-plane",
-                    fields: [ 
-                        {name: "telegramHandle", type: "text", placeholder: "Telegram Handle", value: "" } ,
-                        {name: "telegramAnnouncementChannel", type: "text", placeholder: "Telegram Announcement Channel", value: "", optional: true }
-                    ]
-                }, 
-                
-            }
+      selectedSocialMedia: null,
+      addedSocialMedias: [],
+      eventActionList: [],
+      socialOptions: [
+          {value: null, label: "Select a Social Profile"},
+          {
+              label: "Twitter",
+              
+              value: {
+                  media: "twitter",
+                  icon: "fab fa-twitter",
+                  fields: [ 
+                      {name: "twitterHandle", type: "text", placeholder: "Twitter Handle", value:"" } ,
+                      {name: "twitterPostFormat", type: "text", placeholder: "Twitter Post Format", value: "" }
+                  ]
+              }, 
+              
+          },
+          {
+              label: "Telegram", 
+              value: {
+                  media: "telegram",
+                  icon:"fab fa-telegram-plane",
+                  fields: [ 
+                      {name: "telegramHandle", type: "text", placeholder: "Telegram Handle", value: "" } ,
+                      {name: "telegramAnnouncementChannel", type: "text", placeholder: "Telegram Announcement Channel", value: "", optional: true }
+                  ]
+              }, 
+              
+          }
       ],
 
       searchQuery: "",
@@ -555,6 +557,7 @@ export default {
       perPage: 10,
       projectStatus: true,
       blockchainType: "ETHEREUM",
+      eventActionType: "ETHEREUM",
       currentPage: 1,
       themeColor: "#494949",
       themeColorDefault: "#494949",
@@ -638,6 +641,7 @@ export default {
       
       this.isProjectEditing = false;
       this.project = {}
+      this.eventActionList = this.eventActionList
       this.blockchainType = "ETHEREUM";
       this.fontColor = this.fontColorDefault;
       this.themeColor = this.themeColorDefault;
@@ -737,7 +741,7 @@ export default {
       this.themeColor = project.themeColor
       this.fontColor = project.fontColor
       this.projectStatus = project.projectStatus
-
+      this.eventActionList = project.actions
     
     
       this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
@@ -771,10 +775,10 @@ export default {
         this.project.themeColor = this.themeColor.trim().length ?  this.themeColor :  this.themeColorDefault
         this.project.fontColor = this.fontColor.trim().length ?  this.fontColor :  this.fontColorDefault
         this.project.blockchainType = this.blockchainType
+        this.project.actions = this.eventActionList
 
     
-
-       
+        console.log(this.project)
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
           if(!this.isProjectEditing){
