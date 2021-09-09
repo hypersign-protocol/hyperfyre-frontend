@@ -58,7 +58,7 @@
 
                       <b-card no-body class="mb-1">
                         <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
-                          <b-button block v-b-toggle.accordion-3 variant="info" class="bg-transparent border-0 text-left text-primary" >Custom inputs Configurations </b-button>
+                          <b-button block v-b-toggle.accordion-3 variant="info" class="bg-transparent border-0 text-left text-primary" >Custom inputs  </b-button>
                         </b-card-header>
                         <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
                           <b-card-body>
@@ -71,7 +71,7 @@
                         <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
                           <b-button block v-b-toggle.accordion-3 variant="info" class="bg-transparent border-0 text-left text-primary" > Configurations </b-button>
                         </b-card-header>
-                        <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
+                        <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
                           <b-card-body>
                            <blockchain-congif :blockChainType="blockChainType" />
                           </b-card-body>
