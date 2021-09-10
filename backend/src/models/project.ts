@@ -1,24 +1,5 @@
 import mongoose, {Schema, Document} from "mongoose";
-
-
-export enum EventActionType{
-    INPUT_TEXT = "INPUT_TEXT",
-    INPUT_NUMBER = "INPUT_NUMBER",
-    // FOLLOW_FACEBOOK,
-    // TWITTER_FOLLOW,
-    // TWITTER_RETWEET,
-    // TELEGRAM_JOIN    
-}
-
-interface EventAction{
-    type: EventActionType;
-    title: string; 
-    placeHolder: string; 
-    isManadatory: boolean;
-    value: string;
-    score: number;
-}
-
+import { IEventAction } from "./actions";
 
 export interface IProject extends Document{
     projectName: string;
@@ -41,13 +22,13 @@ export interface IProject extends Document{
         // instagram
 
     
-    actions: Array<EventAction>;
     projectStatus: Boolean;
     blockchainType: string;
     investorsCount: number;
     themeColor: string;
     fontColor: string;
     slug: string;
+    actions: Array<IEventAction>;
 
 }
 
@@ -55,6 +36,7 @@ export enum EBlockchainType {
     ETHEREUM = "ETHEREUM",
     TEZOS = "TEZOS"
 }
+
 const ProjectSchema = new Schema({
     projectName:{ type: String, required: true },
     logoUrl:{ type: String, required: true },
@@ -70,8 +52,7 @@ const ProjectSchema = new Schema({
     investorsCount: {type: Number},
     themeColor: { type: String, required: true},
     fontColor: { type: String, required: true},
-    slug: { type: String, required: true},
-    actions: { type: Array<EventAction>(), required: true}
+    slug: { type: String, required: true}
 })
 
 export default mongoose.model<IProject>("Project", ProjectSchema);

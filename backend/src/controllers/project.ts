@@ -1,6 +1,8 @@
 import { logger } from "../config";
 import { Request, Response, NextFunction } from "express";
-import ProjectModel, { IProject, EBlockchainType, EventActionType } from "../models/project";
+import ProjectModel, { IProject, EBlockchainType } from "../models/project";
+import ActionModel, { IEventAction, EventActionType } from "../models/actions";
+
 import InvestorModel, { IInvestor } from "../models/investor";
 import ApiError from '../error/apiError';
 import { writeInvestorsToFile, deleteFile } from '../utils/files';
@@ -25,6 +27,10 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
     if (Date.parse(fromDate) > Date.parse(toDate)) {
       return next(ApiError.badRequest("fromDate can not be greater than toDate"));
     }
+
+    // if(typeof actions != Array){
+    //   return next(ApiError.badRequest("Choose different project name. This project name is already taken"));
+    // }
     const slug = dashify(projectName);
 
     const project:IProject = await ProjectModel.where({ slug }).findOne();
@@ -42,13 +48,8 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       twitterPostFormat,
     } =  social.twitter;
 
-    if(actions && actions.length > 0){
-      // if(actions.findOne(x => typeof(x.type) != EventActionType)){
-      //   return next(ApiError.badRequest("Invalid action type"));
-      // }
-    }
-
-    const newProject: IProject = await ProjectModel.create({
+  
+    let newProject: IProject = await ProjectModel.create({
       projectName,
       logoUrl,
       fromDate: new Date(fromDate).toISOString(),
@@ -62,14 +63,35 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       blockchainType: !blockchainType || blockchainType == "" ? EBlockchainType.ETHEREUM : blockchainType,
       themeColor: !themeColor || themeColor == "" ? "#494949" : themeColor,
       fontColor: !fontColor || fontColor == "" ? "#ffffff" : fontColor,
-      slug,
-      actions
+      slug
     });
-    res.send(newProject);
+
+    newProject.actions = [];
+    if(actions && actions.length > 0){
+      let i;
+      for(i = 0; i < actions.length; i++){
+        const newAction = await ActionModel.create({
+          eventId: newProject._id,
+          ...actions[i]
+        })
+        newProject.actions.push(newAction)
+      }
+    }
+
+    res.send({
+      ...newProject["_doc"],
+      actions: newProject.actions
+    });
+
+    
   } catch (e) {
     logger.error("ProjectCtrl:: addProject(): Error " + e);
     return next(ApiError.internal(e.message));
   }
+}
+
+async function getEventActions({eventId}){
+  return await ActionModel.find({ eventId });
 }
 
 async function getAllProject(req: Request, res: Response, next: NextFunction) {
@@ -97,6 +119,11 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
         project.investorsCount = await InvestorModel.countDocuments({
           projectId: project["_id"],
         }).then((count) => count);
+
+        project["actions"] = await getEventActions({
+          eventId: project._id
+        })
+
         logger.info("After fetching investos cound = " + project.investorsCount);
 
         projectListTmp.push(project);
@@ -163,6 +190,9 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
     let projectInfo = {
       ...project["_doc"],
     };
+
+    // retrive event/project's actions
+    projectInfo["actions"] = await getEventActions({eventId: projectInfo._id })
 
     if(checkUpdateIfProjectExpired(projectInfo) === true){
       logger.info("Project is expired");
@@ -237,6 +267,12 @@ async function deleteProjectById(req: Request, res: Response, next: NextFunction
   try {
     const { id } = req.params;
     const project: IProject = await ProjectModel.findByIdAndDelete(id);
+
+    // delete all actions
+    ActionModel.deleteMany({
+      eventId: id
+    })
+
     res.send({
       ...project["_doc"],
     });
