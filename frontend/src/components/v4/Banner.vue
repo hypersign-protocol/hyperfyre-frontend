@@ -5,7 +5,7 @@
       `background-color: ${themeColor}; color: ${fontColor} !important; border-color:${fontColor}`
     "
   >
-    <h4>Banner Component</h4>
+    <h4>[Banner Component]</h4>
     <h3>{{ eventName }}</h3>
 
     <p>Event's end date: {{ toDate }}</p>

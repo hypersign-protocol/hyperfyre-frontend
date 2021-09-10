@@ -1,6 +1,6 @@
 <template>
   <div class="logincontent">
-    <h4>Login Component</h4>
+    <h4>[Login Component]</h4>
     <p>
       Login With Hypersign
       <div v-if="QRRefresh" class="QRRefresh">

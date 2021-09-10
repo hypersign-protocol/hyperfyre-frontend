@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2>{{eventData.projectName}}</h2>
     <Banner :eventName="eventData.projectName" 
     :themeColor="eventData.themeColor"
     :fontColor="eventData.fontColor"
@@ -8,15 +9,13 @@
      />
 
     <div class="content" v-if="isAuthenticated">
-      <ul>
-        <li v-for="eachAction in eventData.actions" :key="eachAction.id">
+      <div v-for="eachAction in eventData.actions" :key="eachAction.id">
           <Action
             :actionType="eachAction.type"
             :title="eachAction.title"
             :score="eachAction.score"
           />
-        </li>
-      </ul>
+      </div>
     </div>
 
     <div class="content" v-else>
@@ -97,6 +96,24 @@ export default {
           value: "",
           score: 30,
         },
+         {
+          id: 3,
+          type: "INPUT_NUMBER",
+          title: "Input score",
+          placeholder: "1200",
+          isManadatory: false,
+          value: "",
+          score: 30,
+        },
+        {
+          id: 4,
+          type: "INPUT_TEXT",
+          title: "Enter name",
+          placeholder: "xyz",
+          isManadatory: false,
+          value: "",
+          score: 30,
+        },
       ],
       __v: 0,
     }
@@ -128,7 +145,8 @@ export default {
   height: 500px;
   margin-left: 35%;
   margin-right: 30%;
-
+  max-height: 700px;
+  overflow-y: auto;
   background: rgb(204, 203, 203);
   border-radius: 20px;
 }
