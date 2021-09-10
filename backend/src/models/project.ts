@@ -1,4 +1,5 @@
 import mongoose, {Schema, Document} from "mongoose";
+import { IEventAction } from "./actions";
 
 export interface IProject extends Document{
     projectName: string;
@@ -19,13 +20,15 @@ export interface IProject extends Document{
         // facebook        
 
         // instagram
-        
+
+    
     projectStatus: Boolean;
     blockchainType: string;
     investorsCount: number;
     themeColor: string;
     fontColor: string;
     slug: string;
+    actions: Array<IEventAction>;
 
 }
 
@@ -33,6 +36,7 @@ export enum EBlockchainType {
     ETHEREUM = "ETHEREUM",
     TEZOS = "TEZOS"
 }
+
 const ProjectSchema = new Schema({
     projectName:{ type: String, required: true },
     logoUrl:{ type: String, required: true },
@@ -48,7 +52,7 @@ const ProjectSchema = new Schema({
     investorsCount: {type: Number},
     themeColor: { type: String, required: true},
     fontColor: { type: String, required: true},
-    slug: { type: String, required: true},
+    slug: { type: String, required: true}
 })
 
 export default mongoose.model<IProject>("Project", ProjectSchema);
