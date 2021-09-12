@@ -120,10 +120,10 @@ async function issueCredential(req: Request, res: Response, next: NextFunction){
     logger.info("CredController:: issueCredential(): after sending email");
 
 
-    // res.send({message: "Whitelisting credential has been successfully sent to the investor email", credentialUrl: link})
+
+
     res.status(200).send({message: "Whitelisting credential has been successfully sent to the investor email", credentialUrl: link})
-    // req.body["result"] = {message: "Whitelisting credential has been successfully sent to the investor email", credentialUrl: link}
-    // return next()
+
 
   } catch (e){
     logger.error('CredController:: issueCredential(): Error ' + e);
