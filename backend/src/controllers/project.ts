@@ -105,7 +105,7 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
       projectList = await ProjectModel.find({}).where({ ownerDid: userData.id }).sort(sortyByFromDateTimeDesc);
       let i;
       for(i = 0; i < projectList.length; i++){
-        const project = projectList[i];
+        const project: IProject = projectList[i];
         if(checkUpdateIfProjectExpired(project) === true){
           // logger.info("Project is expired");
           project.projectStatus = false; 
@@ -120,13 +120,16 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
           projectId: project["_id"],
         }).then((count) => count);
 
-        project["actions"] = await getEventActions({
+        const eventActions = await getEventActions({
           eventId: project._id
         })
 
         logger.info("After fetching investos cound = " + project.investorsCount);
 
-        projectListTmp.push(project);
+        projectListTmp.push({
+          ...project["_doc"],
+          actions: eventActions
+        });
       }
 
       // projectList.forEach((project) => {
