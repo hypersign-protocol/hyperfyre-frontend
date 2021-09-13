@@ -190,12 +190,15 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
       return next(ApiError.badRequest("No project found for id or slug = " + id));
     }
 
+// retrive event/project's actions
+   const eventActions = await getEventActions({eventId: id })
+
+
     let projectInfo = {
       ...project["_doc"],
+      actions: eventActions
     };
 
-    // retrive event/project's actions
-    projectInfo["actions"] = await getEventActions({eventId: projectInfo._id })
 
     if(checkUpdateIfProjectExpired(projectInfo) === true){
       logger.info("Project is expired");
