@@ -105,7 +105,7 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
       projectList = await ProjectModel.find({}).where({ ownerDid: userData.id }).sort(sortyByFromDateTimeDesc);
       let i;
       for(i = 0; i < projectList.length; i++){
-        const project = projectList[i];
+        const project: IProject = projectList[i];
         if(checkUpdateIfProjectExpired(project) === true){
           // logger.info("Project is expired");
           project.projectStatus = false; 
@@ -120,13 +120,16 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
           projectId: project["_id"],
         }).then((count) => count);
 
-        project["actions"] = await getEventActions({
+        const eventActions = await getEventActions({
           eventId: project._id
         })
 
         logger.info("After fetching investos cound = " + project.investorsCount);
 
-        projectListTmp.push(project);
+        projectListTmp.push({
+          ...project["_doc"],
+          actions: eventActions
+        });
       }
 
       // projectList.forEach((project) => {
@@ -187,13 +190,16 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
       return next(ApiError.badRequest("No project found for id or slug = " + id));
     }
 
+// retrive event/project's actions
+   const eventActions = await getEventActions({eventId: id })
+
+
     let projectInfo = {
       ...project["_doc"],
+      actions: eventActions
     };
 
-    // retrive event/project's actions
-    projectInfo["actions"] = await getEventActions({eventId: projectInfo._id })
-
+    
     if(checkUpdateIfProjectExpired(projectInfo) === true){
       logger.info("Project is expired");
       projectInfo.projectStatus = false; 
@@ -413,5 +419,6 @@ export default {
   getAllProject,
   updateProject,
   deleteProjectById,
-  getRandomInvestors
+  getRandomInvestors,
+  getEventActions
 };
