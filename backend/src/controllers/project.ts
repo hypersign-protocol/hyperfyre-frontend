@@ -199,7 +199,7 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
       actions: eventActions
     };
 
-
+    
     if(checkUpdateIfProjectExpired(projectInfo) === true){
       logger.info("Project is expired");
       projectInfo.projectStatus = false; 
@@ -419,5 +419,6 @@ export default {
   getAllProject,
   updateProject,
   deleteProjectById,
-  getRandomInvestors
+  getRandomInvestors,
+  getEventActions
 };
