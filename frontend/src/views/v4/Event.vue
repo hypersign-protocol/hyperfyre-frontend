@@ -63,7 +63,8 @@ export default {
       authToken: "",
       userEventData:  null,
       userAuthData: null,
-      eventActionsToShow: []
+      eventActionsToShow: [],
+      eventSlug: "",
     }
   },
   computed:{
@@ -87,8 +88,15 @@ export default {
       console.log("CREATED():: fetching userDetail")
       await this.fetchUserDetails();
     }
-    await this.fetchEventData(); 
-    await this.fetchUserInfoOnLogin();
+
+    if(this.$route.params["slug"]){
+      this.eventSlug = this.$route.params["slug"];
+      console.log(this.eventSlug)
+      await this.fetchEventData(); 
+      await this.fetchUserInfoOnLogin();
+    }
+
+    
   },
   async updated(){
     
@@ -133,9 +141,10 @@ export default {
       }
     },
     async fetchEventData(){
+      if(this.eventSlug && this.eventSlug != ""){
         // https://stage.hypermine.in/whitelist/api/v1/project/custom-input-type--001?isPublic=true
-        const projectSlug = "custom-input-type-002"; // take slug from url
-        let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${projectSlug}?isPublic=true`;
+        //"custom-input-type-002"; // take slug from url
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.eventSlug}?isPublic=true`;
         let headers = {
           "Content-Type": "application/json",
         };
@@ -144,6 +153,10 @@ export default {
         this.eventData = {
           ...resp.data
         }
+      }else{
+        alert("Invalid project slug")
+      }
+        
     },
     async fetchUserInfoOnLogin(){
       if(this.authToken != "" && this.authToken && this.userAuthData.email){
