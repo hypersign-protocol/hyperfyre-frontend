@@ -9,9 +9,12 @@
      />
 
     <div class="content" v-if="isAuthenticated">
-      <div v-for="eachAction in eventData.actions" :key="eachAction.id">
+      <div v-for="eachAction in eventData.actions" :key="eachAction._id">
           <Action
             :actionType="eachAction.type"
+            :actionId="eachAction._id"
+            :placeHolder="eachAction.title"
+            :eventId="eachAction.eventId"
             :title="eachAction.title"
             :score="eachAction.score"
           />
@@ -50,74 +53,18 @@ export default {
     };
   },
   async created() {
-    // https://stage.hypermine.in/whitelist/api/v1/project/solana-hack-test001?isPublic=true
-    const projectSlug = "solana-hack-test001";
+
+    // https://stage.hypermine.in/whitelist/api/v1/project/custom-input-type--001?isPublic=true
+    const projectSlug = "custom-input-type--001"; // take slug from url
     let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${projectSlug}?isPublic=true`;
     let headers = {
       "Content-Type": "application/json",
     };
-    // const resp =  await apiClient.makeCall({ method: "GET", url: url, header: headers})
-
-    // console.log(resp)
+    const resp =  await apiClient.makeCall({ method: "GET", url: url, header: headers})
 
     this.eventData = {
-      _id: "6130de1f0379c618867c3555",
-      projectName: "Cred Credential Issuer",
-      logoUrl:
-        "http://fyre.hypersign.id/wp-content/uploads/elementor/thumbs/HF_SMall-pch5ehuxrejjgmsohg31856yer1edotxk6p6ly0fdi.png",
-      fromDate: "2021-09-02T02:13:00.000Z",
-      toDate: "2021-10-31T02:13:00.000Z",
-      ownerDid: "did:hs:617e0a7d-6b24-471a-9637-6ff3d2aa3018",
-      twitterHandle: "solana",
-      telegramHandle: "solana",
-      twitterPostFormat: "solana",
-      projectStatus: true,
-      telegramAnnouncementChannel: "",
-      blockchainType: "ETHEREUM",
-      themeColor: "#2b0a4e",
-      fontColor: "#ffffff",
-      slug: "solana-hack-test001",
-      actions: [
-        {
-          id: 1,
-          type: "INPUT_TEXT",
-          title: "Enter your name",
-          placeholder: "Vishwas Anand Bhushan",
-          isManadatory: false,
-          value: "",
-          score: 20,
-        },
-        {
-          id: 2,
-          type: "INPUT_DATE",
-          title: "Enter website url",
-          placeholder: "https://hypersign.id",
-          isManadatory: false,
-          value: "",
-          score: 30,
-        },
-         {
-          id: 3,
-          type: "INPUT_NUMBER",
-          title: "Input score",
-          placeholder: "1200",
-          isManadatory: false,
-          value: "",
-          score: 30,
-        },
-        {
-          id: 4,
-          type: "INPUT_TEXT",
-          title: "Enter name",
-          placeholder: "xyz",
-          isManadatory: false,
-          value: "",
-          score: 30,
-        },
-      ],
-      __v: 0,
+      ...resp.data
     }
-
 
   },
   methods: {
@@ -127,7 +74,7 @@ export default {
     getAuthData(authorizationToken) {
       console.log("Receiving auth token event")
       if (authorizationToken && authorizationToken != "") {
-        
+
         this.isAuthenticated = true;
       } else {
         this.isAuthenticated = false;
