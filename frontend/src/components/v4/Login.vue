@@ -84,9 +84,12 @@ export default {
         _this.connection.close();
         const authorizationToken = messageData.data.token;
 
-        localStorage.setItem("authToken", authorizationToken);
+        console.log("Emitting authentoken event")
 
-        this.$emit("AuthDataReceieved", authorizationToken);
+        localStorage.setItem("authToken", authorizationToken);
+        this.$emit("AuthTokenUpdateEvent", authorizationToken);
+
+
       } else if (messageData.op == "reload") {
         _this.QRRefresh = true;
         _this.connection.close(4001, messageData.data.clientId);

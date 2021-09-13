@@ -6,20 +6,20 @@
         <label>{{ title }} : </label>
       </span>
       <span v-if="actionType === 'INPUT_TEXT'">
-        <input type="text" :placeholder="placeHolder" v-model="value" :disabled="done"/>
+        <input type="text" :placeholder="placeHolder" v-model="val" :disabled="done"/>
       </span>
       <span v-if="actionType === 'INPUT_DATE'">
         <input
           type="datetime-local"
           :placeholder="placeHolder"
-          v-model="value"
+          v-model="val"
           :disabled="done"
         />
       </span>
       <span v-if="actionType === 'INPUT_NUMBER'">
-        <input type="number" :placeholder="placeHolder" v-model="value" :disabled="done"/>
+        <input type="number" :placeholder="placeHolder" v-model="val" :disabled="done"/>
       </span>
-
+      
       <span>
         <button
           style="background: green; color: white"
@@ -51,8 +51,9 @@ export default {
     eventId: String,
     placeHolder: String,
     isMandatory: Boolean,
-    value: String,
     score: Number,
+    isDone: Boolean,
+    value: String
   },
   data() {
     return {
@@ -65,18 +66,19 @@ export default {
         "tweetUrl": "https://asdad.com",
       },
       actions: [],
-      done: false,
+      val: this.value,
+      done: this.isDone
     }
   },
   methods:{
     async updateUserInfo(){
       //
-      if(!this.value){
+      if(!this.val){
         return alert("Pls enter a valid input")
       }
       this.actions.push({
         actionId: this.actionId,
-        value: this.value
+        value: this.val
       })
 
       this.userData.projectId = this.eventId
@@ -102,7 +104,9 @@ export default {
         if(actions && actions.length > 0){  
             const action = actions.find(x => x._id == this.actionId);
           if( action != null || action != "undefined"){
-            this.done = true
+            this.done = true;
+            console.log("Update User data event  emit")
+            this.$emit("UserUpdateEvent", resp.data);
           } else {
             return alert("could not update the action")
           }
