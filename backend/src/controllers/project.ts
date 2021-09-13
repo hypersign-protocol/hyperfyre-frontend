@@ -191,7 +191,7 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
     }
 
 // retrive event/project's actions
-   const eventActions = await getEventActions({eventId: id })
+   const eventActions = await getEventActions({eventId: project._id })
 
 
     let projectInfo = {
