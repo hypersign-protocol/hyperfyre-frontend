@@ -1,12 +1,47 @@
 <template>
   <div class="actioncontent">
-    <h4>[Action Component]</h4>
+    <h4>{{ title }}</h4>
     <p>
-      <span>
-        <label>{{ title }} : </label>
+      <span v-if="actionType === 'TWITTER_FOLLOW'">
+        <!-- <i class="fab fa-twitter"></i> -->
+        <b-button
+          size="sm"
+          class="btn-twitter twitter"
+          @click="
+            handleTwitterLogin(
+              'https://twitter.com/' + value + '?ref_src=twsrc%5Etfw'
+            )
+          "
+          :disabled="done"
+        >
+          <i class="fab fa-twitter"></i>
+          Follow @{{ twitter.sourceScreenName }}
+        </b-button>
       </span>
+
+      <span v-if="actionType === 'TWITTER_RETWEET'">
+        <!-- <i class="fab fa-twitter"></i> -->
+        <b-button
+          size="sm"
+          class="btn-twitter twitter"
+          @click="
+            handleTwitterLogin('https://twitter.com/intent/tweet?text=' + value)
+          "
+          :disabled="done"
+        >
+          <i class="fab fa-twitter"></i> Retweet
+        </b-button>
+
+        <input placeholder="Paset your re-tweet url" v-model="val" type="url" :disabled="done" />
+      </span>
+
       <span v-if="actionType === 'INPUT_TEXT'">
-        <input type="text" :placeholder="placeHolder" v-model="val" :disabled="done"/>
+        <input
+          type="text"
+          :placeholder="placeHolder"
+          v-model="val"
+          :disabled="done"
+        />
       </span>
       <span v-if="actionType === 'INPUT_DATE'">
         <input
@@ -17,9 +52,14 @@
         />
       </span>
       <span v-if="actionType === 'INPUT_NUMBER'">
-        <input type="number" :placeholder="placeHolder" v-model="val" :disabled="done"/>
+        <input
+          type="number"
+          :placeholder="placeHolder"
+          v-model="val"
+          :disabled="done"
+        />
       </span>
-      
+
       <span>
         <button
           style="background: green; color: white"
@@ -29,11 +69,7 @@
         >
           + {{ score }}
         </button>
-        <button
-          v-else
-          style="background: grey; color: white"
-          disabled
-        >
+        <button v-else style="background: grey; color: white" disabled>
           <i class="far fa-check-circle"></i>
         </button>
       </span>
@@ -43,6 +79,7 @@
 
 <script>
 import apiClient from "../../mixins/apiClientMixin";
+import webAuth from "../../mixins/twitterLogin";
 export default {
   props: {
     actionType: String,
@@ -53,71 +90,246 @@ export default {
     isMandatory: Boolean,
     score: Number,
     isDone: Boolean,
-    value: String
+    value: String,
   },
   data() {
     return {
       authToken: localStorage.getItem("authToken"),
       userData: {
-        "ethAddress": "0x12312312312",
-        "twitterHandle": "hermit123123",
-        "telegramHandle": "hermitTg123",
-        "projectId": "613b8476442d2d56fb0988fa",
-        "tweetUrl": "https://asdad.com",
+        ethAddress: "0x12312312312",
+        twitterHandle: "hermit123123",
+        telegramHandle: "hermitTg123",
+        projectId: "613b8476442d2d56fb0988fa",
+        tweetUrl: "https://asdad.com",
       },
       actions: [],
+      twitter: {
+        sourceScreenName: this.value,
+        targetScreenName: "",
+      },
       val: this.value,
       done: this.isDone
-    }
+    };
   },
-  methods:{
-    async updateUserInfo(){
+  methods: {
+    async updateUserInfo() {
       //
-      if(!this.val){
-        return alert("Pls enter a valid input")
-      }
-      this.actions.push({
-        actionId: this.actionId,
-        value: this.val
-      })
+      try {
+        if (!this.val) {
+          return alert("Error: Pls enter a valid input");
+        }
 
-      this.userData.projectId = this.eventId
-      const body = {
-        ...this.userData,
-        actions: this.actions
-      }
-
-
-      let url = `${this.$config.studioServer.BASE_URL}api/v1/investor/add`;
-      let headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${this.authToken}`,
-      };
-      
-      const resp =  await apiClient.makeCall({ method: "POST", url: url, body, header: headers})
-      const { data } =  resp;
-      console.log(resp.data);
-      this.actions = [];
-
-      if(data){
-        const  { actions } = data;
-        if(actions && actions.length > 0){  
-            const action = actions.find(x => x._id == this.actionId);
-          if( action != null || action != "undefined"){
-            this.done = true;
-            console.log("Update User data event  emit")
-            this.$emit("UserUpdateEvent", resp.data);
+        if (this.actionType === "TWITTER_FOLLOW") {
+          if (!(await this.hasFollowedTwitter())) {
+            return alert("Error: Please follow first");
           } else {
-            return alert("could not update the action")
+            this.val = this.twitter.targetScreenName;
+          }
+        }
+
+        if (this.actionType === "TWITTER_RETWEET") {
+          if (!(await this.hasRetweeted())) {
+            return alert("Error: Invalid retweet");
+          }
+        }
+
+        this.actions.push({
+          actionId: this.actionId,
+          value: this.val,
+        });
+
+        this.userData.projectId = this.eventId;
+        const body = {
+          ...this.userData,
+          actions: this.actions,
+        };
+
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/investor/add`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+
+        const resp = await apiClient.makeCall({
+          method: "POST",
+          url: url,
+          body,
+          header: headers,
+        });
+        const { data } = resp;
+        console.log(resp.data);
+        this.actions = [];
+
+        if (data) {
+          const { actions } = data;
+          if (actions && actions.length > 0) {
+            const action = actions.find((x) => x._id == this.actionId);
+            if (action != null || action != "undefined") {
+              this.done = true;
+              console.log("Update User data event  emit");
+              this.$emit("UserUpdateEvent", resp.data);
+            } else {
+              return alert("Error: could not update the action");
+            }
+          } else {
+            return alert("Error: no actions found with user");
           }
         } else {
-          return alert("no actions found with user")
+          return alert("Error: some error occurred");
         }
-      } else{
-        return alert("some error occurred")
+      } catch (e) {
+        console.log(e);
       }
-    }
-  }
+    },
+
+    async getTwitterScreenName(twitterId) {
+      try {
+        if (twitterId) {
+          
+          let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/user/${twitterId}`;
+          let headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.authToken}`,
+          };
+
+          const resp = await apiClient.makeCall({
+            method: "GET",
+            url: url,
+            body: {},
+            header: headers,
+          });
+
+          const { screen_name } = resp.data;
+
+          console.log(screen_name);
+          // localStorage.setItem("twitterHandle", screen_name);
+
+          return screen_name;
+        } else {
+
+          return null;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
+    async hasRetweeted() {
+      try {
+        const twitterId = localStorage.getItem('twitterId')
+        if (twitterId) {
+          let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
+          let headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.authToken}`,
+          };
+
+          const body = {
+            tweetUrl: this.val,
+            userId: twitterId,
+            tweetText: this.value,
+            needUserDetails: false,
+            checkIfFollowed: false,
+            sourceScreenName: "",
+          };
+
+          const resp = await apiClient.makeCall({
+            method: "POST",
+            url: url,
+            body,
+            header: headers,
+          });
+
+          if (resp.data.hasTweetUrlVerified) {
+            return true;
+          } else {
+            alert(resp.data.error);
+            return false;
+          }
+        }
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+    },
+
+    async hasFollowedTwitter() {
+      try {
+        const twitterId= localStorage.getItem('twitterId');
+
+        this.twitter.targetScreenName = await this.getTwitterScreenName(
+          twitterId
+        );
+
+
+        if (
+          this.twitter.sourceScreenName && 
+          this.twitter.targetScreenName &&
+          this.twitter.sourceScreenName != "" &&
+          this.twitter.targetScreenName != ""
+        ) {
+          let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/follower`;
+          let headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.authToken}`,
+          };
+
+          const resp = await apiClient.makeCall({
+            method: "POST",
+            url: url,
+            body: this.twitter,
+            header: headers,
+          });
+
+          return resp.data;
+        } else {
+          console.log("Source or target twitter screen name is  blank");
+          return false;
+        }
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+    },
+
+    handleTwitterLogin(urlToRedirect) {
+      try {
+        if (!localStorage.getItem('twitterId')) {
+          
+          webAuth.popup.authorize(
+            {
+              connection: "twitter",
+              owp: true,
+            },
+            (err, authRes) => {
+              if (!err) {
+                webAuth.client.userInfo(
+                  authRes.accessToken,
+                  async (err, user) => {
+                    if (err) {
+                      return alert("Something Went Wrong");
+                    }
+
+                    console.log(user);
+
+                    const twitterId = user.sub.split("|")[1];
+                    localStorage.setItem("twitterId", twitterId);
+
+                    window.open(urlToRedirect, "_blank");
+                  }
+                );
+              }
+            }
+          );
+        } else {
+          window.open(urlToRedirect, "_blank");
+          // this.twitter.targetScreenName = localStorage.getItem("twitterHandle")
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+  },
 };
 </script>
 
@@ -129,5 +341,14 @@ export default {
   height: 150px;
   background: rgb(234, 241, 212);
   border-radius: 20px;
+}
+
+.twitter {
+  color: rgb(255, 255, 255);
+  background-color: rgb(29, 161, 242);
+}
+.telegram {
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 136, 204);
 }
 </style>
