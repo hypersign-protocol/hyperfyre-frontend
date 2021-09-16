@@ -2,7 +2,7 @@
   <div class="actioncontent">
     <h4>{{ title }}</h4>
     <p>
-      <span v-if="actionType === 'TWITTER_FOLLOW'">
+      <span v-if="actionType ===  eventActionType.TWITTER_FOLLOW">
         <!-- <i class="fab fa-twitter"></i> -->
         <b-button
           size="sm"
@@ -19,7 +19,7 @@
         </b-button>
       </span>
 
-      <span v-if="actionType === 'TWITTER_RETWEET'">
+      <span v-if="actionType === eventActionType.TWITTER_RETWEET">
         <!-- <i class="fab fa-twitter"></i> -->
         <b-button
           size="sm"
@@ -35,7 +35,17 @@
         <input placeholder="Paset your re-tweet url" v-model="val" type="url" :disabled="done" />
       </span>
 
-      <span v-if="actionType === 'INPUT_TEXT'">
+      <span  v-if="actionType === eventActionType.TELEGRAM_JOIN">
+        <b-button 
+          size="sm" 
+          class="btn-twitter telegram" 
+          @click="handleTelegramLogin(`https://t.me/${value}`)"
+        >
+          <i class="fab fa-telegram-plane"></i> Join @ {{value}}
+        </b-button>
+      </span>
+
+      <span v-if="actionType === eventActionType.INPUT_TEXT">
         <input
           type="text"
           :placeholder="placeHolder"
@@ -43,7 +53,7 @@
           :disabled="done"
         />
       </span>
-      <span v-if="actionType === 'INPUT_DATE'">
+      <span v-if="actionType === eventActionType.INPUT_DATE">
         <input
           type="datetime-local"
           :placeholder="placeHolder"
@@ -51,7 +61,7 @@
           :disabled="done"
         />
       </span>
-      <span v-if="actionType === 'INPUT_NUMBER'">
+      <span v-if="actionType === eventActionType.INPUT_NUMBER">
         <input
           type="number"
           :placeholder="placeHolder"
@@ -80,6 +90,7 @@
 <script>
 import apiClient from "../../mixins/apiClientMixin";
 import webAuth from "../../mixins/twitterLogin";
+import config from "../../config";
 export default {
   props: {
     actionType: String,
@@ -108,7 +119,10 @@ export default {
         targetScreenName: "",
       },
       val: this.value,
-      done: this.isDone
+      done: this.isDone,
+      eventActionType: {
+        ...config.eventActionType   
+      }
     };
   },
   methods: {
@@ -119,7 +133,7 @@ export default {
           return alert("Error: Pls enter a valid input");
         }
 
-        if (this.actionType === "TWITTER_FOLLOW") {
+        if (this.actionType === this.eventActionType.TWITTER_FOLLOW) {
           if (!(await this.hasFollowedTwitter())) {
             return alert("Error: Please follow first");
           } else {
@@ -127,9 +141,19 @@ export default {
           }
         }
 
-        if (this.actionType === "TWITTER_RETWEET") {
+        if (this.actionType === this.eventActionType.TWITTER_RETWEET) {
           if (!(await this.hasRetweeted())) {
             return alert("Error: Invalid retweet");
+          } else {
+
+          }
+        }
+
+        if(this.actionType === this.eventActionType.TELEGRAM_JOIN){
+          if(!localStorage.getItem("telegamId")){
+            return alert("Error: Please authorize telegram to proceed")
+          } else {
+            this.val = localStorage.getItem("telegamId");
           }
         }
 
@@ -329,7 +353,29 @@ export default {
         console.log(e);
       }
     },
-  },
+
+    handleTelegramLogin(urlToRedirect){
+        if(!localStorage.getItem("telegamId")){
+
+          window.Telegram.Login.auth(
+            { bot_id: config.telegramBotId, request_access: true },
+            (data) => {
+
+              if (!data) {
+                return alert("Authentication Failed! Try again")
+              }
+
+              this.stepOneData.rules[idx].checked = true;
+                localStorage.setItem("telegramId", data.username)
+                window.open(urlToRedirect, "_blank");
+            }
+          );
+
+      } else{
+        window.open(urlToRedirect, "_blank");
+      }
+    }
+  }
 };
 </script>
 
