@@ -3,7 +3,7 @@
     <h2>{{eventData.projectName}}</h2>
     <Metrics
       :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0"
-      :totalEntries="userEventData && userEventData.count ? userEventData.count : 0"
+      :totalEntries="eventData && eventData.count ? eventData.count : 0"
       :timeLeft="timeLeft"
       class="metric"
      />

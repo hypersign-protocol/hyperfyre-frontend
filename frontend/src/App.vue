@@ -245,7 +245,7 @@ export default {
       ],
 
       // Nav for user's end
-      showUserNav: true,
+      showUserNav: false,
     };
   },
 
@@ -253,6 +253,8 @@ export default {
     setTimeout(() => {
       this.filterMenu();
     }, 500);
+
+    this.showUserNav = window.location.pathname.includes("/event") ? true : false
   },
 
   updated() {
