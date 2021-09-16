@@ -14,7 +14,13 @@ const config = {
     auth0Domain: process.env.VUE_APP_AUTH0_DOMAIN,
     auth0ClinetId: process.env.VUE_APP_AUTH0_CLIENT_ID,
     telegramBotId: process.env.VUE_APP_TELEGRAM_BOT_ID,
+    eventActionType: {
+        INPUT_TEXT: "INPUT_TEXT",
+        INPUT_NUMBER :"INPUT_NUMBER",
+        TWITTER_FOLLOW :"TWITTER_FOLLOW",
+        TWITTER_RETWEET :"TWITTER_RETWEET",
+        TELEGRAM_JOIN :"TELEGRAM_JOIN"   
+    }
 }
-
 
 export default config

@@ -782,8 +782,10 @@ export default {
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
           if(!this.isProjectEditing){
-            this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/app/form/" + resp.data.slug :  "/app/form?projectId=" + resp.data._id ) 
-            // this.whitelistingLink = `${window.location.origin} + /form?projectId=${resp.data._id}`;
+            ////  not using this for the time being just  to test
+            // this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/app/form/" + resp.data.slug :  "/app/form?projectId=" + resp.data._id ) 
+            this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/event/" + resp.data.slug :  "/app/form?projectId=" + resp.data._id ) 
+            
           }
         
 
