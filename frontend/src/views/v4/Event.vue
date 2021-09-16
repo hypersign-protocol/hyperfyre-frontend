@@ -69,11 +69,11 @@ export default {
   },
   computed:{
     timeLeft: function () {
-      if(this.eventData.toDate && this.eventData.fromDate){
-        //.toLocaleString()
+      if(this.eventData.fromDate){
+        
         const toDateParse = new Date(this.eventData.toDate)
-        const fromDateParse = new Date(this.eventData.fromDate)
-
+        const fromDateParse = new Date(new Date().toISOString()) // now
+        
         return Math.ceil((toDateParse - fromDateParse ) /  (1000 * 60 * 60 * 24))
       }
     }
