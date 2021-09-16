@@ -365,9 +365,8 @@ export default {
                 return alert("Authentication Failed! Try again")
               }
 
-              this.stepOneData.rules[idx].checked = true;
-                localStorage.setItem("telegramId", data.username)
-                window.open(urlToRedirect, "_blank");
+              localStorage.setItem("telegramId", data.username)
+              window.open(urlToRedirect, "_blank");
             }
           );
 
