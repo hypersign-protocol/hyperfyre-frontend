@@ -241,9 +241,7 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
           .skip(skipInt);
         projectInfo.investors = investorList;
 
-        projectInfo.count = await InvestorModel.countDocuments({
-          projectId: id,
-        }).then((count) => count);
+        
 
         // check if export option is enabled
         // if yes then
@@ -262,6 +260,12 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
         }
       }
     }
+
+    projectInfo.count = await InvestorModel.countDocuments({
+      projectId: id,
+    }).then((count) => count);
+
+    
     res.send(projectInfo);
   } catch (e) {
     logger.error("ProjectCtrl:: getProjectById(): Error " + e);
