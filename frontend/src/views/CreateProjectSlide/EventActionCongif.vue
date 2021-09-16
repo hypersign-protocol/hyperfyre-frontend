@@ -111,10 +111,10 @@ export default {
   name: "EventActionCongif",
   components: {  },
   props: {
-    // eventActionType: {
-    //   type: String
-    // },
     eventActionList : {
+      type: Array
+    },
+    options: {
       type: Array
     }
   },
@@ -132,12 +132,6 @@ export default {
             "value": "",
             "score": 10
       },
-      options : [
-        {text: "Select Action type", value:null},
-        {text: "TEXT", value: "INPUT_TEXT"},
-        {text: "NUMBER", value: "INPUT_NUMBER"},
-        {text: "DATE", value: "INPUT_DATE"},
-      ]
     }
     
   },
