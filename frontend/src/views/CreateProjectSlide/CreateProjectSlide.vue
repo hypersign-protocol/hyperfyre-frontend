@@ -58,9 +58,20 @@
 
                       <b-card no-body class="mb-1">
                         <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
-                          <b-button block v-b-toggle.accordion-3 variant="info" class="bg-transparent border-0 text-left text-primary" >Blockchain Configurations </b-button>
+                          <b-button block v-b-toggle.accordion-3 variant="info" class="bg-transparent border-0 text-left text-primary" >Custom inputs  </b-button>
                         </b-card-header>
                         <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
+                          <b-card-body>
+                           <eventAction-congif :eventActionList="eventActionList" :eventActionType="eventActionType" />
+                          </b-card-body>
+                        </b-collapse>
+                      </b-card>
+
+                      <b-card no-body class="mb-1">
+                        <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
+                          <b-button block v-b-toggle.accordion-4 variant="info" class="bg-transparent border-0 text-left text-primary" > Configurations </b-button>
+                        </b-card-header>
+                        <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
                           <b-card-body>
                            <blockchain-congif :blockChainType="blockChainType" />
                           </b-card-body>
@@ -78,13 +89,19 @@
 
 <script>
 import BlockchainCongif from './BlockchainCongif.vue';
+import EventActionCongif from './EventActionCongif.vue';
 import GeneralConfig from './GeneralConfig.vue';
 import SocialConfig from './SocialConfig.vue';
 
 
 export default {
   name: "CreateProjectSlide",
-  components: {SocialConfig, GeneralConfig, BlockchainCongif  },
+  components: {
+    SocialConfig, 
+    GeneralConfig, 
+    BlockchainCongif,
+    EventActionCongif
+  },
 
   props:{
     project: {
@@ -109,6 +126,9 @@ export default {
       type: Function
     },
     addedSocialMedias: {
+      type: Array,
+    },
+    eventActionList: {
       type: Array,
     },
     selectedSocialMedia: {

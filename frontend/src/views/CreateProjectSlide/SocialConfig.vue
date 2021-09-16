@@ -59,10 +59,10 @@
                     <input v-model="field.value" :type="field.type" :placeholder="field.placeholder" :id="field.name" class="form-control" />
                 </div>
 
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <button @click="handleSocialMediaAdd(selectedSocialMedia)" class="btn btn-primary" type="button"> {{addedSocialMedias.includes(selectedSocialMedia) ? "Update" : "Add"}}</button>
                     
-        </div>
+                </div>
       </div>
 
           

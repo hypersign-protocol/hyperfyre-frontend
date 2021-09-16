@@ -1,6 +1,8 @@
 import { logger } from "../config";
 import { Request, Response, NextFunction } from "express";
 import ProjectModel, { IProject, EBlockchainType } from "../models/project";
+import ActionModel, { IEventAction, EventActionType } from "../models/actions";
+
 import InvestorModel, { IInvestor } from "../models/investor";
 import ApiError from '../error/apiError';
 import { writeInvestorsToFile, deleteFile } from '../utils/files';
@@ -18,12 +20,17 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       userData,
       blockchainType,
       themeColor,
-      fontColor
+      fontColor,
+      actions
     } = req.body;
 
     if (Date.parse(fromDate) > Date.parse(toDate)) {
       return next(ApiError.badRequest("fromDate can not be greater than toDate"));
     }
+
+    // if(typeof actions != Array){
+    //   return next(ApiError.badRequest("Choose different project name. This project name is already taken"));
+    // }
     const slug = dashify(projectName);
 
     const project:IProject = await ProjectModel.where({ slug }).findOne();
@@ -41,7 +48,8 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       twitterPostFormat,
     } =  social.twitter;
 
-    const newProject: IProject = await ProjectModel.create({
+  
+    let newProject: IProject = await ProjectModel.create({
       projectName,
       logoUrl,
       fromDate: new Date(fromDate).toISOString(),
@@ -57,11 +65,33 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       fontColor: !fontColor || fontColor == "" ? "#ffffff" : fontColor,
       slug
     });
-    res.send(newProject);
+
+    newProject.actions = [];
+    if(actions && actions.length > 0){
+      let i;
+      for(i = 0; i < actions.length; i++){
+        const newAction = await ActionModel.create({
+          eventId: newProject._id,
+          ...actions[i]
+        })
+        newProject.actions.push(newAction)
+      }
+    }
+
+    res.send({
+      ...newProject["_doc"],
+      actions: newProject.actions
+    });
+
+    
   } catch (e) {
     logger.error("ProjectCtrl:: addProject(): Error " + e);
     return next(ApiError.internal(e.message));
   }
+}
+
+async function getEventActions({eventId}){
+  return await ActionModel.find({ eventId });
 }
 
 async function getAllProject(req: Request, res: Response, next: NextFunction) {
@@ -75,7 +105,7 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
       projectList = await ProjectModel.find({}).where({ ownerDid: userData.id }).sort(sortyByFromDateTimeDesc);
       let i;
       for(i = 0; i < projectList.length; i++){
-        const project = projectList[i];
+        const project: IProject = projectList[i];
         if(checkUpdateIfProjectExpired(project) === true){
           // logger.info("Project is expired");
           project.projectStatus = false; 
@@ -89,9 +119,17 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
         project.investorsCount = await InvestorModel.countDocuments({
           projectId: project["_id"],
         }).then((count) => count);
+
+        const eventActions = await getEventActions({
+          eventId: project._id
+        })
+
         logger.info("After fetching investos cound = " + project.investorsCount);
 
-        projectListTmp.push(project);
+        projectListTmp.push({
+          ...project["_doc"],
+          actions: eventActions
+        });
       }
 
       // projectList.forEach((project) => {
@@ -152,10 +190,16 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
       return next(ApiError.badRequest("No project found for id or slug = " + id));
     }
 
+// retrive event/project's actions
+   const eventActions = await getEventActions({eventId: project._id })
+
+
     let projectInfo = {
       ...project["_doc"],
+      actions: eventActions
     };
 
+    
     if(checkUpdateIfProjectExpired(projectInfo) === true){
       logger.info("Project is expired");
       projectInfo.projectStatus = false; 
@@ -229,6 +273,12 @@ async function deleteProjectById(req: Request, res: Response, next: NextFunction
   try {
     const { id } = req.params;
     const project: IProject = await ProjectModel.findByIdAndDelete(id);
+
+    // delete all actions
+    ActionModel.deleteMany({
+      eventId: id
+    })
+
     res.send({
       ...project["_doc"],
     });
@@ -304,7 +354,7 @@ async function getRandomInvestors(req: Request, res: Response, next: NextFunctio
 
   try{
 
-    let { limitRecord } = req.query;
+    let { limitRecord, isRandom } = req.query;
     const { id } = req.params;
 
     if(!limitRecord || limitRecord == ""){
@@ -329,12 +379,17 @@ async function getRandomInvestors(req: Request, res: Response, next: NextFunctio
     
     if(limitRecordInt == investorCount){
       randomInvestorList = await InvestorModel.where(query).find();
+    }else if(isRandom === "true"){
+      randomInvestorList =  await InvestorModel.aggregate([
+        { $match: query },
+        { $sample:  { size: limitRecordInt } }
+      ])    
+    }else{
+      randomInvestorList =  await InvestorModel.where(query)
+                            .sort({ numberOfReferals:  -1 }) // decending 
+                            .limit(limitRecordInt);
     }
-
-    randomInvestorList =  await InvestorModel.aggregate([
-      { $match: query },
-      { $sample: { size: limitRecordInt } }
-    ])    
+    
 
 
     const filePath = await writeInvestorsToFile(`${id}_investorList_${new Date().getTime()}`, randomInvestorList);
@@ -364,5 +419,6 @@ export default {
   getAllProject,
   updateProject,
   deleteProjectById,
-  getRandomInvestors
+  getRandomInvestors,
+  getEventActions
 };

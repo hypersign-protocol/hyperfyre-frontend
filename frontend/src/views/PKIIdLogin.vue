@@ -551,7 +551,6 @@ export default {
           }
         }
       } else if (messageData.op == 'reload') {
-        // console.log("Timeout for clientId: " + messageData.data.clientId)
         _this.QRRefresh = true;
         _this.connection.close(4001, messageData.data.clientId);
       }

@@ -26,13 +26,13 @@
 </style>
 <template>
   <div>
-      <div v-if="isProjectEditing" class="row g-3 align-items-center w-100 mt-4">
-            <div class=" text-left col-lg-5 col-md-5 text-left">
-                <label for="did" class="col-form-label">Event Id: </label>
-            </div>
-            <div class="col-lg-7 col-md-7 px-0">
-                <input disabled  v-model="project._id" type="text"   id="did" class="form-control w-100" >
-            </div>  
+    <div v-if="isProjectEditing" class="row g-3 align-items-center w-100 mt-4">
+        <div class=" text-left col-lg-5 col-md-5 text-left">
+            <label for="did" class="col-form-label">Event Id: </label>
+        </div>
+        <div class="col-lg-7 col-md-7 px-0">
+            <input disabled  v-model="project._id" type="text"   id="did" class="form-control w-100" >
+        </div>  
     </div>
 
    <div class="row g-3 align-items-center w-100  mt-4">
