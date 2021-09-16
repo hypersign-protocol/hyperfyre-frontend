@@ -262,10 +262,10 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
     }
 
     projectInfo.count = await InvestorModel.countDocuments({
-      projectId: id,
+      projectId: project._id,
     }).then((count) => count);
 
-    
+
     res.send(projectInfo);
   } catch (e) {
     logger.error("ProjectCtrl:: getProjectById(): Error " + e);
