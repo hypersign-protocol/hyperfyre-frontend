@@ -9,11 +9,6 @@ const router = new Router({
   mode: "history",  
   routes: [
     {
-      path: "/event/:slug",
-      name: "Event",
-      component: () => import(/* webpackChunkName: "investorLogin" */ './views/v4/Event.vue'),
-    },
-    {
       path: "/",
       name: "Website",
       component: () => import(/* webpackChunkName: "investorLogin" */ './views/Website.vue'),

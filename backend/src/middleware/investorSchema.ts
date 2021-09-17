@@ -28,17 +28,17 @@ export const InvestorSchemaPrams = [
 ];
 
 export const InvestorSchemaBody = [
-  // body("email").isEmail().withMessage("email must be a valid email address"),
+  body("email").isEmail().withMessage("email must be a valid email address"),
 
-  // // verify this as well
-  // body("did")
-  //   .exists({ checkFalsy: true })
-  //   .withMessage("did can not be null or empty"),
+  // verify this as well
+  body("did")
+    .exists({ checkFalsy: true })
+    .withMessage("did can not be null or empty"),
 
-  // body("name")
-  //   .exists({ checkFalsy: true })
-  //   .trim()
-  //   .withMessage("name can not be null or empty"),
+  body("name")
+    .exists({ checkFalsy: true })
+    .trim()
+    .withMessage("name can not be null or empty"),
 
   body("ethAddress")
     .exists({ checkFalsy: true })
@@ -55,6 +55,15 @@ export const InvestorSchemaBody = [
     .trim()
     .withMessage("invalid telegramHandle"),
 
+  body("hasTwitted")
+    .exists({ checkFalsy: true })
+    .toBoolean()
+    .withMessage("hasTwitted must be a boolean"),
+  body("hasJoinedTGgroup")
+    .exists({ checkFalsy: true })
+    .toBoolean()
+    .withMessage("hasJoinedTGgroup must be a boolean"),
+
   body("projectId")
     .exists({ checkFalsy: true })
     .trim()
@@ -65,10 +74,4 @@ export const InvestorSchemaBody = [
     .trim()
     .custom((value) => validateURL(value))
     .withMessage("invalid tweet url"),
-
-
-  body("actions")
-    .exists({ checkFalsy: true })
-    .isArray({ min:  1})
-    .withMessage("Invalid actions"),
 ];

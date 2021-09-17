@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { IEventAction } from "./actions";
 
 export interface IInvestor extends Document {
     did: string;
@@ -15,7 +14,6 @@ export interface IInvestor extends Document {
     isVerfiedByHypersign: boolean;
     isVerificationComplete: boolean;
     numberOfReferals: number;
-    actions: IEventAction[];
 }
 
 const InvestorSchema = new Schema({
@@ -31,8 +29,7 @@ const InvestorSchema = new Schema({
   isVerificationComplete: { type: Boolean, required: true, default: false },
   projectId: { type: String, required: true },
   tweetUrl: { type: String, required: true },
-  numberOfReferals: { type: Number, required: true },
-  actions: { type: Array<IEventAction>(), required: true } // 0
+  numberOfReferals: { type: Number, required: true } // 0
 });
 
 export default mongoose.model<IInvestor>("Investor", InvestorSchema);
