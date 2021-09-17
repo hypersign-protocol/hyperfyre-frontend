@@ -41,7 +41,7 @@
 
                       <b-card no-body class="mb-1">
                         <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
-                          <b-button block v-b-toggle.accordion-2 variant="info" class="bg-transparent border-0 text-left text-primary" >Social Configurations</b-button>
+                          <b-button block v-b-toggle.accordion-2 variant="info" class="bg-transparent border-0 text-left text-primary" >Social Configurations (Depreciated)</b-button>
                         </b-card-header>
                         <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
                           <b-card-body>
@@ -58,20 +58,32 @@
 
                       <b-card no-body class="mb-1">
                         <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
-                          <b-button block v-b-toggle.accordion-3 variant="info" class="bg-transparent border-0 text-left text-primary" >Custom inputs  </b-button>
+                          <b-button block v-b-toggle.accordion-3 variant="info" class="bg-transparent border-0 text-left text-primary" >Social Configurations  </b-button>
                         </b-card-header>
                         <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
                           <b-card-body>
-                           <eventAction-congif :eventActionList="eventActionList" :eventActionType="eventActionType" />
+                           <eventAction-congif  v-on="$listeners" :eventActionList="socialList" eventActionType="SOCIAL"  :options="options.socialAction" />
+                          </b-card-body>
+                        </b-collapse>
+                      </b-card>
+
+
+                      <b-card no-body class="mb-1">
+                        <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
+                          <b-button block v-b-toggle.accordion-4 variant="info" class="bg-transparent border-0 text-left text-primary" >Custom Inputs  </b-button>
+                        </b-card-header>
+                        <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
+                          <b-card-body>
+                           <eventAction-congif v-on="$listeners" :eventActionList="customList" eventActionType="CUSTOM" :options="options.customAction" />
                           </b-card-body>
                         </b-collapse>
                       </b-card>
 
                       <b-card no-body class="mb-1">
                         <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
-                          <b-button block v-b-toggle.accordion-4 variant="info" class="bg-transparent border-0 text-left text-primary" > Configurations </b-button>
+                          <b-button block v-b-toggle.accordion-5 variant="info" class="bg-transparent border-0 text-left text-primary" >Blockchain Configurations </b-button>
                         </b-card-header>
-                        <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
+                        <b-collapse id="accordion-5" accordion="my-accordion" role="tabpanel">
                           <b-card-body>
                            <blockchain-congif :blockChainType="blockChainType" />
                           </b-card-body>
@@ -128,7 +140,7 @@ export default {
     addedSocialMedias: {
       type: Array,
     },
-    eventActionList: {
+    actionList: {
       type: Array,
     },
     selectedSocialMedia: {
@@ -141,8 +153,41 @@ export default {
       type: Boolean
     }
   },
- 
-  
+
+  computed: {
+    // a computed getter
+    customList: function () {
+      if(this.actionList &&  this.actionList.length > 0){
+        return this.actionList.filter(x => x.type.indexOf("INPUT_") > -1)
+      }
+    },
+
+    socialList: function () {
+      if(this.actionList &&  this.actionList.length > 0){
+        return this.actionList.filter(x => (x.type.indexOf("TWITTER_") > -1 || x.type.indexOf("TELEGRAM_") > -1))
+      }
+    },
+
+  },
+
+  data(){
+    return {
+      options: {
+        customAction: [
+          {text: "Select Action type", value:null},
+          {text: "TEXT", value: "INPUT_TEXT"},
+          {text: "NUMBER", value: "INPUT_NUMBER"},
+          {text: "DATE", value: "INPUT_DATE"},
+        ],
+        socialAction: [
+          {text: "Select Action type", value:null},
+          {text: "Twitter Follow", value: "TWITTER_FOLLOW"},
+          {text: "Twitter Retweet", value: "TWITTER_RETWEET"},
+          {text: "Telegram Join", value: "TELEGRAM_JOIN"},
+        ]
+      }
+    }
+  }
 };
 </script>
 

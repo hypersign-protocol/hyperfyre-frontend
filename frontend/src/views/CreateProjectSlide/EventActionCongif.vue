@@ -23,7 +23,7 @@
               <input   v-model="selected.title" type="text"   id="title" class="form-control w-100" >
           </div>  
         </div>
-        <div class="row g-3 align-items-center w-100 mt-4">
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType != 'SOCIAL'">
           <div class=" text-left col-lg-5 col-md-5 text-left">
               <label for="placeholder" class="col-form-label">Place Holder: </label>
           </div>
@@ -111,10 +111,15 @@ export default {
   name: "EventActionCongif",
   components: {  },
   props: {
-    // eventActionType: {
-    //   type: String
-    // },
+    eventActionType: {
+      type: String,
+      required: true,
+      default: []
+    },
     eventActionList : {
+      type: Array
+    },
+    options: {
       type: Array
     }
   },
@@ -130,14 +135,9 @@ export default {
             "placeholder": "",
             "isManadatory": true,
             "value": "",
-            "score": 10
+            "score": 10,
+            "id": ""
       },
-      options : [
-        {text: "Select Action type", value:null},
-        {text: "TEXT", value: "INPUT_TEXT"},
-        {text: "NUMBER", value: "INPUT_NUMBER"},
-        {text: "DATE", value: "INPUT_DATE"},
-      ]
     }
     
   },
@@ -175,7 +175,14 @@ export default {
       // Code to Add an Action
       let isvalid = this.handleEventActionValidation()
       if(isvalid) {
-        this.eventActionList.push(this.selected)
+        this.selected["id"] = this.eventActionType + "_" +  this.eventActionList.length;
+        this.eventActionList.push(this.selected);
+        console.log("Emitting events from grand-child to parents")
+        this.$emit("updateEventActions", {
+          type: "ADD",
+          data: this.selected
+        })
+        console.log("Emitting events from grand-child to parents")
         this.clearSelected()
       }
 
@@ -184,7 +191,12 @@ export default {
     handleEventActionDelete(){
 
       // Code to delete an Action
+      const actionToDelete = this.eventActionList[this.currentSelectedId];
       this.eventActionList.splice(this.currentSelectedId, 1);
+      this.$emit("updateEventActions", {
+        type: "DELETE",
+        data: actionToDelete.id
+      })
       this.clearSelected();
       this.isCreate=true
 
@@ -195,6 +207,10 @@ export default {
       let isvalid = this.handleEventActionValidation()
       if(isvalid) { 
         this.eventActionList[this.currentSelectedId] = this.selected
+        this.$emit("updateEventActions", {
+          type: "UPDATE",
+          data: this.selected
+        })
         this.clearSelected();
         this.isCreate=true
       }
