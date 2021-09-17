@@ -32,7 +32,7 @@
           </div>  
         </div>
 
-        <div class="row g-3 align-items-center w-100 mt-4">
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType != 'BLOCKCHAIN'">
           <div class=" text-left col-lg-5 col-md-5 text-left">
               <label for="value" class="col-form-label">Value: </label>
           </div>

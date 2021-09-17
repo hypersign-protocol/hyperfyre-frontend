@@ -70,7 +70,7 @@
 
                       <b-card no-body class="mb-1">
                         <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
-                          <b-button block v-b-toggle.accordion-3 variant="info" class="bg-transparent border-0 text-left text-primary" >Custom Inputs  </b-button>
+                          <b-button block v-b-toggle.accordion-3 variant="info" class="bg-transparent border-0 text-left text-primary" >Custom Inputs Configurations </b-button>
                         </b-card-header>
                         <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
                           <b-card-body>
@@ -79,13 +79,15 @@
                         </b-collapse>
                       </b-card>
 
+
+
                       <b-card no-body class="mb-1">
                         <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
                           <b-button block v-b-toggle.accordion-4 variant="info" class="bg-transparent border-0 text-left text-primary" >Blockchain Configurations </b-button>
                         </b-card-header>
                         <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
                           <b-card-body>
-                           <blockchain-congif :blockChainType="blockChainType" />
+                           <eventAction-congif v-on="$listeners" :eventActionList="blockchainList" eventActionType="BLOCKCHAIN" :options="options.blockchainAction" />
                           </b-card-body>
                         </b-collapse>
                       </b-card>
@@ -172,22 +174,35 @@ export default {
       }
     },
 
+    blockchainList: function () {
+      if(this.actionList &&  this.actionList.length > 0){
+        return this.actionList.filter(x => (x.type.indexOf("BLOCKCHAIN_") > -1))
+      }else{
+        return []
+      }
+    }
+
   },
 
   data(){
     return {
       options: {
         customAction: [
-          {text: "Select Action type", value:null},
+          {text: "Select Input type", value:null},
           {text: "TEXT", value: "INPUT_TEXT"},
           {text: "NUMBER", value: "INPUT_NUMBER"},
           {text: "DATE", value: "INPUT_DATE"},
         ],
         socialAction: [
-          {text: "Select Action type", value:null},
+          {text: "Select Social Action type", value:null},
           {text: "Twitter Follow", value: "TWITTER_FOLLOW"},
           {text: "Twitter Retweet", value: "TWITTER_RETWEET"},
           {text: "Telegram Join", value: "TELEGRAM_JOIN"},
+        ],
+        blockchainAction: [
+          {text: "Select Blockchain type", value:null},
+          {text: "Ethereum", value: "BLOCKCHAIN_ETH"},
+          {text: "Tezos", value: "BLOCKCHAIN_TEZ"},
         ]
       }
     }

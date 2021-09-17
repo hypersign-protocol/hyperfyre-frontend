@@ -1,12 +1,13 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export enum EventActionType{
-  INPUT_TEXT = "INPUT_TEXT",
+  INPUT_TEXT =  "INPUT_TEXT",
   INPUT_NUMBER = "INPUT_NUMBER",
-  // FOLLOW_FACEBOOK,
-  // TWITTER_FOLLOW,
-  // TWITTER_RETWEET,
-  // TELEGRAM_JOIN    
+  TWITTER_FOLLOW = "TWITTER_FOLLOW",
+  TWITTER_RETWEET = "TWITTER_RETWEET",
+  TELEGRAM_JOIN = "TELEGRAM_JOIN",
+  BLOCKCHAIN_ETH =  "BLOCKCHAIN_ETH",
+  BLOCKCHAIN_TEZ =  "BLOCKCHAIN_TEZ" 
 }
 
 export interface IEventAction extends Document{  
