@@ -88,199 +88,6 @@ i {
 
     </b-modal>
 
-     <!-- <b-modal  hide-footer size="lg"  id="create-project-modal" :title=" isProjectEditing ? 'Edit a project ': 'Create a Project'">
-      <div class="card-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label style="margin-right: 8%">Project Name:</label>
-                    <input
-                      type="text"
-                      v-model="project.projectName"
-                      size="30"
-                      placeholder="Enter project name"
-                      class="form-control"
-                    />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label style="margin-right: 8%">LogoUrl:</label>
-                    <input
-                      type="text"
-                      v-model="project.logoUrl"
-                      size="30"
-                      placeholder="Enter logo url"
-                      class="form-control"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label style="margin-right: 8%"
-                      >Whitelisting Start Date:</label
-                    >
-                    <Datepicker v-model="project.fromDate"
-                      name="uniquename"
-                      input-class="form-control" 
-                      format="YYYY-MM-DD h:i:s" 
-                      width="100%"/>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label style="margin-right: 8%"
-                      >Whitelisting End Date:</label
-                    >
-                    <datepicker
-                      v-model="project.toDate"
-                      name="uniquename"
-                      format="YYYY-MM-DD h:i:s"
-                      input-class="form-control"
-                    ></datepicker>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label style="margin-right: 8%"
-                      >Project's Twitter Handle:</label
-                    >
-                    <input
-                      type="text"
-                      v-model="project.twitterHandle"
-                      size="30"
-                      placeholder="Enter twitter handle"
-                      class="form-control"
-                    />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label style="margin-right: 8%"
-                      >Project's Telegram Handle:</label
-                    >
-                    <input
-                      type="text"
-                      v-model="project.telegramHandle"
-                      size="30"
-                      placeholder="Enter telegram channel"
-                      class="form-control"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label style="margin-right: 8%"
-                      >Project Status:</label
-                    >
-                    <select class="form-control" v-model="projectStatus"  @change="changeProjectStatus($event)">
-                      <option value="true" :selected="true">OPEN</option>
-                      <option value="false">CLOSE</option>
-                    </select >
-                  </div>
-                   <div class="form-group">
-                    <label style="margin-right: 8%"
-                      >Telegram Announcement Channel (optional):</label
-                    >
-                    <input
-                      type="text"
-                      v-model="project.telegramAnnouncementChannel"
-                      size="30"
-                      placeholder="Enter telegram ann. channel"
-                      class="form-control"
-                    />
-                  </div>
-
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label style="margin-right: 8%">Twitter Post: </label>
-                    <textarea
-                      rows="5"
-                      cols="5"
-                      v-model="project.twitterPostFormat"
-                      class="form-control"
-                    />
-                  </div>
-                </div>
-              </div>
-              
-              <div class="row">
-
-               
-              
-              <div class="col-md-6">
-                  <div class="form-group">
-                     <label style="margin-right: 8%"
-                      >Blockchain Type:</label
-                    >
-                    <select class="form-control" v-model="blockchainType">
-                      <option value="ETHEREUM" selected>ETHEREUM</option>
-                      <option value="TEZOS">TEZOS</option>
-                    </select >
-                  </div>
-                </div>
-
-                 <div class="col-md-6">
-                   <div class="row">
-                   <div class=" col-md-6 form-group">
-                    <label style="margin-right: 8%"
-                      >Theme Color :</label
-                    >
-                  
-                    <input
-
-                      type="text"
-                      v-model="themeColor"
-                      size="30"
-                      class="form-control w-75"
-                      :placeholder="themeColorDefault"
-                  
-                    />
-                  </div>
-                   <div class=" col-md-6 form-group">
-                    <label style="margin-right: 8%"
-                      >Font Color :</label
-                    >
-                    <input
-                      type="text"
-                     v-model="fontColor"
-                      size="20"
-                      class="form-control w-75"
-                      :placeholder="fontColorDefault"
-                    />
-                  </div>
-                   </div>
-                </div>
-              </div>
-
-               
-
-              
-
-
-              <div class="row">
-                <div class="col-md-12">
-                  <hr />
-                  <button
-                    class="btn btn-outline-primary btn-sm"
-                    @click="saveProject()"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-            </div>
-    </b-modal> -->
 
 
     <div class="row">
@@ -312,7 +119,10 @@ i {
               :addedSocialMedias="addedSocialMedias"
               :selectedSocialMedia="selectedSocialMedia"
               :socialOptions="socialOptions"
-              :eventActionList="eventActionList"
+              :actionList="project.actions"
+
+
+              @updateEventActions="AddUpdateDelEventActions"
              />
 
           
@@ -516,7 +326,8 @@ export default {
         ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
         investorsCount: 0,
         social: {},
-        projectStatus: true
+        projectStatus: true,
+        actions: []
       }, 
       projects: [],   
       
@@ -608,6 +419,40 @@ export default {
       this.resetAllValues();
       this.isProjectEditing = false
         this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+    },
+    AddUpdateDelEventActions(event){
+      console.log("Event receieved from grand-child")
+      const  { type, data } = event;
+      if(type){
+        switch(type){
+          case "ADD": {
+            this.eventActionList.push(data);
+            console.log("Adding action to project action list len = " + this.eventActionList.length)
+            break;
+          }
+
+          case "UPDATE": {
+            const { id } =  data;
+            this.eventActionList.map(x => {
+              if(x.id === id){
+                return data;
+              }
+            })
+            // const actionToUpdate = this.eventActionList.find(x => x.id === id);
+            console.log("Updating action to project action id = " + id)
+            break;
+          }
+
+          case "DELETE": {
+            this.eventActionList = this.eventActionList.filter(x => x.id != data);
+            console.log("Deleting action to project action list len = " + this.eventActionList.length)
+            break;
+          }
+        }
+      }
+      console.log(JSON.stringify(data));
+
+      console.log("Event receieved from grand-child")
     },
     handleSearch(e){
 
@@ -741,6 +586,7 @@ export default {
       this.themeColor = project.themeColor
       this.fontColor = project.fontColor
       this.projectStatus = project.projectStatus
+      console.log(project.actions)
       this.eventActionList = project.actions
     
     
@@ -776,7 +622,7 @@ export default {
         this.project.fontColor = this.fontColor.trim().length ?  this.fontColor :  this.fontColorDefault
         this.project.blockchainType = this.blockchainType
         this.project.actions = this.eventActionList
-
+        
     
         console.log(this.project)
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
@@ -842,37 +688,37 @@ export default {
           return "Please specify a start and end date"
         }
 
-        if(!Object.keys(this.project.social).length){
-          return "Please fill in social configuration";
-        }
+        // if(!Object.keys(this.project.social).length){
+        //   return "Please fill in social configuration";
+        // }
 
-        if(!Object.keys(this.project.social).includes("twitter")){
-          return "Add Twitter Info your project"
-        }
+        // if(!Object.keys(this.project.social).includes("twitter")){
+        //   return "Add Twitter Info your project"
+        // }
 
-        if(!Object.keys(this.project.social).includes("telegram")){
-          return "Add Telegram Info your project"
-        }
+        // if(!Object.keys(this.project.social).includes("telegram")){
+        //   return "Add Telegram Info your project"
+        // }
         
-        if(this.project.social.twitter){
+        // if(this.project.social.twitter){
 
 
 
-            if(!this.project.social.twitter.twitterHandle || this.project.social.twitter.twitterHandle.trim() == ""){
-                return "Please provide a twitter handle"
-            }
-            if(!this.project.social.twitter.twitterPostFormat || this.project.social.twitter.twitterPostFormat.trim() == ""){
-                return "Please provide a Twitter Post Format"
-            }
-        }
+        //     if(!this.project.social.twitter.twitterHandle || this.project.social.twitter.twitterHandle.trim() == ""){
+        //         return "Please provide a twitter handle"
+        //     }
+        //     if(!this.project.social.twitter.twitterPostFormat || this.project.social.twitter.twitterPostFormat.trim() == ""){
+        //         return "Please provide a Twitter Post Format"
+        //     }
+        // }
 
 
-        if(this.project.social.telegram){
+        // if(this.project.social.telegram){
 
-             if(!this.project.social.telegram.telegramHandle || this.project.social.telegram.telegramHandle.trim() == ""){
-                 return "Please provide a telegram handle"
-             }
-        }        
+        //      if(!this.project.social.telegram.telegramHandle || this.project.social.telegram.telegramHandle.trim() == ""){
+        //          return "Please provide a telegram handle"
+        //      }
+        // }        
        
          if(!this.blockchainType){
           return "Please provide Blockchain Type"
@@ -914,8 +760,10 @@ export default {
         ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
         investorsCount: 0,
         social: {},
-        projectStatus: true
+        projectStatus: true,
+        actions: []
       }, 
+      this.eventActionList = []
         this.selectedSocialMedia = null,
         this.addedSocialMedias = [],
         this.socialOptions = [

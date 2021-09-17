@@ -62,7 +62,7 @@
                         </b-card-header>
                         <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
                           <b-card-body>
-                           <eventAction-congif :eventActionList="eventActionList" :eventActionType="eventActionType" :options="socialConfigOptions" />
+                           <eventAction-congif  v-on="$listeners" :eventActionList="socialList" eventActionType="SOCIAL"  :options="options.socialAction" />
                           </b-card-body>
                         </b-collapse>
                       </b-card>
@@ -74,7 +74,7 @@
                         </b-card-header>
                         <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
                           <b-card-body>
-                           <eventAction-congif :eventActionList="eventActionList" :eventActionType="eventActionType" :options="customInputOptions" />
+                           <eventAction-congif v-on="$listeners" :eventActionList="customList" eventActionType="CUSTOM" :options="options.customAction" />
                           </b-card-body>
                         </b-collapse>
                       </b-card>
@@ -140,7 +140,7 @@ export default {
     addedSocialMedias: {
       type: Array,
     },
-    eventActionList: {
+    actionList: {
       type: Array,
     },
     selectedSocialMedia: {
@@ -153,22 +153,39 @@ export default {
       type: Boolean
     }
   },
- 
+
+  computed: {
+    // a computed getter
+    customList: function () {
+      if(this.actionList &&  this.actionList.length > 0){
+        return this.actionList.filter(x => x.type.indexOf("INPUT_") > -1)
+      }
+    },
+
+    socialList: function () {
+      if(this.actionList &&  this.actionList.length > 0){
+        return this.actionList.filter(x => (x.type.indexOf("TWITTER_") > -1 || x.type.indexOf("TELEGRAM_") > -1))
+      }
+    },
+
+  },
+
   data(){
     return {
-      customInputOptions: [
-        {text: "Select Action type", value:null},
-        {text: "TEXT", value: "INPUT_TEXT"},
-        {text: "NUMBER", value: "INPUT_NUMBER"},
-        {text: "DATE", value: "INPUT_DATE"},
-      ],
-      socialConfigOptions: [
-        {text: "Select Action type", value:null},
-        {text: "Twitter Follow", value: "TWITTER_FOLLOW"},
-        {text: "Twitter Retweet", value: "TWITTER_RETWEET"},
-        {text: "Telegram Join", value: "TELEGRAM_JOIN"},
-      ]
-
+      options: {
+        customAction: [
+          {text: "Select Action type", value:null},
+          {text: "TEXT", value: "INPUT_TEXT"},
+          {text: "NUMBER", value: "INPUT_NUMBER"},
+          {text: "DATE", value: "INPUT_DATE"},
+        ],
+        socialAction: [
+          {text: "Select Action type", value:null},
+          {text: "Twitter Follow", value: "TWITTER_FOLLOW"},
+          {text: "Twitter Retweet", value: "TWITTER_RETWEET"},
+          {text: "Telegram Join", value: "TELEGRAM_JOIN"},
+        ]
+      }
     }
   }
 };
