@@ -28,6 +28,17 @@ export = (hypersign) => {
     updateSubscription
   );
 
+  // TODO:  Integrate recaptcha
+  router.post(
+    "/add",
+    hypersign.authorize.bind(hypersign),
+    InvestorSchemaBody,
+    validateRequestSchema,
+    verifySubscription,
+    InvestorController.addUpdateUser,
+    updateSubscription
+  );
+
   router.get(
     "/",
     hypersign.authorize.bind(hypersign),

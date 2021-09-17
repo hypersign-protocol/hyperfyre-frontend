@@ -39,9 +39,9 @@
                       </b-collapse>
                     </b-card>
 
-                      <b-card no-body class="mb-1">
+                      <!-- <b-card no-body class="mb-1">
                         <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
-                          <b-button block v-b-toggle.accordion-2 variant="info" class="bg-transparent border-0 text-left text-primary" >Social Configurations</b-button>
+                          <b-button block v-b-toggle.accordion-2 variant="info" class="bg-transparent border-0 text-left text-primary" >Social Configurations (Depreciated)</b-button>
                         </b-card-header>
                         <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
                           <b-card-body>
@@ -51,18 +51,43 @@
 
                               :socialOptions="socialOptions"
                                :project="project" />
-                            <!-- <b-card-text>{{ text }}</b-card-text> -->
+                            
+                          </b-card-body>
+                        </b-collapse>
+                      </b-card> -->
+
+                      <b-card no-body class="mb-1">
+                        <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
+                          <b-button block v-b-toggle.accordion-2 variant="info" class="bg-transparent border-0 text-left text-primary" >Social Configurations  </b-button>
+                        </b-card-header>
+                        <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
+                          <b-card-body>
+                           <eventAction-congif  v-on="$listeners" :eventActionList="socialList" eventActionType="SOCIAL"  :options="options.socialAction" />
                           </b-card-body>
                         </b-collapse>
                       </b-card>
 
+
                       <b-card no-body class="mb-1">
                         <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
-                          <b-button block v-b-toggle.accordion-3 variant="info" class="bg-transparent border-0 text-left text-primary" >Blockchain Configurations </b-button>
+                          <b-button block v-b-toggle.accordion-3 variant="info" class="bg-transparent border-0 text-left text-primary" >Custom Inputs Configurations </b-button>
                         </b-card-header>
                         <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
                           <b-card-body>
-                           <blockchain-congif :blockChainType="blockChainType" />
+                           <eventAction-congif v-on="$listeners" :eventActionList="customList" eventActionType="CUSTOM" :options="options.customAction" />
+                          </b-card-body>
+                        </b-collapse>
+                      </b-card>
+
+
+
+                      <b-card no-body class="mb-1">
+                        <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
+                          <b-button block v-b-toggle.accordion-4 variant="info" class="bg-transparent border-0 text-left text-primary" >Blockchain Configurations </b-button>
+                        </b-card-header>
+                        <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
+                          <b-card-body>
+                           <eventAction-congif v-on="$listeners" :eventActionList="blockchainList" eventActionType="BLOCKCHAIN" :options="options.blockchainAction" />
                           </b-card-body>
                         </b-collapse>
                       </b-card>
@@ -78,13 +103,19 @@
 
 <script>
 import BlockchainCongif from './BlockchainCongif.vue';
+import EventActionCongif from './EventActionCongif.vue';
 import GeneralConfig from './GeneralConfig.vue';
 import SocialConfig from './SocialConfig.vue';
 
 
 export default {
   name: "CreateProjectSlide",
-  components: {SocialConfig, GeneralConfig, BlockchainCongif  },
+  components: {
+    SocialConfig, 
+    GeneralConfig, 
+    BlockchainCongif,
+    EventActionCongif
+  },
 
   props:{
     project: {
@@ -111,6 +142,9 @@ export default {
     addedSocialMedias: {
       type: Array,
     },
+    actionList: {
+      type: Array,
+    },
     selectedSocialMedia: {
       type: Object
     },
@@ -121,8 +155,58 @@ export default {
       type: Boolean
     }
   },
- 
-  
+
+  computed: {
+    // a computed getter
+    customList: function () {
+      if(this.actionList &&  this.actionList.length > 0){
+        return this.actionList.filter(x => x.type.indexOf("INPUT_") > -1)
+      } else{
+        return []
+      }
+    },
+
+    socialList: function () {
+      if(this.actionList &&  this.actionList.length > 0){
+        return this.actionList.filter(x => (x.type.indexOf("TWITTER_") > -1 || x.type.indexOf("TELEGRAM_") > -1))
+      }else{
+        return []
+      }
+    },
+
+    blockchainList: function () {
+      if(this.actionList &&  this.actionList.length > 0){
+        return this.actionList.filter(x => (x.type.indexOf("BLOCKCHAIN_") > -1))
+      }else{
+        return []
+      }
+    }
+
+  },
+
+  data(){
+    return {
+      options: {
+        customAction: [
+          {text: "Select Input type", value:null},
+          {text: "TEXT", value: "INPUT_TEXT"},
+          {text: "NUMBER", value: "INPUT_NUMBER"},
+          {text: "DATE", value: "INPUT_DATE"},
+        ],
+        socialAction: [
+          {text: "Select Social Action type", value:null},
+          {text: "Twitter Follow", value: "TWITTER_FOLLOW"},
+          {text: "Twitter Retweet", value: "TWITTER_RETWEET"},
+          {text: "Telegram Join", value: "TELEGRAM_JOIN"},
+        ],
+        blockchainAction: [
+          {text: "Select Blockchain type", value:null},
+          {text: "Ethereum", value: "BLOCKCHAIN_ETH"},
+          {text: "Tezos", value: "BLOCKCHAIN_TEZ"},
+        ]
+      }
+    }
+  }
 };
 </script>
 

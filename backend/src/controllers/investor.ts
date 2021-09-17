@@ -4,7 +4,13 @@ import InvestorModel, { IInvestor } from "../models/investor";
 let { template :credentialMailTemplate} = require('../services/mail.template');
 import MailService from '../services/mail.service';
 import ApiError from '../error/apiError';
+import ActionService from "../services/action.service";
+import { IEventAction } from "../models/actions";
 
+
+
+
+const actionService =  new ActionService();
 
 const jsonWebToken = require('jsonwebtoken');
 
@@ -85,6 +91,170 @@ async function addInvestor(req: Request, res: Response, next: NextFunction) {
 
     issueCredential(req, res, next);
     // res.send(new_investor);
+  } catch (e) {
+    logger.error("InvestorController:: addInvestor(): Error " + e);
+    next(ApiError.internal(e.message));
+  }finally{
+    logger.info("InvestorController:: addInvestor method ends.");
+  }
+}
+
+
+
+
+async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    logger.info("InvestorController:: addInvestor() method start..");
+    const { 
+      userData, 
+      ethAddress, 
+      twitterHandle, 
+      telegramHandle, 
+      projectId, 
+      tweetUrl,
+      actions
+    } = req.body;
+
+    const { referrer } = req.query; // did of guy who have refered
+    
+    const { id: did, name, email } = userData;
+
+    logger.info("Called appUpdateUser ....")
+
+    logger.info("InvestorController:: addInvestor(): referrer = " + referrer)
+    const isComingFromReferal = referrer && email != referrer; 
+    logger.info("InvestorController:: addInvestor(): isComingFromReferal = " + isComingFromReferal)
+
+    logger.info("InvestorController:: addInvestor(): before findning investor by email = " + email);
+    const investor_email:IInvestor = await InvestorModel.where({ email: email, projectId: projectId }).findOne();
+
+    if(investor_email){
+      logger.info("user exists ..")
+    }
+
+    let user_actions: Array<IEventAction> = [];
+    let userActionScore = 0;
+    // sanity check for the action
+    if(actions && actions.length > 0){
+      // fetch all actions wrt to that event
+      logger.info("actions exists ..")
+      const eventActionsInDb: Array<IEventAction> =  await actionService.getEventActions({ eventId: projectId });
+      
+
+      if(eventActionsInDb.length === 0){
+        return next(ApiError.badRequest(`No action is set for the eventId ${projectId}`))  
+      }
+
+      logger.info("eventActionsInDb = " + JSON.stringify(eventActionsInDb))
+
+      actions.forEach((x) => {
+        const t: IEventAction = eventActionsInDb.find(y => y._id == x["actionId"])
+        if(typeof t != 'undefined'){
+          user_actions.push({
+            ...t["_doc"],
+            value: x["value"]
+          })
+          
+          userActionScore += t.score;
+        }else{
+          return next(ApiError.badRequest(`Invalid actionId ${x.actionId} for eventId ${projectId}`))
+        }
+      })
+
+      logger.info("userActionScore = " +userActionScore)
+      logger.info("user_actions = " + JSON.stringify(user_actions))
+
+    } else {
+      return next(ApiError.badRequest(`Atleast one action is required`))
+    }
+    
+
+
+    if(investor_email != null){
+      //// UPDATE RECORD
+      logger.info("Update Record flow")
+      
+      // fetch the actions
+      const userActionsInDb: Array<IEventAction> = investor_email.actions;
+
+      logger.info("userActionsInDb = " + JSON.stringify(userActionsInDb));
+      logger.info("user_actions = " + JSON.stringify(user_actions));
+      
+      // find duplicate actions
+      // TODO: Need to check why this condition is not working...
+      if(user_actions.some(a => userActionsInDb.findIndex(b => b._id == a._id) >= 0 )){
+        logger.info("================== found duplicate ====================")
+        return next(ApiError.badRequest(`Duplicate action(s)`))
+      }else{
+        logger.info("================== no duplicate ====================")
+      }
+      
+      // merge user_actions & userActionsInDb
+      const userActionMerged = userActionsInDb.concat(user_actions);
+
+      // update the record
+      const filter = { email, projectId };
+      const updateParams = {
+        numberOfReferals: investor_email.numberOfReferals + userActionScore,
+        actions: userActionMerged
+      }
+      const updatedUser =  await updateInvestorInDb(filter, updateParams);
+      logger.info("updatedUser = " + JSON.stringify(updatedUser));
+
+      res.send(updatedUser);
+    } else{
+      /// ADD RECORD
+      logger.info("Add Record flow")
+      logger.info("InvestorController:: addInvestor(): before creating a new investor into db");
+      const new_investor: IInvestor = await InvestorModel.create({
+        did, 
+        email, 
+        name, 
+        ethAddress, 
+        twitterHandle, 
+        telegramHandle, 
+        hasTwitted: true, 
+        hasJoinedTGgroup: true, 
+        isVerfiedByHypersign: false,
+        isVerificationComplete: true,
+        projectId,
+        tweetUrl,
+        numberOfReferals: (!isComingFromReferal ? 0 : 0.5 * REFFERAL_MULTIPLIER ) +  userActionScore,
+        actions: user_actions
+      });
+      logger.info("InvestorController:: addInvestor(): after creating a new investor into db id = " + new_investor["_id"]);
+  
+      //update the followers if refere is present in query
+      if(isComingFromReferal){
+        const filter = { email: referrer, projectId };
+  
+        // find the refere 
+        logger.info("InvestorController:: addInvestor(): before fetchin the refer from db");
+        const investor:IInvestor = await InvestorModel.where(filter).findOne();
+        if(investor){
+          logger.info("InvestorController:: addInvestor(): after fetchin the refer from db id = " + investor.did);
+          
+          // update the refere followers
+          const updateParams = {
+            numberOfReferals: (investor.numberOfReferals + ( 1 * REFFERAL_MULTIPLIER))
+          };
+    
+          logger.info("InvestorController:: addInvestor(): updateParams = " + JSON.stringify(updateParams));
+          logger.info("InvestorController:: addInvestor(): before updating an investor into db");
+          updateInvestorInDb(filter, updateParams);
+          logger.info("InvestorController:: addInvestor(): after updating an investor into db");
+        }else{
+          logger.info("InvestorController:: addInvestor(): could not fetch investor. filter = " + JSON.stringify(filter));
+        }
+      }
+  
+      // issueCredential(req, res, next);
+      res.send(new_investor);
+
+    }
+
+
+   
   } catch (e) {
     logger.error("InvestorController:: addInvestor(): Error " + e);
     next(ApiError.internal(e.message));
@@ -316,6 +486,7 @@ export default {
   getAllInvestor,
   issueCredential,
   updateInvestor,
-  getCredential
+  getCredential,
+  addUpdateUser
 }
 

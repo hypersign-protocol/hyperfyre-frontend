@@ -1,6 +1,8 @@
 import { logger } from "../config";
 import { Request, Response, NextFunction } from "express";
 import ProjectModel, { IProject, EBlockchainType } from "../models/project";
+import ActionModel, { IEventAction, EventActionType } from "../models/actions";
+
 import InvestorModel, { IInvestor } from "../models/investor";
 import ApiError from '../error/apiError';
 import { writeInvestorsToFile, deleteFile } from '../utils/files';
@@ -12,18 +14,21 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       projectName,
       logoUrl,
       fromDate,
-      toDate,
-      ownerDid,
-      social,      
+      toDate,     
       userData,
       blockchainType,
       themeColor,
-      fontColor
+      fontColor,
+      actions
     } = req.body;
 
     if (Date.parse(fromDate) > Date.parse(toDate)) {
       return next(ApiError.badRequest("fromDate can not be greater than toDate"));
     }
+
+    // if(typeof actions != Array){
+    //   return next(ApiError.badRequest("Choose different project name. This project name is already taken"));
+    // }
     const slug = dashify(projectName);
 
     const project:IProject = await ProjectModel.where({ slug }).findOne();
@@ -31,37 +36,56 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       return next(ApiError.badRequest("Choose different project name. This project name is already taken"));
     }
 
-    const {
-      telegramHandle,
-      telegramAnnouncementChannel, 
-    } =  social.telegram;
+    // const {
+    //   telegramHandle,
+    //   telegramAnnouncementChannel, 
+    // } =  social.telegram;
 
-    const {
-      twitterHandle,
-      twitterPostFormat,
-    } =  social.twitter;
+    // const {
+    //   twitterHandle,
+    //   twitterPostFormat,
+    // } =  social.twitter;
 
-    const newProject: IProject = await ProjectModel.create({
+  
+    let newProject: IProject = await ProjectModel.create({
       projectName,
       logoUrl,
       fromDate: new Date(fromDate).toISOString(),
       toDate: new Date(toDate).toISOString(),
       ownerDid: userData.id,
-      twitterHandle,
-      telegramHandle,
-      twitterPostFormat,
       projectStatus: true,
-      telegramAnnouncementChannel,
       blockchainType: !blockchainType || blockchainType == "" ? EBlockchainType.ETHEREUM : blockchainType,
       themeColor: !themeColor || themeColor == "" ? "#494949" : themeColor,
       fontColor: !fontColor || fontColor == "" ? "#ffffff" : fontColor,
       slug
     });
-    res.send(newProject);
+
+    newProject.actions = [];
+    if(actions && actions.length > 0){
+      let i;
+      for(i = 0; i < actions.length; i++){
+        const newAction = await ActionModel.create({
+          eventId: newProject._id,
+          ...actions[i]
+        })
+        newProject.actions.push(newAction)
+      }
+    }
+
+    res.send({
+      ...newProject["_doc"],
+      actions: newProject.actions
+    });
+
+    
   } catch (e) {
     logger.error("ProjectCtrl:: addProject(): Error " + e);
     return next(ApiError.internal(e.message));
   }
+}
+
+async function getEventActions({eventId}){
+  return await ActionModel.find({ eventId });
 }
 
 async function getAllProject(req: Request, res: Response, next: NextFunction) {
@@ -75,7 +99,7 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
       projectList = await ProjectModel.find({}).where({ ownerDid: userData.id }).sort(sortyByFromDateTimeDesc);
       let i;
       for(i = 0; i < projectList.length; i++){
-        const project = projectList[i];
+        const project: IProject = projectList[i];
         if(checkUpdateIfProjectExpired(project) === true){
           // logger.info("Project is expired");
           project.projectStatus = false; 
@@ -89,9 +113,17 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
         project.investorsCount = await InvestorModel.countDocuments({
           projectId: project["_id"],
         }).then((count) => count);
+
+        const eventActions = await getEventActions({
+          eventId: project._id
+        })
+
         logger.info("After fetching investos cound = " + project.investorsCount);
 
-        projectListTmp.push(project);
+        projectListTmp.push({
+          ...project["_doc"],
+          actions: eventActions
+        });
       }
 
       // projectList.forEach((project) => {
@@ -152,10 +184,16 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
       return next(ApiError.badRequest("No project found for id or slug = " + id));
     }
 
+// retrive event/project's actions
+   const eventActions = await getEventActions({eventId: project._id })
+
+
     let projectInfo = {
       ...project["_doc"],
+      actions: eventActions
     };
 
+    
     if(checkUpdateIfProjectExpired(projectInfo) === true){
       logger.info("Project is expired");
       projectInfo.projectStatus = false; 
@@ -197,9 +235,7 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
           .skip(skipInt);
         projectInfo.investors = investorList;
 
-        projectInfo.count = await InvestorModel.countDocuments({
-          projectId: id,
-        }).then((count) => count);
+        
 
         // check if export option is enabled
         // if yes then
@@ -218,6 +254,12 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
         }
       }
     }
+
+    projectInfo.count = await InvestorModel.countDocuments({
+      projectId: project._id,
+    }).then((count) => count);
+
+
     res.send(projectInfo);
   } catch (e) {
     logger.error("ProjectCtrl:: getProjectById(): Error " + e);
@@ -229,6 +271,12 @@ async function deleteProjectById(req: Request, res: Response, next: NextFunction
   try {
     const { id } = req.params;
     const project: IProject = await ProjectModel.findByIdAndDelete(id);
+
+    // delete all actions
+    ActionModel.deleteMany({
+      eventId: id
+    })
+
     res.send({
       ...project["_doc"],
     });
@@ -245,26 +293,26 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       logoUrl,
       fromDate,
       toDate,
-      social,
       _id,
       userData,
       projectStatus,
       blockchainType,
       themeColor,
-      fontColor
+      fontColor,
+      actions
     } = req.body;
 
     const { id: ownerDid } = userData;
 
-    const {
-      telegramHandle,
-      telegramAnnouncementChannel, 
-    } =  social.telegram;
+    // const {
+    //   telegramHandle,
+    //   telegramAnnouncementChannel, 
+    // } =  social.telegram;
 
-    const {
-      twitterHandle,
-      twitterPostFormat,
-    } =  social.twitter;
+    // const {
+    //   twitterHandle,
+    //   twitterPostFormat,
+    // } =  social.twitter;
 
 
     // FindbyIdupdate returns the old object, however the value has been updated in the db
@@ -274,23 +322,45 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       fromDate,
       toDate,
       ownerDid,
-      twitterHandle,
-      telegramHandle,
-      twitterPostFormat,
       projectStatus,
-      telegramAnnouncementChannel: !telegramAnnouncementChannel ? "" : telegramAnnouncementChannel,
       blockchainType,
       themeColor,
-      fontColor
+      fontColor,
     });
+
+
+    
+    if(actions && actions.length > 0){
+      let i;
+      for(i = 0; i < actions.length; i++){
+        
+        if(actions[i]._id){
+          await ActionModel.findByIdAndUpdate(actions[i]._id,{
+            ...actions[i]
+          })
+  
+        }else{
+          await ActionModel.create({
+            eventId: _id,
+            ...actions[i]
+          })  
+        }
+      }
+    }
+
     const project: IProject = await ProjectModel.findById({ _id: _id });
 
     if(new Date().toISOString() > new Date(project.toDate).toISOString()){
       return next(ApiError.badRequest("You can not edit the project information after project expiry"));
     }
 
+    const eventActions = await getEventActions({
+      eventId: project._id
+    })
+
     res.send({
       ...project["_doc"],
+      actions: eventActions
     });
   } catch (e) {
     logger.error("ProjectCtrl:: updateProject(): Error " + e);
@@ -369,5 +439,6 @@ export default {
   getAllProject,
   updateProject,
   deleteProjectById,
-  getRandomInvestors
+  getRandomInvestors,
+  getEventActions
 };
