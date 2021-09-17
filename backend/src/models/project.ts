@@ -6,22 +6,7 @@ export interface IProject extends Document{
     logoUrl: string;
     fromDate: string; // data and time both
     toDate: string; // data and time both
-    ownerDid: string;
-
-    // social
-        // twitter
-        twitterHandle: string;
-        twitterPostFormat: string;
-        
-        // telegram
-        telegramHandle: string;
-        telegramAnnouncementChannel: string;
-
-        // facebook        
-
-        // instagram
-
-    
+    ownerDid: string;    
     projectStatus: Boolean;
     blockchainType: string;
     investorsCount: number;
@@ -43,11 +28,7 @@ const ProjectSchema = new Schema({
     fromDate:{ type: Date, required: true },
     toDate:{ type: Date, required: true },
     ownerDid:{ type: String, required: true},
-    twitterHandle:{ type: String, required: true},
-    telegramHandle:{ type: String, required: true},
-    twitterPostFormat: { type: String, required: true},
     projectStatus: { type: Boolean, required: true},
-    telegramAnnouncementChannel: { type: String},
     blockchainType: {type: EBlockchainType, required: true},
     investorsCount: {type: Number},
     themeColor: { type: String, required: true},

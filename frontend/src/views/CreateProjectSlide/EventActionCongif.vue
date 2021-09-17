@@ -113,11 +113,11 @@ export default {
   props: {
     eventActionType: {
       type: String,
-      required: true,
-      default: []
+      
     },
     eventActionList : {
-      type: Array
+      type: Array,
+      required: true,
     },
     options: {
       type: Array
