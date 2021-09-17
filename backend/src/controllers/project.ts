@@ -14,9 +14,7 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       projectName,
       logoUrl,
       fromDate,
-      toDate,
-      ownerDid,
-      social,      
+      toDate,     
       userData,
       blockchainType,
       themeColor,
@@ -38,15 +36,15 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       return next(ApiError.badRequest("Choose different project name. This project name is already taken"));
     }
 
-    const {
-      telegramHandle,
-      telegramAnnouncementChannel, 
-    } =  social.telegram;
+    // const {
+    //   telegramHandle,
+    //   telegramAnnouncementChannel, 
+    // } =  social.telegram;
 
-    const {
-      twitterHandle,
-      twitterPostFormat,
-    } =  social.twitter;
+    // const {
+    //   twitterHandle,
+    //   twitterPostFormat,
+    // } =  social.twitter;
 
   
     let newProject: IProject = await ProjectModel.create({
@@ -55,11 +53,7 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       fromDate: new Date(fromDate).toISOString(),
       toDate: new Date(toDate).toISOString(),
       ownerDid: userData.id,
-      twitterHandle,
-      telegramHandle,
-      twitterPostFormat,
       projectStatus: true,
-      telegramAnnouncementChannel,
       blockchainType: !blockchainType || blockchainType == "" ? EBlockchainType.ETHEREUM : blockchainType,
       themeColor: !themeColor || themeColor == "" ? "#494949" : themeColor,
       fontColor: !fontColor || fontColor == "" ? "#ffffff" : fontColor,
@@ -299,7 +293,6 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       logoUrl,
       fromDate,
       toDate,
-      social,
       _id,
       userData,
       projectStatus,
@@ -311,15 +304,15 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
 
     const { id: ownerDid } = userData;
 
-    const {
-      telegramHandle,
-      telegramAnnouncementChannel, 
-    } =  social.telegram;
+    // const {
+    //   telegramHandle,
+    //   telegramAnnouncementChannel, 
+    // } =  social.telegram;
 
-    const {
-      twitterHandle,
-      twitterPostFormat,
-    } =  social.twitter;
+    // const {
+    //   twitterHandle,
+    //   twitterPostFormat,
+    // } =  social.twitter;
 
 
     // FindbyIdupdate returns the old object, however the value has been updated in the db
@@ -329,11 +322,7 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       fromDate,
       toDate,
       ownerDid,
-      twitterHandle,
-      telegramHandle,
-      twitterPostFormat,
       projectStatus,
-      telegramAnnouncementChannel: !telegramAnnouncementChannel ? "" : telegramAnnouncementChannel,
       blockchainType,
       themeColor,
       fontColor,
