@@ -305,7 +305,8 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       projectStatus,
       blockchainType,
       themeColor,
-      fontColor
+      fontColor,
+      actions
     } = req.body;
 
     const { id: ownerDid } = userData;
@@ -335,16 +336,33 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       telegramAnnouncementChannel: !telegramAnnouncementChannel ? "" : telegramAnnouncementChannel,
       blockchainType,
       themeColor,
-      fontColor
+      fontColor,
     });
+
+
+    
+    if(actions && actions.length > 0){
+      let i;
+      for(i = 0; i < actions.length; i++){
+        await ActionModel.findByIdAndUpdate(actions[i]._id,{
+          ...actions[i]
+        })
+      }
+    }
+
     const project: IProject = await ProjectModel.findById({ _id: _id });
 
     if(new Date().toISOString() > new Date(project.toDate).toISOString()){
       return next(ApiError.badRequest("You can not edit the project information after project expiry"));
     }
 
+    const eventActions = await getEventActions({
+      eventId: project._id
+    })
+
     res.send({
       ...project["_doc"],
+      actions: eventActions
     });
   } catch (e) {
     logger.error("ProjectCtrl:: updateProject(): Error " + e);
