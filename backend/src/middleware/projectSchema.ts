@@ -34,11 +34,6 @@ export const ProjectSchemaBody = [
     .custom((value) => validateDate(value))
     .withMessage("toDate is invlaid or empty"),
 
-  body("actions")
-  .isArray()
-  .custom((value) =>  value.length > 0)
-  .withMessage("Actions can but null or empty"),
-
   // body("toDate")
   //   .custom((value) => notLessThanCurrent(value))
   //   .withMessage("end date time can not be less than current time"),

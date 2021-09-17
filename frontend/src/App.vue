@@ -96,13 +96,9 @@
 </style>
 <template>
   <div id="app">
-    <div v-if="showUserNav"  style="padding:5px; border: 1px solid grey; color: red; margin-bottom: 10px; text-align:left">
-      <h3>HyperFyre</h3>
-    </div>
-
     <div
       :class="[
-        showNavbar & !showUserNav
+        showNavbar
           ? isSidebarCollapsed
             ? 'showNavbar collapsed'
             : 'showNavbar notCollapsed'
@@ -135,7 +131,6 @@
         <router-view />
       </div>
     </div>
-
     <notifications group="foo" />
   </div>
 </template>
@@ -186,7 +181,7 @@
   left: 0;
   right: 0;
   z-index: 42;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 0 10px rgba(0,0,0,.1);
 }
 .v-sidebar-menu .vsm-arrow:after {
   font-family: FontAwesome;
@@ -203,6 +198,7 @@
 .v-sidebar-menu.vsm_white-theme .vsm--link_level-1.vsm--link_active {
   background-color: rgba(242, 242, 242, 1);
 }
+
 </style>
 
 <script>
@@ -213,7 +209,8 @@ export default {
       isSidebarCollapsed: false,
       authRoutes: ["register", "PKIIdLogin"],
       showNavbar: false,
-      menu: [
+
+        menu: [
         {
           href: "/app/admin/dashboard",
           title: "Dashboard",
@@ -234,56 +231,58 @@ export default {
           href: "/app/admin/subscription",
           title: "Subscriptions",
           icon: "fas fa-tags",
-          exactPath: true,
+            exactPath: true,
         },
         {
           href: "/app/admin/login",
           title: "Logout",
           icon: "fas fa-sign-out-alt",
           exactPath: true,
+        
         },
       ],
-
-      // Nav for user's end
-      showUserNav: false,
     };
   },
 
+   
+
   mounted() {
     setTimeout(() => {
-      this.filterMenu();
-    }, 500);
-
-    this.showUserNav = window.location.pathname.includes("/event") ? true : false
+      this.filterMenu()
+    }, 500)
+      
   },
 
-  updated() {
-    this.showNavbar =
+
+  updated(){
+     this.showNavbar =
       window.location.pathname.includes("/app/admin/investors") ||
       window.location.pathname.includes("/app/admin/project") ||
-      window.location.pathname.includes("/app/admin/dashboard") ||
+      window.location.pathname.includes("/app/admin/dashboard") || 
       window.location.pathname.includes("/app/admin/subscription")
         ? true
-        : false;
+        : false;  
 
-    // this.filterMenu();
+        // this.filterMenu();
   },
 
   methods: {
-    filterMenu() {
-      if (localStorage.getItem("user")) {
-        const user = JSON.parse(localStorage.getItem("user"));
 
-        if (user.isSubscribed) {
-          return;
-        }
-        this.menu = this.menu.filter(
-          (x) =>
-            x.title.toLowerCase().includes("subscription") ||
-            x.title.toLowerCase().includes("logout")
-        );
-      }
-    },
+      filterMenu(){
+          if(localStorage.getItem("user")){
+  
+                  const user = JSON.parse(localStorage.getItem("user"))
+
+                  
+                  if(user.isSubscribed){
+                     return
+                  
+                  }
+                  this.menu  = this.menu.filter(x => (x.title.toLowerCase().includes("subscription") || x.title.toLowerCase().includes("logout") ));
+
+                  
+          }
+      },
 
     goToNextPage(route) {
       const r = this.menu.find((x) => x.name === route);
