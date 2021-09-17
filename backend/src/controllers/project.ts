@@ -344,9 +344,18 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
     if(actions && actions.length > 0){
       let i;
       for(i = 0; i < actions.length; i++){
-        await ActionModel.findByIdAndUpdate(actions[i]._id,{
-          ...actions[i]
-        })
+        
+        if(actions[i]._id){
+          await ActionModel.findByIdAndUpdate(actions[i]._id,{
+            ...actions[i]
+          })
+  
+        }else{
+          await ActionModel.create({
+            eventId: _id,
+            ...actions[i]
+          })  
+        }
       }
     }
 
