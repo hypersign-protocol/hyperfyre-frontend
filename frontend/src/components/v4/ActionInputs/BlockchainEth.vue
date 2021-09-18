@@ -1,0 +1,68 @@
+<template>
+	<b-card no-body class="action-wrap">
+		<b-card-header role="tab">
+			<b-row :class="visible ? null : 'collapsed'" :aria-expanded="visible ? 'true' : 'false'" :aria-controls="`collapse-${idValue}`" @click="visible = !visible">
+				<b-col cols="1" sm="1" md="1">
+					<img src="../../../assets/question-circle-fill.svg" height="25px">
+				</b-col>
+				<b-col cols="9" sm="9" class="border-right text-left" md="9">
+					<div class="text text-capitalize">{{data.title}}</div>
+				</b-col>
+				<b-col cols="2" sm="2" md="2">
+					<b-badge variant="warning" @click="update()" v-if="!data.isDone">
+						<img src="../../../assets/plus.svg">
+						{{data.score}}
+					</b-badge>
+					<img src="../../../assets/check-circle-fill.svg" height="25px" v-if="data.isDone">
+				</b-col>
+			</b-row>
+		</b-card-header>
+		<b-collapse :id="`collapse-${idValue}`" v-model="visible">
+			<b-card-body class="user-details">
+				<b-row>
+					<b-col cols="12" sm="12" md="12">
+						<div class="follow">
+							<b-form-input type="text" :placeholder="data.title" v-model="data.value" :disabled="data.isDone" :required="data.isManadatory"></b-form-input>
+						</div>
+					</b-col>
+				</b-row>
+			</b-card-body>
+		</b-collapse>
+	</b-card>
+</template>
+<script>
+import eventBus from "../../../eventBus.js"
+export default {
+	name: 'BlockchainEth',
+	props: {
+		idValue: {
+			required: true
+		},
+		data: {
+			required: true
+		}
+	},
+	data() {
+		return {
+			visible: false,
+			done: false
+		}
+	},
+	mounted() {
+		eventBus.$on(`disableInput${this.data._id}`, this.disableInput)
+	},
+	methods: {
+		update() {
+			if (!this.data.value) {
+				return alert("Error: Pls enter a valid input");
+			} else {
+				this.$emit('input', this.data.value)
+			}
+		},
+		disableInput(data) {
+			this.done = data
+		}
+	}
+
+}
+</script>

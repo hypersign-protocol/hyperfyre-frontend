@@ -1,111 +1,70 @@
 <template>
-  <div class="actioncontent">
-    <h4>{{ title }}</h4>
-    <p>
-      <span v-if="actionType ===  eventActionType.TWITTER_FOLLOW">
-        <!-- <i class="fab fa-twitter"></i> -->
-        <b-button
-          size="sm"
-          class="btn-twitter twitter"
-          @click="
-            handleTwitterLogin(
-              'https://twitter.com/' + value + '?ref_src=twsrc%5Etfw'
-            )
-          "
-          :disabled="done"
-        >
-          <i class="fab fa-twitter"></i>
-          Follow @{{ twitter.sourceScreenName }}
-        </b-button>
-      </span>
-
-      <span v-if="actionType === eventActionType.TWITTER_RETWEET">
-        <!-- <i class="fab fa-twitter"></i> -->
-        <b-button
-          size="sm"
-          class="btn-twitter twitter"
-          @click="
-            handleTwitterLogin('https://twitter.com/intent/tweet?text=' + value)
-          "
-          :disabled="done"
-        >
-          <i class="fab fa-twitter"></i> Retweet
-        </b-button>
-
-        <input placeholder="Paset your re-tweet url" v-model="val" type="url" :disabled="done" />
-      </span>
-
-      <span  v-if="actionType === eventActionType.TELEGRAM_JOIN">
-        <b-button 
-          size="sm" 
-          class="btn-twitter telegram" 
-          @click="handleTelegramLogin(`https://t.me/${value}`)"
-        >
-          <i class="fab fa-telegram-plane"></i> Join @ {{value}}
-        </b-button>
-      </span>
-
-      <span v-if="actionType === eventActionType.INPUT_TEXT">
-        <input
-          type="text"
-          :placeholder="placeHolder"
-          v-model="val"
-          :disabled="done"
-        />
-      </span>
-      <span v-if="actionType === eventActionType.INPUT_DATE">
-        <input
-          type="datetime-local"
-          :placeholder="placeHolder"
-          v-model="val"
-          :disabled="done"
-        />
-      </span>
-      <span v-if="actionType === eventActionType.INPUT_NUMBER">
-        <input
-          type="number"
-          :placeholder="placeHolder"
-          v-model="val"
-          :disabled="done"
-        />
-      </span>
-
-      <span>
-        <button
-          style="background: green; color: white"
-          @click="updateUserInfo()"
-          title="click to accept"
-          v-if="!done"
-        >
-          + {{ score }}
-        </button>
-        <button v-else style="background: grey; color: white" disabled>
-          <i class="far fa-check-circle"></i>
-        </button>
-      </span>
-    </p>
+  <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px;">
+    <b-card no-body class="action-wrap">
+      <b-card-header role="tab">
+        <b-row v-b-toggle.accordion-1>
+          <b-col cols="1" sm="1" md="1">
+            <img src="../../assets/person-fill.svg" height="25px">
+          </b-col>
+          <b-col cols="9" sm="9" class="text-left" md="9">
+            <div class="text">Your Profile</div>
+          </b-col>
+        </b-row>
+      </b-card-header>
+      <b-collapse id="accordion-1" accordion="my-accordion" role="tabpanel">
+        <b-card-body class="user-details" v-if="user">
+          <b-row>
+            <b-col cols="12" sm="3" md="3">
+              <div class="title text-left mb-1">Username</div>
+              <div class="text text-left">{{user.name}}</div>
+            </b-col>
+            <b-col cols="12" sm="4" md="4">
+              <div class="title text-left mb-1">Email</div>
+              <div class="text text-left">{{user.email}}</div>
+            </b-col>
+            <b-col cols="12" sm="5" md="5">
+              <div class="title text-left mb-1">DID</div>
+              <div class="text text-left">{{user.id}}</div>
+            </b-col>
+          </b-row>
+        </b-card-body>
+      </b-collapse>
+    </b-card>
+    <template v-for="(actionItem,index) in ActionSchema">
+      <component :is="CapitaliseString(actionItem.type)" :key="index" :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
+    </template>
   </div>
 </template>
-
 <script>
+import TwitterFollow from "./ActionInputs/TwitterFollow.vue";
+import TwitterRetweet from "./ActionInputs/TwitterRetweet.vue";
+import TelegramJoin from "./ActionInputs/TelegramJoin.vue";
+import InputText from "./ActionInputs/InputText.vue";
+import BlockchainEth from "./ActionInputs/BlockchainEth.vue";
+import InputDate from "./ActionInputs/InputDate.vue";
+import eventBus from "../../eventBus.js"
 import apiClient from "../../mixins/apiClientMixin";
-import webAuth from "../../mixins/twitterLogin";
 import config from "../../config";
 export default {
+  name: "Action",
   props: {
-    actionType: String,
-    actionId: String,
-    title: String,
-    eventId: String,
-    placeHolder: String,
-    isMandatory: Boolean,
-    score: Number,
-    isDone: Boolean,
-    value: String,
+    ActionSchema: {
+      required: true,
+      type: Array
+    }
+  },
+  components: {
+    TwitterFollow,
+    TwitterRetweet,
+    TelegramJoin,
+    InputText,
+    BlockchainEth,
+    InputDate
   },
   data() {
     return {
       authToken: localStorage.getItem("authToken"),
+      user: JSON.parse(localStorage.getItem('user')),
       userData: {
         ethAddress: "0x12312312312",
         twitterHandle: "hermit123123",
@@ -114,55 +73,29 @@ export default {
         tweetUrl: "https://asdad.com",
       },
       actions: [],
-      twitter: {
-        sourceScreenName: this.value,
-        targetScreenName: "",
-      },
-      val: this.value,
-      done: this.isDone,
       eventActionType: {
-        ...config.eventActionType   
+        ...config.eventActionType
       }
     };
   },
   methods: {
-    async updateUserInfo() {
+
+    CapitaliseString(string) {
+      let res = string.split('_');
+      let first = res[0][0].toUpperCase() + res[0].substring(1).toLowerCase()
+      let next = res[1][0].toUpperCase() + res[1].substring(1).toLowerCase()
+      return first + next
+    },
+    async updateUserInfo(actionItem, value) {
       //
       try {
-        if (!this.val) {
-          return alert("Error: Pls enter a valid input");
-        }
-
-        if (this.actionType === this.eventActionType.TWITTER_FOLLOW) {
-          if (!(await this.hasFollowedTwitter())) {
-            return alert("Error: Please follow first");
-          } else {
-            this.val = this.twitter.targetScreenName;
-          }
-        }
-
-        if (this.actionType === this.eventActionType.TWITTER_RETWEET) {
-          if (!(await this.hasRetweeted())) {
-            return alert("Error: Invalid retweet");
-          } else {
-
-          }
-        }
-
-        if(this.actionType === this.eventActionType.TELEGRAM_JOIN){
-          if(!localStorage.getItem("telegamId")){
-            return alert("Error: Please authorize telegram to proceed")
-          } else {
-            this.val = localStorage.getItem("telegamId");
-          }
-        }
 
         this.actions.push({
-          actionId: this.actionId,
-          value: this.val,
+          'actionId': actionItem._id,
+          'value': value,
         });
 
-        this.userData.projectId = this.eventId;
+        this.userData.projectId = actionItem.eventId;
         const body = {
           ...this.userData,
           actions: this.actions,
@@ -187,9 +120,10 @@ export default {
         if (data) {
           const { actions } = data;
           if (actions && actions.length > 0) {
-            const action = actions.find((x) => x._id == this.actionId);
+            const action = actions.find((x) => x._id == actionItem._id);
             if (action != null || action != "undefined") {
-              this.done = true;
+              actionItem.isDone = true;
+              eventBus.$emit(`disableInput${actionItem._id}`, actionItem.isDone);
               console.log("Update User data event  emit");
               this.$emit("UserUpdateEvent", resp.data);
             } else {
@@ -205,195 +139,6 @@ export default {
         console.log(e);
       }
     },
-
-    async getTwitterScreenName(twitterId) {
-      try {
-        if (twitterId) {
-          
-          let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/user/${twitterId}`;
-          let headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.authToken}`,
-          };
-
-          const resp = await apiClient.makeCall({
-            method: "GET",
-            url: url,
-            body: {},
-            header: headers,
-          });
-
-          const { screen_name } = resp.data;
-
-          console.log(screen_name);
-          // localStorage.setItem("twitterHandle", screen_name);
-
-          return screen_name;
-        } else {
-
-          return null;
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
-
-    async hasRetweeted() {
-      try {
-        const twitterId = localStorage.getItem('twitterId')
-        if (twitterId) {
-          let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
-          let headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.authToken}`,
-          };
-
-          const body = {
-            tweetUrl: this.val,
-            userId: twitterId,
-            tweetText: this.value,
-            needUserDetails: false,
-            checkIfFollowed: false,
-            sourceScreenName: "",
-          };
-
-          const resp = await apiClient.makeCall({
-            method: "POST",
-            url: url,
-            body,
-            header: headers,
-          });
-
-          if (resp.data.hasTweetUrlVerified) {
-            return true;
-          } else {
-            alert(resp.data.error);
-            return false;
-          }
-        }
-      } catch (e) {
-        console.log(e);
-        return false;
-      }
-    },
-
-    async hasFollowedTwitter() {
-      try {
-        const twitterId= localStorage.getItem('twitterId');
-
-        this.twitter.targetScreenName = await this.getTwitterScreenName(
-          twitterId
-        );
-
-
-        if (
-          this.twitter.sourceScreenName && 
-          this.twitter.targetScreenName &&
-          this.twitter.sourceScreenName != "" &&
-          this.twitter.targetScreenName != ""
-        ) {
-          let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/follower`;
-          let headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.authToken}`,
-          };
-
-          const resp = await apiClient.makeCall({
-            method: "POST",
-            url: url,
-            body: this.twitter,
-            header: headers,
-          });
-
-          return resp.data;
-        } else {
-          console.log("Source or target twitter screen name is  blank");
-          return false;
-        }
-      } catch (e) {
-        console.log(e);
-        return false;
-      }
-    },
-
-    handleTwitterLogin(urlToRedirect) {
-      try {
-        if (!localStorage.getItem('twitterId')) {
-          
-          webAuth.popup.authorize(
-            {
-              connection: "twitter",
-              owp: true,
-            },
-            (err, authRes) => {
-              if (!err) {
-                webAuth.client.userInfo(
-                  authRes.accessToken,
-                  async (err, user) => {
-                    if (err) {
-                      return alert("Something Went Wrong");
-                    }
-
-                    console.log(user);
-
-                    const twitterId = user.sub.split("|")[1];
-                    localStorage.setItem("twitterId", twitterId);
-
-                    window.open(urlToRedirect, "_blank");
-                  }
-                );
-              }
-            }
-          );
-        } else {
-          window.open(urlToRedirect, "_blank");
-          // this.twitter.targetScreenName = localStorage.getItem("twitterHandle")
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
-
-    handleTelegramLogin(urlToRedirect){
-        if(!localStorage.getItem("telegamId")){
-
-          window.Telegram.Login.auth(
-            { bot_id: config.telegramBotId, request_access: true },
-            (data) => {
-
-              if (!data) {
-                return alert("Authentication Failed! Try again")
-              }
-
-              localStorage.setItem("telegramId", data.username)
-              window.open(urlToRedirect, "_blank");
-            }
-          );
-
-      } else{
-        window.open(urlToRedirect, "_blank");
-      }
-    }
   }
-};
+}
 </script>
-
-<style scoped>
-.actioncontent {
-  margin-top: 20px;
-  padding: 2px;
-  min-width: 500px;
-  height: 150px;
-  background: rgb(234, 241, 212);
-  border-radius: 20px;
-}
-
-.twitter {
-  color: rgb(255, 255, 255);
-  background-color: rgb(29, 161, 242);
-}
-.telegram {
-  color: rgb(255, 255, 255);
-  background-color: rgb(0, 136, 204);
-}
-</style>
