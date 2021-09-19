@@ -37,6 +37,7 @@
 	</b-card>
 </template>
 <script>
+import apiClient from "../../../mixins/apiClientMixin";
 import webAuth from "../../../mixins/twitterLogin";
 import eventBus from "../../../eventBus.js"
 export default {
@@ -51,6 +52,7 @@ export default {
 	},
 	data() {
 		return {
+			authToken: localStorage.getItem("authToken"),
 			visible: false,
 			done: this.data.isDone,
 		}
@@ -59,9 +61,9 @@ export default {
 		eventBus.$on(`disableInput${this.data._id}`, this.disableInput)
 	},
 	methods: {
-		update() {
-			if (!this.data.value) {
-				return alert("Error: Pls enter a valid input");
+		async update() {
+			if (!(await this.hasRetweeted())) {
+				return alert("Error: Invalid retweet");
 			} else {
 				this.$emit('input', this.data.value)
 			}
@@ -103,6 +105,44 @@ export default {
 				}
 			} catch (e) {
 				console.log(e);
+			}
+		},
+		async hasRetweeted() {
+			try {
+				const twitterId = localStorage.getItem('twitterId')
+				if (twitterId) {
+					let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
+					let headers = {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${this.authToken}`,
+					};
+
+					const body = {
+						tweetUrl: this.val,
+						userId: twitterId,
+						tweetText: this.value,
+						needUserDetails: false,
+						checkIfFollowed: false,
+						sourceScreenName: "",
+					};
+
+					const resp = await apiClient.makeCall({
+						method: "POST",
+						url: url,
+						body,
+						header: headers,
+					});
+
+					if (resp.data.hasTweetUrlVerified) {
+						return true;
+					} else {
+						alert(resp.data.error);
+						return false;
+					}
+				}
+			} catch (e) {
+				console.log(e);
+				return false;
 			}
 		},
 	}
