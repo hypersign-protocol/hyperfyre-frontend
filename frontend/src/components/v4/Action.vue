@@ -1,47 +1,20 @@
 <template>
   <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px;">
-    <b-card no-body class="action-wrap">
-      <b-card-header role="tab">
-        <b-row v-b-toggle.accordion-1>
-          <b-col cols="1" sm="1" md="1">
-            <img src="../../assets/person-fill.svg" height="25px">
-          </b-col>
-          <b-col cols="9" sm="9" class="text-left" md="9">
-            <div class="text">Your Profile</div>
-          </b-col>
-        </b-row>
-      </b-card-header>
-      <b-collapse id="accordion-1" accordion="my-accordion" role="tabpanel">
-        <b-card-body class="user-details" v-if="user">
-          <b-row>
-            <b-col cols="12" sm="3" md="3">
-              <div class="title text-left mb-1">Username</div>
-              <div class="text text-left">{{user.name}}</div>
-            </b-col>
-            <b-col cols="12" sm="4" md="4">
-              <div class="title text-left mb-1">Email</div>
-              <div class="text text-left">{{user.email}}</div>
-            </b-col>
-            <b-col cols="12" sm="5" md="5">
-              <div class="title text-left mb-1">DID</div>
-              <div class="text text-left">{{user.id}}</div>
-            </b-col>
-          </b-row>
-        </b-card-body>
-      </b-collapse>
-    </b-card>
+    <Profile />
     <template v-for="(actionItem,index) in ActionSchema">
       <component :is="CapitaliseString(actionItem.type)" :key="index" :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
     </template>
   </div>
 </template>
 <script>
+import Profile from "./ActionInputs/Profile.vue";
 import TwitterFollow from "./ActionInputs/TwitterFollow.vue";
 import TwitterRetweet from "./ActionInputs/TwitterRetweet.vue";
 import TelegramJoin from "./ActionInputs/TelegramJoin.vue";
 import InputText from "./ActionInputs/InputText.vue";
 import BlockchainEth from "./ActionInputs/BlockchainEth.vue";
 import InputDate from "./ActionInputs/InputDate.vue";
+import InputNumber from "./ActionInputs/InputNumber.vue";
 import eventBus from "../../eventBus.js"
 import apiClient from "../../mixins/apiClientMixin";
 import config from "../../config";
@@ -54,12 +27,17 @@ export default {
     }
   },
   components: {
+    Profile,
     TwitterFollow,
     TwitterRetweet,
     TelegramJoin,
     InputText,
     BlockchainEth,
-    InputDate
+    InputDate,
+    InputNumber
+  },
+  mounted(){
+    eventBus.$emit('loadUserProfileData');
   },
   data() {
     return {

@@ -21,6 +21,7 @@
       <div class="content-wrapper">
         <router-view />
       </div>
+      <p class="footer">Powered By: HyperSign</p>
     </div>
     <notifications group="foo" />
   </div>
@@ -162,22 +163,6 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 2px 0px,
     rgba(0, 0, 0, 0.02) 0px 3px 1px -2px, rgba(0, 0, 0, 0.01) 0px 1px 5px 0px;
 }
-
-/*
-.nav-style {
-  text-align: left;
-  background-color: rgb(58, 58, 58);
-  padding-bottom: 10px;
-  margin-bottom: 50px;
-}
-.nav-style .nav-logo {
-  z-index: 10;
-  padding: 15px 30px;
-  width: 25%;
-  text-align: center;
-  background-color: #fff;
-  border-bottom-right-radius: 20px;
-} */
 .rightAlign {
   text-align: end;
 }
@@ -193,13 +178,6 @@ export default {
   margin-left: 5px;
 }
 
-#app {
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  min-height: 100vh;
-  background: #f6f6f687;
-}
 
 .subtitle {
   padding-left: 10px;

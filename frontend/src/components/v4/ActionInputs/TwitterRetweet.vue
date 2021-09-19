@@ -1,19 +1,19 @@
 <template>
 	<b-card no-body class="action-wrap">
-		<b-card-header role="tab">
-			<b-row :class="visible ? null : 'collapsed'" :aria-expanded="visible ? 'true' : 'false'" :aria-controls="`collapse-${idValue}`" @click="visible = !visible">
+		<b-card-header :class="visible ? null : 'collapsed'" :aria-expanded="visible ? 'true' : 'false'" :aria-controls="`collapse-${idValue}`" @click="visible = !visible">
+			<b-row>
 				<b-col cols="1" sm="1" md="1">
 					<img src="../../../assets/twitter-4.svg" height="25px">
 				</b-col>
-				<b-col cols="9" sm="9" class="border-right text-left" md="9">
+				<b-col cols="9" sm="9" class="text-left" md="9">
 					<div class="text text-capitalize">{{data.title}}</div>
 				</b-col>
 				<b-col cols="2" sm="2" md="2">
-					<b-badge variant="warning" @click="update()" v-if="!data.isDone">
+					<b-badge class="btn-score" @click="update()" v-if="!done">
 						<img src="../../../assets/plus.svg">
 						{{data.score}}
 					</b-badge>
-					<img src="../../../assets/check-circle-fill.svg" height="25px" v-if="data.isDone">
+					<img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done">
 				</b-col>
 			</b-row>
 		</b-card-header>
@@ -22,12 +22,13 @@
 				<b-row>
 					<b-col cols="12" sm="12" md="12">
 						<div class="follow">
-							<button :disabled="data.isDone" @click="
+							<button :disabled="done" @click="
             handleTwitterLogin('https://twitter.com/intent/tweet?text=' + data.value)
           " class="btn btn-outline-twitter text-black">
 								<img src="../../../assets/twitter.svg">
 								Retweet
 							</button>
+							<b-form-input type="text" :placeholder="data.title" v-model="data.value" :disabled="data.isDone" :required="data.isManadatory"></b-form-input>
 						</div>
 					</b-col>
 				</b-row>
@@ -51,7 +52,7 @@ export default {
 	data() {
 		return {
 			visible: false,
-			done: false,
+			done: this.data.isDone,
 		}
 	},
 	mounted() {

@@ -3,10 +3,10 @@
     <b-row class="login-wrap">
       <b-col md="12">
         <b-card-body>
-          <b-card-text>
+          <b-card-text class="w-100 text-center">
             <template v-if="QRRefresh">
               <div class="alert alert-warning" role="alert">
-                Session expired. <a href="#" class="alert-link" @click="reloadQR">Click to reload.</a>
+                Session expired. <a href="#" class="ml-2 alert-link" @click="reloadQR">Click to reload.</a>
               </div>
             </template>
             <template v-else-if="value && value != ''">

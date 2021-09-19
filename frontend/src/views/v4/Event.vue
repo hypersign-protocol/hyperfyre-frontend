@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card no-body class="mx-auto overflow-hidden mt-3" style="max-width: 600px;">
+    <b-card no-body class="mx-auto overflow-hidden mt-3 border-0" style="max-width: 600px;">
       <Metrics :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0" :totalEntries="eventData && eventData.count ? eventData.count : 0" :timeLeft="timeLeft" />
       <Banner :eventName="eventData.projectName" :themeColor="eventData.themeColor" :fontColor="eventData.fontColor" :fromDate="new Date(eventData.fromDate).toLocaleString()" :toDate="new Date(eventData.toDate).toLocaleString()" :logoUrl="eventData.logoUrl" />
       <template v-if="authToken == '' || authToken == null">
@@ -8,7 +8,8 @@
       </template>
     </b-card>
     <template v-if="authToken != '' && authToken != null">
-      <Action :ActionSchema="eventActionsToShow" @UserUpdateEvent="updateUserData" />
+      <EventIsOver v-if="!eventData.projectStatus" />
+      <Action v-if="eventData.projectStatus" :ActionSchema="eventActionsToShow" @UserUpdateEvent="updateUserData" />
     </template>
     <!--  <Metrics :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0" :totalEntries="eventData && eventData.count ? eventData.count : 0" :timeLeft="timeLeft" class="metric" />
     <Banner :eventName="eventData.projectName" :themeColor="eventData.themeColor" :fontColor="eventData.fontColor" :fromDate="new Date(eventData.fromDate).toLocaleString()" :toDate="new Date(eventData.toDate).toLocaleString()" />
@@ -25,6 +26,7 @@
 <script>
 import Banner from "../../components/v4/Banner.vue";
 import Login from "../../components/v4/Login.vue";
+import EventIsOver from "../../components/v4/EventIsOver.vue";
 import Action from "../../components/v4/Action.vue";
 import Metrics from "../../components/v4/Metrics.vue";
 import apiClient from "../../mixins/apiClientMixin";
@@ -34,7 +36,8 @@ export default {
     Banner,
     Login,
     Action,
-    Metrics
+    Metrics,
+    EventIsOver
   },
   data() {
     return {
