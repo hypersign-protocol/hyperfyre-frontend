@@ -24,7 +24,7 @@
 						<div class="follow">
 							<button :disabled="done" @click="
             handleTwitterLogin('https://twitter.com/intent/tweet?text=' + data.value)
-          " class="btn btn-outline-twitter text-black">
+          " class="btn btn-outline-twitter text-black mb-2">
 								<img src="../../../assets/twitter.svg">
 								Retweet
 							</button>

@@ -41,17 +41,13 @@ export default {
 		}
 	},
 	mounted() {
-		eventBus.$on('loadUserProfileData', this.load)
+		this.load()
 	},
 	methods: {
 		async load() {
-			debugger
-			setTimeout(function() {
-				if (localStorage.getItem('user')) {
-					let _this = this
-					_this.user = JSON.parse(localStorage.getItem('user'))
-				}
-			}, 1000);
+			if (localStorage.getItem('user')) {
+				this.user = JSON.parse(localStorage.getItem('user'))
+			}
 		}
 	}
 }

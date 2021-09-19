@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <NavBar title="HyperFyre" :show="showUserNav"/>
+    <NavBar title="HyperFyre" :show="showUserNav" />
     <div :class="[
         showNavbar & !showUserNav
           ? isSidebarCollapsed
@@ -21,7 +21,7 @@
       <div class="content-wrapper">
         <router-view />
       </div>
-      <p class="footer">Powered By: HyperSign</p>
+      <div class="footer">Powered By: <a href="https://hypersign.id/" target="_blank"> HyperSign</a></div>
     </div>
     <notifications group="foo" />
   </div>
@@ -30,7 +30,7 @@
 // Ref:  fa icons:  https://fontawesome.com/
 import NavBar from "./components/v4/NavBar.vue"
 export default {
-  components:{
+  components: {
     NavBar
   },
   data() {
@@ -163,6 +163,7 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 2px 0px,
     rgba(0, 0, 0, 0.02) 0px 3px 1px -2px, rgba(0, 0, 0, 0.01) 0px 1px 5px 0px;
 }
+
 .rightAlign {
   text-align: end;
 }
