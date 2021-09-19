@@ -1,5 +1,5 @@
 <template>
-    <!-- <div>
+<!-- <div>
     <div class="card">
         <p><span>{{ userScore }}</span></p>
         <p>Your Score</p>
@@ -16,11 +16,11 @@
     <b-row class="metrics-info">
         <b-col cols="4" sm="4" class="p-4 border-right" md="4">
             <div class="number">{{ userScore }}</div>
-            <div class="text">Score</div>
+            <div class="text">Your Score</div>
         </b-col>
         <b-col cols="4" sm="4" class="p-4 border-right" md="4">
             <div class="number">{{ totalEntries }}</div>
-            <div class="text">Entries</div>
+            <div class="text">Total Entries</div>
         </b-col>
         <b-col cols="4" sm="4" class="p-4" md="4">
             <div class="number">{{ timeLeft}}</div>
