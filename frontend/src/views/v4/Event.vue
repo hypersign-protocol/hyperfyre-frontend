@@ -30,6 +30,7 @@ import EventIsOver from "../../components/v4/EventIsOver.vue";
 import Action from "../../components/v4/Action.vue";
 import Metrics from "../../components/v4/Metrics.vue";
 import apiClient from "../../mixins/apiClientMixin";
+import eventBus from "../../eventBus.js"
 export default {
   name: "Test",
   components: {
@@ -89,6 +90,7 @@ export default {
     async updateAuthentication(authToken) {
       console.log('Authtoke event recieved authToken =' + authToken)
       this.authToken = authToken;
+      eventBus.$emit('getAuthToken', authToken)
       await this.fetchUserDetails();
       this.fetchUserInfoOnLogin();
 
@@ -146,7 +148,7 @@ export default {
     },
     async fetchUserInfoOnLogin() {
       if (this.authToken != "" && this.authToken && this.userAuthData.email) {
-         this.userProfileData = this.userAuthData
+        this.userProfileData = this.userAuthData
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?email=${this.userAuthData.email}&projectId=${this.eventData._id}`;
         let headers = {
           "Content-Type": "application/json",

@@ -9,6 +9,7 @@
 	</b-navbar>
 </template>
 <script>
+import eventBus from "../../eventBus.js"
 export default {
 	name: 'NavBar',
 	props: {
@@ -24,17 +25,18 @@ export default {
 	data: () => ({
 		authToken: ''
 	}),
-	created() {
+	mounted() {
+		eventBus.$on('getAuthToken', this.setAuth)
 		if (localStorage.getItem('authToken')) {
 			this.authToken = localStorage.getItem("authToken")
 		}
 	},
 	methods: {
-
+		async setAuth(data) {
+			this.authToken = data
+		},
 		logout() {
-			localStorage.removeItem('user')
-			localStorage.removeItem('authToken')
-			localStorage.removeItem('twitterId')
+			localStorage.clear();
 			this.$router.go()
 		}
 	}
