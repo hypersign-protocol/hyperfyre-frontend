@@ -10,7 +10,7 @@
               </div>
             </template>
             <template v-else-if="value && value != ''">
-              <b-button variant="warning" class="btn-login" @click.prevent="openWallet()">Login with HyperSign</b-button>
+              <b-button variant="warning" class="btn-login" @click.prevent="openWallet()">Use Web Wallet</b-button>
             </template>
           </b-card-text>
         </b-card-body>

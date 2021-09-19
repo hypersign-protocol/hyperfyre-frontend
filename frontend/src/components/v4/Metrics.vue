@@ -16,15 +16,15 @@
     <b-row class="metrics-info">
         <b-col cols="4" sm="4" class="p-4 border-right" md="4">
             <div class="number">{{ userScore }}</div>
-            <div class="text">Your Score</div>
+            <div class="">Your Score</div>
         </b-col>
         <b-col cols="4" sm="4" class="p-4 border-right" md="4">
             <div class="number">{{ totalEntries }}</div>
-            <div class="text">Total Entries</div>
+            <div class="">Total Entries</div>
         </b-col>
         <b-col cols="4" sm="4" class="p-4" md="4">
             <div class="number">{{ timeLeft}}</div>
-            <div class="text">Days Left</div>
+            <div class="">Days Left</div>
         </b-col>
     </b-row>
 </template>
