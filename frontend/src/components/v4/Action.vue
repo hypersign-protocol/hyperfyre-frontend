@@ -1,6 +1,6 @@
 <template>
   <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px;">
-    <Profile />
+    <Profile :user="userProfile"/>
     <template v-for="(actionItem,index) in ActionSchema">
       <component :is="CapitaliseString(actionItem.type)" :key="index" :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
     </template>
@@ -24,6 +24,10 @@ export default {
     ActionSchema: {
       required: true,
       type: Array
+    },
+    userProfile:{
+      required: true,
+      type: Object
     }
   },
   components: {

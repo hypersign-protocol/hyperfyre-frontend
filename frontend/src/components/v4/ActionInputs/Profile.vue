@@ -34,21 +34,16 @@
 import eventBus from "../../../eventBus.js"
 export default {
 	name: 'Profile',
+	props: {
+		user: {
+			required: true,
+			type: Object
+		}
+	},
 	data() {
 		return {
-			visible: false,
-			user: {}
+			visible: false
 		}
 	},
-	mounted() {
-		this.load()
-	},
-	methods: {
-		async load() {
-			if (localStorage.getItem('user')) {
-				this.user = JSON.parse(localStorage.getItem('user'))
-			}
-		}
-	}
 }
 </script>

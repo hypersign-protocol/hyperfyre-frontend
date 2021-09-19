@@ -9,7 +9,7 @@
     </b-card>
     <template v-if="authToken != '' && authToken != null">
       <EventIsOver v-if="!eventData.projectStatus" />
-      <Action v-if="eventData.projectStatus" :ActionSchema="eventActionsToShow" @UserUpdateEvent="updateUserData" />
+      <Action v-if="eventData.projectStatus" :userProfile="userProfileData" :ActionSchema="eventActionsToShow" @UserUpdateEvent="updateUserData" />
     </template>
     <!--  <Metrics :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0" :totalEntries="eventData && eventData.count ? eventData.count : 0" :timeLeft="timeLeft" class="metric" />
     <Banner :eventName="eventData.projectName" :themeColor="eventData.themeColor" :fontColor="eventData.fontColor" :fromDate="new Date(eventData.fromDate).toLocaleString()" :toDate="new Date(eventData.toDate).toLocaleString()" />
@@ -48,6 +48,7 @@ export default {
       userAuthData: null,
       eventActionsToShow: [],
       eventSlug: "",
+      userProfileData: {}
     }
   },
   computed: {
@@ -115,6 +116,7 @@ export default {
             ...res.data.message
           }
           localStorage.setItem("user", JSON.stringify(this.userAuthData));
+          this.userProfileData = JSON.parse(localStorage.getItem('user'))
         } else {
           console.log("Invlaid resposen")
         }
@@ -144,6 +146,7 @@ export default {
     },
     async fetchUserInfoOnLogin() {
       if (this.authToken != "" && this.authToken && this.userAuthData.email) {
+         this.userProfileData = this.userAuthData
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?email=${this.userAuthData.email}&projectId=${this.eventData._id}`;
         let headers = {
           "Content-Type": "application/json",
