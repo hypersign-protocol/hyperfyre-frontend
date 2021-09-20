@@ -186,6 +186,9 @@ ul.social-links li:hover {
         position: relative;
         right: 10px;
     }
+    .nav-bar .navbar-brand img {
+        height: 40px;
+    }
 }
 /*Styles added by Hermit*/
 

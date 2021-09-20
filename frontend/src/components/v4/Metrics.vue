@@ -3,13 +3,13 @@
     <b-col cols="4" sm="4" class="border-right" md="4">
       <div class="py-4">
         <div class="number">{{ userScore }}</div>
-        <div class="text">Score</div>
+        <div class="text">Your Score</div>
       </div>
     </b-col>
     <b-col cols="4" sm="4" class="border-right" md="4">
       <div class="py-4">
         <div class="number">{{ totalEntries }}</div>
-        <div class="text">Entries</div>
+        <div class="text">Total Entries</div>
       </div>
     </b-col>
     <b-col cols="4" sm="4" md="4">
