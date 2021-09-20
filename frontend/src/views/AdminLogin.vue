@@ -87,6 +87,7 @@ h5 span {
   padding-bottom: 10px;
   margin: 0 auto;
   border-top: 2px solid rgb(120, 120, 243);
+  text-align: center;
 }
 
 .QRRefresh{

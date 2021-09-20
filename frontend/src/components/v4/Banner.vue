@@ -1,17 +1,12 @@
 <template>
-  <div
-    class="banner"
-    :style="
-      `background-color: ${themeColor}; color: ${fontColor} !important; border-color:${fontColor}`
-    "
-  >
-    <h4>[Banner Component]</h4>
-    <h3>{{ eventName }}</h3>
-
-    <p>Event's end date: {{ toDate }}</p>
-  </div>
+  <b-row>
+    <b-col md="12">
+      <b-card no-body class="banner rounded-0" :img-src="logoUrl" img-alt="Card Image">
+      <!-- <b-card no-body class="banner rounded-0" img-src="https://miro.medium.com/max/1400/0*taSOJIwx3Dmv_zhx" img-alt="Card Image"> -->
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
-
 <script>
 export default {
   props: {
@@ -20,18 +15,7 @@ export default {
     fontColor: String,
     fromDate: String,
     toDate: String,
+    logoUrl: String
   },
 };
 </script>
-
-<style scoped>
-.banner {
-  padding: 10px;
-  height: 300px;
-  width: 730px;
-  margin-left: 35%;
-  margin-right: 30%;
-  background: rgb(204, 203, 203);
-  border-radius: 20px;
-}
-</style>

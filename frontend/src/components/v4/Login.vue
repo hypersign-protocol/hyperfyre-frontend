@@ -1,32 +1,42 @@
 <template>
-  <div class="logincontent">
-    <h4>[Login Component]</h4>
-    <p>
-      Login With Hypersign
-      <div v-if="QRRefresh" class="QRRefresh">
-        <i @click="reloadQR" class="fas fa-redo" style="font-size: xx-large; color: gray;"></i>
-        <p>
-          <label style="font-size:small; color:grey; margin-top:1%">
-            Session expired. Click to reload.
-          </label>
-        </p>
-      </div>
-
-      <a
-        v-else-if="value && value != ''"
-        class="btn btn-hypersign text-white "
-        href="#"
-        :style="
+  <div>
+    <b-row class="login-wrap">
+      <b-col md="12">
+        <b-card-body>
+          <b-card-text class="w-100 text-center">
+            <template v-if="QRRefresh">
+              <div class="alert alert-warning" role="alert">
+                Session expired. <a href="#" class="ml-2 alert-link" @click="reloadQR">Click to reload.</a>
+              </div>
+            </template>
+            <template v-else-if="value && value != ''">
+              <b-button variant="warning" class="btn-login" @click.prevent="openWallet()">Use Web Wallet</b-button>
+            </template>
+          </b-card-text>
+        </b-card-body>
+      </b-col>
+    </b-row>
+   <!--  <div class="logincontent">
+      <h4>[Login Component]</h4>
+      <p>
+        Login With Hypersign
+        <div v-if="QRRefresh" class="QRRefresh">
+          <i @click="reloadQR" class="fas fa-redo" style="font-size: xx-large; color: gray;"></i>
+          <p>
+            <label style="font-size:small; color:grey; margin-top:1%">
+              Session expired. Click to reload.
+            </label>
+          </p>
+        </div>
+        <a v-else-if="value && value != ''" class="btn btn-hypersign text-white " href="#" :style="
           `background-color: ${themeColor}; color: ${fontColor} !important; border-color:${fontColor}`
-        "
-        @click.prevent="openWallet()"
-      >
-        <div style="font-size: smaller;">USE WEB WALLET</div>
-      </a>      
-    </p>
+        " @click.prevent="openWallet()">
+          <div style="font-size: smaller;">USE WEB WALLET</div>
+        </a>
+      </p>
+    </div> -->
   </div>
 </template>
-
 <script>
 export default {
   props: {
@@ -54,9 +64,9 @@ export default {
       parsedUrl = url.parse(baseUrl);
 
       websocketUrl =
-        parsedUrl.protocol === "https:"
-          ? `wss://${parsedUrl.host}`
-          : `ws://${parsedUrl.host}`;
+        parsedUrl.protocol === "https:" ?
+        `wss://${parsedUrl.host}` :
+        `ws://${parsedUrl.host}`;
     } catch (e) {
       websocketUrl = "ws://localhost:3003";
     }
@@ -119,7 +129,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .logincontent {
   margin-top: 20px;
