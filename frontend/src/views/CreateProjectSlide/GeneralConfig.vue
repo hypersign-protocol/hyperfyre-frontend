@@ -40,7 +40,7 @@
                 <label for="projectName" class="col-form-label">Event Name: </label>
             </div>
             <div class=" col-lg-7 col-md-7 px-0">
-                <input v-model="project.projectName" type="text" placeholder="Event Name" id="projectName" class="form-control w-100" >
+                <input v-model="project.projectName" type="text" placeholder="Demo Giveaway" id="projectName" class="form-control w-100" >
             </div>   
     </div>
 
@@ -59,10 +59,10 @@
 
     <div class="row g-3 align-items-center w-100 mt-4">
             <div class="col-lg-5 col-md-5 text-left">
-                <label for="logoUrl" class="col-form-label">Logo URL: </label>
+                <label for="logoUrl" class="col-form-label">Banner URL: </label>
             </div>
             <div class="col-lg-7 col-md-7 px-0">
-                <input v-model="project.logoUrl" type="text" placeholder="Logo URL" id="logoUrl" class="form-control w-100" >
+                <input v-model="project.logoUrl" type="text" placeholder="of size 600x300" id="logoUrl" class="form-control w-100" >
             </div>  
     </div>
 
@@ -106,7 +106,7 @@
 
 
       
-    <div class="row g-3 align-items-center w-100 mt-4">
+    <!-- <div class="row g-3 align-items-center w-100 mt-4">
             <div class="col-lg-5 col-md-5 text-left">
                 <label for="themeColor" class="col-form-label">Theme Color: </label>
             </div>
@@ -124,7 +124,7 @@
             <div class="col-lg-7 col-md-7 px-0">
                 <input @change="handleColors"  name="fontColor" v-model="fontColorLocal" type="text"  :placeholder="fontColorDefault" id="fontColor" class="form-control w-100" >
             </div>  
-    </div>
+    </div> -->
 
     
 </b-form>
