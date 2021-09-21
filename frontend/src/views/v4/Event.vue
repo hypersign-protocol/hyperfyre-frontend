@@ -11,16 +11,6 @@
       <EventIsOver v-if="!eventData.projectStatus" />
       <Action v-if="eventData.projectStatus" :userProfile="userProfileData" :ActionSchema="eventActionsToShow" @UserUpdateEvent="updateUserData" />
     </template>
-    <!--  <Metrics :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0" :totalEntries="eventData && eventData.count ? eventData.count : 0" :timeLeft="timeLeft" class="metric" />
-    <Banner :eventName="eventData.projectName" :themeColor="eventData.themeColor" :fontColor="eventData.fontColor" :fromDate="new Date(eventData.fromDate).toLocaleString()" :toDate="new Date(eventData.toDate).toLocaleString()" />
-    <div class="content" v-if="authToken != '' && authToken != null">
-      <div v-for="eachAction in eventActionsToShow" :key="eachAction._id">
-        <Action :actionType="eachAction.type" :actionId="eachAction._id" :placeHolder="eachAction.title" :eventId="eachAction.eventId" :title="eachAction.title" :score="eachAction.score" :isDone="eachAction.isDone" :value="eachAction.value" @UserUpdateEvent="updateUserData" />
-      </div>
-    </div>
-    <div class="content" v-else>
-      <Login :themeColor="eventData.themeColor" :fontColor="eventData.fontColor" @AuthTokenUpdateEvent="updateAuthentication" />
-    </div> -->
   </div>
 </template>
 <script>
@@ -60,47 +50,47 @@ export default {
         const fromDateParse = new Date(new Date().toISOString()) // now
 
         return Math.ceil((toDateParse - fromDateParse) / (1000 * 60 * 60 * 24))
+      } else{
+        return 0;
       }
     }
   },
   async created() {
-    this.authToken = localStorage.getItem("authToken");
-    const userDetail = localStorage.getItem("user")
-    if (userDetail) {
-      this.userAuthData = JSON.parse(userDetail)
-    } else {
-      console.log(userDetail)
-      console.log("CREATED():: fetching userDetail")
-      await this.fetchUserDetails();
+    try{
+      this.authToken = localStorage.getItem("authToken");
+      const userDetail = localStorage.getItem("user")
+      if (userDetail) {
+        this.userAuthData = JSON.parse(userDetail)
+      } else {
+        await this.fetchUserDetails();
+      }
+
+      if (this.$route.params["slug"]) {
+        this.eventSlug = this.$route.params["slug"];
+        await this.fetchEventData();
+        await this.fetchUserInfoOnLogin();
+      }
+    }catch(e){
+      alert("Error occurred: " + e.message);
     }
-
-    if (this.$route.params["slug"]) {
-      this.eventSlug = this.$route.params["slug"];
-      console.log(this.eventSlug)
-      await this.fetchEventData();
-      await this.fetchUserInfoOnLogin();
-    }
-
-
   },
   async updated() {
 
   },
   methods: {
     async updateAuthentication(authToken) {
-      console.log('Authtoke event recieved authToken =' + authToken)
-      this.authToken = authToken;
-      eventBus.$emit('getAuthToken', authToken)
-      await this.fetchUserDetails();
-      this.fetchUserInfoOnLogin();
-
+      try{
+        this.authToken = authToken;
+        eventBus.$emit('getAuthToken', authToken)
+        await this.fetchUserDetails();
+        this.fetchUserInfoOnLogin();
+      }catch(e){
+        alert("Error occurred: " + e.message);
+      }
     },
-
     async fetchUserDetails() {
       if (this.authToken) {
-
         const url = `${this.$config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
-        console.log(url)
         let headers = {
           Authorization: `Bearer ${this.authToken}`,
         }
@@ -187,7 +177,6 @@ export default {
       }
     },
     updateUserData(userEventData) {
-      console.log("Update User data event  received")
       if (userEventData) {
         this.userEventData = {
           ...userEventData

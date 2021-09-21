@@ -68,25 +68,30 @@ export default {
 			this.done = data
 		},
 		handleTelegramLogin(urlToRedirect) {
-			if (!localStorage.getItem("telegramId")) {
-				window.Telegram.Login.auth({ bot_id: config.telegramBotId, request_access: true },
-					(data) => {
+			try{
+				if (!localStorage.getItem("telegramId")) {
+					window.Telegram.Login.auth({ bot_id: config.telegramBotId, request_access: true },
+						(data) => {
 
-						if (!data) {
-							return alert("Authentication Failed! Try again")
+							if (!data) {
+								return alert("Authentication Failed! Try again")
+							}
+							if(data.username){
+								localStorage.setItem("telegramId", data.username)
+								window.open(urlToRedirect, "_blank");
+							} else{
+								return alert("Could not fetch the username after telegram authentication")
+							}
 						}
-						if(data.username){
-							localStorage.setItem("telegramId", data.username)
-							window.open(urlToRedirect, "_blank");
-						} else{
-							return alert("Could not fetch the username after telegram authentication")
-						}
-					}
-				);
+					);
 
-			} else {
-				window.open(urlToRedirect, "_blank");
+				} else {
+					window.open(urlToRedirect, "_blank");
+				}
+			}catch(e){
+				alert("Error occurred: " + e.message);
 			}
+			
 		}
 	}
 
