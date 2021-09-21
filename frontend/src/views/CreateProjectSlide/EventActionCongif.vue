@@ -25,10 +25,10 @@
         </div>
         <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType != 'SOCIAL'">
           <div class=" text-left col-lg-5 col-md-5 text-left">
-              <label for="placeholder" class="col-form-label">Place Holder: </label>
+              <label for="placeHolder" class="col-form-label">Place Holder: </label>
           </div>
           <div class="col-lg-7 col-md-7 px-0">
-              <input   v-model="selected.placeholder" type="text"   id="placeholder" class="form-control w-100" >
+              <input   v-model="selected.placeHolder" type="text"   id="placeHolder" class="form-control w-100" >
           </div>  
         </div>
 
@@ -132,7 +132,7 @@ export default {
       selected :{
             "type": null,
             "title": "",
-            "placeholder": "",
+            "placeHolder": "",
             "isManadatory": true,
             "value": "",
             "score": 10,
@@ -146,7 +146,7 @@ export default {
       let clearData = {
             "type": null,
             "title": "",
-            "placeholder": "",
+            "placeHolder": "",
             "isManadatory": true,
             "value": "",
             "score": 10
@@ -187,6 +187,8 @@ export default {
       }
 
     },
+
+  
       
     handleEventActionDelete(){
 
