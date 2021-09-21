@@ -264,7 +264,7 @@ i {
               title="Telegram handle"
             >
               <a
-                :href="`https://t.me/${project.telegramHandle}`"
+                :href="`https://telegram.me/${project.telegramHandle}`"
                 target="__blank"
                 ><i class="fab fa-telegram-plane"></i
               ></a>

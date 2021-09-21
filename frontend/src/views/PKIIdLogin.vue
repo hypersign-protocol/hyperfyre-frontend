@@ -320,7 +320,7 @@ h5 span {
           class="text-right mt-3  text-dark text-reset fw-bold"
           style="font-weight:600"
           target="_blank"
-          :href="`https://t.me/${projectDetails.telegramHandle}`"
+          :href="`https://telegram.me/${projectDetails.telegramHandle}`"
           >HELP ?</a
         >
 

@@ -22,7 +22,7 @@
 				<b-row>
 					<b-col cols="12" sm="12" md="12">
 						<div class="follow">
-							<button :disabled="done" @click="handleTelegramLogin(`https://t.me/${data.value}`)" class="btn btn-outline-telegram">
+							<button :disabled="done" @click="handleTelegramLogin(`https://telegram.me/${data.value}`)" class="btn btn-outline-telegram">
 								<img src="../../../assets/telegram.svg">
 								Join @{{data.value}}
 							</button>
