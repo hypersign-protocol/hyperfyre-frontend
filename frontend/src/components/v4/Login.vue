@@ -16,25 +16,6 @@
         </b-card-body>
       </b-col>
     </b-row>
-   <!--  <div class="logincontent">
-      <h4>[Login Component]</h4>
-      <p>
-        Login With Hypersign
-        <div v-if="QRRefresh" class="QRRefresh">
-          <i @click="reloadQR" class="fas fa-redo" style="font-size: xx-large; color: gray;"></i>
-          <p>
-            <label style="font-size:small; color:grey; margin-top:1%">
-              Session expired. Click to reload.
-            </label>
-          </p>
-        </div>
-        <a v-else-if="value && value != ''" class="btn btn-hypersign text-white " href="#" :style="
-          `background-color: ${themeColor}; color: ${fontColor} !important; border-color:${fontColor}`
-        " @click.prevent="openWallet()">
-          <div style="font-size: smaller;">USE WEB WALLET</div>
-        </a>
-      </p>
-    </div> -->
   </div>
 </template>
 <script>

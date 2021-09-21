@@ -118,6 +118,7 @@ export default {
           return alert("Error: some error occurred");
         }
       } catch (e) {
+        alert("Error occurred: " + e.message);
         console.log(e);
       }
     },
