@@ -28,7 +28,7 @@
 								<img src="../../../assets/twitter.svg">
 								Retweet
 							</button>
-							<b-form-input type="text" :placeholder="data.title" v-model="data.value" :disabled="data.isDone" :required="data.isManadatory"></b-form-input>
+							<b-form-input type="text" :placeholder="data.placeHolder" v-model="data.value" :disabled="data.isDone" :required="data.isManadatory"></b-form-input>
 						</div>
 					</b-col>
 				</b-row>

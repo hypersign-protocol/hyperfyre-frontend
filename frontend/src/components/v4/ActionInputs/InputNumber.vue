@@ -22,7 +22,7 @@
 				<b-row>
 					<b-col cols="12" sm="12" md="12">
 						<div class="follow">
-							<b-form-input type="number" :placeholder="data.title" v-model="data.value" :disabled="done" :required="data.isManadatory"></b-form-input>
+							<b-form-input type="number" :placeholder="data.placeHolder" v-model="data.value" :disabled="done" :required="data.isManadatory"></b-form-input>
 						</div>
 					</b-col>
 				</b-row>
