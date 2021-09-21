@@ -59,10 +59,10 @@ export default {
 		update() {
 			console.log('Inside update')
 			const tgIdInStore = localStorage.getItem("telegamId");
+			console.log('Before emitting the telegram bot ' + tgIdInStore)
 			if (!tgIdInStore || tgIdInStore == "undefined") {
 				return alert("Error: Please authorize telegram to proceed")
 			} else {
-				console.log('Before emitting the telegram bot ' + tgIdInStore)
 				this.$emit('input', tgIdInStore)
 	 		}
 		},
