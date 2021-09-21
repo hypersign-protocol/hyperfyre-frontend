@@ -101,7 +101,7 @@ export default {
           method: "POST",
         });
 
-        console.log(res)
+        //console.log(res)
 
         if (res && res.data) {
           this.userAuthData = {
@@ -110,10 +110,10 @@ export default {
           localStorage.setItem("user", JSON.stringify(this.userAuthData));
           this.userProfileData = JSON.parse(localStorage.getItem('user'))
         } else {
-          console.log("Invlaid resposen")
+          //console.log("Invlaid resposen")
         }
       } else {
-        console.log("fetchUserDetails() :  No authToken")
+        //console.log("fetchUserDetails() :  No authToken")
       }
     },
     async fetchEventData() {
@@ -126,7 +126,7 @@ export default {
         };
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
 
-        console.log(resp)
+        //console.log(resp)
 
         this.eventData = {
           ...resp.data
