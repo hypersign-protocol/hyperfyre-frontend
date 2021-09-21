@@ -22,7 +22,7 @@
 				<b-row>
 					<b-col cols="12" sm="12" md="12">
 						<div class="follow">
-							<button :disabled="done" @click="handleTelegramLogin(`https://t.me/${data.value}`)" class="btn btn-outline-telegram">
+							<button :disabled="done" @click="handleTelegramLogin(`https://telegram.me/${data.value}`)" class="btn btn-outline-telegram">
 								<img src="../../../assets/telegram.svg">
 								Join @{{data.value}}
 							</button>
@@ -57,11 +57,14 @@ export default {
 	},
 	methods: {
 		update() {
-			if (!localStorage.getItem("telegamId")) {
+			console.log('Inside update')
+			const tgIdInStore = localStorage.getItem("telegamId");
+			if (!tgIdInStore || tgIdInStore == "undefined") {
 				return alert("Error: Please authorize telegram to proceed")
 			} else {
-				this.$emit('input', localStorage.getItem("telegamId"))
-			}
+				console.log('Before emitting the telegram bot ' + tgIdInStore)
+				this.$emit('input', tgIdInStore)
+	 		}
 		},
 		disableInput(data) {
 			this.done = data
@@ -75,9 +78,12 @@ export default {
 						if (!data) {
 							return alert("Authentication Failed! Try again")
 						}
-
-						localStorage.setItem("telegramId", data.username)
-						window.open(urlToRedirect, "_blank");
+						if(data.username){
+							localStorage.setItem("telegramId", data.username)
+							window.open(urlToRedirect, "_blank");
+						} else{
+							return alert("Could not fetch the username after telegram authentication")
+						}
 					}
 				);
 

@@ -286,7 +286,7 @@ export default {
           renderBodyCell: ({ row, column, rowIndex }, h) => {
             return (
               <span class="text-bold" style="color:#1890ff;">
-                <a href={`https://t.me/${row.telegramHandle}`} target="_blank">
+                <a href={`https://telegram.me/${row.telegramHandle}`} target="_blank">
                   {row.telegramHandle}
                 </a>
               </span>
