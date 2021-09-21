@@ -57,10 +57,8 @@ export default {
 	},
 	methods: {
 		update() {
-			console.log('Inside update')
-			const tgIdInStore = localStorage.getItem("telegamId");
-			console.log('Before emitting the telegram bot ' + tgIdInStore)
-			if (!tgIdInStore || tgIdInStore == "undefined") {
+			const tgIdInStore = localStorage.getItem("telegramId");
+			if (!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) {
 				return alert("Error: Please authorize telegram to proceed")
 			} else {
 				this.$emit('input', tgIdInStore)
@@ -70,8 +68,7 @@ export default {
 			this.done = data
 		},
 		handleTelegramLogin(urlToRedirect) {
-			if (!localStorage.getItem("telegamId")) {
-
+			if (!localStorage.getItem("telegramId")) {
 				window.Telegram.Login.auth({ bot_id: config.telegramBotId, request_access: true },
 					(data) => {
 
