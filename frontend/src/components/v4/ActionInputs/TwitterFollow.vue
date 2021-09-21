@@ -24,11 +24,11 @@
 						<div class="follow">
 							<button :disabled="done" @click="
             handleTwitterLogin(
-              'https://twitter.com/' + data.value + '?ref_src=twsrc%5Etfw'
+              'https://twitter.com/' + twitter.sourceScreenName + '?ref_src=twsrc%5Etfw'
             )
           " class="btn btn-outline-twitter text-black">
 								<img src="../../../assets/twitter.svg">
-								Follow @{{data.value}}
+								Follow @{{twitter.sourceScreenName}}
 							</button>
 						</div>
 					</b-col>
@@ -58,12 +58,21 @@ export default {
 			authToken: localStorage.getItem("authToken"),
 			actions: [],
 			twitter: {
-				sourceScreenName: this.data.value,
+				sourceScreenName: "",
 				targetScreenName: "",
 			},
 		}
 	},
 	mounted() {
+		try{
+			if(this.data.value){
+				const twitter = JSON.parse(this.data.value)
+				this.twitter = { ...twitter };
+			}
+		}catch(e){
+			this.twitter.sourceScreenName = this.data.value;
+		}
+
 		eventBus.$on(`disableInput${this.data._id}`, this.disableInput)
 	},
 	methods: {
@@ -71,7 +80,9 @@ export default {
 			if (!(await this.hasFollowedTwitter())) {
 				return alert("Error: Please follow first");
 			} else {
-				this.$emit('input', this.twitter.targetScreenName)
+				this.$emit('input', JSON.stringify({
+					...this.twitter
+				}))
 			}
 		},
 		disableInput(data) {
@@ -91,7 +102,7 @@ export default {
 									authRes.accessToken,
 									async (err, user) => {
 										if (err) {
-											return alert("Something Went Wrong");
+											return alert("Error: Something Went Wrong");
 										}
 
 										console.log(user);
