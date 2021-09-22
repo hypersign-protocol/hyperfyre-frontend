@@ -55,14 +55,23 @@ export default {
 		update() {
 			if (!this.data.value) {
 				return alert("Error: Pls enter a valid input");
-			} else {
+			} 
+			if(this.data.value ==" ")
+			{
+				return alert("Error:Only whitespace is not allowed");
+			}
+			if(!this.data.value.match(/^[A-Za-z ]+$/))
+			{
+				return alert("Error:Characters other than alphabets are not allowed")
+			}
+			else {
 				this.$emit('input', this.data.value)
 			}
 		},
-		disableInput(data) {
+	    disableInput(data) {
 			this.done = data
 		}
 	}
-
 }
+
 </script>
