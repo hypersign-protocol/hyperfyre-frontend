@@ -55,7 +55,17 @@ export default {
 		update() {
 			if (!this.data.value) {
 				return alert("Error: Pls enter a valid input");
-			} else {
+			} 
+			if(this.data.value ==" ")
+			{
+				return alert("Error:Only whitespace is not allowed");
+			}
+			if(!this.data.value.match(/^0x[a-fA-F0-9]{40}$/g))
+			{
+				return alert("Error:It is not Ethereum wallet address")
+			}
+			
+			else {
 				this.$emit('input', this.data.value)
 			}
 		},
