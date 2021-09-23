@@ -32,3 +32,12 @@ export function isEmpty(str){
     }
     return false
 }
+
+
+
+export function isDate(date){
+    if(!date){
+      return false
+    }
+    return (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
+  }

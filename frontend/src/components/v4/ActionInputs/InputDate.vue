@@ -31,7 +31,8 @@
 	</b-card>
 </template>
 <script>
-import eventBus from "../../../eventBus.js"
+import eventBus from "../../../eventBus.js";
+import {  isDate } from "../../../mixins/fieldValidationMixin";
 export default {
 	name: 'InputDate',
 	props: {
@@ -54,8 +55,9 @@ export default {
 	},
 	methods: {
 		update() {
-			if (!this.data.value) {
-				return alert("Error: Pls enter a valid input");
+			if (!isDate(this.data.value)) {
+				this.data.value = "";
+				return alert("Error: Invalid date time");
 			} else {
 				this.$emit('input', this.data.value)
 			}
