@@ -89,8 +89,6 @@ export default {
 											return alert("Something Went Wrong");
 										}
 
-										console.log(user);
-
 										const twitterId = user.sub.split("|")[1];
 										localStorage.setItem("twitterId", twitterId);
 
