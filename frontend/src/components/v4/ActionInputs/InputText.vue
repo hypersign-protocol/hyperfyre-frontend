@@ -52,26 +52,34 @@ export default {
 		eventBus.$on(`disableInput${this.data._id}`, this.disableInput)
 	},
 	methods: {
-		update() {
+	update() {
+			if(!this.isFieldValid()){
+				return alert("Invalid Field");
+			}
+			this.$emit('input', this.data.value)
+
+		},
+		isFieldValid(){
 			if (!this.data.value) {
-				return alert("Error: Pls enter a valid input");
+				return false
 			} 
 			if(this.data.value ==" ")
 			{
-				return alert("Error:Only whitespace is not allowed");
+				return false
 			}
-			if(!this.data.value.match(/^[A-Za-z ]+$/))
+			if(this.data.value.match(/^[0-9]+$/))
 			{
-				return alert("Error:Characters other than alphabets are not allowed")
+				return false
 			}
-			else {
-				this.$emit('input', this.data.value)
+			if(!this.data.value.match(/^[A-Za-z 0-9]+$/))
+			{
+				return false
 			}
-		},
-	    disableInput(data) {
+			return true
+			},
+			disableInput(data) {
 			this.done = data
 		}
 	}
 }
-
 </script>
