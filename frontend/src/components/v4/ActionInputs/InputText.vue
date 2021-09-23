@@ -31,7 +31,8 @@
 	</b-card>
 </template>
 <script>
-import eventBus from "../../../eventBus.js"
+import eventBus from "../../../eventBus.js";
+import { isValidURL, isValidText, isEmpty } from "../../../mixins/fieldValidationMixin";
 export default {
 	name: 'InputText',
 	props: {
@@ -53,12 +54,25 @@ export default {
 	},
 	methods: {
 		update() {
-			if (!this.data.value) {
-				return alert("Error: Pls enter a valid input");
+			if (!this.isFieldValid()) {
+				this.data.value = "";
+				return alert("Error: Field value is invalid");
 			} else {
 				this.$emit('input', this.data.value)
 			}
 		},
+		isFieldValid() {
+			if(isEmpty(this.data.value)){
+				return false
+			}
+			if(isValidURL(this.data.value)){
+				return false;
+			}
+			if(!isValidText(this.data.value)){
+				return false
+			}
+			return true
+    	},
 		disableInput(data) {
 			this.done = data
 		}
