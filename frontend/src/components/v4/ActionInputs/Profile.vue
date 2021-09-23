@@ -26,12 +26,25 @@
 						<div class="text text-left">{{user.id}}</div>
 					</b-col>
 				</b-row>
+				<b-row v-if="referalLink">
+					<b-col cols="12" sm="12" md="12">
+						<div class="title text-left mb-1">Your Referral Link</div>
+						<div class="text text-left"> {{referalLink}} <span @click="copy" class="copy"><i class="far fa-copy"></i></span>  </div>
+					</b-col>
+				</b-row>
 			</b-card-body>
 		</b-collapse>
 	</b-card>
 </template>
+
+<style scoped>
+.copy{
+	padding:4px; font-size: large; cursor: pointer; color:grey
+}
+</style>
 <script>
 import eventBus from "../../../eventBus.js"
+import notificationMixin from "../../../mixins/notificationMixins";
 export default {
 	name: 'Profile',
 	props: {
@@ -42,8 +55,27 @@ export default {
 	},
 	data() {
 		return {
-			visible: false
+			visible: false,
+			referalLink: ""
 		}
 	},
+	updated(){
+		if(this.user.email){
+			this.referalLink = `${window.location.protocol + "//" + window.location.host + window.location.pathname}?referrer=${encodeURIComponent(this.user.email)}`
+		}
+	},
+	mixins: [notificationMixin],
+	methods: {
+		copy(){
+			if(this.referalLink){
+				navigator.clipboard.writeText(this.referalLink).then(() => {
+						this.notifySuccess('Text copied to clipboard');
+					})
+					.catch(err => {
+						this.notifyErr('Error in copying text: ', err);
+					});
+			}
+    	},
+	}
 }
 </script>
