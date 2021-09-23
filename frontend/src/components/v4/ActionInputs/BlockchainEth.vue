@@ -53,23 +53,27 @@ export default {
 	},
 	methods: {
 		update() {
+			if(!this.isFieldValid()){
+				return alert("Invalid Field");
+			}
+			this.$emit('input', this.data.value)
+
+		},
+		isFieldValid(){
 			if (!this.data.value) {
-				return alert("Error: Pls enter a valid input");
+				return false
 			} 
 			if(this.data.value ==" ")
 			{
-				return alert("Error:Only whitespace is not allowed");
+				return false
 			}
 			if(!this.data.value.match(/^0x[a-fA-F0-9]{40}$/g))
 			{
-				return alert("Error:It is not Ethereum wallet address")
+				return false
 			}
-			
-			else {
-				this.$emit('input', this.data.value)
-			}
-		},
-		disableInput(data) {
+			return true
+			},
+			disableInput(data) {
 			this.done = data
 		}
 	}
