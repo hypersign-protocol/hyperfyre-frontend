@@ -28,7 +28,7 @@
 								<img src="../../../assets/twitter.svg">
 								Retweet
 							</button>
-							<b-form-input type="text" :placeholder="data.placeHolder" v-model="data.value" :disabled="data.isDone" :required="data.isManadatory"></b-form-input>
+							<b-form-input type="text" placeholder="https://twitter.com/<twitterHandle>/status/<tweetId>" v-model="retweetUrl" :disabled="data.isDone" :required="data.isManadatory"></b-form-input>
 						</div>
 					</b-col>
 				</b-row>
@@ -55,6 +55,7 @@ export default {
 			authToken: localStorage.getItem("authToken"),
 			visible: false,
 			done: this.data.isDone,
+			retweetUrl: ""
 		}
 	},
 	mounted() {
@@ -65,7 +66,7 @@ export default {
 			if (!(await this.hasRetweeted())) {
 				return alert("Error: Invalid retweet");
 			} else {
-				this.$emit('input', this.data.value)
+				this.$emit('input', this.retweetUrl)
 			}
 		},
 		disableInput(data) {
@@ -118,9 +119,9 @@ export default {
 					};
 
 					const body = {
-						tweetUrl: this.val,
+						tweetUrl: this.retweetUrl,
 						userId: twitterId,
-						tweetText: this.value,
+						tweetText: this.data.value,
 						needUserDetails: false,
 						checkIfFollowed: false,
 						sourceScreenName: "",
