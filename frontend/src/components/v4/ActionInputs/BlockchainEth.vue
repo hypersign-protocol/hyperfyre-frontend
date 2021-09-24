@@ -33,6 +33,7 @@
 <script>
 import eventBus from "../../../eventBus.js";
 import { isValidURL, isValidText, isEmpty } from "../../../mixins/fieldValidationMixin";
+import notificationMixins from "../../../mixins/notificationMixins";
 export default {
 	name: 'BlockchainEth',
 	props: {
@@ -56,7 +57,7 @@ export default {
 		update() {
 			if (!this.isFieldValid()) {
 				this.data.value = "";
-				return alert("Error: Field value is invalid");
+				return this.notifyErr("Error: Field value is invalid");
 			} else {
 				this.$emit('input', this.data.value)
 			}
@@ -76,7 +77,7 @@ export default {
 		disableInput(data) {
 			this.done = data
 		}
-	}
-
+	},
+mixins:[notificationMixins]
 }
 </script>

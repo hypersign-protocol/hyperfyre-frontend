@@ -35,7 +35,8 @@
 </template>
 <script>
 import config from "../../../config";
-import eventBus from "../../../eventBus.js"
+import eventBus from "../../../eventBus.js";
+import notificationMixins from "../../../mixins/notificationMixins";
 export default {
 	name: 'TwitterRetweet',
 	props: {
@@ -59,7 +60,7 @@ export default {
 		update() {
 			const tgIdInStore = localStorage.getItem("telegramId");
 			if (!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) {
-				return alert("Error: Please authorize telegram to proceed")
+				return this.notifyErr("Error: Please authorize telegram to proceed")
 			} else {
 				this.$emit('input', tgIdInStore)
 	 		}
@@ -74,13 +75,13 @@ export default {
 						(data) => {
 
 							if (!data) {
-								return alert("Authentication Failed! Try again")
+								return this.notifyErr("Authentication Failed! Try again")
 							}
 							if(data.username){
 								localStorage.setItem("telegramId", data.username)
 								window.open(urlToRedirect, "_blank");
 							} else{
-								return alert("Could not fetch the username after telegram authentication")
+								return this.notifyErr("Could not fetch the username after telegram authentication")
 							}
 						}
 					);
@@ -89,11 +90,11 @@ export default {
 					window.open(urlToRedirect, "_blank");
 				}
 			}catch(e){
-				alert("Error occurred: " + e.message);
+				this.notifyErr("Error occurred: " + e.message);
 			}
 			
 		}
-	}
-
+	},
+mixins:[notificationMixins]
 }
 </script>
