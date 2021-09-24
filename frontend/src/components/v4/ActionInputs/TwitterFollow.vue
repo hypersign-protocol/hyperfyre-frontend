@@ -41,6 +41,7 @@
 import apiClient from "../../../mixins/apiClientMixin";
 import webAuth from "../../../mixins/twitterLogin";
 import eventBus from "../../../eventBus.js"
+import notificationMixins from "../../../mixins/notificationMixins";
 export default {
 	name: 'TwitterRetweet',
 	props: {
@@ -78,7 +79,7 @@ export default {
 	methods: {
 		async update() {
 			if (!(await this.hasFollowedTwitter())) {
-				return alert("Error: Please follow first");
+				return this.notifyErr("Error: Please follow first");
 			} else {
 				this.$emit('input', JSON.stringify({
 					...this.twitter
@@ -102,7 +103,7 @@ export default {
 									authRes.accessToken,
 									async (err, user) => {
 										if (err) {
-											return alert("Error: Something Went Wrong");
+											return this.notifyErr("Error: Something Went Wrong");
 										}
 
 										console.log(user);
@@ -193,7 +194,7 @@ export default {
 				console.log(e);
 			}
 		},
-	}
-
+	},
+	mixins:[notificationMixins]
 }
 </script>

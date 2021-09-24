@@ -31,7 +31,8 @@
 	</b-card>
 </template>
 <script>
-import eventBus from "../../../eventBus.js"
+import eventBus from "../../../eventBus.js";
+import notificationMixins from "../../../mixins/notificationMixins";
 export default {
 	name: 'InputNumber',
 	props: {
@@ -54,7 +55,7 @@ export default {
 	methods: {
 		update() {
 			if (!this.data.value) {
-				return alert("Error: Pls enter a valid input");
+				return this.notifyErr("Error: Pls enter a valid input");
 			} else {
 				this.$emit('input', this.data.value)
 			}
@@ -62,7 +63,7 @@ export default {
 		disableInput(data) {
 			this.done = data
 		}
-	}
-
+	},
+mixins:[notificationMixins]
 }
 </script>

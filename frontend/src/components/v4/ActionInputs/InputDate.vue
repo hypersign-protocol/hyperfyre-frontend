@@ -33,6 +33,7 @@
 <script>
 import eventBus from "../../../eventBus.js";
 import {  isDate } from "../../../mixins/fieldValidationMixin";
+import notificationMixins from "../../../mixins/notificationMixins";
 export default {
 	name: 'InputDate',
 	props: {
@@ -57,7 +58,7 @@ export default {
 		update() {
 			if (!isDate(this.data.value)) {
 				this.data.value = "";
-				return alert("Error: Invalid date time");
+				return this.notifyErr("Error: Invalid date time");
 			} else {
 				this.$emit('input', this.data.value)
 			}
@@ -65,7 +66,7 @@ export default {
 		disableInput(data) {
 			this.done = data
 		}
-	}
-
+	},
+mixins:[notificationMixins]
 }
 </script>
