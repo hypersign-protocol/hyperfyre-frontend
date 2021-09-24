@@ -39,7 +39,8 @@
 <script>
 import apiClient from "../../../mixins/apiClientMixin";
 import webAuth from "../../../mixins/twitterLogin";
-import eventBus from "../../../eventBus.js"
+import eventBus from "../../../eventBus.js";
+import notificationMixins from "../../../mixins/notificationMixins";
 export default {
 	name: 'TwitterRetweet',
 	props: {
@@ -64,7 +65,7 @@ export default {
 	methods: {
 		async update() {
 			if (!(await this.hasRetweeted())) {
-				return alert("Error: Invalid retweet");
+				return this.notifyErr("Error: Invalid retweet");
 			} else {
 				this.$emit('input', this.retweetUrl)
 			}
@@ -86,7 +87,7 @@ export default {
 									authRes.accessToken,
 									async (err, user) => {
 										if (err) {
-											return alert("Something Went Wrong");
+											return this.notifyErr("Something Went Wrong");
 										}
 
 										const twitterId = user.sub.split("|")[1];
@@ -135,7 +136,7 @@ export default {
 					if (resp.data.hasTweetUrlVerified) {
 						return true;
 					} else {
-						alert(resp.data.error);
+						this.notifyErr(resp.data.error);
 						return false;
 					}
 				}
@@ -144,7 +145,7 @@ export default {
 				return false;
 			}
 		},
-	}
-
+	},
+mixins:[notificationMixins]
 }
 </script>
