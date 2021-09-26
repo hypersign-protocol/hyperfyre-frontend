@@ -17,7 +17,7 @@ const { mail } = require("../../hypersign.json");
                     <p>Hi Folks,</p>
                     <p></p>
                     <p></p>
-                    <p>The server have been successfully restarted.</p>
+                    <p>The ${healthCheckBotConfig.ENV} server have been successfully restarted.</p>
                     <p></p>
                     <p>Thanks,</p>
                     <p>Health Check Bot</p>
@@ -25,7 +25,7 @@ const { mail } = require("../../hypersign.json");
             </html>
         `
         logger.info("HealthCheck:: notifyAdmins(): Before sending email.");
-        mailService.sendEmail(healthCheckBotConfig.ADMIN_EMAILS, mailTemplateTemp, `${healthCheckBotConfig.ENV} : WARNING!!! Whitelist Server Restart on Error`);
+        mailService.sendEmail(healthCheckBotConfig.ADMIN_EMAILS, mailTemplateTemp, `WARNING!!! Whitelist ${healthCheckBotConfig.ENV} Server Restart on Error`);
         logger.info("HealthCheck:: notifyAdmins(): After sending email.");
         logger.info("HealthCheck:: notifyAdmins(): Method end.");
     }
@@ -45,7 +45,7 @@ const { mail } = require("../../hypersign.json");
                 throw new Error(stderr);
             }
         }catch(e){
-            logger.error('HealthCheck:: restartServer(): stdout ', e.message);
+            logger.error(e);
         }finally{
             logger.info("HealthCheck:: restartServer(): Method ends");
         }
@@ -57,7 +57,7 @@ const { mail } = require("../../hypersign.json");
         .then(resp => resp.json())
         .then(json => logger.info("HealthCheck:: init() :: " + JSON.stringify(json)))
         .catch(e => {
-            logger.error("HealthCheck:: init() :: error "  + e.mesasge);
+            logger.error(e);
             // Restart the server
             restartServer()
         })
