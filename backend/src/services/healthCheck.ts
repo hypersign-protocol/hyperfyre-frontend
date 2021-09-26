@@ -15,6 +15,7 @@ const { mail } = require("../../hypersign.json");
     }
 
     function notifyAdmins() {
+        logger.info("HealthCheck:: notifyAdmins(): Method start.");
         const mailService = new MailService({ ...mail });
         const mailTemplateTemp =  `
             Hi Folks,
@@ -24,8 +25,10 @@ const { mail } = require("../../hypersign.json");
             Thanks,
             Health Check Bot
         `
-        // to, message, subject
+        logger.info("HealthCheck:: notifyAdmins(): Before sending email.");
         mailService.sendEmail(bot_config.ADMIN_EMAILS, mailTemplateTemp, `${bot_config.ENV} : WARNING!!! Whitelist Server Restart on Error`);
+        logger.info("HealthCheck:: notifyAdmins(): After sending email.");
+        logger.info("HealthCheck:: notifyAdmins(): Method end.");
     }
 
     async function restartServer(){
