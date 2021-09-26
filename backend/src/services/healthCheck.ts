@@ -25,7 +25,7 @@ const { mail } = require("../../hypersign.json");
             Health Check Bot
         `
         // to, message, subject
-        mailService.sendEmail(bot_config.ADMIN_EMAILS, mailTemplateTemp, `${bot_config.ENV} : Whitelist Server Restart on Error`);
+        mailService.sendEmail(bot_config.ADMIN_EMAILS, mailTemplateTemp, `${bot_config.ENV} : WARNING!!! Whitelist Server Restart on Error`);
     }
 
     async function restartServer(){
