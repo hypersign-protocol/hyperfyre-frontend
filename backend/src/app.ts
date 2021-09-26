@@ -9,7 +9,7 @@ import HypersignAuth from 'hypersign-auth-js-sdk';
 import routes from './routes';
 import { getCerts, corsOptionsDelegate } from './utils/https';
 import apiErrorHandler from './error/apiErrorHandler';
-
+import process from "process";
 
 let server;
 async function setupApp() {
@@ -59,7 +59,7 @@ async function setupApp() {
 
 setupApp().then(done => {
     if (done) {
-        server.listen(port, () => logger.info(`The server is running on port ${port}`));
+        server.listen(port, () => logger.info(`PID: ${process.pid} :: The server is running on port ${port}`));
     }
 });
 
