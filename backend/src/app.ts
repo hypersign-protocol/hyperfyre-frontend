@@ -44,6 +44,10 @@ async function setupApp() {
 
         app.use(apiErrorHandler);
 
+        app.get("api/v1/health", (req, res) => {
+            res.status(200).json({ msg: "All good folks, I am healthy :) !"});
+        })
+
         return true;
 
     } catch (e) {
