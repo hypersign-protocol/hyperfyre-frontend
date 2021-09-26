@@ -89,6 +89,14 @@ const tweeterConfig = {
 }
 
 const REFFERAL_MULTIPLIER = 10;
+
+const healthCheckBotConfig = {
+  ENV : process.env.HEALTH_ENV || "DEVELOPMENT",
+  HEALTH_CHECK_URL : process.env.HEALTH_CHECK_URL || "https://stage.hypermine.in/whitelist/api/v1/health",
+  SERVER_RESTART_COMMAND : process.env.SERVER_RESTART_COMMAND || "pm2 restart wl-server:3004",
+  INTERVAL : 30000,
+  ADMIN_EMAILS : process.env.ADMIN_EMAILS|| ["vishwas@hypermine.in", "vikram@hypermine.in", "irfan@hypermine.in"]
+}
 export {
   port,
   host,
@@ -106,5 +114,6 @@ export {
   whitelist,
   hsAuthServerEp,
   tweeterConfig,
-  REFFERAL_MULTIPLIER
+  REFFERAL_MULTIPLIER,
+  healthCheckBotConfig
 };
