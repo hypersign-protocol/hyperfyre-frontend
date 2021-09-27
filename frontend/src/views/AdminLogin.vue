@@ -97,11 +97,26 @@ h5 span {
   cursor: pointer;
   margin-top: 14%;
 }
+
+.button-theme{
+  background-color: #F1B319;
+  border-collapse: #F1B319;
+  color: black;
+  border: 0;
+
+}
+
+.event-card{
+  border:0;
+  border-radius: 10px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
 </style>
 <template>
   <!-- <div class="row" style="margin-left: 35%;"> -->
   <div class="" style="justify-content: center; padding-top:3%">
-    <b-card no-body class="loginContent">
+    <b-card no-body class="loginContent event-card ">
       <loading
         :active.sync="isLoading"
         :can-cancel="true"
@@ -146,19 +161,14 @@ h5 span {
 
           <h5><span>OR</span></h5>
 
-          <div class="mb-2 ">
+          <div class="mb-2 " >
             <a
               v-if="this.value != ''"
-              class="btn btn-hypersign text-white "
+              class="btn btn-hypersign  button-theme"
               href="#"
               @click.prevent="openWallet()"
             >
-              <img
-                style="height:40px; float: left;"
-                :src="require('../assets/hypersignSmallLogo.png')"
-                class="ml-0 rounded rounded-circle  left"
-              />
-              <div style="font-size: smaller; margin-top: 10px;">
+              <div  style="font-size: smaller; padding: 10px;">
                 USE WEB WALLET
               </div>
             </a>
