@@ -69,16 +69,47 @@ i {
   border-radius: 3px;
 }
 .paginationContainer >>> li.active {
-  background-color: #007bff;
+  background-color: #F1B319;
   color: #fff;
 }
 
-.theme{
-  background-color: #363740;
+
+.button-theme{
+  background-color: #F1B319;
+  border-collapse: #F1B319;
   color: whitesmoke;
   border: 0;
+
 }
 
+
+.theme{
+  background-color: #363740;
+  border-collapse: #363740;
+  color: whitesmoke;
+  border: 0;
+
+}
+
+.event-card{
+  float: left;
+  max-width: 60rem;
+  margin-right: 3%;
+  margin-bottom: 2%;
+  border:0;
+  border-radius: 20px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+
+.event-card-footer{
+  padding: 7px; background-color: #F1B3193D;  border-radius: 0px 0px 20px 20px;
+}
+
+.event-card-header{
+  padding: 7px; text-align: center; border-radius: 20px 20px 0px 0px
+}
 .copy{
 	padding:3px; font-size: medium; cursor: pointer; color:grey
 }
@@ -108,7 +139,7 @@ i {
 
         <div class="col-md-4">
           <div class="text-right">
-            <button @click="openCreateSidebar" class="btn btn-primary ">Create <i class="fas fa-plus text-white"></i> </button>
+            <button @click="openCreateSidebar" class="btn btn-primary button-theme">Create <i class="fas fa-plus text-white"></i> </button>
           </div>
 
           <div>
@@ -164,20 +195,12 @@ i {
     <div class="row" style="margin-top: 2%">
       <div class="col-md-12 my-5 w-100" style="text-align: left;max-height:660px; overflow-y:scroll">
         <div
-          class="card"
+          class="card event-card"
           v-for="project in projectsToShow"
           v-bind:key="project.projectName"
-          style="
-            float: left;
-            max-width: 60rem;
-            margin-right: 3%;
-            margin-bottom: 1%;
-          
-          "
         >
           <div
-            class="card-header theme"
-            style="padding: 5px; text-align: center; font-weight: bold"
+            class="theme event-card-header"
           >
             <span style="">{{ project.projectName }}</span>
             <span data-toggle="tooltip"
@@ -252,8 +275,7 @@ i {
             </div>
           </div>
           <div
-            class="card-header theme"
-            style="padding: 5px; background-color: #8080801f"
+            class="theme event-card-footer"
           >
             <!-- <span
               data-toggle="tooltip"

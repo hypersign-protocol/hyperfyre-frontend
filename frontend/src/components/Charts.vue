@@ -30,7 +30,8 @@ export default {
       unused: 0,
       user: {},
       usage: {},
-      sections: [{ label: "Requests consumed", value: 0, color: "#ed5c5c" }],
+      sections: [{ label: "Requests consumed", value: this.totalUsed, color: "#ed5c5c" }, 
+                 { label: "Requests left", value: this.unused, color: "#60c860" }],
       authToken: localStorage.getItem("authToken"),
     };
   },
@@ -51,6 +52,7 @@ export default {
     this.totalUsed = this.usage["totalUsed"];
     this.unused = this.totalAvailable - this.totalUsed;
     this.sections[0].value = this.totalUsed;
+    this.sections[1].value = this.unused;
 
     // const subscriptionsInStorage = localStorage.getItem("subscriptions");
     // if(subscriptionsInStorage){

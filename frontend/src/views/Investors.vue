@@ -64,15 +64,15 @@ label {
   border-radius: 3px;
 }
 .paginationContainer >>> li.active {
-  background-color: #007bff;
+  background-color: #F1B319;
   color: #fff;
 }
 .dot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  border: 1px solid #007bff;
-  background-color: #007bff;
+  border: 1px solid #F1B319;
+  background-color: #F1B319;
   margin: 1px 0;
 }
  .modal-text{
@@ -96,6 +96,13 @@ label {
  .paginationItem.active a{
    color: #fff;
  }
+
+.button-theme{
+  background-color: #F1B319;
+  border-collapse: #F1B319;
+  color: whitesmoke;
+  border: 0;
+}
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -130,7 +137,7 @@ label {
         </div>
         
         <div class="mt-5 text-center">
-          <button @click="handleLottery" type="button" class="btn btn-primary">Execute</button>
+          <button @click="handleLottery" type="button" class="btn btn-primary button-theme">Execute</button>
         </div>
   </b-modal>
 
@@ -154,10 +161,10 @@ label {
             ></b-form-input>
           </div>
           <div class="mx-3">
-            <button @click="handleExport" :disabled='project.investors.length ? false : true' class="cta_btns btn btn-primary btn-md">Export All <i class="fas fa-file-export"></i></button>
+            <button @click="handleExport" :disabled='project.investors.length ? false : true' class="cta_btns btn btn-primary btn-md button-theme">Export All <i class="fas fa-file-export"></i></button>
           </div>
           <div>
-            <button  :disabled='project.investors.length ? false : true' v-b-modal.modal-1 class="cta_btns btn btn-primary btn-md">Lottery <i class="fas fa-dharmachakra"></i></button>
+            <button  :disabled='project.investors.length ? false : true' v-b-modal.modal-1 class="cta_btns btn btn-primary btn-md button-theme">Lottery <i class="fas fa-dharmachakra"></i></button>
           </div>
         </div>
       </div>
@@ -185,7 +192,7 @@ label {
         v-model="paginateValue"
         :nextText="'Next'"
         :containerClass="'paginationContainer'"
-        :page-class="'paginationItem'"
+        :page-class="'paginationItem '"
       >
       </paginate>
       <div class="ml-auto">
