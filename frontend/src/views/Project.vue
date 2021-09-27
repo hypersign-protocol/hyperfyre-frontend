@@ -227,7 +227,7 @@ i {
                   <li
                     data-toggle="tooltip"
                     data-placement="bottom"
-                    title="ProjectId"
+                    title="EventId"
                   >
                     <i class="far fa-id-card"></i
                     ><span class="card-title">{{ project._id }}</span> <span @click="copy(project._id, 'EventId')" class="copy"><i class="far fa-copy"></i></span>
