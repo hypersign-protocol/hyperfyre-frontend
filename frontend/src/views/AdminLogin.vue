@@ -122,7 +122,7 @@ h5 span {
         :can-cancel="true"
         :is-full-page="fullPage"
       ></loading>
-      <h4>ADMIN LOGIN</h4>
+      <h4>Admin Login</h4>
       <div class="row" style="margin-top:3%">
         <div v-if="QRRefresh" class="QRRefresh">
           <i @click="reloadQR" class="fas fa-redo" style="font-size: xx-large; color: gray;"></i>
@@ -169,7 +169,7 @@ h5 span {
               @click.prevent="openWallet()"
             >
               <div  style="font-size: smaller; padding: 10px;">
-                USE WEB WALLET
+                Use Web Wallet
               </div>
             </a>
           </div>
