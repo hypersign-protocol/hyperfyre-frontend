@@ -64,42 +64,42 @@ label {
   border-radius: 3px;
 }
 .paginationContainer >>> li.active {
-  background-color: #F1B319;
+  background-color: #f1b319;
   color: #fff;
 }
 .dot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  border: 1px solid #F1B319;
-  background-color: #F1B319;
+  border: 1px solid #f1b319;
+  background-color: #f1b319;
   margin: 1px 0;
 }
- .modal-text{
-   font-size: 12px;
- }
- .projectSelector{
-   min-width: 220px;
- }
- .lotteryImage{
-    -webkit-filter: brightness(0) invert(1);
- filter: brightness(0) invert(1); 
- }
- .cta_btns{
-   display: flex;
-   align-items: center;
- }
- .cta_btns i{
-    font-size: 22px;
-    margin-left: 10px;
- }
- .paginationItem.active a{
-   color: #fff;
- }
+.modal-text {
+  font-size: 12px;
+}
+.projectSelector {
+  min-width: 220px;
+}
+.lotteryImage {
+  -webkit-filter: brightness(0) invert(1);
+  filter: brightness(0) invert(1);
+}
+.cta_btns {
+  display: flex;
+  align-items: center;
+}
+.cta_btns i {
+  font-size: 22px;
+  margin-left: 10px;
+}
+.paginationItem.active a {
+  color: #fff;
+}
 
-.button-theme{
-  background-color: #F1B319;
-  border-collapse: #F1B319;
+.button-theme {
+  background-color: #f1b319;
+  border-collapse: #f1b319;
   color: whitesmoke;
   border: 0;
 }
@@ -112,44 +112,66 @@ label {
       :is-full-page="fullPage"
     ></loading>
 
+    <b-modal hide-footer id="modal-1" title="Lottery">
+      <p
+        class="my-4  border rounded-lg p-2 modal-text"
+        style="background:#f0f9ff"
+      >
+        <b>Lottery</b> is the process of selecting winners of an event. Upon
+        clicking on "<b>Execute button</b>", the lottery process begins, which
+        may take sometime and screen may freeze. Once done, you will get
+        selected records in excel sheet. The winner selection is primarly based
+        on their "<b>score</b>" unless checked "<b>randomly</b>".
+      </p>
+      <div class="d-flex mx-auto  justify-content-between px-4">
+        <div class="bold">Total Records</div>
+        <div class="bold">{{ project.count }}</div>
+      </div>
+      <div class="d-flex mx-auto  justify-content-between px-4 mt-4">
+        <div class="bold">Number of winners to choose</div>
+        <div class="bold">
+          <input
+            v-model="recordsForLottery"
+            type="number"
+            class="form-control"
+            placeholder="No. of records"
+          />
+        </div>
+      </div>
+      <div class="d-flex mx-auto  justify-content-between px-4 mt-4">
+        <div class="bold">Check to choose randomly (optional)</div>
+        <div class="bold">
+          <input
+            v-model="isRandom"
+            type="checkbox"
+            class=""
+            title="Check to choose randomly"
+          />
+        </div>
+      </div>
 
-  <b-modal  hide-footer id="modal-1" title="Lottery">
-    <p class="my-4  border rounded-lg p-2 modal-text" style="background:#f0f9ff"><b>Lottery</b> is
-        the process of selecting winners of an event. Upon clicking
-        on "<b>Execute button</b>", the
-        lottery process begins, which may take sometime and screen may
-        freeze. Once done, you will get selected records in excel sheet. The winner selection is primarly based on their "<b>score</b>" unless checked "<b>randomly</b>".</p>
-        <div class="d-flex mx-auto  justify-content-between px-4">
-          <div class="bold">Total Records</div>
-          <div class="bold">{{project.count}}</div>
-        </div>
-        <div class="d-flex mx-auto  justify-content-between px-4 mt-4">
-          <div class="bold">Number of winners to choose </div>
-          <div class="bold">
-             <input v-model="recordsForLottery" type="number" class="form-control" placeholder="No. of records" />
-          </div>
-        </div>
-        <div class="d-flex mx-auto  justify-content-between px-4 mt-4">
-          <div class="bold">Check to choose randomly (optional) </div>
-          <div class="bold">
-             <input v-model="isRandom" type="checkbox" class="" title="Check to choose randomly" />
-          </div>
-        </div>
-        
-        <div class="mt-5 text-center">
-          <button @click="handleLottery" type="button" class="btn btn-primary button-theme">Execute</button>
-        </div>
-  </b-modal>
-
+      <div class="mt-5 text-center">
+        <button
+          @click="handleLottery"
+          type="button"
+          class="btn btn-primary button-theme"
+        >
+          Execute
+        </button>
+      </div>
+    </b-modal>
 
     <div class="row " style="margin-top: 2%">
       <div class="d-flex justify-content-between col-md-12">
-
-
-        <div class="projectSelector">  
-          
-           <b-form-select v-model="selectedProject"  @change="fetchProjectInvestors"  placeholder="Select an event"    value-field="_id" text-field="projectName" :options="projects"></b-form-select>
-         
+        <div class="projectSelector">
+          <b-form-select
+            v-model="selectedProject"
+            @change="fetchProjectInvestors"
+            placeholder="Select an event"
+            value-field="_id"
+            text-field="projectName"
+            :options="projects"
+          ></b-form-select>
         </div>
         <div class="d-flex ml-auto align-items-center">
           <div>
@@ -161,10 +183,22 @@ label {
             ></b-form-input>
           </div>
           <div class="mx-3">
-            <button @click="handleExport" :disabled='project.investors.length ? false : true' class="cta_btns btn btn-primary btn-md button-theme">Export All <i class="fas fa-file-export"></i></button>
+            <button
+              @click="handleExport"
+              :disabled="project.investors.length ? false : true"
+              class="cta_btns btn btn-primary btn-md button-theme"
+            >
+              Export All <i class="fas fa-file-export"></i>
+            </button>
           </div>
           <div>
-            <button  :disabled='project.investors.length ? false : true' v-b-modal.modal-1 class="cta_btns btn btn-primary btn-md button-theme">Lottery <i class="fas fa-dharmachakra"></i></button>
+            <button
+              :disabled="project.investors.length ? false : true"
+              v-b-modal.modal-1
+              class="cta_btns btn btn-primary btn-md button-theme"
+            >
+              Lottery <i class="fas fa-dharmachakra"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -180,6 +214,8 @@ label {
             :sort-option="sortOption"
             :columns="columns"
             :table-data="project.investors"
+            :expand-option="expandOption"
+            row-key-field-name="_id"
           />
         </div>
       </div>
@@ -196,7 +232,11 @@ label {
       >
       </paginate>
       <div class="ml-auto">
-        <b-form-select v-model="paginateValue"  :options="this.pageSelectDropdown" @change="paginateChange"></b-form-select>
+        <b-form-select
+          v-model="paginateValue"
+          :options="this.pageSelectDropdown"
+          @change="paginateChange"
+        ></b-form-select>
       </div>
     </div>
   </div>
@@ -207,8 +247,8 @@ import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import Paginate from "vuejs-paginate";
-import notificationMixins from '../mixins/notificationMixins';
-import apiClientMixin from '../mixins/apiClientMixin';
+import notificationMixins from "../mixins/notificationMixins";
+import apiClientMixin from "../mixins/apiClientMixin";
 import FileDownload from "js-file-download";
 const issuedImgLink = require("../assets/issued-icon.png");
 
@@ -237,90 +277,132 @@ export default {
           return this.items.length;
         },
       },
-      isRandom :  false,
+      isRandom: false,
       pageSelectDropdown: [],
-
+      expandOption: {
+        trigger: "row",
+        render: ({ row, column, rowIndex }, h) => {
+          return (
+            <div style="text-align:center; background-color: whitesmoke">
+              <h5>Event Actions</h5>
+              <table class="table" style="text-align:left ">
+              <thead>
+                <tr>
+                  <th>Field Title</th>
+                  <th>Field Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {row.actions.map((action) => (
+                  <tr>
+                    <td>{action.title}</td>
+                    <td>{action.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            
+            </div>
+            
+          );
+        },
+      },
       columns: [
-        { field: "name", key: "b", title: "Name", align: "left", sortBy: "" },
+        {
+          field: "",
+          key: "a",
+          // 设置需要显示展开图标的列
+          type: "expand",
+          title: "",
+          width: 50,
+          align: "center",
+        },
+        {
+          field: "name",
+          key: "b",
+          title: "Name",
+          align: "left",
+          sortBy: "",
+          width: 250,
+        },
         {
           field: "email",
           key: "c",
           title: "Email",
           align: "left",
           sortBy: "asc",
-          width: 10,
+          width: 300,
         },
+        // {
+        //   field: "ethaAddress",
+        //   key: "d",
+        //   title: "Blockchain Address",
+        //   align: "left",
+        // },
         {
-          field: "ethAddress",
-          key: "d",
-          title: "Blockchain Address",
-          align: "left",
-
-          // renderBodyCell: ({ row, column, rowIndex }, h) => {
-          //   return (
-          //     <span class="text-bold" style="color:#1890ff;">
-          //       <a href={`https://etherscan.io/address/${row.ethAddress}`} target="_blank">
-          //         {row.ethAddress}
-          //       </a>
-          //     </span>
-          //   );
-          // },
-        },
-        {
-          field: "twitterHandle",
+          field: "actions",
           key: "e",
-          title: "Twitter Handle",
+          title: "User Actions",
           align: "left",
-          sortBy: "",
-
+          width: 250,
           renderBodyCell: ({ row, column, rowIndex }, h) => {
-            return (
-              <span class="text-bold" style="color:#1890ff;">
-                <a href={`https://twitter.com/${row.twitterHandle}`} target="_blank">
-                  {row.twitterHandle}
-                </a>
-              </span>
-            );
+            const actions = row[column.field];
+            return <span>Performed {actions.length} actions</span>;
           },
         },
-        {
-          field: "telegramHandle",
-          key: "f",
-          title: "Telegram Handle",
-          align: "left",
-          sortBy: "",
-
-          renderBodyCell: ({ row, column, rowIndex }, h) => {
-            return (
-              <span class="text-bold" style="color:#1890ff;">
-                <a href={`https://telegram.me/${row.telegramHandle}`} target="_blank">
-                  {row.telegramHandle}
-                </a>
-              </span>
-            );
-          },
-        },
-        {
-          field: "tweetUrl",
-          key: "g",
-          title: "Tweet Url",
-          align: "left",
-
-          renderBodyCell: ({ row, column, rowIndex }, h) => {
-            return (
-              <span class="text-bold" style="color:#1890ff;">
-                <a href={`${row.tweetUrl}`} target="_blank">Tweet</a>
-              </span>
-            );
-          },
-        },
+        // {
+        //   field: "twitterHandle",
+        //   key: "e",
+        //   title: "Twitter Handle",
+        //   align: "left",
+        //   sortBy: "",
+        //   renderBodyCell: ({ row, column, rowIndex }, h) => {
+        //     return (
+        //       <span class="text-bold" style="color:#1890ff;">
+        //         <a href={`https://twitter.com/${row.twitterHandle}`} target="_blank">
+        //           {row.twitterHandle}
+        //         </a>
+        //       </span>
+        //     );
+        //   },
+        // },
+        // {
+        //   field: "telegramHandle",
+        //   key: "f",
+        //   title: "Telegram Handle",
+        //   align: "left",
+        //   sortBy: "",
+        //   renderBodyCell: ({ row, column, rowIndex }, h) => {
+        //     return (
+        //       <span class="text-bold" style="color:#1890ff;">
+        //         <a href={`https://telegram.me/${row.telegramHandle}`} target="_blank">
+        //           {row.telegramHandle}
+        //         </a>
+        //       </span>
+        //     );
+        //   },
+        // },
+        // {
+        //   field: "tweetUrl",
+        //   key: "g",
+        //   title: "Tweet Url",
+        //   align: "left",
+        //   renderBodyCell: ({ row, column, rowIndex }, h) => {
+        //     return (
+        //       <span class="text-bold" style="color:#1890ff;">
+        //         <a href={`${row.tweetUrl}`} target="_blank">Tweet</a>
+        //       </span>
+        //     );
+        //   },
+        // },
         {
           field: "numberOfReferals",
           key: "h",
           title: "Score",
           align: "right",
           sortBy: "desc",
-        }
+          width: 100,
+        },
       ],
 
       investor: {
@@ -337,6 +419,7 @@ export default {
         isVerificationComplete: false,
         tweetUrl: "",
         numberOfReferals: 0,
+        actions: [],
       },
       project: {
         count: 20,
@@ -361,72 +444,74 @@ export default {
   },
 
   async mounted() {
-
-    
-
-  if(this.$route.query.projectId){
-    this.selectedProjectId = this.$route.query.projectId;
-    this.selectedProject = this.$route.query.projectId;
-    this.investor.projectId = this.$route.query.projectId
-    this.fetchProjectData(0, this.perPage)
-  }
+    if (this.$route.query.projectId) {
+      this.selectedProjectId = this.$route.query.projectId;
+      this.selectedProject = this.$route.query.projectId;
+      this.investor.projectId = this.$route.query.projectId;
+      this.fetchProjectData(0, this.perPage);
+    }
 
     const userProjectStr = localStorage.getItem("userProjects");
     const userProjectsData = JSON.parse(userProjectStr);
-    this.projects = userProjectsData.projects;  
+    this.projects = userProjectsData.projects;
     this.projects.unshift({
       _id: null,
-      projectName: "Select an event"
-    })
-  
- 
+      projectName: "Select an event",
+    });
   },
-
 
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.prevRoute = from;
     });
   },
-  
+
   methods: {
-    async handleExport(){
-      try{
-       const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.project._id}?fetchInvestors=true&isExport=true&limit=${this.project.count}`;
+    async handleExport() {
+      try {
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.project._id}?fetchInvestors=true&isExport=true&limit=${this.project.count}`;
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
         };
 
-        const res = await apiClientMixin.makeCall({method: "GET", url, header: headers, isFile: true})
+        const res = await apiClientMixin.makeCall({
+          method: "GET",
+          url,
+          header: headers,
+          isFile: true,
+        });
         FileDownload(res.data, `Investors_${this.selectedProject}.csv`);
-      }catch(e){
+      } catch (e) {
         console.log(e);
-        this.notifyErr(e)
-      
+        this.notifyErr(e);
       }
     },
-    async handleLottery(){
-      if(this.recordsForLottery > this.project.count || this.recordsForLottery <= 0){
-        return this.notifyErr("No of records must be less or equal to total")
+    async handleLottery() {
+      if (
+        this.recordsForLottery > this.project.count ||
+        this.recordsForLottery <= 0
+      ) {
+        return this.notifyErr("No of records must be less or equal to total");
       }
-      try{
-        
-          let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.project._id}/lottery?token=${this.authToken}&limitRecord=${this.recordsForLottery}&isRandom=${this.isRandom}`
+      try {
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.project._id}/lottery?token=${this.authToken}&limitRecord=${this.recordsForLottery}&isRandom=${this.isRandom}`;
 
-          const headers = {
+        const headers = {
+          Authorization: `Bearer ${this.authToken}`,
+        };
 
-            "Authorization": `Bearer ${this.authToken}`,
-          };
-
-          const res = await apiClientMixin.makeCall({method:"GET", header: headers, url, isFile: true}) 
-          FileDownload(res.data,  "Lottery.csv")
-
-        }catch(e){
-          console.log(e);
-          this.notifyErr(e)
-        }
-      
+        const res = await apiClientMixin.makeCall({
+          method: "GET",
+          header: headers,
+          url,
+          isFile: true,
+        });
+        FileDownload(res.data, "Lottery.csv");
+      } catch (e) {
+        console.log(e);
+        this.notifyErr(e);
+      }
     },
     sortChange(params) {
       this.project.investors.sort((a, b) => {
@@ -486,11 +571,10 @@ export default {
       this.fetchProjectData(0, this.perPage);
     },
     async fetchProjectInvestors(e) {
-      if(e){
+      if (e) {
         this.investor.projectId = e;
         await this.fetchProjectData(0, this.perPage);
       }
-      
     },
 
     filterVerified(label) {
@@ -526,12 +610,12 @@ export default {
     },
 
     paginateChange(e) {
-      if(typeof e == "number"){
+      if (typeof e == "number") {
         this.currentPage = e;
-        this.paginateValue = e
-      } else{
+        this.paginateValue = e;
+      } else {
         this.currentPage = e.target.value;
-        this.paginateValue = e
+        this.paginateValue = e;
       }
 
       const skip = this.perPage * (this.currentPage - 1);
@@ -640,15 +724,14 @@ export default {
         this.project.toDate = this.formateDate(this.project.toDate);
         this.projectFetched = true;
 
+        this.pageSelectDropdown = Array.from(
+          { length: Math.ceil(this.project.count / this.perPage) },
+          (_, i) => i + 1
+        );
 
-        this.pageSelectDropdown = Array.from({length: Math.ceil(this.project.count / this.perPage)}, (_, i) => i + 1)
-
-      
         this.notifySuccess(
           "Project is fetched. ProjectName " + json.projectName
         );
-
-
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
@@ -659,35 +742,35 @@ export default {
       const d = new Date(dateStr);
       return d.toDateString();
     },
-    async saveInvestor() {
-      try {
-        this.isLoading = true;
+    // async saveInvestor() {
+    //   try {
+    //     this.isLoading = true;
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
-        let headers = {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.authToken}`,
-        };
-        const resp = await fetch(url, {
-          method: "POST",
-          body: JSON.stringify(this.investor),
-          headers,
-        });
+    //     const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
+    //     let headers = {
+    //       "Content-Type": "application/json",
+    //       "Authorization": `Bearer ${this.authToken}`,
+    //     };
+    //     const resp = await fetch(url, {
+    //       method: "POST",
+    //       body: JSON.stringify(this.investor),
+    //       headers,
+    //     });
 
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
-        }
+    //     if (!resp.ok) {
+    //       return this.notifyErr(resp.statusText);
+    //     }
 
-        const json = await resp.json();
-        this.isDataSaved = true;
-        this.notifySuccess("Your data is saved. Id = " + json._id);
-      } catch (e) {
-        this.notifyErr(e.message);
-      } finally {
-        this.isLoading = false;
-        this.clear();
-      }
-    },
+    //     const json = await resp.json();
+    //     this.isDataSaved = true;
+    //     this.notifySuccess("Your data is saved. Id = " + json._id);
+    //   } catch (e) {
+    //     this.notifyErr(e.message);
+    //   } finally {
+    //     this.isLoading = false;
+    //     this.clear();
+    //   }
+    // },
     clear() {
       this.investor = {
         did: "did:hs:TEqweqweqwe12",
@@ -703,6 +786,6 @@ export default {
     },
   },
 
-  mixins: [notificationMixins]
+  mixins: [notificationMixins],
 };
 </script>
