@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-md-12 card" style="border-radius: 5px; padding: 35px; margin-top: 10px;">
+    <div class="col-md-12 card chart-container" style="">
       <vc-donut
         background="white"
         foreground="#60c860"
@@ -18,9 +18,19 @@
         <h1>{{ unused }}</h1>
       </vc-donut>
     </div>
-    
   </div>
 </template>
+
+<style scoped>
+.chart-container {
+  border-radius: 20px;
+  border: 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  padding: 35px;
+  margin-top: 10px;
+  margin-left: 2%;
+}
+</style>
 <script>
 export default {
   data() {
@@ -30,24 +40,23 @@ export default {
       unused: 0,
       user: {},
       usage: {},
-      sections: [{ label: "Requests consumed", value: this.totalUsed, color: "#ed5c5c" }, 
-                 { label: "Requests left", value: this.unused, color: "#60c860" }],
+      sections: [
+        { label: "Requests consumed", value: this.totalUsed, color: "#ed5c5c" },
+        { label: "Requests left", value: this.unused, color: "#60c860" },
+      ],
       authToken: localStorage.getItem("authToken"),
     };
   },
   async created() {
-
     const usrStr = localStorage.getItem("user");
     this.user = {
       ...JSON.parse(usrStr),
     };
 
-
     // this.fetchPlan();
-    
-    
+
     await this.fetchSubscription();
-    
+
     this.totalAvailable = this.usage["totalAvailable"];
     this.totalUsed = this.usage["totalUsed"];
     this.unused = this.totalAvailable - this.totalUsed;
@@ -57,17 +66,16 @@ export default {
     // const subscriptionsInStorage = localStorage.getItem("subscriptions");
     // if(subscriptionsInStorage){
     //   const parsedSub = JSON.parse(subscriptionsInStorage)
-      
+
     //   console.log({
     //     avl : this.totalAvailable,
     //     usd: this.totalUsed,
     //     sec: this.sections[0].value
     //   })
-    // }    
+    // }
   },
   methods: {
-    handleSectionClick(section, event) {
-    },
+    handleSectionClick(section, event) {},
     async fetchSubscription() {
       try {
         this.isLoading = true;
@@ -96,7 +104,6 @@ export default {
         this.isLoading = false;
       }
     },
-    
   },
 };
 </script>

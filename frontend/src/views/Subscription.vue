@@ -67,11 +67,19 @@ i {
 }
 
 
+.tile {
+  background: white;
+  border: 0;
+  border-radius: 20px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .theme{
   background-color: #363740;
   border-collapse: #363740;
   color: whitesmoke;
   border: 0;
+  border-radius: 20px 20px 0px 0px;
 
 }
 
@@ -91,7 +99,7 @@ i {
         v-for="plan in plans"
         v-bind:key="plan._id"
       >
-        <div class="card">
+        <div class="card tile">
           <div class="card-header theme" style="padding-top: 10px">
             <h4>
               <b>{{ plan.planName }}</b>
