@@ -73,6 +73,16 @@ i {
   color: #fff;
 }
 
+.theme{
+  background-color: #363740;
+  color: whitesmoke;
+  border: 0;
+}
+
+.copy{
+	padding:3px; font-size: medium; cursor: pointer; color:grey
+}
+
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -81,11 +91,10 @@ i {
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-    <b-modal   size="lg"  id="err-modal" title="Errors !">
+    <b-modal  size="lg"  id="err-modal" title="Errors !">
       <p v-for="err in errors" :key="err.msg">
           {{err.param.toUpperCase()}} : {{err.msg}}
       </p>
-
     </b-modal>
 
 
@@ -167,7 +176,7 @@ i {
           "
         >
           <div
-            class="card-header"
+            class="card-header theme"
             style="padding: 5px; text-align: center; font-weight: bold"
           >
             <span style="">{{ project.projectName }}</span>
@@ -198,7 +207,7 @@ i {
                     title="ProjectId"
                   >
                     <i class="far fa-id-card"></i
-                    ><span class="card-title">{{ project._id }}</span>
+                    ><span class="card-title">{{ project._id }}</span> <span @click="copy(project._id, 'EventId')" class="copy"><i class="far fa-copy"></i></span>
                   </li>
                   <li
                     data-toggle="tooltip"
@@ -223,8 +232,8 @@ i {
                   >
                     <i class="fas fa-file-alt"></i>
                     <a :href="project.whitelisting_link" target="_blank"
-                      >Whitelisting Form</a
-                    >
+                      >Whitelisting Form Url</a
+                    ><span @click="copy(project.whitelisting_link, 'Form Url')" class="copy"><i class="far fa-copy"></i></span>
                   </li>
 
                   <li
@@ -243,10 +252,10 @@ i {
             </div>
           </div>
           <div
-            class="card-header"
+            class="card-header theme"
             style="padding: 5px; background-color: #8080801f"
           >
-            <span
+            <!-- <span
               data-toggle="tooltip"
               data-placement="bottom"
               title="Twitter handle"
@@ -257,8 +266,8 @@ i {
               >
                 <i class="fab fa-twitter"></i
               ></a>
-            </span>
-            <span
+            </span> -->
+            <!-- <span
               data-toggle="tooltip"
               data-placement="bottom"
               title="Telegram handle"
@@ -268,7 +277,7 @@ i {
                 target="__blank"
                 ><i class="fab fa-telegram-plane"></i
               ></a>
-            </span>
+            </span> -->
             <span
               style="float: right; cursor: pointer"
               data-toggle="tooltip"
@@ -415,6 +424,16 @@ export default {
     });
   },
   methods: {
+    copy(textToCopy, contentType){
+			if(textToCopy){
+				navigator.clipboard.writeText(textToCopy).then(() => {
+						this.notifySuccess(`${contentType} is copied to clipboard`);
+					})
+					.catch(err => {
+						this.notifyErr('Error in copying text: ', err);
+					});
+			}
+    },
     openCreateSidebar(){
       this.resetAllValues();
       this.isProjectEditing = false
