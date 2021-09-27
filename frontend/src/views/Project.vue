@@ -682,7 +682,9 @@ export default {
         if (this.isLogoUrlValid() !== true) {
           return this.notifyErr(this.isLogoUrlValid());
         }
-
+        if(this.isProjectNameValid()!==true){
+          return this.notifyErr(this.isProjectNameValid());
+        }
         this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
@@ -825,6 +827,13 @@ export default {
       }
       return true;
     },
+    isProjectNameValid(){
+      if(isValidURL(this.project.projectName)){
+        return "Please provide valid project name";
+      }
+      return true;
+    },
+
     clear() {
       this.isProjectEditing = false;
       this.project = {
