@@ -101,7 +101,9 @@ i {
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
-
+.card-body-custom{
+  color: rgb(46, 46, 46);
+}
 
 .event-card-footer{
   padding: 7px; background-color: #F1B3193D;  border-radius: 0px 0px 20px 20px;
@@ -217,7 +219,7 @@ i {
 
             </span>
           </div>
-          <div class="card-body">
+          <div class="card-body card-body-custom">
             <div class="row">
               <div class="col-md-4">
                 <img :src="project.logoUrl" style="max-width: 150px; min-width: 150px;" />
@@ -254,7 +256,7 @@ i {
                     title="Whitelisting Form"
                   >
                     <i class="fas fa-file-alt"></i>
-                    <a :href="project.whitelisting_link" target="_blank"
+                    <a :href="project.whitelisting_link" target="_blank" class="card-body-custom"
                       >Whitelisting Form Url</a
                     ><span @click="copy(project.whitelisting_link, 'Form Url')" class="copy"><i class="far fa-copy"></i></span>
                   </li>
@@ -265,7 +267,7 @@ i {
                     title="Investor List"
                   >
                     <i class="fas fa-users"></i
-                    ><a :href="`/app/admin/investors?projectId=${project._id}`"
+                    ><a class="card-body-custom" :href="`/app/admin/investors?projectId=${project._id}`"
                       >User List ({{project.investorsCount}})</a
                     >
                   </li>
