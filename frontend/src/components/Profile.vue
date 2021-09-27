@@ -51,6 +51,7 @@
   text-align: left;
 }
 .tile-number{
+  color: rgb(46, 46, 46);
   font-size: xxx-large;
 }
 .fVal {
