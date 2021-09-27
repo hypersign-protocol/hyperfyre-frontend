@@ -77,7 +77,7 @@ i {
 .button-theme{
   background-color: #F1B319;
   border-collapse: #F1B319;
-  color: whitesmoke;
+  color: black;
   border: 0;
 
 }
@@ -110,7 +110,7 @@ i {
 }
 
 .event-card-header{
-  padding: 7px; text-align: center; border-radius: 20px 20px 0px 0px
+  padding: 7px; background-color: white; color: black; font-size: larger; text-align: center; border-radius: 20px 20px 0px 0px
 }
 .copy{
 	padding:3px; font-size: medium; cursor: pointer; color:grey

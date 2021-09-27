@@ -22,12 +22,16 @@
 .button-theme{
   background-color: #F1B319;
   border-collapse: #F1B319;
-  color: whitesmoke;
+  color: black;
   border: 0;
 }
 
 .fa-minus-circle {
   font-size: 14px;
+}
+
+.fixed-width{
+  max-width: 150px;
 }
 @keyframes flash {
   0% {
@@ -47,8 +51,8 @@
       <div
         :class="
           flash == idx
-            ? 'flash card rounded m-1 p-1 d-flex flex-row align-items-center'
-            : 'card rounded m-1 p-1 d-flex flex-row align-items-center'
+            ? 'flash card fixed-width rounded m-1 p-1 d-flex flex-row align-items-center'
+            : 'card  fixed-width rounded m-1 p-1 d-flex flex-row align-items-center'
         "
         v-for="(socialMedia, idx) in addedSocialMedias"
         :key="idx"
@@ -56,8 +60,8 @@
         <span class="mr-2 text-capitalize"
           ><i :class="socialMedia.icon"></i> {{ socialMedia.media }}</span
         >
-        <div class="ml-3" />
-        <i @click="removeSocialMedia(idx)" class="fas fa-minus-circle"></i>
+        <!-- <div class="ml-3" /> -->
+        <span><i @click="removeSocialMedia(idx)" class="fas fa-minus-circle"></i></span>
       </div>
     </div>
 

@@ -61,7 +61,7 @@ i {
 .button-theme{
   background-color: #F1B319;
   border-collapse: #F1B319;
-  color: whitesmoke;
+  color: black;
   border: 0;
 
 }
