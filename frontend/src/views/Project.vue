@@ -342,6 +342,7 @@ import Datepicker from 'vuejs-datetimepicker'
 import Paginate from "vuejs-paginate";
 import notificationMixins from '../mixins/notificationMixins';
 import apiClientMixin from '../mixins/apiClientMixin';
+import { isValidURL } from "../mixins/fieldValidationMixin.js";
 import CreateProjectSlide from './CreateProjectSlide/CreateProjectSlide.vue';
 import dayjs from "dayjs";
 export default {
@@ -643,7 +644,9 @@ export default {
         if(this.checkIfEverythingIsFilled() !==  true){
             return this.notifyErr( this.checkIfEverythingIsFilled());   
         }
-       
+        if (this.isLogoUrlValid() !== true) {
+          return this.notifyErr(this.isLogoUrlValid());
+        }
     
         this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
@@ -725,7 +728,7 @@ export default {
           return "Please Specify a project name"
         }   
         if(!this.project.logoUrl){
-          return "Please specify a Logo Url"
+          return "Please specify a Banner Url"
         }
         if(! (this.project.fromDate && this.project.toDate)){
           return "Please specify a start and end date"
@@ -778,7 +781,12 @@ export default {
 
       
     },  
-
+    isLogoUrlValid() {
+          if (!isValidURL(this.project.logoUrl)) {
+            return "Url is not Valid";
+          }
+          return true;
+        },
     clear() {
       this.isProjectEditing = false;
       this.project = {
