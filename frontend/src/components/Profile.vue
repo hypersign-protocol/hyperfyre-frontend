@@ -27,10 +27,7 @@
   list-style-type: none;
 }
 
-.title {
-  color: grey;
-  font-size: 18px;
-}
+
 .dot {
   height: 15px;
   width: 15px;
@@ -41,10 +38,20 @@
   float: right;
 }
 
+
 .tile {
+  background: white;
+  border: 0;
+  border-radius: 20px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.tile-profile{
+  text-align: left;
+}
+.tile-number{
   font-size: xxx-large;
-  background: whitesmoke;
-  border-bottom: 1px solid #8080802b;
 }
 .fVal {
   font-size: small;
@@ -52,13 +59,10 @@
   word-wrap: break-word;
 }
 
-.card {
-  border-radius: 10px;
-}
-
 .accordion-header-theme{
   background-color: rgba(241, 179, 25, 0.24);
   border: 0;
+  border-radius: 0px 0px 20px 20px;
 }
 </style>
 
@@ -66,21 +70,21 @@
   <div>
     <div class="row" style="margin-top: 2%">
       <div class="col-md-6">
-        <div class="card">
-          <div class="card-body tile">{{ projectCount }}</div>
+        <div class="card tile" >
+          <div class="card-body tile-number">{{ projectCount }}</div>
           <div class="card-header accordion-header-theme">Total Events</div>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-body tile">{{ schemaCount }}</div>
+      <div class="col-md-6" >
+        <div class="card tile">
+          <div class="card-body tile-number">{{ schemaCount }}</div>
           <div class="card-header accordion-header-theme">Total Users</div>
         </div>
       </div>
     </div>
     <div class="row" style="margin-top: 5%">
-      <div class="col-md-12 leftAlign">
-        <div class="card">
+      <div class="col-md-12 leftAlign ">
+        <div class="card tile tile-profile" >
           <div class="card-body">
             <div class="row">
               <div class="col-md-4">
