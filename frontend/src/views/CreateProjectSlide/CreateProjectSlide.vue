@@ -179,6 +179,8 @@ export default {
       }
     },
 
+
+
     socialList: function () {
       if(this.actionList &&  this.actionList.length > 0){
         return this.actionList.filter(x => (x.type.indexOf("TWITTER_") > -1 || x.type.indexOf("TELEGRAM_") > -1))
