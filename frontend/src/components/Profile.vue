@@ -51,6 +51,7 @@
   text-align: left;
 }
 .tile-number{
+  color: rgb(46, 46, 46);
   font-size: xxx-large;
 }
 .fVal {
@@ -72,13 +73,13 @@
       <div class="col-md-6">
         <div class="card tile" >
           <div class="card-body tile-number">{{ projectCount }}</div>
-          <div class="card-header accordion-header-theme">Total Events</div>
+          <div class="card-header accordion-header-theme">TOTAL EVENTS</div>
         </div>
       </div>
       <div class="col-md-6" >
         <div class="card tile">
           <div class="card-body tile-number">{{ schemaCount }}</div>
-          <div class="card-header accordion-header-theme">Total Users</div>
+          <div class="card-header accordion-header-theme">TOTAL USERS</div>
         </div>
       </div>
     </div>

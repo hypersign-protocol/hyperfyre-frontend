@@ -101,7 +101,9 @@ i {
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
-
+.card-body-custom{
+  color: rgb(46, 46, 46);
+}
 
 .event-card-footer{
   padding: 7px; background-color: #F1B3193D;  border-radius: 0px 0px 20px 20px;
@@ -217,7 +219,7 @@ i {
 
             </span>
           </div>
-          <div class="card-body">
+          <div class="card-body card-body-custom">
             <div class="row">
               <div class="col-md-4">
                 <img :src="project.logoUrl" style="max-width: 150px; min-width: 150px;" />
@@ -227,7 +229,7 @@ i {
                   <li
                     data-toggle="tooltip"
                     data-placement="bottom"
-                    title="ProjectId"
+                    title="EventId"
                   >
                     <i class="far fa-id-card"></i
                     ><span class="card-title">{{ project._id }}</span> <span @click="copy(project._id, 'EventId')" class="copy"><i class="far fa-copy"></i></span>
@@ -254,7 +256,7 @@ i {
                     title="Whitelisting Form"
                   >
                     <i class="fas fa-file-alt"></i>
-                    <a :href="project.whitelisting_link" target="_blank"
+                    <a :href="project.whitelisting_link" target="_blank" class="card-body-custom"
                       >Whitelisting Form Url</a
                     ><span @click="copy(project.whitelisting_link, 'Form Url')" class="copy"><i class="far fa-copy"></i></span>
                   </li>
@@ -265,7 +267,7 @@ i {
                     title="Investor List"
                   >
                     <i class="fas fa-users"></i
-                    ><a :href="`/app/admin/investors?projectId=${project._id}`"
+                    ><a class="card-body-custom" :href="`/app/admin/investors?projectId=${project._id}`"
                       >User List ({{project.investorsCount}})</a
                     >
                   </li>
@@ -340,6 +342,9 @@ import Datepicker from 'vuejs-datetimepicker'
 import Paginate from "vuejs-paginate";
 import notificationMixins from '../mixins/notificationMixins';
 import apiClientMixin from '../mixins/apiClientMixin';
+
+import { isValidURL } from "../mixins/fieldValidationMixin.js";
+
 import CreateProjectSlide from './CreateProjectSlide/CreateProjectSlide.vue';
 import dayjs from "dayjs";
 export default {
@@ -641,8 +646,15 @@ export default {
         if(this.checkIfEverythingIsFilled() !==  true){
             return this.notifyErr( this.checkIfEverythingIsFilled());   
         }
+        
+        if(this.isProjectNameValid()!==true){
+          return this.notifyErr(this.isProjectNameValid());
+        }
        
-    
+        if (this.isLogoUrlValid() !== true) {
+          return this.notifyErr(this.isLogoUrlValid());
+        }
+
         this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
@@ -723,7 +735,7 @@ export default {
           return "Please Specify a project name"
         }   
         if(!this.project.logoUrl){
-          return "Please specify a Logo Url"
+          return "Please specify a Banner Url"
         }
         if(! (this.project.fromDate && this.project.toDate)){
           return "Please specify a start and end date"
@@ -776,6 +788,19 @@ export default {
 
       
     },  
+
+    isProjectNameValid(){
+      if(isValidURL(this.project.projectName)){
+        return "Please provide valid project name";
+      }
+      return true;
+    },
+    isLogoUrlValid() {
+          if (!isValidURL(this.project.logoUrl)) {
+            return "Url is not Valid";
+          }
+          return true;
+        },
 
     clear() {
       this.isProjectEditing = false;
