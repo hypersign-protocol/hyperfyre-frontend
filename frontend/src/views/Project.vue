@@ -69,51 +69,52 @@ i {
   border-radius: 3px;
 }
 .paginationContainer >>> li.active {
-  background-color: #F1B319;
+  background-color: #f1b319;
   color: #fff;
 }
 
-
-.button-theme{
-  background-color: #F1B319;
-  border-collapse: #F1B319;
+.button-theme {
+  background-color: #f1b319;
+  border-collapse: #f1b319;
   color: whitesmoke;
   border: 0;
-
 }
 
-
-.theme{
+.theme {
   background-color: #363740;
   border-collapse: #363740;
   color: whitesmoke;
   border: 0;
-
 }
 
-.event-card{
+.event-card {
   float: left;
   max-width: 60rem;
   margin-right: 3%;
   margin-bottom: 2%;
-  border:0;
+  border: 0;
   border-radius: 20px;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
 
-
-.event-card-footer{
-  padding: 7px; background-color: #F1B3193D;  border-radius: 0px 0px 20px 20px;
+.event-card-footer {
+  padding: 7px;
+  background-color: #f1b3193d;
+  border-radius: 0px 0px 20px 20px;
 }
 
-.event-card-header{
-  padding: 7px; text-align: center; border-radius: 20px 20px 0px 0px
+.event-card-header {
+  padding: 7px;
+  text-align: center;
+  border-radius: 20px 20px 0px 0px;
 }
-.copy{
-	padding:3px; font-size: medium; cursor: pointer; color:grey
+.copy {
+  padding: 3px;
+  font-size: medium;
+  cursor: pointer;
+  color: grey;
 }
-
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -122,54 +123,59 @@ i {
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-    <b-modal  size="lg"  id="err-modal" title="Errors !">
+    <b-modal size="lg" id="err-modal" title="Errors !">
       <p v-for="err in errors" :key="err.msg">
-          {{err.param.toUpperCase()}} : {{err.msg}}
+        {{ err.param.toUpperCase() }} : {{ err.msg }}
       </p>
     </b-modal>
 
-
-
     <div class="row">
-        <div class="col-md-8">
-            <div class="form-group">
-              <input v-if="projects.length"  @keyup="handleSearch" type="text" class="form-control w-25" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Search events by name">
-            </div>
+      <div class="col-md-8">
+        <div class="form-group">
+          <input
+            v-if="projects.length"
+            @keyup="handleSearch"
+            type="text"
+            class="form-control w-25"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+            placeholder="Search events by name"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="text-right">
+          <button
+            @click="openCreateSidebar"
+            class="btn btn-primary button-theme"
+          >
+            Create <i class="fas fa-plus text-white"></i>
+          </button>
         </div>
 
-        <div class="col-md-4">
-          <div class="text-right">
-            <button @click="openCreateSidebar" class="btn btn-primary button-theme">Create <i class="fas fa-plus text-white"></i> </button>
-          </div>
+        <div>
+          <!-- <b-button v-b-toggle.sidebar-right>Toggle Sidebar</b-button> -->
 
-          <div>
-            <!-- <b-button v-b-toggle.sidebar-right>Toggle Sidebar</b-button> -->
-            
-            <create-project-slide 
+          <create-project-slide
             :isProjectEditing="isProjectEditing"
-              :project="project"
-              @UpdateColors="UpdateColors"
-              :themeColor="themeColor"
-              :themeColorDefault="themeColorDefault"
-              :fontColor="fontColor"
-              :fontColorDefault="fontColorDefault"
-              :blockChainType="blockchainType"
-              :eventActionType="eventActionType"
-              :saveProject="saveProject"
-              :addedSocialMedias="addedSocialMedias"
-              :selectedSocialMedia="selectedSocialMedia"
-              :socialOptions="socialOptions"
-              :actionList="project.actions"
-
-
-              @updateEventActions="AddUpdateDelEventActions"
-             />
-
-          
-
-          </div>
-
+            :project="project"
+            @UpdateColors="UpdateColors"
+            :themeColor="themeColor"
+            :themeColorDefault="themeColorDefault"
+            :fontColor="fontColor"
+            :fontColorDefault="fontColorDefault"
+            :blockChainType="blockchainType"
+            :eventActionType="eventActionType"
+            :saveProject="saveProject"
+            :addedSocialMedias="addedSocialMedias"
+            :selectedSocialMedia="selectedSocialMedia"
+            :socialOptions="socialOptions"
+            :actionList="project.actions"
+            @updateEventActions="AddUpdateDelEventActions"
+          />
         </div>
+      </div>
     </div>
 
     <div class="row" v-if="whitelistingLink != ''" style="margin-top: 2%">
@@ -188,39 +194,45 @@ i {
       </div>
     </div>
 
-      <div v-if="!projectsToShow.length">
-          <h3>No events found, click on "create" button to create a new event!</h3>
-      </div>
+    <div v-if="!projectsToShow.length">
+      <h3>No events found, click on "create" button to create a new event!</h3>
+    </div>
 
     <div class="row" style="margin-top: 2%">
-      <div class="col-md-12 my-5 w-100" style="text-align: left;max-height:660px; overflow-y:scroll">
+      <div
+        class="col-md-12 my-5 w-100"
+        style="text-align: left;max-height:660px; overflow-y:scroll"
+      >
         <div
           class="card event-card"
           v-for="project in projectsToShow"
           v-bind:key="project.projectName"
         >
-          <div
-            class="theme event-card-header"
-          >
+          <div class="theme event-card-header">
             <span style="">{{ project.projectName }}</span>
-            <span data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="Project Status" style="float:right">
-
-              
+            <span
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Project Status"
+              style="float:right"
+            >
               <span v-if="project.projectStatus == true">
-                <i class="fas fa-signal" style="color:green"></i> 
+                <i class="fas fa-signal" style="color:green"></i>
               </span>
-              <span  v-if="!project.projectStatus ||  project.projectStatus == false" >
+              <span
+                v-if="!project.projectStatus || project.projectStatus == false"
+              >
                 <i class="fas fa-signal" style="color:red"></i>
               </span>
-
             </span>
           </div>
           <div class="card-body">
             <div class="row">
               <div class="col-md-4">
-                <img :src="project.logoUrl" style="max-width: 150px; min-width: 150px;" />
+                <img
+                  :src="project.logoUrl"
+                  style="max-width: 150px; min-width: 150px;"
+                />
               </div>
               <div class="col-md-8">
                 <ul style="list-style-type: none">
@@ -230,7 +242,10 @@ i {
                     title="ProjectId"
                   >
                     <i class="far fa-id-card"></i
-                    ><span class="card-title">{{ project._id }}</span> <span @click="copy(project._id, 'EventId')" class="copy"><i class="far fa-copy"></i></span>
+                    ><span class="card-title">{{ project._id }}</span>
+                    <span @click="copy(project._id, 'EventId')" class="copy"
+                      ><i class="far fa-copy"></i
+                    ></span>
                   </li>
                   <li
                     data-toggle="tooltip"
@@ -245,7 +260,8 @@ i {
                     data-placement="bottom"
                     title="End Date"
                   >
-                    <i class="fas fa-hourglass-end"></i> {{ new Date(project.toDate).toLocaleString() }}
+                    <i class="fas fa-hourglass-end"></i>
+                    {{ new Date(project.toDate).toLocaleString() }}
                   </li>
 
                   <li
@@ -256,7 +272,11 @@ i {
                     <i class="fas fa-file-alt"></i>
                     <a :href="project.whitelisting_link" target="_blank"
                       >Whitelisting Form Url</a
-                    ><span @click="copy(project.whitelisting_link, 'Form Url')" class="copy"><i class="far fa-copy"></i></span>
+                    ><span
+                      @click="copy(project.whitelisting_link, 'Form Url')"
+                      class="copy"
+                      ><i class="far fa-copy"></i
+                    ></span>
                   </li>
 
                   <li
@@ -266,17 +286,14 @@ i {
                   >
                     <i class="fas fa-users"></i
                     ><a :href="`/app/admin/investors?projectId=${project._id}`"
-                      >User List ({{project.investorsCount}})</a
+                      >User List ({{ project.investorsCount }})</a
                     >
                   </li>
-
                 </ul>
               </div>
             </div>
           </div>
-          <div
-            class="theme event-card-footer"
-          >
+          <div class="theme event-card-footer">
             <!-- <span
               data-toggle="tooltip"
               data-placement="bottom"
@@ -305,30 +322,24 @@ i {
               data-toggle="tooltip"
               data-placement="bottom"
               title="Edit this event"
-              ><i class="fas fa-pencil-alt"  @click="editProject(project)"></i
+              ><i class="fas fa-pencil-alt" @click="editProject(project)"></i
             ></span>
           </div>
         </div>
-
-      
-
       </div>
     </div>
 
-
-       <paginate
-       v-if="projectsToShow.length"
-      
-        :pageCount="Math.ceil(this.projects.length / this.perPage)"
-         :clickHandler="paginateChange"
-        :prevText="'Prev'"
-        :nextText="'Next'"
-        :force-page="currentPage"
-        :containerClass="'paginationContainer'"
-        :page-class="'paginationItem'"
-        
-      >
-      </paginate>
+    <paginate
+      v-if="projectsToShow.length"
+      :pageCount="Math.ceil(this.projects.length / this.perPage)"
+      :clickHandler="paginateChange"
+      :prevText="'Prev'"
+      :nextText="'Next'"
+      :force-page="currentPage"
+      :containerClass="'paginationContainer'"
+      :page-class="'paginationItem'"
+    >
+    </paginate>
   </div>
 </template>
 
@@ -336,11 +347,12 @@ i {
 import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import Datepicker from 'vuejs-datetimepicker'
+import Datepicker from "vuejs-datetimepicker";
 import Paginate from "vuejs-paginate";
-import notificationMixins from '../mixins/notificationMixins';
-import apiClientMixin from '../mixins/apiClientMixin';
-import CreateProjectSlide from './CreateProjectSlide/CreateProjectSlide.vue';
+import notificationMixins from "../mixins/notificationMixins";
+import apiClientMixin from "../mixins/apiClientMixin";
+import { isValidURL } from "../mixins/fieldValidationMixin.js";
+import CreateProjectSlide from "./CreateProjectSlide/CreateProjectSlide.vue";
 import dayjs from "dayjs";
 export default {
   name: "Investor",
@@ -358,44 +370,63 @@ export default {
         investorsCount: 0,
         social: {},
         projectStatus: true,
-        actions: []
-      }, 
-      projects: [],   
-      
+        actions: [],
+      },
+      projects: [],
+
       selectedSocialMedia: null,
       addedSocialMedias: [],
       eventActionList: [],
       socialOptions: [
-          {value: null, label: "Select a Social Profile"},
-          {
-              label: "Twitter",
-              
-              value: {
-                  media: "twitter",
-                  icon: "fab fa-twitter",
-                  fields: [ 
-                      {name: "twitterHandle", type: "text", placeholder: "Twitter Handle", value:"" } ,
-                      {name: "twitterPostFormat", type: "text", placeholder: "Twitter Post Format", value: "" }
-                  ]
-              }, 
-              
+        { value: null, label: "Select a Social Profile" },
+        {
+          label: "Twitter",
+
+          value: {
+            media: "twitter",
+            icon: "fab fa-twitter",
+            fields: [
+              {
+                name: "twitterHandle",
+                type: "text",
+                placeholder: "Twitter Handle",
+                value: "",
+              },
+              {
+                name: "twitterPostFormat",
+                type: "text",
+                placeholder: "Twitter Post Format",
+                value: "",
+              },
+            ],
           },
-          {
-              label: "Telegram", 
-              value: {
-                  media: "telegram",
-                  icon:"fab fa-telegram-plane",
-                  fields: [ 
-                      {name: "telegramHandle", type: "text", placeholder: "Telegram Handle", value: "" } ,
-                      {name: "telegramAnnouncementChannel", type: "text", placeholder: "Telegram Announcement Channel", value: "", optional: true }
-                  ]
-              }, 
-              
-          }
+        },
+        {
+          label: "Telegram",
+          value: {
+            media: "telegram",
+            icon: "fab fa-telegram-plane",
+            fields: [
+              {
+                name: "telegramHandle",
+                type: "text",
+                placeholder: "Telegram Handle",
+                value: "",
+              },
+              {
+                name: "telegramAnnouncementChannel",
+                type: "text",
+                placeholder: "Telegram Announcement Channel",
+                value: "",
+                optional: true,
+              },
+            ],
+          },
+        },
       ],
 
       searchQuery: "",
-      projectsToShow : [],
+      projectsToShow: [],
       perPage: 10,
       projectStatus: true,
       blockchainType: "ETHEREUM",
@@ -407,7 +438,7 @@ export default {
       fontColorDefault: "#ffffff",
 
       isProjectEditing: false,
-      
+
       cols: [
         "Project Id",
         "Project Name",
@@ -425,7 +456,7 @@ export default {
       isLoading: false,
       fullPage: true,
       user: {},
-      errors: []
+      errors: [],
     };
   },
 
@@ -446,106 +477,114 @@ export default {
     });
   },
   methods: {
-    copy(textToCopy, contentType){
-			if(textToCopy){
-				navigator.clipboard.writeText(textToCopy).then(() => {
-						this.notifySuccess(`${contentType} is copied to clipboard`);
-					})
-					.catch(err => {
-						this.notifyErr('Error in copying text: ', err);
-					});
-			}
+    copy(textToCopy, contentType) {
+      if (textToCopy) {
+        navigator.clipboard
+          .writeText(textToCopy)
+          .then(() => {
+            this.notifySuccess(`${contentType} is copied to clipboard`);
+          })
+          .catch((err) => {
+            this.notifyErr("Error in copying text: ", err);
+          });
+      }
     },
-    openCreateSidebar(){
+    openCreateSidebar() {
       this.resetAllValues();
-      this.isProjectEditing = false
-        this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+      this.isProjectEditing = false;
+      this.$root.$emit("bv::toggle::collapse", "sidebar-right");
     },
-    AddUpdateDelEventActions(event){
-      console.log("Event receieved from grand-child")
-      const  { type, data } = event;
-      if(type){
-        switch(type){
+    AddUpdateDelEventActions(event) {
+      console.log("Event receieved from grand-child");
+      const { type, data } = event;
+      if (type) {
+        switch (type) {
           case "ADD": {
             this.eventActionList.push(data);
-            console.log("Adding action to project action list len = " + this.eventActionList.length)
+            console.log(
+              "Adding action to project action list len = " +
+                this.eventActionList.length
+            );
             break;
           }
 
           case "UPDATE": {
-            const { id } =  data;
-            this.eventActionList.map(x => {
-              if(x.id === id){
+            const { id } = data;
+            this.eventActionList.map((x) => {
+              if (x.id === id) {
                 return data;
               }
-            })
+            });
             // const actionToUpdate = this.eventActionList.find(x => x.id === id);
-            console.log("Updating action to project action id = " + id)
+            console.log("Updating action to project action id = " + id);
             break;
           }
 
           case "DELETE": {
-            this.eventActionList = this.eventActionList.filter(x => x.id != data);
-            console.log("Deleting action to project action list len = " + this.eventActionList.length)
+            this.eventActionList = this.eventActionList.filter(
+              (x) => x.id != data
+            );
+            console.log(
+              "Deleting action to project action list len = " +
+                this.eventActionList.length
+            );
             break;
           }
         }
       }
       console.log(JSON.stringify(data));
 
-      console.log("Event receieved from grand-child")
+      console.log("Event receieved from grand-child");
     },
-    handleSearch(e){
-
-        if(e.target.value.length){
-          this.searchQuery = e.target.value.trim();
-          return this.projectsToShow = this.projects.filter(x => x.projectName.includes(e.target.value));
-        } else{
-          this.searchQuery = ""
-          this.paginateChange(this.currentPage)
-        }
-
+    handleSearch(e) {
+      if (e.target.value.length) {
+        this.searchQuery = e.target.value.trim();
+        return (this.projectsToShow = this.projects.filter((x) =>
+          x.projectName.includes(e.target.value)
+        ));
+      } else {
+        this.searchQuery = "";
+        this.paginateChange(this.currentPage);
+      }
     },
-    UpdateColors(e){
-
-     this.fontColor = e.fontColor
-    this.themeColor = e.themeColor
-
+    UpdateColors(e) {
+      this.fontColor = e.fontColor;
+      this.themeColor = e.themeColor;
     },
-    paginateChange(e){
+    paginateChange(e) {
+      this.currentPage = e;
+      const skip = this.perPage * (e - 1);
 
-      this.currentPage = e
-       const skip = this.perPage * (e - 1);
-
-       this.projectsToShow  = this.projects.slice(skip, this.perPage + skip);
+      this.projectsToShow = this.projects.slice(skip, this.perPage + skip);
     },
 
     handleThemeChange(e) {
-      this.themeColor = e.target.value
+      this.themeColor = e.target.value;
     },
     openCreateModal() {
-      
       this.isProjectEditing = false;
-      this.project = {}
-      this.eventActionList = this.eventActionList
+      this.project = {};
+      this.eventActionList = this.eventActionList;
       this.blockchainType = "ETHEREUM";
       this.fontColor = this.fontColorDefault;
       this.themeColor = this.themeColorDefault;
       this.projectStatus = true;
-      this.$bvModal.show("create-project-modal")
+      this.$bvModal.show("create-project-modal");
     },
-    changeProjectStatus (event) {
-      this.project.projectStatus = event.target.options[event.target.options.selectedIndex].value === "false" ? false : true ;
+    changeProjectStatus(event) {
+      this.project.projectStatus =
+        event.target.options[event.target.options.selectedIndex].value ===
+        "false"
+          ? false
+          : true;
     },
     async fetchProjects() {
       try {
-        
         this.isLoading = true;
         // console.log("THIS USER", )
 
         // if (!this.project.ownerDid) throw new Error("No project found");
         if (!this.user.id) throw new Error("No project found");
-       
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.user.id}`;
 
@@ -566,11 +605,12 @@ export default {
         this.projectsToShow = this.projects.slice(0, this.perPage);
         this.projects.map((x) => {
           x["whitelisting_link"] =
-            window.location.origin + ( x.slug && x.slug != "" ?  "/event/" + x.slug :  "/app/form?projectId=" + x._id ) ;
-          x["investors_link"] =
             window.location.origin +
-            "/app/admin/investors?projectId=" +
-            x._id;
+            (x.slug && x.slug != ""
+              ? "/event/" + x.slug
+              : "/app/form?projectId=" + x._id);
+          x["investors_link"] =
+            window.location.origin + "/app/admin/investors?projectId=" + x._id;
         });
         this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {
@@ -589,60 +629,60 @@ export default {
     editProject(project) {
       this.resetAllValues();
       this.isProjectEditing = true;
-      this.project = {...project};
+      this.project = { ...project };
 
-      this.project.fromDate  =  dayjs(project.fromDate).format("YYYY-MM-DD hh:mm:ss");
-      this.project.toDate  =  dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
-
+      this.project.fromDate = dayjs(project.fromDate).format(
+        "YYYY-MM-DD hh:mm:ss"
+      );
+      this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
 
       // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
       this.project.social = {
         twitter: {
           isEnabled: true,
           twitterHandle: this.project.twitterHandle,
-          twitterPostFormat: this.project.twitterPostFormat
+          twitterPostFormat: this.project.twitterPostFormat,
         },
         telegram: {
-           isEnabled: true,
+          isEnabled: true,
           telegramHandle: this.project.telegramHandle,
-          telegramAnnouncementChannel : this.project.telegramAnnouncementChannel
-        }
-      }
-    
-      this.socialOptions.forEach(media => {
-        if(media.value){
-          media.value.fields.map(field => {
-            field.value = this.project[field.name]
-          })
-        }
-      })
+          telegramAnnouncementChannel: this.project.telegramAnnouncementChannel,
+        },
+      };
 
-      this.socialOptions.map(x =>{ 
-        if(x.value){
-            this.addedSocialMedias.push(x.value)
+      this.socialOptions.forEach((media) => {
+        if (media.value) {
+          media.value.fields.map((field) => {
+            field.value = this.project[field.name];
+          });
         }
-      })
+      });
 
-      this.blockchainType = project.blockchainType
-      this.themeColor = project.themeColor
-      this.fontColor = project.fontColor
-      this.projectStatus = project.projectStatus
-      console.log(project.actions)
-      this.eventActionList = project.actions
-    
-    
-      this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+      this.socialOptions.map((x) => {
+        if (x.value) {
+          this.addedSocialMedias.push(x.value);
+        }
+      });
+
+      this.blockchainType = project.blockchainType;
+      this.themeColor = project.themeColor;
+      this.fontColor = project.fontColor;
+      this.projectStatus = project.projectStatus;
+      console.log(project.actions);
+      this.eventActionList = project.actions;
+
+      this.$root.$emit("bv::toggle::collapse", "sidebar-right");
     },
-    
-    async saveProject() {
-      
-      try {
 
-        if(this.checkIfEverythingIsFilled() !==  true){
-            return this.notifyErr( this.checkIfEverythingIsFilled());   
+    async saveProject() {
+      try {
+        if (this.checkIfEverythingIsFilled() !== true) {
+          return this.notifyErr(this.checkIfEverythingIsFilled());
         }
-       
-    
+        if (this.isLogoUrlValid() !== true) {
+          return this.notifyErr(this.isLogoUrlValid());
+        }
+
         this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
@@ -658,23 +698,33 @@ export default {
 
         this.project.toDate = new Date(this.project.toDate).toISOString();
         this.project.fromDate = new Date(this.project.fromDate).toISOString();
-       
-        this.project.themeColor = this.themeColor.trim().length ?  this.themeColor :  this.themeColorDefault
-        this.project.fontColor = this.fontColor.trim().length ?  this.fontColor :  this.fontColorDefault
-        this.project.blockchainType = this.blockchainType
-        this.project.actions = this.eventActionList
-        
-    
-        console.log(this.project)
-        const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
-          if(!this.isProjectEditing){
-            ////  not using this for the time being just  to test
-            // this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/app/form/" + resp.data.slug :  "/app/form?projectId=" + resp.data._id ) 
-            this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/event/" + resp.data.slug :  "/app/form?projectId=" + resp.data._id ) 
-            
-          }
-        
+        this.project.themeColor = this.themeColor.trim().length
+          ? this.themeColor
+          : this.themeColorDefault;
+        this.project.fontColor = this.fontColor.trim().length
+          ? this.fontColor
+          : this.fontColorDefault;
+        this.project.blockchainType = this.blockchainType;
+        this.project.actions = this.eventActionList;
+
+        console.log(this.project);
+        const resp = await apiClientMixin.makeCall({
+          url,
+          body: this.project,
+          method,
+          header: headers,
+        });
+
+        if (!this.isProjectEditing) {
+          ////  not using this for the time being just  to test
+          // this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/app/form/" + resp.data.slug :  "/app/form?projectId=" + resp.data._id )
+          this.whitelistingLink =
+            window.location.origin +
+            (resp.data.slug && resp.data.slug != ""
+              ? "/event/" + resp.data.slug
+              : "/app/form?projectId=" + resp.data._id);
+        }
 
         setTimeout(() => {
           this.whitelistingLink = "";
@@ -682,32 +732,28 @@ export default {
         this.notifySuccess("Project is saved. Id = " + resp.data._id);
         this.resetAllValues();
 
-        if(this.isProjectEditing){
-           await this.fetchProjects();
-            this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+        if (this.isProjectEditing) {
+          await this.fetchProjects();
+          this.$root.$emit("bv::toggle::collapse", "sidebar-right");
           return;
         }
-    
-      
-        /// WARNING:: This code is redundant it seems. 
+
+        /// WARNING:: This code is redundant it seems.
         /// Not removing but handling the condition.
         const userProjects = JSON.parse(localStorage.getItem("userProjects"));
-        if(userProjects){
-          userProjects.count += 1
-          userProjects.projects.push(resp.data)
-          localStorage.setItem("userProjects", JSON.stringify(userProjects))
+        if (userProjects) {
+          userProjects.count += 1;
+          userProjects.projects.push(resp.data);
+          localStorage.setItem("userProjects", JSON.stringify(userProjects));
         }
-       
+
         await this.fetchProjects();
         this.$bvModal.hide("create-project-modal");
-        this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
-        
-        
+        this.$root.$emit("bv::toggle::collapse", "sidebar-right");
       } catch (e) {
-        
-        if(e.errors){
-            this.errors = e.errors
-            this.$bvModal.show("err-modal");
+        if (e.errors) {
+          this.errors = e.errors;
+          this.$bvModal.show("err-modal");
         }
         console.log(e);
         this.notifyErr(e || e.message);
@@ -717,66 +763,68 @@ export default {
       }
     },
 
-    checkIfEverythingIsFilled(){
+    checkIfEverythingIsFilled() {
+      if (!this.project.projectName) {
+        return "Please Specify a project name";
+      }
+      if (!this.project.logoUrl) {
+        return "Please specify a Logo Url";
+      }
+      if (!(this.project.fromDate && this.project.toDate)) {
+        return "Please specify a start and end date";
+      }
 
-        if(!this.project.projectName){
-          return "Please Specify a project name"
-        }   
-        if(!this.project.logoUrl){
-          return "Please specify a Logo Url"
-        }
-        if(! (this.project.fromDate && this.project.toDate)){
-          return "Please specify a start and end date"
-        }
+      // if(!Object.keys(this.project.social).length){
+      //   return "Please fill in social configuration";
+      // }
 
-        // if(!Object.keys(this.project.social).length){
-        //   return "Please fill in social configuration";
-        // }
+      // if(!Object.keys(this.project.social).includes("twitter")){
+      //   return "Add Twitter Info your project"
+      // }
 
-        // if(!Object.keys(this.project.social).includes("twitter")){
-        //   return "Add Twitter Info your project"
-        // }
+      // if(!Object.keys(this.project.social).includes("telegram")){
+      //   return "Add Telegram Info your project"
+      // }
 
-        // if(!Object.keys(this.project.social).includes("telegram")){
-        //   return "Add Telegram Info your project"
-        // }
-        
-        // if(this.project.social.twitter){
+      // if(this.project.social.twitter){
 
+      //     if(!this.project.social.twitter.twitterHandle || this.project.social.twitter.twitterHandle.trim() == ""){
+      //         return "Please provide a twitter handle"
+      //     }
+      //     if(!this.project.social.twitter.twitterPostFormat || this.project.social.twitter.twitterPostFormat.trim() == ""){
+      //         return "Please provide a Twitter Post Format"
+      //     }
+      // }
 
+      // if(this.project.social.telegram){
 
-        //     if(!this.project.social.twitter.twitterHandle || this.project.social.twitter.twitterHandle.trim() == ""){
-        //         return "Please provide a twitter handle"
-        //     }
-        //     if(!this.project.social.twitter.twitterPostFormat || this.project.social.twitter.twitterPostFormat.trim() == ""){
-        //         return "Please provide a Twitter Post Format"
-        //     }
-        // }
+      //      if(!this.project.social.telegram.telegramHandle || this.project.social.telegram.telegramHandle.trim() == ""){
+      //          return "Please provide a telegram handle"
+      //      }
+      // }
 
+      if (!this.blockchainType) {
+        return "Please provide Blockchain Type";
+      }
 
-        // if(this.project.social.telegram){
+      if (this.themeColor == "#ffffff") {
+        return "Theme color cannot be white";
+      }
 
-        //      if(!this.project.social.telegram.telegramHandle || this.project.social.telegram.telegramHandle.trim() == ""){
-        //          return "Please provide a telegram handle"
-        //      }
-        // }        
-       
-         if(!this.blockchainType){
-          return "Please provide Blockchain Type"
-        }
-
-        if(this.themeColor == "#ffffff"){
-          return "Theme color cannot be white"
-        }
-
-        if(this.themeColor == this.fontColor && (this.themeColor.trim().length && this.themeColor.trim().length) ){
-          return "Theme color and font color cannot be same"
-        }
-        return true
-
-      
-    },  
-
+      if (
+        this.themeColor == this.fontColor &&
+        this.themeColor.trim().length && this.themeColor.trim().length
+      ) {
+        return "Theme color and font color cannot be same";
+      }
+      return true;
+    },
+    isLogoUrlValid() {
+      if (!isValidURL(this.project.logoUrl)) {
+        return "Url is not Valid";
+      }
+      return true;
+    },
     clear() {
       this.isProjectEditing = false;
       this.project = {
@@ -791,9 +839,9 @@ export default {
       };
     },
 
-    resetAllValues(){
-       this.project = {
-         _id: "",
+    resetAllValues() {
+      (this.project = {
+        _id: "",
         projectName: "",
         logoUrl: "",
         fromDate: "",
@@ -802,42 +850,60 @@ export default {
         investorsCount: 0,
         social: {},
         projectStatus: true,
-        actions: []
-      }, 
-      this.eventActionList = []
-        this.selectedSocialMedia = null,
-        this.addedSocialMedias = [],
-        this.socialOptions = [
-            {value: null, label: "Select a Social Profile"},
-            {
-                label: "Twitter",
-                
-                value: {
-                    media: "twitter",
-                    icon: "fab fa-twitter",
-                    fields: [ 
-                        {name: "twitterHandle", type: "text", placeholder: "Twitter Handle", value:"" } ,
-                        {name: "twitterPostFormat", type: "text", placeholder: "Twitter Post Format", value: "" }
-                    ]
-                }, 
-                
-            },
-            {
-                label: "Telegram", 
-                value: {
-                    media: "telegram",
-                    icon:"fab fa-telegram-plane",
-                    fields: [ 
-                        {name: "telegramHandle", type: "text", placeholder: "Telegram Handle", value: "" } ,
-                        {name: "telegramAnnouncementChannel", type: "text", placeholder: "Telegram Announcement Channel", value: "", optional: true }
-                    ]
-                }, 
-                
-            }
-      ]
+        actions: [],
+      }),
+        (this.eventActionList = []);
+      (this.selectedSocialMedia = null),
+        (this.addedSocialMedias = []),
+        (this.socialOptions = [
+          { value: null, label: "Select a Social Profile" },
+          {
+            label: "Twitter",
 
-    }
+            value: {
+              media: "twitter",
+              icon: "fab fa-twitter",
+              fields: [
+                {
+                  name: "twitterHandle",
+                  type: "text",
+                  placeholder: "Twitter Handle",
+                  value: "",
+                },
+                {
+                  name: "twitterPostFormat",
+                  type: "text",
+                  placeholder: "Twitter Post Format",
+                  value: "",
+                },
+              ],
+            },
+          },
+          {
+            label: "Telegram",
+            value: {
+              media: "telegram",
+              icon: "fab fa-telegram-plane",
+              fields: [
+                {
+                  name: "telegramHandle",
+                  type: "text",
+                  placeholder: "Telegram Handle",
+                  value: "",
+                },
+                {
+                  name: "telegramAnnouncementChannel",
+                  type: "text",
+                  placeholder: "Telegram Announcement Channel",
+                  value: "",
+                  optional: true,
+                },
+              ],
+            },
+          },
+        ]);
+    },
   },
-  mixins: [notificationMixins]
+  mixins: [notificationMixins],
 };
 </script>
