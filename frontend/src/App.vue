@@ -9,9 +9,9 @@
           : 'hideNavbar',
       ]">
       <sidebar-menu class="sidebar-wrapper" @toggle-collapse="onToggleCollapse" @item-click="onItemClick" :theme="'white-theme'" width="220px" :menu="menu" v-if="showNavbar">
-        <span slot="header">
+        <span slot="header" style="background:#363740">
           <div class="ml-1 mt-3 mb-2" style="padding-left: 18px;">
-            <img :src="require('./assets/Fidato_logo.png')" alt="logo" width="150px" />
+            <img :src="require('./assets/logo.png')" alt="logo" width="150px" />
           </div>
           <!-- <p class="header-text">{{ $config.app.name }}</p> -->
           <hr class="rule" />
