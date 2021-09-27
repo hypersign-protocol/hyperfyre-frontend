@@ -100,7 +100,7 @@ label {
 .button-theme {
   background-color: #f1b319;
   border-collapse: #f1b319;
-  color: whitesmoke;
+  color: black;
   border: 0;
 }
 </style>
