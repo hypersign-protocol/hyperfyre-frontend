@@ -19,6 +19,12 @@
   color: #fff;
   animation: flash 0.4s cubic-bezier(1, 0, 0, 1);
 }
+.button-theme{
+  background-color: #F1B319;
+  border-collapse: #F1B319;
+  color: whitesmoke;
+  border: 0;
+}
 
 .fa-minus-circle {
   font-size: 14px;
@@ -88,7 +94,7 @@
       <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         <button
           @click="handleSocialMediaAdd(selectedSocialMedia)"
-          class="btn btn-primary"
+          class="btn btn-primary button-theme"
           type="button"
         >
           {{

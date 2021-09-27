@@ -43,7 +43,7 @@
 
 .tile {
   font-size: xxx-large;
-  background: aliceblue;
+  background: whitesmoke;
   border-bottom: 1px solid #8080802b;
 }
 .fVal {
@@ -55,6 +55,11 @@
 .card {
   border-radius: 10px;
 }
+
+.accordion-header-theme{
+  background-color: rgba(241, 179, 25, 0.24);
+  border: 0;
+}
 </style>
 
 <template>
@@ -63,13 +68,13 @@
       <div class="col-md-6">
         <div class="card">
           <div class="card-body tile">{{ projectCount }}</div>
-          <div class="card-header">Events</div>
+          <div class="card-header accordion-header-theme">Total Events</div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="card">
           <div class="card-body tile">{{ schemaCount }}</div>
-          <div class="card-header">Users</div>
+          <div class="card-header accordion-header-theme">Total Users</div>
         </div>
       </div>
     </div>
@@ -90,7 +95,7 @@
                 <p class="fVal">
                   <a target="_blank">{{ user.id }}</a>
                 </p>
-                <p>Email</p>
+                <p>EMAIL</p>
                 <p class="fVal">{{ user.email }}</p>
                 <p v-if="user.phoneNumber">
                   Phone Number: {{ user.phoneNumber }}

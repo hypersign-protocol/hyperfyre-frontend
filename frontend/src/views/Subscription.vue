@@ -57,6 +57,24 @@ i {
   color: grey;
   padding: 5px;
 }
+
+.button-theme{
+  background-color: #F1B319;
+  border-collapse: #F1B319;
+  color: whitesmoke;
+  border: 0;
+
+}
+
+
+.theme{
+  background-color: #363740;
+  border-collapse: #363740;
+  color: whitesmoke;
+  border: 0;
+
+}
+
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -74,7 +92,7 @@ i {
         v-bind:key="plan._id"
       >
         <div class="card">
-          <div class="card-header" style="padding-top: 10px">
+          <div class="card-header theme" style="padding-top: 10px">
             <h4>
               <b>{{ plan.planName }}</b>
             </h4>
@@ -85,7 +103,7 @@ i {
             <p>Upto <span style="font-weight: bold">{{ plan.totalNoOfRequests }}</span> requests</p>
             <p style="margin-top: 43%;">
               <button
-                class="btn btn-outline-primary btn-sm"
+                class="btn btn-outline-primary btn-sm button-theme"
                 @click="subscribe(plan['_id'])"
               >
                 Subscribe

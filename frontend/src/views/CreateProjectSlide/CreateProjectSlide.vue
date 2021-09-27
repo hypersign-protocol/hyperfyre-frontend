@@ -5,6 +5,19 @@
 .b-sidebar > .b-sidebar-header{
   border: 1px solid #000 !important;
 }
+
+.button-theme{
+  background-color: #F1B319;
+  border-collapse: #F1B319;
+  color: whitesmoke;
+  border: 0;
+}
+
+.accordion-header-theme{
+  background-color: rgba(241, 179, 25, 0.24);
+  border: 0;
+}
+
 /* .card-header{
   background-color: transparent;
 }
@@ -27,7 +40,7 @@
               <div class=" px-3 py-2">
                  <div class="accordion" role="tablist">
                     <b-card  no-body class="mb-1 ">
-                      <b-card-header  header-tag="header" class="p-1 border-0 accordin-header" role="tab">
+                      <b-card-header  header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme" role="tab">
                         <b-button block v-b-toggle.accordion-1 class="bg-transparent border-0 text-left text-primary" >General Configurations</b-button>
                       </b-card-header>
                       <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
@@ -57,7 +70,7 @@
                       </b-card> -->
 
                       <b-card no-body class="mb-1">
-                        <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
+                        <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" role="tab">
                           <b-button block v-b-toggle.accordion-2 variant="info" class="bg-transparent border-0 text-left text-primary" >Social Configurations  </b-button>
                         </b-card-header>
                         <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
@@ -69,7 +82,7 @@
 
 
                       <b-card no-body class="mb-1">
-                        <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
+                        <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" role="tab">
                           <b-button block v-b-toggle.accordion-3 variant="info" class="bg-transparent border-0 text-left text-primary" >Custom Inputs Configurations </b-button>
                         </b-card-header>
                         <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
@@ -82,7 +95,7 @@
 
 
                       <b-card no-body class="mb-1">
-                        <b-card-header header-tag="header" class="p-1 accordin-header" role="tab">
+                        <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" role="tab">
                           <b-button block v-b-toggle.accordion-4 variant="info" class="bg-transparent border-0 text-left text-primary" >Blockchain Configurations </b-button>
                         </b-card-header>
                         <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
@@ -93,7 +106,7 @@
                       </b-card>
               
                 </div>
-                <button  class="btn btn-primary mt-3" type="button" @click="saveProject">Submit</button>
+                <button  class="btn btn-primary mt-3 button-theme" type="button" @click="saveProject">Submit</button>
               </div>
               
     </b-sidebar>

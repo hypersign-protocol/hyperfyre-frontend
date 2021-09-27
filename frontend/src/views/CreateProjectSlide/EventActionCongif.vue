@@ -50,15 +50,15 @@
         </div>
         <div class="row g-3 justify-content-md-end w-100 mt-4" v-if="isCreate==true">
           <div class="col-lg-7 col-md-7 px-0">
-            <button @click="handleEventActionAdd()" class="btn btn-primary" type="button"> {{eventActionList.includes(selected) ? "Update" : "Add"}}</button>
+            <button @click="handleEventActionAdd()" class="btn btn-primary button-theme" type="button"> {{eventActionList.includes(selected) ? "Update" : "Add"}}</button>
           </div>  
         </div>
         <div class="row g-3 justify-content-md-end w-100 mt-4" v-else>
           <div class="col-lg-3 col-md-7 px-0">
-            <button @click="handleEventActionUpdate()" class="btn btn-primary" type="button"> Update</button>
+            <button @click="handleEventActionUpdate()" class="btn btn-primary button-theme" type="button"> Update</button>
           </div>  
           <div class="col-lg-3 col-md-7 px-0">
-            <button @click="handleEventActionDelete()" class="btn btn-primary" type="button"> Delete</button>
+            <button @click="handleEventActionDelete()" class="btn btn-primary button-theme" type="button"> Delete</button>
           </div>  
         </div>
       </div>
@@ -102,6 +102,13 @@
     100%{
         opacity: 1;
     }
+}
+
+.button-theme{
+  background-color: #F1B319;
+  border-collapse: #F1B319;
+  color: whitesmoke;
+  border: 0;
 }
 </style>
 <script>

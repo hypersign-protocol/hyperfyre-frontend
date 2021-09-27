@@ -16,7 +16,8 @@
         "bootstrap": "npm run start -- --bootstrap",
         "activateSubscription": "nodemon src/services/activateSubscription.ts",
         "bootstrapPlan": "nodemon src/services/bootstrapPlans.ts",
-        "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'  --require src/app.ts"
+        "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'  --require src/app.ts",
+        "healthCheck": "nodemon src/services/healthCheck.ts"
     },
     "author": "Vishwas Anand Bhushan",
     "license": "MIT",

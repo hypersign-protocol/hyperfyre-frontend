@@ -69,8 +69,49 @@ i {
   border-radius: 3px;
 }
 .paginationContainer >>> li.active {
-  background-color: #007bff;
+  background-color: #F1B319;
   color: #fff;
+}
+
+
+.button-theme{
+  background-color: #F1B319;
+  border-collapse: #F1B319;
+  color: whitesmoke;
+  border: 0;
+
+}
+
+
+.theme{
+  background-color: #363740;
+  border-collapse: #363740;
+  color: whitesmoke;
+  border: 0;
+
+}
+
+.event-card{
+  float: left;
+  max-width: 60rem;
+  margin-right: 3%;
+  margin-bottom: 2%;
+  border:0;
+  border-radius: 20px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+
+.event-card-footer{
+  padding: 7px; background-color: #F1B3193D;  border-radius: 0px 0px 20px 20px;
+}
+
+.event-card-header{
+  padding: 7px; text-align: center; border-radius: 20px 20px 0px 0px
+}
+.copy{
+	padding:3px; font-size: medium; cursor: pointer; color:grey
 }
 
 </style>
@@ -81,11 +122,10 @@ i {
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-    <b-modal   size="lg"  id="err-modal" title="Errors !">
+    <b-modal  size="lg"  id="err-modal" title="Errors !">
       <p v-for="err in errors" :key="err.msg">
           {{err.param.toUpperCase()}} : {{err.msg}}
       </p>
-
     </b-modal>
 
 
@@ -99,7 +139,7 @@ i {
 
         <div class="col-md-4">
           <div class="text-right">
-            <button @click="openCreateSidebar" class="btn btn-primary ">Create <i class="fas fa-plus text-white"></i> </button>
+            <button @click="openCreateSidebar" class="btn btn-primary button-theme">Create <i class="fas fa-plus text-white"></i> </button>
           </div>
 
           <div>
@@ -155,20 +195,12 @@ i {
     <div class="row" style="margin-top: 2%">
       <div class="col-md-12 my-5 w-100" style="text-align: left;max-height:660px; overflow-y:scroll">
         <div
-          class="card"
+          class="card event-card"
           v-for="project in projectsToShow"
           v-bind:key="project.projectName"
-          style="
-            float: left;
-            max-width: 60rem;
-            margin-right: 3%;
-            margin-bottom: 1%;
-          
-          "
         >
           <div
-            class="card-header"
-            style="padding: 5px; text-align: center; font-weight: bold"
+            class="theme event-card-header"
           >
             <span style="">{{ project.projectName }}</span>
             <span data-toggle="tooltip"
@@ -198,7 +230,7 @@ i {
                     title="ProjectId"
                   >
                     <i class="far fa-id-card"></i
-                    ><span class="card-title">{{ project._id }}</span>
+                    ><span class="card-title">{{ project._id }}</span> <span @click="copy(project._id, 'EventId')" class="copy"><i class="far fa-copy"></i></span>
                   </li>
                   <li
                     data-toggle="tooltip"
@@ -223,8 +255,8 @@ i {
                   >
                     <i class="fas fa-file-alt"></i>
                     <a :href="project.whitelisting_link" target="_blank"
-                      >Whitelisting Form</a
-                    >
+                      >Whitelisting Form Url</a
+                    ><span @click="copy(project.whitelisting_link, 'Form Url')" class="copy"><i class="far fa-copy"></i></span>
                   </li>
 
                   <li
@@ -243,10 +275,9 @@ i {
             </div>
           </div>
           <div
-            class="card-header"
-            style="padding: 5px; background-color: #8080801f"
+            class="theme event-card-footer"
           >
-            <span
+            <!-- <span
               data-toggle="tooltip"
               data-placement="bottom"
               title="Twitter handle"
@@ -257,8 +288,8 @@ i {
               >
                 <i class="fab fa-twitter"></i
               ></a>
-            </span>
-            <span
+            </span> -->
+            <!-- <span
               data-toggle="tooltip"
               data-placement="bottom"
               title="Telegram handle"
@@ -268,7 +299,7 @@ i {
                 target="__blank"
                 ><i class="fab fa-telegram-plane"></i
               ></a>
-            </span>
+            </span> -->
             <span
               style="float: right; cursor: pointer"
               data-toggle="tooltip"
@@ -415,6 +446,16 @@ export default {
     });
   },
   methods: {
+    copy(textToCopy, contentType){
+			if(textToCopy){
+				navigator.clipboard.writeText(textToCopy).then(() => {
+						this.notifySuccess(`${contentType} is copied to clipboard`);
+					})
+					.catch(err => {
+						this.notifyErr('Error in copying text: ', err);
+					});
+			}
+    },
     openCreateSidebar(){
       this.resetAllValues();
       this.isProjectEditing = false
