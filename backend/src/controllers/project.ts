@@ -26,26 +26,16 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       return next(ApiError.badRequest("fromDate can not be greater than toDate"));
     }
 
-    // if(typeof actions != Array){
-    //   return next(ApiError.badRequest("Choose different project name. This project name is already taken"));
-    // }
+    if(!Array.isArray(actions)){
+      return next(ApiError.badRequest("Actions should be array"));
+    }
+
     const slug = dashify(projectName);
 
     const project:IProject = await ProjectModel.where({ slug }).findOne();
     if(project){
       return next(ApiError.badRequest("Choose different project name. This project name is already taken"));
     }
-
-    // const {
-    //   telegramHandle,
-    //   telegramAnnouncementChannel, 
-    // } =  social.telegram;
-
-    // const {
-    //   twitterHandle,
-    //   twitterPostFormat,
-    // } =  social.twitter;
-
   
     let newProject: IProject = await ProjectModel.create({
       projectName,
@@ -61,6 +51,21 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
     });
 
     newProject.actions = [];
+
+    /// Default Action
+    /// Add HYPERSIGN_AUTH action as default action
+    const hsAuthEventAction = {
+      type: EventActionType.HYPERSIGN_AUTH,
+      title: "Hypersign Authentication",
+      eventId: newProject._id,
+      score: 5, // TODO:  hardcoding for now, later will take in ENV
+      isManadatory: true,
+      value: "Hypersign Authentication",
+      placeHolder: "Hypersign Authentication"
+    } as IEventAction;
+    actions.push(hsAuthEventAction);
+
+
     if(actions && actions.length > 0){
       let i;
       for(i = 0; i < actions.length; i++){
