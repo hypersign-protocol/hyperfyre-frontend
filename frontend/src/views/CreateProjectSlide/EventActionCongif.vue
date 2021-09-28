@@ -113,6 +113,7 @@
 </style>
 <script>
 import notificationMixins from '../../mixins/notificationMixins';
+import {isEmpty,isValidURL} from '../../mixins/fieldValidationMixin';
 
 export default {
   name: "EventActionCongif",
@@ -162,18 +163,53 @@ export default {
       this.selected = clearData
       this.currentSelectedId = null
     },
-
     handleEventActionValidation() {
       let isvalid = true
-      if(this.selected.type == null){
-        isvalid = false
-         this.notifyErr(`Please fill in Action Type`)
+      switch (this.eventActionType) {
+        case "SOCIAL":
+            if(this.selected.type===null){
+              isvalid = false
+              this.notifyErr(`Please choose Social Action Type`)
+            }else if(isEmpty(this.selected.title)){
+                isvalid = false
+                this.notifyErr(`Title Should not be empty`)
+            }else if(isValidURL(this.selected.title)){
+              isvalid=false
+              this.notifyErr(`Do not put url in title`)
+            }else if(isEmpty(this.selected.value)){
+              isvalid=false
+              this.notifyErr(`Value Should not be empty`)
+            }
+          break;
+        case "CUSTOM":
+         if(this.selected.type===null){
+              isvalid = false
+              this.notifyErr(`Please choose Custom Action Type`)
+            }else if(isEmpty(this.selected.title)){
+                isvalid = false
+                this.notifyErr(`Title Should not be empty`)
+            }else if(isValidURL(this.selected.title)){
+              isvalid=false
+              this.notifyErr(`Do not put url in title`)
+            }
+        break;
+        case "BLOCKCHAIN":
+          if(this.selected.type===null){
+              isvalid = false
+              this.notifyErr(`Please choose Blockchain Type`)
+            }else if(isEmpty(this.selected.title)){
+                isvalid = false
+                this.notifyErr(`Title Should not be empty`)
+            }else if(isValidURL(this.selected.title)){
+              isvalid=false
+              this.notifyErr(`Do not put url in title`)
+            }
+        break;
+        default:
+          console.log("Spelling mistake");
       }
-
-      if(this.selected.title == ""){
-        isvalid = false
-         this.notifyErr(`Please fill in Title`)
-      }
+      
+      
 
       return isvalid
     },
