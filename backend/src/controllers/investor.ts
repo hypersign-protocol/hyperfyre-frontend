@@ -202,7 +202,7 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       logger.info("updatedUser = " + JSON.stringify(updatedUser));
       
       req.body["result"] = {
-        ...updatedUser,
+        ...updatedUser["_doc"],
         isSubscribed: true
       }
       return next()
@@ -253,7 +253,7 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       }
   
       req.body["result"] = {
-        ...new_investor,
+        ...new_investor["_doc"],
         isSubscribed: false
       }
       return next()
