@@ -200,8 +200,12 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       }
       const updatedUser =  await updateInvestorInDb(filter, updateParams);
       logger.info("updatedUser = " + JSON.stringify(updatedUser));
-
-      res.send(updatedUser);
+      
+      req.body = {
+        ...updatedUser,
+        isSubscribed: true
+      }
+      return next()
     } else{
       /// ADD RECORD
       logger.info("Add Record flow")
@@ -248,13 +252,12 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
         }
       }
   
-      // issueCredential(req, res, next);
-      res.send(new_investor);
-
+      req.body = {
+        ...new_investor,
+        isSubscribed: false
+      }
+      return next()
     }
-
-
-   
   } catch (e) {
     logger.error("InvestorController:: addInvestor(): Error " + e);
     next(ApiError.internal(e.message));
