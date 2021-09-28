@@ -19,6 +19,7 @@ import Login from "../../components/v4/Login.vue";
 import EventIsOver from "../../components/v4/EventIsOver.vue";
 import Action from "../../components/v4/Action.vue";
 import Metrics from "../../components/v4/Metrics.vue";
+import notificationMixins from "../../mixins/notificationMixins";
 import apiClient from "../../mixins/apiClientMixin";
 import eventBus from "../../eventBus.js"
 export default {
@@ -71,7 +72,7 @@ export default {
         await this.fetchUserInfoOnLogin();
       }
     }catch(e){
-      alert("Error occurred: " + e.message);
+      this.notifyErr("Error occurred: " + e.message);
     }
   },
   async updated() {
@@ -85,7 +86,7 @@ export default {
         await this.fetchUserDetails();
         this.fetchUserInfoOnLogin();
       }catch(e){
-        alert("Error occurred: " + e.message);
+        this.notifyErr("Error occurred: " + e.message);
       }
     },
     async fetchUserDetails() {
@@ -132,7 +133,7 @@ export default {
           ...resp.data
         }
       } else {
-        alert("Invalid project slug")
+        this.notifyErr("Invalid project slug")
       }
 
     },
@@ -185,6 +186,7 @@ export default {
     }
 
   },
+  mixins:[notificationMixins],
 };
 </script>
 <style scoped>
