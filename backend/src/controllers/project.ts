@@ -47,7 +47,9 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       blockchainType: !blockchainType || blockchainType == "" ? EBlockchainType.ETHEREUM : blockchainType,
       themeColor: !themeColor || themeColor == "" ? "#494949" : themeColor,
       fontColor: !fontColor || fontColor == "" ? "#ffffff" : fontColor,
-      slug
+      slug,
+      createdAt: new Date(),
+      updatedAt: new Date()
     });
 
     newProject.actions = [];
@@ -154,6 +156,7 @@ function checkUpdateIfProjectExpired(projectInfo: IProject){
   if(projectInfo.projectStatus){
     if(new Date().toISOString() > new Date(projectInfo.toDate).toISOString()){
       projectInfo.projectStatus = false;
+      projectInfo.updatedAt =  new Date();
       // update the project in background
       ProjectModel.findByIdAndUpdate(projectInfo._id, { ...projectInfo });
       return true;

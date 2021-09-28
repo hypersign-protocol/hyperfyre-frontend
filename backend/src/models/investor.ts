@@ -16,6 +16,8 @@ export interface IInvestor extends Document {
     isVerificationComplete: boolean;
     numberOfReferals: number;
     actions: IEventAction[];
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 const InvestorSchema = new Schema({
@@ -32,7 +34,9 @@ const InvestorSchema = new Schema({
   projectId: { type: String, required: true },
   tweetUrl: { type: String, required: true },
   numberOfReferals: { type: Number, required: true },
-  actions: { type: Array<IEventAction>(), required: true } // 0
+  actions: { type: Array<IEventAction>(), required: true }, // 0,
+  createdAt: { type: Date, required: false },
+  updatedAt: { type: Date, required: false }
 });
 
 export default mongoose.model<IInvestor>("Investor", InvestorSchema);

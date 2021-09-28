@@ -14,7 +14,8 @@ export interface IProject extends Document{
     fontColor: string;
     slug: string;
     actions: Array<IEventAction>;
-
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export enum EBlockchainType {
@@ -33,7 +34,9 @@ const ProjectSchema = new Schema({
     investorsCount: {type: Number},
     themeColor: { type: String, required: true},
     fontColor: { type: String, required: true},
-    slug: { type: String, required: true}
+    slug: { type: String, required: true},
+    createdAt: { type: Date, required: false },
+    updatedAt: { type: Date, required: false }
 })
 
 export default mongoose.model<IProject>("Project", ProjectSchema);

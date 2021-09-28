@@ -230,7 +230,9 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
         projectId,
         tweetUrl,
         numberOfReferals: (!isComingFromReferal ? 0 : 0.5 * REFFERAL_MULTIPLIER ) +  userActionScore,
-        actions: user_actions
+        actions: user_actions,
+        createdAt: new Date(),
+        updatedAt: new Date()
       });
       logger.info("InvestorController:: addInvestor(): after creating a new investor into db id = " + new_investor["_id"]);
   
@@ -302,7 +304,7 @@ async function getInvestorByDID(req: Request, res: Response, next: NextFunction)
 
 async function updateInvestorInDb(filter, updateParams){
 
-  const opts = { new: true, useFindAndModify: true };
+  const opts = { new: true, useFindAndModify: true, updatedAt: new Date() };
   
   const investor: IInvestor = await InvestorModel.findOneAndUpdate(filter, updateParams, opts);
 
