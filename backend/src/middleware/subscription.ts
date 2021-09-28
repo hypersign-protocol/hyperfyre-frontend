@@ -18,7 +18,7 @@ async function verifySubscription(req: Request, res: Response, next: NextFunctio
         const res = await subscriptionService.verify({did: ownerDid});
         if(!res){
             // if not send the error response back  to user
-            return next(ApiError.badRequest("Subscription failed. Please contract the admin"));
+            return next(ApiError.badRequest("Subscription failed. Please contact the admin"));
         }
         // if yes then move to controller where user can filled the form
         req.body["ownerDid"] = ownerDid;

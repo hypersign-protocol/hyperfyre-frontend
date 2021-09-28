@@ -151,6 +151,19 @@ export default {
           method: "GET",
         })
 
+        if(res.data.length == 0){
+           // a user can participate in event 
+           // Participate in event
+          try{
+            const hypersignAuthAction  = this.eventData.actions.find(x => x.type == "HYPERSIGN_AUTH")
+            if(hypersignAuthAction){
+              eventBus.$emit('UpdateUserInfoFromEvent', { actionItem: hypersignAuthAction, value: "Authorized"});
+            }
+          }catch(e){
+            console.error(e);
+          }
+        }
+
         this.userEventData = {
           ...res.data[0]
         }

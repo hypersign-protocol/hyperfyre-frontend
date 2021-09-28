@@ -164,9 +164,15 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       logger.info("userActionScore = " +userActionScore)
       logger.info("user_actions = " + JSON.stringify(user_actions))
 
-    } else {
-      return next(ApiError.badRequest(`Atleast one action is required`))
-    }
+    } 
+    
+    /** Commenting this to ensure that even if a user has logged in and hasnt done a single action, 
+        he is concidered particiapted in the event. so action becomes optional now;  
+        Refer: https://github.com/hypersign-protocol/whitelisting/issues/263
+    **/
+    // else {  
+    //   return next(ApiError.badRequest(`Atleast one action is required`))
+    // }
     
 
 
@@ -200,8 +206,12 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       }
       const updatedUser =  await updateInvestorInDb(filter, updateParams);
       logger.info("updatedUser = " + JSON.stringify(updatedUser));
-
-      res.send(updatedUser);
+      
+      req.body["result"] = {
+        ...updatedUser["_doc"],
+        isSubscribed: true
+      }
+      return next()
     } else{
       /// ADD RECORD
       logger.info("Add Record flow")
@@ -248,13 +258,12 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
         }
       }
   
-      // issueCredential(req, res, next);
-      res.send(new_investor);
-
+      req.body["result"] = {
+        ...new_investor["_doc"],
+        isSubscribed: false
+      }
+      return next()
     }
-
-
-   
   } catch (e) {
     logger.error("InvestorController:: addInvestor(): Error " + e);
     next(ApiError.internal(e.message));

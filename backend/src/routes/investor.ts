@@ -36,7 +36,17 @@ export = (hypersign) => {
     validateRequestSchema,
     verifySubscription,
     InvestorController.addUpdateUser,
-    updateSubscription
+    (req, res, next) => {
+      const { result } = req.body;
+      const { isSubscribed } = result;
+      // only update the subscription for the first time :  during ADD user.
+      // from the second time (during UPDATE user), need not to update subscriptions: 
+      if (!isSubscribed) {
+        updateSubscription(req, res, next);
+      }else{
+        res.send(result);
+      }
+    }
   );
 
   router.get(
