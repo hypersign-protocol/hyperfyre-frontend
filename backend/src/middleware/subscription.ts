@@ -48,7 +48,7 @@ async function verifySubscriptionWithDid(req: Request, res: Response, next: Next
 
 async function updateSubscription(req: Request, res: Response, next: NextFunction){
     try{
-        // console.log("call comes in updateSubscription middleware");
+        console.log("call comes in updateSubscription middleware");
         // if user has successfully filled the form then
         const { result,  ownerDid } = req.body;
         // updated the usage table for that admin
