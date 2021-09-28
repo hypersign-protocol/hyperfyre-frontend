@@ -201,7 +201,7 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       const updatedUser =  await updateInvestorInDb(filter, updateParams);
       logger.info("updatedUser = " + JSON.stringify(updatedUser));
       
-      req.body = {
+      req.body["result"] = {
         ...updatedUser,
         isSubscribed: true
       }
@@ -252,7 +252,7 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
         }
       }
   
-      req.body = {
+      req.body["result"] = {
         ...new_investor,
         isSubscribed: false
       }

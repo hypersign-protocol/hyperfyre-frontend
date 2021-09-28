@@ -37,7 +37,7 @@ export = (hypersign) => {
     verifySubscription,
     InvestorController.addUpdateUser,
     (req, res, next) => {
-      const { isSubscribed } = req.body;
+      const { isSubscribed } = req.body["result"];
       // only update the subscription for the first time :  during ADD user.
       // from the second time (during UPDATE user), need not to update subscriptions: 
       if (!isSubscribed) {
