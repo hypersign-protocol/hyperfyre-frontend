@@ -42,6 +42,10 @@ export default {
   },
   mounted(){
     eventBus.$emit('loadUserProfileData');
+    eventBus.$on('UpdateUserInfoFromEvent',   (data) => {
+      const { actionItem,  value} =  data;
+      this.updateUserInfo(actionItem,  value)
+    })
   },
   data() {
     return {
@@ -84,6 +88,9 @@ export default {
         };
 
         let url = `${this.$config.studioServer.BASE_URL}api/v1/investor/add`;
+        if (this.$route.query.referrer && this.$route.query.referrer != "") {
+          url += `?referrer=${this.$route.query.referrer}`;
+        }
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
