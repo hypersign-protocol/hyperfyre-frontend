@@ -567,13 +567,25 @@ export default {
       });
     },
 
-    async handleTableSearch() {
-      this.fetchProjectData(0, this.perPage);
+  async handleTableSearch(e) {
+           if(e.target.value.length){
+          this.searchQuery = e.target.value.trim();
+          this.temp=[]
+          this.holdInvestors.forEach(x => { 
+            if(x.email.toLowerCase().includes(this.searchQuery.toLowerCase())||x.name.toLowerCase().includes(this.searchQuery.toLowerCase())){
+                    this.temp.push(x);  
+              }
+            })
+            this.project.investors=this.temp;
+            }else{
+              this.project.investors=this.holdInvestors
+            } 
     },
     async fetchProjectInvestors(e) {
       if (e) {
         this.investor.projectId = e;
         await this.fetchProjectData(0, this.perPage);
+        this.holdInvestors=this.project.investors;              
       }
     },
 
