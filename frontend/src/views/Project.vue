@@ -509,10 +509,9 @@ export default {
       console.log("Event receieved from grand-child")
     },
     handleSearch(e){
-
         if(e.target.value.length){
           this.searchQuery = e.target.value.trim();
-          return this.projectsToShow = this.projects.filter(x => x.projectName.includes(e.target.value));
+          return this.projectsToShow = this.projects.filter(x => (x.projectName.toLowerCase().includes(e.target.value.toLowerCase())));
         } else{
           this.searchQuery = ""
           this.paginateChange(this.currentPage)
@@ -805,7 +804,7 @@ export default {
     },
     isLogoUrlValid() {
           if (!isValidURL(this.project.logoUrl)) {
-            return "Url is not Valid";
+            return "Banner Url is not Valid";
           }
           return true;
         },
