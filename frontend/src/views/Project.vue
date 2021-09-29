@@ -805,7 +805,7 @@ export default {
     },
     isLogoUrlValid() {
           if (!isValidURL(this.project.logoUrl)) {
-            return "Url is not Valid";
+            return "Banner Url is not Valid";
           }
           return true;
         },
