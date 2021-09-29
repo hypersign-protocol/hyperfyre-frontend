@@ -129,7 +129,7 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       logger.info("user exists ..")
     }
 
-    let user_actions: Array<IEventAction> = [];
+    let user_actions = [];
     let userActionScore = 0;
     // sanity check for the action
     if(actions && actions.length > 0){
@@ -178,14 +178,13 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       logger.info("Update Record flow")
       
       // fetch the actions
-      const userActionsInDb: Array<IEventAction> = investor_email.actions;
+      const userActionsInDb = investor_email.actions;
 
       logger.info("userActionsInDb = " + JSON.stringify(userActionsInDb));
       logger.info("user_actions = " + JSON.stringify(user_actions));
       
-      // find duplicate actions
-      // TODO: Need to check why this condition is not working...
-      if(user_actions.some(a => userActionsInDb.findIndex(b => b._id == a._id) >= 0 )){
+      // find duplicate actions      
+      if(user_actions.some(x => userActionsInDb.findIndex(b => b._id == x._id))){
         logger.info("================== found duplicate ====================")
         return next(ApiError.badRequest(`Duplicate action(s)`))
       }else{
