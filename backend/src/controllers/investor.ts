@@ -5,7 +5,7 @@ let { template :credentialMailTemplate} = require('../services/mail.template');
 import MailService from '../services/mail.service';
 import ApiError from '../error/apiError';
 import ActionService from "../services/action.service";
-import { IEventAction } from "../models/actions";
+import { IEventAction, EventActionType } from "../models/actions";
 
 
 
@@ -107,11 +107,8 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
     logger.info("InvestorController:: addInvestor() method start..");
     const { 
       userData, 
-      ethAddress, 
-      twitterHandle, 
-      telegramHandle, 
+      
       projectId, 
-      tweetUrl,
       actions
     } = req.body;
 
@@ -132,7 +129,7 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       logger.info("user exists ..")
     }
 
-    let user_actions: Array<IEventAction> = [];
+    let user_actions = [];
     let userActionScore = 0;
     // sanity check for the action
     if(actions && actions.length > 0){
@@ -146,9 +143,9 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       }
 
       logger.info("eventActionsInDb = " + JSON.stringify(eventActionsInDb))
-
+      
       actions.forEach((x) => {
-        const t: IEventAction = eventActionsInDb.find(y => y._id == x["actionId"])
+        const t: IEventAction = eventActionsInDb.find(y => y._id == x["actionId"] && x.type != EventActionType.HYPERSIGN_AUTH)
         if(typeof t != 'undefined'){
           user_actions.push({
             ...t["_doc"],
@@ -160,9 +157,6 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
           return next(ApiError.badRequest(`Invalid actionId ${x.actionId} for eventId ${projectId}`))
         }
       })
-
-      logger.info("userActionScore = " +userActionScore)
-      logger.info("user_actions = " + JSON.stringify(user_actions))
 
     } 
     
@@ -181,20 +175,17 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       logger.info("Update Record flow")
       
       // fetch the actions
-      const userActionsInDb: Array<IEventAction> = investor_email.actions;
+      const userActionsInDb = investor_email.actions;
 
-      logger.info("userActionsInDb = " + JSON.stringify(userActionsInDb));
-      logger.info("user_actions = " + JSON.stringify(user_actions));
-      
-      // find duplicate actions
-      // TODO: Need to check why this condition is not working...
-      if(user_actions.some(a => userActionsInDb.findIndex(b => b._id == a._id) >= 0 )){
-        logger.info("================== found duplicate ====================")
-        return next(ApiError.badRequest(`Duplicate action(s)`))
-      }else{
-        logger.info("================== no duplicate ====================")
-      }
-      
+      // find duplicate actions      
+      user_actions.forEach(action => {
+        const id  = action["_id"];
+        if(userActionsInDb.find(y => y._id == id)){
+          console.log("Found duplicates")
+          return next(ApiError.badRequest(`Duplicate action(s)`))
+        }
+      })
+
       // merge user_actions & userActionsInDb
       const userActionMerged = userActionsInDb.concat(user_actions);
 
@@ -205,7 +196,6 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
         actions: userActionMerged
       }
       const updatedUser =  await updateInvestorInDb(filter, updateParams);
-      logger.info("updatedUser = " + JSON.stringify(updatedUser));
       
       req.body["result"] = {
         ...updatedUser["_doc"],
@@ -220,15 +210,7 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
         did, 
         email, 
         name, 
-        ethAddress, 
-        twitterHandle, 
-        telegramHandle, 
-        hasTwitted: true, 
-        hasJoinedTGgroup: true, 
-        isVerfiedByHypersign: false,
-        isVerificationComplete: true,
         projectId,
-        tweetUrl,
         numberOfReferals: (!isComingFromReferal ? 0 : 0.5 * REFFERAL_MULTIPLIER ) +  userActionScore,
         actions: user_actions,
         createdAt: new Date(),

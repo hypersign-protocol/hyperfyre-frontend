@@ -61,11 +61,7 @@ export default {
       authToken: localStorage.getItem("authToken"),
       user: JSON.parse(localStorage.getItem('user')),
       userData: {
-        ethAddress: "0x12312312312",
-        twitterHandle: "hermit123123",
-        telegramHandle: "hermitTg123",
-        projectId: "613b8476442d2d56fb0988fa",
-        tweetUrl: "https://asdad.com",
+        projectId: "613b8476442d2d56fb0988fa",  
       },
       actions: [],
       eventActionType: {
@@ -84,10 +80,11 @@ export default {
       return first + next
     },
     async updateUserInfo(actionItem, value) {
-      this.isLoading = true
-
       try {
-          this.actions.push({
+        this.isLoading = true
+        this.actions = [];
+        
+        this.actions.push({
           'actionId': actionItem._id,
           'value': value,
         });

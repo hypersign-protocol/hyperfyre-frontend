@@ -40,35 +40,34 @@ export const InvestorSchemaBody = [
   //   .trim()
   //   .withMessage("name can not be null or empty"),
 
-  body("ethAddress")
-    .exists({ checkFalsy: true })
-    .trim()
-    .withMessage("invalid ethereum address"),
+  // body("ethAddress")
+  //   .exists({ checkFalsy: true })
+  //   .trim()
+  //   .withMessage("invalid ethereum address"),
 
-  body("twitterHandle")
-    .exists({ checkFalsy: true })
-    .trim()
-    .withMessage("invalid twitterHandle"),
+  // body("twitterHandle")
+  //   .exists({ checkFalsy: true })
+  //   .trim()
+  //   .withMessage("invalid twitterHandle"),
 
-  body("telegramHandle")
-    .exists({ checkFalsy: true })
-    .trim()
-    .withMessage("invalid telegramHandle"),
+  // body("telegramHandle")
+  //   .exists({ checkFalsy: true })
+  //   .trim()
+  //   .withMessage("invalid telegramHandle"),
 
   body("projectId")
     .exists({ checkFalsy: true })
     .trim()
     .withMessage("projectId can not be null or empty"),
 
-  body("tweetUrl")
-    .exists({ checkFalsy: true })
-    .trim()
-    .custom((value) => validateURL(value))
-    .withMessage("invalid tweet url"),
+  // body("tweetUrl")
+  //   .exists({ checkFalsy: true })
+  //   .trim()
+  //   .custom((value) => validateURL(value))
+  //   .withMessage("invalid tweet url"),
 
 
-  body("actions")
-    .exists({ checkFalsy: true })
-    .isArray({ min:  1})
-    .withMessage("Invalid actions"),
+  body("actions")    
+    .isArray()
+    .withMessage("actions must be an array"),
 ];
