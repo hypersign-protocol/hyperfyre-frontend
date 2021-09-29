@@ -116,6 +116,10 @@ i {
 	padding:3px; font-size: medium; cursor: pointer; color:grey
 }
 
+.fixBanner{
+  min-width: 150px; min-height: 150px; max-width: 150px; max-height: 150px;
+}
+
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -222,7 +226,7 @@ i {
           <div class="card-body card-body-custom">
             <div class="row">
               <div class="col-md-4">
-                <img :src="project.logoUrl" style="max-width: 150px; min-width: 150px;" />
+                <img :src="project.logoUrl" class="fixBanner" />
               </div>
               <div class="col-md-8">
                 <ul style="list-style-type: none">
