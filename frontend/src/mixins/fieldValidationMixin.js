@@ -59,5 +59,5 @@ export function truncate(str, limit){
   const eachLen = Math.floor(limit / 3);  //  we need to 3 parts
   const firstPart = str.substr(0, eachLen);
   const lastPart = str.slice(-eachLen)
-  return firstPart + "..." + lastPart;
+  return firstPart + " ... " + lastPart;
 }
