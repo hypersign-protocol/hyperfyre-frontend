@@ -1,5 +1,11 @@
 <template>
+
 	<b-card no-body class="action-wrap">
+		 <loading
+      :active.sync="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+         ></loading>
 		<b-card-header :class="visible ? null : 'collapsed'" :aria-expanded="visible ? 'true' : 'false'" :aria-controls="`collapse-${idValue}`" @click="visible = !visible">
 			<b-row>
 				<b-col cols="1" sm="1" md="1">
@@ -37,11 +43,14 @@
 	</b-card>
 </template>
 <script>
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 import apiClient from "../../../mixins/apiClientMixin";
 import webAuth from "../../../mixins/twitterLogin";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 export default {
+	components:{Loading},
 	name: 'TwitterRetweet',
 	props: {
 		idValue: {
@@ -56,7 +65,9 @@ export default {
 			authToken: localStorage.getItem("authToken"),
 			visible: false,
 			done: this.data.isDone,
-			retweetUrl: ""
+			retweetUrl: "",
+			isLoading: false,
+            fullPage: true
 		}
 	},
 	mounted() {
@@ -109,6 +120,7 @@ export default {
 		},
 		async hasRetweeted() {
 			try {
+				this.isLoading= true;
 				const twitterId = localStorage.getItem('twitterId')
 				if (twitterId) {
 					let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
@@ -132,7 +144,7 @@ export default {
 						body,
 						header: headers,
 					});
-
+					
 					if (resp.data.hasTweetUrlVerified) {
 						return true;
 					} else {
@@ -143,6 +155,9 @@ export default {
 			} catch (e) {
 				console.log(e);
 				return false;
+			}
+			finally{
+				this.isLoading= false;
 			}
 		},
 	},
