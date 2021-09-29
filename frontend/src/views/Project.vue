@@ -226,7 +226,7 @@ i {
           <div class="card-body card-body-custom">
             <div class="row">
               <div class="col-md-4">
-                <img :src="project.logoUrl" class="fixBanner" />
+                <img :src="createBanner(project.logoUrl)" class="fixBanner" @error="imageError =  true" />
               </div>
               <div class="col-md-8">
                 <ul style="list-style-type: none">
@@ -354,9 +354,10 @@ import dayjs from "dayjs";
 export default {
   name: "Investor",
   components: { Loading, Datepicker, Paginate, CreateProjectSlide },
-
+  
   data() {
     return {
+      imageError: false,
       project: {
         _id: "",
         projectName: "",
@@ -455,6 +456,9 @@ export default {
     });
   },
   methods: {
+    createBanner(banner) {
+      return this.imageError ? require("../assets/default-banner.png") : banner;
+    },
     copy(textToCopy, contentType){
 			if(textToCopy){
 				navigator.clipboard.writeText(textToCopy).then(() => {
