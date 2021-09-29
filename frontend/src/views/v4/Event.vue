@@ -1,5 +1,10 @@
 <template>
   <div>
+    <loading
+      :active.sync="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    ></loading>
     <b-card no-body class="mx-auto overflow-hidden mt-3 border-0" style="max-width: 600px;">
       <Metrics :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0" :totalEntries="eventData && eventData.count ? eventData.count : 0" :timeLeft="timeLeft" />
       <Banner :eventName="eventData.projectName" :themeColor="eventData.themeColor" :fontColor="eventData.fontColor" :fromDate="new Date(eventData.fromDate).toLocaleString()" :toDate="new Date(eventData.toDate).toLocaleString()" :logoUrl="eventData.logoUrl" />
@@ -14,6 +19,8 @@
   </div>
 </template>
 <script>
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 import Banner from "../../components/v4/Banner.vue";
 import Login from "../../components/v4/Login.vue";
 import EventIsOver from "../../components/v4/EventIsOver.vue";
@@ -29,7 +36,8 @@ export default {
     Login,
     Action,
     Metrics,
-    EventIsOver
+    EventIsOver,
+    Loading
   },
   data() {
     return {
@@ -40,7 +48,9 @@ export default {
       userAuthData: null,
       eventActionsToShow: [],
       eventSlug: "",
-      userProfileData: {}
+      userProfileData: {},
+      isLoading: false,
+      fullPage: true
     }
   },
   computed: {
@@ -90,6 +100,7 @@ export default {
       }
     },
     async fetchUserDetails() {
+      this.isLoading= true;
       if (this.authToken) {
         const url = `${this.$config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
         let headers = {
@@ -116,8 +127,11 @@ export default {
       } else {
         //console.log("fetchUserDetails() :  No authToken")
       }
+      this.isLoading=false;
+      
     },
     async fetchEventData() {
+      this.isLoading=true
       if (this.eventSlug && this.eventSlug != "") {
         // https://stage.hypermine.in/whitelist/api/v1/project/custom-input-type--001?isPublic=true
         //"custom-input-type-002"; // take slug from url
@@ -135,10 +149,12 @@ export default {
       } else {
         this.notifyErr("Invalid project slug")
       }
-
+      this.isLoading=false;
     },
     async fetchUserInfoOnLogin() {
+      this.isLoading= true
       if (this.authToken != "" && this.authToken && this.userAuthData.email) {
+        
         this.userProfileData = this.userAuthData
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?email=${this.userAuthData.email}&projectId=${this.eventData._id}`;
         let headers = {
@@ -189,6 +205,8 @@ export default {
           this.eventActionsToShow = eventActions
         }
       }
+      
+      this.isLoading=false;
     },
     updateUserData(userEventData) {
       if (userEventData) {
