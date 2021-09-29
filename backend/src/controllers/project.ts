@@ -133,11 +133,7 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
         });
       }
 
-      // projectList.forEach((project) => {
-        
-      // });
-
-      logger.info(projectListTmp)
+      // logger.info(projectListTmp)
     } else {
       projectList = []// await ProjectModel.find({});
     }
@@ -192,7 +188,7 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
       return next(ApiError.badRequest("No project found for id or slug = " + id));
     }
 
-// retrive event/project's actions
+   // retrive event/project's actions
    const eventActions = await getEventActions({eventId: project._id })
 
 
