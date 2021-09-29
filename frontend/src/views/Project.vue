@@ -226,7 +226,7 @@ i {
           <div class="card-body card-body-custom">
             <div class="row">
               <div class="col-md-4">
-                <img :src="createBanner(project.logoUrl)" class="fixBanner" @error="imageError =  true" />
+                <img :src="project.logoUrl" class="fixBanner" @error="onBannerError($event)" />
               </div>
               <div class="col-md-8">
                 <ul style="list-style-type: none">
@@ -357,7 +357,6 @@ export default {
   
   data() {
     return {
-      imageError: false,
       project: {
         _id: "",
         projectName: "",
@@ -435,7 +434,7 @@ export default {
       isLoading: false,
       fullPage: true,
       user: {},
-      errors: []
+      errors: [],
     };
   },
 
@@ -455,9 +454,10 @@ export default {
       vm.prevRoute = from;
     });
   },
+
   methods: {
-    createBanner(banner) {
-      return this.imageError ? require("../assets/default-banner.png") : banner;
+    onBannerError(e){
+      e.target.src =require("../assets/default-banner.png");
     },
     copy(textToCopy, contentType){
 			if(textToCopy){
