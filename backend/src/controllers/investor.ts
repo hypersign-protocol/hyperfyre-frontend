@@ -178,12 +178,9 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       const userActionsInDb = investor_email.actions;
 
       // find duplicate actions      
-      user_actions.forEach(action => {
-        const id  = action["_id"];
-        if(userActionsInDb.find(y => y._id.equals(id))){
-          return next(ApiError.badRequest(`Duplicate action(s)`))
-        }
-      })
+      if(user_actions.some(x => userActionsInDb.findIndex(y => y._id.equals(x._id)) > -1 )){
+        return next(ApiError.badRequest("Duplicate action"))  
+      }
 
       // merge user_actions & userActionsInDb
       const userActionMerged = userActionsInDb.concat(user_actions);
