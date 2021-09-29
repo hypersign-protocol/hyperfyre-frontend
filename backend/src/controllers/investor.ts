@@ -180,8 +180,7 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       // find duplicate actions      
       user_actions.forEach(action => {
         const id  = action["_id"];
-        if(userActionsInDb.find(y => y._id == id)){
-          console.log("Found duplicates")
+        if(userActionsInDb.find(y => y._id.equals(id))){
           return next(ApiError.badRequest(`Duplicate action(s)`))
         }
       })
