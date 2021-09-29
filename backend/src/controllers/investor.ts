@@ -107,11 +107,8 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
     logger.info("InvestorController:: addInvestor() method start..");
     const { 
       userData, 
-      ethAddress, 
-      twitterHandle, 
-      telegramHandle, 
+      
       projectId, 
-      tweetUrl,
       actions
     } = req.body;
 
@@ -220,15 +217,7 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
         did, 
         email, 
         name, 
-        ethAddress, 
-        twitterHandle, 
-        telegramHandle, 
-        hasTwitted: true, 
-        hasJoinedTGgroup: true, 
-        isVerfiedByHypersign: false,
-        isVerificationComplete: true,
         projectId,
-        tweetUrl,
         numberOfReferals: (!isComingFromReferal ? 0 : 0.5 * REFFERAL_MULTIPLIER ) +  userActionScore,
         actions: user_actions,
         createdAt: new Date(),
