@@ -1,5 +1,10 @@
 <template>
   <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px;">
+   <loading
+      :active.sync="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    ></loading>
     <Profile :user="userProfile"/>
     <template v-for="(actionItem,index) in ActionSchema">
       <component :is="CapitaliseString(actionItem.type)" :key="index" :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
@@ -7,6 +12,8 @@
   </div>
 </template>
 <script>
+ import Loading from "vue-loading-overlay";
+ import "vue-loading-overlay/dist/vue-loading.css";
 import Profile from "./ActionInputs/Profile.vue";
 import TwitterFollow from "./ActionInputs/TwitterFollow.vue";
 import TwitterRetweet from "./ActionInputs/TwitterRetweet.vue";
@@ -39,7 +46,8 @@ export default {
     InputText,
     BlockchainEth,
     InputDate,
-    InputNumber
+    InputNumber,
+    Loading
   },
   mounted(){
     eventBus.$emit('loadUserProfileData');
@@ -58,7 +66,9 @@ export default {
       actions: [],
       eventActionType: {
         ...config.eventActionType
-      }
+      },
+       isLoading:false,
+       fullPage: true
     };
   },
   methods: {
@@ -70,9 +80,10 @@ export default {
       return first + next
     },
     async updateUserInfo(actionItem, value) {
-      //
       try {
-
+        this.isLoading = true
+        this.actions = [];
+        
         this.actions.push({
           'actionId': actionItem._id,
           'value': value,
@@ -99,6 +110,7 @@ export default {
           body,
           header: headers,
         });
+        this.isLoading=false;
         const { data } = resp;
         console.log(resp.data);
         this.actions = [];

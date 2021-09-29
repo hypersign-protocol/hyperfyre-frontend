@@ -5,7 +5,7 @@ let { template :credentialMailTemplate} = require('../services/mail.template');
 import MailService from '../services/mail.service';
 import ApiError from '../error/apiError';
 import ActionService from "../services/action.service";
-import { IEventAction } from "../models/actions";
+import { IEventAction, EventActionType } from "../models/actions";
 
 
 
@@ -143,9 +143,9 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       }
 
       logger.info("eventActionsInDb = " + JSON.stringify(eventActionsInDb))
-
+      
       actions.forEach((x) => {
-        const t: IEventAction = eventActionsInDb.find(y => y._id == x["actionId"])
+        const t: IEventAction = eventActionsInDb.find(y => y._id == x["actionId"] && x.type != EventActionType.HYPERSIGN_AUTH)
         if(typeof t != 'undefined'){
           user_actions.push({
             ...t["_doc"],
@@ -178,13 +178,14 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       const userActionsInDb = investor_email.actions;
 
       // find duplicate actions      
-      if(user_actions.some(x => userActionsInDb.findIndex(b => b._id == x._id))){
-        logger.info("================== found duplicate ====================")
-        return next(ApiError.badRequest(`Duplicate action(s)`))
-      }else{
-        logger.info("================== no duplicate ====================")
-      }
-      
+      user_actions.forEach(action => {
+        const id  = action["_id"];
+        if(userActionsInDb.find(y => y._id == id)){
+          console.log("Found duplicates")
+          return next(ApiError.badRequest(`Duplicate action(s)`))
+        }
+      })
+
       // merge user_actions & userActionsInDb
       const userActionMerged = userActionsInDb.concat(user_actions);
 
