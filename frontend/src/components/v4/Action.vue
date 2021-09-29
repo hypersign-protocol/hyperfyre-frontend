@@ -72,7 +72,7 @@ export default {
     async updateUserInfo(actionItem, value) {
       //
       try {
-
+        this.actions = [];
         this.actions.push({
           'actionId': actionItem._id,
           'value': value,
