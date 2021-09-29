@@ -158,9 +158,6 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
         }
       })
 
-      logger.info("userActionScore = " +userActionScore)
-      logger.info("user_actions = " + JSON.stringify(user_actions))
-
     } 
     
     /** Commenting this to ensure that even if a user has logged in and hasnt done a single action, 
@@ -180,9 +177,6 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       // fetch the actions
       const userActionsInDb = investor_email.actions;
 
-      logger.info("userActionsInDb = " + JSON.stringify(userActionsInDb));
-      logger.info("user_actions = " + JSON.stringify(user_actions));
-      
       // find duplicate actions      
       if(user_actions.some(x => userActionsInDb.findIndex(b => b._id == x._id))){
         logger.info("================== found duplicate ====================")
@@ -201,7 +195,6 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
         actions: userActionMerged
       }
       const updatedUser =  await updateInvestorInDb(filter, updateParams);
-      logger.info("updatedUser = " + JSON.stringify(updatedUser));
       
       req.body["result"] = {
         ...updatedUser["_doc"],
