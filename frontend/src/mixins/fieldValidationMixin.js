@@ -40,4 +40,24 @@ export function isDate(date){
       return false
     }
     return (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
+}
+
+export function truncate(str, limit){
+  if(!str){
+    throw new Error("String must be passed")
   }
+
+  if(!limit){
+    throw new Error("Limit must be passed")
+  }
+
+  // if less than limit then do nothing
+  if(str.length <= limit){
+    return str;
+  }
+  
+  const eachLen = Math.floor(limit / 3);  //  we need to 3 parts
+  const firstPart = str.substr(0, eachLen);
+  const lastPart = str.slice(-eachLen)
+  return firstPart + " ... " + lastPart;
+}

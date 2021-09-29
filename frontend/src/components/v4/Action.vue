@@ -17,6 +17,7 @@ import InputDate from "./ActionInputs/InputDate.vue";
 import InputNumber from "./ActionInputs/InputNumber.vue";
 import eventBus from "../../eventBus.js"
 import apiClient from "../../mixins/apiClientMixin";
+import notificationMixins from "../../mixins/notificationMixins";
 import config from "../../config";
 export default {
   name: "Action",
@@ -52,11 +53,7 @@ export default {
       authToken: localStorage.getItem("authToken"),
       user: JSON.parse(localStorage.getItem('user')),
       userData: {
-        ethAddress: "0x12312312312",
-        twitterHandle: "hermit123123",
-        telegramHandle: "hermitTg123",
-        projectId: "613b8476442d2d56fb0988fa",
-        tweetUrl: "https://asdad.com",
+        projectId: "613b8476442d2d56fb0988fa",  
       },
       actions: [],
       eventActionType: {
@@ -116,19 +113,21 @@ export default {
               console.log("Update User data event  emit");
               this.$emit("UserUpdateEvent", resp.data);
             } else {
-              return alert("Error: could not update the action");
+              return this.notifyErr("Error: could not update the action");
             }
           } else {
-            return alert("Error: no actions found with user");
+            return this.notifyErr("Error: no actions found with user");
           }
         } else {
-          return alert("Error: some error occurred");
+          return this.notifyErr("Error: some error occurred");
         }
       } catch (e) {
-        alert("Error occurred: " + e.message);
+        this.notifyErr("Error occurred: " + e.message);
         console.log(e);
       }
     },
-  }
+  },
+  mixins: [notificationMixins],
+
 }
 </script>

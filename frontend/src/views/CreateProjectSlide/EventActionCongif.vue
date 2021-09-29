@@ -1,9 +1,14 @@
 <template>
   <div>
-      <div v-if="eventActionList.length" class="selected-media-wrapper d-flex p-2 mb-4" >
-        <div @click="handleEventActionClick(idx)" :class="flash == idx ?  'flash card rounded m-1 p-1 d-flex flex-row align-items-center' : 'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'" v-for="(eventAction, idx) in eventActionList" :key="idx">
-            <span class="mr-2 text-capitalize"><i :class="eventAction.title"></i>  {{eventAction.title}}</span>
-            <div class="ml-3" /><i @click="removeSocialMedia(idx)" class="fas fa-minus-circle"></i>
+      <div v-if="eventActionList.length" style="overflow-y:auto" class="selected-media-wrapper d-flex p-2 mb-4" >
+        <div @click="handleEventActionClick(idx)" 
+          :class="flash == idx ?  
+            'flash card rounded m-1 p-1 d-flex flex-row align-items-center' : 
+            'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'" 
+          style="min-width: 113px"
+          v-for="(eventAction, idx) in eventActionList" :key="idx">
+            <span class="mr-2"><i :class="eventAction.title"></i>  {{ truncate1(eventAction.title, 12) }}</span>
+            <i @click="removeSocialMedia(idx)" class="fas fa-minus-circle"></i>
         </div>
       </div>
       <div >
@@ -58,7 +63,7 @@
             <button @click="handleEventActionUpdate()" class="btn btn-primary button-theme" type="button"> Update</button>
           </div>  
           <div class="col-lg-3 col-md-7 px-0">
-            <button @click="handleEventActionDelete()" class="btn btn-primary button-theme" type="button"> Delete</button>
+            <button @click="handleEventActionDelete()" class="btn btn-danger" type="button"> Delete</button>
           </div>  
         </div>
       </div>
@@ -113,7 +118,7 @@
 </style>
 <script>
 import notificationMixins from '../../mixins/notificationMixins';
-import {isEmpty,isValidURL} from '../../mixins/fieldValidationMixin';
+import {isEmpty,isValidURL, truncate} from '../../mixins/fieldValidationMixin';
 
 export default {
   name: "EventActionCongif",
@@ -270,6 +275,10 @@ export default {
       this.isCreate=false
 
     },
+
+    truncate1(str, number){
+      return truncate(str, number)
+    }
       
   },
 

@@ -107,11 +107,8 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
     logger.info("InvestorController:: addInvestor() method start..");
     const { 
       userData, 
-      ethAddress, 
-      twitterHandle, 
-      telegramHandle, 
+      
       projectId, 
-      tweetUrl,
       actions
     } = req.body;
 
@@ -132,7 +129,7 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       logger.info("user exists ..")
     }
 
-    let user_actions: Array<IEventAction> = [];
+    let user_actions = [];
     let userActionScore = 0;
     // sanity check for the action
     if(actions && actions.length > 0){
@@ -161,9 +158,6 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
         }
       })
 
-      logger.info("userActionScore = " +userActionScore)
-      logger.info("user_actions = " + JSON.stringify(user_actions))
-
     } 
     
     /** Commenting this to ensure that even if a user has logged in and hasnt done a single action, 
@@ -181,14 +175,10 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       logger.info("Update Record flow")
       
       // fetch the actions
-      const userActionsInDb: Array<IEventAction> = investor_email.actions;
+      const userActionsInDb = investor_email.actions;
 
-      logger.info("userActionsInDb = " + JSON.stringify(userActionsInDb));
-      logger.info("user_actions = " + JSON.stringify(user_actions));
-      
-      // find duplicate actions
-      // TODO: Need to check why this condition is not working...
-      if(user_actions.some(a => userActionsInDb.findIndex(b => b._id == a._id) >= 0 )){
+      // find duplicate actions      
+      if(user_actions.some(x => userActionsInDb.findIndex(b => b._id == x._id))){
         logger.info("================== found duplicate ====================")
         return next(ApiError.badRequest(`Duplicate action(s)`))
       }else{
@@ -205,7 +195,6 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
         actions: userActionMerged
       }
       const updatedUser =  await updateInvestorInDb(filter, updateParams);
-      logger.info("updatedUser = " + JSON.stringify(updatedUser));
       
       req.body["result"] = {
         ...updatedUser["_doc"],
@@ -220,17 +209,11 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
         did, 
         email, 
         name, 
-        ethAddress, 
-        twitterHandle, 
-        telegramHandle, 
-        hasTwitted: true, 
-        hasJoinedTGgroup: true, 
-        isVerfiedByHypersign: false,
-        isVerificationComplete: true,
         projectId,
-        tweetUrl,
         numberOfReferals: (!isComingFromReferal ? 0 : 0.5 * REFFERAL_MULTIPLIER ) +  userActionScore,
-        actions: user_actions
+        actions: user_actions,
+        createdAt: new Date(),
+        updatedAt: new Date()
       });
       logger.info("InvestorController:: addInvestor(): after creating a new investor into db id = " + new_investor["_id"]);
   
@@ -302,7 +285,7 @@ async function getInvestorByDID(req: Request, res: Response, next: NextFunction)
 
 async function updateInvestorInDb(filter, updateParams){
 
-  const opts = { new: true, useFindAndModify: true };
+  const opts = { new: true, useFindAndModify: true, updatedAt: new Date() };
   
   const investor: IInvestor = await InvestorModel.findOneAndUpdate(filter, updateParams, opts);
 
