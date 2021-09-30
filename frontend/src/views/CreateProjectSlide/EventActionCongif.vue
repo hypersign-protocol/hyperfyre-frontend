@@ -245,7 +245,7 @@ export default {
       this.eventActionList.splice(this.currentSelectedId, 1);
       this.$emit("updateEventActions", {
         type: "DELETE",
-        data: actionToDelete.id
+        data: actionToDelete._id
       })
       this.clearSelected();
       this.isCreate=true

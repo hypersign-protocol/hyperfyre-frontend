@@ -486,7 +486,7 @@ export default {
           }
 
           case "UPDATE": {
-            const { id } =  data;
+            const { id } =  data;          
             this.eventActionList.map(x => {
               if(x.id === id){
                 return data;
@@ -498,13 +498,13 @@ export default {
           }
 
           case "DELETE": {
-            this.eventActionList = this.eventActionList.filter(x => x.id != data);
+            this.eventActionList = this.eventActionList.filter(x => x._id !== data);
             console.log("Deleting action to project action list len = " + this.eventActionList.length)
             break;
           }
         }
       }
-      console.log(JSON.stringify(data));
+      //console.log(JSON.stringify(data));
 
       console.log("Event receieved from grand-child")
     },
@@ -639,7 +639,7 @@ export default {
       this.themeColor = project.themeColor
       this.fontColor = project.fontColor
       this.projectStatus = project.projectStatus
-      console.log(project.actions)
+     // console.log(project.actions)
       this.eventActionList = project.actions
     
     
@@ -684,7 +684,7 @@ export default {
         this.project.actions = this.eventActionList
         
     
-        console.log(this.project)
+        console.log(JSON.stringify(this.project.actions))
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
           if(!this.isProjectEditing){
