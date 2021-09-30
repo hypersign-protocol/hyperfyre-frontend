@@ -51,6 +51,7 @@ export default {
 		return {
 			visible: false,
 			done: this.data.isDone,
+			telegramData: {}
 		}
 	},
 	mounted() {
@@ -71,12 +72,18 @@ export default {
 		handleTelegramLogin(urlToRedirect) {
 			try{
 				if (!localStorage.getItem("telegramId")) {
+					const that =  this;
 					window.Telegram.Login.auth({ bot_id: config.telegramBotId, request_access: true },
 						(data) => {
 
 							if (!data) {
 								return this.notifyErr("Authentication Failed! Try again")
-							}
+							}	
+
+							console.log(data)
+
+							that.telegramData = data;
+
 							if(data.username){
 								localStorage.setItem("telegramId", data.username)
 								window.open(urlToRedirect, "_blank");
