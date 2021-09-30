@@ -389,7 +389,7 @@ async function getRandomInvestors(req: Request, res: Response, next: NextFunctio
     // get count of total investors for this projectId
     // query: projectId, isVerificationComplete = true
     // check limitRecord < investorCount
-    const query = { projectId: id,isVerificationComplete: true };
+    const query = { projectId: id };
     const investorCount = await InvestorModel.countDocuments(query).then((count) => count);
 
     if(investorCount == 0){
