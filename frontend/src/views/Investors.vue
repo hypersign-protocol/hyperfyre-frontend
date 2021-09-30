@@ -469,6 +469,7 @@ export default {
   methods: {
     async handleExport() {
       try {
+        this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.project._id}?fetchInvestors=true&isExport=true&limit=${this.project.count}`;
         const headers = {
           "Content-Type": "application/json",
@@ -481,10 +482,15 @@ export default {
           header: headers,
           isFile: true,
         });
+        
         FileDownload(res.data, `Investors_${this.selectedProject}.csv`);
+        this.isLoading = false;
       } catch (e) {
         console.log(e);
+        this.isLoading = false;
         this.notifyErr(e);
+      } finally{
+        this.isLoading = false;
       }
     },
     async handleLottery() {
@@ -495,6 +501,7 @@ export default {
         return this.notifyErr("No of records must be less or equal to total");
       }
       try {
+        this.isLoading = true;
         let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.project._id}/lottery?token=${this.authToken}&limitRecord=${this.recordsForLottery}&isRandom=${this.isRandom}`;
 
         const headers = {
@@ -508,10 +515,15 @@ export default {
           isFile: true,
         });
         FileDownload(res.data, "Lottery.csv");
+        this.isLoading = false;
       } catch (e) {
+        this.isLoading = false;
         console.log(e);
         this.notifyErr(e);
+      } finally{
+        this.isLoading = false;
       }
+
     },
     sortChange(params) {
       this.project.investors.sort((a, b) => {
