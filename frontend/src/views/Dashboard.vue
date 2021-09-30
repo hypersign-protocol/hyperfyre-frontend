@@ -35,6 +35,11 @@
 </style>
 <template>
    <div class="home  marginLeft marginRight">
+      <loading
+      :active.sync="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    ></loading>
      <h3 class="leftAlign">Welcome, {{user.name}} !</h3>
      <div class="row">
         <div class="col-md-6">
@@ -52,13 +57,19 @@
 import Profile from '@/components/Profile.vue'
 import Charts from '@/components/Charts.vue'
 import notificationMixins from '../mixins/notificationMixins';
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 export default {
   name: "PanelPage",
   mounted() {
+   setTimeout(()=>{
+     this.isLoading=false
+   },700)
   },
   components: { 
     Profile,
-    Charts
+    Charts,
+    Loading
   },
   data() {
     return {
@@ -66,14 +77,18 @@ export default {
      
       user: {},
       appName: "",
-      authToken: localStorage.getItem('authToken')
+      authToken: localStorage.getItem('authToken'),
+       isLoading: true,
+      fullPage: true
     };
   },
   created() {
+  
     const usrStr = localStorage.getItem('user');    
      this.user = {
        ...JSON.parse(usrStr)
      }
+   
   },
   methods: {
     gotosubpage: id => {
