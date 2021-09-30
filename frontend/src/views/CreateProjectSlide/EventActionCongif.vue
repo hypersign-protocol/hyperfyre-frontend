@@ -6,7 +6,7 @@
             'flash card rounded m-1 p-1 d-flex flex-row align-items-center' : 
             'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'" 
           style="min-width: 113px"
-          v-for="(eventAction, idx) in eventActionList" :key="idx">
+          v-for="(eventAction, idx) in eventActionList" v-bind:Key="idx">
             <span class="mr-2"><i :class="eventAction.title"></i>  {{ truncate1(eventAction.title, 12) }}</span>
             <i @click="removeSocialMedia(idx)" class="fas fa-minus-circle"></i>
         </div>
@@ -70,6 +70,8 @@
   </div>
 </template>
 <style scoped>
+
+
 .pointer {
  cursor: pointer;
 }
@@ -143,7 +145,7 @@ export default {
       isCreate: true,
       currentSelectedId :0,
       selected :{
-            "type": null,
+            "type": "",
             "title": "",
             "placeHolder": "",
             "isManadatory": true,
@@ -155,6 +157,10 @@ export default {
     
   },
   methods: {
+      removeSocialMedia(index) {        
+      this.currentSelectedId=index
+      this.handleEventActionDelete()
+    },
     clearSelected () {
       let clearData = {
             "type": null,
@@ -269,6 +275,7 @@ export default {
 
     handleEventActionClick(idx){
       // Code to update an Action
+      this.flash=idx
       let updateData = this.eventActionList[idx]
       this.currentSelectedId = idx
       this.selected = updateData

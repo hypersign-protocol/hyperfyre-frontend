@@ -684,7 +684,7 @@ export default {
         this.project.actions = this.eventActionList
         
     
-        console.log(JSON.stringify(this.project.actions))
+        //console.log(JSON.stringify(this.project.actions))
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
           if(!this.isProjectEditing){
