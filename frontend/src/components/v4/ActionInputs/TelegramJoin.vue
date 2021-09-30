@@ -50,8 +50,7 @@ export default {
 	data() {
 		return {
 			visible: false,
-			done: this.data.isDone,
-			telegramData: {}
+			done: this.data.isDone
 		}
 	},
 	mounted() {
@@ -80,12 +79,8 @@ export default {
 								return this.notifyErr("Authentication Failed! Try again")
 							}	
 
-							console.log(data)
-
-							that.telegramData = data;
-
-							if(data.username){
-								localStorage.setItem("telegramId", data.username)
+							if(data.username || data.id){
+								localStorage.setItem("telegramId", data.username || data.id)
 								window.open(urlToRedirect, "_blank");
 							} else{
 								return this.notifyErr("Could not fetch the username after telegram authentication")
