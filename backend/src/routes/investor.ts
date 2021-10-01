@@ -31,6 +31,7 @@ export = (hypersign) => {
   // TODO:  Integrate recaptcha
   router.post(
     "/add",
+    verifyReCaptcha,
     hypersign.authorize.bind(hypersign),
     InvestorSchemaBody,
     validateRequestSchema,

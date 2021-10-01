@@ -49,9 +49,11 @@ export default {
     BlockchainTez,
     InputDate,
     InputNumber,
-    Loading
+    Loading,
+    RecaptchaToken: ""
   },
   mounted(){
+    this.RecaptchaToken = localStorage.getItem("recaptchaToken");
     eventBus.$emit('loadUserProfileData');
     eventBus.$on('UpdateUserInfoFromEvent',   (data) => {
       const { actionItem,  value} =  data;
@@ -97,7 +99,7 @@ export default {
           actions: this.actions,
         };
 
-        let url = `${this.$config.studioServer.BASE_URL}api/v1/investor/add`;
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/investor/add?rcToken=${this.RecaptchaToken}`;
         if (this.$route.query.referrer && this.$route.query.referrer != "") {
           url += `?referrer=${this.$route.query.referrer}`;
         }
@@ -114,7 +116,6 @@ export default {
         });
         this.isLoading=false;
         const { data } = resp;
-        console.log(resp.data);
         this.actions = [];
 
         if (data) {
@@ -124,7 +125,6 @@ export default {
             if (action != null || action != "undefined") {
               actionItem.isDone = true;
               eventBus.$emit(`disableInput${actionItem._id}`, actionItem.isDone);
-              console.log("Update User data event  emit");
               this.$emit("UserUpdateEvent", resp.data);
             } else {
               return this.notifyErr("Error: could not update the action");

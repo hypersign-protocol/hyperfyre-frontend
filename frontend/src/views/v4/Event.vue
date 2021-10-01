@@ -30,7 +30,7 @@ import notificationMixins from "../../mixins/notificationMixins";
 import apiClient from "../../mixins/apiClientMixin";
 import eventBus from "../../eventBus.js"
 export default {
-  name: "Test",
+  name: "Event",
   components: {
     Banner,
     Login,
@@ -215,7 +215,7 @@ export default {
         }
       }
     }
-
+    
   },
   mixins:[notificationMixins],
 };
