@@ -595,8 +595,9 @@ export default {
     },
     async fetchProjectInvestors(e) {
       if (e) {
+        this.tableSearch=""
         this.investor.projectId = e;
-        await this.fetchProjectData(0, this.perPage);
+        await this.fetchProjectData(0, this.perPage); 
         this.holdInvestors=this.project.investors;              
       }
     },
