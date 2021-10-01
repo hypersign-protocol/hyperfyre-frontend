@@ -486,20 +486,23 @@ export default {
           }
 
           case "UPDATE": {
-            const { id } =  data;          
+            const { id, _id } =  data;          
             this.eventActionList.map(x => {
-              if(x.id === id){
+              if((x._id === _id) || x.id === id){
                 return data;
               }
             })
-            // const actionToUpdate = this.eventActionList.find(x => x.id === id);
-            console.log("Updating action to project action id = " + id)
             break;
           }
 
           case "DELETE": {
-            this.eventActionList = this.eventActionList.filter(x => x._id !== data);
-            console.log("Deleting action to project action list len = " + this.eventActionList.length)
+            this.eventActionList.map(x => {
+              if((x._id === data) || x.id === data){
+                x["isDeleted"] = true;
+                console.log(JSON.stringify(x));
+                return x;
+              }
+            })
             break;
           }
         }

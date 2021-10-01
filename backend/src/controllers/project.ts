@@ -312,17 +312,6 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
 
     const { id: ownerDid } = userData;
 
-    // const {
-    //   telegramHandle,
-    //   telegramAnnouncementChannel, 
-    // } =  social.telegram;
-
-    // const {
-    //   twitterHandle,
-    //   twitterPostFormat,
-    // } =  social.twitter;
-
-
     // FindbyIdupdate returns the old object, however the value has been updated in the db
     await ProjectModel.findByIdAndUpdate(_id, {
       projectName,
@@ -341,17 +330,22 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
     if(actions && actions.length > 0){
       let i;
       for(i = 0; i < actions.length; i++){
-        
         if(actions[i]._id){
+          if(actions[i]["isDeleted"]){
+            await ActionModel.findByIdAndDelete(actions[i]._id)
+          }else{
           await ActionModel.findByIdAndUpdate(actions[i]._id,{
             ...actions[i]
           })
+          }
   
         }else{
+          if(!actions[i]["isDeleted"]){
           await ActionModel.create({
             eventId: _id,
             ...actions[i]
           })  
+          }
         }
       }
     }
