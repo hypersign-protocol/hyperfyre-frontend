@@ -493,7 +493,7 @@ export default {
           case "DELETE": {
             const actionIndex = this.eventActionList.findIndex(x => x._id === data)
             if(actionIndex > -1){
-              this.eventActionList[actionIndex][isDeleted] = true;
+              this.eventActionList[actionIndex]["isDeleted"] = true;
             }else{
               const actionIndex = this.eventActionList.findIndex(x => x.id === data)
               if(actionIndex > -1){

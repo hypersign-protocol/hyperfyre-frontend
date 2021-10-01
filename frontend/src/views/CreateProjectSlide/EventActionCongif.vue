@@ -8,7 +8,7 @@
           style="min-width: 113px"
           v-for="(eventAction, idx) in eventActionList" v-bind:Key="idx">
             <span class="mr-2"><i :class="eventAction.title"></i>  {{ truncate1(eventAction.title, 12) }}</span>
-            <i @click="removeSocialMedia(idx)" class="fas fa-minus-circle"></i>
+            <i  class="fas fa-minus-circle"></i>
         </div>
       </div>
       <div >
@@ -93,8 +93,10 @@
     margin-right: 4px;
 }
 .flash{
-    background-color: #1FAA59;
-    color: #fff; 
+    cursor: pointer;
+    background-color: #1faa596b;
+    border: 0;
+    box-shadow: 2px 0 10px rgb(0 0 0 / 10%);
     animation: flash 0.4s cubic-bezier(1, 0, 0, 1);
 }
 
@@ -145,7 +147,7 @@ export default {
       isCreate: true,
       currentSelectedId :0,
       selected :{
-            "type": "",
+            "type": null,
             "title": "",
             "placeHolder": "",
             "isManadatory": true,
@@ -162,7 +164,8 @@ export default {
       this.handleEventActionDelete()
     },
     clearSelected () {
-      let clearData = {
+      this.flash=null;
+      let clearData = {            
             "type": null,
             "title": "",
             "placeHolder": "",
