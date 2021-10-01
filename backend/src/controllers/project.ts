@@ -133,11 +133,7 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
         });
       }
 
-      // projectList.forEach((project) => {
-        
-      // });
-
-      logger.info(projectListTmp)
+      // logger.info(projectListTmp)
     } else {
       projectList = []// await ProjectModel.find({});
     }
@@ -192,7 +188,7 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
       return next(ApiError.badRequest("No project found for id or slug = " + id));
     }
 
-// retrive event/project's actions
+   // retrive event/project's actions
    const eventActions = await getEventActions({eventId: project._id })
 
 
@@ -393,7 +389,7 @@ async function getRandomInvestors(req: Request, res: Response, next: NextFunctio
     // get count of total investors for this projectId
     // query: projectId, isVerificationComplete = true
     // check limitRecord < investorCount
-    const query = { projectId: id,isVerificationComplete: true };
+    const query = { projectId: id };
     const investorCount = await InvestorModel.countDocuments(query).then((count) => count);
 
     if(investorCount == 0){

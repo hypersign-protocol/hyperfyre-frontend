@@ -33,11 +33,14 @@ export function writeInvestorsToFile(
             if(investor.actions && investor.actions.length > 0){
               console.log(investor.actions.length)
               investor.actions.forEach((action: IEventAction) => {
-                wkCol.push({
-                  header: action.title.toUpperCase(),
-                  key: action._id,
-                  width: 30
-                })
+                // only add colum if not added, otherwise skip
+                if(wkCol.findIndex(x => action._id.equals(x.key)) < 0){
+                  wkCol.push({
+                    header: action.title.toUpperCase(),
+                    key: action._id,
+                    width: 30
+                  })
+                }
                 investor[action["_id"]] = action.value;  
               })
             }else{

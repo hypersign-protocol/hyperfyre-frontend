@@ -142,7 +142,7 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
         return next(ApiError.badRequest(`No action is set for the eventId ${projectId}`))  
       }
 
-      logger.info("eventActionsInDb = " + JSON.stringify(eventActionsInDb))
+      // logger.info("eventActionsInDb = " + JSON.stringify(eventActionsInDb))
       
       actions.forEach((x) => {
         const t: IEventAction = eventActionsInDb.find(y => y._id == x["actionId"] && x.type != EventActionType.HYPERSIGN_AUTH)
@@ -229,7 +229,7 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
             numberOfReferals: (investor.numberOfReferals + ( 1 * REFFERAL_MULTIPLIER))
           };
     
-          logger.info("InvestorController:: addInvestor(): updateParams = " + JSON.stringify(updateParams));
+          // logger.info("InvestorController:: addInvestor(): updateParams = " + JSON.stringify(updateParams));
           logger.info("InvestorController:: addInvestor(): before updating an investor into db");
           updateInvestorInDb(filter, updateParams);
           logger.info("InvestorController:: addInvestor(): after updating an investor into db");
