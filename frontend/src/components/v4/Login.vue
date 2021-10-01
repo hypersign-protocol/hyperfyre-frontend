@@ -10,7 +10,16 @@
               </div>
             </template>
             <template v-else-if="value && value != ''">
-              <b-button variant="warning" class="btn-login" @click.prevent="openWallet()">Use Web Wallet</b-button>
+              <b-button variant="warning" class="btn-login" @click.prevent="openWallet()">Use Web Wallet
+                <vue-recaptcha
+                  ref="recaptcha"
+                  size="invisible"
+                  :sitekey="$config.recaptchaSiteKey"
+                  :loadRecaptchaScript="true"
+                  @verify="onCaptchaVerified"
+                  @expired="onCaptchaExpired"
+                ></vue-recaptcha>
+              </b-button>
             </template>
           </b-card-text>
         </b-card-body>
@@ -19,7 +28,11 @@
   </div>
 </template>
 <script>
+import VueRecaptcha from "vue-recaptcha";
 export default {
+  components: {
+    VueRecaptcha
+  },
   props: {
     fontColor: String,
     themeColor: String,
@@ -97,6 +110,9 @@ export default {
       window.location.reload();
     },
     openWallet() {
+      this.$refs.recaptcha.execute()
+    },
+    openWalletAfterRecaptcha(){
       if (this.value != "") {
         this.walletWindow = window.open(
           `${this.$config.webWalletAddress}/deeplink?url=${this.value}`,
@@ -106,6 +122,19 @@ export default {
       } else {
         // console.log("this value is not")
       }
+    },
+    onCaptchaExpired: function() {
+      console.log("Captcha expired");
+      this.$refs.recaptcha.reset();
+    },
+    onCaptchaVerified: function(recaptchaToken) {
+      console.log('Verify: ' + recaptchaToken)
+      localStorage.setItem("recaptchaToken", recaptchaToken);
+      const self = this;
+      self.status = "submitting";
+      self.$refs.recaptcha.reset();
+      this.openWalletAfterRecaptcha();
+      // this.saveInvestor(this.stepTwoData.formData, recaptchaToken);
     },
   },
 };
