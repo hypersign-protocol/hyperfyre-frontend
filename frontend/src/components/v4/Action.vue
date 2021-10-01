@@ -20,6 +20,7 @@ import TwitterRetweet from "./ActionInputs/TwitterRetweet.vue";
 import TelegramJoin from "./ActionInputs/TelegramJoin.vue";
 import InputText from "./ActionInputs/InputText.vue";
 import BlockchainEth from "./ActionInputs/BlockchainEth.vue";
+import BlockchainTez from "./ActionInputs/BlockchainTez.vue";
 import InputDate from "./ActionInputs/InputDate.vue";
 import InputNumber from "./ActionInputs/InputNumber.vue";
 import eventBus from "../../eventBus.js"
@@ -45,6 +46,7 @@ export default {
     TelegramJoin,
     InputText,
     BlockchainEth,
+    BlockchainTez,
     InputDate,
     InputNumber,
     Loading
