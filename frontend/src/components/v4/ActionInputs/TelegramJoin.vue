@@ -88,14 +88,16 @@ export default {
 		handleTelegramLogin(urlToRedirect) {
 			try{
 				if (!localStorage.getItem("telegramId")) {
+					const that =  this;
 					window.Telegram.Login.auth({ bot_id: config.telegramBotId, request_access: true },
 						(data) => {
 
 							if (!data) {
 								return this.notifyErr("Authentication Failed! Try again")
-							}
-							if(data.username){
-								localStorage.setItem("telegramId", data.username)
+							}	
+
+							if(data.username || data.id){
+								localStorage.setItem("telegramId", data.username || data.id)
 								window.open(urlToRedirect, "_blank");
 							} else{
 								return this.notifyErr("Could not fetch the username after telegram authentication")
