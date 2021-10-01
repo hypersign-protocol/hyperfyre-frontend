@@ -24,7 +24,7 @@
 						<div class="follow">
 							<button :disabled="done" @click="handleTelegramLogin(`https://telegram.me/${data.value}`)" class="btn btn-outline-telegram">
 								<img src="../../../assets/telegram.svg">
-								Join @{{data.value}}
+								Join @{{tg.sourceScreenName}}
 							</button>
 						</div>
 					</b-col>
@@ -51,9 +51,23 @@ export default {
 		return {
 			visible: false,
 			done: this.data.isDone,
+			tg: {
+				sourceScreenName: "",
+				targetScreenName: ""
+			}
 		}
 	},
 	mounted() {
+		try{
+			if(this.data.value){
+				const tg = JSON.parse(this.data.value)
+				this.tg = { ...tg };
+			}
+		}catch(e){
+			this.tg.sourceScreenName = this.data.value;
+			
+		}
+
 		eventBus.$on(`disableInput${this.data._id}`, this.disableInput)
 	},
 	methods: {
@@ -62,7 +76,10 @@ export default {
 			if (!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) {
 				return this.notifyErr("Error: Please authorize telegram to proceed")
 			} else {
-				this.$emit('input', tgIdInStore)
+				this.tg.targetScreenName = tgIdInStore;
+				this.$emit('input', JSON.stringify({
+					...this.tg
+				}))
 	 		}
 		},
 		disableInput(data) {
