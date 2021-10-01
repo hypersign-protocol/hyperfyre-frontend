@@ -15,8 +15,10 @@
   margin-right: 4px;
 }
 .flash {
-  background-color: #1faa59;
-  color: #fff;
+  cursor: pointer;
+    background-color: #1faa596b;
+    border: 0;
+    box-shadow: 2px 0 10px rgb(0 0 0 / 10%);
   animation: flash 0.4s cubic-bezier(1, 0, 0, 1);
 }
 .button-theme{
