@@ -115,7 +115,7 @@ export default {
 					// this.twitter.targetScreenName = localStorage.getItem("twitterHandle")
 				}
 			} catch (e) {
-				console.log(e);
+				this.notifyErr(e);
 			}
 		},
 		async hasRetweeted() {
@@ -153,7 +153,7 @@ export default {
 					}
 				}
 			} catch (e) {
-				console.log(e);
+				this.notifyErr(e);
 				return false;
 			}
 			finally{

@@ -113,7 +113,6 @@ export default {
           method: "POST",
         });
 
-        //console.log(res)
 
         if (res && res.data) {
           this.userAuthData = {
@@ -122,10 +121,10 @@ export default {
           localStorage.setItem("user", JSON.stringify(this.userAuthData));
           this.userProfileData = JSON.parse(localStorage.getItem('user'))
         } else {
-          //console.log("Invlaid resposen")
+          this.notifyErr("Invalid response")
         }
       } else {
-        //console.log("fetchUserDetails() :  No authToken")
+        this.notifyErr("Authentication token missing")
       }
       this.isLoading=false;
       
@@ -133,16 +132,12 @@ export default {
     async fetchEventData() {
       this.isLoading=true
       if (this.eventSlug && this.eventSlug != "") {
-        // https://stage.hypermine.in/whitelist/api/v1/project/custom-input-type--001?isPublic=true
-        //"custom-input-type-002"; // take slug from url
         let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.eventSlug}?isPublic=true`;
         let headers = {
           "Content-Type": "application/json",
         };
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
-
-        //console.log(resp)
-
+        
         this.eventData = {
           ...resp.data
         }

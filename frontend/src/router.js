@@ -22,28 +22,6 @@ const router = new Router({
       path: "/app",
       redirect: "/app/admin/login",
     },
-
-    {
-      path: "/app/login/:projectSlug",
-      name: "PKIIdLogin",
-      component: () => import(/* webpackChunkName: "investorLogin" */ './views/PKIIdLogin.vue'),
-    },
-    {
-      path: "/app/form/:slug",
-      name: "investor",
-      component: () => import(/* webpackChunkName: "investor" */ './views/Investor.vue') ,
-      meta: {
-        requiresAuth: true,
-      },
-    },
-    {
-      path: "/app/form",
-      name: "investor",
-      component: () => import(/* webpackChunkName: "investor" */ './views/Investor.vue') ,
-      meta: {
-        requiresAuth: true,
-      },
-    },
     {
       path: "/app/admin",
       redirect: "/app/admin/login",
@@ -131,27 +109,6 @@ router.beforeEach((to, from, next) => {
           });
         });
     } else {
-      // I think this part is not required anymore...
-      if((to.params["slug"] || to.query["projectId"]) && (to.params["slug"] != "" || to.query["projectId"] != "")){
-        // console.log("first we need to remove all these items projectDetails, projectSlug, projectId")
-        localStorage.removeItem("projectDetails");
-        localStorage.removeItem("projectSlug");
-        localStorage.removeItem("projectId");
-        if(!to.params["slug"]){
-          if(!to.query["projectId"]){
-            // i guess no need to do anything here
-          }else{
-            localStorage.setItem("projectId", to.query["projectId"]);
-          }
-        }else{        
-          localStorage.setItem("projectSlug", to.params["slug"]);  
-        }
-        
-      }else{
-        console.log("ProjectId or slug is blank");
-        console.log("Not doing anything but just sending to next route");
-      }
-
       next({
         path: to.meta.admin ? "/app/admin/login" : (
           !to.query["referrer"] ? 

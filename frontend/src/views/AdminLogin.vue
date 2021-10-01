@@ -244,7 +244,7 @@ export default {
     // take it in the env
     this.connection = new WebSocket(this.$config.websocketUrl);
     this.connection.onopen = function() {
-      console.log("Websocket connection is open");
+      console.log("Socket connection is open");
     };
 
     this.isLoading = true;

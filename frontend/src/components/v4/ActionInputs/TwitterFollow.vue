@@ -130,7 +130,7 @@ export default {
 					// this.twitter.targetScreenName = localStorage.getItem("twitterHandle")
 				}
 			} catch (e) {
-				console.log(e);
+				return this.notifyErr(e.message ? e.message : JSON.stringify(e));
 			}
 		},
 		async hasFollowedTwitter() {
@@ -164,11 +164,11 @@ export default {
 					});
 					return resp.data;
 				} else {
-					console.log("Source or target twitter screen name is  blank");
+					this.notifyErr("Source or target twitter screen name is  blank");
 					return false;
 				}
 			} catch (e) {
-				console.log(e);
+				this.notifyErr(e);
 				return false;
 			}
 			finally{
@@ -194,8 +194,6 @@ export default {
 					});
 
 					const { screen_name } = resp.data;
-
-					console.log(screen_name);
 					// localStorage.setItem("twitterHandle", screen_name);
 
 					return screen_name;
@@ -204,7 +202,7 @@ export default {
 					return null;
 				}
 			} catch (e) {
-				console.log(e);
+				this.notifyErr(e);
 			}
 			finally{
 				this.isLoading=false;

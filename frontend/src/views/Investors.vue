@@ -486,7 +486,6 @@ export default {
         FileDownload(res.data, `Investors_${this.selectedProject}.csv`);
         this.isLoading = false;
       } catch (e) {
-        console.log(e);
         this.isLoading = false;
         this.notifyErr(e);
       } finally{
@@ -518,7 +517,6 @@ export default {
         this.isLoading = false;
       } catch (e) {
         this.isLoading = false;
-        console.log(e);
         this.notifyErr(e);
       } finally{
         this.isLoading = false;
