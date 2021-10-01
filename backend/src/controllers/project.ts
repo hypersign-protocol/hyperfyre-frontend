@@ -340,12 +340,10 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
           }
   
         }else{
-          if(!actions[i]["isDeleted"]){
           await ActionModel.create({
             eventId: _id,
             ...actions[i]
           })  
-          }
         }
       }
     }

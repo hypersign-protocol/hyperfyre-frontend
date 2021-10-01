@@ -128,11 +128,6 @@ i {
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-    <b-modal  size="lg"  id="err-modal" title="Errors !">
-      <p v-for="err in errors" :key="err.msg">
-          {{err.param.toUpperCase()}} : {{err.msg}}
-      </p>
-    </b-modal>
 
 
 
@@ -496,13 +491,15 @@ export default {
           }
 
           case "DELETE": {
-            this.eventActionList.map(x => {
-              if((x._id === data) || x.id === data){
-                x["isDeleted"] = true;
-                console.log(JSON.stringify(x));
-                return x;
+            const actionIndex = this.eventActionList.findIndex(x => x._id === data)
+            if(actionIndex > -1){
+              this.eventActionList[actionIndex][isDeleted] = true;
+            }else{
+              const actionIndex = this.eventActionList.findIndex(x => x.id === data)
+              if(actionIndex > -1){
+                this.eventActionList.splice(actionIndex, 1)
               }
-            })
+            }
             break;
           }
         }

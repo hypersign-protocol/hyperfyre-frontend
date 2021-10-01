@@ -35,9 +35,9 @@ export const ProjectSchemaBody = [
     .withMessage("toDate is invlaid or empty"),
 
   body("actions")
-  .isArray()
-  .custom((value) =>  value.length > 0)
-  .withMessage("Actions can but null or empty"),
+  .isArray(),
+  // .custom((value) =>  value.length > 0),
+  // .withMessage("Actions can but null or empty"),
 
   // body("toDate")
   //   .custom((value) => notLessThanCurrent(value))
