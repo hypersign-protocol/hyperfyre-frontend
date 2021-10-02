@@ -465,9 +465,11 @@ export default {
 			}
     },
     openCreateSidebar(){
-      this.resetAllValues();
       this.isProjectEditing = false
-        this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+      this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+      
+      this.resetAllValues();
+      this.$root.$emit('callClearFromProject');    
     },
     AddUpdateDelEventActions(event){
       console.log("Event receieved from grand-child")
@@ -544,7 +546,7 @@ export default {
       this.fontColor = this.fontColorDefault;
       this.themeColor = this.themeColorDefault;
       this.projectStatus = true;
-      this.$bvModal.show("create-project-modal")
+      this.$bvModal.show("create-project-modal")      
     },
     changeProjectStatus (event) {
       this.project.projectStatus = event.target.options[event.target.options.selectedIndex].value === "false" ? false : true ;
@@ -643,7 +645,8 @@ export default {
       this.eventActionList = project.actions
     
     
-      this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+      this.$root.$emit('bv::toggle::collapse', 'sidebar-right') 
+      this.$root.$emit('callClearFromProject');
     },
     
     async saveProject() {
