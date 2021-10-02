@@ -158,6 +158,9 @@ export default {
     }
     
   },
+  async mounted(){
+    this.$root.$on('callClearFromProject',()=>{this.clearSelected()})
+  },
   methods: {
       removeSocialMedia(index) {        
       this.currentSelectedId=index
