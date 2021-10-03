@@ -54,7 +54,8 @@ export default {
 			tg: {
 				sourceScreenName: "",
 				targetScreenName: ""
-			}
+			},
+			telegramId: "",
 		}
 	},
 	mounted() {
@@ -72,7 +73,7 @@ export default {
 	},
 	methods: {
 		update() {
-			const tgIdInStore = localStorage.getItem("telegramId");
+			const tgIdInStore = this.telegramId; //localStorage.getItem("telegramId");
 			if (!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) {
 				return this.notifyErr("Error: Please authorize telegram to proceed")
 			} else {
@@ -87,7 +88,12 @@ export default {
 		},
 		handleTelegramLogin(urlToRedirect) {
 			try{
-				if (!localStorage.getItem("telegramId")) {
+				
+				/// Commenting this condition out to make user authenticate eveything he presses on Join telegram
+				/// Because of this check a user can just add any random value in the localstorage
+				/// and by pass the telegram authentication. See this bug https://github.com/hypersign-protocol/whitelisting/issues/338
+								
+				// if (!localStorage.getItem("telegramId")) {
 					const that =  this;
 					window.Telegram.Login.auth({ bot_id: config.telegramBotId, request_access: true },
 						(data) => {
@@ -97,7 +103,8 @@ export default {
 							}	
 
 							if(data.username || data.id){
-								localStorage.setItem("telegramId", data.username || data.id)
+								that.telegramId = data.username || data.id;
+								// localStorage.setItem("telegramId", data.username || data.id)
 								window.open(urlToRedirect, "_blank");
 							} else{
 								return this.notifyErr("Could not fetch the username after telegram authentication")
@@ -105,9 +112,9 @@ export default {
 						}
 					);
 
-				} else {
-					window.open(urlToRedirect, "_blank");
-				}
+				// } else {
+				// 	window.open(urlToRedirect, "_blank");
+				// }
 			}catch(e){
 				this.notifyErr("Error occurred: " + e.message);
 			}
