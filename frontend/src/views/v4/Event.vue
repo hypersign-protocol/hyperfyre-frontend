@@ -124,7 +124,7 @@ export default {
           this.notifyErr("Invalid response")
         }
       } else {
-        this.notifyErr("Authentication token missing")
+        //this.notifyErr("Authentication token missing")
       }
       this.isLoading=false;
       
