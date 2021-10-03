@@ -113,7 +113,7 @@
 </template>
 
 <script>
-import notificationMixins from "../../mixins/notificationMixins";
+import notificationMixins from "../../../mixins/notificationMixins";
 
 export default {
   name: "SocialConfig",

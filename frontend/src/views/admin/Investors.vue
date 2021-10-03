@@ -247,10 +247,10 @@ import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import Paginate from "vuejs-paginate";
-import notificationMixins from "../mixins/notificationMixins";
-import apiClientMixin from "../mixins/apiClientMixin";
+import notificationMixins from "../../mixins/notificationMixins";
+import apiClientMixin from "../../mixins/apiClientMixin";
 import FileDownload from "js-file-download";
-const issuedImgLink = require("../assets/issued-icon.png");
+const issuedImgLink = require("../../assets/issued-icon.png");
 
 export default {
   name: "Investor",

@@ -21,11 +21,11 @@
 <script>
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import Banner from "../../components/v4/Banner.vue";
-import Login from "../../components/v4/Login.vue";
-import EventIsOver from "../../components/v4/EventIsOver.vue";
-import Action from "../../components/v4/Action.vue";
-import Metrics from "../../components/v4/Metrics.vue";
+import Banner from "../../components/participant/Banner.vue";
+import Login from "../../components/participant/Login.vue";
+import EventIsOver from "../../components/participant/EventIsOver.vue";
+import Action from "../../components/participant/Action.vue";
+import Metrics from "../../components/participant/Metrics.vue";
 import notificationMixins from "../../mixins/notificationMixins";
 import apiClient from "../../mixins/apiClientMixin";
 import eventBus from "../../eventBus.js"

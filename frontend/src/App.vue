@@ -28,7 +28,7 @@
 </template>
 <script>
 // Ref:  fa icons:  https://fontawesome.com/
-import NavBar from "./components/v4/NavBar.vue"
+import NavBar from "./components/participant/NavBar.vue"
 export default {
   components: {
     NavBar

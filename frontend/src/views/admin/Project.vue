@@ -339,10 +339,10 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import Datepicker from 'vuejs-datetimepicker'
 import Paginate from "vuejs-paginate";
-import notificationMixins from '../mixins/notificationMixins';
-import apiClientMixin from '../mixins/apiClientMixin';
+import notificationMixins from '../../mixins/notificationMixins';
+import apiClientMixin from '../../mixins/apiClientMixin';
 
-import { isValidURL } from "../mixins/fieldValidationMixin.js";
+import { isValidURL } from "../../mixins/fieldValidationMixin.js";
 
 import CreateProjectSlide from './CreateProjectSlide/CreateProjectSlide.vue';
 import dayjs from "dayjs";
@@ -452,7 +452,7 @@ export default {
 
   methods: {
     onBannerError(e){
-      e.target.src =require("../assets/default-banner.png");
+      e.target.src =require("../../assets/default-banner.png");
     },
     copy(textToCopy, contentType){
 			if(textToCopy){

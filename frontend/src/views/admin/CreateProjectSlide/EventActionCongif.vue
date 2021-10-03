@@ -121,8 +121,8 @@
 }
 </style>
 <script>
-import notificationMixins from '../../mixins/notificationMixins';
-import {isEmpty,isValidURL, truncate} from '../../mixins/fieldValidationMixin';
+import notificationMixins from '../../../mixins/notificationMixins';
+import {isEmpty,isValidURL, truncate} from '../../../mixins/fieldValidationMixin';
 
 export default {
   name: "EventActionCongif",

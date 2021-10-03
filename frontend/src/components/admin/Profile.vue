@@ -90,7 +90,7 @@
             <div class="row">
               <div class="col-md-4">
                 <img
-                  src="../assets/avatarUploadLabel.png"
+                  src="../../assets/avatarUploadLabel.png"
                   alt="John"
                   style="width: 100%; height: 100%; opacity: 0.2"
                 />

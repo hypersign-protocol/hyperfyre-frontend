@@ -49,9 +49,9 @@
 
 
 <script>
-import Profile from '@/components/Profile.vue'
-import Charts from '@/components/Charts.vue'
-import notificationMixins from '../mixins/notificationMixins';
+import Profile from '@/components/admin/Profile.vue'
+import Charts from '@/components/admin/Charts.vue'
+import notificationMixins from '../../mixins/notificationMixins';
 export default {
   name: "PanelPage",
   mounted() {
