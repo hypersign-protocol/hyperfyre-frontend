@@ -223,7 +223,7 @@ export default {
             }
         break;
         default:
-          console.log("Spelling mistake");
+          this.notifyErr("Invalid event type")
       }
       
       
@@ -236,13 +236,11 @@ export default {
       let isvalid = this.handleEventActionValidation()
       if(isvalid) {
         this.selected["id"] = this.eventActionType + "_" +  this.eventActionList.length;
-        this.eventActionList.push(this.selected);
-        console.log("Emitting events from grand-child to parents")
+        this.eventActionList.push(this.selected);      
         this.$emit("updateEventActions", {
           type: "ADD",
           data: this.selected
         })
-        console.log("Emitting events from grand-child to parents")
         this.clearSelected()
       }
 

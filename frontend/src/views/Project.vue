@@ -472,13 +472,11 @@ export default {
       this.$root.$emit('callClearFromProject');    
     },
     AddUpdateDelEventActions(event){
-      console.log("Event receieved from grand-child")
       const  { type, data } = event;
       if(type){
         switch(type){
           case "ADD": {
-            this.eventActionList.push(data);
-            console.log("Adding action to project action list len = " + this.eventActionList.length)
+            this.eventActionList.push(data);            
             break;
           }
 
@@ -506,9 +504,6 @@ export default {
           }
         }
       }
-      //console.log(JSON.stringify(data));
-
-      console.log("Event receieved from grand-child")
     },
     handleSearch(e){
         if(e.target.value.length){
@@ -555,9 +550,6 @@ export default {
       try {
         
         this.isLoading = true;
-        // console.log("THIS USER", )
-
-        // if (!this.project.ownerDid) throw new Error("No project found");
         if (!this.user.id) throw new Error("No project found");
        
 
@@ -687,7 +679,6 @@ export default {
         this.project.actions = this.eventActionList
         
     
-        //console.log(JSON.stringify(this.project.actions))
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
           if(!this.isProjectEditing){
@@ -731,7 +722,6 @@ export default {
             this.errors = e.errors
             this.$bvModal.show("err-modal");
         }
-        console.log(e);
         this.notifyErr(e || e.message);
       } finally {
         this.isLoading = false;

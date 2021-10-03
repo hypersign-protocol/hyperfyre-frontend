@@ -137,7 +137,7 @@ export default {
         }
       } catch (e) {
         this.notifyErr("Error occurred: " + e.message);
-        console.log(e);
+        // console.log(e);
       }
     },
   },

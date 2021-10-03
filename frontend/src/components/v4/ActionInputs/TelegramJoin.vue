@@ -102,6 +102,7 @@ export default {
 
 							if(data.username || data.id){
 								this.tg.targetScreenName = data.username || data.id;
+                
 								// localStorage.setItem("telegramId", data.username || data.id)
 								window.open(urlToRedirect, "_blank");
 							} else{

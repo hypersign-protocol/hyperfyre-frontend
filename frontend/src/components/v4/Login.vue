@@ -88,7 +88,7 @@ export default {
         _this.connection.close();
         const authorizationToken = messageData.data.token;
 
-        console.log("Emitting authentoken event")
+        // console.log("Emitting authentoken event")
 
         localStorage.setItem("authToken", authorizationToken);
         this.$emit("AuthTokenUpdateEvent", authorizationToken);
@@ -124,11 +124,11 @@ export default {
       }
     },
     onCaptchaExpired: function() {
-      console.log("Captcha expired");
+      // console.log("Captcha expired");
       this.$refs.recaptcha.reset();
     },
     onCaptchaVerified: function(recaptchaToken) {
-      console.log('Verify: ' + recaptchaToken)
+      // console.log('Verify: ' + recaptchaToken)
       localStorage.setItem("recaptchaToken", recaptchaToken);
       const self = this;
       self.status = "submitting";
