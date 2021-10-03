@@ -13,7 +13,7 @@
     "predeploy": "npm run build"
   },
   "dependencies": {
-    "auth0-js": "^9.16.2",
+    "auth0-js": "^9.16.4",
     "axios": "^0.21.1",
     "bootstrap-vue": "^2.0.0-rc.11",
     "dayjs": "^1.10.6",
