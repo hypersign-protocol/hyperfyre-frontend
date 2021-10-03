@@ -342,7 +342,7 @@ export default {
         {
           field: "actions",
           key: "e",
-          title: "User Actions",
+          title: "Actions",
           align: "left",
           width: 250,
           renderBodyCell: ({ row, column, rowIndex }, h) => {

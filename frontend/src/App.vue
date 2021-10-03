@@ -45,13 +45,13 @@ export default {
           icon: "fas fa-tachometer-alt",
         },
         {
-          href: "/app/admin/project",
+          href: "/app/admin/events",
           title: "Events",
           icon: "fas fa-plane-departure",
         },
         {
-          href: "/app/admin/investors",
-          title: "Users",
+          href: "/app/admin/participants",
+          title: "Participants",
           icon: "fas fa-users",
           exactPath: true,
         },
@@ -79,18 +79,28 @@ export default {
       this.filterMenu();
     }, 500);
 
-    this.showUserNav = window.location.pathname.includes("/event") ? true : false
+    if(this.$route.meta.admin){
+      this.showNavbar =
+          window.location.pathname.includes("/app/admin/participants") ||
+          window.location.pathname.includes("/app/admin/events") ||
+          window.location.pathname.includes("/app/admin/dashboard") ||
+          window.location.pathname.includes("/app/admin/subscription") ?
+          true :
+          false;
+    }else{
+      this.showUserNav = window.location.pathname.includes("/event") ? true : false
+    }
   },
 
   updated() {
+   
     this.showNavbar =
-      window.location.pathname.includes("/app/admin/investors") ||
-      window.location.pathname.includes("/app/admin/project") ||
-      window.location.pathname.includes("/app/admin/dashboard") ||
-      window.location.pathname.includes("/app/admin/subscription") ?
-      true :
-      false;
-
+          window.location.pathname.includes("/app/admin/participants") ||
+          window.location.pathname.includes("/app/admin/events") ||
+          window.location.pathname.includes("/app/admin/dashboard") ||
+          window.location.pathname.includes("/app/admin/subscription") ?
+          true :
+          false;
     // this.filterMenu();
   },
 

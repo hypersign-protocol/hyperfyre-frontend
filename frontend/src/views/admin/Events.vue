@@ -266,8 +266,8 @@ i {
                     title="Investor List"
                   >
                     <i class="fas fa-users"></i
-                    ><a class="card-body-custom" :href="`/app/admin/investors?projectId=${project._id}`"
-                      >User List ({{project.investorsCount}})</a
+                    ><a class="card-body-custom" :href="`/app/admin/participants?projectId=${project._id}`"
+                      >Participants ({{project.investorsCount}})</a
                     >
                   </li>
 
@@ -575,7 +575,7 @@ export default {
             window.location.origin + ( x.slug && x.slug != "" ?  "/event/" + x.slug :  "/app/form?projectId=" + x._id ) ;
           x["investors_link"] =
             window.location.origin +
-            "/app/admin/investors?projectId=" +
+            "/app/admin/participants?projectId=" +
             x._id;
         });
         this.notifySuccess("No. of projects fetched " + this.projects.length);

@@ -41,18 +41,18 @@ const router = new Router({
       },
     },
     {
-      path: "/app/admin/investors",
-      name: "investors",
-      component: () => import(/* webpackChunkName: "investors" */ './views/admin/Investors.vue') ,
+      path: "/app/admin/participants",
+      name: "Participants",
+      component: () => import(/* webpackChunkName: "investors" */ './views/admin/Participants.vue') ,
       meta: {
         requiresAuth: true,
         admin: true,
       },
     },
     {
-      path: "/app/admin/project",
-      name: "project",
-      component: () => import(/* webpackChunkName: "project" */ './views/admin/Project.vue') ,
+      path: "/app/admin/events",
+      name: "Events",
+      component: () => import(/* webpackChunkName: "project" */ './views/admin/Events.vue') ,
       meta: {
         requiresAuth: true,
         admin: true,

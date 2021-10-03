@@ -299,7 +299,7 @@ export default {
 
         this.notifySuccess("Your are subscribed. SubscriptionId = " + json._id);
         location.reload();
-        // window.location.href = window.location.origin + "/app/admin/project";
+        // window.location.href = window.location.origin + "/app/admin/events";
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
