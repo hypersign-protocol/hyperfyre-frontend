@@ -58,7 +58,7 @@ export default {
 		update() {
 			if (!this.isFieldValid()) {
 				this.data.value = "";
-				return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_FIELD.INVALID_INPUT);
+				return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
 			} else {
 				this.$emit('input', this.data.value)
 			}

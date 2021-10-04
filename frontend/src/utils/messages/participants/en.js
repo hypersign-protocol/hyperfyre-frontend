@@ -2,6 +2,10 @@ const EVENT = {
     BANNER: {
 
     },
+    PROFILE:{
+        TEXT_COPIED: "Text copied to clipboard",
+        ERROR_WHILE_COPYING: "Error in copying text: " 
+    },
     EVENT_IS_OVER: {
 
     },
@@ -12,11 +16,15 @@ const EVENT = {
     },
 
 }
-
+const ACTIONS = {
+        UPDATE_FAILED: "Error: could not update the action",
+        NO_ACTION_FOUND: "Error: no actions found with user",
+        SOME_ERROR: "Error: some error occurred"
+}
 const EVENT_ACTIONS = {
-    INVALID_FIELD: {
-        INVALID_INPUT: "Error: Field value is invalid"
-    },
+    INVALID_INPUT: "Error: Field value is invalid",
+    WENT_WRONG: "Error: Something Went Wrong",
+    ERROR: "Error occurred: ",
     INPUT_DATE: {
         INVALID_DATE_TIME: "Error: Invalid date time"
     },
@@ -24,9 +32,7 @@ const EVENT_ACTIONS = {
         TELEGRAM_AUTH: "Error: Please authorize telegram to proceed",
         AUTH_FAILED: "Authentication Failed! Try again",
         FETCH_USERNAME_FAILED: "Could not fetch the username after telegram authentication",
-        ERROR: "Error occurred: "
     },
-    WENT_WRONG: "Error: Something Went Wrong",
     TWITTER_FOLLOW: {
         FOLLOW_FIRST: "Error: Please follow first",
         TWITTER_SCREENS_BLANK: "Error: Source or target twitter screen name is  blank",
@@ -41,5 +47,6 @@ const EVENT_ACTIONS = {
 
 module.exports = {
     EVENT,
-    EVENT_ACTIONS
+    EVENT_ACTIONS,
+    ACTIONS
 }

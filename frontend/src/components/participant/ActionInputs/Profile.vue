@@ -45,6 +45,7 @@
 <script>
 import eventBus from "../../../eventBus.js"
 import notificationMixin from "../../../mixins/notificationMixins";
+import Messages from "../../../utils/messages/participants/en"
 export default {
 	name: 'Profile',
 	props: {
@@ -69,10 +70,10 @@ export default {
 		copy(){
 			if(this.referalLink){
 				navigator.clipboard.writeText(this.referalLink).then(() => {
-						this.notifySuccess('Text copied to clipboard');
+						this.notifySuccess(Messages.EVENT.PROFILE.TEXT_COPIED);
 					})
 					.catch(err => {
-						this.notifyErr('Error in copying text: ', err);
+						this.notifyErr(Messages.EVENT.PROFILE.ERROR_WHILE_COPYING, err);
 					});
 			}
     	},

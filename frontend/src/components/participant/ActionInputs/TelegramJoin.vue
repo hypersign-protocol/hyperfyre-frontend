@@ -116,7 +116,7 @@ export default {
 				// 	window.open(urlToRedirect, "_blank");
 				// }
 			}catch(e){
-				this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.ERROR + e.message);
+				this.notifyErr(Messages.EVENT_ACTIONS.ERROR + e.message);
 			}
 			
 		}
