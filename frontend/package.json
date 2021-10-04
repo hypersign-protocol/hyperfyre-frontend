@@ -26,7 +26,7 @@
     "vue-notification": "^1.3.20",
     "vue-qr": "^2.4.0",
     "vue-recaptcha": "^1.3.0",
-    "vue-router": "^3.0.1",
+    "vue-router": "^3.5.2",
     "vue-sidebar-menu": "^4.7.4",
     "vue-stepper": "^1.4.2",
     "vuejs-datepicker": "^1.6.2",
