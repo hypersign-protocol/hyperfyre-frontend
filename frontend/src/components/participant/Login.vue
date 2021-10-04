@@ -103,7 +103,7 @@ export default {
 
     this.connection.onerror = function(error) {
       _this.error = true;
-      _this.socketMessage = "Error while fetching the QR data :(";
+      _this.socketMessage = Messages.EVENT.LOGIN.SOCKET_ERROR;
     };
   },
   methods: {

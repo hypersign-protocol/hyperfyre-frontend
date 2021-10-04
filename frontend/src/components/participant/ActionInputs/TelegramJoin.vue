@@ -37,6 +37,7 @@
 import config from "../../../config";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
+import Messages from "../../../utils/messages/participants/en"
 export default {
 	name: 'TwitterRetweet',
 	props: {
@@ -74,7 +75,7 @@ export default {
 		update() {
 			const tgIdInStore = this.tg.targetScreenName; //localStorage.getItem("telegramId");
 			if (!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) {
-				return this.notifyErr("Error: Please authorize telegram to proceed")
+				return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.TELEGRAM_AUTH);
 			} else {
 				// this.tg.targetScreenName = tgIdInStore;
 				this.$emit('input', JSON.stringify({
@@ -97,7 +98,7 @@ export default {
 						(data) => {
 
 							if (!data) {
-								return this.notifyErr("Authentication Failed! Try again")
+								return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.AUTH_FAILED)
 							}	
 
 							if(data.username || data.id){
@@ -106,7 +107,7 @@ export default {
 								// localStorage.setItem("telegramId", data.username || data.id)
 								window.open(urlToRedirect, "_blank");
 							} else{
-								return this.notifyErr("Could not fetch the username after telegram authentication")
+								return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.FETCH_USERNAME_FAILED)
 							}
 						}
 					);
@@ -115,7 +116,7 @@ export default {
 				// 	window.open(urlToRedirect, "_blank");
 				// }
 			}catch(e){
-				this.notifyErr("Error occurred: " + e.message);
+				this.notifyErr(Messages.EVENT_ACTIONS.ERROR + e.message);
 			}
 			
 		}
