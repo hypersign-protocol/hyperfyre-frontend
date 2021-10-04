@@ -13,7 +13,7 @@ export default class TwitterService {
    * @param userId
    * @returns user detials
    */
-  async getUserDetails(userId: string): Promise<Object> {
+  async getUserDetails(userId: string): Promise<any> {
     const response = await this.tweeterClient.get('users/show', {
       user_id: userId,
     });
@@ -68,7 +68,7 @@ export default class TwitterService {
     needUserDetails = false,
     checkIfFollowed = false,
     sourceScreenName = ''
-  ): Promise<Object> {
+  ): Promise<any> {
     try {
       // const url = new Url(tweetUrl);
       // logger.info("Parsed tweetURl");
@@ -170,7 +170,7 @@ export default class TwitterService {
     needUserDetails = false,
     checkIfFollowed = false,
     sourceScreenName = ''
-  ): Promise<Object> {
+  ): Promise<any> {
     const userDetailsFromTwitter = await this.getUserDetails(loggedInUserId);
     const returnObj = {};
     returnObj['hasTweetUrlVerified'] = true;
