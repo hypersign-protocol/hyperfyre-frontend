@@ -10,7 +10,7 @@ import routes from './routes';
 import { getCerts, corsOptionsDelegate } from './utils/https';
 import apiErrorHandler from './error/apiErrorHandler';
 import process from "process";
-
+import helment from 'helmet';
 let server;
 async function setupApp() {
     try {
@@ -23,8 +23,10 @@ async function setupApp() {
         } else {
             server = http.createServer(app);
         }
-
+        
         const hypersign = new HypersignAuth(server);
+        app.use(helment())
+        app.disable('x-powered-by')
 
         app.use(express.json());
         app.use(cors(corsOptionsDelegate)); // add appropriate urls
