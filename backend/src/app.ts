@@ -74,13 +74,6 @@ process.on('SIGINT', function() {
     })
 });
 
-//  testing husky
-
-function t(){
-
-}
-
-const t1 = "";
-
+// testing husky
 export default server;
 
