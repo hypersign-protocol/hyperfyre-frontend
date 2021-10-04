@@ -10,12 +10,12 @@
         "start:dev": "nodemon src/app.ts",
         "build": "rimraf ./dist && tsc -p .",
         "activateSubscription": "node dist/services/activateSubscription.js",
-        "bootstrapPlan": "node dist/services/bootstrapPlans.js",
         "activateSubscription:dev": "nodemon src/services/activateSubscription.ts",
+        "bootstrapPlan": "node dist/services/bootstrapPlans.js",
         "bootstrapPlan:dev": "nodemon src/services/bootstrapPlans.ts",
         "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'  --require src/app.ts",
-        "healthCheck:dev": "nodemon src/services/healthCheck.ts",
-        "healthCheck": "node dist/services/healthCheck.js"
+        "healthCheck": "node dist/services/healthCheck.js",
+        "healthCheck:dev": "nodemon src/services/healthCheck.ts"
     },
     "author": "Vishwas Anand Bhushan",
     "license": "MIT",
