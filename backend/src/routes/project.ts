@@ -64,13 +64,14 @@ export = (hypersign) => {
 
 
   // Delete
-  router.delete(
-    "/:id",
-    hypersign.authorize.bind(hypersign),
-    ProjectSchemaPrams,
-    validateRequestSchema,
-    ProjectController.deleteProjectById
-  );
+  /// Disabling for the time being
+  // router.delete(
+  //   "/:id",
+  //   hypersign.authorize.bind(hypersign),
+  //   ProjectSchemaPrams,
+  //   validateRequestSchema,
+  //   ProjectController.deleteProjectById
+  // );
 
   return router;
 };

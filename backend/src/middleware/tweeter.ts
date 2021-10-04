@@ -1,11 +1,11 @@
 import { body, param } from "express-validator";
-import { validateURL } from "../utils/fields";
+import { isValidURL } from "../utils/fields";
 
 export const TweeterSchemaPrams = [
     param("userId")
       .exists({ checkFalsy: true })
       .trim()
-      .withMessage("userId can not be null or empty"),
+      .withMessage("UserId can not be null or empty"),
   ];
   
   export const TweeterSchemaBody = [
@@ -14,29 +14,29 @@ export const TweeterSchemaPrams = [
     body("tweetText")
       .exists({ checkFalsy: true })
       .trim()
-      .withMessage("tweetText can not be null or empty"),
+      .withMessage("TweetText can not be null or empty"),
   
     body("userId")
       .exists({ checkFalsy: true })
       .trim()
-      .withMessage("userId can not be null or empty"),
+      .withMessage("UserId can not be null or empty"),
     
     body("tweetUrl")
       .exists({ checkFalsy: true })
       .trim()
-      .custom((value) => validateURL(value))
-      .withMessage("invalid tweet url"),
+      .custom((value) => isValidURL(value))
+      .withMessage("Invalid re-tweet url"),
   ];
 
   export const TweeterFollowerBody = [
     body("sourceScreenName")
     .exists({ checkFalsy: true })
     .trim()
-    .withMessage("sourceScreenName can not be null or empty"),
+    .withMessage("SourceScreenName can not be null or empty"),
 
    body("targetScreenName")
     .exists({ checkFalsy: true })
     .trim()
-    .withMessage("targetScreenName can not be null or empty"),
+    .withMessage("TargetScreenName can not be null or empty"),
   ]
   

@@ -1,16 +1,14 @@
-const URL_REGX = new RegExp(
-  "^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|(www\\.)?){1}([0-9A-Za-z-\\.@:%_+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?"
-);
+import validURL from 'valid-url';
 
-export function validateURL(url) {
-  return new Promise((resolve, reject) => {
-    if (!URL_REGX.test(url)) {
-      reject(false); 
-    }
-    resolve(true);
-  });
+export function isValidURL(str) {   
+  const pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  return !!pattern.test(str) || validURL.isUri(str);// 
 }
-
 
 export function validateDate(date){
   return new Promise((resolve, reject) => {
