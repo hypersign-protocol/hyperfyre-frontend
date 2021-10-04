@@ -6,9 +6,9 @@
     "typings": "dist/index",
     "scripts": {
         "setEnv": "if [ -e .env.staging ]; then cp .env.staging .env; fi",
-        "start": "npm run build && node dist/src/app.js",
-        "start:dev": "nodemon src/app.ts",
-        "build": "rimraf ./dist && tsc -p .",
+        "start": "node dist/src/app.js",
+        "start:dev": "rimraf temp && mkdir temp && nodemon src/app.ts",
+        "build": "rimraf ./dist && tsc -p . && mkdir ./dist/temp",
         "activateSubscription": "node dist/src/services/activateSubscription.js",
         "activateSubscription:dev": "nodemon src/services/activateSubscription.ts",
         "bootstrapPlan": "node dist/src/services/bootstrapPlans.js",
