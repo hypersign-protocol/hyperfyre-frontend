@@ -15,6 +15,7 @@ const EVENT = {
 
 const EVENT_ACTIONS = {
     BLOCKCHAIN_ETH: {
+        INVALID_FIELD: "Error: Field value is invalid"
 
     },
     BLOCKCHAIN_TEZ: {
