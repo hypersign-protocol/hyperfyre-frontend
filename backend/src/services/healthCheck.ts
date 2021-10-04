@@ -1,9 +1,11 @@
 import fetch from "node-fetch";
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+import util from 'util';
+import cp from 'child_process'
 import { logger,  healthCheckBotConfig } from "../config";
 import MailService from './mail.service';
-const { mail } = require("../../hypersign.json");
+
+const exec = util.promisify(cp.exec);
+import { mail } from "../../hypersign.json";
 
 (() => {
     

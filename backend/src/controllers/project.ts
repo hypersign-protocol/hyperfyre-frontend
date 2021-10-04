@@ -37,7 +37,7 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
       return next(ApiError.badRequest("Choose different project name. This project name is already taken"));
     }
   
-    let newProject: IProject = await ProjectModel.create({
+    const newProject: IProject = await ProjectModel.create({
       projectName,
       logoUrl,
       fromDate: new Date(fromDate).toISOString(),
@@ -100,7 +100,7 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
     const { owner } = req.query;
     const { userData } = req.body;
     let projectList: Array<IProject>;
-    let projectListTmp = [];
+    const projectListTmp = [];
     if ( userData.id ) {
       const sortyByFromDateTimeDesc = { fromDate: -1 };
       projectList = await ProjectModel.find({}).where({ ownerDid: userData.id }).sort(sortyByFromDateTimeDesc);
@@ -172,11 +172,11 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
     let project: IProject = null; 
 
     try{
-    project = await ProjectModel.findById({ _id: id });
+      project = await ProjectModel.findById({ _id: id });
 
-    if(project == null) {
-    	throw new Error("not found");
-    }
+      if (project == null) {
+        throw new Error("not found");
+      }
 
     }catch(e){
       if(!project){
@@ -192,7 +192,7 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
    const eventActions = await getEventActions({eventId: project._id })
 
 
-    let projectInfo = {
+    const projectInfo = {
       ...project["_doc"],
       actions: eventActions
     };
@@ -212,7 +212,7 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
         const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
         const searchRgx = rgx(searchQuery);
 
-        var queryOptions = {
+        const queryOptions = {
           $or: [
             { name: { $regex: searchRgx, $options: "i" } },
             { email: { $regex: searchRgx, $options: "i" } },
@@ -370,13 +370,14 @@ async function getRandomInvestors(req: Request, res: Response, next: NextFunctio
 
   try{
 
-    let { limitRecord, isRandom } = req.query;
+    let { limitRecord } = req.query;
+    const { isRandom } = req.query;
     const { id } = req.params;
 
     if(!limitRecord || limitRecord == ""){
       limitRecord = "1";
     } 
-    let limitRecordInt = parseInt(limitRecord.toString());
+    const limitRecordInt = parseInt(limitRecord.toString());
     
     // get count of total investors for this projectId
     // query: projectId, isVerificationComplete = true

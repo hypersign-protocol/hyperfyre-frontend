@@ -6,16 +6,17 @@
     "typings": "dist/index",
     "scripts": {
         "setEnv": "if [ -e .env.staging ]; then cp .env.staging .env; fi",
-        "start": "npm run build && node dist/app.js",
+        "start": "npm run build && node dist/src/app.js",
         "start:dev": "nodemon src/app.ts",
         "build": "rimraf ./dist && tsc -p .",
-        "activateSubscription": "node dist/services/activateSubscription.js",
+        "activateSubscription": "node dist/src/services/activateSubscription.js",
         "activateSubscription:dev": "nodemon src/services/activateSubscription.ts",
-        "bootstrapPlan": "node dist/services/bootstrapPlans.js",
+        "bootstrapPlan": "node dist/src/services/bootstrapPlans.js",
         "bootstrapPlan:dev": "nodemon src/services/bootstrapPlans.ts",
         "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'  --require src/app.ts",
-        "healthCheck": "node dist/services/healthCheck.js",
-        "healthCheck:dev": "nodemon src/services/healthCheck.ts"
+        "healthCheck": "node dist/src/services/healthCheck.js",
+        "healthCheck:dev": "nodemon src/services/healthCheck.ts",
+        "lint": "eslint . --ext .ts --fix"
     },
     "author": "Vishwas Anand Bhushan",
     "license": "MIT",
@@ -47,12 +48,15 @@
         "@types/express": "^4.17.6",
         "@types/mocha": "^8.2.2",
         "@types/node": "^14.0.23",
+        "@typescript-eslint/eslint-plugin": "^4.32.0",
+        "@typescript-eslint/parser": "^4.32.0",
         "chai": "^4.3.4",
         "chai-http": "^4.3.0",
+        "eslint": "^7.32.0",
         "mocha": "^8.3.2",
         "nodemon": "^2.0.4",
+        "rimraf": "^3.0.2",
         "ts-node": "^8.10.2",
-        "typescript": "^3.4.0",
-        "rimraf": "^3.0.2"
+        "typescript": "^3.4.0"
     }
 }

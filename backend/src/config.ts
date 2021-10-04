@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import HypersignSsiSDK from "hs-ssi-sdk";
 
-const log = require("simple-node-logger");
+import log from "simple-node-logger";
 
 env.config();
 

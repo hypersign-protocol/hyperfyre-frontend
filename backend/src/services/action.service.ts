@@ -2,7 +2,7 @@ import ActionModel, { IEventAction, EventActionType } from "../models/actions";
 
 export  default class ActionService{
     constructor(){
-
+        // do nothing
     }
 
     async addAction( actionParams : IEventAction){

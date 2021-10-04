@@ -1,20 +1,17 @@
 import { logger, hypersignSDK, whitelistingSchemaId, nodeServer, hostnameurl, hsAuthServerEp, REFFERAL_MULTIPLIER } from "../config";
 import { Request, Response, NextFunction } from "express";
 import InvestorModel, { IInvestor } from "../models/investor";
-let { template :credentialMailTemplate} = require('../services/mail.template');
 import MailService from '../services/mail.service';
 import ApiError from '../error/apiError';
 import ActionService from "../services/action.service";
 import { IEventAction, EventActionType } from "../models/actions";
-
-
+import credentialMailTemplate from '../services/mail.template';
+import jsonWebToken from 'jsonwebtoken';
+import { keys as issuerKeyPair, mail, jwt } from '../../hypersign.json';
 
 
 const actionService =  new ActionService();
 
-const jsonWebToken = require('jsonwebtoken');
-
-const { keys: issuerKeyPair,  mail, jwt } = require("../../hypersign.json");
 
 function isHypersignDid(did){
   if(!did || did === "") return false;
@@ -47,7 +44,7 @@ async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
       logger.info("user exists ..")
     }
 
-    let user_actions = [];
+    const user_actions = [];
     let userActionScore = 0;
     // sanity check for the action
     if(actions && actions.length > 0){
@@ -312,7 +309,7 @@ async function getCredential(req: Request, res: Response, next: NextFunction) {
 
 async function sendEmail(data){
   const token = await jsonWebToken.sign(data, jwt.secret, { expiresIn: jwt.expiryTime })
-  let link = `${hostnameurl}/api/v1/investors/credential?token=${token}`;
+  const link = `${hostnameurl}/api/v1/investors/credential?token=${token}`;
   let mailTemplateTemp = credentialMailTemplate;
   mailTemplateTemp = mailTemplateTemp.replace(/@@APPNAME@@/g, mail.name);
   mailTemplateTemp = mailTemplateTemp.replace('@@RECEIVERNAME@@', data.name);
@@ -352,7 +349,7 @@ async function issueCredential(req: Request, res: Response, next: NextFunction){
       return next(ApiError.badRequest("Investor has already been verifed"));
     }
 
-    let attributesMap = {
+    const attributesMap = {
       name: "",
       email: "",
       blockchainAddress: "",

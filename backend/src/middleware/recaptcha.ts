@@ -1,6 +1,6 @@
 
 import { recaptchaSecret, recaptchaUri } from '../config'
-const request = require("request");
+import request from "request";
 
 export function verifyReCaptcha(req, res, next){
     const { rcToken } = req.query;

@@ -45,7 +45,7 @@ async function getSubscriptionByDid(req: Request, res: Response, next: NextFunct
     const { usage } = req.query;
     const filter = { userDid: userData["id"] };
     const employeeList = await subscriptionService.list(filter);
-    let resp = {};
+    const resp = {};
     resp["subscriptions"] = employeeList;
     if(usage){
       resp["usage"] = await subscriptionService.usage({ did: userData["id"] });

@@ -11,10 +11,10 @@ let chaiServer;
 let investorCount;
 
 // This token we have to get by logging into webapp
-let HypersignAuthToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVmlzaHdhcyBBbmFuZCAiLCJlbWFpbCI6InZpc2h1LmFuYW5kMUBnbWFpbC5jb20iLCJpZCI6ImRpZDpoczo2OGJhMjQxZC00YjE4LTQ3NjUtYjMyMS05ZGJiMmRkZjg1YWEiLCJpYXQiOjE2MTg0OTIwODEsImV4cCI6MTYxODYxMjA4MX0.hdjqoTNnaitdFwSyfbjr7nmtvBe8yMarrPXJkHDDfoo"
+const HypersignAuthToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVmlzaHdhcyBBbmFuZCAiLCJlbWFpbCI6InZpc2h1LmFuYW5kMUBnbWFpbC5jb20iLCJpZCI6ImRpZDpoczo2OGJhMjQxZC00YjE4LTQ3NjUtYjMyMS05ZGJiMmRkZjg1YWEiLCJpYXQiOjE2MTg0OTIwODEsImV4cCI6MTYxODYxMjA4MX0.hdjqoTNnaitdFwSyfbjr7nmtvBe8yMarrPXJkHDDfoo"
 
 
-let mockData = {
+const mockData = {
     did: "did:hs:mock",
     email: "vishu.anand1@gmail.com",
     name: "mock_user",
@@ -44,7 +44,7 @@ describe("API testing for /api/v1/investor", () => {
             })
             done();
         }catch(e){
-
+            console.log(e)
         }
     })
 

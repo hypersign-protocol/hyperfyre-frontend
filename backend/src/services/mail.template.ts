@@ -1,4 +1,4 @@
-export const template = 
+const template = 
     `
 <html>
 
@@ -92,3 +92,4 @@ export const template =
 
 </html>
 `
+export default template;

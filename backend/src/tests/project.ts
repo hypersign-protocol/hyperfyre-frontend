@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 let chaiServer;
 let projectCount;
 
-let projectData = {
+const projectData = {
   projectName: "Test New Project",
   logoUrl: "http://localhost:xyz.png",
   fromDate: new Date().toString(),

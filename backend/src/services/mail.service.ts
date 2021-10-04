@@ -1,6 +1,6 @@
 import { logger } from '../config';
+import nodemailer from 'nodemailer';
 
-const nodemailer = require('nodemailer');
 export default class MailService {
     host: any;
     port: any;

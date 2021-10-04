@@ -7,7 +7,7 @@ export interface IProject extends Document{
     fromDate: string; // data and time both
     toDate: string; // data and time both
     ownerDid: string;    
-    projectStatus: Boolean;
+    projectStatus: boolean;
     blockchainType: string;
     investorsCount: number;
     themeColor: string;

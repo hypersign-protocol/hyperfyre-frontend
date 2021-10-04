@@ -1,10 +1,10 @@
-const httpsLocalhost = require("https-localhost")();
+import  httpsLocalhost from "https-localhost";
 import { whitelist } from '../config';
 
 // Ref: https://github.com/daquinoaldo/https-localhost#use-as-module
-export function getCerts(){
+export function getCerts(): Promise<any>{
     return new Promise((resolve, reject) => {
-        httpsLocalhost.getCerts().then(cert => {
+        httpsLocalhost().getCerts().then(cert => {
             resolve(cert)
         }).catch(e => {
             reject(e);
@@ -14,7 +14,7 @@ export function getCerts(){
 
 
 // Ref: https://www.npmjs.com/package/cors
-export function corsOptionsDelegate (req, callback) {
+export function corsOptionsDelegate (req, callback): void{
     let corsOptions;
     if (whitelist.indexOf(req.header('Origin')) !== -1) {
       corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
@@ -24,6 +24,6 @@ export function corsOptionsDelegate (req, callback) {
     callback(null, corsOptions) // callback expects two parameters: error and options
   }
 
-export function getRandomArbitrary(min, max) {
+export function getRandomArbitrary(min, max) : Number{
     return Math.ceil(Math.random() * (max - min) + min);
   }
