@@ -17,7 +17,7 @@
         "healthCheck": "node dist/src/services/healthCheck.js",
         "healthCheck:dev": "nodemon src/services/healthCheck.ts",
         "lint": "eslint . --ext .ts",
-        "lint:fix": "eslint . --ext .ts --fix"
+        "lint:fix": "npm run lint -- --fix"
     },
     "author": "Vishwas Anand Bhushan",
     "license": "MIT",
