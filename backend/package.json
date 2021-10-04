@@ -16,7 +16,8 @@
         "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'  --require src/app.ts",
         "healthCheck": "node dist/src/services/healthCheck.js",
         "healthCheck:dev": "nodemon src/services/healthCheck.ts",
-        "lint": "eslint . --ext .ts --fix"
+        "lint": "eslint . --ext .ts",
+        "lint:fix": "eslint . --ext .ts --fix"
     },
     "author": "Vishwas Anand Bhushan",
     "license": "MIT",
@@ -53,6 +54,8 @@
         "chai": "^4.3.4",
         "chai-http": "^4.3.0",
         "eslint": "^7.32.0",
+        "husky": "^7.0.2",
+        "lint-staged": "^11.2.0",
         "mocha": "^8.3.2",
         "nodemon": "^2.0.4",
         "rimraf": "^3.0.2",
