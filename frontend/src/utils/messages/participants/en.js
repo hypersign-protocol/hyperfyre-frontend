@@ -18,7 +18,7 @@ const EVENT_ACTIONS = {
         INVALID_FIELD: "Error: Field value is invalid"
     },
     INPUT_DATE: {
-
+        INVALID_DATE_TIME: "Error: Invalid date time"
     },
     INPUT_NUM: {
 
