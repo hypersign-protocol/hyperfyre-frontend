@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { port, logger, httpsEnabled } from './config';
 import http from 'http';
@@ -31,7 +30,6 @@ async function setupApp() {
         app.use(express.json());
         app.use(cors(corsOptionsDelegate)); // add appropriate urls
         app.use(cookieParser());
-        app.use(bodyParser.json());
         app.use(express.static('public'));
 
 
