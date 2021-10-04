@@ -157,6 +157,7 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
 import apiClientMixin from "../../mixins/apiClientMixin";
+import Messages from "../../utils/messages/admin/en"
 
 export default {
   name: "Subscription",
@@ -294,11 +295,8 @@ export default {
         const json = await resp.json();
         // this.subscriptions.push(json);
         this.fetchSubscription();
-
         // localStorage.setItem("subscriptions", JSON.stringify(this.subscriptions));
-
-        this.notifySuccess("Your are subscribed. SubscriptionId = " + json._id);
-        location.reload();
+        this.notifySuccess(Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED +json._id);
         // window.location.href = window.location.origin + "/app/admin/events";
       } catch (e) {
         this.notifyErr(e.message);
