@@ -1,6 +1,6 @@
-import Twit from "twit";
-import Url from "url-parse";
-import { tweeterConfig, logger } from "../config";
+import Twit from 'twit';
+import Url from 'url-parse';
+import { tweeterConfig, logger } from '../config';
 
 export default class TwitterService {
   tweeterClient: any;
@@ -14,45 +14,40 @@ export default class TwitterService {
    * @returns user detials
    */
   async getUserDetails(userId: string): Promise<Object> {
-    const response = await this.tweeterClient.get("users/show", {
+    const response = await this.tweeterClient.get('users/show', {
       user_id: userId,
     });
     const { data } = response;
 
     if (!data) {
-      throw new Error("could not fetch user information from tweeter");
+      throw new Error('could not fetch user information from tweeter');
     }
 
     return {
-      screen_name: data["screen_name"],
-      name: data["name"],
-      id: data["id_str"],
-      description: data["description"],
+      screen_name: data['screen_name'],
+      name: data['name'],
+      id: data['id_str'],
+      description: data['description'],
     };
   }
 
   getTweetIDFromUrl(tweetUrl): string {
-    if (!tweetUrl) throw new Error("tweetUrl can not be blank");
+    if (!tweetUrl) throw new Error('tweetUrl can not be blank');
 
     //const t = tweetUrl.trim();
     const url = new Url(tweetUrl);
-    logger.info("Parsed tweetURl");
+    logger.info('Parsed tweetURl');
     const pathName = url.pathname;
-    logger.info("pathName = " + pathName);
-    if (!pathName) throw new Error("invalid tweeter url");
+    logger.info('pathName = ' + pathName);
+    if (!pathName) throw new Error('invalid tweeter url');
 
-    const paths: Array<string> = pathName.split("/status");
+    const paths: Array<string> = pathName.split('/status');
     logger.info(paths);
-    if (
-      !paths ||
-      paths.length <= 0 ||
-      paths[1] == undefined ||
-      paths[1] == ""
-    ) {
-      throw new Error("invalid tweeter url");
+    if (!paths || paths.length <= 0 || paths[1] == undefined || paths[1] == '') {
+      throw new Error('invalid tweeter url');
     }
 
-    const tweetId = paths[1].replace("/", "").trim();
+    const tweetId = paths[1].replace('/', '').trim();
 
     return tweetId;
   }
@@ -72,7 +67,7 @@ export default class TwitterService {
     tweetText: string,
     needUserDetails = false,
     checkIfFollowed = false,
-    sourceScreenName = ""
+    sourceScreenName = ''
   ): Promise<Object> {
     try {
       // const url = new Url(tweetUrl);
@@ -87,68 +82,63 @@ export default class TwitterService {
       // }
 
       const tweetId = this.getTweetIDFromUrl(tweetUrl); // paths[1].replace("/", "").trim();
-      logger.info("tweetId = " + tweetId);
+      logger.info('tweetId = ' + tweetId);
 
-      const response = await this.tweeterClient.get("statuses/show", {
+      const response = await this.tweeterClient.get('statuses/show', {
         id: tweetId,
       });
       const { data } = response;
 
       if (!data) {
-        throw new Error("could not fetch tweet data");
+        throw new Error('could not fetch tweet data');
       }
 
-      if (!data["user"]) {
-        throw new Error("no user details found");
+      if (!data['user']) {
+        throw new Error('no user details found');
       }
 
-      if (data["user"]["id_str"] != loggedInUserId) {
+      if (data['user']['id_str'] != loggedInUserId) {
         logger.info("this is someone else's tweet");
         throw new Error("this is someone else's tweet");
       }
 
-      const text = data["text"];
+      const text = data['text'];
 
       if (!text) {
-        logger.info("no tweet found in id " + tweetId);
-        throw new Error("no tweet found in id " + tweetId);
+        logger.info('no tweet found in id ' + tweetId);
+        throw new Error('no tweet found in id ' + tweetId);
       }
 
-      if (!data["is_quote_status"]) {
+      if (!data['is_quote_status']) {
         if (text.indexOf(tweetText) <= -1) {
-          logger.info("tweet did not match with tweet text for id " + tweetId);
-          throw new Error(
-            "tweet did not match with tweet text for id " + tweetId
-          );
+          logger.info('tweet did not match with tweet text for id ' + tweetId);
+          throw new Error('tweet did not match with tweet text for id ' + tweetId);
         }
       } else {
-        const quotedTweetId = data["quoted_status_id_str"];
+        const quotedTweetId = data['quoted_status_id_str'];
         let t = tweetText;
-        t = t.split("/status/")[1].split("?")[0];
+        t = t.split('/status/')[1].split('?')[0];
         // const tweetId = this.getTweetIDFromUrl(tweetUrl)
         if (quotedTweetId != t) {
-          logger.info("invalid tweet; make sure you quoted our tweet");
-          throw new Error("invalid tweet; make sure you quoted our tweet");
+          logger.info('invalid tweet; make sure you quoted our tweet');
+          throw new Error('invalid tweet; make sure you quoted our tweet');
         }
       }
 
       const returnObj = {};
-      returnObj["hasTweetUrlVerified"] = true;
+      returnObj['hasTweetUrlVerified'] = true;
       if (needUserDetails) {
-        returnObj["user"] = {
-          screen_name: data["user"]["screen_name"],
-          name: data["user"]["name"],
-          id: data["user"]["id_str"],
-          description: data["user"]["description"],
+        returnObj['user'] = {
+          screen_name: data['user']['screen_name'],
+          name: data['user']['name'],
+          id: data['user']['id_str'],
+          description: data['user']['description'],
         };
       }
 
       if (needUserDetails && checkIfFollowed) {
-        const followed = await this.hasFollowed(
-          sourceScreenName,
-          returnObj["user"]["screen_name"]
-        );
-        returnObj["user"]["followed"] = {
+        const followed = await this.hasFollowed(sourceScreenName, returnObj['user']['screen_name']);
+        returnObj['user']['followed'] = {
           to: sourceScreenName,
           hasFollowed: followed,
         };
@@ -179,21 +169,18 @@ export default class TwitterService {
     tweetText: string,
     needUserDetails = false,
     checkIfFollowed = false,
-    sourceScreenName = ""
+    sourceScreenName = ''
   ): Promise<Object> {
     const userDetailsFromTwitter = await this.getUserDetails(loggedInUserId);
     const returnObj = {};
-    returnObj["hasTweetUrlVerified"] = true;
+    returnObj['hasTweetUrlVerified'] = true;
     if (needUserDetails) {
-      returnObj["user"] = userDetailsFromTwitter;
+      returnObj['user'] = userDetailsFromTwitter;
     }
 
     if (needUserDetails && checkIfFollowed) {
-      const followed = await this.hasFollowed(
-        sourceScreenName,
-        returnObj["user"]["screen_name"]
-      );
-      returnObj["user"]["followed"] = {
+      const followed = await this.hasFollowed(sourceScreenName, returnObj['user']['screen_name']);
+      returnObj['user']['followed'] = {
         to: sourceScreenName,
         hasFollowed: followed,
       };
@@ -209,29 +196,26 @@ export default class TwitterService {
    * @param targetScreenName user who follows
    * @returns boolean
    */
-  async hasFollowed(
-    sourceScreenName: string,
-    targetScreenName: string
-  ): Promise<boolean> {
-    const response = await this.tweeterClient.get("friendships/show", {
+  async hasFollowed(sourceScreenName: string, targetScreenName: string): Promise<boolean> {
+    const response = await this.tweeterClient.get('friendships/show', {
       source_screen_name: sourceScreenName,
       target_screen_name: targetScreenName,
     });
     const { data } = response;
 
     if (!data) {
-      throw new Error("could not fetch friendship information");
+      throw new Error('could not fetch friendship information');
     }
 
     const { relationship } = data;
 
     if (!relationship) {
-      throw new Error("no relationship found");
+      throw new Error('no relationship found');
     }
 
     const { source, target } = relationship;
     if (!source || !target) {
-      throw new Error("no source or target object found");
+      throw new Error('no source or target object found');
     }
 
     if (source.followed_by && target.following) {

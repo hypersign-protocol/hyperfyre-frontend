@@ -1,45 +1,36 @@
-import { Router } from "express";
-import ProjectController from "../controllers/project";
+import { Router } from 'express';
+import ProjectController from '../controllers/project';
 
-import {
-  ProjectSchemaBody,
-  ProjectSchemaPrams,
-} from "../middleware/projectSchema";
+import { ProjectSchemaBody, ProjectSchemaPrams } from '../middleware/projectSchema';
 
-import { validateRequestSchema } from "../middleware/validateRequestSchema";
+import { validateRequestSchema } from '../middleware/validateRequestSchema';
 
-import {
-  verifySubscriptionWithDid
-} from "../middleware/subscription";
+import { verifySubscriptionWithDid } from '../middleware/subscription';
 
 export = (hypersign) => {
   const router = Router();
 
   router.post(
-    "/",
+    '/',
     hypersign.authorize.bind(hypersign),
-    verifySubscriptionWithDid, 
+    verifySubscriptionWithDid,
     ProjectSchemaBody,
     validateRequestSchema,
     ProjectController.addProject
   );
 
   router.put(
-    "/",
+    '/',
     hypersign.authorize.bind(hypersign),
     ProjectSchemaBody,
     validateRequestSchema,
     ProjectController.updateProject
   );
 
-  router.get(
-    "/",
-    hypersign.authorize.bind(hypersign),
-    ProjectController.getAllProject
-  );
+  router.get('/', hypersign.authorize.bind(hypersign), ProjectController.getAllProject);
 
   router.get(
-    "/:id",
+    '/:id',
     (req, res, next) => {
       const { isPublic } = req.query;
       if (isPublic) {
@@ -54,14 +45,12 @@ export = (hypersign) => {
   );
 
   router.get(
-    "/:id/lottery",
+    '/:id/lottery',
     hypersign.authorize.bind(hypersign),
     ProjectSchemaPrams,
     validateRequestSchema,
     ProjectController.getRandomInvestors
   );
-  
-
 
   // Delete
   /// Disabling for the time being

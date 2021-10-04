@@ -17,7 +17,8 @@
         "healthCheck": "node dist/src/services/healthCheck.js",
         "healthCheck:dev": "nodemon src/services/healthCheck.ts",
         "lint": "eslint . --ext .ts",
-        "lint:fix": "npm run lint -- --fix"
+        "lint:fix": "npm run lint -- --fix",
+        "prettier": "prettier --config .prettierrc.json --write src/**/*.ts"
     },
     "author": "Vishwas Anand Bhushan",
     "license": "MIT",
@@ -56,6 +57,7 @@
         "eslint": "^7.32.0",
         "mocha": "^8.3.2",
         "nodemon": "^2.0.4",
+        "prettier": "^2.4.1",
         "rimraf": "^3.0.2",
         "ts-node": "^8.10.2",
         "typescript": "^3.4.0"

@@ -1,21 +1,19 @@
-import ActionModel, { IEventAction, EventActionType } from "../models/actions";
+import ActionModel, { IEventAction, EventActionType } from '../models/actions';
 
-export  default class ActionService{
-    constructor(){
-        // do nothing
-    }
+export default class ActionService {
+  constructor() {
+    // do nothing
+  }
 
-    async addAction( actionParams : IEventAction){
-        const newAction = await ActionModel.create({
-            ...actionParams
-        })
+  async addAction(actionParams: IEventAction) {
+    const newAction = await ActionModel.create({
+      ...actionParams,
+    });
 
-        return newAction;
-    }
+    return newAction;
+  }
 
-    async getEventActions({ eventId }){
-        return await ActionModel.find({ eventId });
-    }
-
+  async getEventActions({ eventId }) {
+    return await ActionModel.find({ eventId });
+  }
 }
-

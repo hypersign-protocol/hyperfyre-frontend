@@ -5,11 +5,10 @@ import twitter from './tweeter';
 import subscrition from './subscription';
 import plan from './plan';
 export default {
-    project,
-    investor,
-    auth,
-    twitter,
-    subscrition, 
-    plan
-}
-
+  project,
+  investor,
+  auth,
+  twitter,
+  subscrition,
+  plan,
+};

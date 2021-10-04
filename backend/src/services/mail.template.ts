@@ -1,5 +1,4 @@
-const template = 
-    `
+const template = `
 <html>
 
 <head>
@@ -91,5 +90,5 @@ const template =
 </body>
 
 </html>
-`
+`;
 export default template;

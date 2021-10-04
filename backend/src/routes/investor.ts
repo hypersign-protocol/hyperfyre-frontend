@@ -1,25 +1,17 @@
-import { Router } from "express";
-import InvestorController from "../controllers/investor";
-import { verifyReCaptcha } from "../middleware/recaptcha";
-import {
-  InvestorSchemaBody,
-  InvestorSchemaPrams,
-  InvestorSchemaQuery,
-} from "../middleware/investorSchema";
+import { Router } from 'express';
+import InvestorController from '../controllers/investor';
+import { verifyReCaptcha } from '../middleware/recaptcha';
+import { InvestorSchemaBody, InvestorSchemaPrams, InvestorSchemaQuery } from '../middleware/investorSchema';
 
-import { validateRequestSchema } from "../middleware/validateRequestSchema";
-import {
-  verifySubscription,
-  updateSubscription
-} from "../middleware/subscription";
+import { validateRequestSchema } from '../middleware/validateRequestSchema';
+import { verifySubscription, updateSubscription } from '../middleware/subscription';
 
 export = (hypersign) => {
-
   const router = Router();
 
   // TODO:  Integrate recaptcha
   router.post(
-    "/",
+    '/',
     verifyReCaptcha,
     hypersign.authorize.bind(hypersign),
     InvestorSchemaBody,
@@ -30,23 +22,19 @@ export = (hypersign) => {
       const { result } = req.body;
       const { isSubscribed } = result;
       // only update the subscription for the first time :  during ADD user.
-      // from the second time (during UPDATE user), need not to update subscriptions: 
+      // from the second time (during UPDATE user), need not to update subscriptions:
       if (!isSubscribed) {
         updateSubscription(req, res, next);
-      }else{
+      } else {
         res.send(result);
       }
     }
   );
 
-  router.get(
-    "/",
-    hypersign.authorize.bind(hypersign),
-    InvestorController.getAllInvestor
-  );
+  router.get('/', hypersign.authorize.bind(hypersign), InvestorController.getAllInvestor);
 
   router.get(
-    "/:did",
+    '/:did',
     hypersign.authorize.bind(hypersign),
     InvestorSchemaPrams,
     validateRequestSchema,
@@ -54,7 +42,7 @@ export = (hypersign) => {
   );
 
   router.put(
-    "/:did",
+    '/:did',
     hypersign.authorize.bind(hypersign),
     InvestorSchemaPrams,
     InvestorSchemaQuery,
@@ -64,8 +52,8 @@ export = (hypersign) => {
   );
 
   // Delete
-  router.delete("/", (req, res) => {
-    res.json({ message: "Hello World" });
+  router.delete('/', (req, res) => {
+    res.json({ message: 'Hello World' });
   });
 
   //// Since this will be called by mobile wallet, you need hypersign authorization middleware here...

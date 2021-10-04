@@ -1,7 +1,7 @@
-import SubscriptionModel, { ISubscription } from "../models/subscription";
-import { IPlan } from "../models/plan";
-import UsageModel, { IUsage } from "../models/usage";
-import PlanService from "./plan.service";
+import SubscriptionModel, { ISubscription } from '../models/subscription';
+import { IPlan } from '../models/plan';
+import UsageModel, { IUsage } from '../models/usage';
+import PlanService from './plan.service';
 // import planList from "./plans.json";
 
 export default class Subscription {
@@ -10,12 +10,7 @@ export default class Subscription {
     this.plan = new PlanService();
   }
 
-  async upInsertUsage({
-    userDid,
-    totalAvailable,
-    totalUsed = 0,
-    updateUsed = false,
-  }): Promise<void> {
+  async upInsertUsage({ userDid, totalAvailable, totalUsed = 0, updateUsed = false }): Promise<void> {
     const filter = { userDid };
     const usageInDb: IUsage = await UsageModel.where(filter).findOne();
     if (!usageInDb) {
@@ -40,25 +35,14 @@ export default class Subscription {
     }
   }
 
-  async add({
-    planId,
-    userDid,
-    subscriptionDate,
-    isActive,
-    hasExpired,
-    leftOverNoRequests,
-  }): Promise<ISubscription> {
+  async add({ planId, userDid, subscriptionDate, isActive, hasExpired, leftOverNoRequests }): Promise<ISubscription> {
     const planInDb: IPlan = await this.plan.getById({ id: planId });
 
     // we only allow 1 freemium subscription
-    if (planInDb.planName === "Freemium") {
-      const subscriptionWithFreemiumPlans: Array<ISubscription> =
-        await this.list({ userDid, planId });
-      if (
-        subscriptionWithFreemiumPlans &&
-        subscriptionWithFreemiumPlans.length >= 1
-      ) {
-        throw new Error("You can not opt for more than one freemium plan");
+    if (planInDb.planName === 'Freemium') {
+      const subscriptionWithFreemiumPlans: Array<ISubscription> = await this.list({ userDid, planId });
+      if (subscriptionWithFreemiumPlans && subscriptionWithFreemiumPlans.length >= 1) {
+        throw new Error('You can not opt for more than one freemium plan');
       }
     }
 
@@ -72,10 +56,10 @@ export default class Subscription {
     });
 
     // in case of freemium, activate the subscription right away
-    if (planInDb.planName === "Freemium") {
+    if (planInDb.planName === 'Freemium') {
       // updated usage and subscriptioin
       const filter = {
-        _id: newSubscription["_id"],
+        _id: newSubscription['_id'],
         userDid,
       };
       const update = {
@@ -89,20 +73,16 @@ export default class Subscription {
   }
 
   async updateSubscription(filter, update): Promise<ISubscription> {
-    const subcrip: ISubscription = await SubscriptionModel.findByIdAndUpdate(
-      filter["_id"],
-      update
-    );
+    const subcrip: ISubscription = await SubscriptionModel.findByIdAndUpdate(filter['_id'], update);
     this.upInsertUsage({
-      userDid: filter["userDid"],
-      totalAvailable: update["leftOverNoRequests"],
+      userDid: filter['userDid'],
+      totalAvailable: update['leftOverNoRequests'],
     });
     return subcrip;
   }
 
   async list(filter): Promise<Array<ISubscription>> {
-    const allSubscriptionForUser: Array<ISubscription> =
-      await SubscriptionModel.where(filter).find();
+    const allSubscriptionForUser: Array<ISubscription> = await SubscriptionModel.where(filter).find();
     return allSubscriptionForUser;
   }
 
@@ -117,7 +97,7 @@ export default class Subscription {
   }
 
   async verify({ did }): Promise<boolean> {
-    if (!did) throw new Error("Invalid did");
+    if (!did) throw new Error('Invalid did');
     // check if
     // owner has active subscriptions or not
     const subscriptionList: Array<ISubscription> = await this.list({
@@ -125,7 +105,7 @@ export default class Subscription {
       isActive: true,
     });
     if (!subscriptionList) {
-      throw new Error("Could not fetch subscription for admin did " + did);
+      throw new Error('Could not fetch subscription for admin did ' + did);
     }
     if (subscriptionList.length === 0) {
       return false;
@@ -134,7 +114,7 @@ export default class Subscription {
     // has some requests left or not
     const usage: IUsage = await this.usage({ did });
     if (!usage) {
-      throw new Error("Could not fetch usage for admin did " + did);
+      throw new Error('Could not fetch usage for admin did ' + did);
     }
 
     if (usage.totalUsed >= usage.totalAvailable) {
