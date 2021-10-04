@@ -21,93 +21,11 @@ function isHypersignDid(did){
   return (did.indexOf('did:hs:') > -1);
 }
 
-async function addInvestor(req: Request, res: Response, next: NextFunction) {
-  try {
-    logger.info("InvestorController:: addInvestor() method start..");
-    const { did, email, name, ethAddress, twitterHandle, telegramHandle, hasTwitted, hasJoinedTGgroup,  projectId, tweetUrl  } = req.body;
-    const { referrer } = req.query; // did of guy who have refered
-    logger.info("InvestorController:: addInvestor(): referrer = " + referrer)
-    const isComingFromReferal = referrer && email != referrer; 
-    logger.info("InvestorController:: addInvestor(): isComingFromReferal = " + isComingFromReferal)
-
-    logger.info("InvestorController:: addInvestor(): before findning investor by did = " + did);
-    const investor:IInvestor = await InvestorModel.where({ did: did, projectId: projectId }).findOne();
-
-    logger.info("InvestorController:: addInvestor(): before findning investor by email = " + email);
-    const investor_email:IInvestor = await InvestorModel.where({ email: email, projectId: projectId }).findOne();
-
-    if(investor != null){ 
-      logger.info("InvestorController:: addInvestor(): investor by did is non null so throwing");
-      return next(ApiError.badRequest('More than one submition is not allowed from this did'));
-    }
-
-    if(investor_email != null){
-      logger.info("InvestorController:: addInvestor(): investor by email is non null so throwing");
-      return next(ApiError.badRequest('More than one submition is not allowed from this emailId'));
-    }
-
-    logger.info("InvestorController:: addInvestor(): before creating a new investor into db");
-    const isVerificationComplete = hasTwitted && hasJoinedTGgroup;
-    const new_investor: IInvestor = await InvestorModel.create({
-      did, 
-      email, 
-      name, 
-      ethAddress, 
-      twitterHandle, 
-      telegramHandle, 
-      hasTwitted, 
-      hasJoinedTGgroup, 
-      isVerfiedByHypersign: false,
-      isVerificationComplete,
-      projectId,
-      tweetUrl,
-      numberOfReferals: !isComingFromReferal ? 0 : 0.5 * REFFERAL_MULTIPLIER
-    });
-    logger.info("InvestorController:: addInvestor(): after creating a new investor into db id = " + new_investor["_id"]);
-
-    // update the followers if refere is present in query
-    if(isComingFromReferal){
-      const filter = { email: referrer, projectId };
-
-      // find the refere 
-      logger.info("InvestorController:: addInvestor(): before fetchin the refer from db");
-      const investor:IInvestor = await InvestorModel.where(filter).findOne();
-      if(investor){
-        logger.info("InvestorController:: addInvestor(): after fetchin the refer from db id = " + investor.did);
-        
-        // update the refere followers
-        const updateParams = {
-          numberOfReferals: (investor.numberOfReferals + ( 1 * REFFERAL_MULTIPLIER))
-        };
-  
-        logger.info("InvestorController:: addInvestor(): updateParams = " + JSON.stringify(updateParams));
-        logger.info("InvestorController:: addInvestor(): before updating an investor into db");
-        updateInvestorInDb(filter, updateParams);
-        logger.info("InvestorController:: addInvestor(): after updating an investor into db");
-      }else{
-        logger.info("InvestorController:: addInvestor(): could not fetch investor. filter = " + JSON.stringify(filter));
-      }
-    }
-
-    issueCredential(req, res, next);
-    // res.send(new_investor);
-  } catch (e) {
-    logger.error("InvestorController:: addInvestor(): Error " + e);
-    next(ApiError.internal(e.message));
-  }finally{
-    logger.info("InvestorController:: addInvestor method ends.");
-  }
-}
-
-
-
-
 async function addUpdateUser(req: Request, res: Response, next: NextFunction) {
   try {
     logger.info("InvestorController:: addInvestor() method start..");
     const { 
       userData, 
-      
       projectId, 
       actions
     } = req.body;
@@ -392,7 +310,6 @@ async function getCredential(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-
 async function sendEmail(data){
   const token = await jsonWebToken.sign(data, jwt.secret, { expiresIn: jwt.expiryTime })
   let link = `${hostnameurl}/api/v1/investors/credential?token=${token}`;
@@ -412,7 +329,6 @@ async function sendEmail(data){
   await mailService.sendEmail(data.email, mailTemplateTemp, `Congratulations! You are successfully verified with Hypersign`);
   return link;
 }
-
 
 async function issueCredential(req: Request, res: Response, next: NextFunction){
   try{
@@ -470,7 +386,6 @@ async function issueCredential(req: Request, res: Response, next: NextFunction){
 }
 
 export default {
-  addInvestor,
   getInvestorByDID,
   getAllInvestor,
   issueCredential,

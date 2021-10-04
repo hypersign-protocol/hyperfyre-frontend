@@ -17,20 +17,9 @@ export = (hypersign) => {
 
   const router = Router();
 
-  router.post(
-    "/",
-    verifyReCaptcha,
-    hypersign.authorize.bind(hypersign),
-    InvestorSchemaBody,
-    validateRequestSchema,
-    verifySubscription,
-    InvestorController.addInvestor,
-    updateSubscription
-  );
-
   // TODO:  Integrate recaptcha
   router.post(
-    "/add",
+    "/",
     verifyReCaptcha,
     hypersign.authorize.bind(hypersign),
     InvestorSchemaBody,
@@ -78,6 +67,9 @@ export = (hypersign) => {
   router.delete("/", (req, res) => {
     res.json({ message: "Hello World" });
   });
+
+  //// Since this will be called by mobile wallet, you need hypersign authorization middleware here...
+  router.get("/credential",  InvestorController.getCredential);
 
   return router;
 };

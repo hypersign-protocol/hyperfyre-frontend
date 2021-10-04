@@ -99,7 +99,7 @@ export default {
           actions: this.actions,
         };
 
-        let url = `${this.$config.studioServer.BASE_URL}api/v1/investor/add?rcToken=${this.RecaptchaToken}`;
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${this.RecaptchaToken}`;
         if (this.$route.query.referrer && this.$route.query.referrer != "") {
           url += `?referrer=${this.$route.query.referrer}`;
         }
