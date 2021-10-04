@@ -27,7 +27,9 @@ const EVENT_ACTIONS = {
         ERROR: "Error occurred: "
     },
     TWITTER_FOLLOW: {
-
+        FOLLOW_FIRST: "Error: Please follow first",
+        WENT_WRONG: "Error: Something Went Wrong",
+        TWITTER_SCREENS_BLANK: "Error: Source or target twitter screen name is  blank",
     },
     TWITTER_RETWEET: {
 
