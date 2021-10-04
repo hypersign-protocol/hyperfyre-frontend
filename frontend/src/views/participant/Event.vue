@@ -29,6 +29,7 @@ import Metrics from "../../components/participant/Metrics.vue";
 import notificationMixins from "../../mixins/notificationMixins";
 import apiClient from "../../mixins/apiClientMixin";
 import eventBus from "../../eventBus.js"
+import Messages from "../../utils/messages/admin/en"
 export default {
   name: "Event",
   components: {
@@ -82,7 +83,7 @@ export default {
         await this.fetchUserInfoOnLogin();
       }
     }catch(e){
-      this.notifyErr("Error occurred: " + e.message);
+      this.notifyErr(Messages.EVENT.ERROR_OCCURED+ e.message);
     }
   },
   async updated() {
@@ -96,7 +97,7 @@ export default {
         await this.fetchUserDetails();
         this.fetchUserInfoOnLogin();
       }catch(e){
-        this.notifyErr("Error occurred: " + e.message);
+        this.notifyErr(Messages.EVENT.ERROR_OCCURED + e.message);
       }
     },
     async fetchUserDetails() {
@@ -121,7 +122,7 @@ export default {
           localStorage.setItem("user", JSON.stringify(this.userAuthData));
           this.userProfileData = JSON.parse(localStorage.getItem('user'))
         } else {
-          this.notifyErr("Invalid response")
+          this.notifyErr(Messages.EVENT.INVALID_RESPONSE)
         }
       } else {
         //this.notifyErr("Authentication token missing")
@@ -142,7 +143,7 @@ export default {
           ...resp.data
         }
       } else {
-        this.notifyErr("Invalid project slug")
+        this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG)
       }
       this.isLoading=false;
     },
