@@ -33,6 +33,7 @@
 <script>
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
+import Messages from "../../../utils/messages/participants/en"
 export default {
 	name: 'InputNumber',
 	props: {
@@ -55,7 +56,7 @@ export default {
 	methods: {
 		update() {
 			if (!this.data.value) {
-				return this.notifyErr("Error: Pls enter a valid input");
+				return this.notifyErr(Messages.EVENT_ACTIONS.INPUT_NUM.INVALID_NUM);
 			} else {
 				this.$emit('input', this.data.value)
 			}

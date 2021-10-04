@@ -21,7 +21,7 @@ const EVENT_ACTIONS = {
         INVALID_DATE_TIME: "Error: Invalid date time"
     },
     INPUT_NUM: {
-
+        INVALID_NUM: "Error: Please enter a valid input"
     },
     INPUT_TEXT: {
 

@@ -34,7 +34,7 @@
 import eventBus from "../../../eventBus.js";
 import {  isDate } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
-import Message from "../../../utils/messages/participants/en";
+import Messages from "../../../utils/messages/participants/en";
 export default {
 	name: 'InputDate',
 	props: {
@@ -59,7 +59,7 @@ export default {
 		update() {
 			if (!isDate(this.data.value)) {
 				this.data.value = "";
-				return this.notifyErr(Message.EVENT_ACTIONS.INPUT_DATE.INVALID_DATE_TIME);
+				return this.notifyErr(Messages.EVENT_ACTIONS.INPUT_DATE.INVALID_DATE_TIME);
 			} else {
 				this.$emit('input', this.data.value)
 			}
