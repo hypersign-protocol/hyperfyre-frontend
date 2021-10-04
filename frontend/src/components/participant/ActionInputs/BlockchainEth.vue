@@ -58,7 +58,7 @@ export default {
 		update() {
 			if (!this.isFieldValid()) {
 				this.data.value = "";
-				return this.notifyErr(Messages.EVENT_ACTIONS.BLOCKCHAIN_ETH_AND_TEZ.INVALID_FIELD);
+				return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_FIELD.INVALID_INPUT);
 			} else {
 				this.$emit('input', this.data.value)
 			}

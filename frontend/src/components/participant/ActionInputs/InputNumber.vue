@@ -56,7 +56,7 @@ export default {
 	methods: {
 		update() {
 			if (!this.data.value) {
-				return this.notifyErr(Messages.EVENT_ACTIONS.INPUT_NUM.INVALID_NUM);
+				return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_FIELD.INVALID_INPUT);
 			} else {
 				this.$emit('input', this.data.value)
 			}
