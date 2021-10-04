@@ -24,6 +24,7 @@ export async function writeInvestorsToFile(filename: string, data: Array<any>): 
     { header: 'SCORE', key: 'numberOfReferals', width: 10 },
   ];
 
+  logger.info("file ts:: Before map")
   data = data.map((investor: IInvestor) => {
     if (investor.actions && investor.actions.length > 0) {
       console.log(investor.actions.length);
@@ -41,6 +42,7 @@ export async function writeInvestorsToFile(filename: string, data: Array<any>): 
     }
     return investor;
   });
+  logger.info("file ts:: After map")
 
   worksheet.columns = wkCol;
 
@@ -48,11 +50,11 @@ export async function writeInvestorsToFile(filename: string, data: Array<any>): 
   worksheet.getRow(1).font = { bold: true };
 
   const fname = path.join(folder, filename + '.csv');
-  logger.info('File.ts:: writeInvestorsToFile(): fname = ' + fname);
-
-  await workbook.csv.writeFile(fname);
-
+  
   const filePath = path.resolve(__dirname, '../../', fname);
+  logger.info('File.ts:: writeInvestorsToFile(): filePath = ' + filePath);
+  await workbook.csv.writeFile(filePath);
+
   logger.info('File.ts:: writeInvestorsToFile(): filePath = ' + filePath);
   return filePath;
 }
