@@ -341,11 +341,10 @@ import Datepicker from 'vuejs-datetimepicker'
 import Paginate from "vuejs-paginate";
 import notificationMixins from '../../mixins/notificationMixins';
 import apiClientMixin from '../../mixins/apiClientMixin';
-
 import { isValidURL } from "../../mixins/fieldValidationMixin.js";
-
 import CreateProjectSlide from './CreateProjectSlide/CreateProjectSlide.vue';
 import dayjs from "dayjs";
+import Messages from "../../utils/messages/admin/en"
 export default {
   name: "Investor",
   components: { Loading, Datepicker, Paginate, CreateProjectSlide },
@@ -457,10 +456,10 @@ export default {
     copy(textToCopy, contentType){
 			if(textToCopy){
 				navigator.clipboard.writeText(textToCopy).then(() => {
-						this.notifySuccess(`${contentType} is copied to clipboard`);
+						this.notifySuccess(`${contentType}, ${Messages.EVENTS.CREATE_EDIT_EVENT.COPIED_TO_CLIPBOARD}`);
 					})
 					.catch(err => {
-						this.notifyErr('Error in copying text: ', err);
+						this.notifyErr(Messages.EVENTS.CREATE_EDIT_EVENT.ERROR_WHILE_COPYING, err);
 					});
 			}
     },
@@ -578,7 +577,7 @@ export default {
             "/app/admin/participants?projectId=" +
             x._id;
         });
-        this.notifySuccess("No. of projects fetched " + this.projects.length);
+        this.notifySuccess(Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_FETCHED_NO + this.projects.length);
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
@@ -692,7 +691,7 @@ export default {
         setTimeout(() => {
           this.whitelistingLink = "";
         }, 10000);
-        this.notifySuccess("Project is saved. Id = " + resp.data._id);
+        this.notifySuccess(Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_SAVED + resp.data._id);
         this.resetAllValues();
 
         if(this.isProjectEditing){
@@ -732,13 +731,13 @@ export default {
     checkIfEverythingIsFilled(){
 
         if(!this.project.projectName){
-          return "Please Specify a project name"
+          return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_NAME
         }   
         if(!this.project.logoUrl){
-          return "Please specify a Banner Url"
+          return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_LOGO_URL
         }
         if(! (this.project.fromDate && this.project.toDate)){
-          return "Please specify a start and end date"
+          return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_DATE_TIME
         }
 
         // if(!Object.keys(this.project.social).length){
@@ -774,15 +773,15 @@ export default {
         // }        
        
          if(!this.blockchainType){
-          return "Please provide Blockchain Type"
+          return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_BLOCKCHAIN_TYPE
         }
 
         if(this.themeColor == "#ffffff"){
-          return "Theme color cannot be white"
+          return Messages.EVENTS.CREATE_EDIT_EVENT.THEME_NOT_WHITE
         }
 
         if(this.themeColor == this.fontColor && (this.themeColor.trim().length && this.themeColor.trim().length) ){
-          return "Theme color and font color cannot be same"
+          return Messages.EVENTS.CREATE_EDIT_EVENT.THEME_COLOR_NOT_SAME
         }
         return true
 
@@ -791,13 +790,13 @@ export default {
 
     isProjectNameValid(){
       if(isValidURL(this.project.projectName)){
-        return "Please provide valid project name";
+        return Messages.EVENTS.VALIDATION.INVALID_PROJECT_NAME;
       }
       return true;
     },
     isLogoUrlValid() {
           if (!isValidURL(this.project.logoUrl)) {
-            return "Banner Url is not Valid";
+            return Messages.EVENTS.VALIDATION.INVALID_LOGO_URL;
           }
           return true;
         },
