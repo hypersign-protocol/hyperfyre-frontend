@@ -29,6 +29,7 @@
 </template>
 <script>
 import VueRecaptcha from "vue-recaptcha";
+import Messages from "../../utils/messages/participants/en"
 export default {
   components: {
     VueRecaptcha
@@ -72,10 +73,10 @@ export default {
     var _this = this;
 
     // take it in the env
-    _this.socketMessage = "Connecting to auth server...";
+    _this.socketMessage = Messages.EVENT.LOGIN.SOCKET_INIT;
     this.connection = new WebSocket(this.$config.websocketUrl);
     this.connection.onopen = function() {
-      _this.socketMessage = "Connected to auth server...";
+      _this.socketMessage = Messages.EVENT.LOGIN.SOCKET_OPEN;
     };
 
     this.connection.onmessage = ({ data }) => {
