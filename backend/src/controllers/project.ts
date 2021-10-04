@@ -1,55 +1,46 @@
-import { logger } from "../config";
-import { Request, Response, NextFunction } from "express";
-import ProjectModel, { IProject, EBlockchainType } from "../models/project";
-import ActionModel, { IEventAction, EventActionType } from "../models/actions";
+import { logger } from '../config';
+import { Request, Response, NextFunction } from 'express';
+import ProjectModel, { IProject, EBlockchainType } from '../models/project';
+import ActionModel, { IEventAction, EventActionType } from '../models/actions';
 
-import InvestorModel, { IInvestor } from "../models/investor";
+import InvestorModel, { IInvestor } from '../models/investor';
 import ApiError from '../error/apiError';
 import { writeInvestorsToFile, deleteFile } from '../utils/files';
 import dashify from 'dashify';
 
 async function addProject(req: Request, res: Response, next: NextFunction) {
   try {
-    const {
-      projectName,
-      logoUrl,
-      fromDate,
-      toDate,     
-      userData,
-      blockchainType,
-      themeColor,
-      fontColor,
-      actions
-    } = req.body;
+    const { projectName, logoUrl, fromDate, toDate, userData, blockchainType, themeColor, fontColor, actions } =
+      req.body;
 
     if (Date.parse(fromDate) > Date.parse(toDate)) {
-      return next(ApiError.badRequest("fromDate can not be greater than toDate"));
+      return next(ApiError.badRequest('fromDate can not be greater than toDate'));
     }
 
-    if(!Array.isArray(actions)){
-      return next(ApiError.badRequest("Actions should be array"));
+    if (!Array.isArray(actions)) {
+      return next(ApiError.badRequest('Actions should be array'));
     }
 
     const slug = dashify(projectName);
 
-    const project:IProject = await ProjectModel.where({ slug }).findOne();
-    if(project){
-      return next(ApiError.badRequest("Choose different project name. This project name is already taken"));
+    const project: IProject = await ProjectModel.where({ slug }).findOne();
+    if (project) {
+      return next(ApiError.badRequest('Choose different project name. This project name is already taken'));
     }
-  
-    let newProject: IProject = await ProjectModel.create({
+
+    const newProject: IProject = await ProjectModel.create({
       projectName,
       logoUrl,
       fromDate: new Date(fromDate).toISOString(),
       toDate: new Date(toDate).toISOString(),
       ownerDid: userData.id,
       projectStatus: true,
-      blockchainType: !blockchainType || blockchainType == "" ? EBlockchainType.ETHEREUM : blockchainType,
-      themeColor: !themeColor || themeColor == "" ? "#494949" : themeColor,
-      fontColor: !fontColor || fontColor == "" ? "#ffffff" : fontColor,
+      blockchainType: !blockchainType || blockchainType == '' ? EBlockchainType.ETHEREUM : blockchainType,
+      themeColor: !themeColor || themeColor == '' ? '#494949' : themeColor,
+      fontColor: !fontColor || fontColor == '' ? '#ffffff' : fontColor,
       slug,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
     newProject.actions = [];
@@ -58,40 +49,37 @@ async function addProject(req: Request, res: Response, next: NextFunction) {
     /// Add HYPERSIGN_AUTH action as default action
     const hsAuthEventAction = {
       type: EventActionType.HYPERSIGN_AUTH,
-      title: "Hypersign Authentication",
+      title: 'Hypersign Authentication',
       eventId: newProject._id,
       score: 5, // TODO:  hardcoding for now, later will take in ENV
       isManadatory: true,
-      value: "Hypersign Authentication",
-      placeHolder: "Hypersign Authentication"
+      value: 'Hypersign Authentication',
+      placeHolder: 'Hypersign Authentication',
     } as IEventAction;
     actions.push(hsAuthEventAction);
 
-
-    if(actions && actions.length > 0){
+    if (actions && actions.length > 0) {
       let i;
-      for(i = 0; i < actions.length; i++){
+      for (i = 0; i < actions.length; i++) {
         const newAction = await ActionModel.create({
           eventId: newProject._id,
-          ...actions[i]
-        })
-        newProject.actions.push(newAction)
+          ...actions[i],
+        });
+        newProject.actions.push(newAction);
       }
     }
 
     res.send({
-      ...newProject["_doc"],
-      actions: newProject.actions
+      ...newProject['_doc'],
+      actions: newProject.actions,
     });
-
-    
   } catch (e) {
-    logger.error("ProjectCtrl:: addProject(): Error " + e);
+    logger.error('ProjectCtrl:: addProject(): Error ' + e);
     return next(ApiError.internal(e.message));
   }
 }
 
-async function getEventActions({eventId}){
+async function getEventActions({ eventId }) {
   return await ActionModel.find({ eventId });
 }
 
@@ -100,66 +88,65 @@ async function getAllProject(req: Request, res: Response, next: NextFunction) {
     const { owner } = req.query;
     const { userData } = req.body;
     let projectList: Array<IProject>;
-    let projectListTmp = [];
-    if ( userData.id ) {
+    const projectListTmp = [];
+    if (userData.id) {
       const sortyByFromDateTimeDesc = { fromDate: -1 };
       projectList = await ProjectModel.find({}).where({ ownerDid: userData.id }).sort(sortyByFromDateTimeDesc);
       let i;
-      for(i = 0; i < projectList.length; i++){
+      for (i = 0; i < projectList.length; i++) {
         const project: IProject = projectList[i];
-        if(checkUpdateIfProjectExpired(project) === true){
+        if (checkUpdateIfProjectExpired(project) === true) {
           // logger.info("Project is expired");
-          project.projectStatus = false; 
-        }else{
+          project.projectStatus = false;
+        } else {
           // logger.info("Project NOt expired");
         }
 
-        
-        logger.info("Before fetching investos cound");
+        logger.info('Before fetching investos cound');
         // project.investorsCount = await InvestorModel.countDocuments({ projectId: project["_id"] });
         project.investorsCount = await InvestorModel.countDocuments({
-          projectId: project["_id"],
+          projectId: project['_id'],
         }).then((count) => count);
 
         const eventActions = await getEventActions({
-          eventId: project._id
-        })
+          eventId: project._id,
+        });
 
-        logger.info("After fetching investos cound = " + project.investorsCount);
+        logger.info('After fetching investos cound = ' + project.investorsCount);
 
         projectListTmp.push({
-          ...project["_doc"],
-          actions: eventActions
+          ...project['_doc'],
+          actions: eventActions,
         });
       }
 
       // logger.info(projectListTmp)
     } else {
-      projectList = []// await ProjectModel.find({});
+      projectList = []; // await ProjectModel.find({});
     }
     res.send(projectListTmp);
   } catch (e) {
-    logger.error("ProjectCtrl:: getAllProject(): Error " + e);
+    logger.error('ProjectCtrl:: getAllProject(): Error ' + e);
     return next(ApiError.internal(e.message));
   }
 }
 
-function checkUpdateIfProjectExpired(projectInfo: IProject){
-  if(!projectInfo){
-    throw new Error("Invaild project info object")
+function checkUpdateIfProjectExpired(projectInfo: IProject) {
+  if (!projectInfo) {
+    throw new Error('Invaild project info object');
   }
-  
-  if(projectInfo.projectStatus){
-    if(new Date().toISOString() > new Date(projectInfo.toDate).toISOString()){
+
+  if (projectInfo.projectStatus) {
+    if (new Date().toISOString() > new Date(projectInfo.toDate).toISOString()) {
       projectInfo.projectStatus = false;
-      projectInfo.updatedAt =  new Date();
+      projectInfo.updatedAt = new Date();
       // update the project in background
       ProjectModel.findByIdAndUpdate(projectInfo._id, { ...projectInfo });
       return true;
-    }else{
-    return false;
-    }  
-  }else{
+    } else {
+      return false;
+    }
+  } else {
     return false;
   }
 }
@@ -169,54 +156,51 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
 
     const { fetchInvestors, limit, skip, searchQuery, isPublic, isExport } = req.query;
-    let project: IProject = null; 
+    let project: IProject = null;
 
-    try{
-    project = await ProjectModel.findById({ _id: id });
+    try {
+      project = await ProjectModel.findById({ _id: id });
 
-    if(project == null) {
-    	throw new Error("not found");
-    }
-
-    }catch(e){
-      if(!project){
+      if (project == null) {
+        throw new Error('not found');
+      }
+    } catch (e) {
+      if (!project) {
         project = await ProjectModel.where({ slug: id }).findOne();
       }
     }
 
     if (project == null) {
-      return next(ApiError.badRequest("No project found for id or slug = " + id));
+      return next(ApiError.badRequest('No project found for id or slug = ' + id));
     }
 
-   // retrive event/project's actions
-   const eventActions = await getEventActions({eventId: project._id })
+    // retrive event/project's actions
+    const eventActions = await getEventActions({ eventId: project._id });
 
-
-    let projectInfo = {
-      ...project["_doc"],
-      actions: eventActions
+    const projectInfo = {
+      ...project['_doc'],
+      actions: eventActions,
     };
 
-    
-    if(checkUpdateIfProjectExpired(projectInfo) === true){
-      logger.info("Project is expired");
-      projectInfo.projectStatus = false; 
-    }else{
-      logger.info("Project NOt expired");
+    if (checkUpdateIfProjectExpired(projectInfo) === true) {
+      logger.info('Project is expired');
+      projectInfo.projectStatus = false;
+    } else {
+      logger.info('Project NOt expired');
     }
     //// Implement project expiry
     // If currentTime is more than that
 
-    if ((fetchInvestors) && (!isPublic)) {
+    if (fetchInvestors && !isPublic) {
       if (searchQuery) {
         const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
         const searchRgx = rgx(searchQuery);
 
-        var queryOptions = {
+        const queryOptions = {
           $or: [
-            { name: { $regex: searchRgx, $options: "i" } },
-            { email: { $regex: searchRgx, $options: "i" } },
-            { ethAddress: { $regex: searchRgx, $options: "i" } },
+            { name: { $regex: searchRgx, $options: 'i' } },
+            { email: { $regex: searchRgx, $options: 'i' } },
+            { ethAddress: { $regex: searchRgx, $options: 'i' } },
           ],
         };
 
@@ -239,17 +223,15 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
           .skip(skipInt);
         projectInfo.investors = investorList;
 
-        
-
         // check if export option is enabled
         // if yes then
         // create excel sheet
         // write investors data to it
         // send the file in the UI and return here.
-        if(isExport){
+        if (isExport) {
           const filePath = await writeInvestorsToFile(`${id}_investorList_${new Date().getTime()}`, investorList);
-          if(filePath){
-            res.sendFile(filePath, ()=>{
+          if (filePath) {
+            res.sendFile(filePath, () => {
               // delete the file when tranfer is complete.
               deleteFile(filePath);
             });
@@ -263,10 +245,9 @@ async function getProjectById(req: Request, res: Response, next: NextFunction) {
       projectId: project._id,
     }).then((count) => count);
 
-
     res.send(projectInfo);
   } catch (e) {
-    logger.error("ProjectCtrl:: getProjectById(): Error " + e);
+    logger.error('ProjectCtrl:: getProjectById(): Error ' + e);
     return next(ApiError.internal(e.message));
   }
 }
@@ -278,14 +259,14 @@ async function deleteProjectById(req: Request, res: Response, next: NextFunction
 
     // delete all actions
     ActionModel.deleteMany({
-      eventId: id
-    })
+      eventId: id,
+    });
 
     res.send({
-      ...project["_doc"],
+      ...project['_doc'],
     });
   } catch (e) {
-    logger.error("ProjectCtrl:: deleteProjectById(): Error " + e);
+    logger.error('ProjectCtrl:: deleteProjectById(): Error ' + e);
     return next(ApiError.internal(e.message));
   }
 }
@@ -303,7 +284,7 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       blockchainType,
       themeColor,
       fontColor,
-      actions
+      actions,
     } = req.body;
 
     const { id: ownerDid } = userData;
@@ -321,113 +302,95 @@ async function updateProject(req: Request, res: Response, next: NextFunction) {
       fontColor,
     });
 
-
-    
-    if(actions && actions.length > 0){
+    if (actions && actions.length > 0) {
       let i;
-      for(i = 0; i < actions.length; i++){
-        if(actions[i]._id){
-          if(actions[i]["isDeleted"]){
-            await ActionModel.findByIdAndDelete(actions[i]._id)
-          }else{
-          await ActionModel.findByIdAndUpdate(actions[i]._id,{
-            ...actions[i]
-          })
+      for (i = 0; i < actions.length; i++) {
+        if (actions[i]._id) {
+          if (actions[i]['isDeleted']) {
+            await ActionModel.findByIdAndDelete(actions[i]._id);
+          } else {
+            await ActionModel.findByIdAndUpdate(actions[i]._id, {
+              ...actions[i],
+            });
           }
-  
-        }else{
+        } else {
           await ActionModel.create({
             eventId: _id,
-            ...actions[i]
-          })  
+            ...actions[i],
+          });
         }
       }
     }
 
     const project: IProject = await ProjectModel.findById({ _id: _id });
 
-    if(new Date().toISOString() > new Date(project.toDate).toISOString()){
-      return next(ApiError.badRequest("You can not edit the project information after project expiry"));
+    if (new Date().toISOString() > new Date(project.toDate).toISOString()) {
+      return next(ApiError.badRequest('You can not edit the project information after project expiry'));
     }
 
     const eventActions = await getEventActions({
-      eventId: project._id
-    })
+      eventId: project._id,
+    });
 
     res.send({
-      ...project["_doc"],
-      actions: eventActions
+      ...project['_doc'],
+      actions: eventActions,
     });
   } catch (e) {
-    logger.error("ProjectCtrl:: updateProject(): Error " + e);
+    logger.error('ProjectCtrl:: updateProject(): Error ' + e);
     return next(ApiError.internal(e.message));
   }
 }
 
-
-
 async function getRandomInvestors(req: Request, res: Response, next: NextFunction) {
-
-  try{
-
-    let { limitRecord, isRandom } = req.query;
+  try {
+    let { limitRecord } = req.query;
+    const { isRandom } = req.query;
     const { id } = req.params;
 
-    if(!limitRecord || limitRecord == ""){
-      limitRecord = "1";
-    } 
-    let limitRecordInt = parseInt(limitRecord.toString());
-    
+    if (!limitRecord || limitRecord == '') {
+      limitRecord = '1';
+    }
+    const limitRecordInt = parseInt(limitRecord.toString());
+
     // get count of total investors for this projectId
     // query: projectId, isVerificationComplete = true
     // check limitRecord < investorCount
     const query = { projectId: id };
     const investorCount = await InvestorModel.countDocuments(query).then((count) => count);
 
-    if(investorCount == 0){
-      return next(ApiError.badRequest("no record found for this project to perform lottery"));
+    if (investorCount == 0) {
+      return next(ApiError.badRequest('no record found for this project to perform lottery'));
     }
 
-    if(limitRecordInt > investorCount){
-      return next(ApiError.badRequest("lottery can not be executed for records more than total verified records"));
+    if (limitRecordInt > investorCount) {
+      return next(ApiError.badRequest('lottery can not be executed for records more than total verified records'));
     }
     let randomInvestorList: Array<IInvestor> = [];
-    
-    if(limitRecordInt == investorCount){
-      randomInvestorList = await InvestorModel.where(query).find();
-    }else if(isRandom === "true"){
-      randomInvestorList =  await InvestorModel.aggregate([
-        { $match: query },
-        { $sample:  { size: limitRecordInt } }
-      ])    
-    }else{
-      randomInvestorList =  await InvestorModel.where(query)
-                            .sort({ numberOfReferals:  -1 }) // decending 
-                            .limit(limitRecordInt);
-    }
-    
 
+    if (limitRecordInt == investorCount) {
+      randomInvestorList = await InvestorModel.where(query).find();
+    } else if (isRandom === 'true') {
+      randomInvestorList = await InvestorModel.aggregate([{ $match: query }, { $sample: { size: limitRecordInt } }]);
+    } else {
+      randomInvestorList = await InvestorModel.where(query)
+        .sort({ numberOfReferals: -1 }) // decending
+        .limit(limitRecordInt);
+    }
 
     const filePath = await writeInvestorsToFile(`${id}_investorList_${new Date().getTime()}`, randomInvestorList);
-    if(filePath){
-      res.sendFile(filePath, ()=>{
+    if (filePath) {
+      res.sendFile(filePath, () => {
         // delete the file when tranfer is complete.
         deleteFile(filePath);
       });
       return;
     }
-
-    
-
-  }catch(e){
-    logger.error("ProjectCtrl:: getRandomInvestors(): Error " + e);
+  } catch (e) {
+    logger.error('ProjectCtrl:: getRandomInvestors(): Error ' + e);
     return next(ApiError.internal(e.message));
   }
-
-
 }
-  
-
 
 export default {
   addProject,
@@ -436,5 +399,5 @@ export default {
   updateProject,
   deleteProjectById,
   getRandomInvestors,
-  getEventActions
+  getEventActions,
 };

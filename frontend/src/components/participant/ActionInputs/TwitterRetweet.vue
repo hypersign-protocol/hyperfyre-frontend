@@ -49,6 +49,7 @@ import apiClient from "../../../mixins/apiClientMixin";
 import webAuth from "../../../mixins/twitterLogin";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
+import Messages from "../../../utils/messages/participants/en";
 export default {
 	components:{Loading},
 	name: 'TwitterRetweet',
@@ -76,7 +77,7 @@ export default {
 	methods: {
 		async update() {
 			if (!(await this.hasRetweeted())) {
-				return this.notifyErr("Error: Invalid retweet");
+				return this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_RETWEET.INVALID_RETWEET);
 			} else {
 				this.$emit('input', this.retweetUrl)
 			}
@@ -98,7 +99,7 @@ export default {
 									authRes.accessToken,
 									async (err, user) => {
 										if (err) {
-											return this.notifyErr("Something Went Wrong");
+											return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
 										}
 
 										const twitterId = user.sub.split("|")[1];

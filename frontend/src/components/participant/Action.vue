@@ -27,6 +27,7 @@ import eventBus from "../../eventBus.js"
 import apiClient from "../../mixins/apiClientMixin";
 import notificationMixins from "../../mixins/notificationMixins";
 import config from "../../config";
+import Messsages from "../../utils/messages/participants/en"
 export default {
   name: "Action",
   props: {
@@ -99,7 +100,7 @@ export default {
           actions: this.actions,
         };
 
-        let url = `${this.$config.studioServer.BASE_URL}api/v1/investor/add?rcToken=${this.RecaptchaToken}`;
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${this.RecaptchaToken}`;
         if (this.$route.query.referrer && this.$route.query.referrer != "") {
           url += `?referrer=${this.$route.query.referrer}`;
         }
@@ -127,16 +128,16 @@ export default {
               eventBus.$emit(`disableInput${actionItem._id}`, actionItem.isDone);
               this.$emit("UserUpdateEvent", resp.data);
             } else {
-              return this.notifyErr("Error: could not update the action");
+              return this.notifyErr(Messsages.ACTIONS.UPDATE_FAILED);
             }
           } else {
-            return this.notifyErr("Error: no actions found with user");
+            return this.notifyErr(Messsages.ACTIONS.NO_ACTION_FOUND);
           }
         } else {
-          return this.notifyErr("Error: some error occurred");
+          return this.notifyErr(Messsages.ACTIONS.SOME_ERROR);
         }
       } catch (e) {
-        this.notifyErr("Error occurred: " + e.message);
+        this.notifyErr(Messsages.EVENT_ACTIONS.ERROR + e.message);
         // console.log(e);
       }
     },
