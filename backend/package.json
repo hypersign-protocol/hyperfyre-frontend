@@ -5,19 +5,17 @@
     "main": "dist/index",
     "typings": "dist/index",
     "scripts": {
-        "setup": "npm run setEnv && npm run build && npm run newdb",
-        "newdb": "npm run start -- --newdb",
-        "setup-noenv": "npm run build && npm run start -- --newdb && npm run setUI",
-        "setEnv": "if [ -e .env.staging ]; then cp .env.staging .env; fi",
-        "setUI": "mkdir -p public && mkdir -p dist/public && cp -R ../client/dist/* public && cp -R public/* dist/public",
-        "start": "node dist/app.js",
-        "dev": "nodemon src/app.ts",
-        "build": "tsc -p .",
-        "bootstrap": "npm run start -- --bootstrap",
-        "activateSubscription": "nodemon src/services/activateSubscription.ts",
-        "bootstrapPlan": "nodemon src/services/bootstrapPlans.ts",
+        "setEnv": "if [ -e .env.staging ]; then cp .env.staging .env; fi",        
+        "start": "npm run build && node dist/app.js",
+        "start:dev": "nodemon src/app.ts",
+        "build": "rimraf ./dist && tsc -p .",
+        "activateSubscription": "node dist/services/activateSubscription.js",
+        "bootstrapPlan": "node dist/services/bootstrapPlans.js",
+        "activateSubscription:dev": "nodemon src/services/activateSubscription.ts",
+        "bootstrapPlan:dev": "nodemon src/services/bootstrapPlans.ts",
         "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'  --require src/app.ts",
-        "healthCheck": "nodemon src/services/healthCheck.ts"
+        "healthCheck:dev": "nodemon src/services/healthCheck.ts",
+        "healthCheck": "node dist/services/healthCheck.js"
     },
     "author": "Vishwas Anand Bhushan",
     "license": "MIT",
@@ -53,6 +51,7 @@
         "mocha": "^8.3.2",
         "nodemon": "^2.0.4",
         "ts-node": "^8.10.2",
-        "typescript": "^3.4.0"
+        "typescript": "^3.4.0",
+        "rimraf": "^3.0.2"
     }
 }
