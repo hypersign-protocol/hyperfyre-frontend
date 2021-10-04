@@ -26,13 +26,13 @@ const EVENT_ACTIONS = {
         FETCH_USERNAME_FAILED: "Could not fetch the username after telegram authentication",
         ERROR: "Error occurred: "
     },
+    WENT_WRONG: "Error: Something Went Wrong",
     TWITTER_FOLLOW: {
         FOLLOW_FIRST: "Error: Please follow first",
-        WENT_WRONG: "Error: Something Went Wrong",
         TWITTER_SCREENS_BLANK: "Error: Source or target twitter screen name is  blank",
     },
     TWITTER_RETWEET: {
-
+        INVALID_RETWEET: "Error: Invalid retweet"
     }
 }
 

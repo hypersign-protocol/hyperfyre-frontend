@@ -114,7 +114,7 @@ export default {
 									authRes.accessToken,
 									async (err, user) => {
 										if (err) {
-											return this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_FOLLOW.WENT_WRONG);
+											return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
 										}
 
 										const twitterId = user.sub.split("|")[1];
