@@ -62,3 +62,23 @@ export function truncate(str, limit){
   const lastPart = str.slice(-eachLen)
   return firstPart + " ... " + lastPart;
 }
+
+
+export function urlSanitizer(url,endsWith){
+
+  switch (endsWith) {
+    case true:
+      if(url.endsWith('/'))
+        return url
+      else
+        return url+'/'
+      break;
+    case false:
+        if(url.endsWith('/'))      
+          return url.slice(0,-1)
+      else
+        return url
+      break;
+  }
+  
+}
