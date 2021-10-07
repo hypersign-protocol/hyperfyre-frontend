@@ -1,23 +1,23 @@
-import mongoose, { Schema, Document } from "mongoose";
-import { IEventAction } from "./actions";
+import mongoose, { Schema, Document } from 'mongoose';
+import { IEventAction } from './actions';
 
 export interface IInvestor extends Document {
-    did: string;
-    email: string;
-    name: string;
-    ethAddress: string;
-    twitterHandle: string;
-    telegramHandle: string;
-    projectId: string;
-    tweetUrl: string;
-    hasTwitted: boolean;
-    hasJoinedTGgroup: boolean;
-    isVerfiedByHypersign: boolean;
-    isVerificationComplete: boolean;
-    numberOfReferals: number;
-    actions: IEventAction[];
-    createdAt: Date;
-    updatedAt: Date;
+  did: string;
+  email: string;
+  name: string;
+  ethAddress: string;
+  twitterHandle: string;
+  telegramHandle: string;
+  projectId: string;
+  tweetUrl: string;
+  hasTwitted: boolean;
+  hasJoinedTGgroup: boolean;
+  isVerfiedByHypersign: boolean;
+  isVerificationComplete: boolean;
+  numberOfReferals: number;
+  actions: IEventAction[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const InvestorSchema = new Schema({
@@ -28,9 +28,7 @@ const InvestorSchema = new Schema({
   numberOfReferals: { type: Number, required: true },
   actions: { type: Array<IEventAction>(), required: true }, // 0,
   createdAt: { type: Date, required: false },
-  updatedAt: { type: Date, required: false }
+  updatedAt: { type: Date, required: false },
 });
 
-export default mongoose.model<IInvestor>("Investor", InvestorSchema);
-
-
+export default mongoose.model<IInvestor>('Investor', InvestorSchema);

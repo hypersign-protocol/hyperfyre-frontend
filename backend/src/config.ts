@@ -2,8 +2,8 @@ import env from "dotenv";
 import path from "path";
 import fs from "fs";
 import HypersignSsiSDK from "hs-ssi-sdk";
-import mongoose from "mongoose";
-const log = require("simple-node-logger");
+
+import log from "simple-node-logger";
 
 env.config();
 
@@ -30,25 +30,11 @@ const protocol = httpsEnabled ? "https" : "http";
 const hostnameurl = process.env.SERVICE_EP_URL ||  `${protocol}://${host}:${port}`;
 
 
-//DATABASE
+//DATABASE CONNECTION
 const dbConnUrl =
   process.env.DB_URL && process.env.DB_URL != ""
     ? process.env.DB_URL
     : "mongodb://admin:admin@cluster0-shard-00-00.jg0ef.mongodb.net:27017,cluster0-shard-00-01.jg0ef.mongodb.net:27017,cluster0-shard-00-02.jg0ef.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-n72avn-shard-0&authSource=admin&retryWrites=true&w=majority";
-if (dbConnUrl) {
-  mongoose.connect(
-    dbConnUrl,
-    { useNewUrlParser: true, useUnifiedTopology: true },
-    (err) => {
-      if (err) {
-        logger.error("Error: could not connect to mongo database");
-      } else {
-        logger.info("Connected to mongo database");
-      }
-    }
-  );
-}
-
 // DID Related:
 // TODO: Not required for this project. so remove
 const did = {
@@ -115,5 +101,6 @@ export {
   hsAuthServerEp,
   tweeterConfig,
   REFFERAL_MULTIPLIER,
-  healthCheckBotConfig
+  healthCheckBotConfig,
+  dbConnUrl
 };

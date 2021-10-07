@@ -11,7 +11,7 @@ const router = new Router({
     {
       path: "/event/:slug",
       name: "Event",
-      component: () => import(/* webpackChunkName: "investorLogin" */ './views/v4/Event.vue'),
+      component: () => import(/* webpackChunkName: "investorLogin" */ './views/participant/Event.vue'),
     },
     {
       path: "/",
@@ -22,28 +22,6 @@ const router = new Router({
       path: "/app",
       redirect: "/app/admin/login",
     },
-
-    {
-      path: "/app/login/:projectSlug",
-      name: "PKIIdLogin",
-      component: () => import(/* webpackChunkName: "investorLogin" */ './views/PKIIdLogin.vue'),
-    },
-    {
-      path: "/app/form/:slug",
-      name: "investor",
-      component: () => import(/* webpackChunkName: "investor" */ './views/Investor.vue') ,
-      meta: {
-        requiresAuth: true,
-      },
-    },
-    {
-      path: "/app/form",
-      name: "investor",
-      component: () => import(/* webpackChunkName: "investor" */ './views/Investor.vue') ,
-      meta: {
-        requiresAuth: true,
-      },
-    },
     {
       path: "/app/admin",
       redirect: "/app/admin/login",
@@ -51,30 +29,30 @@ const router = new Router({
     {
       path: "/app/admin/login",
       name: "AdminLogin",
-      component: () => import(/* webpackChunkName: "adminLogin" */ './views/AdminLogin.vue'),
+      component: () => import(/* webpackChunkName: "adminLogin" */ './views/admin/AdminLogin.vue'),
     },
     {
       path: "/app/admin/dashboard",
       name: "Dashboard",
-      component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue') ,
+      component: () => import(/* webpackChunkName: "dashboard" */ './views/admin/Dashboard.vue') ,
       meta: {
         requiresAuth: true,
         admin: true,
       },
     },
     {
-      path: "/app/admin/investors",
-      name: "investors",
-      component: () => import(/* webpackChunkName: "investors" */ './views/Investors.vue') ,
+      path: "/app/admin/participants",
+      name: "Participants",
+      component: () => import(/* webpackChunkName: "investors" */ './views/admin/Participants.vue') ,
       meta: {
         requiresAuth: true,
         admin: true,
       },
     },
     {
-      path: "/app/admin/project",
-      name: "project",
-      component: () => import(/* webpackChunkName: "project" */ './views/Project.vue') ,
+      path: "/app/admin/events",
+      name: "Events",
+      component: () => import(/* webpackChunkName: "project" */ './views/admin/Events.vue') ,
       meta: {
         requiresAuth: true,
         admin: true,
@@ -83,7 +61,7 @@ const router = new Router({
     {
       path: "/app/admin/subscription",
       name: "subscription",
-      component: () => import(/* webpackChunkName: "subscription" */ './views/Subscription.vue') ,
+      component: () => import(/* webpackChunkName: "subscription" */ './views/admin/Subscription.vue') ,
       meta: {
         requiresAuth: true,
         admin: true,
@@ -131,27 +109,6 @@ router.beforeEach((to, from, next) => {
           });
         });
     } else {
-      // I think this part is not required anymore...
-      if((to.params["slug"] || to.query["projectId"]) && (to.params["slug"] != "" || to.query["projectId"] != "")){
-        // console.log("first we need to remove all these items projectDetails, projectSlug, projectId")
-        localStorage.removeItem("projectDetails");
-        localStorage.removeItem("projectSlug");
-        localStorage.removeItem("projectId");
-        if(!to.params["slug"]){
-          if(!to.query["projectId"]){
-            // i guess no need to do anything here
-          }else{
-            localStorage.setItem("projectId", to.query["projectId"]);
-          }
-        }else{        
-          localStorage.setItem("projectSlug", to.params["slug"]);  
-        }
-        
-      }else{
-        console.log("ProjectId or slug is blank");
-        console.log("Not doing anything but just sending to next route");
-      }
-
       next({
         path: to.meta.admin ? "/app/admin/login" : (
           !to.query["referrer"] ? 
