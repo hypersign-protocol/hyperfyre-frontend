@@ -15,8 +15,7 @@ const router = new Router({
     },
     {
       path: "/",
-      name: "Website",
-      component: () => import(/* webpackChunkName: "investorLogin" */ './views/Website.vue'),
+      redirect: "/admin/login"
     },
      {
       path: "/app",
