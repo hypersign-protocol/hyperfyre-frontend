@@ -40,29 +40,29 @@ export default {
       authRoutes: ["register", "PKIIdLogin"],
       showNavbar: false,
       menu: [{
-          href: "/app/admin/dashboard",
+          href: "/admin/dashboard",
           title: "Dashboard",
           icon: "fas fa-tachometer-alt",
         },
         {
-          href: "/app/admin/events",
+          href: "/admin/events",
           title: "Events",
           icon: "fas fa-plane-departure",
         },
         {
-          href: "/app/admin/participants",
+          href: "/admin/participants",
           title: "Participants",
           icon: "fas fa-users",
           exactPath: true,
         },
         {
-          href: "/app/admin/subscription",
+          href: "/admin/subscription",
           title: "Subscriptions",
           icon: "fas fa-tags",
           exactPath: true,
         },
         {
-          href: "/app/admin/login",
+          href: "/admin/login",
           title: "Logout",
           icon: "fas fa-sign-out-alt",
           exactPath: true,
@@ -81,10 +81,10 @@ export default {
 
     if(this.$route.meta.admin){
       this.showNavbar =
-          window.location.pathname.includes("/app/admin/participants") ||
-          window.location.pathname.includes("/app/admin/events") ||
-          window.location.pathname.includes("/app/admin/dashboard") ||
-          window.location.pathname.includes("/app/admin/subscription") ?
+          window.location.pathname.includes("/admin/participants") ||
+          window.location.pathname.includes("/admin/events") ||
+          window.location.pathname.includes("/admin/dashboard") ||
+          window.location.pathname.includes("/admin/subscription") ?
           true :
           false;
     }else{
@@ -95,10 +95,10 @@ export default {
   updated() {
    
     this.showNavbar =
-          window.location.pathname.includes("/app/admin/participants") ||
-          window.location.pathname.includes("/app/admin/events") ||
-          window.location.pathname.includes("/app/admin/dashboard") ||
-          window.location.pathname.includes("/app/admin/subscription") ?
+          window.location.pathname.includes("/admin/participants") ||
+          window.location.pathname.includes("/admin/events") ||
+          window.location.pathname.includes("/admin/dashboard") ||
+          window.location.pathname.includes("/admin/subscription") ?
           true :
           false;
     // this.filterMenu();
@@ -142,7 +142,7 @@ export default {
         window.location.pathname.includes("investors") ||
         window.location.pathname.includes("project") ||
         window.location.pathname.includes("dashboard") ||
-        window.location.pathname.includes("/app/admin/subscription")
+        window.location.pathname.includes("/admin/subscription")
       ) {
         this.showNavbar = true;
       } else {

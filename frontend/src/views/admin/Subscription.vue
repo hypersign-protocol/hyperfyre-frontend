@@ -297,7 +297,7 @@ export default {
         this.fetchSubscription();
         // localStorage.setItem("subscriptions", JSON.stringify(this.subscriptions));
         this.notifySuccess(Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED +json._id);
-        // window.location.href = window.location.origin + "/app/admin/events";
+        // window.location.href = window.location.origin + "/admin/events";
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
