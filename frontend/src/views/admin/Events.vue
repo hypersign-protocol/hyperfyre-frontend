@@ -256,7 +256,7 @@ i {
                   >
                     <i class="fas fa-file-alt"></i>
                     <a :href="project.whitelisting_link" target="_blank" class="card-body-custom"
-                      >Whitelisting Form Url</a
+                      >Event Url</a
                     ><span @click="copy(project.whitelisting_link, 'Form Url')" class="copy"><i class="far fa-copy"></i></span>
                   </li>
 
