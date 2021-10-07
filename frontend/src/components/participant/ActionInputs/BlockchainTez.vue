@@ -34,8 +34,9 @@
 import eventBus from "../../../eventBus.js";
 import { isValidURL, isValidText, isEmpty } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
+import Messages from "../../../utils/messages/participants/en";
 export default {
-	name: 'BlockchainEth',
+	name: 'BlockchainTez',
 	props: {
 		idValue: {
 			required: true
@@ -57,7 +58,7 @@ export default {
 		update() {
 			if (!this.isFieldValid()) {
 				this.data.value = "";
-				return this.notifyErr("Error: Field value is invalid");
+				return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
 			} else {
 				this.$emit('input', this.data.value)
 			}

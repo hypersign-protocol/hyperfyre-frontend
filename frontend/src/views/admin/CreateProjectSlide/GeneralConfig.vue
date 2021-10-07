@@ -37,7 +37,7 @@
 
    <div class="row g-3 align-items-center w-100  mt-4">
             <div class="col-lg-5 col-md-5 text-left">
-                <label for="projectName" class="col-form-label">Event Name: </label>
+                <label for="projectName" class="col-form-label">Event Name<span style="color: red">*</span>: </label>
             </div>
             <div class=" col-lg-7 col-md-7 px-0">
                 <input v-model="project.projectName" type="text" placeholder="Demo Giveaway" id="projectName" class="form-control w-100" >
@@ -59,7 +59,7 @@
 
     <div class="row g-3 align-items-center w-100 mt-4">
             <div class="col-lg-5 col-md-5 text-left">
-                <label for="logoUrl" class="col-form-label">Banner URL: </label>
+                <label for="logoUrl" class="col-form-label">Banner URL<span style="color: red">*</span>: </label>
             </div>
             <div class="col-lg-7 col-md-7 px-0">
                 <input v-model="project.logoUrl" type="text" placeholder="of size 600x300" id="logoUrl" class="form-control w-100" >
@@ -69,7 +69,7 @@
       
     <div class="row g-3 align-items-center w-100 mt-4">
             <div class="col-lg-5 col-md-5 text-left">
-                <label for="startDate" class="col-form-label">Start Date: </label>
+                <label for="startDate" class="col-form-label">Start Date<span style="color: red">*</span>: </label>
             </div>
             
             <div class="col-lg-7 col-md-7 px-0 datepicker">
@@ -91,7 +91,7 @@
       
     <div class="row g-3 align-items-center w-100 mt-4">
             <div class="col-lg-5 col-md-5 text-left">
-                <label for="endDate" class="col-form-label">End Date: </label>
+                <label for="endDate" class="col-form-label">End Date<span style="color: red">*</span>: </label>
             </div>
             <div class="col-lg-7 col-md-7 px-0">
                 <!-- <input disabled  v-model="project.toDate" type="text"   id="fromDate" class="form-control w-100" > -->

@@ -1,11 +1,11 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ISubscription extends Document {
   planId: string;
   userDid: string;
   subscriptionDate: Date;
   isActive: boolean;
-  hasExpired: boolean;  
+  hasExpired: boolean;
   leftOverNoRequests: number;
 }
 
@@ -15,9 +15,7 @@ const SubscriptionSchema = new Schema({
   subscriptionDate: { type: Date, required: true },
   isActive: { type: Boolean, required: true },
   hasExpired: { type: Boolean, required: true },
-  leftOverNoRequests: { type: Number, required: true }
+  leftOverNoRequests: { type: Number, required: true },
 });
 
-export default mongoose.model<ISubscription>("Subscription", SubscriptionSchema);
-
-
+export default mongoose.model<ISubscription>('Subscription', SubscriptionSchema);

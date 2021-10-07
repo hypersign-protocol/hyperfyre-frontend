@@ -49,6 +49,7 @@ import apiClient from "../../../mixins/apiClientMixin";
 import webAuth from "../../../mixins/twitterLogin";
 import eventBus from "../../../eventBus.js"
 import notificationMixins from "../../../mixins/notificationMixins";
+import Messages from "../../../utils/messages/participants/en"
 export default {
 	components:{Loading},
 	name: 'TwitterRetweet',
@@ -89,7 +90,7 @@ export default {
 	methods: {
 		async update() {
 			if (!(await this.hasFollowedTwitter())) {
-				return this.notifyErr("Error: Please follow first");
+				return this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_FOLLOW.FOLLOW_FIRST);
 			} else {
 				this.$emit('input', JSON.stringify({
 					...this.twitter
@@ -113,7 +114,7 @@ export default {
 									authRes.accessToken,
 									async (err, user) => {
 										if (err) {
-											return this.notifyErr("Error: Something Went Wrong");
+											return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
 										}
 
 										const twitterId = user.sub.split("|")[1];
@@ -164,7 +165,7 @@ export default {
 					});
 					return resp.data;
 				} else {
-					this.notifyErr("Source or target twitter screen name is  blank");
+					this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_FOLLOW.TWITTER_SCREENS_BLANK);
 					return false;
 				}
 			} catch (e) {

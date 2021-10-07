@@ -22,7 +22,7 @@
 				<b-row>
 					<b-col cols="12" sm="12" md="12">
 						<div class="follow">
-							<b-form-input type="text" :placeholder="data.placeHolder" v-model="data.value" :disabled="done" :required="data.isManadatory"></b-form-input>
+							<b-form-input type="date" :placeholder="data.placeHolder" v-model="data.value" :disabled="done" :required="data.isManadatory"></b-form-input>
 						</div>
 					</b-col>
 				</b-row>
@@ -32,10 +32,11 @@
 </template>
 <script>
 import eventBus from "../../../eventBus.js";
-import { isValidURL, isValidText, isEmpty } from "../../../mixins/fieldValidationMixin";
+import {  isDate } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
+import Messages from "../../../utils/messages/participants/en";
 export default {
-	name: 'InputText',
+	name: 'InputDate',
 	props: {
 		idValue: {
 			required: true
@@ -48,6 +49,7 @@ export default {
 		return {
 			visible: false,
 			done: this.data.isDone,
+			value: ''
 		}
 	},
 	mounted() {
@@ -55,25 +57,13 @@ export default {
 	},
 	methods: {
 		update() {
-			if (!this.isFieldValid()) {
+			if (!isDate(this.data.value)) {
 				this.data.value = "";
-				return this.notifyErr("Error: Field value is invalid");
+				return this.notifyErr(Messages.EVENT_ACTIONS.INPUT_DATE.INVALID_DATE_TIME);
 			} else {
 				this.$emit('input', this.data.value)
 			}
 		},
-		isFieldValid() {
-			if(isEmpty(this.data.value)){
-				return false
-			}
-			if(isValidURL(this.data.value)){
-				return false;
-			}
-			if(!isValidText(this.data.value)){
-				return false
-			}
-			return true
-    	},
 		disableInput(data) {
 			this.done = data
 		}

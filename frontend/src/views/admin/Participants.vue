@@ -247,11 +247,11 @@ import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import Paginate from "vuejs-paginate";
-import notificationMixins from "../mixins/notificationMixins";
-import apiClientMixin from "../mixins/apiClientMixin";
+import notificationMixins from "../../mixins/notificationMixins";
+import apiClientMixin from "../../mixins/apiClientMixin";
 import FileDownload from "js-file-download";
-const issuedImgLink = require("../assets/issued-icon.png");
-
+const issuedImgLink = require("../../assets/issued-icon.png");
+import Messages from "../../utils/messages/admin/en"
 export default {
   name: "Investor",
   components: { Loading, Paginate },
@@ -342,7 +342,7 @@ export default {
         {
           field: "actions",
           key: "e",
-          title: "User Actions",
+          title: "Actions",
           align: "left",
           width: 250,
           renderBodyCell: ({ row, column, rowIndex }, h) => {
@@ -497,7 +497,7 @@ export default {
         this.recordsForLottery > this.project.count ||
         this.recordsForLottery <= 0
       ) {
-        return this.notifyErr("No of records must be less or equal to total");
+        return this.notifyErr(Messages.PARTICIPANTS.LOTTERY.NO_OF_RECORDS);
       }
       try {
         this.isLoading = true;
@@ -753,7 +753,7 @@ export default {
         );
 
         this.notifySuccess(
-          "Project is fetched. ProjectName " + json.projectName
+          Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_FETCHED + json.projectName
         );
       } catch (e) {
         this.notifyErr(e.message);

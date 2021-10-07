@@ -11,7 +11,7 @@ const router = new Router({
     {
       path: "/event/:slug",
       name: "Event",
-      component: () => import(/* webpackChunkName: "investorLogin" */ './views/v4/Event.vue'),
+      component: () => import(/* webpackChunkName: "investorLogin" */ './views/participant/Event.vue'),
     },
     {
       path: "/",
@@ -29,30 +29,30 @@ const router = new Router({
     {
       path: "/app/admin/login",
       name: "AdminLogin",
-      component: () => import(/* webpackChunkName: "adminLogin" */ './views/AdminLogin.vue'),
+      component: () => import(/* webpackChunkName: "adminLogin" */ './views/admin/AdminLogin.vue'),
     },
     {
       path: "/app/admin/dashboard",
       name: "Dashboard",
-      component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue') ,
+      component: () => import(/* webpackChunkName: "dashboard" */ './views/admin/Dashboard.vue') ,
       meta: {
         requiresAuth: true,
         admin: true,
       },
     },
     {
-      path: "/app/admin/investors",
-      name: "investors",
-      component: () => import(/* webpackChunkName: "investors" */ './views/Investors.vue') ,
+      path: "/app/admin/participants",
+      name: "Participants",
+      component: () => import(/* webpackChunkName: "investors" */ './views/admin/Participants.vue') ,
       meta: {
         requiresAuth: true,
         admin: true,
       },
     },
     {
-      path: "/app/admin/project",
-      name: "project",
-      component: () => import(/* webpackChunkName: "project" */ './views/Project.vue') ,
+      path: "/app/admin/events",
+      name: "Events",
+      component: () => import(/* webpackChunkName: "project" */ './views/admin/Events.vue') ,
       meta: {
         requiresAuth: true,
         admin: true,
@@ -61,7 +61,7 @@ const router = new Router({
     {
       path: "/app/admin/subscription",
       name: "subscription",
-      component: () => import(/* webpackChunkName: "subscription" */ './views/Subscription.vue') ,
+      component: () => import(/* webpackChunkName: "subscription" */ './views/admin/Subscription.vue') ,
       meta: {
         requiresAuth: true,
         admin: true,

@@ -79,7 +79,7 @@
       <div class="col-md-6" >
         <div class="card tile">
           <div class="card-body tile-number">{{ schemaCount }}</div>
-          <div class="card-header accordion-header-theme">TOTAL USERS</div>
+          <div class="card-header accordion-header-theme">TOTAL PARTICIPANTS</div>
         </div>
       </div>
     </div>
@@ -90,7 +90,7 @@
             <div class="row">
               <div class="col-md-4">
                 <img
-                  src="../assets/avatarUploadLabel.png"
+                  src="../../assets/avatarUploadLabel.png"
                   alt="John"
                   style="width: 100%; height: 100%; opacity: 0.2"
                 />
@@ -170,7 +170,7 @@ export default {
           x["whitelisting_link"] =
             window.location.origin + "/form?projectId=" + x._id;
           x["investors_link"] =
-            window.location.origin + "/admin/investors?projectId=" + x._id;
+            window.location.origin + "/admin/participants?projectId=" + x._id;
         });
 
         this.projectCount = this.projects.length;

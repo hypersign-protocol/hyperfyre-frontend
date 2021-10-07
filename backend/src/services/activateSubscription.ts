@@ -1,55 +1,67 @@
-import SubscriptionService from "./subscription.service";
-import PlanService from "./plan.service";
-import { ISubscription } from "../models/subscription";
-import { IPlan } from "../models/plan";
-import env from "dotenv";
+import SubscriptionService from './subscription.service';
+import PlanService from './plan.service';
+import { ISubscription } from '../models/subscription';
+import { IPlan } from '../models/plan';
+import env from 'dotenv';
+import DB from '../dbConn';
+import { logger } from '../config';
 
 env.config();
-const subService = new SubscriptionService();
-const planService =  new PlanService();
 
-async function activate(){
-    console.log("*******************************************")
-    console.log("**** Activating subscription start ********")
-    console.log(" ")
-    console.log(" ")
-    console.log(" ")
-    
+async function activate() {
+  try {
+    logger.info('*******************************************');
+    logger.info('**** Activating subscription start ********');
+    logger.info(' ');
+    logger.info(' ');
+    logger.info(' ');
+
     const subscriptionId = process.env.SUBSCRIPTIONID;
-    if(!subscriptionId) throw new Error("Please pass SUBSCRIPTIONID as env var");
+    if (!subscriptionId) throw new Error('Please pass SUBSCRIPTIONID as env var');
 
-    console.log("     Fetching subscription for id = " + subscriptionId);
-    const subInDb: ISubscription = await subService.getById({ id: subscriptionId});
-    if(!subInDb)  throw new Error("No subscription found with id = " + subscriptionId);
-    
-    const { planId,  userDid } =  subInDb;
+    const subService = new SubscriptionService();
+    const planService = new PlanService();
 
-    console.log("     Fetching plan with id " + planId);
-    const plan: IPlan =  await planService.getById({id: planId});
-    if(!plan)  throw new Error("No plan found with id = " + planId);
+    logger.info('     Fetching subscription for id = ' + subscriptionId);
+    const subInDb: ISubscription = await subService.getById({ id: subscriptionId });
+    if (!subInDb) throw new Error('No subscription found with id = ' + subscriptionId);
 
-    const filter = { _id: subscriptionId, userDid }     
+    const { planId, userDid } = subInDb;
+
+    logger.info('     Fetching plan with id ' + planId);
+    const plan: IPlan = await planService.getById({ id: planId });
+    if (!plan) throw new Error('No plan found with id = ' + planId);
+
+    const filter = { _id: subscriptionId, userDid };
     const update = {
-        leftOverNoRequests: plan.totalNoOfRequests,
-        isActive: true // activate it
+      leftOverNoRequests: plan.totalNoOfRequests,
+      isActive: true, // activate it
     };
-    
-    console.log("     Updating subscriptions and usage tables");
+
+    logger.info('     Updating subscriptions and usage tables');
     await subService.updateSubscription(filter, update);
 
     const updatedSubs = await subService.getById({ id: subscriptionId });
-    const updatedUsage = await subService.usage({ did: userDid}) ;
+    const updatedUsage = await subService.usage({ did: userDid });
 
-    console.log("         Usage : " + JSON.stringify(updatedUsage))
-    console.log("         Subscription : " + JSON.stringify(updatedSubs))
-        
-    console.log(" ")
-    console.log(" ")
-    console.log(" ")
-    console.log("**** Activating subscription finished *****")
-    console.log("*******************************************")
-}   
+    logger.info('         Usage : ' + JSON.stringify(updatedUsage));
+    logger.info('         Subscription : ' + JSON.stringify(updatedSubs));
 
-activate();
+    logger.info(' ');
+    logger.info(' ');
+    logger.info(' ');
+    logger.info('**** Activating subscription finished *****');
+    logger.info('*******************************************');
+  } catch (e) {
+    logger.error(e);
+  } finally {
+    DB.closeConnection().then(() => {
+      logger.info('Successfully closed connection from mongo database');
+    });
+  }
+}
 
-
+DB.openConnection().then((x) => {
+  logger.info(x);
+  activate();
+});

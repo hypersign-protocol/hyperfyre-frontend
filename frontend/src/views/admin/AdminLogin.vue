@@ -186,8 +186,8 @@ import VueQr from "vue-qr";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import url from "url";
-import notificationMixins from "../mixins/notificationMixins";
-import localStorageMixin from "../mixins/localStorageMixin";
+import notificationMixins from "../../mixins/notificationMixins";
+import localStorageMixin from "../../mixins/localStorageMixin";
 
 export default {
   name: "Login",
@@ -199,7 +199,7 @@ export default {
     return {
       walletWindow: null,
       QRRefresh: false,
-      src2: require("../assets/icon.png"),
+      src2: require("../../assets/icon.png"),
       active: 0,
       username: "",
       password: "",

@@ -14,7 +14,7 @@
       <div >
         <div class="row g-3 align-items-center w-100 mt-4">
           <div class=" text-left col-lg-5 col-md-5 text-left">
-              <label for="type" class="col-form-label">Type: </label>
+              <label for="type" class="col-form-label">Type<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-7 col-md-7 px-0">
             <b-form-select v-model="selected.type" :options="options"></b-form-select>
@@ -22,7 +22,7 @@
         </div>
         <div class="row g-3 align-items-center w-100 mt-4">
           <div class=" text-left col-lg-5 col-md-5 text-left">
-              <label for="title" class="col-form-label">Title: </label>
+              <label for="title" class="col-form-label">Title<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-7 col-md-7 px-0">
               <input   v-model="selected.title" type="text"   id="title" class="form-control w-100" >
@@ -37,9 +37,9 @@
           </div>  
         </div>
 
-        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType != 'BLOCKCHAIN'">
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="nodDisplay">
           <div class=" text-left col-lg-5 col-md-5 text-left">
-              <label for="value" class="col-form-label">Value: </label>
+              <label for="value" class="col-form-label">Social Handle<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-7 col-md-7 px-0">
               <input   v-model="selected.value" type="text"   id="value" class="form-control w-100" >
@@ -121,8 +121,8 @@
 }
 </style>
 <script>
-import notificationMixins from '../../mixins/notificationMixins';
-import {isEmpty,isValidURL, truncate} from '../../mixins/fieldValidationMixin';
+import notificationMixins from '../../../mixins/notificationMixins';
+import {isEmpty,isValidURL, truncate} from '../../../mixins/fieldValidationMixin';
 
 export default {
   name: "EventActionCongif",
@@ -130,7 +130,6 @@ export default {
   props: {
     eventActionType: {
       type: String,
-      
     },
     eventActionList : {
       type: Array,
@@ -139,6 +138,13 @@ export default {
     options: {
       type: Array
     }
+  },
+  computed:{
+    nodDisplay(){
+      if(this.eventActionType !='CUSTOM' && this.eventActionType !='BLOCKCHAIN')
+      return true
+    }
+
   },
   data(){
     return{

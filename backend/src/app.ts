@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { port, logger, httpsEnabled } from './config';
 import http from 'http';
@@ -10,7 +9,8 @@ import routes from './routes';
 import { getCerts, corsOptionsDelegate } from './utils/https';
 import apiErrorHandler from './error/apiErrorHandler';
 import process from "process";
-
+import helment from 'helmet';
+import DB from './dbConn';
 let server;
 async function setupApp() {
     try {
@@ -23,19 +23,24 @@ async function setupApp() {
         } else {
             server = http.createServer(app);
         }
-
+        
+        // Setup Authentication
         const hypersign = new HypersignAuth(server);
+
+        // Setup Db connection
+        DB.openConnection().then(x => logger.info(x)).catch(e => logger.error(e));
+
+        app.use(helment())
+        app.disable('x-powered-by')
 
         app.use(express.json());
         app.use(cors(corsOptionsDelegate)); // add appropriate urls
         app.use(cookieParser());
-        app.use(bodyParser.json());
         app.use(express.static('public'));
 
 
         // Routes    
         app.use('/api/v1/investor', routes.investor(hypersign));
-        app.use('/api/v1/investors', routes.investors(hypersign));
         app.use('/api/v1/project', routes.project(hypersign));
         app.use("/hs/api/v2/auth", routes.auth(hypersign));
         app.use("/api/v1/twitter", routes.twitter(hypersign));
@@ -63,5 +68,12 @@ setupApp().then(done => {
     }
 });
 
+process.on('SIGINT', function() {
+    DB.closeConnection().then(() => {
+        logger.info('Mongoose default connection disconnected through app termination');
+    })
+});
+
+// testing husky
 export default server;
 
