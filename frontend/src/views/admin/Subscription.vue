@@ -289,9 +289,18 @@ export default {
         });
 
         if (!resp.ok) {
+          let eServer;
+          await resp.json().then((text)=>{
+            eServer=text
+          })
+          if(resp.status===500){
+            return this.notifyErr(eServer)
+          }
+          
+          else
           return this.notifyErr(resp.statusText);
         }
-
+        
         const json = await resp.json();
         // this.subscriptions.push(json);
         this.fetchSubscription();
