@@ -256,7 +256,7 @@ i {
                   >
                     <i class="fas fa-file-alt"></i>
                     <a :href="project.whitelisting_link" target="_blank" class="card-body-custom"
-                      >Whitelisting Form Url</a
+                      >Event Url</a
                     ><span @click="copy(project.whitelisting_link, 'Form Url')" class="copy"><i class="far fa-copy"></i></span>
                   </li>
 
@@ -266,7 +266,7 @@ i {
                     title="Investor List"
                   >
                     <i class="fas fa-users"></i
-                    ><a class="card-body-custom" :href="`/app/admin/participants?projectId=${project._id}`"
+                    ><a class="card-body-custom" :href="`/admin/participants?projectId=${project._id}`"
                       >Participants ({{project.investorsCount}})</a
                     >
                   </li>
@@ -571,10 +571,10 @@ export default {
         this.projectsToShow = this.projects.slice(0, this.perPage);
         this.projects.map((x) => {
           x["whitelisting_link"] =
-            window.location.origin + ( x.slug && x.slug != "" ?  "/event/" + x.slug :  "/app/form?projectId=" + x._id ) ;
+            window.location.origin + ( x.slug && x.slug != "" ?  "/event/" + x.slug :  "/form?projectId=" + x._id ) ;
           x["investors_link"] =
             window.location.origin +
-            "/app/admin/participants?projectId=" +
+            "/admin/participants?projectId=" +
             x._id;
         });
         this.notifySuccess(Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_FETCHED_NO + this.projects.length);
@@ -682,8 +682,8 @@ export default {
 
           if(!this.isProjectEditing){
             ////  not using this for the time being just  to test
-            // this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/app/form/" + resp.data.slug :  "/app/form?projectId=" + resp.data._id ) 
-            this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/event/" + resp.data.slug :  "/app/form?projectId=" + resp.data._id ) 
+            // this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/form/" + resp.data.slug :  "/form?projectId=" + resp.data._id ) 
+            this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/event/" + resp.data.slug :  "/form?projectId=" + resp.data._id ) 
             
           }
         

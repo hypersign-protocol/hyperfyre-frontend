@@ -15,24 +15,23 @@ const router = new Router({
     },
     {
       path: "/",
-      name: "Website",
-      component: () => import(/* webpackChunkName: "investorLogin" */ './views/Website.vue'),
+      redirect: "/admin/login"
     },
      {
       path: "/app",
-      redirect: "/app/admin/login",
+      redirect: "/admin/login",
     },
     {
-      path: "/app/admin",
-      redirect: "/app/admin/login",
+      path: "/admin",
+      redirect: "/admin/login",
     },
     {
-      path: "/app/admin/login",
+      path: "/admin/login",
       name: "AdminLogin",
       component: () => import(/* webpackChunkName: "adminLogin" */ './views/admin/AdminLogin.vue'),
     },
     {
-      path: "/app/admin/dashboard",
+      path: "/admin/dashboard",
       name: "Dashboard",
       component: () => import(/* webpackChunkName: "dashboard" */ './views/admin/Dashboard.vue') ,
       meta: {
@@ -41,7 +40,7 @@ const router = new Router({
       },
     },
     {
-      path: "/app/admin/participants",
+      path: "/admin/participants",
       name: "Participants",
       component: () => import(/* webpackChunkName: "investors" */ './views/admin/Participants.vue') ,
       meta: {
@@ -50,7 +49,7 @@ const router = new Router({
       },
     },
     {
-      path: "/app/admin/events",
+      path: "/admin/events",
       name: "Events",
       component: () => import(/* webpackChunkName: "project" */ './views/admin/Events.vue') ,
       meta: {
@@ -59,7 +58,7 @@ const router = new Router({
       },
     },
     {
-      path: "/app/admin/subscription",
+      path: "/admin/subscription",
       name: "subscription",
       component: () => import(/* webpackChunkName: "subscription" */ './views/admin/Subscription.vue') ,
       meta: {
@@ -86,15 +85,15 @@ router.beforeEach((to, from, next) => {
         .then((json) => {
           if (json.status == 403) {
             next({
-              path: to.meta.admin ? "/app/admin/login" : "/app/login",
+              path: to.meta.admin ? "/admin/login" : "/login",
               params: { nextUrl: to.fullPath },
             });
           } else {
             localStorage.setItem("user", JSON.stringify(json.message));
             // console.log(to.path);
-            if (to.meta.admin && !json.message.isSubscribed && to.path != "/app/admin/subscription") {
+            if (to.meta.admin && !json.message.isSubscribed && to.path != "/admin/subscription") {
               next({
-                  path: '/app/admin/subscription',
+                  path: '/admin/subscription',
                   params: { nextUrl: to.fullPath }
               })
             } else {
@@ -105,16 +104,16 @@ router.beforeEach((to, from, next) => {
         .catch((e) => {
           console.log(e)
           next({
-            path: to.meta.admin ? "/app/admin/login" : "/app/login",
+            path: to.meta.admin ? "/admin/login" : "/login",
             params: { nextUrl: to.fullPath },
           });
         });
     } else {
       next({
-        path: to.meta.admin ? "/app/admin/login" : (
+        path: to.meta.admin ? "/admin/login" : (
           !to.query["referrer"] ? 
-          `/app/login/${to.params["slug"]}` :
-          `/app/login/${to.params["slug"]}?referrer=${to.query["referrer"]}`
+          `/login/${to.params["slug"]}` :
+          `/login/${to.params["slug"]}?referrer=${to.query["referrer"]}`
         ),
         params: { nextUrl: to.fullPath },
       });
