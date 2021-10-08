@@ -56,7 +56,7 @@ export default {
   },
   computed: {
     timeLeft: function() {
-      if (this.eventData.fromDate) {
+      if (this.eventData.fromDate && this.eventData.projectStatus) {
 
         const toDateParse = new Date(this.eventData.toDate)
         const fromDateParse = new Date(new Date().toISOString()) // now

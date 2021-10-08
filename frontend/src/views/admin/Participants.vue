@@ -80,6 +80,7 @@ label {
 }
 .projectSelector {
   min-width: 220px;
+  max-width: 220px;
 }
 .lotteryImage {
   -webkit-filter: brightness(0) invert(1);
@@ -178,7 +179,7 @@ label {
             <b-form-input
               @input.native="handleTableSearch"
               v-model="tableSearch"
-              placeholder="Search"
+              placeholder="Search participants"
               type="search"
             ></b-form-input>
           </div>
@@ -284,7 +285,7 @@ export default {
         render: ({ row }) => {
           return (
             <div style="text-align:center; background-color: whitesmoke">
-              <h5>Event Actions</h5>
+              <h6>Event Actions</h6>
               <table class="table" style="text-align:left ">
                 <thead>
                   <tr>
@@ -430,7 +431,7 @@ export default {
           isFile: true,
         });
 
-        FileDownload(res.data, `Investors_${this.selectedProject}.csv`);
+        FileDownload(res.data, `Participants_${this.selectedProject}.csv`);
         this.isLoading = false;
       } catch (e) {
         this.isLoading = false;
@@ -460,7 +461,7 @@ export default {
           url,
           isFile: true,
         });
-        FileDownload(res.data, "Lottery.csv");
+        FileDownload(res.data, `Lottery_${this.project._id}.csv`);
         this.isLoading = false;
       } catch (e) {
         this.isLoading = false;
