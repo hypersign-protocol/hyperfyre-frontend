@@ -3,16 +3,16 @@
 // This voilates RFC3986 (https://tools.ietf.org/html/rfc3986)
 import validURL from "valid-url";
 export function isValidURL(str) {
-  const pattern = new RegExp(
-    "^(https?:\\/\\/)?" + // protocol
-    "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-    "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-    "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-    "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-      "(\\#[-a-z\\d_]*)?$",
-    "i"
-  ); // fragment locator
-  return !!pattern.test(str) || validURL.isUri(str); //
+  // const pattern = new RegExp(
+  //   "^(https?:\\/\\/)?" + // protocol
+  //   "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+  //   "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+  //   "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+  //   "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+  //     "(\\#[-a-z\\d_]*)?$",
+  //   "i"
+  // ); // fragment locator
+  return /*!!pattern.test(str) ||*/ validURL.isUri(str); //
 }
 
 // Note: string including numbers are concidered valid text
