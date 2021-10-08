@@ -252,7 +252,7 @@ i {
                   <li
                     data-toggle="tooltip"
                     data-placement="bottom"
-                    title="Whitelisting Form"
+                    title="Event Url"
                   >
                     <i class="fas fa-file-alt"></i>
                     <a :href="project.whitelisting_link" target="_blank" class="card-body-custom"
@@ -263,7 +263,7 @@ i {
                   <li
                     data-toggle="tooltip"
                     data-placement="bottom"
-                    title="Investor List"
+                    title="Participants List"
                   >
                     <i class="fas fa-users"></i
                     ><a class="card-body-custom" :href="`/admin/participants?projectId=${project._id}`"
