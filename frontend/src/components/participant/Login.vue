@@ -29,7 +29,8 @@
 </template>
 <script>
 import VueRecaptcha from "vue-recaptcha";
-import Messages from "../../utils/messages/participants/en"
+import Messages from "../../utils/messages/participants/en";
+import url from "url";
 export default {
   components: {
     VueRecaptcha
@@ -102,6 +103,7 @@ export default {
     };
 
     this.connection.onerror = function(error) {
+      console.log(error);
       _this.error = true;
       _this.socketMessage = Messages.EVENT.LOGIN.SOCKET_ERROR;
     };

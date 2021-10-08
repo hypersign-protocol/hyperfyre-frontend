@@ -102,6 +102,7 @@ router.beforeEach((to, from, next) => {
           }
         })
         .catch((e) => {
+          console.log(e)
           next({
             path: to.meta.admin ? "/admin/login" : "/login",
             params: { nextUrl: to.fullPath },

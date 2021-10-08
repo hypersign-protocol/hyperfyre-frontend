@@ -237,7 +237,7 @@ export default {
       return isvalid
     },
 
-    handleEventActionAdd(media){
+    handleEventActionAdd(){
       // Code to Add an Action
       let isvalid = this.handleEventActionValidation()
       if(isvalid) {

@@ -251,7 +251,7 @@ import notificationMixins from "../../mixins/notificationMixins";
 import apiClientMixin from "../../mixins/apiClientMixin";
 import FileDownload from "js-file-download";
 const issuedImgLink = require("../../assets/issued-icon.png");
-import Messages from "../../utils/messages/admin/en"
+import Messages from "../../utils/messages/admin/en";
 export default {
   name: "Investor",
   components: { Loading, Paginate },
@@ -281,29 +281,27 @@ export default {
       pageSelectDropdown: [],
       expandOption: {
         trigger: "row",
-        render: ({ row, column, rowIndex }, h) => {
+        render: ({ row }) => {
           return (
             <div style="text-align:center; background-color: whitesmoke">
               <h5>Event Actions</h5>
               <table class="table" style="text-align:left ">
-              <thead>
-                <tr>
-                  <th>Field Title</th>
-                  <th>Field Value</th>
-                </tr>
-              </thead>
-              <tbody>
-                {row.actions.map((action) => (
+                <thead>
                   <tr>
-                    <td>{action.title}</td>
-                    <td>{action.value}</td>
+                    <th>Field Title</th>
+                    <th>Field Value</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            
+                </thead>
+                <tbody>
+                  {row.actions.map((action) => (
+                    <tr>
+                      <td>{action.title}</td>
+                      <td>{action.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            
           );
         },
       },
@@ -333,68 +331,17 @@ export default {
           sortBy: "asc",
           width: 300,
         },
-        // {
-        //   field: "ethaAddress",
-        //   key: "d",
-        //   title: "Blockchain Address",
-        //   align: "left",
-        // },
         {
           field: "actions",
           key: "e",
           title: "Actions",
           align: "left",
           width: 250,
-          renderBodyCell: ({ row, column, rowIndex }, h) => {
+          renderBodyCell: ({ row, column }) => {
             const actions = row[column.field];
             return <span>Performed {actions.length} actions</span>;
           },
         },
-        // {
-        //   field: "twitterHandle",
-        //   key: "e",
-        //   title: "Twitter Handle",
-        //   align: "left",
-        //   sortBy: "",
-        //   renderBodyCell: ({ row, column, rowIndex }, h) => {
-        //     return (
-        //       <span class="text-bold" style="color:#1890ff;">
-        //         <a href={`https://twitter.com/${row.twitterHandle}`} target="_blank">
-        //           {row.twitterHandle}
-        //         </a>
-        //       </span>
-        //     );
-        //   },
-        // },
-        // {
-        //   field: "telegramHandle",
-        //   key: "f",
-        //   title: "Telegram Handle",
-        //   align: "left",
-        //   sortBy: "",
-        //   renderBodyCell: ({ row, column, rowIndex }, h) => {
-        //     return (
-        //       <span class="text-bold" style="color:#1890ff;">
-        //         <a href={`https://telegram.me/${row.telegramHandle}`} target="_blank">
-        //           {row.telegramHandle}
-        //         </a>
-        //       </span>
-        //     );
-        //   },
-        // },
-        // {
-        //   field: "tweetUrl",
-        //   key: "g",
-        //   title: "Tweet Url",
-        //   align: "left",
-        //   renderBodyCell: ({ row, column, rowIndex }, h) => {
-        //     return (
-        //       <span class="text-bold" style="color:#1890ff;">
-        //         <a href={`${row.tweetUrl}`} target="_blank">Tweet</a>
-        //       </span>
-        //     );
-        //   },
-        // },
         {
           field: "numberOfReferals",
           key: "h",
@@ -482,13 +429,13 @@ export default {
           header: headers,
           isFile: true,
         });
-        
+
         FileDownload(res.data, `Investors_${this.selectedProject}.csv`);
         this.isLoading = false;
       } catch (e) {
         this.isLoading = false;
         this.notifyErr(e);
-      } finally{
+      } finally {
         this.isLoading = false;
       }
     },
@@ -518,10 +465,9 @@ export default {
       } catch (e) {
         this.isLoading = false;
         this.notifyErr(e);
-      } finally{
+      } finally {
         this.isLoading = false;
       }
-
     },
     sortChange(params) {
       this.project.investors.sort((a, b) => {
@@ -577,26 +523,29 @@ export default {
       });
     },
 
-  async handleTableSearch(e) {
-           if(e.target.value.length){
-          this.searchQuery = e.target.value.trim();
-          this.temp=[]
-          this.holdInvestors.forEach(x => { 
-            if(x.email.toLowerCase().includes(this.searchQuery.toLowerCase())||x.name.toLowerCase().includes(this.searchQuery.toLowerCase())){
-                    this.temp.push(x);  
-              }
-            })
-            this.project.investors=this.temp;
-            }else{
-              this.project.investors=this.holdInvestors
-            } 
+    async handleTableSearch(e) {
+      if (e.target.value.length) {
+        this.searchQuery = e.target.value.trim();
+        this.temp = [];
+        this.holdInvestors.forEach((x) => {
+          if (
+            x.email.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+            x.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+          ) {
+            this.temp.push(x);
+          }
+        });
+        this.project.investors = this.temp;
+      } else {
+        this.project.investors = this.holdInvestors;
+      }
     },
     async fetchProjectInvestors(e) {
       if (e) {
-        this.tableSearch=""
+        this.tableSearch = "";
         this.investor.projectId = e;
-        await this.fetchProjectData(0, this.perPage); 
-        this.holdInvestors=this.project.investors;              
+        await this.fetchProjectData(0, this.perPage);
+        this.holdInvestors = this.project.investors;
       }
     },
 
@@ -653,72 +602,6 @@ export default {
       return new Date(d).toLocaleString();
     },
 
-    // async verifyInvestor(investor) {
-    //   try {
-    //     this.isLoading = true;
-
-    //     const url = `${this.$config.studioServer.BASE_URL}api/v1/investor/${investor.did}?projectId=${this.investor.projectId}`;
-
-    //     investor.hasJoinedTGgroup = true;
-    //     investor.isVerificationComplete = true;
-    //     investor.hasTwitted = true;
-
-    //     if (investor["_id"]) delete investor["_id"];
-
-    //     const headers = {
-    //       "Content-Type": "application/json",
-    //       "Authorization": `Bearer ${this.authToken}`,
-    //     };
-
-    //     const resp = await fetch(url, {
-    //       method: "PUT",
-    //       body: JSON.stringify(investor),
-    //       headers,
-    //     });
-
-    //     if (!resp.ok) {
-    //       return this.notifyErr(resp.statusText);
-    //     }
-
-    //     const json = await resp.json();
-    //     this.notifySuccess("Investor verified successfully");
-    //   } catch (e) {
-    //     this.notifyErr(e.message);
-    //   } finally {
-    //     this.isLoading = false;
-    //   }
-    // },
-    // async issueCredential(investor, idx) {
-    //   try {
-    //     this.isLoading = true;
-    //     const url = `${this.$config.studioServer.BASE_URL}api/v1/investors/issue`;
-    //     const body = {
-    //       did: investor.did,
-    //       projectId: this.investor.projectId,
-    //     };
-    //     const headers = {
-    //       "Content-Type": "application/json",
-    //       Authorization: `Bearer ${this.authToken}`,
-    //     };
-
-    //     const resp = await fetch(url, {
-    //       method: "POST",
-    //       body: JSON.stringify(body),
-    //       headers,
-    //     });
-
-    //     if (!resp.ok) {
-    //       return this.notifyErr(resp.statusText);
-    //     }
-    //     const json = await resp.json();
-    //     this.notifySuccess(json.message);
-    //     this.project.investors[idx].isVerfiedByHypersign = true;
-    //   } catch (e) {
-    //     this.notifyErr(e.message);
-    //   } finally {
-    //     this.isLoading = false;
-    //   }
-    // },
     async fetchProjectData(skip, limit) {
       try {
         this.isLoading = true;
@@ -761,39 +644,7 @@ export default {
         this.isLoading = false;
       }
     },
-    formateDate(dateStr) {
-      const d = new Date(dateStr);
-      return d.toDateString();
-    },
-    // async saveInvestor() {
-    //   try {
-    //     this.isLoading = true;
 
-    //     const url = `${this.$config.studioServer.BASE_URL}api/v1/investor`;
-    //     let headers = {
-    //       "Content-Type": "application/json",
-    //       "Authorization": `Bearer ${this.authToken}`,
-    //     };
-    //     const resp = await fetch(url, {
-    //       method: "POST",
-    //       body: JSON.stringify(this.investor),
-    //       headers,
-    //     });
-
-    //     if (!resp.ok) {
-    //       return this.notifyErr(resp.statusText);
-    //     }
-
-    //     const json = await resp.json();
-    //     this.isDataSaved = true;
-    //     this.notifySuccess("Your data is saved. Id = " + json._id);
-    //   } catch (e) {
-    //     this.notifyErr(e.message);
-    //   } finally {
-    //     this.isLoading = false;
-    //     this.clear();
-    //   }
-    // },
     clear() {
       this.investor = {
         did: "did:hs:TEqweqweqwe12",

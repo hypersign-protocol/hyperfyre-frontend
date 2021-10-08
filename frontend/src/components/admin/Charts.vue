@@ -75,7 +75,7 @@ export default {
     // }
   },
   methods: {
-    handleSectionClick(section, event) {},
+    handleSectionClick() {},
     async fetchSubscription() {
       try {
         this.isLoading = true;
