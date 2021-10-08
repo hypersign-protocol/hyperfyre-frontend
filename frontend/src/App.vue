@@ -47,7 +47,7 @@ export default {
         {
           href: "/admin/events",
           title: "Events",
-          icon: "fas fa-plane-departure",
+          icon: "fas fa-calendar-alt",
         },
         {
           href: "/admin/participants",
@@ -58,7 +58,7 @@ export default {
         {
           href: "/admin/subscription",
           title: "Subscriptions",
-          icon: "fas fa-tags",
+          icon: "fas fa-receipt",
           exactPath: true,
         },
         {

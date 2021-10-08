@@ -254,9 +254,9 @@ i {
                     data-placement="bottom"
                     title="Event Url"
                   >
-                    <i class="fas fa-file-alt"></i>
+                    <i class="fas fa-calendar-alt"></i>
                     <a :href="project.whitelisting_link" target="_blank" class="card-body-custom"
-                      >Event Url</a
+                      > Event Url</a
                     ><span @click="copy(project.whitelisting_link, 'Form Url')" class="copy"><i class="far fa-copy"></i></span>
                   </li>
 
