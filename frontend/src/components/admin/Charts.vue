@@ -52,9 +52,6 @@ export default {
     this.user = {
       ...JSON.parse(usrStr),
     };
-
-    // this.fetchPlan();
-
     await this.fetchSubscription();
 
     this.totalAvailable = this.usage["totalAvailable"];
@@ -63,16 +60,6 @@ export default {
     this.sections[0].value = this.totalUsed;
     this.sections[1].value = this.unused;
 
-    // const subscriptionsInStorage = localStorage.getItem("subscriptions");
-    // if(subscriptionsInStorage){
-    //   const parsedSub = JSON.parse(subscriptionsInStorage)
-
-    //   console.log({
-    //     avl : this.totalAvailable,
-    //     usd: this.totalUsed,
-    //     sec: this.sections[0].value
-    //   })
-    // }
   },
   methods: {
     handleSectionClick() {},
