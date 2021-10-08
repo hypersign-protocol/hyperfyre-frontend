@@ -9,7 +9,7 @@ const router = new Router({
   mode: "history",  
   routes: [
     {
-      path: "/event/:slug",
+      path: "/form/:slug",
       name: "Event",
       component: () => import(/* webpackChunkName: "investorLogin" */ './views/participant/Event.vue'),
     },

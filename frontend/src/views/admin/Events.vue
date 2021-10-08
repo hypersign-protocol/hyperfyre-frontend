@@ -571,7 +571,7 @@ export default {
         this.projectsToShow = this.projects.slice(0, this.perPage);
         this.projects.map((x) => {
           x["whitelisting_link"] =
-            window.location.origin + ( x.slug && x.slug != "" ?  "/event/" + x.slug :  "/form?projectId=" + x._id ) ;
+            window.location.origin + ( x.slug && x.slug != "" ?  "/form/" + x.slug :  "/form?projectId=" + x._id ) ;
           x["investors_link"] =
             window.location.origin +
             "/admin/participants?projectId=" +

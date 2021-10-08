@@ -88,7 +88,7 @@ export default {
           true :
           false;
     }else{
-      this.showUserNav = window.location.pathname.includes("/event") ? true : false
+      this.showUserNav = window.location.pathname.includes("/form") ? true : false
     }
   },
 
