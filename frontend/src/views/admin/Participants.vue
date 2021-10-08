@@ -179,7 +179,7 @@ label {
             <b-form-input
               @input.native="handleTableSearch"
               v-model="tableSearch"
-              placeholder="Search"
+              placeholder="Search participants"
               type="search"
             ></b-form-input>
           </div>
