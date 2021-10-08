@@ -285,7 +285,7 @@ export default {
         render: ({ row }) => {
           return (
             <div style="text-align:center; background-color: whitesmoke">
-              <h5>Event Actions</h5>
+              <h6>Event Actions</h6>
               <table class="table" style="text-align:left ">
                 <thead>
                   <tr>
