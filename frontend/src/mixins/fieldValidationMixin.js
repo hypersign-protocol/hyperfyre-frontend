@@ -72,13 +72,11 @@ export function urlSanitizer(url,endsWith){
         return url
       else
         return url+'/'
-      break;
     case false:
         if(url.endsWith('/'))      
           return url.slice(0,-1)
       else
         return url
-      break;
   }
   
 }

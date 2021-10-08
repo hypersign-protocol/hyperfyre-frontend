@@ -156,7 +156,6 @@ import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
-import apiClientMixin from "../../mixins/apiClientMixin";
 import Messages from "../../utils/messages/admin/en"
 
 export default {

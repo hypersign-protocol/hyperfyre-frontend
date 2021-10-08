@@ -23,7 +23,7 @@
 
 
 </style>
-</style>
+
 <template>
   <div>
     <div v-if="isProjectEditing" class="row g-3 align-items-center w-100 mt-4">
@@ -103,33 +103,7 @@
                     />
             </div>  
     </div>
-
-
-      
-    <!-- <div class="row g-3 align-items-center w-100 mt-4">
-            <div class="col-lg-5 col-md-5 text-left">
-                <label for="themeColor" class="col-form-label">Theme Color: </label>
-            </div>
-            <div class="col-lg-7 col-md-7 px-0">
-                <input @change="handleColors"  v-model="themeColorLocal"  name="themeColor"    type="text" :placeholder="themeColorDefault" id="themeColor" class="form-control w-100" >
-            </div>  
-    </div>
-
-
-      
-    <div class="row g-3 align-items-center w-100 mt-4">
-            <div class="col-lg-5 col-md-5 text-left">
-                <label for="fontColor" class="col-form-label">Font Color: </label>
-            </div>
-            <div class="col-lg-7 col-md-7 px-0">
-                <input @change="handleColors"  name="fontColor" v-model="fontColorLocal" type="text"  :placeholder="fontColorDefault" id="fontColor" class="form-control w-100" >
-            </div>  
-    </div> -->
-
-    
-</b-form>
-
-      
+  
   </div>
 </template>
 
@@ -147,26 +121,6 @@ export default {
       }
       
   },
-  methods:{
-      handleColors(e){
-  
-
-            if(!this.themeColorLocal.trim().length){
-                this.themeColorLocal = this.themeColorDefault;
-                    
-            }
-            if(!this.fontColorLocal.trim().length){
-                this.fontColorLocal = this.fontColorDefault; 
-            }
-
-        this.$parent.$parent.$parent.$emit("UpdateColors", {
-            themeColor: this.themeColorLocal,
-            fontColor: this.fontColorLocal
-        });
-
-      }
-  },
-
   props:{
       project:{
           type: Object
