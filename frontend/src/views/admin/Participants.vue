@@ -430,7 +430,7 @@ export default {
           isFile: true,
         });
 
-        FileDownload(res.data, `Investors_${this.selectedProject}.csv`);
+        FileDownload(res.data, `Participants_${this.selectedProject}.csv`);
         this.isLoading = false;
       } catch (e) {
         this.isLoading = false;
@@ -460,7 +460,7 @@ export default {
           url,
           isFile: true,
         });
-        FileDownload(res.data, "Lottery.csv");
+        FileDownload(res.data, `Lottery_${this.project._id}.csv`);
         this.isLoading = false;
       } catch (e) {
         this.isLoading = false;
