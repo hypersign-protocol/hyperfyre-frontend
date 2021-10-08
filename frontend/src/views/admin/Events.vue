@@ -196,7 +196,7 @@ i {
           <div
             class="theme event-card-header"
           >
-            <span style="">{{ project.projectName }}</span>
+            <span style="">{{ truncate1(project.projectName,25) }}</span>
             <span data-toggle="tooltip"
                     data-placement="bottom"
                     title="Project Status" style="float:right">
@@ -302,7 +302,7 @@ import Datepicker from 'vuejs-datetimepicker'
 import Paginate from "vuejs-paginate";
 import notificationMixins from '../../mixins/notificationMixins';
 import apiClientMixin from '../../mixins/apiClientMixin';
-import { isValidURL } from "../../mixins/fieldValidationMixin.js";
+import { isValidURL,truncate} from "../../mixins/fieldValidationMixin.js";
 import CreateProjectSlide from './CreateProjectSlide/CreateProjectSlide.vue';
 import dayjs from "dayjs";
 import Messages from "../../utils/messages/admin/en"
@@ -821,8 +821,12 @@ export default {
             }
       ]
 
-    }
+    },
+    truncate1(str,number){
+      return truncate(str,number)
+      }
   },
+  
   mixins: [notificationMixins]
 };
 </script>
