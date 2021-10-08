@@ -80,6 +80,7 @@ label {
 }
 .projectSelector {
   min-width: 220px;
+  max-width: 220px;
 }
 .lotteryImage {
   -webkit-filter: brightness(0) invert(1);
