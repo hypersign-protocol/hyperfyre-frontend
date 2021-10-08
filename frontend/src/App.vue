@@ -10,7 +10,7 @@
       ]">
       <sidebar-menu class="sidebar-wrapper" @toggle-collapse="onToggleCollapse" @item-click="onItemClick" :theme="'white-theme'" width="220px" :menu="menu" v-if="showNavbar">
         <span slot="header" style="background:#363740">
-          <div class="ml-1 mt-3 mb-2" style="padding-left:1px; text-align:center; margin-right: 0.25rem !important;" > 
+          <div class="ml-1 mt-3 mb-2" style="padding-left:1px; text-align:center; margin-right: 2.25rem !important;" > 
             <img :src="require('./assets/logo.png')" alt="logo" width="150px" />
           </div>
           <!-- <p class="header-text">{{ $config.app.name }}</p> -->

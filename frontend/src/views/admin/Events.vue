@@ -144,8 +144,6 @@ i {
           </div>
 
           <div>
-            <!-- <b-button v-b-toggle.sidebar-right>Toggle Sidebar</b-button> -->
-            
             <create-project-slide 
             :isProjectEditing="isProjectEditing"
               :project="project"
@@ -161,13 +159,8 @@ i {
               :selectedSocialMedia="selectedSocialMedia"
               :socialOptions="socialOptions"
               :actionList="project.actions"
-
-
               @updateEventActions="AddUpdateDelEventActions"
              />
-
-          
-
           </div>
 
         </div>
@@ -207,8 +200,6 @@ i {
             <span data-toggle="tooltip"
                     data-placement="bottom"
                     title="Project Status" style="float:right">
-
-              
               <span v-if="project.projectStatus == true">
                 <i class="fas fa-signal" style="color:green"></i> 
               </span>
@@ -278,29 +269,6 @@ i {
           <div
             class="theme event-card-footer"
           >
-            <!-- <span
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Twitter handle"
-            >
-              <a
-                :href="`https://twitter.com/${project.twitterHandle}`"
-                target="__blank"
-              >
-                <i class="fab fa-twitter"></i
-              ></a>
-            </span> -->
-            <!-- <span
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Telegram handle"
-            >
-              <a
-                :href="`https://telegram.me/${project.telegramHandle}`"
-                target="__blank"
-                ><i class="fab fa-telegram-plane"></i
-              ></a>
-            </span> -->
             <span
               style="float: right; cursor: pointer"
               data-toggle="tooltip"
@@ -310,16 +278,10 @@ i {
             ></span>
           </div>
         </div>
-
-      
-
       </div>
     </div>
-
-
        <paginate
-       v-if="projectsToShow.length"
-      
+        v-if="projectsToShow.length"
         :pageCount="Math.ceil(this.projects.length / this.perPage)"
          :clickHandler="paginateChange"
         :prevText="'Prev'"
@@ -327,7 +289,6 @@ i {
         :force-page="currentPage"
         :containerClass="'paginationContainer'"
         :page-class="'paginationItem'"
-        
       >
       </paginate>
   </div>
