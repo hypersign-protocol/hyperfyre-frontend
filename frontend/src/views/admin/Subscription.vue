@@ -126,7 +126,6 @@ i {
                 <span v-html="getEmoji(plan.planName)"></span>
                 {{ plan.planName }}
               </h4>
-              <p class="price-desc">{{plan.description}}</p>
               <div class="price">
                 <span>$</span>
                 {{ plan.price }}

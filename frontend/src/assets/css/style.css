@@ -306,14 +306,11 @@ ul.social-links li:hover {
     box-shadow: 0 5px 20px 0 rgb(0 0 0 / 17%);
 }
 .pricing-card.popular:before {
-    content: "Popular";
+    content: "";
     display: block;
-    height: 21px;
+    height: 7px;
     width: 100%;
     background: #F1B319;
-    text-align: center;
-    line-height: 20px;
-    text-transform: uppercase;
 }
 .pricing-heading {
     font-size: 28px;
