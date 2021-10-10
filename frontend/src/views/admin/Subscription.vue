@@ -168,6 +168,9 @@ i {
                       <img src="../../assets/avalanche.png" height="25px" v-if="item === 'AVAX'" />
                       <img src="../../assets/moonbeam.png" height="25px" v-if="item === 'GLMR'" />
                       <img src="../../assets/moon-river.png" height="25px" v-if="item === 'MOVR'" />
+                      <template v-if="item === 'Custom'">
+                        {{item}}
+                      </template>
                     </span>
                   </template>
                 </div>
