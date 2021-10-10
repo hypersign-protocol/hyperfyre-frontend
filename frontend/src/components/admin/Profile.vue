@@ -90,9 +90,9 @@
             <div class="row">
               <div class="col-md-4">
                 <img
-                  src="../../assets/avatarUploadLabel.png"
+                  src="../../assets/avatar.png"
                   alt="John"
-                  style="width: 100%; height: 100%; opacity: 0.2"
+                  style="width: 100%;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);"
                 />
               </div>
               <div class="col-md-8" style="flex-wrap: wrap; padding: 20px">

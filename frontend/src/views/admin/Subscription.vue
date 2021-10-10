@@ -109,7 +109,9 @@ i {
         Entrant Data Export
       </div>
     </div>
-    <button type="button" class="btn btn-outline-dark btn-plan free">Free Basic Plan</button>
+    <template v-for="plan in plans">
+      <button type="button" class="btn btn-outline-dark btn-plan free" :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''" v-if="plan.price === 0" :disabled="subscriptions.find((el) => el.planId === plan._id)" @click="subscribe(plan._id)">Free Basic Plan</button>
+    </template>
     <div class="divider">
       <small class="small-desc">
         or buckle up and take our pro features...
@@ -117,7 +119,7 @@ i {
     </div>
     <b-row class="subscription-wrap">
       <template v-for="plan in plans">
-        <b-col cols="12" sm="6" md="3" :key="plan._id" v-if="plan.planName !== 'Trial'" class="subscription-column">
+        <b-col cols="12" sm="6" md="3" :key="plan._id" v-if="plan.price !== 0" class="subscription-column">
           <b-card no-body class="pricing-card" :class="(plan.planName === 'Lambo') ? 'popular' : ''">
             <b-card-body>
               <h4 class="pricing-heading">

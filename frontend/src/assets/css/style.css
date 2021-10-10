@@ -191,6 +191,10 @@ ul.social-links li:hover {
     .nav-bar .navbar-brand img {
         height: 40px;
     }
+
+    .user-details :is(.text){
+        margin-bottom: 20px;
+    }
 }
 /*Styles added by Hermit*/
 
