@@ -162,6 +162,7 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
 import Messages from "../../utils/messages/admin/en"
+import eventBus from '../../eventBus';
 
 export default {
   name: "Subscription",
@@ -261,6 +262,12 @@ export default {
         }
         const json = await resp.json();
         this.subscriptions = json["subscriptions"];
+        if(this.subscriptions.length > 0)
+        {
+          eventBus.$emit('UpdateAdminNav', true);
+        } else {
+          eventBus.$emit('UpdateAdminNav', false);
+        }
         // localStorage.setItem("subscriptions", JSON.stringify(json));
         // this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {

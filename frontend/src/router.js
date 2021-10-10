@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import config from "./config";
 import fetch from "node-fetch";
-
+import eventBus from './eventBus';
 Vue.use(Router);
 
 const router = new Router({
@@ -90,8 +90,9 @@ router.beforeEach((to, from, next) => {
             });
           } else {
             localStorage.setItem("user", JSON.stringify(json.message));
-            // console.log(to.path);
+
             if (to.meta.admin && !json.message.isSubscribed && to.path != "/admin/subscription") {
+              eventBus.$emit('UpdateAdminNav', false);
               next({
                   path: '/admin/subscription',
                   params: { nextUrl: to.fullPath }
