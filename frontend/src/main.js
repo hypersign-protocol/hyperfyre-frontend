@@ -8,7 +8,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import Donut from 'vue-css-donut-chart';
 import 'vue-css-donut-chart/dist/vcdonut.css';
-
+import "@mdi/font/css/materialdesignicons.css";
+import "@mdi/light-font/css/materialdesignicons-light.css";
 import './assets/css/style.css';
 import {
   VeTable,

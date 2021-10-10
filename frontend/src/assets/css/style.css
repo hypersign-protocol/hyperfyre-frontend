@@ -1,7 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');*/
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 body {
     overflow-y: auto;
-    font-family: 'Mulish', sans-serif;
+    font-family: 'Lato', sans-serif;
     background: #F7F8FC;
     height: 100vh;
 }
@@ -252,7 +254,7 @@ ul.social-links li:hover {
     margin-top: 22px;
     margin-bottom: 0px;
 }
-.footer a:hover{
+.footer a:hover {
     text-decoration: underline;
 }
 .footer a {
@@ -276,4 +278,269 @@ ul.social-links li:hover {
 }
 .follow {
     text-align: center;
+}
+.subscription-section {
+    margin: 0px 90px;
+}
+.subscription-wrap {
+    margin-top: 40px;
+}
+.subscription-header {
+    color: #363740;
+    font-size: 50px;
+    font-weight: 600;
+    width: 100%;
+    max-width: 510px;
+    margin: auto;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pricing-card {
+    background-color: rgba(255, 255, 255, .97);
+    border-radius: 2px !important;
+    box-shadow: 0 5px 20px 0 rgb(0 0 0 / 17%);
+}
+.pricing-card.popular:before {
+    content: "";
+    display: block;
+    height: 7px;
+    width: 100%;
+    background: #F1B319;
+    z-index: 1;
+}
+.pricing-heading {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: .6px;
+    margin: 0 0 5px;
+    white-space: nowrap;
+    text-align: center;
+}
+.pricing-heading span {
+    font-weight: 300;
+}
+.pricing-intro {
+    width: 100%;
+    max-width: 510px;
+    margin: auto;
+    position: relative;
+    left: 68px;
+}
+.intro-item {
+    width: 230px;
+    text-align: left;
+    display: inline-block;
+}
+.btn-plan {
+    min-height: 48px;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 20px;
+    text-align: center;
+    letter-spacing: 0.2px;
+    color: #292825;
+    box-shadow: 0 5px 20px 0 rgb(0 0 0 / 17%);
+    border-radius: 8px;
+    width: 214px;
+    margin: 30px auto 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100px;
+}
+.btn-plan.free {
+    border-color: #F1B319;
+}
+.btn-plan.popular {
+    background: #F1B319;
+    border-color: #F1B319;
+}
+.price {
+    font-size: 50px;
+    text-align: center;
+    font-weight: 700;
+    position: relative;
+}
+.price-desc {
+    color: #a5afb8;
+    font-size: 15px;
+    letter-spacing: .3px;
+    text-align: center;
+}
+.price span {
+    font-size: 22px;
+    letter-spacing: .5px;
+    position: relative;
+    top: -18px;
+}
+.feature-wrap h4 {
+    color: #2f363b;
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    line-height: 1.5;
+    margin: 0 5px;
+    text-align: left;
+}
+.feature-wrap ul li {
+    list-style: none;
+    color: #2f363b;
+    font-size: 15px;
+    letter-spacing: 0.2px;
+    margin: 8px 0;
+}
+.feature-wrap ul {
+    padding-left: 10px;
+}
+.block-chain-support h4 {
+    color: #2f363b;
+    font-size: 15px;
+    letter-spacing: .3px;
+    line-height: 1.4;
+    text-align: center;
+}
+.block-chain-support .image img {
+    margin-right: 8px;
+}
+.block-chain-support .image {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+.block-chain-support {
+    background-color: rgba(165, 175, 184, .06);
+    border-bottom: 1px solid #e1e7eb;
+    border-top: 1px solid #e1e7eb;
+    margin: 0 0 20px;
+    padding: 12px 0;
+    height: 80px;
+}
+.block-chain-support ul li {
+    list-style: none;
+    text-align: center;
+    color: #2f363b;
+    font-size: 15px;
+    letter-spacing: .3px;
+    line-height: 1.4;
+    text-align: center;
+    font-weight: bold;
+}
+.block-chain-support ul {
+    padding-left: 0px;
+}
+.show-all {
+    color: #76808b;
+    cursor: pointer;
+    font-size: 15px;
+    letter-spacing: .3px;
+    line-height: 48px;
+    text-align: center;
+}
+.show-all .arrow {
+    position: relative;
+    top: 5px;
+}
+.show-less {
+    text-align: right;
+    margin-right: 30px;
+}
+.divider {
+    position: relative;
+    display: block;
+    width: 850px;
+    margin: 0 auto;
+    text-align: center;
+}
+.divider:before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 1px;
+    top: 15px;
+    left: 0;
+    background: rgba(213, 217, 232, 0.75);
+}
+.small-desc {
+    display: inline-block;
+    padding: 0 20px;
+    font-size: 12px;
+    font-style: italic;
+    color: rgba(63, 86, 112, 0.75);
+    background: #F7F8FC;
+}
+.pro-feature ul {
+    padding-left: 10px;
+}
+.pro-feature ul li .number {
+    font-weight: 600;
+}
+.pro-feature ul li .mdil-check {
+    top: 3px;
+    position: relative;
+    color: green;
+    right: 3px;
+}
+.pro-feature ul li {
+    list-style: none;
+}
+@media only screen and (max-width:599px) {
+    .subscription-column {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+    .subscription-header {
+        font-size: 40px;
+    }
+    .pricing-intro {
+        text-align: center;
+    }
+    .btn-plan {
+        width: auto;
+    }
+}
+@media screen and (min-width: 600px) and (max-width: 959px) {
+    .subscription-column {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+    .subscription-header {
+        font-size: 40px;
+    }
+    .pricing-intro {
+        text-align: center;
+    }
+    .btn-plan {
+        width: auto;
+    }
+    .content-wrapper{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+    }
+}
+@media screen and (min-width: 960px) and (max-width: 1263px) {
+    .subscription-column {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+}
+@media screen and (min-width: 1264px) and (max-width: 1903px) {
+    .subscription-column {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+}
+@media only screen and (min-width:1904px) {
+    .subscription-column {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
 }
