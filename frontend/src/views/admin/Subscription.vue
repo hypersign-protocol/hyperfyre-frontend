@@ -92,7 +92,7 @@ i {
       :is-full-page="fullPage"
     ></loading>
 
-    <div class="row" style="margin-top: 2%">
+    <div class="row" style="margin-top: 2%;">
       <div
         class="col-md-4"
         style="text-align: center;"
@@ -100,16 +100,21 @@ i {
         v-bind:key="plan._id"
       >
         <div class="card tile">
-          <div class="card-header theme" style="padding-top: 10px">
+          <div class="card-header theme" style="padding-top: 10px:">
             <h4>
               <b>{{ plan.planName }}</b>
             </h4>
-            <p style="color: gray;">{{ plan.description }}</p>
           </div>
           <div class="card-body" style="text-align:center; min-height:280px">
             <p style="font-size:xx-large">${{ plan.price }}</p>
-            <p>Upto <span style="font-weight: bold">{{ plan.totalNoOfRequests }}</span> requests</p>
-            <p style="margin-top: 43%;">
+            <p>Unlimited Active Campaings</p>
+            <p>Upto <span style="font-weight: bold">{{ plan.totalNoOfRequests }}</span> Credits [Signup Capacity]</p>
+            <p>Upto <span style="font-weight: bold">{{ plan.totalNoOfRequests }}</span> Winners Selection</p>
+            <p>Upto <span style="font-weight: bold">{{ plan.noOfRepeatitiveActions }}</span> Repeated Actions</p> 
+            <p v-for="feature in plan.otherFeatures" :key="feature">
+              {{ feature }}
+            </p>
+            <p style="">
               <button
                 class="btn btn-outline-primary btn-sm button-theme"
                 @click="subscribe(plan['_id'])"
