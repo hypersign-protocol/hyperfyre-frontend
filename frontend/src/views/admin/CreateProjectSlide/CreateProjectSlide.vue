@@ -42,7 +42,7 @@
                 block
                 v-b-toggle.accordion-1
                 class="bg-transparent border-0 text-left text-primary"
-                >General Configurations</b-button
+                ><i class="fas fa-cog"></i>  General Configurations</b-button
               >
             </b-card-header>
             <b-collapse
@@ -75,7 +75,7 @@
                 v-b-toggle.accordion-2
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                >Social Configurations
+                ><i class="fas fa-share-alt"></i>  Social Configurations
               </b-button>
             </b-card-header>
             <b-collapse
@@ -105,7 +105,7 @@
                 v-b-toggle.accordion-3
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                >Custom Inputs Configurations
+                ><i class="fab fa-intercom"></i>  Custom Inputs Configurations
               </b-button>
             </b-card-header>
             <b-collapse
@@ -135,7 +135,7 @@
                 v-b-toggle.accordion-4
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                >Blockchain Configurations
+                ><i class="fab fa-bitcoin"></i>  Blockchain Configurations
               </b-button>
             </b-card-header>
             <b-collapse
