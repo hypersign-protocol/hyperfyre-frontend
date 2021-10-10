@@ -191,8 +191,7 @@ ul.social-links li:hover {
     .nav-bar .navbar-brand img {
         height: 40px;
     }
-
-    .user-details :is(.text){
+    .user-details :is(.text) {
         margin-bottom: 20px;
     }
 }
@@ -307,12 +306,14 @@ ul.social-links li:hover {
     box-shadow: 0 5px 20px 0 rgb(0 0 0 / 17%);
 }
 .pricing-card.popular:before {
-    content: "";
+    content: "Popular";
     display: block;
-    height: 7px;
+    height: 21px;
     width: 100%;
     background: #F1B319;
-    z-index: 1;
+    text-align: center;
+    line-height: 20px;
+    text-transform: uppercase;
 }
 .pricing-heading {
     font-size: 28px;
@@ -523,7 +524,7 @@ ul.social-links li:hover {
     .btn-plan {
         width: auto;
     }
-    .content-wrapper{
+    .content-wrapper {
         display: flex;
         align-items: center;
         justify-content: center;
