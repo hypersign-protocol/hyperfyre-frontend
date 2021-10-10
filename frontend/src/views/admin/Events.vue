@@ -644,7 +644,7 @@ export default {
           if(!this.isProjectEditing){
             ////  not using this for the time being just  to test
             // this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/form/" + resp.data.slug :  "/form?projectId=" + resp.data._id ) 
-            this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/event/" + resp.data.slug :  "/form?projectId=" + resp.data._id ) 
+            this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/form/" + resp.data.slug :  "/form?projectId=" + resp.data._id ) 
             
           }
         

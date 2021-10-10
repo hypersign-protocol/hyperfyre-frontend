@@ -8,7 +8,8 @@
             : 'showNavbar notCollapsed'
           : 'hideNavbar',
       ]">
-      <sidebar-menu class="sidebar-wrapper" @toggle-collapse="onToggleCollapse" @item-click="onItemClick" :theme="'white-theme'" width="220px" :menu="menu" v-if="showNavbar">
+      <sidebar-menu class="sidebar-wrapper" @toggle-collapse="onToggleCollapse" @item-click="onItemClick" :theme="'white-theme'" width="220px" 
+      :menu="isSubscribed? menu : unsubsSubscribedMenu" v-if="showNavbar">
         <span slot="header" style="background:#363740">
           <div class="ml-1 mt-3 mb-2" style="padding-left:1px; text-align:center; margin-right: 2.25rem !important;" > 
             <img :src="require('./assets/logo.png')" alt="logo" width="150px" />
@@ -29,6 +30,7 @@
 <script>
 // Ref:  fa icons:  https://fontawesome.com/
 import NavBar from "./components/participant/NavBar.vue"
+import eventBus from "./eventBus";
 export default {
   components: {
     NavBar
@@ -68,6 +70,21 @@ export default {
           exactPath: true,
         },
       ],
+      unsubsSubscribedMenu: [
+        {
+          href: "/admin/subscription",
+          title: "Subscriptions",
+          icon: "fas fa-receipt",
+          exactPath: true,
+        },
+        {
+          href: "/admin/login",
+          title: "Logout",
+          icon: "fas fa-sign-out-alt",
+          exactPath: true,
+        },
+      ],
+      isSubscribed: true,
 
       // Nav for user's end
       showUserNav: false,
@@ -75,9 +92,15 @@ export default {
   },
 
   mounted() {
-    setTimeout(() => {
-      this.filterMenu();
-    }, 500);
+    eventBus.$on('UpdateAdminNav',   (isSubscribed) => {
+        console.log('UpdateAdminNav event receieved in mounted')
+        // this.filterMenu();
+        this.isSubscribed = isSubscribed;
+    })
+
+    if (localStorage.getItem("user")) {
+        // this.filterMenu();
+    }
 
     if(this.$route.meta.admin){
       this.showNavbar =
@@ -93,7 +116,6 @@ export default {
   },
 
   updated() {
-   
     this.showNavbar =
           window.location.pathname.includes("/admin/participants") ||
           window.location.pathname.includes("/admin/events") ||
@@ -101,7 +123,6 @@ export default {
           window.location.pathname.includes("/admin/subscription") ?
           true :
           false;
-    // this.filterMenu();
   },
 
   methods: {
@@ -114,7 +135,7 @@ export default {
         }
         this.menu = this.menu.filter(
           (x) =>
-          x.title.toLowerCase().includes("subscription") ||
+             x.title.toLowerCase().includes("subscription") ||
           x.title.toLowerCase().includes("logout")
         );
       }

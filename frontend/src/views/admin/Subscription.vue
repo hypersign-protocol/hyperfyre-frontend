@@ -192,27 +192,6 @@ i {
         </b-col>
       </template>
     </b-row>
-    <!--   <div class="row" style="margin-top: 2%">
-      <div class="col-md-3" style="text-align: center;" v-for="plan in plans" v-bind:key="plan._id">
-        <div class="card tile">
-          <div class="card-header theme" style="padding-top: 10px">
-            <h4>
-              <b>{{ plan.planName }}</b>
-            </h4>
-            <p style="color: gray;">{{ plan.description }}</p>
-          </div>
-          <div class="card-body" style="text-align:center; min-height:280px">
-            <p style="font-size:xx-large">${{ plan.price }}</p>
-            <p>Upto <span style="font-weight: bold">{{ plan.totalNoOfRequests }}</span> requests</p>
-            <p style="margin-top: 43%;">
-              <button class="btn btn-outline-primary btn-sm button-theme" @click="subscribe(plan['_id'])">
-                Subscribe
-              </button>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div> -->
     <div class="row" style="margin-top: 2%;">
       <div class="col-md-12">
         <table v-if="subscriptions.length" class="table table-bordered" style="background:#FFFF">
@@ -247,6 +226,7 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
 import Messages from "../../utils/messages/admin/en"
+import eventBus from '../../eventBus';
 
 export default {
   name: "Subscription",
@@ -370,6 +350,12 @@ export default {
         }
         const json = await resp.json();
         this.subscriptions = json["subscriptions"];
+        if(this.subscriptions.length > 0)
+        {
+          eventBus.$emit('UpdateAdminNav', true);
+        } else {
+          eventBus.$emit('UpdateAdminNav', false);
+        }
         // localStorage.setItem("subscriptions", JSON.stringify(json));
         // this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {
