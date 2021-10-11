@@ -73,13 +73,13 @@
       <div class="col-md-6">
         <div class="card tile" >
           <div class="card-body tile-number">{{ projectCount }}</div>
-          <div class="card-header accordion-header-theme">TOTAL EVENTS</div>
+          <div class="card-header accordion-header-theme" style="font-size:13px">TOTAL EVENTS</div>
         </div>
       </div>
       <div class="col-md-6" >
         <div class="card tile">
           <div class="card-body tile-number">{{ schemaCount }}</div>
-          <div class="card-header accordion-header-theme">TOTAL PARTICIPANTS</div>
+          <div class="card-header accordion-header-theme" style="font-size:13px">TOTAL PARTICIPANTS</div>
         </div>
       </div>
     </div>
