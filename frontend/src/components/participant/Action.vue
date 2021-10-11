@@ -102,7 +102,7 @@ export default {
 
         let url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${this.RecaptchaToken}`;
         if (this.$route.query.referrer && this.$route.query.referrer != "") {
-          url += `?referrer=${this.$route.query.referrer}`;
+          url += `&referrer=${this.$route.query.referrer}`;
         }
         let headers = {
           "Content-Type": "application/json",
