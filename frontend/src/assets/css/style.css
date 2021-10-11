@@ -345,7 +345,7 @@ ul.social-links li:hover {
     color: #292825;
     box-shadow: 0 5px 20px 0 rgb(0 0 0 / 17%);
     border-radius: 8px;
-    width: 214px;
+    width: 180px;
     margin: 30px auto 30px;
     display: flex;
     align-items: center;
@@ -395,7 +395,7 @@ ul.social-links li:hover {
     margin: 8px 0;
 }
 .feature-wrap ul {
-    padding-left: 10px;
+    padding-left: 0px;
 }
 .block-chain-support h4 {
     color: #2f363b;
@@ -475,8 +475,14 @@ ul.social-links li:hover {
     color: rgba(63, 86, 112, 0.75);
     background: #F7F8FC;
 }
+.pro-feature ul li:before {
+    content: url('../tick.svg');
+    margin-left: -1.3em;
+    width: 20px;
+    display: inline-block;
+}
 .pro-feature ul {
-    padding-left: 10px;
+    padding-left: 20px;
 }
 .pro-feature ul li .number {
     font-weight: 600;
@@ -489,6 +495,22 @@ ul.social-links li:hover {
 }
 .pro-feature ul li {
     list-style: none;
+    font-size: 14px;
+    letter-spacing: .3px;
+    line-height: 25px;
+}
+.subscription-column {
+    margin-bottom: 10px;
+}
+@media only screen and (min-width: 1904px) {
+    .pro-feature ul li {
+        font-size: 15px;
+    }
+}
+@media only screen and (min-width: 1904px) {
+    .pro-feature ul li {
+        font-size: 12px;
+    }
 }
 @media only screen and (max-width:599px) {
     .subscription-column {
@@ -530,14 +552,15 @@ ul.social-links li:hover {
 }
 @media screen and (min-width: 960px) and (max-width: 1263px) {
     .subscription-column {
-        flex: 0 0 25%;
-        max-width: 25%;
+        flex: 0 0 50%;
+        max-width: 50%;
     }
 }
 @media screen and (min-width: 1264px) and (max-width: 1903px) {
     .subscription-column {
         flex: 0 0 25%;
         max-width: 25%;
+        padding: 0px 5px;
     }
 }
 @media only screen and (min-width:1904px) {
