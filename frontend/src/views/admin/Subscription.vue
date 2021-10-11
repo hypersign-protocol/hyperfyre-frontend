@@ -134,21 +134,17 @@ i {
               <div class="pro-feature">
                 <ul>
                   <li>
-                    <span class="mdil mdil-24px mdil-check"></span>
                     Unlimited Active Campaigns
                   </li>
                   <li>
-                    <span class="mdil mdil-24px mdil-check"></span>
                     <span class="number">{{plan.totalNoOfRequests}} </span>
                     Winners Selection
                   </li>
                   <li>
-                    <span class="mdil mdil-24px mdil-check"></span>
                     <span class="number">{{plan.noOfWinners}}</span>
                     Credits [Signup Capacity]
                   </li>
                   <li>
-                    <span class="mdil mdil-24px mdil-check"></span>
                     <span class="number">{{plan.noOfRepeatitiveActions}}</span>
                     Repeated Actions (Social/Inputs)
                   </li>
@@ -352,8 +348,7 @@ export default {
         }
         const json = await resp.json();
         this.subscriptions = json["subscriptions"];
-        if(this.subscriptions.length > 0)
-        {
+        if (this.subscriptions.length > 0) {
           eventBus.$emit('UpdateAdminNav', true);
         } else {
           eventBus.$emit('UpdateAdminNav', false);
