@@ -62,7 +62,11 @@ export default {
                 { property: 'og:title', content: this.eventData.projectName},
                 { property: 'og:site_name', content: 'Hyperfyre'},
                 { property: 'og:type', content: 'website'},    
-                { itemprop: 'image',  content: this.eventData.logoUrl}
+                { property: 'og:image', content: this.eventData.logoUrl},
+                { property: 'og:image:type', content: "image/png"},
+                { property: 'og:image:width', content: "1024"},
+                { property: 'og:image:height', content: "1024"},
+
             ]
         }
     },
