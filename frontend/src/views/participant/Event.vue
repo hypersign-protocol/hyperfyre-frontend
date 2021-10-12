@@ -40,7 +40,22 @@ export default {
     EventIsOver,
     Loading
   },
-  metaInfo: function () {
+  
+  data() {
+    return {
+      eventData: {},
+      actions: [],
+      authToken: "",
+      userEventData: null,
+      userAuthData: null,
+      eventActionsToShow: [],
+      eventSlug: "",
+      userProfileData: {},
+      isLoading: false,
+      fullPage: true
+    }
+  },
+  metaInfo () {
     return { 
             title: this.eventData.projectName,
             titleTemplate: 'Hyperfyre | Event | %s',
@@ -64,24 +79,6 @@ export default {
         ]
     }
   },
-  data() {
-    return {
-      eventData: {},
-      actions: [],
-      authToken: "",
-      userEventData: null,
-      userAuthData: null,
-      eventActionsToShow: [],
-      eventSlug: "",
-      userProfileData: {},
-      isLoading: false,
-      fullPage: true
-    }
-  },
-  // metaInfo() {
-  //       return 
-  //   },
-
     
   computed: {
     timeLeft: function() {
