@@ -21,6 +21,8 @@ import {
 
 import VueSidebarMenu from "vue-sidebar-menu";
 import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
+import VueMeta from 'vue-meta';
+
 
 // Tell Vue to install the plugin.
 // Vue.use(VuejsDialog.main.default);
@@ -48,6 +50,8 @@ Vue.use(Donut);
 Vue.prototype.$config = config;
 
 Vue.use(VueSidebarMenu);
+
+Vue.use(VueMeta)
 
 new Vue({
   router,

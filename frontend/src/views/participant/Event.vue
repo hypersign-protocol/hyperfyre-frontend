@@ -54,6 +54,18 @@ export default {
       fullPage: true
     }
   },
+  metaInfo() {
+        return { 
+            title: this.eventData.projectName,
+            meta: [
+                { name: 'description', content:  this.eventData.projectName},
+                { property: 'og:title', content: this.eventData.projectName},
+                { property: 'og:site_name', content: 'Hyperfyre'},
+                { property: 'og:type', content: 'website'},    
+                { itemprop: 'image',  content: this.eventData.logoUrl}
+            ]
+        }
+    },
   computed: {
     timeLeft: function() {
       if (this.eventData.fromDate && this.eventData.projectStatus) {
