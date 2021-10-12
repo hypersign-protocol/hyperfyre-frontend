@@ -384,16 +384,18 @@ export default {
           headers,
         });
 
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
-        }
-
         const json = await resp.json();
-        // this.subscriptions.push(json);
-        this.fetchSubscription();
-        // localStorage.setItem("subscriptions", JSON.stringify(this.subscriptions));
-        this.notifySuccess(Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED + json._id);
-        // window.location.href = window.location.origin + "/admin/events";
+        if(json){
+          if (!resp.ok) {
+            return this.notifyErr(json)
+          }else{
+            this.fetchSubscription();
+            this.notifySuccess(Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED + json["_id"]);
+          }
+        }else{
+          throw new Error('Error while subscritption')
+        }
+        
       } catch (e) {
         this.notifyErr(e.message);
       } finally {

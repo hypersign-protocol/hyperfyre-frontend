@@ -93,14 +93,8 @@ export default {
 
   mounted() {
     eventBus.$on('UpdateAdminNav',   (isSubscribed) => {
-        console.log('UpdateAdminNav event receieved in mounted')
-        // this.filterMenu();
         this.isSubscribed = isSubscribed;
     })
-
-    if (localStorage.getItem("user")) {
-        // this.filterMenu();
-    }
 
     if(this.$route.meta.admin){
       this.showNavbar =

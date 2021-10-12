@@ -54,6 +54,31 @@ export default {
       fullPage: true
     }
   },
+  metaInfo() {
+        return { 
+            title: `Hyperfyre | Event | ${this.eventData.projectName}`,
+            meta: [
+                {  "data-rh" : "true" , property: "og:site_name" , content: "HyperFyre"},
+                {  "data-rh" : "true" , property: "og:type" , content: "website"},
+                {  "data-rh" : "true" , name: "title" , content: `Hyperfyre | Event | ${this.eventData.projectName}`},
+                {  "data-rh" : "true" , property: "og:title" , content: `Hyperfyre | Event | ${this.eventData.projectName}`},
+                {  "data-rh" : "true" , property: "twitter:title" , content: `Hyperfyre | Event | ${this.eventData.projectName}`},
+                {  "data-rh" : "true" , name: "description" , content: `Participate in ${this.eventData.projectName} event to win ...`},
+                {  "data-rh" : "true" , property: "og:description" , content: `Participate in ${this.eventData.projectName} event to win`},
+                {  "data-rh" : "true" , property: "twitter:description" , content: `Participate in ${this.eventData.projectName} event to win`},
+                {  "data-rh" : "true" , property: "og:url" , content: window.location },
+                {  "data-rh" : "true" , property: "al:web:url" , content: window.location },
+                {  "data-rh" : "true" , property: "og:image" , content: this.eventData.logoUrl},
+                {  "data-rh" : "true" , name: "twitter:image:src" , content: this.eventData.logoUrl},
+                {  "data-rh" : "true" , name: "twitter:card" , content: "summary_large_image"},
+                {  "data-rh" : "true" , name: "author" , content: "HyperFyre"},
+                {  "data-rh" : "true" , name: "robots" , content: "index,follow,max-image-preview:large"},
+                {  "data-rh" : "true" , name: "referrer" , content: "unsafe-url"},
+        ]
+      }
+    },
+
+    
   computed: {
     timeLeft: function() {
       if (this.eventData.fromDate && this.eventData.projectStatus) {
