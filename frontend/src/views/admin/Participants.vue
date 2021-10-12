@@ -297,7 +297,7 @@ export default {
                   {row.actions.map((action) => (
                     <tr>
                       <td>{action.title}</td>
-                      <td>{action.value}</td>
+                      <td >{action.value.includes("targetScreenName")? JSON.parse(action.value).targetScreenName:action.value}</td>
                     </tr>
                   ))}
                 </tbody>
