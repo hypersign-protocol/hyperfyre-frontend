@@ -75,6 +75,7 @@ export default {
                 {  "data-rh" : "true" , name: "robots" , content: "index,follow,max-image-preview:large"},
                 {  "data-rh" : "true" , name: "referrer" , content: "unsafe-url"},
         ]
+      }
     },
 
     
