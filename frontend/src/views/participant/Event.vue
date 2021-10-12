@@ -58,24 +58,23 @@ export default {
         return { 
             title: `Hyperfyre | Event | ${this.eventData.projectName}`,
             meta: [
-                // { name: 'description', content:  `Participate in ${this.eventData.projectName} event to win`},
-                // { name: 'robots', content:  'Hyperfyre, Hypersign, Giveaway, Free, Tokens, Blockchain, How to win, Win, Participate'},,
-                // { name: 'twitter:card', content: 'summary_large_image'},
-                // { property: 'og:title', content: this.eventData.projectName},
-                // { property: 'og:description', content: `Participate in ${this.eventData.projectName} event to win`},
-                // { property: 'og:site_name', content: this.eventData.projectName },
-                // { property: 'og:type', content: 'website'},    
-                // { property: 'twitter:title', content: this.eventData.projectName},
-                // { property: 'twitter:description', content: `Participate in ${this.eventData.projectName} event to win`},
-                // { property: "og:image", content: this.eventData.logoUrl},
-                // { property: "og:image:secure_url", content: this.eventData.logoUrl},
-                // { property: "og:image:type", content: "image/jpeg"},
-                // { property: "og:image:width", content: "400"},
-                // { property: "og:image:height", content: "300"},
-                // { property: "og:image:alt", content=this.eventData.projectName},
-              
-            ]
-        }
+                {  "data-rh" : "true" , property: "og:site_name" , content: "HyperFyre"},
+                {  "data-rh" : "true" , property: "og:type" , content: "website"},
+                {  "data-rh" : "true" , name: "title" , content: `Hyperfyre | Event | ${this.eventData.projectName}`},
+                {  "data-rh" : "true" , property: "og:title" , content: `Hyperfyre | Event | ${this.eventData.projectName}`},
+                {  "data-rh" : "true" , property: "twitter:title" , content: `Hyperfyre | Event | ${this.eventData.projectName}`},
+                {  "data-rh" : "true" , name: "description" , content: `Participate in ${this.eventData.projectName} event to win ...`},
+                {  "data-rh" : "true" , property: "og:description" , content: `Participate in ${this.eventData.projectName} event to win`},
+                {  "data-rh" : "true" , property: "twitter:description" , content: `Participate in ${this.eventData.projectName} event to win`},
+                {  "data-rh" : "true" , property: "og:url" , content: window.location },
+                {  "data-rh" : "true" , property: "al:web:url" , content: window.location },
+                {  "data-rh" : "true" , property: "og:image" , content: this.eventData.logoUrl},
+                {  "data-rh" : "true" , name: "twitter:image:src" , content: this.eventData.logoUrl},
+                {  "data-rh" : "true" , name: "twitter:card" , content: "summary_large_image"},
+                {  "data-rh" : "true" , name: "author" , content: "HyperFyre"},
+                {  "data-rh" : "true" , name: "robots" , content: "index,follow,max-image-preview:large"},
+                {  "data-rh" : "true" , name: "referrer" , content: "unsafe-url"},
+        ]
     },
 
     
