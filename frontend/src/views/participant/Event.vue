@@ -59,7 +59,8 @@ export default {
             title: this.eventData.projectName,
             meta: [
                 { name: 'description', content:  `Participate in ${this.eventData.projectName} event to win`},
-                { name: 'keywords', content:  'Hyperfyre, Hypersign, Giveaway, Free, Tokens, Blockchain, How to win, Win, Participate'},
+                { name: 'robots', content:  'Hyperfyre, Hypersign, Giveaway, Free, Tokens, Blockchain, How to win, Win, Participate'},,
+                { name: 'twitter:card', content: 'summary_large_image'},
                 { property: 'og:title', content: this.eventData.projectName},
                 { property: 'og:description', content: `Participate in ${this.eventData.projectName} event to win`},
                 { property: 'og:site_name', content: this.eventData.projectName },
