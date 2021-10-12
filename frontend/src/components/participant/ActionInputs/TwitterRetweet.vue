@@ -97,12 +97,21 @@ export default {
   },
   methods: {
     async update() {
-      if (!(await this.hasRetweeted())) {
-        return this.notifyErr(
-          Messages.EVENT_ACTIONS.TWITTER_RETWEET.INVALID_RETWEET
-        );
-      } else {
-        this.$emit("input", this.retweetUrl);
+      try {
+        if (!(await this.hasRetweeted())) {
+          throw new Error(
+            Messages.EVENT_ACTIONS.TWITTER_RETWEET.INVALID_RETWEET
+          );
+        } else {
+          this.$emit("input", this.retweetUrl);
+        }
+      } catch (e) {
+        const { errors } = e;
+        if (errors && errors.length > 0) {
+          this.notifyErr(errors[0]["msg"]);
+        } else {
+          this.notifyErr(e.message);
+        }
       }
     },
     disableInput(data) {
@@ -143,44 +152,40 @@ export default {
       }
     },
     async hasRetweeted() {
-      try {
-        this.isLoading = true;
-        const twitterId = localStorage.getItem("twitterId");
-        if (twitterId) {
-          let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
-          let headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.authToken}`,
-          };
+      if (!this.retweetUrl) {
+        throw new Error("Retweet url cannot be empty");
+      }
+      this.isLoading = true;
+      const twitterId = localStorage.getItem("twitterId");
+      if (twitterId) {
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
 
-          const body = {
-            tweetUrl: this.retweetUrl,
-            userId: twitterId,
-            tweetText: this.data.value,
-            needUserDetails: false,
-            checkIfFollowed: false,
-            sourceScreenName: "",
-          };
+        const body = {
+          tweetUrl: this.retweetUrl,
+          userId: twitterId,
+          tweetText: this.data.value,
+          needUserDetails: false,
+          checkIfFollowed: false,
+          sourceScreenName: "",
+        };
 
-          const resp = await apiClient.makeCall({
-            method: "POST",
-            url: url,
-            body,
-            header: headers,
-          });
-
-          if (resp.data.hasTweetUrlVerified) {
-            return true;
-          } else {
-            this.notifyErr(resp.data.error);
-            return false;
-          }
-        }
-      } catch (e) {
-        this.notifyErr(e);
-        return false;
-      } finally {
+        const resp = await apiClient.makeCall({
+          method: "POST",
+          url: url,
+          body,
+          header: headers,
+        });
         this.isLoading = false;
+        if (resp.data.hasTweetUrlVerified) {
+          return true;
+        } else {
+          this.notifyErr(resp.data.error);
+          return false;
+        }
       }
     },
   },
