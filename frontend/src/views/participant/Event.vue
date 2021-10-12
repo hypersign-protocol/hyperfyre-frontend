@@ -56,24 +56,24 @@ export default {
   },
   metaInfo() {
         return { 
-            title: this.eventData.projectName,
+            title: `Hyperfyre | Event | ${this.eventData.projectName}`,
             meta: [
-                { name: 'description', content:  `Participate in ${this.eventData.projectName} event to win`},
-                { name: 'robots', content:  'Hyperfyre, Hypersign, Giveaway, Free, Tokens, Blockchain, How to win, Win, Participate'},,
-                { name: 'twitter:card', content: 'summary_large_image'},
-                { property: 'og:title', content: this.eventData.projectName},
-                { property: 'og:description', content: `Participate in ${this.eventData.projectName} event to win`},
-                { property: 'og:site_name', content: this.eventData.projectName },
-                { property: 'og:type', content: 'website'},    
-                { property: 'twitter:title', content: this.eventData.projectName},
-                { property: 'twitter:description', content: `Participate in ${this.eventData.projectName} event to win`},
-                { property: "og:image", content: this.eventData.logoUrl},
-                { property: "og:image:secure_url", content: this.eventData.logoUrl},
-                { property: "og:image:type", content: "image/jpeg"},
-                { property: "og:image:width", content: "400"},
-                { property: "og:image:height", content: "300"},
-                { property: "og:image:alt", content=this.eventData.projectName},
-
+                // { name: 'description', content:  `Participate in ${this.eventData.projectName} event to win`},
+                // { name: 'robots', content:  'Hyperfyre, Hypersign, Giveaway, Free, Tokens, Blockchain, How to win, Win, Participate'},,
+                // { name: 'twitter:card', content: 'summary_large_image'},
+                // { property: 'og:title', content: this.eventData.projectName},
+                // { property: 'og:description', content: `Participate in ${this.eventData.projectName} event to win`},
+                // { property: 'og:site_name', content: this.eventData.projectName },
+                // { property: 'og:type', content: 'website'},    
+                // { property: 'twitter:title', content: this.eventData.projectName},
+                // { property: 'twitter:description', content: `Participate in ${this.eventData.projectName} event to win`},
+                // { property: "og:image", content: this.eventData.logoUrl},
+                // { property: "og:image:secure_url", content: this.eventData.logoUrl},
+                // { property: "og:image:type", content: "image/jpeg"},
+                // { property: "og:image:width", content: "400"},
+                // { property: "og:image:height", content: "300"},
+                // { property: "og:image:alt", content=this.eventData.projectName},
+              
             ]
         }
     },
