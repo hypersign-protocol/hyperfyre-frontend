@@ -58,12 +58,15 @@ export default {
         return { 
             title: this.eventData.projectName,
             meta: [
-                { name: 'description', content:  this.eventData.projectName},
+                { name: 'description', content:  `Participate in ${this.eventData.projectName} event to win`},
+                { name: 'keywords', content:  'Hyperfyre, Hypersign, Giveaway, Free, Tokens, Blockchain, How to win, Win, Participate'},
                 { property: 'og:title', content: this.eventData.projectName},
-                { property: 'og:site_name', content: 'Hyperfyre'},
+                { property: 'og:description', content: `Participate in ${this.eventData.projectName} event to win`},
+                { property: 'og:site_name', content: this.eventData.projectName },
                 { property: 'og:type', content: 'website'},    
                 { property: 'og:image', content: this.eventData.logoUrl},
-                { property: 'og:image:type', content: "image/png"},
+                { property: 'twitter:title', content: this.eventData.projectName},
+                { property: 'twitter:description', content: `Participate in ${this.eventData.projectName} event to win`},
                 { property: 'og:image:width', content: "1024"},
                 { property: 'og:image:height', content: "1024"},
 
