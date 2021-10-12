@@ -65,15 +65,20 @@ export default {
                 { property: 'og:description', content: `Participate in ${this.eventData.projectName} event to win`},
                 { property: 'og:site_name', content: this.eventData.projectName },
                 { property: 'og:type', content: 'website'},    
-                { property: 'og:image', content: this.eventData.logoUrl},
                 { property: 'twitter:title', content: this.eventData.projectName},
                 { property: 'twitter:description', content: `Participate in ${this.eventData.projectName} event to win`},
-                { property: 'og:image:width', content: "1024"},
-                { property: 'og:image:height', content: "1024"},
+                { property: "og:image", content: this.eventData.logoUrl},
+                { property: "og:image:secure_url", content: this.eventData.logoUrl},
+                { property: "og:image:type", content: "image/jpeg"},
+                { property: "og:image:width", content: "400"},
+                { property: "og:image:height", content: "300"},
+                { property: "og:image:alt", content=this.eventData.projectName},
 
             ]
         }
     },
+
+    
   computed: {
     timeLeft: function() {
       if (this.eventData.fromDate && this.eventData.projectStatus) {
