@@ -3,11 +3,10 @@ import Router from "vue-router";
 import config from "./config";
 import fetch from "node-fetch";
 import eventBus from './eventBus';
-import VueMeta from 'vue-meta';
+
 
 
 Vue.use(Router);
-Vue.use(VueMeta)
 
 const router = new Router({
   mode: "history",  
