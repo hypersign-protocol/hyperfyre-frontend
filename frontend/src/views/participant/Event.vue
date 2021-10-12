@@ -40,6 +40,30 @@ export default {
     EventIsOver,
     Loading
   },
+  metaInfo: function () {
+    return { 
+            title: this.eventData.projectName,
+            titleTemplate: 'Hyperfyre | Event | %s',
+            meta: [
+                {  property: "og:site_name" , content: "HyperFyre"},
+                {  property: "og:type" , content: "website"},
+                {  name: "title" , content: `Hyperfyre | Event | ${this.eventData.projectName}`},
+                {  property: "og:title" , content: `Hyperfyre | Event | ${this.eventData.projectName}`},
+                {  property: "twitter:title" , content: `Hyperfyre | Event | ${this.eventData.projectName}`},
+                {  name: "description" , content: `Participate in ${this.eventData.projectName} event to win ...`},
+                {  property: "og:description" , content: `Participate in ${this.eventData.projectName} event to win`},
+                {  property: "twitter:description" , content: `Participate in ${this.eventData.projectName} event to win`},
+                {  property: "og:url" , content: window.location },
+                {  property: "al:web:url" , content: window.location },
+                {  property: "og:image" , content: this.eventData.logoUrl},
+                {  name: "twitter:image:src" , content: this.eventData.logoUrl},
+                {  name: "twitter:card" , content: "summary_large_image"},
+                {  name: "author" , content: "HyperFyre"},
+                {  name: "robots" , content: "index,follow,max-image-preview:large"},
+                {  name: "referrer" , content: "unsafe-url"},
+        ]
+    }
+  },
   data() {
     return {
       eventData: {},
@@ -54,29 +78,9 @@ export default {
       fullPage: true
     }
   },
-  metaInfo() {
-        return { 
-            title: `Hyperfyre | Event | ${this.eventData.projectName}`,
-            meta: [
-                {  "data-rh" : "true" , property: "og:site_name" , content: "HyperFyre"},
-                {  "data-rh" : "true" , property: "og:type" , content: "website"},
-                {  "data-rh" : "true" , name: "title" , content: `Hyperfyre | Event | ${this.eventData.projectName}`},
-                {  "data-rh" : "true" , property: "og:title" , content: `Hyperfyre | Event | ${this.eventData.projectName}`},
-                {  "data-rh" : "true" , property: "twitter:title" , content: `Hyperfyre | Event | ${this.eventData.projectName}`},
-                {  "data-rh" : "true" , name: "description" , content: `Participate in ${this.eventData.projectName} event to win ...`},
-                {  "data-rh" : "true" , property: "og:description" , content: `Participate in ${this.eventData.projectName} event to win`},
-                {  "data-rh" : "true" , property: "twitter:description" , content: `Participate in ${this.eventData.projectName} event to win`},
-                {  "data-rh" : "true" , property: "og:url" , content: window.location },
-                {  "data-rh" : "true" , property: "al:web:url" , content: window.location },
-                {  "data-rh" : "true" , property: "og:image" , content: this.eventData.logoUrl},
-                {  "data-rh" : "true" , name: "twitter:image:src" , content: this.eventData.logoUrl},
-                {  "data-rh" : "true" , name: "twitter:card" , content: "summary_large_image"},
-                {  "data-rh" : "true" , name: "author" , content: "HyperFyre"},
-                {  "data-rh" : "true" , name: "robots" , content: "index,follow,max-image-preview:large"},
-                {  "data-rh" : "true" , name: "referrer" , content: "unsafe-url"},
-        ]
-      }
-    },
+  // metaInfo() {
+  //       return 
+  //   },
 
     
   computed: {
