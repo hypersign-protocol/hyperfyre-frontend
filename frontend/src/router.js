@@ -3,6 +3,9 @@ import Router from "vue-router";
 import config from "./config";
 import fetch from "node-fetch";
 import eventBus from './eventBus';
+
+
+
 Vue.use(Router);
 
 const router = new Router({
