@@ -7,15 +7,17 @@
             'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'" 
           style="min-width: 113px"
           v-for="(eventAction, idx) in eventActionList" v-bind:Key="idx">
-            <span class="mr-2">
+            <span>
               <i style="color: gray" v-if="eventAction.type.includes('TWITTER')" class="fab fa-twitter"></i>  
               <i style="color: gray" v-if="eventAction.type.includes('TELEGRAM')" class="fab fa-telegram-plane"></i>  
               <i style="color: gray" v-if="eventAction.type.includes('TEXT')"  class="fas fa-file-alt"></i>
               <i style="color: gray" v-if="eventAction.type.includes('NUMBER')"  class="fas fa-list-ol"></i>
               <i style="color: gray" v-if="eventAction.type.includes('DATE')"  class="fas fa-calendar-minus"></i>
-                {{ truncate1(eventAction.title, 8) }}
+              <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('_ETH')"   height="22px" />
+              <img style="padding-right: 5px" src="../../../assets/tezos.png"  v-if="eventAction.type.includes('_TEZ')"   height="22px" />
             </span>
-            <i style="color: gray"  class="fas fa-minus-circle"></i>
+            <span >{{ truncate1(eventAction.title, 8) }}</span>
+            <span style="color: gray;padding-left: 5px"><i style=""  class="fas fa-minus-circle"></i></span>
         </div>
       </div>
       <div >
