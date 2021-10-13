@@ -55,6 +55,9 @@ export default {
       fullPage: true
     }
   },
+  /***
+  * Need to fix this
+  *
   metaInfo () {
     return { 
             title: "Test Event",
@@ -79,7 +82,7 @@ export default {
                 {  name: "referrer" , content: "unsafe-url"},
         ]
     }
-  },
+  },*/
     
   computed: {
     timeLeft: function() {
