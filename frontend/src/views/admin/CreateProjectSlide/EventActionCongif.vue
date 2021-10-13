@@ -7,8 +7,15 @@
             'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'" 
           style="min-width: 113px"
           v-for="(eventAction, idx) in eventActionList" v-bind:Key="idx">
-            <span class="mr-2"><i :class="eventAction.title"></i>  {{ truncate1(eventAction.title, 12) }}</span>
-            <i  class="fas fa-minus-circle"></i>
+            <span class="mr-2">
+              <i style="color: gray" v-if="eventAction.type.includes('TWITTER')" class="fab fa-twitter"></i>  
+              <i style="color: gray" v-if="eventAction.type.includes('TELEGRAM')" class="fab fa-telegram-plane"></i>  
+              <i style="color: gray" v-if="eventAction.type.includes('TEXT')"  class="fas fa-file-alt"></i>
+              <i style="color: gray" v-if="eventAction.type.includes('NUMBER')"  class="fas fa-list-ol"></i>
+              <i style="color: gray" v-if="eventAction.type.includes('DATE')"  class="fas fa-calendar-minus"></i>
+                {{ truncate1(eventAction.title, 8) }}
+            </span>
+            <i style="color: gray"  class="fas fa-minus-circle"></i>
         </div>
       </div>
       <div >
