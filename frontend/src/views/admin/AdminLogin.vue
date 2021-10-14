@@ -112,10 +112,16 @@ h5 span {
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
+.align-center{
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
 </style>
 <template>
   <!-- <div class="row" style="margin-left: 35%;"> -->
-  <div class="" style="justify-content: center; padding-top:3%">
+  <div style="justify-content: center; padding-top:3%">
+    <img class="align-center" style="margin-bottom: 20px" height="60px" src="../../assets/Hyperfyre_BY.svg"/>
     <b-card no-body class="loginContent event-card ">
       <loading
         :active.sync="isLoading"
