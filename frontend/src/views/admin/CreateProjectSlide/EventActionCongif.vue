@@ -54,12 +54,12 @@
               <input   v-model="selected.value" type="text"   id="value" class="form-control w-100" >
           </div>  
         </div>
-        <div class="row g-3 align-items-center w-100 mt-4" style="display:none">
+        <div class="row g-3 align-items-center w-100 mt-4">
           <div class=" text-left col-lg-5 col-md-5 text-left">
-              <label for="score" class="col-form-label">Score: </label>
+              <label for="title" class="col-form-label">Score<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-7 col-md-7 px-0">
-              <input   v-model="selected.score" type="text"   id="score" class="form-control w-100" >
+              <input   v-model="selected.score" type="number"   id="title" class="form-control w-100" >
           </div>  
         </div>
         <div class="row g-3 justify-content-md-end w-100 mt-4" v-if="isCreate==true">
@@ -211,6 +211,9 @@ export default {
             }else if(isEmpty(this.selected.value)){
               isvalid=false
               this.notifyErr(`Value Should not be empty`)
+            } else if(isNaN(parseInt(this.selected.score))){
+              isvalid=false
+              this.notifyErr(`Score should be a number`)
             }
           break;
         case "CUSTOM":
@@ -223,6 +226,9 @@ export default {
             }else if(isValidURL(this.selected.title)){
               isvalid=false
               this.notifyErr(`Do not put url in title`)
+            } else if(isNaN(parseInt(this.selected.score))){
+              isvalid=false
+              this.notifyErr(`Score should be a number`)
             }
         break;
         case "BLOCKCHAIN":
@@ -235,6 +241,9 @@ export default {
             }else if(isValidURL(this.selected.title)){
               isvalid=false
               this.notifyErr(`Do not put url in title`)
+            } else if(isNaN(parseInt(this.selected.score))){
+              isvalid=false
+              this.notifyErr(`Score should be a number`)
             }
         break;
         default:
