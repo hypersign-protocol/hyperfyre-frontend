@@ -234,7 +234,7 @@ export default {
       if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
           (x) =>
-            x.type.indexOf("TWITTER_") > -1 || x.type.indexOf("TELEGRAM_") > -1
+            x.type.indexOf("TWITTER_") > -1 || x.type.indexOf("TELEGRAM_") > -1 || x.type.indexOf("DISCORD_") > -1
         );
       } else {
         return [];
@@ -254,6 +254,10 @@ export default {
   
   data() {
     return {
+      /// TODO: Need to do it in a neat way
+      // Use api https://localhost:6006/api/v1/actions
+      // it returns: 
+      // {"actionTypes":["INPUT_TEXT","INPUT_NUMBER","TWITTER_FOLLOW","TWITTER_RETWEET","TELEGRAM_JOIN","DISCORD_JOIN","BLOCKCHAIN_ETH","BLOCKCHAIN_TEZ","HYPERSIGN_AUTH"],"length":9}
       options: {
         customAction: [
           { text: "Select Input type", value: null },
@@ -266,6 +270,7 @@ export default {
           { text: "Twitter Follow", value: "TWITTER_FOLLOW" },
           { text: "Twitter Retweet", value: "TWITTER_RETWEET" },
           { text: "Telegram Join", value: "TELEGRAM_JOIN" },
+          { text: "Discord Join", value: "DISCORD_JOIN" },
         ],
         blockchainAction: [
           { text: "Select Blockchain type", value: null },

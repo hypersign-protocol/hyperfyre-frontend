@@ -153,6 +153,10 @@ ul.social-links li:hover {
     color: #1DA1F2;
     border-color: #1DA1F2;
 }
+.btn-outline-discord {
+    color: #5865f2;
+    border-color: #5865f2;
+}
 .btn-outline-telegram {
     color: #0088cc;
     border-color: #0088cc;
