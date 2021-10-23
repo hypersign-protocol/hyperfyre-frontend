@@ -51,7 +51,7 @@
               <label for="value" class="col-form-label">Social Handle<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-7 col-md-7 px-0">
-              <input   v-model="selected.value" type="text"   id="value" class="form-control w-100" >
+              <input   v-model="selected.value" type="text"  :placeholder="selected.type === 'DISCORD_JOIN' ? 'Enter server invite link' : '' "  id="value" class="form-control w-100" >
           </div>  
         </div>
         <div class="row g-3 align-items-center w-100 mt-4">

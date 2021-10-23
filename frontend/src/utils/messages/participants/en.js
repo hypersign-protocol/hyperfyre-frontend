@@ -33,6 +33,10 @@ const EVENT_ACTIONS = {
         AUTH_FAILED: "Authentication Failed! Try again",
         FETCH_USERNAME_FAILED: "Could not fetch the username after telegram authentication",
     },
+    DISCORD_JOIN: {
+        DISCORD_AUTH: "Error: Please authorize telegram to proceed",
+        AUTH_FAILED: "Authentication Failed! Try again",
+    },
     TWITTER_FOLLOW: {
         FOLLOW_FIRST: "Error: Please follow first",
         TWITTER_SCREENS_BLANK: "Error: Source or target twitter screen name is  blank",
