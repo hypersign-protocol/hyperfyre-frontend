@@ -13,6 +13,7 @@
               <i style="color: gray" v-if="eventAction.type.includes('TEXT')"  class="fas fa-file-alt"></i>
               <i style="color: gray" v-if="eventAction.type.includes('NUMBER')"  class="fas fa-list-ol"></i>
               <i style="color: gray" v-if="eventAction.type.includes('DATE')"  class="fas fa-calendar-minus"></i>
+              <i style="color: gray" v-if="eventAction.type.includes('DISCORD')"  class="fab fa-discord"></i>
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('_ETH')"   height="22px" />
               <img style="padding-right: 5px" src="../../../assets/tezos.png"  v-if="eventAction.type.includes('_TEZ')"   height="22px" />
             </span>
