@@ -60,7 +60,7 @@
         :key="idx"
       >
         <span class="mr-2 text-capitalize"
-          ><i :class="socialMedia.icon"></i> {{ socialMedia.media }}</span
+          ><i :class="socialMedia.icon"></i> {{ socialMedia.media }} </span
         >
         <!-- <div class="ml-3" /> -->
         <span><i @click="removeSocialMedia(idx)" class="fas fa-minus-circle"></i></span>

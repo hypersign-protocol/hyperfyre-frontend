@@ -17,6 +17,7 @@
 import Profile from "./ActionInputs/Profile.vue";
 import TwitterFollow from "./ActionInputs/TwitterFollow.vue";
 import TwitterRetweet from "./ActionInputs/TwitterRetweet.vue";
+import DiscordJoin from "./ActionInputs/DiscordJoin.vue";
 import TelegramJoin from "./ActionInputs/TelegramJoin.vue";
 import InputText from "./ActionInputs/InputText.vue";
 import BlockchainEth from "./ActionInputs/BlockchainEth.vue";
@@ -51,6 +52,7 @@ export default {
     InputDate,
     InputNumber,
     Loading,
+    DiscordJoin,
     RecaptchaToken: ""
   },
   mounted(){
@@ -102,7 +104,7 @@ export default {
 
         let url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${this.RecaptchaToken}`;
         if (this.$route.query.referrer && this.$route.query.referrer != "") {
-          url += `?referrer=${this.$route.query.referrer}`;
+          url += `&referrer=${this.$route.query.referrer}`;
         }
         let headers = {
           "Content-Type": "application/json",

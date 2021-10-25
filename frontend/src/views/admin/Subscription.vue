@@ -134,21 +134,17 @@ i {
               <div class="pro-feature">
                 <ul>
                   <li>
-                    <span class="mdil mdil-24px mdil-check"></span>
                     Unlimited Active Campaigns
                   </li>
                   <li>
-                    <span class="mdil mdil-24px mdil-check"></span>
                     <span class="number">{{plan.totalNoOfRequests}} </span>
                     Winners Selection
                   </li>
                   <li>
-                    <span class="mdil mdil-24px mdil-check"></span>
                     <span class="number">{{plan.noOfWinners}}</span>
                     Credits [Signup Capacity]
                   </li>
                   <li>
-                    <span class="mdil mdil-24px mdil-check"></span>
                     <span class="number">{{plan.noOfRepeatitiveActions}}</span>
                     Repeated Actions (Social/Inputs)
                   </li>
@@ -352,8 +348,7 @@ export default {
         }
         const json = await resp.json();
         this.subscriptions = json["subscriptions"];
-        if(this.subscriptions.length > 0)
-        {
+        if (this.subscriptions.length > 0) {
           eventBus.$emit('UpdateAdminNav', true);
         } else {
           eventBus.$emit('UpdateAdminNav', false);
@@ -389,16 +384,18 @@ export default {
           headers,
         });
 
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
-        }
-
         const json = await resp.json();
-        // this.subscriptions.push(json);
-        this.fetchSubscription();
-        // localStorage.setItem("subscriptions", JSON.stringify(this.subscriptions));
-        this.notifySuccess(Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED + json._id);
-        // window.location.href = window.location.origin + "/admin/events";
+        if(json){
+          if (!resp.ok) {
+            return this.notifyErr(json)
+          }else{
+            this.fetchSubscription();
+            this.notifySuccess(Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED + json["_id"]);
+          }
+        }else{
+          throw new Error('Error while subscritption')
+        }
+        
       } catch (e) {
         this.notifyErr(e.message);
       } finally {

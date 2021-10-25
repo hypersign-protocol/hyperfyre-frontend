@@ -792,18 +792,16 @@ export default {
       this.eventActionList = []
         this.selectedSocialMedia = null,
         this.addedSocialMedias = [],
+        // TODO:  This is agian bad way 
+        //  need to use /api/v1/action API
         this.socialOptions = [
             {value: null, label: "Select a Social Profile"},
             {
                 label: "Twitter",
-                
                 value: {
                     media: "twitter",
                     icon: "fab fa-twitter",
-                    fields: [ 
-                        {name: "twitterHandle", type: "text", placeholder: "Twitter Handle", value:"" } ,
-                        {name: "twitterPostFormat", type: "text", placeholder: "Twitter Post Format", value: "" }
-                    ]
+                    fields: []
                 }, 
                 
             },
@@ -812,10 +810,16 @@ export default {
                 value: {
                     media: "telegram",
                     icon:"fab fa-telegram-plane",
-                    fields: [ 
-                        {name: "telegramHandle", type: "text", placeholder: "Telegram Handle", value: "" } ,
-                        {name: "telegramAnnouncementChannel", type: "text", placeholder: "Telegram Announcement Channel", value: "", optional: true }
-                    ]
+                    fields: []
+                }, 
+                
+            },
+            {
+                label: "Discord", 
+                value: {
+                    media: "discord",
+                    icon:"fab fa-discord",
+                    fields: []
                 }, 
                 
             }

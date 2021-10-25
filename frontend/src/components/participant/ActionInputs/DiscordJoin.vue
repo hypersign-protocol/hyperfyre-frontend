@@ -13,7 +13,7 @@
     >
       <b-row>
         <b-col cols="1" sm="1" md="1">
-          <img src="../../../assets/twitter-4.svg" height="25px" />
+          <img src="../../../assets/discord.png" height="25px" />
         </b-col>
         <b-col cols="9" sm="9" class="text-left" md="9">
           <div class="text text-capitalize">{{ data.title }}</div>
@@ -40,22 +40,14 @@
               <button
                 :disabled="done"
                 @click="
-                  handleTwitterLogin(
-                    'https://twitter.com/intent/tweet?text=' + data.value
-                  )
+                  handleDiscordLogin(discord.sourceScreenName)
                 "
-                class="btn btn-outline-twitter text-black mb-2"
+                class="btn btn-outline-discord text-black"
               >
-                <img src="../../../assets/twitter.svg" />
-                Retweet
+                <!-- <img src="../../../assets/discord.png" height="20px"/> -->
+                <i class="fab fa-discord"></i>
+                Join our Discord
               </button>
-              <b-form-input
-                type="text"
-                placeholder="https://twitter.com/<twitterHandle>/status/<tweetId>"
-                v-model="retweetUrl"
-                :disabled="data.isDone"
-                :required="data.isManadatory"
-              ></b-form-input>
             </div>
           </b-col>
         </b-row>
@@ -84,45 +76,57 @@ export default {
   },
   data() {
     return {
-      authToken: localStorage.getItem("authToken"),
       visible: false,
       done: this.data.isDone,
-      retweetUrl: "",
+      authToken: localStorage.getItem("authToken"),
+      actions: [],
+      discord: {
+        sourceScreenName: "",
+        targetScreenName: "",
+        channelName: ""
+      },
       isLoading: false,
       fullPage: true,
     };
   },
-  mounted() {
+  async mounted() {
+    try {
+      if (this.data.value) {
+        const discord = JSON.parse(this.data.value);
+        this.discord = { ...discord };
+      }
+    } catch (e) {
+      this.discord.sourceScreenName = this.data.value;
+    }
+
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
     async update() {
-      try {
-        if (!(await this.hasRetweeted())) {
-          throw new Error(
-            Messages.EVENT_ACTIONS.TWITTER_RETWEET.INVALID_RETWEET
-          );
-        } else {
-          this.$emit("input", this.retweetUrl);
-        }
-      } catch (e) {
-        const { errors } = e;
-        if (errors && errors.length > 0) {
-          this.notifyErr(errors[0]["msg"]);
-        } else {
-          this.notifyErr(e.message);
-        }
+      const tgIdInStore = localStorage.getItem("discordId"); 
+      if (!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) {
+        return this.notifyErr(
+          Messages.EVENT_ACTIONS.DISCORD_JOIN.DISCORD_AUTH
+        );
+      } else {
+        this.discord.targetScreenName = tgIdInStore;
+        this.$emit(
+          "input",
+          JSON.stringify({
+            ...this.discord,
+          })
+        );
       }
     },
     disableInput(data) {
       this.done = data;
     },
-    handleTwitterLogin(urlToRedirect) {
+    handleDiscordLogin(urlToRedirect) {
       try {
-        if (!localStorage.getItem("twitterId")) {
+        if (!localStorage.getItem("discordId")) {
           webAuth.popup.authorize(
             {
-              connection: "twitter",
+              connection: "discord",
               owp: true,
             },
             (err, authRes) => {
@@ -133,10 +137,9 @@ export default {
                     if (err) {
                       return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
                     }
-
-                    const twitterId = user.sub.split("|")[1];
-                    localStorage.setItem("twitterId", twitterId);
-
+                    console.log(user);
+                    const twitterId = user.sub.split("|")[2];
+                    localStorage.setItem("discordId", twitterId);
                     window.open(urlToRedirect, "_blank");
                   }
                 );
@@ -148,46 +151,9 @@ export default {
           // this.twitter.targetScreenName = localStorage.getItem("twitterHandle")
         }
       } catch (e) {
-        this.notifyErr(e);
+        return this.notifyErr(e.message ? e.message : JSON.stringify(e));
       }
-    },
-    async hasRetweeted() {
-      if (!this.retweetUrl) {
-        throw new Error("Retweet url cannot be empty");
-      }
-      this.isLoading = true;
-      const twitterId = localStorage.getItem("twitterId");
-      if (twitterId) {
-        let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
-        let headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
-        };
-
-        const body = {
-          tweetUrl: this.retweetUrl,
-          userId: twitterId,
-          tweetText: this.data.value,
-          needUserDetails: false,
-          checkIfFollowed: false,
-          sourceScreenName: "",
-        };
-
-        const resp = await apiClient.makeCall({
-          method: "POST",
-          url: url,
-          body,
-          header: headers,
-        });
-        this.isLoading = false;
-        if (resp.data.hasTweetUrlVerified) {
-          return true;
-        } else {
-          this.notifyErr(resp.data.error);
-          return false;
-        }
-      }
-    },
+    }
   },
   mixins: [notificationMixins],
 };

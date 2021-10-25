@@ -40,6 +40,7 @@ export default {
     EventIsOver,
     Loading
   },
+  
   data() {
     return {
       eventData: {},
@@ -54,6 +55,35 @@ export default {
       fullPage: true
     }
   },
+  /***
+  * Need to fix this
+  *
+  metaInfo () {
+    return { 
+            title: "Test Event",
+            titleTemplate: 'Hyperfyre | Event | %s',
+            meta: [
+                {  property: "og:site_name" , content: "HyperFyre"},
+                {  property: "og:type" , content: "website"},
+                {  name: "title" , content: `Hyperfyre | Event |  Test Event`},
+                {  name: "description" , content: `Participate in  Test Event event to win...`},
+                {  property: "og:title" , content: `Hyperfyre | Event |  Test Event`},
+                {  property: "og:description" , content: `Participate in  Test Event event to win`},
+                {  property: "twitter:description" , content: `Participate in  Test Event event to win...`},
+                {  property: "og:url" , content: "https://hswhitelist.netlify.app/form/demo-event-001" },
+                {  property: "al:web:url" , content: "https://hswhitelist.netlify.app/form/demo-event-001" },
+                {  property: "og:image" , content: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.istockphoto.com%2Fvectors%2Fgiveaway-banner-for-social-media-contests-and-special-offer-vector-vector-id1183256238&f=1&nofb=1"},
+                {  name: "twitter:title" , content: "Hyperfyre | Event |  Test Event"},
+                {  name: "twitter:description" , content: "Hyperfyre | Event |  Test Event"},
+                {  name: "twitter:image" , content: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.istockphoto.com%2Fvectors%2Fgiveaway-banner-for-social-media-contests-and-special-offer-vector-vector-id1183256238&f=1&nofb=1"},
+                {  name: "twitter:card" , content: "summary_large_image"},
+                {  name: "author" , content: "HyperFyre"},
+                {  name: "robots" , content: "index,follow,max-image-preview:large"},
+                {  name: "referrer" , content: "unsafe-url"},
+        ]
+    }
+  },*/
+    
   computed: {
     timeLeft: function() {
       if (this.eventData.fromDate && this.eventData.projectStatus) {

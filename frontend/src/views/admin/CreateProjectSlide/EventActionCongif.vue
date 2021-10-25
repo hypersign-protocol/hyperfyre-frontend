@@ -7,8 +7,17 @@
             'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'" 
           style="min-width: 113px"
           v-for="(eventAction, idx) in eventActionList" v-bind:Key="idx">
-            <span class="mr-2"><i :class="eventAction.title"></i>  {{ truncate1(eventAction.title, 12) }}</span>
-            <i  class="fas fa-minus-circle"></i>
+            <span>
+              <i style="color: gray" v-if="eventAction.type.includes('TWITTER')" class="fab fa-twitter"></i>  
+              <i style="color: gray" v-if="eventAction.type.includes('TELEGRAM')" class="fab fa-telegram-plane"></i>  
+              <i style="color: gray" v-if="eventAction.type.includes('TEXT')"  class="fas fa-file-alt"></i>
+              <i style="color: gray" v-if="eventAction.type.includes('NUMBER')"  class="fas fa-list-ol"></i>
+              <i style="color: gray" v-if="eventAction.type.includes('DATE')"  class="fas fa-calendar-minus"></i>
+              <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('_ETH')"   height="22px" />
+              <img style="padding-right: 5px" src="../../../assets/tezos.png"  v-if="eventAction.type.includes('_TEZ')"   height="22px" />
+            </span>
+            <span >{{ truncate1(eventAction.title, 8) }}</span>
+            <span style="color: gray;padding-left: 5px"><i style=""  class="fas fa-minus-circle"></i></span>
         </div>
       </div>
       <div >
@@ -42,7 +51,7 @@
               <label for="value" class="col-form-label">Social Handle<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-7 col-md-7 px-0">
-              <input   v-model="selected.value" type="text"   id="value" class="form-control w-100" >
+              <input   v-model="selected.value" type="text"  :placeholder="selected.type === 'DISCORD_JOIN' ? 'Enter server invite link' : '' "  id="value" class="form-control w-100" >
           </div>  
         </div>
         <div class="row g-3 align-items-center w-100 mt-4" style="display:none">
