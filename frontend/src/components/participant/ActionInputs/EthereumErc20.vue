@@ -48,7 +48,7 @@
 </template>
 <script>
 import eventBus from "../../../eventBus.js";
-// import apiClient from '../../../mixins/apiClientMixin.js';
+import apiClient from '../../../mixins/apiClientMixin.js';
 import {
   isValidURL,
   isValidText,
@@ -56,6 +56,7 @@ import {
 } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
+
 export default {
   name: "EthereumErc20",
   props: {
@@ -70,19 +71,50 @@ export default {
     return {
       visible: false,
       done: this.data.isDone,
+      authToken: localStorage.getItem("authToken"),
+
     };
   },
   mounted() {
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
-    console.log(JSON.stringify(this.data));
+    this.data.contractAddress=this.data.value
+    this.data.value=""
+    
+    
+
   },
   methods: {
-   update() {
+   async update() {
       if (!this.isFieldValid()) {
-        this.data.value = "";
+       // this.data.value = "";
+      
         return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
       } else {
-        this.$emit("input", this.data.value);
+          try {
+            let balance = await this.hasBalance()
+            
+            if(balance.result!==undefined){
+              let wallet_balance= Number.parseInt(balance.result)
+             if(wallet_balance > 0 ){
+               this.$emit("input", this.data.value);
+             }else{
+               throw new Error("Insufficient balance")
+             }
+            }
+          } catch (error) {
+              console.log(error);
+          }
+          
+                        
+
+       
+             
+            //  .then(res=>{
+            //    console.log(res);
+            //  })
+              //console.log(result);
+        //console.log(JSON.stringify(this.data));
+       // this.$emit("input", this.data.value);
       }
     },
     isFieldValid() {
@@ -97,6 +129,32 @@ export default {
       }
       return true;
     },
+    async hasBalance(){
+        const body ={
+          "actionType": this.data.type,
+          "data":  this.data.value,
+          "contractAddress": this.data.contractAddress
+        };
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/action/verify`;
+      
+        let headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.authToken}`,
+          };
+        
+          const res = await apiClient.makeCall({
+            method: "POST",
+            url: url,
+            body: body,
+            header: headers,
+          });
+          
+          const result =res.data
+         
+          return result
+      
+        
+    }
     // contractApi(){
     //     const body ={
     // "actionType": "ETHEREUM_ERC20",
@@ -118,7 +176,7 @@ export default {
     //       });
     //       return resp.data;
     // },
-    disableInput(data) {
+    ,disableInput(data) {
       this.done = data;
     },
   },

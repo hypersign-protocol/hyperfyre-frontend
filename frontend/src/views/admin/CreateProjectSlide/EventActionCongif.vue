@@ -36,7 +36,7 @@
               <label for="title" class="col-form-label">Contract Address<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-7 col-md-7 px-0">
-              <input   v-model="selected.contractAddress" type="text"   id="title" class="form-control w-100" >
+              <input   v-model="selected.value" type="text"   id="title" class="form-control w-100" >
           </div>  
         </div>
 
@@ -190,7 +190,7 @@ export default {
             "value": "",
             "score": 10,
             "id": "",
-            "contractAddress": ""
+            
       },
     }
     
@@ -212,6 +212,7 @@ export default {
             "isManadatory": true,
             "value": "",
             "score": 10,
+            
       }
 
       this.selected = clearData
