@@ -9,29 +9,36 @@
       <b-row>
         <b-col cols="1" sm="1" md="1">
           <img src="../../../assets/question-circle-fill.svg" height="25px" />
+          <!-- <img src="../../../assets/metamask.svg" height="25px" /> -->
         </b-col>
         <b-col cols="9" sm="9" class="text-left" md="9">
           <div class="text text-capitalize">{{ data.title }}</div>
         </b-col>
         <b-col cols="2" sm="2" md="2">
-          <b-badge class="btn-score" @click="update()" v-if="!done">
+          <b-badge class="btn-score" @click="update()" v-if="done">
             <img src="../../../assets/plus.svg" />
             {{ data.score }}
           </b-badge>
-          <img
+           <!-- <b-badge class="btn-score" @click="invokeMetamask()" v-if="!done">
+            <img src="../../../assets/metamask.svg" />
+            {{ data.score }}
+          </b-badge> -->
+          <!-- <img
             class="check-mark"
             src="../../../assets/check-circle-fill.svg"
             height="25px"
+            {{data.score}}
             v-if="done"
-          />
+          /> -->
         </b-col>
+        
       </b-row>
     </b-card-header>
     <b-collapse :id="`collapse-${idValue}`" v-model="visible">
       <b-card-body class="user-details">
         <b-row>
           <b-col cols="12" sm="12" md="12">
-            <div class="follow">
+            <div class="metamask">
               <b-form-input
                 type="text"
                 :placeholder="data.placeHolder"
@@ -39,14 +46,19 @@
                 :disabled="done"
                 :required="data.isManadatory"
               ></b-form-input>
-            </div>
+             <button
+             class="btn btn-outline-twitter text-black" @click="invokeMetamask()"> <img src="../../../assets/metamask.svg" height="25px" width="25px" /></button>
+          </div>
+            
           </b-col>
         </b-row>
       </b-card-body>
     </b-collapse>
+    
   </b-card>
 </template>
 <script>
+
 import eventBus from "../../../eventBus.js";
 import apiClient from '../../../mixins/apiClientMixin.js';
 import {
@@ -56,7 +68,8 @@ import {
 } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
-
+// import validateEthAddress from "../../../mixins/fieldValidationMixin"
+import Web3 from 'web3';
 export default {
   name: "EthereumErc20",
   props: {
@@ -76,6 +89,8 @@ export default {
     };
   },
   mounted() {
+    // this.metamask();
+    // this.web33();
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
     this.data.contractAddress=this.data.value
     this.data.value=""
@@ -84,8 +99,31 @@ export default {
 
   },
   methods: {
+    // ans(){this.$root.$on("in",()=>{
+    //    console.log("");
+    //  })},
+// metamask(){
+//   if (!window.ethereum) {
+//   return this.notifyErr("Please install MetaMask");
+//   }else{
+// console.log("installed");
+//   }
+  
+// },
+// web33(){
+//   var web3 = new Web3(Web3.givenProvider);
+// console.log(web3);
+
+// },
+invokeMetamask(){
+ if (!window.ethereum) {
+  return this.notifyErr("Please install MetaMask");
+  }else{
+    ethereum.enable();
+  }
+},
    async update() {
-      if (!this.isFieldValid()) {
+      if (!this.isFieldValid()|| this.data.value ==="") {
        // this.data.value = "";
       
         return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
@@ -102,19 +140,8 @@ export default {
              }
             }
           } catch (error) {
-              console.log(error);
+           return this.notifyErr(error);
           }
-          
-                        
-
-       
-             
-            //  .then(res=>{
-            //    console.log(res);
-            //  })
-              //console.log(result);
-        //console.log(JSON.stringify(this.data));
-       // this.$emit("input", this.data.value);
       }
     },
     isFieldValid() {
@@ -155,27 +182,6 @@ export default {
       
         
     }
-    // contractApi(){
-    //     const body ={
-    // "actionType": "ETHEREUM_ERC20",
-    // "data":  value,
-    // "contractAddress": this.contractAddress
-    //     };
-    
-    // let url = `${this.$config.studioServer.BASE_URL}api/v1/action/verify`;
-    // let headers = {
-    //       "Content-Type": "application/json",
-    //       Authorization: `Bearer ${this.authToken}`,
-    //     };
-    // const resp = aapiClient.makeCall
-    // const resp = await apiClient.makeCall({
-    //         method: "POST",
-    //         url: url,
-    //         body: this.twitter,
-    //         header: headers,
-    //       });
-    //       return resp.data;
-    // },
     ,disableInput(data) {
       this.done = data;
     },
