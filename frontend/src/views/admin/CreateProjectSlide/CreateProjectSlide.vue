@@ -287,7 +287,9 @@ export default {
     smartContractlist: function(){
       if (this.actionList && this.actionList.length >0){
         return this.actionList.filter(
-          (x)=> x.type.indexOf("ETHEREUM_")  > -1 || x.type.indexOf("MATIC_") > -1
+          (x)=> x.type.indexOf("ETHEREUM_")  > -1 
+          || x.type.indexOf("MATIC_") > -1
+          || x.type.indexOf("BINANCE_") > -1
         );
       }else{
         return [];
@@ -323,7 +325,8 @@ export default {
         smartContractAction:[
           { text: "Select Contract Type", value:null},
           { text: "Ethereum ERC20", value:"ETHEREUM_ERC20"},
-          { text: "Matic ERC20", value:"MATIC_ERC20"},
+          { text: "Polygon ERC20", value:"MATIC_ERC20"},
+          { text: "Binance ERC20", value:"BINANCE_ERC20"},
         ]
       },
     };
