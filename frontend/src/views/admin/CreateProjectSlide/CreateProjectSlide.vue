@@ -203,15 +203,13 @@ import BlockchainCongif from "./BlockchainCongif.vue";
 import EventActionCongif from "./EventActionCongif.vue";
 import GeneralConfig from "./GeneralConfig.vue";
 import SocialConfig from "./SocialConfig.vue";
-import ContractConfig from "./ContractConfig.vue"
 export default {
   name: "CreateProjectSlide",
   components: {
     SocialConfig,
     GeneralConfig,
     BlockchainCongif,
-    EventActionCongif,
-    ContractConfig
+    EventActionCongif
   },
 
   props: {
@@ -324,8 +322,7 @@ export default {
         ],
         smartContractAction:[
           { text: "Select Contract Type", value:null},
-          { text: "ERC20 Contract", value:"ETHEREUM_ERC20"},
-          { text: "ERC721 Contract", value:"ETHEREUM_ERC721"}
+          { text: "Ethereum ERC20", value:"ETHEREUM_ERC20"},
         ]
       },
     };

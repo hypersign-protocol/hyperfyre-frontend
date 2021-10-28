@@ -13,7 +13,7 @@
       </template>
     </b-card>
     <template v-if="authToken != '' && authToken != null">
-      <EventIsOver v-if="!eventData.projectStatus" />
+      <ErrorMessage v-if="!eventData.projectStatus" errorMessage="Event is over" />
       <Action v-if="eventData.projectStatus" :userProfile="userProfileData" :ActionSchema="eventActionsToShow" @UserUpdateEvent="updateUserData" />
     </template>
   </div>
@@ -23,7 +23,7 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import Banner from "../../components/participant/Banner.vue";
 import Login from "../../components/participant/Login.vue";
-import EventIsOver from "../../components/participant/EventIsOver.vue";
+import ErrorMessage from "../../components/participant/ErrorMessage.vue";
 import Action from "../../components/participant/Action.vue";
 import Metrics from "../../components/participant/Metrics.vue";
 import notificationMixins from "../../mixins/notificationMixins";
@@ -37,7 +37,7 @@ export default {
     Login,
     Action,
     Metrics,
-    EventIsOver,
+    ErrorMessage,
     Loading
   },
   
