@@ -43,6 +43,10 @@ const EVENT_ACTIONS = {
     },
     TWITTER_RETWEET: {
         INVALID_RETWEET: "Error: Invalid retweet"
+    },
+    ETH: {
+        INVALIDWEB3: "Web3 provider not found. Please install Metamask wallet",
+        INVALID_SIG: "Invalid signature"
     }
 }
 

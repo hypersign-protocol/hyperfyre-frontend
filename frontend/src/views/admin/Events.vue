@@ -153,6 +153,7 @@ i {
               :fontColor="fontColor"
               :fontColorDefault="fontColorDefault"
               :blockChainType="blockchainType"
+              :contractType="contractType"
               :eventActionType="eventActionType"
               :saveProject="saveProject"
               :addedSocialMedias="addedSocialMedias"
@@ -363,6 +364,7 @@ export default {
       perPage: 10,
       projectStatus: true,
       blockchainType: "ETHEREUM",
+      contractType: "ERC20",
       eventActionType: "ETHEREUM",
       currentPage: 1,
       themeColor: "#494949",
@@ -498,6 +500,7 @@ export default {
       this.project = {}
       this.eventActionList = this.eventActionList
       this.blockchainType = "ETHEREUM";
+      this.contractType = "ERC20";
       this.fontColor = this.fontColorDefault;
       this.themeColor = this.themeColorDefault;
       this.projectStatus = true;
@@ -590,6 +593,7 @@ export default {
       })
 
       this.blockchainType = project.blockchainType
+      this.contractType = project.contractType
       this.themeColor = project.themeColor
       this.fontColor = project.fontColor
       this.projectStatus = project.projectStatus
@@ -636,6 +640,7 @@ export default {
         this.project.themeColor = this.themeColor.trim().length ?  this.themeColor :  this.themeColorDefault
         this.project.fontColor = this.fontColor.trim().length ?  this.fontColor :  this.fontColorDefault
         this.project.blockchainType = this.blockchainType
+        this.project.contractType = this.contractType
         this.project.actions = this.eventActionList
         
     
@@ -736,6 +741,11 @@ export default {
          if(!this.blockchainType){
           return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_BLOCKCHAIN_TYPE
         }
+
+        // if(!this.contractType){
+        //   // return this.notifyErr("hi");
+        //   return this.notifyErr("Please select Contract Type");
+        // }
 
         if(this.themeColor == "#ffffff"){
           return Messages.EVENTS.CREATE_EDIT_EVENT.THEME_NOT_WHITE
