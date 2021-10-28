@@ -135,7 +135,7 @@
                 v-b-toggle.accordion-4
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fab fa-bitcoin"></i>  Blockchain Configurations
+                ><i class="fab fa-bitcoin"></i>  Wallet Configurations
               </b-button>
             </b-card-header>
             <b-collapse
