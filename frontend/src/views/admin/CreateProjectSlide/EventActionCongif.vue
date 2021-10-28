@@ -206,13 +206,18 @@ export default {
             }else if(isEmpty(this.selected.title)){
                 isvalid = false
                 this.notifyErr(`Title Should not be empty`)
+            }else if(isEmpty(this.selected.value)){
+              isvalid=false
+              this.notifyErr(`Social Handle Should not be empty`)
             }else if(isValidURL(this.selected.title)){
               isvalid=false
               this.notifyErr(`Do not put url in title`)
-            }else if(isEmpty(this.selected.value)){
-              isvalid=false
-              this.notifyErr(`Value Should not be empty`)
-            }
+            }else if(this.selected.type==='DISCORD_JOIN'){
+             if(!this.selected.value.includes('https://discord.gg/')){
+               isvalid= false
+               this.notifyErr(`Invalid Invite Link`);
+             }
+             }
           break;
         case "CUSTOM":
          if(this.selected.type===null){
@@ -246,6 +251,7 @@ export default {
 
       return isvalid
     },
+
 
     handleEventActionAdd(){
       // Code to Add an Action
