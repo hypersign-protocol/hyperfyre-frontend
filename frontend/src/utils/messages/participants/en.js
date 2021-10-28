@@ -34,7 +34,7 @@ const EVENT_ACTIONS = {
         FETCH_USERNAME_FAILED: "Could not fetch the username after telegram authentication",
     },
     DISCORD_JOIN: {
-        DISCORD_AUTH: "Error: Please authorize telegram to proceed",
+        DISCORD_AUTH: "Error: Please authorize discord to proceed",
         AUTH_FAILED: "Authentication Failed! Try again",
     },
     TWITTER_FOLLOW: {
