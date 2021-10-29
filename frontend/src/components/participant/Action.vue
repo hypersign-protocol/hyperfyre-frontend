@@ -22,6 +22,10 @@ import TelegramJoin from "./ActionInputs/TelegramJoin.vue";
 import InputText from "./ActionInputs/InputText.vue";
 import BlockchainEth from "./ActionInputs/BlockchainEth.vue";
 import BlockchainTez from "./ActionInputs/BlockchainTez.vue";
+import EthereumErc20 from "./ActionInputs/EthereumErc20.vue";
+import EthereumErc721 from "./ActionInputs/EthereumErc721.vue"
+import MaticErc20 from "./ActionInputs/MaticErc20.vue"
+import BinanceErc20 from "./ActionInputs/BinanceErc20.vue"
 import InputDate from "./ActionInputs/InputDate.vue";
 import InputNumber from "./ActionInputs/InputNumber.vue";
 import eventBus from "../../eventBus.js"
@@ -49,8 +53,12 @@ export default {
     InputText,
     BlockchainEth,
     BlockchainTez,
+    EthereumErc20,
+    EthereumErc721,
+    MaticErc20,
     InputDate,
     InputNumber,
+    BinanceErc20,
     Loading,
     DiscordJoin,
     RecaptchaToken: ""

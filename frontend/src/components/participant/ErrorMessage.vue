@@ -5,7 +5,7 @@
         <b-card-body>
           <b-card-text class="w-100 text-center">
             <div class="alert alert-warning" role="alert">
-              Event is over
+              {{ errorMessage }}
             </div>
           </b-card-text>
         </b-card-body>
@@ -15,6 +15,11 @@
 </template>
 <script>
 export default {
+  props: {
+    errorMessage:  {
+      type: String
+    }
+  },
   data() {
     return {};
   },
