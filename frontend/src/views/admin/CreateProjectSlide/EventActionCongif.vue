@@ -14,7 +14,8 @@
               <i style="color: gray" v-if="eventAction.type.includes('NUMBER')"  class="fas fa-list-ol"></i>
               <i style="color: gray" v-if="eventAction.type.includes('DATE')"  class="fas fa-calendar-minus"></i>
               <i style="color: gray" v-if="eventAction.type.includes('DISCORD')"  class="fab fa-discord"></i>
-              <i style="color: gray" v-if="eventAction.type.includes('HYPERLINK')"  class="fa fa-link"></i>
+              <i style="color: gray" v-if="eventAction.type.includes('INPUT_HYPERLINK')"  class="fa fa-link"></i>
+              <img style="padding-right: 5px" src="../../../assets/external-link.svg"  v-if="eventAction.type.includes('HYPERLINK_URL')"   height="22px" />
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('_ETH')"   height="22px" />
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('ETHEREUM')"   height="22px" />
               <img style="padding-right: 5px;" src="../../../assets/matic-logo.svg"  v-if="eventAction.type.includes('MATIC')"   height="20px" />
@@ -53,7 +54,17 @@
           </div>  
         </div>
 
-        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType != 'SOCIAL'">
+         <!-- HyperlinkUrl -->
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="url">
+          <div class=" text-left col-lg-5 col-md-5 text-left">
+              <label for="title" class="col-form-label">URL<span style="color: red">*</span>: </label>
+          </div>
+          <div class="col-lg-7 col-md-7 px-0">
+              <input   v-model="selected.value" type="text"   id="title" class="form-control w-100" >
+          </div>  
+        </div>
+
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="placeH">
           <div class=" text-left col-lg-5 col-md-5 text-left">
               <label for="placeHolder" class="col-form-label">Place Holder: </label>
           </div>
@@ -61,7 +72,6 @@
               <input   v-model="selected.placeHolder" type="text"   id="placeHolder" class="form-control w-100" >
           </div>  
         </div>       
-        
         <div class="row g-3 align-items-center w-100 mt-4" v-if="nodDisplay">
           <div class=" text-left col-lg-5 col-md-5 text-left">
               <label for="value" class="col-form-label">Social Handle<span style="color: red">*</span>: </label>
@@ -168,8 +178,15 @@ export default {
     nodDisplay(){
       if(this.eventActionType !='CUSTOM' && this.eventActionType !='BLOCKCHAIN' && this.eventActionType !='SMARTCONTRACT')
       return true
+    },
+    url(){
+      if(this.eventActionType === 'CUSTOM' && this.selected.type ==='HYPERLINK_URL')
+      return true
+    },
+    placeH(){
+      if(this.eventActionType != 'SOCIAL'  && this.selected.type !='HYPERLINK_URL')
+      return true
     }
-
   },
   data(){
     return{
@@ -250,7 +267,15 @@ export default {
             }else if(isValidURL(this.selected.title)){
               isvalid=false
               this.notifyErr(`Do not put url in title`)
-            } else if(isNaN(parseInt(this.selected.score))){
+            }else if(this.selected.type==='HYPERLINK_URL'){
+             if(isEmpty(this.selected.value)){
+                isvalid = false
+                this.notifyErr(`Url Should not be empty`)
+            }else if(!(this.selected.type ==='HYPERLINK_URL' && isValidURL(this.selected.value))){
+              isvalid=false
+              this.notifyErr(`Please Enter Valid Url`)
+            }
+            }else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
               this.notifyErr(`Score should be a number`)
             }
