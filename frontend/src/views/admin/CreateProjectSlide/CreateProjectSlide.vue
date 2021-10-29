@@ -309,6 +309,7 @@ export default {
           { text: "TEXT", value: "INPUT_TEXT" },
           { text: "NUMBER", value: "INPUT_NUMBER" },
           { text: "DATE", value: "INPUT_DATE" },
+          { text: "LINK", value: "INPUT_HYPERLINK" },
         ],
         socialAction: [
           { text: "Select Social Action type", value: null },

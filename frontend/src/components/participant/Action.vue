@@ -28,6 +28,7 @@ import MaticErc20 from "./ActionInputs/MaticErc20.vue"
 import BinanceErc20 from "./ActionInputs/BinanceErc20.vue"
 import InputDate from "./ActionInputs/InputDate.vue";
 import InputNumber from "./ActionInputs/InputNumber.vue";
+import InputHyperlink from "./ActionInputs/InputHyperlink.vue";
 import eventBus from "../../eventBus.js"
 import apiClient from "../../mixins/apiClientMixin";
 import notificationMixins from "../../mixins/notificationMixins";
@@ -61,6 +62,7 @@ export default {
     BinanceErc20,
     Loading,
     DiscordJoin,
+    InputHyperlink,
     RecaptchaToken: ""
   },
   mounted(){
