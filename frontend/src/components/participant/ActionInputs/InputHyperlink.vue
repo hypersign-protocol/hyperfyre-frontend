@@ -22,7 +22,13 @@
 				<b-row>
 					<b-col cols="12" sm="12" md="12">
 						<div class="follow">
-							<b-form-input type="text" :placeholder="data.placeHolder" v-model="data.value" :disabled="done" :required="data.isManadatory"></b-form-input>
+							<b-form-input 
+							type="text" 
+							:placeholder="data.placeHolder" 
+							v-model="data.value" 
+							:disabled="done" 
+							:required="data.isManadatory"
+							></b-form-input>
 						</div>
 					</b-col>
 				</b-row>
@@ -34,6 +40,9 @@
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en"
+import {
+  isValidURL
+} from "../../../mixins/fieldValidationMixin";
 export default {
 	name: 'InputHyperlink',
 	props: {
@@ -55,7 +64,8 @@ export default {
 	},
 	methods: {
 		update() {
-			if (!this.data.value) {
+			if (!isValidURL(this.data.value)) {
+				this.data.value = "";
 				return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
 			} else {
 				this.$emit('input', this.data.value)
