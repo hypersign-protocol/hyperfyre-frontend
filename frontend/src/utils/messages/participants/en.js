@@ -34,7 +34,7 @@ const EVENT_ACTIONS = {
         FETCH_USERNAME_FAILED: "Could not fetch the username after telegram authentication",
     },
     DISCORD_JOIN: {
-        DISCORD_AUTH: "Error: Please authorize telegram to proceed",
+        DISCORD_AUTH: "Error: Please authorize discord to proceed",
         AUTH_FAILED: "Authentication Failed! Try again",
     },
     TWITTER_FOLLOW: {
@@ -43,6 +43,10 @@ const EVENT_ACTIONS = {
     },
     TWITTER_RETWEET: {
         INVALID_RETWEET: "Error: Invalid retweet"
+    },
+    ETH: {
+        INVALIDWEB3: "Web3 provider not found. Please install Metamask wallet",
+        INVALID_SIG: "Invalid signature"
     }
 }
 

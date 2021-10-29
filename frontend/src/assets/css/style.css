@@ -286,6 +286,11 @@ ul.social-links li:hover {
 .follow {
     text-align: center;
 }
+.metamask{
+ 
+    display: flex;
+
+}
 .subscription-section {
     margin: 0px 90px;
 }

@@ -135,7 +135,7 @@
                 v-b-toggle.accordion-4
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fab fa-bitcoin"></i>  Blockchain Configurations
+                ><i class="fab fa-bitcoin"></i>  Wallet Configurations
               </b-button>
             </b-card-header>
             <b-collapse
@@ -153,6 +153,38 @@
               </b-card-body>
             </b-collapse>
           </b-card>
+
+          <!-- Smart Contract Config -->
+          <b-card no-body class="mb-1">
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-5
+                variant="info"
+                class="bg-transparent border-0 text-left text-primary"
+                ><i class="fas fa-file-contract"></i>  Smart Contract Configurations
+              </b-button>
+            </b-card-header>
+            <b-collapse
+              id="accordion-5"
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body>
+                <eventAction-congif
+                  v-on="$listeners"
+                  :eventActionList="smartContractlist"
+                  eventActionType="SMARTCONTRACT"
+                  :options="options.smartContractAction"
+                />
+              </b-card-body>
+            </b-collapse>
+          </b-card>
+          <!--  -->
         </div>
         <button
           class="btn btn-primary mt-3 button-theme"
@@ -171,14 +203,13 @@ import BlockchainCongif from "./BlockchainCongif.vue";
 import EventActionCongif from "./EventActionCongif.vue";
 import GeneralConfig from "./GeneralConfig.vue";
 import SocialConfig from "./SocialConfig.vue";
-
 export default {
   name: "CreateProjectSlide",
   components: {
     SocialConfig,
     GeneralConfig,
     BlockchainCongif,
-    EventActionCongif,
+    EventActionCongif
   },
 
   props: {
@@ -199,6 +230,9 @@ export default {
     },
     blockChainType: {
       type: String,
+    },
+    contractType:{
+      type: String
     },
     saveProject: {
       type: Function,
@@ -250,6 +284,17 @@ export default {
         return [];
       }
     },
+    smartContractlist: function(){
+      if (this.actionList && this.actionList.length >0){
+        return this.actionList.filter(
+          (x)=> x.type.indexOf("ETHEREUM_")  > -1 
+          || x.type.indexOf("MATIC_") > -1
+          || x.type.indexOf("BINANCE_") > -1
+        );
+      }else{
+        return [];
+      }
+    }
   },
   
   data() {
@@ -277,6 +322,12 @@ export default {
           { text: "Ethereum", value: "BLOCKCHAIN_ETH" },
           { text: "Tezos", value: "BLOCKCHAIN_TEZ" },
         ],
+        smartContractAction:[
+          { text: "Select Contract Type", value:null},
+          { text: "Ethereum ERC20", value:"ETHEREUM_ERC20"},
+          { text: "Polygon ERC20", value:"MATIC_ERC20"},
+          { text: "Binance ERC20", value:"BINANCE_ERC20"},
+        ]
       },
     };
   },
