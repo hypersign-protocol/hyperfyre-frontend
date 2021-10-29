@@ -59,16 +59,7 @@
           <div class="col-lg-7 col-md-7 px-0">
               <input   v-model="selected.placeHolder" type="text"   id="placeHolder" class="form-control w-100" >
           </div>  
-        </div>
-
-        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType === 'SMARTCONTRACT'">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
-              <label for="score" class="col-form-label">Score<span style="color: red">*</span>: </label>
-          </div>
-          <div class="col-lg-7 col-md-7 px-0">
-              <input   v-model="selected.score" type="number"   id="score" class="form-control w-100" >
-          </div>  
-        </div>
+        </div>       
         
         <div class="row g-3 align-items-center w-100 mt-4" v-if="nodDisplay">
           <div class=" text-left col-lg-5 col-md-5 text-left">
