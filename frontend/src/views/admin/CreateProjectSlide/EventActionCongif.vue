@@ -155,7 +155,7 @@
 </style>
 <script>
 import notificationMixins from '../../../mixins/notificationMixins';
-import {isEmpty,isValidURL, truncate} from '../../../mixins/fieldValidationMixin';
+import {isEmpty,isValidURL, truncate,isdiscordLink} from '../../../mixins/fieldValidationMixin';
 
 export default {
   name: "EventActionCongif",
@@ -237,11 +237,14 @@ export default {
             }else if(isValidURL(this.selected.title)){
               isvalid=false
               this.notifyErr(`Do not put url in title`)
-            }else if(this.selected.type==='DISCORD_JOIN'){
-             if(!this.selected.value.includes('https://discord.gg/')){
-               isvalid= false
-               this.notifyErr(`Invalid Invite Link`);
-             }
+            }else if(isEmpty(this.selected.value)){
+              isvalid=false
+              this.notifyErr(`Social Handle Should not be empty`)
+            }else if(this.selected.type === 'DISCORD_JOIN'){
+              if(isdiscordLink(this.selected.value)){
+                isvalid= false
+                this.notifyErr(`Invalid Invite Link`);
+              }
              }
           break;
         case "CUSTOM":
