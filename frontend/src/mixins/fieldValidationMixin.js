@@ -35,7 +35,11 @@ export function isEmpty(str) {
   }
   return false;
 }
-
+export function isdiscordLink(str){
+  if(!str.includes('https://discord.gg/')){
+    return true
+  }
+}
 export function isDate(date) {
   if (!date) {
     return false;
