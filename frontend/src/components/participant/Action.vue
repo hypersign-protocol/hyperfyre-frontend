@@ -15,6 +15,7 @@
  import Loading from "vue-loading-overlay";
  import "vue-loading-overlay/dist/vue-loading.css";
 import Profile from "./ActionInputs/Profile.vue";
+import HyperlinkUrl from "./ActionInputs/HyperlinkUrl.vue"
 import TwitterFollow from "./ActionInputs/TwitterFollow.vue";
 import TwitterRetweet from "./ActionInputs/TwitterRetweet.vue";
 import DiscordJoin from "./ActionInputs/DiscordJoin.vue";
@@ -62,6 +63,7 @@ export default {
     BinanceErc20,
     Loading,
     DiscordJoin,
+    HyperlinkUrl,
     InputHyperlink,
     RecaptchaToken: ""
   },
