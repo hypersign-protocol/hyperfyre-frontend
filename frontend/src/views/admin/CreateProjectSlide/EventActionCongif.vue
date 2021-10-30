@@ -14,6 +14,7 @@
               <i style="color: gray" v-if="eventAction.type.includes('NUMBER')"  class="fas fa-list-ol"></i>
               <i style="color: gray" v-if="eventAction.type.includes('DATE')"  class="fas fa-calendar-minus"></i>
               <i style="color: gray" v-if="eventAction.type.includes('DISCORD')"  class="fab fa-discord"></i>
+              <i style="color: gray" v-if="eventAction.type.includes('HYPERLINK')"  class="fa fa-link"></i>
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('_ETH')"   height="22px" />
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('ETHEREUM')"   height="22px" />
               <img style="padding-right: 5px;" src="../../../assets/matic-logo.svg"  v-if="eventAction.type.includes('MATIC')"   height="20px" />
@@ -59,16 +60,7 @@
           <div class="col-lg-7 col-md-7 px-0">
               <input   v-model="selected.placeHolder" type="text"   id="placeHolder" class="form-control w-100" >
           </div>  
-        </div>
-
-        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType === 'SMARTCONTRACT'">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
-              <label for="score" class="col-form-label">Score<span style="color: red">*</span>: </label>
-          </div>
-          <div class="col-lg-7 col-md-7 px-0">
-              <input   v-model="selected.score" type="number"   id="score" class="form-control w-100" >
-          </div>  
-        </div>
+        </div>       
         
         <div class="row g-3 align-items-center w-100 mt-4" v-if="nodDisplay">
           <div class=" text-left col-lg-5 col-md-5 text-left">
