@@ -258,7 +258,10 @@ export default {
     // a computed getter
     customList: function() {
       if (this.actionList && this.actionList.length > 0) {
-        return this.actionList.filter((x) => x.type.indexOf("INPUT_") > -1);
+        return this.actionList.filter(
+          (x) => 
+            x.type.indexOf("INPUT_") > -1 ||  x.type.indexOf("HYPERLINK_URL") > -1
+        );
       } else {
         return [];
       }
@@ -310,6 +313,7 @@ export default {
           { text: "NUMBER", value: "INPUT_NUMBER" },
           { text: "DATE", value: "INPUT_DATE" },
           { text: "LINK", value: "INPUT_HYPERLINK" },
+          { text: "HYPERLINK", value: "HYPERLINK_URL"}
         ],
         socialAction: [
           { text: "Select Social Action type", value: null },
