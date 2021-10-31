@@ -23,6 +23,7 @@ const ACTIONS = {
 }
 const EVENT_ACTIONS = {
     INVALID_INPUT: "Error: Field value is invalid",
+    URL_NOT_VISITED: "Error: Please visit the link",
     WENT_WRONG: "Error: Something Went Wrong",
     ERROR: "Error occurred: ",
     INPUT_DATE: {

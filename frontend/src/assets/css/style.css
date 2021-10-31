@@ -287,9 +287,10 @@ ul.social-links li:hover {
     text-align: center;
 }
 .metamask{
- 
     display: flex;
-
+}
+.extlink{
+    display: flex;
 }
 .subscription-section {
     margin: 0px 90px;
