@@ -23,7 +23,7 @@
   <div>
     <b-sidebar
       backdrop
-      width="850px"
+      width="50%"
       id="sidebar-right"
       :title="isProjectEditing ? 'Edit Event' : 'Create Event'"
       class="sidebarContainer background-transparent"
