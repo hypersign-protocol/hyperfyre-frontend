@@ -60,7 +60,7 @@
               <label for="title" class="col-form-label">Info<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-7 col-md-7 px-0">
-              <textarea  v-model="selected.value"   id="title" class="form-control w-100" />
+              <markdown-editor toolbar=' numlist bullist code quote bold italic heading link preview fullscreen ' theme="success" v-model="selected.value"></markdown-editor>
           </div>  
         </div>
         <!-- HyperlinkUrl -->
@@ -69,7 +69,7 @@
               <label for="title" class="col-form-label">URL<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-7 col-md-7 px-0">
-              <input   v-model="selected.value" type="text"   id="title" class="form-control w-100" >
+              <input   v-model="selected.value"  type="text"   id="title" class="form-control w-100" >
           </div>  
         </div>
 
@@ -167,6 +167,10 @@
 <script>
 import notificationMixins from '../../../mixins/notificationMixins';
 import {isEmpty,isValidURL, truncate,isdiscordLink} from '../../../mixins/fieldValidationMixin';
+import 'v-markdown-editor/dist/v-markdown-editor.css';
+import Vue from 'vue'
+import Editor from 'v-markdown-editor'
+Vue.use(Editor);
 
 export default {
   name: "EventActionCongif",
