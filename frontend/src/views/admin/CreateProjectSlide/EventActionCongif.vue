@@ -10,11 +10,12 @@
             <span>
               <i style="color: gray" v-if="eventAction.type.includes('TWITTER')" class="fab fa-twitter"></i>  
               <i style="color: gray" v-if="eventAction.type.includes('TELEGRAM')" class="fab fa-telegram-plane"></i>  
-              <i style="color: gray" v-if="eventAction.type.includes('TEXT')"  class="fas fa-file-alt"></i>
+              <i style="color: gray" v-if="eventAction.type.includes('INPUT_TEXT')"  class="fas fa-file-alt"></i>
               <i style="color: gray" v-if="eventAction.type.includes('NUMBER')"  class="fas fa-list-ol"></i>
               <i style="color: gray" v-if="eventAction.type.includes('DATE')"  class="fas fa-calendar-minus"></i>
               <i style="color: gray" v-if="eventAction.type.includes('DISCORD')"  class="fab fa-discord"></i>
               <i style="color: gray" v-if="eventAction.type.includes('INPUT_HYPERLINK')"  class="fa fa-link"></i>
+              <i style="color: gray" v-if="eventAction.type.includes('INFO_TEXT')"  class="fa fa-info-circle"></i>
               <img style="padding-right: 5px" src="../../../assets/external-link.svg"  v-if="eventAction.type.includes('HYPERLINK_URL')"   height="22px" />
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('_ETH')"   height="22px" />
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('ETHEREUM')"   height="22px" />
@@ -54,7 +55,15 @@
           </div>  
         </div>
 
-         <!-- HyperlinkUrl -->
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="info">
+          <div class=" text-left col-lg-5 col-md-5 text-left">
+              <label for="title" class="col-form-label">Info<span style="color: red">*</span>: </label>
+          </div>
+          <div class="col-lg-7 col-md-7 px-0">
+              <textarea  v-model="selected.value"   id="title" class="form-control w-100" />
+          </div>  
+        </div>
+        <!-- HyperlinkUrl -->
         <div class="row g-3 align-items-center w-100 mt-4" v-if="url">
           <div class=" text-left col-lg-5 col-md-5 text-left">
               <label for="title" class="col-form-label">URL<span style="color: red">*</span>: </label>
@@ -183,10 +192,16 @@ export default {
       if(this.eventActionType === 'CUSTOM' && this.selected.type ==='HYPERLINK_URL')
       return true
     },
+   
     placeH(){
-      if(this.eventActionType != 'SOCIAL'  && this.selected.type !='HYPERLINK_URL')
+      if(this.eventActionType != 'SOCIAL'  && this.selected.type !='HYPERLINK_URL' && this.selected.type !='INFO_TEXT')
       return true
-    }
+    },
+    info(){
+      if(this.eventActionType === 'CUSTOM' && this.selected.type ==='INFO_TEXT'){
+      return true
+      }
+    },
   },
   data(){
     return{
@@ -267,6 +282,11 @@ export default {
             }else if(isValidURL(this.selected.title)){
               isvalid=false
               this.notifyErr(`Do not put url in title`)
+            }else if(this.selected.type==='INFO_TEXT'){
+             if(isEmpty(this.selected.value)){
+                isvalid = false
+                this.notifyErr(`Info Should not be empty`)
+            }
             }else if(this.selected.type==='HYPERLINK_URL'){
              if(isEmpty(this.selected.value)){
                 isvalid = false

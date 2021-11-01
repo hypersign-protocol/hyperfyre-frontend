@@ -15,6 +15,7 @@
  import Loading from "vue-loading-overlay";
  import "vue-loading-overlay/dist/vue-loading.css";
 import Profile from "./ActionInputs/Profile.vue";
+import InfoText from "./ActionInputs/InfoText.vue"
 import HyperlinkUrl from "./ActionInputs/HyperlinkUrl.vue"
 import TwitterFollow from "./ActionInputs/TwitterFollow.vue";
 import TwitterRetweet from "./ActionInputs/TwitterRetweet.vue";
@@ -65,6 +66,7 @@ export default {
     DiscordJoin,
     HyperlinkUrl,
     InputHyperlink,
+    InfoText,
     RecaptchaToken: ""
   },
   mounted(){
