@@ -29,84 +29,84 @@
       </div>
       <div >
         <div class="row g-3 align-items-center w-100 mt-4">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="type" class="col-form-label">Type<span style="color: red">*</span>: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
             <b-form-select v-model="selected.type" :options="options"></b-form-select>
           </div>  
         </div>
          <!-- contract address -->
         <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType === 'SMARTCONTRACT'">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="title" class="col-form-label">Contract Address<span style="color: red">*</span>: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
               <input   v-model="selected.value" type="text"   id="title" class="form-control w-100" >
           </div>  
         </div>
 
         <div class="row g-3 align-items-center w-100 mt-4">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="title" class="col-form-label">Title<span style="color: red">*</span>: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
               <input   v-model="selected.title" type="text"   id="title" class="form-control w-100" >
           </div>  
         </div>
 
         <div class="row g-3 align-items-center w-100 mt-4" v-if="info">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="title" class="col-form-label">Info<span style="color: red">*</span>: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
               <markdown-editor toolbar=' numlist bullist code quote bold italic heading link preview fullscreen ' theme="success" v-model="selected.value"></markdown-editor>
           </div>  
         </div>
         <!-- HyperlinkUrl -->
         <div class="row g-3 align-items-center w-100 mt-4" v-if="url">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="title" class="col-form-label">URL<span style="color: red">*</span>: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
               <input   v-model="selected.value"  type="text"   id="title" class="form-control w-100" >
           </div>  
         </div>
 
         <div class="row g-3 align-items-center w-100 mt-4" v-if="placeH">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="placeHolder" class="col-form-label">Place Holder: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
               <input   v-model="selected.placeHolder" type="text"   id="placeHolder" class="form-control w-100" >
           </div>  
         </div>       
         <div class="row g-3 align-items-center w-100 mt-4" v-if="nodDisplay">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="value" class="col-form-label">Social Handle<span style="color: red">*</span>: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
               <input   v-model="selected.value" type="text"  :placeholder="selected.type === 'DISCORD_JOIN' ? 'Enter server invite link' : '' "  id="value" class="form-control w-100" >
           </div>  
         </div>
         <div class="row g-3 align-items-center w-100 mt-4">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="title" class="col-form-label">Score<span style="color: red">*</span>: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
               <input   v-model="selected.score" type="number"   id="title" class="form-control w-100" >
           </div>  
         </div>
         <div class="row g-3 justify-content-md-end w-100 mt-4" v-if="isCreate==true">
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
             <button @click="handleEventActionAdd()" class="btn btn-primary button-theme" type="button"> {{eventActionList.includes(selected) ? "Update" : "Add"}}</button>
           </div>  
         </div>
         <div class="row g-3 justify-content-md-end w-100 mt-4" v-else>
-          <div class="col-lg-3 col-md-7 px-0">
+          <div class="col-lg-3 col-md-9 px-0">
             <button @click="handleEventActionUpdate()" class="btn btn-primary button-theme" type="button"> Update</button>
           </div>  
-          <div class="col-lg-3 col-md-7 px-0">
+          <div class="col-lg-3 col-md-9 px-0">
             <button @click="handleEventActionDelete()" class="btn btn-danger" type="button"> Delete</button>
           </div>  
         </div>
