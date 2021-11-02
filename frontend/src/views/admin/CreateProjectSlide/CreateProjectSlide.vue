@@ -75,11 +75,45 @@
                 v-b-toggle.accordion-2
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fas fa-share-alt"></i>  Social Configurations
+                ><i class="fas fa-file-contract"></i>  Referal Configurations
               </b-button>
             </b-card-header>
             <b-collapse
               id="accordion-2"
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body>
+                <referral-config
+                  v-on="$listeners"
+                  :project="project"                  
+                />
+                <!-- <eventAction-congif
+                  v-on="$listeners"
+                  :eventActionList="smartContractlist"
+                  eventActionType="SMARTCONTRACT"
+                  :options="options.smartContractAction"
+                /> -->
+              </b-card-body>
+            </b-collapse>
+          </b-card>
+
+          <b-card no-body class="mb-1">
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-3
+                variant="info"
+                class="bg-transparent border-0 text-left text-primary"
+                ><i class="fas fa-share-alt"></i>  Social Configurations
+              </b-button>
+            </b-card-header>
+            <b-collapse
+              id="accordion-3"
               accordion="my-accordion"
               role="tabpanel"
             >
@@ -102,14 +136,14 @@
             >
               <b-button
                 block
-                v-b-toggle.accordion-3
+                v-b-toggle.accordion-4
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 ><i class="fab fa-intercom"></i>  Custom Inputs Configurations
               </b-button>
             </b-card-header>
             <b-collapse
-              id="accordion-3"
+              id="accordion-4"
               accordion="my-accordion"
               role="tabpanel"
             >
@@ -132,14 +166,14 @@
             >
               <b-button
                 block
-                v-b-toggle.accordion-4
+                v-b-toggle.accordion-5
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 ><i class="fab fa-bitcoin"></i>  Wallet Configurations
               </b-button>
             </b-card-header>
             <b-collapse
-              id="accordion-4"
+              id="accordion-5"
               accordion="my-accordion"
               role="tabpanel"
             >
@@ -163,14 +197,14 @@
             >
               <b-button
                 block
-                v-b-toggle.accordion-5
+                v-b-toggle.accordion-6
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 ><i class="fas fa-file-contract"></i>  Smart Contract Configurations
               </b-button>
             </b-card-header>
             <b-collapse
-              id="accordion-5"
+              id="accordion-6"
               accordion="my-accordion"
               role="tabpanel"
             >
@@ -203,13 +237,15 @@ import BlockchainCongif from "./BlockchainCongif.vue";
 import EventActionCongif from "./EventActionCongif.vue";
 import GeneralConfig from "./GeneralConfig.vue";
 import SocialConfig from "./SocialConfig.vue";
+import ReferralConfig from "../../../components/admin/ReferralConfig.vue";
 export default {
   name: "CreateProjectSlide",
   components: {
     SocialConfig,
     GeneralConfig,
     BlockchainCongif,
-    EventActionCongif
+    EventActionCongif,
+    ReferralConfig
   },
 
   props: {
