@@ -236,6 +236,7 @@ export default {
     },
     clearSelected () {
       this.flash=null;
+      this.isCreate=true
       let clearData = {            
             "type": null,
             "title": "",
