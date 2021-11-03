@@ -91,6 +91,9 @@ export default {
   },
   async mounted() {
     try {
+        if(localStorage.getItem("discordId")){
+          localStorage.removeItem("discordId")
+          }
       if (this.data.value) {
         const discord = JSON.parse(this.data.value);
         this.discord = { ...discord };
@@ -138,8 +141,8 @@ export default {
                       return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
                     }
                     console.log(user);
-                    const twitterId = user.sub.split("|")[2];
-                    localStorage.setItem("discordId", twitterId);
+                    const discordId = user.sub.split("|")[2];
+                    localStorage.setItem("discordId", discordId);
                     window.open(urlToRedirect, "_blank");
                   }
                 );
