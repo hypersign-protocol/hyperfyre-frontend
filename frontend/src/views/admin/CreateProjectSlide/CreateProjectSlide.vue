@@ -75,7 +75,7 @@
                 v-b-toggle.accordion-2
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fas fa-file-contract"></i>  Referal Configurations
+                ><i class="fa fa-user-plus"></i> Referal Configurations
               </b-button>
             </b-card-header>
             <b-collapse
