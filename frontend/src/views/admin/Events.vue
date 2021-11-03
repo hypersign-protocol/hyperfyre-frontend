@@ -624,6 +624,9 @@ export default {
         if(isNaN(parseInt(this.project.refereePoint)) || isNaN(parseInt(this.project.referralPoint))){
         return this.notifyErr(`Refree Point or Referral Point Should be number`);
         }
+        if((parseInt(this.project.refereePoint)<0) || (parseInt(this.project.referralPoint)<0)){
+        return this.notifyErr(`Refree Point or Referral Point Should be Positive number`);
+        }
         
         this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;

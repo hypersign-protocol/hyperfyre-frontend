@@ -274,7 +274,10 @@ export default {
             } else if(isNaN(parseInt(this.selected.score))){
                 isvalid=false
                 this.notifyErr(`Score should be a number`)
-            }
+            } else if(parseInt(this.selected.score)<0){
+                isvalid=false
+                this.notifyErr(`Score should be a Positive number`)
+            } 
           break;
         case "CUSTOM":
          if(this.selected.type===null){
@@ -302,7 +305,10 @@ export default {
             }else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
               this.notifyErr(`Score should be a number`)
-            }
+            }else if(parseInt(this.selected.score)<0){
+                isvalid=false
+                this.notifyErr(`Score should be a Positive number`)
+            } 
         break;
         case "BLOCKCHAIN":
           if(this.selected.type===null){
@@ -317,7 +323,10 @@ export default {
             } else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
               this.notifyErr(`Score should be a number`)
-            }
+            }else if(parseInt(this.selected.score)<0){
+                isvalid=false
+                this.notifyErr(`Score should be a Positive number`)
+            } 
         break;
         case "SMARTCONTRACT":
           if(this.selected.type===null){
@@ -332,8 +341,12 @@ export default {
             }else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
               this.notifyErr(`Score should be a number`)
-            }
+            }else if(parseInt(this.selected.score)<0){
+                isvalid=false
+                this.notifyErr(`Score should be a Positive number`)
+            } 
         break;
+        
         default:
           this.notifyErr("Invalid event type")
       }
