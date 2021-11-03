@@ -89,7 +89,7 @@
               <input   v-model="selected.value" type="text"  :placeholder="selected.type === 'DISCORD_JOIN' ? 'Enter server invite link' : '' "  id="value" class="form-control w-100" >
           </div>  
         </div>
-        <div class="row g-3 align-items-center w-100 mt-4">
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="!noScore">
           <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="title" class="col-form-label">Score<span style="color: red">*</span>: </label>
           </div>
@@ -206,6 +206,11 @@ export default {
       return true
       }
     },
+    noScore(){
+      if(this.eventActionType === 'CUSTOM' && this.selected.type ==='INFO_TEXT'){
+        return true
+      }
+    }
   },
   data(){
     return{
@@ -294,13 +299,6 @@ export default {
                 isvalid = false
                 this.notifyErr(`Info Should not be empty`)
             }
-            else if(isNaN(parseInt(this.selected.score))){
-              isvalid=false
-              this.notifyErr(`Score should be a number`)
-            }else if(parseInt(this.selected.score)<0){
-                isvalid=false
-                this.notifyErr(`Score should be a Positive number`)
-            } 
             }else if(this.selected.type==='HYPERLINK_URL'){
              if(isEmpty(this.selected.value)){
                 isvalid = false
