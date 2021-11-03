@@ -166,7 +166,7 @@
 </style>
 <script>
 import notificationMixins from '../../../mixins/notificationMixins';
-import {isEmpty,isValidURL, truncate,isdiscordLink} from '../../../mixins/fieldValidationMixin';
+import {isEmpty,isValidURL, truncate,isdiscordLink,isContractValid} from '../../../mixins/fieldValidationMixin';
 import 'v-markdown-editor/dist/v-markdown-editor.css';
 import Vue from 'vue'
 import Editor from 'v-markdown-editor'
@@ -332,6 +332,12 @@ export default {
           if(this.selected.type===null){
               isvalid = false
               this.notifyErr(`Please choose Contract Type`)
+            }else if(isEmpty(this.selected.value)){
+                isvalid = false
+                this.notifyErr(`Contract Address Should not be empty`)
+            }else if(!isContractValid(this.selected.value)){
+              isvalid= false
+              this.notifyErr(`Please enter valid Contract address`)
             }else if(isEmpty(this.selected.title)){
                 isvalid = false
                 this.notifyErr(`Title Should not be empty`)
