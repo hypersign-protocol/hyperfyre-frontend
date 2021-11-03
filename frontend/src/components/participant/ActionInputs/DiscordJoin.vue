@@ -91,8 +91,9 @@ export default {
   },
   async mounted() {
     try {
-        if(localStorage.getItem("discordId")){
+        if(localStorage.getItem("discordId") || localStorage.getItem("discordUserName")){
           localStorage.removeItem("discordId")
+          localStorage.getItem("discordUserName")
           }
       if (this.data.value) {
         const discord = JSON.parse(this.data.value);
@@ -107,12 +108,13 @@ export default {
   methods: {
     async update() {
       const tgIdInStore = localStorage.getItem("discordId"); 
-      if (!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) {
+      const discordScreenName=localStorage.getItem("discordUserName")
+      if ((!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) && (!discordScreenName || discordScreenName == "undefined" || discordScreenName == null)) {
         return this.notifyErr(
           Messages.EVENT_ACTIONS.DISCORD_JOIN.DISCORD_AUTH
         );
       } else {
-        this.discord.targetScreenName = tgIdInStore;
+        this.discord.targetScreenName = discordScreenName;
         this.$emit(
           "input",
           JSON.stringify({
@@ -133,6 +135,7 @@ export default {
               owp: true,
             },
             (err, authRes) => {
+  
               if (!err) {
                 webAuth.client.userInfo(
                   authRes.accessToken,
@@ -142,7 +145,10 @@ export default {
                     }
                     console.log(user);
                     const discordId = user.sub.split("|")[2];
+                    const discordUserName=user.name;
+                    console.log(discordUserName);
                     localStorage.setItem("discordId", discordId);
+                    localStorage.setItem("discordUserName",discordUserName)
                     window.open(urlToRedirect, "_blank");
                   }
                 );
