@@ -620,7 +620,11 @@ export default {
         if (this.isLogoUrlValid() !== true) {
           return this.notifyErr(this.isLogoUrlValid());
         }
-
+        
+        if(isNaN(parseInt(this.project.refereePoint)) || isNaN(parseInt(this.project.referralPoint))){
+        return this.notifyErr(`Refree Point or Referral Point Should be number`);
+        }
+        
         this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
