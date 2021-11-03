@@ -35,6 +35,14 @@ export function isEmpty(str) {
   }
   return false;
 }
+export function isContractValid(str){
+  if(str.match(/^0x[a-fA-F0-9]{40}$/)){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
 export function isdiscordLink(str){
   if(!str.includes('https://discord.gg/')){
     return true
