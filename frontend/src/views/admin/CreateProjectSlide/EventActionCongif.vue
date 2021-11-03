@@ -329,6 +329,9 @@ export default {
             }else if(isValidURL(this.selected.title)){
               isvalid=false
               this.notifyErr(`Do not put url in title`)
+            }else if(isNaN(parseInt(this.selected.score))){
+              isvalid=false
+              this.notifyErr(`Score should be a number`)
             }
         break;
         default:
