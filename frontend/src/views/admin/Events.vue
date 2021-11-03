@@ -651,7 +651,8 @@ export default {
         this.project.blockchainType = this.blockchainType
         this.project.contractType = this.contractType
         this.project.actions = this.eventActionList
-        
+        this.project.refereePoint=this.project.refereePoint.toString()
+        this.project.referralPoint=this.project.referralPoint.toString()
     
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
