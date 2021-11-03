@@ -277,7 +277,10 @@ export default {
             }else if(this.selected.type === 'DISCORD_JOIN' && isdiscordLink(this.selected.value)){
                 isvalid = false
                 this.notifyErr(`Invalid Invite Link`)
-            } else if(isNaN(parseInt(this.selected.score))){
+            }else if(this.selected.score===""){
+                isvalid=false
+                this.notifyErr(`Please Enter the Score`)
+            }  else if(isNaN(parseInt(this.selected.score))){
                 isvalid=false
                 this.notifyErr(`Score should be a number`)
             } else if(parseInt(this.selected.score)<0){
@@ -308,7 +311,10 @@ export default {
               isvalid=false
               this.notifyErr(`Please Enter Valid Url`)
             }
-            else if(isNaN(parseInt(this.selected.score))){
+            else if(this.selected.score===""){
+                isvalid=false
+                this.notifyErr(`Please Enter the Score`)
+            }  else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
               this.notifyErr(`Score should be a number`)
             }else if(parseInt(this.selected.score)<0){
@@ -333,7 +339,10 @@ export default {
             }else if(isValidURL(this.selected.title)){
               isvalid=false
               this.notifyErr(`Do not put url in title`)
-            } else if(isNaN(parseInt(this.selected.score))){
+            } else if(this.selected.score===""){
+                isvalid=false
+                this.notifyErr(`Please Enter the Score`)
+            }  else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
               this.notifyErr(`Score should be a number`)
             }else if(parseInt(this.selected.score)<0){
@@ -357,7 +366,10 @@ export default {
             }else if(isValidURL(this.selected.title)){
               isvalid=false
               this.notifyErr(`Do not put url in title`)
-            }else if(isNaN(parseInt(this.selected.score))){
+            }else if(this.selected.score===""){
+                isvalid=false
+                this.notifyErr(`Please Enter the Score`)
+            }  else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
               this.notifyErr(`Score should be a number`)
             }else if(parseInt(this.selected.score)<0){
