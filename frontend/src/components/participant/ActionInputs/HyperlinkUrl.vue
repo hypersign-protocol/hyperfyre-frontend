@@ -34,7 +34,7 @@
             <div class="extlink">
 				<button class="btn text-black"  >
 					<a :href="data.value" v-bind:class="{isDisabled : done}"  @click="isClicked()" target="_blank">
-						{{data.value}}
+						{{ truncate1(data.value, 50) }}
 						<img
 							src="../../../assets/external-link.svg"
 							height="20px"
@@ -63,6 +63,7 @@
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
+import { truncate } from "../../../mixins/fieldValidationMixin";
 export default {
   name: "HyperlinkUrl",
   props: {
@@ -98,6 +99,9 @@ export default {
     disableInput(data) {
       this.done = data;
     },
+    truncate1(str, number){
+      return truncate(str, number)
+    }
   },
   mixins: [notificationMixins],
 };
