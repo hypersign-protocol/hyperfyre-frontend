@@ -294,6 +294,13 @@ export default {
                 isvalid = false
                 this.notifyErr(`Info Should not be empty`)
             }
+            else if(isNaN(parseInt(this.selected.score))){
+              isvalid=false
+              this.notifyErr(`Score should be a number`)
+            }else if(parseInt(this.selected.score)<0){
+                isvalid=false
+                this.notifyErr(`Score should be a Positive number`)
+            } 
             }else if(this.selected.type==='HYPERLINK_URL'){
              if(isEmpty(this.selected.value)){
                 isvalid = false
@@ -301,6 +308,13 @@ export default {
             }else if(!(this.selected.type ==='HYPERLINK_URL' && isValidURL(this.selected.value))){
               isvalid=false
               this.notifyErr(`Please Enter Valid Url`)
+            }
+            else if(isNaN(parseInt(this.selected.score))){
+              isvalid=false
+              this.notifyErr(`Score should be a number`)
+            }else if(parseInt(this.selected.score)<0){
+                isvalid=false
+                this.notifyErr(`Score should be a Positive number`)
             }
             }else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
