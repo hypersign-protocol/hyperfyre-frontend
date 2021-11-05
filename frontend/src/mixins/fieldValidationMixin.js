@@ -48,6 +48,11 @@ export function isdiscordLink(str){
     return true
   }
 }
+export function isretweetUrl(str){
+  if(!str.match(/https:\/\/twitter\.com\/.*\/status\/[0-9]+/)){
+    return true
+  }
+}
 export function isDate(date) {
   if (!date) {
     return false;

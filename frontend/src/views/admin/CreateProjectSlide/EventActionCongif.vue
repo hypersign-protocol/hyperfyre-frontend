@@ -87,7 +87,23 @@
               <label for="value" class="col-form-label">Social Handle<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-9 col-md-9 px-0">
-              <input   v-model="selected.value" type="text"  :placeholder="selected.type === 'DISCORD_JOIN' ? 'Enter server invite link' : '' "  id="value" class="form-control w-100" >
+              <input   v-model="selected.value" type="text"  :placeholder="selected.type=== null ? '':'Plase Enter Your ' + [[ CapitaliseString(selected.type) ]] +' '+'handle' "  id="value" class="form-control w-100"  >
+          </div>  
+        </div>
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="showRetweet">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
+              <label for="value" class="col-form-label">Retweet Url<span style="color: red">*</span>: </label>
+          </div>
+          <div class="col-lg-9 col-md-9 px-0">
+              <input   v-model="selected.value" type="text"  :placeholder="selected.type=== null ? '':'Please Enter Your Retweet Url' "  id="value" class="form-control w-100"  >
+          </div>  
+        </div>
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="showInvitelink">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
+              <label for="value" class="col-form-label">Invite Link<span style="color: red">*</span>: </label>
+          </div>
+          <div class="col-lg-9 col-md-9 px-0">
+              <input   v-model="selected.value" type="text"  :placeholder="selected.type=== null ? '':'Please Enter Your Discord server invite link' "  id="value" class="form-control w-100"  >
           </div>  
         </div>
         <div class="row g-3 align-items-center w-100 mt-4" v-if="!noScore">
@@ -167,7 +183,7 @@
 </style>
 <script>
 import notificationMixins from '../../../mixins/notificationMixins';
-import {isEmpty,isValidURL, truncate,isdiscordLink,isContractValid} from '../../../mixins/fieldValidationMixin';
+import {isEmpty,isValidURL, truncate,isdiscordLink,isContractValid,isretweetUrl} from '../../../mixins/fieldValidationMixin';
 import 'v-markdown-editor/dist/v-markdown-editor.css';
 import Vue from 'vue'
 import Editor from 'v-markdown-editor'
@@ -190,7 +206,7 @@ export default {
   },
   computed:{
     nodDisplay(){
-      if(this.eventActionType !='CUSTOM' && this.eventActionType !='BLOCKCHAIN' && this.eventActionType !='SMARTCONTRACT')
+      if(this.eventActionType !='CUSTOM' && this.eventActionType !='BLOCKCHAIN' && this.eventActionType !='SMARTCONTRACT' && this.selected.type!='TWITTER_RETWEET' && this.selected.type!='DISCORD_JOIN')
       return true
     },
     url(){
@@ -211,7 +227,18 @@ export default {
       if(this.eventActionType === 'CUSTOM' && this.selected.type ==='INFO_TEXT'){
         return true
       }
+    },
+    showRetweet(){
+      if(this.eventActionType ==='SOCIAL' &&  this.selected.type==='TWITTER_RETWEET'){
+        return true
+      }
+    },
+    showInvitelink(){
+      if(this.eventActionType ==='SOCIAL' &&  this.selected.type==='DISCORD_JOIN'){
+        return true
+      }
     }
+    
   },
   data(){
     return{
@@ -236,6 +263,11 @@ export default {
     this.$root.$on('callClearFromProject',()=>{this.clearSelected()})
   },
   methods: {
+    CapitaliseString(string) {
+      let res = string.split('_');
+      let first = res[0][0].toUpperCase() + res[0].substring(1).toLowerCase()
+      return first +' '
+    },
       removeSocialMedia(index) {        
       this.currentSelectedId=index
       this.handleEventActionDelete()
@@ -266,27 +298,37 @@ export default {
             }else if(isEmpty(this.selected.title)){
                 isvalid = false
                 this.notifyErr(`Title Should not be empty`)
-            }else if(isEmpty(this.selected.value)){
-              isvalid=false
-              this.notifyErr(`Social Handle Should not be empty`)
             }else if(isValidURL(this.selected.title)){
               isvalid=false
               this.notifyErr(`Do not put url in title`)
-            }else if(isEmpty(this.selected.value)){
+            }
+            else if(this.selected.type==='TWITTER_RETWEET' && isEmpty(this.selected.value)){
+              isvalid=false
+              this.notifyErr(`Retweet Url Should not be empty`)
+            }
+            else if(this.selected.type==='DISCORD_JOIN' && isEmpty(this.selected.value)){
+              isvalid=false
+              this.notifyErr(`Invite Link Should not be empty`)
+            }
+            else if(isEmpty(this.selected.value)){
               isvalid=false
               this.notifyErr(`Social Handle Should not be empty`)
+            }
+            else if(this.selected.type!='DISCORD_JOIN' &&this.selected.type!='TWITTER_RETWEET' && isValidURL(this.selected.value)){
+              isvalid=false
+              this.notifyErr(`Do not put url in Social Handle`)
+            }else if(this.selected.type==='TWITTER_RETWEET' && isretweetUrl(this.selected.value)){
+              isvalid=false
+              this.notifyErr(`Plase Enter valid retweet url`)
             }else if(this.selected.type === 'DISCORD_JOIN' && isdiscordLink(this.selected.value)){
                 isvalid = false
                 this.notifyErr(`Invalid Invite Link`)
-            }else if(this.selected.score===""){
+            }else if(isNaN(parseInt(this.selected.score))){
                 isvalid=false
-                this.notifyErr(`Please Enter the Score`)
-            }  else if(isNaN(parseInt(this.selected.score))){
+                this.notifyErr(`Please enter a Score that should be a number`)
+            }else if(parseInt(this.selected.score)<0){
                 isvalid=false
-                this.notifyErr(`Score should be a number`)
-            } else if(parseInt(this.selected.score)<0){
-                isvalid=false
-                this.notifyErr(`Score should be a Positive number`)
+                this.notifyErr(`Please enter a Score that should be a Positive number`)
             } 
           break;
         case "CUSTOM":
@@ -305,33 +347,28 @@ export default {
                 this.notifyErr(`Info Should not be empty`)
             }
             }else if(this.selected.type==='HYPERLINK_URL'){
-             if(isEmpty(this.selected.value)){
-                isvalid = false
-                this.notifyErr(`Url Should not be empty`)
-            }else if(!(this.selected.type ==='HYPERLINK_URL' && isValidURL(this.selected.value))){
-              isvalid=false
-              this.notifyErr(`Please Enter Valid Url`)
-            }
-            else if(this.selected.score===""){
+               if(isEmpty(this.selected.value)){
+                  isvalid = false
+                  this.notifyErr(`Url Should not be empty`)
+              }else if(!(this.selected.type ==='HYPERLINK_URL' && isValidURL(this.selected.value))){
                 isvalid=false
-                this.notifyErr(`Please Enter the Score`)
-            }  else if(isNaN(parseInt(this.selected.score))){
-              isvalid=false
-              this.notifyErr(`Score should be a number`)
-            }else if(parseInt(this.selected.score)<0){
+                this.notifyErr(`Please Enter Valid Url`)
+              }
+              else if(isNaN(parseInt(this.selected.score))){
                 isvalid=false
-                this.notifyErr(`Score should be a Positive number`)
-            }
-            }else if(this.selected.score===""){
-                isvalid=false
-                this.notifyErr(`Please Enter the Score`)
+                this.notifyErr(`Please enter a Score that should be a number`)
+              }else if(parseInt(this.selected.score)<0){
+                  isvalid=false
+                  this.notifyErr(`Please enter a Score that should be a Positive number`)
+              }
+
             }
             else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
-              this.notifyErr(`Score should be a number`)
+              this.notifyErr(`Please enter a Score that should be a number`)
             }else if(parseInt(this.selected.score)<0){
                 isvalid=false
-                this.notifyErr(`Score should be a Positive number`)
+                this.notifyErr(`Please enter a Score that should be a Positive number`)
             } 
         break;
         case "BLOCKCHAIN":
@@ -344,15 +381,12 @@ export default {
             }else if(isValidURL(this.selected.title)){
               isvalid=false
               this.notifyErr(`Do not put url in title`)
-            } else if(this.selected.score===""){
-                isvalid=false
-                this.notifyErr(`Please Enter the Score`)
-            }  else if(isNaN(parseInt(this.selected.score))){
+            }else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
-              this.notifyErr(`Score should be a number`)
+              this.notifyErr(`Please enter a Score that should be a number`)
             }else if(parseInt(this.selected.score)<0){
                 isvalid=false
-                this.notifyErr(`Score should be a Positive number`)
+                this.notifyErr(`Please enter a Score that should be a Positive number`)
             } 
         break;
         case "SMARTCONTRACT":
@@ -371,15 +405,12 @@ export default {
             }else if(isValidURL(this.selected.title)){
               isvalid=false
               this.notifyErr(`Do not put url in title`)
-            }else if(this.selected.score===""){
-                isvalid=false
-                this.notifyErr(`Please Enter the Score`)
-            }  else if(isNaN(parseInt(this.selected.score))){
+            }else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
-              this.notifyErr(`Score should be a number`)
+              this.notifyErr(`Please enter a Score that should be a number`)
             }else if(parseInt(this.selected.score)<0){
                 isvalid=false
-                this.notifyErr(`Score should be a Positive number`)
+                this.notifyErr(`Please enter a Score that should be a Positive number`)
             } 
         break;
         
