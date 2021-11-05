@@ -307,6 +307,7 @@ import { isValidURL,truncate} from "../../mixins/fieldValidationMixin.js";
 import CreateProjectSlide from './CreateProjectSlide/CreateProjectSlide.vue';
 import dayjs from "dayjs";
 import Messages from "../../utils/messages/admin/en"
+import MessagesParticipent from "../../utils/messages/participants/en";
 export default {
   name: "Investor",
   components: { Loading, Datepicker, Paginate, CreateProjectSlide },
@@ -620,14 +621,12 @@ export default {
         if (this.isLogoUrlValid() !== true) {
           return this.notifyErr(this.isLogoUrlValid());
         }
-        if(this.project.refereePoint==="" || this.project.referralPoint===""){
-        return this.notifyErr(` Please Enter Refree Point and Referral Point`);
-        }
+        
         if(isNaN(parseInt(this.project.refereePoint)) || isNaN(parseInt(this.project.referralPoint))){
-        return this.notifyErr(`Refree Point and Referral Point Should be number`);
+        return this.notifyErr(MessagesParticipent.REF_POINT.NOT_VALID_INP);
         }
         if((parseInt(this.project.refereePoint)<0) || (parseInt(this.project.referralPoint)<0)){
-        return this.notifyErr(`Refree Point and Referral Point Should be Positive number`);
+        return this.notifyErr(MessagesParticipent.REF_POINT.NOT_POS_INP);
         }
         
         this.isLoading = true;

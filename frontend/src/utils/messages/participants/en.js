@@ -16,6 +16,10 @@ const EVENT = {
     },
 
 }
+const REF_POINT={
+    NOT_VALID_INP:'Please Enter Refree Point and Referral Point that Should be number',
+    NOT_POS_INP:'Refree Point and Referral Point Should be Positive number'
+}
 const ACTIONS = {
         UPDATE_FAILED: "Error: could not update the action",
         NO_ACTION_FOUND: "Error: no actions found with user",
@@ -58,5 +62,6 @@ const EVENT_ACTIONS = {
 module.exports = {
     EVENT,
     EVENT_ACTIONS,
-    ACTIONS
+    ACTIONS,
+    REF_POINT
 }
