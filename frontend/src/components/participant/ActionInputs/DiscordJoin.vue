@@ -123,6 +123,8 @@ export default {
             ...this.discord,
           })
         );
+        localStorage.removeItem("discordUserName")
+        localStorage.removeItem("discordId")
       }
     },
     disableInput(data) {
