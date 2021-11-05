@@ -87,7 +87,7 @@
               <label for="value" class="col-form-label">Social Handle<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-9 col-md-9 px-0">
-              <input   v-model="selected.value" type="text"  :placeholder="selected.type=== null ? '':'Plase Enter Your ' + [[ CapitaliseString(selected.type) ]] +' '+'handle' "  id="value" class="form-control w-100"  >
+              <input   v-model="selected.value" type="text"  :placeholder="selected.type=== null ? '':'Please Enter Your ' + [[ CapitaliseString(selected.type) ]] +' '+'handle' "  id="value" class="form-control w-100"  >
           </div>  
         </div>
         <div class="row g-3 align-items-center w-100 mt-4" v-if="showRetweet">
@@ -185,6 +185,7 @@
 import notificationMixins from '../../../mixins/notificationMixins';
 import {isEmpty,isValidURL, truncate,isdiscordLink,isContractValid,isretweetUrl} from '../../../mixins/fieldValidationMixin';
 import 'v-markdown-editor/dist/v-markdown-editor.css';
+import Messages from "../../../utils/messages/admin/en"
 import Vue from 'vue'
 import Editor from 'v-markdown-editor'
 Vue.use(Editor);
@@ -294,128 +295,128 @@ export default {
         case "SOCIAL":
             if(this.selected.type===null){
               isvalid = false
-              this.notifyErr(`Please choose Social Action Type`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.SOCIAL_TYPE)
             }else if(isEmpty(this.selected.title)){
                 isvalid = false
-                this.notifyErr(`Title Should not be empty`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE)
             }else if(isValidURL(this.selected.title)){
               isvalid=false
-              this.notifyErr(`Do not put url in title`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL)
             }
             else if(this.selected.type==='TWITTER_RETWEET' && isEmpty(this.selected.value)){
               isvalid=false
-              this.notifyErr(`Retweet Url Should not be empty`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.RETWEET_NOT_EMPTY)
             }
             else if(this.selected.type==='DISCORD_JOIN' && isEmpty(this.selected.value)){
               isvalid=false
-              this.notifyErr(`Invite Link Should not be empty`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVITE_NOT_EMPTY)
             }
             else if(isEmpty(this.selected.value)){
               isvalid=false
-              this.notifyErr(`Social Handle Should not be empty`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.SOCIAL_HANDLE_EMPTY)
             }
             else if(this.selected.type!='DISCORD_JOIN' &&this.selected.type!='TWITTER_RETWEET' && isValidURL(this.selected.value)){
               isvalid=false
-              this.notifyErr(`Do not put url in Social Handle`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.URL_IN_SOCIAL_HANDLE)
             }else if(this.selected.type==='TWITTER_RETWEET' && isretweetUrl(this.selected.value)){
               isvalid=false
-              this.notifyErr(`Plase Enter valid retweet url`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.RETWEET_VALID_URL)
             }else if(this.selected.type === 'DISCORD_JOIN' && isdiscordLink(this.selected.value)){
                 isvalid = false
-                this.notifyErr(`Invalid Invite Link`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVALID_INVITE_LINK)
             }else if(isNaN(parseInt(this.selected.score))){
                 isvalid=false
-                this.notifyErr(`Please enter a Score that should be a number`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM)
             }else if(parseInt(this.selected.score)<0){
                 isvalid=false
-                this.notifyErr(`Please enter a Score that should be a Positive number`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM)
             } 
           break;
         case "CUSTOM":
          if(this.selected.type===null){
               isvalid = false
-              this.notifyErr(`Please choose Custom Action Type`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOM.CUSTOM_TYPE)
             }else if(isEmpty(this.selected.title)){
                 isvalid = false
-                this.notifyErr(`Title Should not be empty`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE)
             }else if(isValidURL(this.selected.title)){
               isvalid=false
-              this.notifyErr(`Do not put url in title`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL)
             }else if(this.selected.type==='INFO_TEXT'){
              if(isEmpty(this.selected.value)){
                 isvalid = false
-                this.notifyErr(`Info Should not be empty`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOM.EMPTY_INFO)
             }
             }else if(this.selected.type==='HYPERLINK_URL'){
                if(isEmpty(this.selected.value)){
                   isvalid = false
-                  this.notifyErr(`Url Should not be empty`)
+                  this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOM.URL_NOT_EMPTY)
               }else if(!(this.selected.type ==='HYPERLINK_URL' && isValidURL(this.selected.value))){
                 isvalid=false
-                this.notifyErr(`Please Enter Valid Url`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.VALID_URL)
               }
               else if(isNaN(parseInt(this.selected.score))){
                 isvalid=false
-                this.notifyErr(`Please enter a Score that should be a number`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM)
               }else if(parseInt(this.selected.score)<0){
                   isvalid=false
-                  this.notifyErr(`Please enter a Score that should be a Positive number`)
+                  this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM)
               }
 
             }
             else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
-              this.notifyErr(`Please enter a Score that should be a number`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM)
             }else if(parseInt(this.selected.score)<0){
                 isvalid=false
-                this.notifyErr(`Please enter a Score that should be a Positive number`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM)
             } 
         break;
         case "BLOCKCHAIN":
           if(this.selected.type===null){
               isvalid = false
-              this.notifyErr(`Please choose Blockchain Type`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.BLOCKCHAIN.CHOOSE_TYPE)
             }else if(isEmpty(this.selected.title)){
                 isvalid = false
-                this.notifyErr(`Title Should not be empty`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE)
             }else if(isValidURL(this.selected.title)){
               isvalid=false
-              this.notifyErr(`Do not put url in title`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL)
             }else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
-              this.notifyErr(`Please enter a Score that should be a number`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM)
             }else if(parseInt(this.selected.score)<0){
                 isvalid=false
-                this.notifyErr(`Please enter a Score that should be a Positive number`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM)
             } 
         break;
         case "SMARTCONTRACT":
           if(this.selected.type===null){
               isvalid = false
-              this.notifyErr(`Please choose Contract Type`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE)
             }else if(isEmpty(this.selected.value)){
                 isvalid = false
-                this.notifyErr(`Contract Address Should not be empty`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY)
             }else if(!isContractValid(this.selected.value)){
               isvalid= false
-              this.notifyErr(`Please enter valid Contract address`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.VALID_CONTRACT_ADDRESS)
             }else if(isEmpty(this.selected.title)){
                 isvalid = false
-                this.notifyErr(`Title Should not be empty`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE)
             }else if(isValidURL(this.selected.title)){
               isvalid=false
-              this.notifyErr(`Do not put url in title`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL)
             }else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
-              this.notifyErr(`Please enter a Score that should be a number`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM)
             }else if(parseInt(this.selected.score)<0){
                 isvalid=false
-                this.notifyErr(`Please enter a Score that should be a Positive number`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM)
             } 
         break;
         
         default:
-          this.notifyErr("Invalid event type")
+          this.notifyErr(Messages.EVENTS.ACTIONS.INVALID_EVENT_TYPE)
       }
       
       

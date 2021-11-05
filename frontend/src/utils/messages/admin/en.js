@@ -7,6 +7,10 @@ const EVENT={
     INVALID_PROJECT_SLUG:"Invalid Event slug"
 }
 const EVENTS = {
+    REF_POINT:{
+        NOT_VALID_INP:'Please Enter Refree Point and Referral Point that Should be number',
+        NOT_POS_INP:'Refree Point and Referral Point Should be Positive number'
+    },
     VALIDATION:{
         INVALID_PROJECT_NAME: "Please provide valid Event Name",
         INVALID_LOGO_URL: "Banner Url is not Valid"
@@ -24,6 +28,43 @@ const EVENTS = {
         THEME_NOT_WHITE: "Theme color cannot be white",
         THEME_COLOR_NOT_SAME: "Theme color and font color cannot be same"
     },
+    
+    ACTIONS:{
+        VALID_URL: "Please Enter Valid Url",
+        TITLE_URL: "Do not put url in title",
+        EMPTY_TITLE: "Title Should not be empty",
+        SCORE_IS_NUM: "Please enter a Score that should be a number",
+        SCORE_IS_POSITIVE_NUM: "Please enter a Score that should be a Positive number",
+        INVALID_EVENT_TYPE: "Invalid event type",
+
+    SOCIAL:{
+        SOCIAL_TYPE: "Please choose Social Action Type",
+        RETWEET_NOT_EMPTY: "Retweet Url Should not be empty",
+        INVITE_NOT_EMPTY: "Invite Link Should not be empty",
+        SOCIAL_HANDLE_EMPTY: "Invite Link Should not be empty",
+        URL_IN_SOCIAL_HANDLE: "Do not put url in Social Handle",
+        RETWEET_VALID_URL: "Plase Enter valid retweet url",
+        INVALID_INVITE_LINK: "Invalid Invite Link"
+    },
+
+    CUSTOM:{
+        CUSTOM_TYPE: "Please choose Custom Action Type",
+        EMPTY_INFO: "Info Should not be empty",
+        URL_NOT_EMPTY: "Url Should not be empty"
+    },
+
+    BLOCKCHAIN:{
+        CHOOSE_TYPE: "Please choose Blockchain Type"
+    },
+
+    SMARTCONTRACT:{
+        CHOOSE_CONTRACT_TYPE: "Please choose Contract Type",
+        ADDRESS_NOT_EMPTY: "Contract Address Should not be empty",
+        VALID_CONTRACT_ADDRESS: "Please enter valid Contract address"
+        
+    }
+
+    }
 }
 
 
