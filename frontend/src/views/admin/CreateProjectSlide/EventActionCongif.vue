@@ -321,7 +321,11 @@ export default {
                 isvalid=false
                 this.notifyErr(`Score should be a Positive number`)
             }
-            }else if(isNaN(parseInt(this.selected.score))){
+            }else if(this.selected.score===""){
+                isvalid=false
+                this.notifyErr(`Please Enter the Score`)
+            }
+            else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
               this.notifyErr(`Score should be a number`)
             }else if(parseInt(this.selected.score)<0){
