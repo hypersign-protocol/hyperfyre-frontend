@@ -41,7 +41,7 @@
                 :disabled="true"
                 :required="data.isManadatory"
               ></b-form-input>
-              <button class="btn text-black" @click="invokeMetamask()">
+              <button class="btn text-black" @click="invokeMetamask()" v-if="!done">
                 <img
                   src="../../../assets/metamask.svg"
                   height="25px"
@@ -154,7 +154,7 @@ export default {
           }
         } 
       } catch (error) {
-        return this.notifyErr(Messages.EVENT_ACTIONS.ETH.INVALIDWEB3)
+        return this.notifyErr(error.message)
       }
     },
     async update() {
