@@ -297,7 +297,7 @@ export default {
                   {row.actions.map((action) => (
                     <tr>
                       <td>{action.title}</td>
-                      <td >{action.value.includes("targetScreenName")? JSON.parse(action.value).targetScreenName:action.value}</td>
+                      <td >{this.parseActionValue(action)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -415,6 +415,24 @@ export default {
   },
 
   methods: {
+     parseActionValue(action){            
+            switch (action.type) {
+              case 'DISCORD_JOIN':
+              case 'TWITTER_FOLLOW':{
+                return JSON.parse(action.value).targetScreenName;
+                break;
+              }
+              case 'ETHEREUM_ERC20':
+              case 'MATIC_ERC20':
+              case 'BINANCE_ERC20':{              
+                return JSON.parse(action.value).userWalletAddress;
+              break;
+              }
+              default:
+                return action.value;
+              break;
+            }
+          },
     async handleExport() {
       try {
         this.isLoading = true;

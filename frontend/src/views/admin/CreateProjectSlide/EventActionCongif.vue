@@ -1,12 +1,12 @@
 <template>
   <div>
       <div v-if="eventActionList.length" style="overflow-y:auto" class="selected-media-wrapper d-flex p-2 mb-4" >
-        <div @click="handleEventActionClick(idx)" 
-          :class="flash == idx ?  
+        <div @click="handleEventActionClick(idx)"           
+          v-for="(eventAction, idx) in eventActionList" v-bind:Key="idx" >
+          <div v-if="!eventActionList[idx].isDeleted" :class="flash == idx ?  
             'flash card rounded m-1 p-1 d-flex flex-row align-items-center' : 
             'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'" 
-          style="min-width: 113px"
-          v-for="(eventAction, idx) in eventActionList" v-bind:Key="idx">
+          style="min-width: 113px">
             <span>
               <i style="color: gray" v-if="eventAction.type.includes('TWITTER')" class="fab fa-twitter"></i>  
               <i style="color: gray" v-if="eventAction.type.includes('TELEGRAM')" class="fab fa-telegram-plane"></i>  
@@ -25,6 +25,7 @@
             </span>
             <span >{{ truncate1(eventAction.title, 8) }}</span>
             <span style="color: gray;padding-left: 5px"><i style=""  class="fas fa-minus-circle"></i></span>
+        </div>
         </div>
       </div>
       <div >
@@ -346,20 +347,21 @@ export default {
                 this.notifyErr(`Info Should not be empty`)
             }
             }else if(this.selected.type==='HYPERLINK_URL'){
-             if(isEmpty(this.selected.value)){
-                isvalid = false
-                this.notifyErr(`Url Should not be empty`)
-            }else if(!(this.selected.type ==='HYPERLINK_URL' && isValidURL(this.selected.value))){
-              isvalid=false
-              this.notifyErr(`Please Enter Valid Url`)
-            }
-            else if(isNaN(parseInt(this.selected.score))){
-              isvalid=false
-              this.notifyErr(`Please enter a Score that should be a number`)
-            }else if(parseInt(this.selected.score)<0){
+               if(isEmpty(this.selected.value)){
+                  isvalid = false
+                  this.notifyErr(`Url Should not be empty`)
+              }else if(!(this.selected.type ==='HYPERLINK_URL' && isValidURL(this.selected.value))){
                 isvalid=false
-                this.notifyErr(`Please enter a Score that should be a Positive number`)
-            }
+                this.notifyErr(`Please Enter Valid Url`)
+              }
+              else if(isNaN(parseInt(this.selected.score))){
+                isvalid=false
+                this.notifyErr(`Please enter a Score that should be a number`)
+              }else if(parseInt(this.selected.score)<0){
+                  isvalid=false
+                  this.notifyErr(`Please enter a Score that should be a Positive number`)
+              }
+
             }
             else if(isNaN(parseInt(this.selected.score))){
               isvalid=false

@@ -91,10 +91,12 @@ export default {
   },
   async mounted() {
     try {
-        if(localStorage.getItem("discordId") || localStorage.getItem("discordUserName")){
+        if(localStorage.getItem("discordId")){
           localStorage.removeItem("discordId")
-          localStorage.getItem("discordUserName")
           }
+        if (localStorage.getItem("discordUserName")) {
+              localStorage.removeItem("discordUserName")
+        }
       if (this.data.value) {
         const discord = JSON.parse(this.data.value);
         this.discord = { ...discord };
@@ -121,6 +123,8 @@ export default {
             ...this.discord,
           })
         );
+        localStorage.removeItem("discordUserName")
+        localStorage.removeItem("discordId")
       }
     },
     disableInput(data) {

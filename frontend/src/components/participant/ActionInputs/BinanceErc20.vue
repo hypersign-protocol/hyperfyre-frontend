@@ -158,8 +158,8 @@ export default {
       }
     },
     async update() {
-      if (!this.isFieldValid() || this.data.value === "") {
-        return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
+      if (!this.isFieldValid() || this.value.userWalletAddress === "") {
+        return this.notifyErr(Messages.EVENT_ACTIONS.ETH.CONNECT_METAMASK);
       } else {
         try {
           let balance = await this.hasBalance();
@@ -182,13 +182,13 @@ export default {
       }
     },
     isFieldValid() {
-      if (isEmpty(this.data.value)) {
+      if (isEmpty(this.value.userWalletAddress)) {
         return false;
       }
-      if (isValidURL(this.data.value)) {
+      if (isValidURL(this.value.userWalletAddress)) {
         return false;
       }
-      if (!isValidText(this.data.value)) {
+      if (!isValidText(this.value.userWalletAddress)) {
         return false;
       }
       return true;
