@@ -1,12 +1,12 @@
 <template>
   <div>
       <div v-if="eventActionList.length" style="overflow-y:auto" class="selected-media-wrapper d-flex p-2 mb-4" >
-        <div @click="handleEventActionClick(idx)" 
-          :class="flash == idx ?  
+        <div @click="handleEventActionClick(idx)"           
+          v-for="(eventAction, idx) in eventActionList" v-bind:Key="idx" >
+          <div v-if="!eventActionList[idx].isDeleted" :class="flash == idx ?  
             'flash card rounded m-1 p-1 d-flex flex-row align-items-center' : 
             'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'" 
-          style="min-width: 113px"
-          v-for="(eventAction, idx) in eventActionList" v-bind:Key="idx">
+          style="min-width: 113px">
             <span>
               <i style="color: gray" v-if="eventAction.type.includes('TWITTER')" class="fab fa-twitter"></i>  
               <i style="color: gray" v-if="eventAction.type.includes('TELEGRAM')" class="fab fa-telegram-plane"></i>  
@@ -25,6 +25,7 @@
             </span>
             <span >{{ truncate1(eventAction.title, 8) }}</span>
             <span style="color: gray;padding-left: 5px"><i style=""  class="fas fa-minus-circle"></i></span>
+        </div>
         </div>
       </div>
       <div >
