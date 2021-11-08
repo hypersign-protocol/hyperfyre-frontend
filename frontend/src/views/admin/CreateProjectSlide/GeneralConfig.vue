@@ -27,28 +27,28 @@
 <template>
   <div>
     <div v-if="isProjectEditing" class="row g-3 align-items-center w-100 mt-4">
-        <div class=" text-left col-lg-5 col-md-5 text-left">
+        <div class=" text-left col-lg-3 col-md-3 text-left">
             <label for="did" class="col-form-label">Event Id: </label>
         </div>
-        <div class="col-lg-7 col-md-7 px-0">
+        <div class="col-lg-9 col-md-9 px-0">
             <input disabled  v-model="project._id" type="text"   id="did" class="form-control w-100" >
         </div>  
     </div>
 
    <div class="row g-3 align-items-center w-100  mt-4">
-            <div class="col-lg-5 col-md-5 text-left">
+            <div class="col-lg-3 col-md-3 text-left">
                 <label for="projectName" class="col-form-label">Event Name<span style="color: red">*</span>: </label>
             </div>
-            <div class=" col-lg-7 col-md-7 px-0">
+            <div class=" col-lg-9 col-md-9 px-0">
                 <input v-model="project.projectName" type="text" placeholder="Demo Giveaway" id="projectName" class="form-control w-100" >
             </div>   
     </div>
 
     <div v-if="isProjectEditing" class="row g-3 align-items-center w-100 mt-4">
-            <div class="col-lg-5 col-md-5 text-left">
+            <div class="col-lg-3 col-md-3 text-left">
                 <label for="projectStatus" class="col-form-label">Status: </label>
             </div>
-            <div class="col-lg-7 col-md-7 px-0">
+            <div class="col-lg-9 col-md-9 px-0">
                 
                  <select class="form-control" v-model="project.projectStatus">
                       <option value="true" >OPEN</option>
@@ -58,21 +58,21 @@
     </div>
 
     <div class="row g-3 align-items-center w-100 mt-4">
-            <div class="col-lg-5 col-md-5 text-left">
+            <div class="col-lg-3 col-md-3 text-left">
                 <label for="logoUrl" class="col-form-label">Banner URL<span style="color: red">*</span>: </label>
             </div>
-            <div class="col-lg-7 col-md-7 px-0">
+            <div class="col-lg-9 col-md-9 px-0">
                 <input v-model="project.logoUrl" type="text" placeholder="of size 600x300" id="logoUrl" class="form-control w-100" >
             </div>  
     </div>
 
       
     <div class="row g-3 align-items-center w-100 mt-4">
-            <div class="col-lg-5 col-md-5 text-left">
+            <div class="col-lg-3 col-md-3 text-left">
                 <label for="startDate" class="col-form-label">Start Date<span style="color: red">*</span>: </label>
             </div>
             
-            <div class="col-lg-7 col-md-7 px-0 datepicker">
+            <div class="col-lg-9 col-md-9 px-0 datepicker">
 
          
                 <datepicker 
@@ -90,10 +90,10 @@
 
       
     <div class="row g-3 align-items-center w-100 mt-4">
-            <div class="col-lg-5 col-md-5 text-left">
+            <div class="col-lg-3 col-md-3 text-left">
                 <label for="endDate" class="col-form-label">End Date<span style="color: red">*</span>: </label>
             </div>
-            <div class="col-lg-7 col-md-7 px-0">
+            <div class="col-lg-9 col-md-9 px-0">
                 <!-- <input disabled  v-model="project.toDate" type="text"   id="fromDate" class="form-control w-100" > -->
                 <Datepicker 
                 class="datepicker"

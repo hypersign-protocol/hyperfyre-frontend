@@ -23,7 +23,7 @@
   <div>
     <b-sidebar
       backdrop
-      width="500px"
+      width="50%"
       id="sidebar-right"
       :title="isProjectEditing ? 'Edit Event' : 'Create Event'"
       class="sidebarContainer background-transparent"
@@ -296,7 +296,7 @@ export default {
       if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
           (x) => 
-            x.type.indexOf("INPUT_") > -1 ||  x.type.indexOf("HYPERLINK_URL") > -1
+            x.type.indexOf("INPUT_") > -1 ||  x.type.indexOf("HYPERLINK_URL") > -1 || x.type.indexOf("INFO_TEXT") > -1
         );
       } else {
         return [];
@@ -349,7 +349,8 @@ export default {
           { text: "NUMBER", value: "INPUT_NUMBER" },
           { text: "DATE", value: "INPUT_DATE" },
           { text: "LINK", value: "INPUT_HYPERLINK" },
-          { text: "HYPERLINK", value: "HYPERLINK_URL"}
+          { text: "HYPERLINK", value: "HYPERLINK_URL"},
+          { text: "INFO", value: "INFO_TEXT"}
         ],
         socialAction: [
           { text: "Select Social Action type", value: null },

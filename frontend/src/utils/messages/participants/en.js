@@ -16,6 +16,7 @@ const EVENT = {
     },
 
 }
+
 const ACTIONS = {
         UPDATE_FAILED: "Error: could not update the action",
         NO_ACTION_FOUND: "Error: no actions found with user",
@@ -47,7 +48,8 @@ const EVENT_ACTIONS = {
     },
     ETH: {
         INVALIDWEB3: "Web3 provider not found. Please install Metamask wallet",
-        INVALID_SIG: "Invalid signature"
+        INVALID_SIG: "Invalid signature",
+        CONNECT_METAMASK:"Connect your metamask wallet"
     }
 }
 
@@ -57,5 +59,5 @@ const EVENT_ACTIONS = {
 module.exports = {
     EVENT,
     EVENT_ACTIONS,
-    ACTIONS
+    ACTIONS,
 }

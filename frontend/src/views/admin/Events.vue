@@ -306,7 +306,7 @@ import apiClientMixin from '../../mixins/apiClientMixin';
 import { isValidURL,truncate} from "../../mixins/fieldValidationMixin.js";
 import CreateProjectSlide from './CreateProjectSlide/CreateProjectSlide.vue';
 import dayjs from "dayjs";
-import Messages from "../../utils/messages/admin/en"
+import Messages from "../../utils/messages/admin/en";
 export default {
   name: "Investor",
   components: { Loading, Datepicker, Paginate, CreateProjectSlide },
@@ -622,7 +622,10 @@ export default {
         }
         
         if(isNaN(parseInt(this.project.refereePoint)) || isNaN(parseInt(this.project.referralPoint))){
-        return this.notifyErr(`Refree Point or Referral Point Should be number`);
+        return this.notifyErr(Messages.EVENTS.REF_POINT.NOT_VALID_INP);
+        }
+        if((parseInt(this.project.refereePoint)<0) || (parseInt(this.project.referralPoint)<0)){
+        return this.notifyErr(Messages.EVENTS.REF_POINT.NOT_POS_INP);
         }
         
         this.isLoading = true;
@@ -646,7 +649,8 @@ export default {
         this.project.blockchainType = this.blockchainType
         this.project.contractType = this.contractType
         this.project.actions = this.eventActionList
-        
+        this.project.refereePoint=this.project.refereePoint.toString()
+        this.project.referralPoint=this.project.referralPoint.toString()
     
         const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
@@ -745,11 +749,6 @@ export default {
          if(!this.blockchainType){
           return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_BLOCKCHAIN_TYPE
         }
-
-        // if(!this.contractType){
-        //   // return this.notifyErr("hi");
-        //   return this.notifyErr("Please select Contract Type");
-        // }
 
         if(this.themeColor == "#ffffff"){
           return Messages.EVENTS.CREATE_EDIT_EVENT.THEME_NOT_WHITE

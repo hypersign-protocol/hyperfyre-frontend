@@ -91,6 +91,12 @@ export default {
   },
   async mounted() {
     try {
+        if(localStorage.getItem("discordId")){
+          localStorage.removeItem("discordId")
+          }
+        if (localStorage.getItem("discordUserName")) {
+              localStorage.removeItem("discordUserName")
+        }
       if (this.data.value) {
         const discord = JSON.parse(this.data.value);
         this.discord = { ...discord };
@@ -104,18 +110,21 @@ export default {
   methods: {
     async update() {
       const tgIdInStore = localStorage.getItem("discordId"); 
-      if (!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) {
+      const discordScreenName=localStorage.getItem("discordUserName")
+      if ((!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) && (!discordScreenName || discordScreenName == "undefined" || discordScreenName == null)) {
         return this.notifyErr(
           Messages.EVENT_ACTIONS.DISCORD_JOIN.DISCORD_AUTH
         );
       } else {
-        this.discord.targetScreenName = tgIdInStore;
+        this.discord.targetScreenName = discordScreenName;
         this.$emit(
           "input",
           JSON.stringify({
             ...this.discord,
           })
         );
+        localStorage.removeItem("discordUserName")
+        localStorage.removeItem("discordId")
       }
     },
     disableInput(data) {
@@ -130,6 +139,7 @@ export default {
               owp: true,
             },
             (err, authRes) => {
+  
               if (!err) {
                 webAuth.client.userInfo(
                   authRes.accessToken,
@@ -138,8 +148,11 @@ export default {
                       return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
                     }
                     console.log(user);
-                    const twitterId = user.sub.split("|")[2];
-                    localStorage.setItem("discordId", twitterId);
+                    const discordId = user.sub.split("|")[2];
+                    const discordUserName=user.name;
+                    console.log(discordUserName);
+                    localStorage.setItem("discordId", discordId);
+                    localStorage.setItem("discordUserName",discordUserName)
                     window.open(urlToRedirect, "_blank");
                   }
                 );

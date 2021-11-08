@@ -1,20 +1,21 @@
 <template>
   <div>
       <div v-if="eventActionList.length" style="overflow-y:auto" class="selected-media-wrapper d-flex p-2 mb-4" >
-        <div @click="handleEventActionClick(idx)" 
-          :class="flash == idx ?  
+        <div @click="handleEventActionClick(idx)"           
+          v-for="(eventAction, idx) in eventActionList" v-bind:Key="idx" >
+          <div v-if="!eventActionList[idx].isDeleted" :class="flash == idx ?  
             'flash card rounded m-1 p-1 d-flex flex-row align-items-center' : 
             'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'" 
-          style="min-width: 113px"
-          v-for="(eventAction, idx) in eventActionList" v-bind:Key="idx">
+          style="min-width: 113px">
             <span>
               <i style="color: gray" v-if="eventAction.type.includes('TWITTER')" class="fab fa-twitter"></i>  
               <i style="color: gray" v-if="eventAction.type.includes('TELEGRAM')" class="fab fa-telegram-plane"></i>  
-              <i style="color: gray" v-if="eventAction.type.includes('TEXT')"  class="fas fa-file-alt"></i>
+              <i style="color: gray" v-if="eventAction.type.includes('INPUT_TEXT')"  class="fas fa-file-alt"></i>
               <i style="color: gray" v-if="eventAction.type.includes('NUMBER')"  class="fas fa-list-ol"></i>
               <i style="color: gray" v-if="eventAction.type.includes('DATE')"  class="fas fa-calendar-minus"></i>
               <i style="color: gray" v-if="eventAction.type.includes('DISCORD')"  class="fab fa-discord"></i>
               <i style="color: gray" v-if="eventAction.type.includes('INPUT_HYPERLINK')"  class="fa fa-link"></i>
+              <i style="color: gray" v-if="eventAction.type.includes('INFO_TEXT')"  class="fa fa-info-circle"></i>
               <img style="padding-right: 5px" src="../../../assets/external-link.svg"  v-if="eventAction.type.includes('HYPERLINK_URL')"   height="22px" />
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('_ETH')"   height="22px" />
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('ETHEREUM')"   height="22px" />
@@ -25,79 +26,104 @@
             <span >{{ truncate1(eventAction.title, 8) }}</span>
             <span style="color: gray;padding-left: 5px"><i style=""  class="fas fa-minus-circle"></i></span>
         </div>
+        </div>
       </div>
       <div >
         <div class="row g-3 align-items-center w-100 mt-4">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="type" class="col-form-label">Type<span style="color: red">*</span>: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
             <b-form-select v-model="selected.type" :options="options"></b-form-select>
           </div>  
         </div>
          <!-- contract address -->
         <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType === 'SMARTCONTRACT'">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="title" class="col-form-label">Contract Address<span style="color: red">*</span>: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
               <input   v-model="selected.value" type="text"   id="title" class="form-control w-100" >
           </div>  
         </div>
 
         <div class="row g-3 align-items-center w-100 mt-4">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="title" class="col-form-label">Title<span style="color: red">*</span>: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
               <input   v-model="selected.title" type="text"   id="title" class="form-control w-100" >
           </div>  
         </div>
 
-         <!-- HyperlinkUrl -->
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="info">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
+              <label for="title" class="col-form-label">Info<span style="color: red">*</span>: </label>
+          </div>
+          <div class="col-lg-9 col-md-9 px-0">
+              <markdown-editor toolbar=' numlist bullist code quote bold italic heading link preview fullscreen ' theme="success" v-model="selected.value"></markdown-editor>
+          </div>  
+        </div>
+        <!-- HyperlinkUrl -->
         <div class="row g-3 align-items-center w-100 mt-4" v-if="url">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="title" class="col-form-label">URL<span style="color: red">*</span>: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
-              <input   v-model="selected.value" type="text"   id="title" class="form-control w-100" >
+          <div class="col-lg-9 col-md-9 px-0">
+              <input   v-model="selected.value"  type="text"   id="title" class="form-control w-100" >
           </div>  
         </div>
 
         <div class="row g-3 align-items-center w-100 mt-4" v-if="placeH">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="placeHolder" class="col-form-label">Place Holder: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
               <input   v-model="selected.placeHolder" type="text"   id="placeHolder" class="form-control w-100" >
           </div>  
         </div>       
         <div class="row g-3 align-items-center w-100 mt-4" v-if="nodDisplay">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="value" class="col-form-label">Social Handle<span style="color: red">*</span>: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
-              <input   v-model="selected.value" type="text"  :placeholder="selected.type === 'DISCORD_JOIN' ? 'Enter server invite link' : '' "  id="value" class="form-control w-100" >
+          <div class="col-lg-9 col-md-9 px-0">
+              <input   v-model="selected.value" type="text"  :placeholder="selected.type=== null ? '':'Please Enter Your ' + [[ CapitaliseString(selected.type) ]] +' '+'handle' "  id="value" class="form-control w-100"  >
           </div>  
         </div>
-        <div class="row g-3 align-items-center w-100 mt-4">
-          <div class=" text-left col-lg-5 col-md-5 text-left">
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="showRetweet">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
+              <label for="value" class="col-form-label">Retweet Url<span style="color: red">*</span>: </label>
+          </div>
+          <div class="col-lg-9 col-md-9 px-0">
+              <input   v-model="selected.value" type="text"  :placeholder="selected.type=== null ? '':'Please Enter Your Retweet Url' "  id="value" class="form-control w-100"  >
+          </div>  
+        </div>
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="showInvitelink">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
+              <label for="value" class="col-form-label">Invite Link<span style="color: red">*</span>: </label>
+          </div>
+          <div class="col-lg-9 col-md-9 px-0">
+              <input   v-model="selected.value" type="text"  :placeholder="selected.type=== null ? '':'Please Enter Your Discord server invite link' "  id="value" class="form-control w-100"  >
+          </div>  
+        </div>
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="!noScore">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="title" class="col-form-label">Score<span style="color: red">*</span>: </label>
           </div>
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
               <input   v-model="selected.score" type="number"   id="title" class="form-control w-100" >
           </div>  
         </div>
         <div class="row g-3 justify-content-md-end w-100 mt-4" v-if="isCreate==true">
-          <div class="col-lg-7 col-md-7 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
             <button @click="handleEventActionAdd()" class="btn btn-primary button-theme" type="button"> {{eventActionList.includes(selected) ? "Update" : "Add"}}</button>
           </div>  
         </div>
         <div class="row g-3 justify-content-md-end w-100 mt-4" v-else>
-          <div class="col-lg-3 col-md-7 px-0">
+          <div class="col-lg-3 col-md-9 px-0">
             <button @click="handleEventActionUpdate()" class="btn btn-primary button-theme" type="button"> Update</button>
           </div>  
-          <div class="col-lg-3 col-md-7 px-0">
+          <div class="col-lg-3 col-md-9 px-0">
             <button @click="handleEventActionDelete()" class="btn btn-danger" type="button"> Delete</button>
           </div>  
         </div>
@@ -157,7 +183,12 @@
 </style>
 <script>
 import notificationMixins from '../../../mixins/notificationMixins';
-import {isEmpty,isValidURL, truncate,isdiscordLink} from '../../../mixins/fieldValidationMixin';
+import {isEmpty,isValidURL, truncate,isdiscordLink,isContractValid,isretweetUrl} from '../../../mixins/fieldValidationMixin';
+import 'v-markdown-editor/dist/v-markdown-editor.css';
+import Messages from "../../../utils/messages/admin/en"
+import Vue from 'vue'
+import Editor from 'v-markdown-editor'
+Vue.use(Editor);
 
 export default {
   name: "EventActionCongif",
@@ -176,17 +207,39 @@ export default {
   },
   computed:{
     nodDisplay(){
-      if(this.eventActionType !='CUSTOM' && this.eventActionType !='BLOCKCHAIN' && this.eventActionType !='SMARTCONTRACT')
+      if(this.eventActionType !='CUSTOM' && this.eventActionType !='BLOCKCHAIN' && this.eventActionType !='SMARTCONTRACT' && this.selected.type!='TWITTER_RETWEET' && this.selected.type!='DISCORD_JOIN')
       return true
     },
     url(){
       if(this.eventActionType === 'CUSTOM' && this.selected.type ==='HYPERLINK_URL')
       return true
     },
+   
     placeH(){
-      if(this.eventActionType != 'SOCIAL'  && this.selected.type !='HYPERLINK_URL')
+      if(this.eventActionType != 'SOCIAL'  && this.selected.type !='HYPERLINK_URL' && this.selected.type !='INFO_TEXT')
       return true
+    },
+    info(){
+      if(this.eventActionType === 'CUSTOM' && this.selected.type ==='INFO_TEXT'){
+      return true
+      }
+    },
+    noScore(){
+      if(this.eventActionType === 'CUSTOM' && this.selected.type ==='INFO_TEXT'){
+        return true
+      }
+    },
+    showRetweet(){
+      if(this.eventActionType ==='SOCIAL' &&  this.selected.type==='TWITTER_RETWEET'){
+        return true
+      }
+    },
+    showInvitelink(){
+      if(this.eventActionType ==='SOCIAL' &&  this.selected.type==='DISCORD_JOIN'){
+        return true
+      }
     }
+    
   },
   data(){
     return{
@@ -211,12 +264,18 @@ export default {
     this.$root.$on('callClearFromProject',()=>{this.clearSelected()})
   },
   methods: {
+    CapitaliseString(string) {
+      let res = string.split('_');
+      let first = res[0][0].toUpperCase() + res[0].substring(1).toLowerCase()
+      return first +' '
+    },
       removeSocialMedia(index) {        
       this.currentSelectedId=index
       this.handleEventActionDelete()
     },
     clearSelected () {
       this.flash=null;
+      this.isCreate=true
       let clearData = {            
             "type": null,
             "title": "",
@@ -236,79 +295,128 @@ export default {
         case "SOCIAL":
             if(this.selected.type===null){
               isvalid = false
-              this.notifyErr(`Please choose Social Action Type`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.SOCIAL_TYPE)
             }else if(isEmpty(this.selected.title)){
                 isvalid = false
-                this.notifyErr(`Title Should not be empty`)
-            }else if(isEmpty(this.selected.value)){
-              isvalid=false
-              this.notifyErr(`Social Handle Should not be empty`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE)
             }else if(isValidURL(this.selected.title)){
               isvalid=false
-              this.notifyErr(`Do not put url in title`)
-            }else if(isEmpty(this.selected.value)){
+              this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL)
+            }
+            else if(this.selected.type==='TWITTER_RETWEET' && isEmpty(this.selected.value)){
               isvalid=false
-              this.notifyErr(`Social Handle Should not be empty`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.RETWEET_NOT_EMPTY)
+            }
+            else if(this.selected.type==='DISCORD_JOIN' && isEmpty(this.selected.value)){
+              isvalid=false
+              this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVITE_NOT_EMPTY)
+            }
+            else if(isEmpty(this.selected.value)){
+              isvalid=false
+              this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.SOCIAL_HANDLE_EMPTY)
+            }
+            else if(this.selected.type!='DISCORD_JOIN' &&this.selected.type!='TWITTER_RETWEET' && isValidURL(this.selected.value)){
+              isvalid=false
+              this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.URL_IN_SOCIAL_HANDLE)
+            }else if(this.selected.type==='TWITTER_RETWEET' && isretweetUrl(this.selected.value)){
+              isvalid=false
+              this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.RETWEET_VALID_URL)
             }else if(this.selected.type === 'DISCORD_JOIN' && isdiscordLink(this.selected.value)){
                 isvalid = false
-                this.notifyErr(`Invalid Invite Link`)
-            } else if(isNaN(parseInt(this.selected.score))){
+                this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVALID_INVITE_LINK)
+            }else if(isNaN(parseInt(this.selected.score))){
                 isvalid=false
-                this.notifyErr(`Score should be a number`)
-            }
+                this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM)
+            }else if(parseInt(this.selected.score)<0){
+                isvalid=false
+                this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM)
+            } 
           break;
         case "CUSTOM":
          if(this.selected.type===null){
               isvalid = false
-              this.notifyErr(`Please choose Custom Action Type`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOM.CUSTOM_TYPE)
             }else if(isEmpty(this.selected.title)){
                 isvalid = false
-                this.notifyErr(`Title Should not be empty`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE)
             }else if(isValidURL(this.selected.title)){
               isvalid=false
-              this.notifyErr(`Do not put url in title`)
-            }else if(this.selected.type==='HYPERLINK_URL'){
+              this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL)
+            }else if(this.selected.type==='INFO_TEXT'){
              if(isEmpty(this.selected.value)){
                 isvalid = false
-                this.notifyErr(`Url Should not be empty`)
-            }else if(!(this.selected.type ==='HYPERLINK_URL' && isValidURL(this.selected.value))){
-              isvalid=false
-              this.notifyErr(`Please Enter Valid Url`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOM.EMPTY_INFO)
             }
-            }else if(isNaN(parseInt(this.selected.score))){
-              isvalid=false
-              this.notifyErr(`Score should be a number`)
+            }else if(this.selected.type==='HYPERLINK_URL'){
+               if(isEmpty(this.selected.value)){
+                  isvalid = false
+                  this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOM.URL_NOT_EMPTY)
+              }else if(!(this.selected.type ==='HYPERLINK_URL' && isValidURL(this.selected.value))){
+                isvalid=false
+                this.notifyErr(Messages.EVENTS.ACTIONS.VALID_URL)
+              }
+              else if(isNaN(parseInt(this.selected.score))){
+                isvalid=false
+                this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM)
+              }else if(parseInt(this.selected.score)<0){
+                  isvalid=false
+                  this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM)
+              }
+
             }
+            else if(isNaN(parseInt(this.selected.score))){
+              isvalid=false
+              this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM)
+            }else if(parseInt(this.selected.score)<0){
+                isvalid=false
+                this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM)
+            } 
         break;
         case "BLOCKCHAIN":
           if(this.selected.type===null){
               isvalid = false
-              this.notifyErr(`Please choose Blockchain Type`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.BLOCKCHAIN.CHOOSE_TYPE)
             }else if(isEmpty(this.selected.title)){
                 isvalid = false
-                this.notifyErr(`Title Should not be empty`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE)
             }else if(isValidURL(this.selected.title)){
               isvalid=false
-              this.notifyErr(`Do not put url in title`)
-            } else if(isNaN(parseInt(this.selected.score))){
+              this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL)
+            }else if(isNaN(parseInt(this.selected.score))){
               isvalid=false
-              this.notifyErr(`Score should be a number`)
-            }
+              this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM)
+            }else if(parseInt(this.selected.score)<0){
+                isvalid=false
+                this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM)
+            } 
         break;
         case "SMARTCONTRACT":
           if(this.selected.type===null){
               isvalid = false
-              this.notifyErr(`Please choose Contract Type`)
+              this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE)
+            }else if(isEmpty(this.selected.value)){
+                isvalid = false
+                this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY)
+            }else if(!isContractValid(this.selected.value)){
+              isvalid= false
+              this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.VALID_CONTRACT_ADDRESS)
             }else if(isEmpty(this.selected.title)){
                 isvalid = false
-                this.notifyErr(`Title Should not be empty`)
+                this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE)
             }else if(isValidURL(this.selected.title)){
               isvalid=false
-              this.notifyErr(`Do not put url in title`)
-            }
+              this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL)
+            }else if(isNaN(parseInt(this.selected.score))){
+              isvalid=false
+              this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM)
+            }else if(parseInt(this.selected.score)<0){
+                isvalid=false
+                this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM)
+            } 
         break;
+        
         default:
-          this.notifyErr("Invalid event type")
+          this.notifyErr(Messages.EVENTS.ACTIONS.INVALID_EVENT_TYPE)
       }
       
       

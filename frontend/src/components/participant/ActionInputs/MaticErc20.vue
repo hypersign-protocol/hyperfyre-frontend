@@ -8,7 +8,7 @@
     >
       <b-row>
         <b-col cols="1" sm="1" md="1">
-          <img src="../../../assets/question-circle-fill.svg" height="25px" />
+          <img src="../../../assets/matic-logo.svg" height="25px" />
           <!-- <img src="../../../assets/metamask.svg" height="25px" /> -->
         </b-col>
         <b-col cols="9" sm="9" class="text-left" md="9">
@@ -41,7 +41,7 @@
                 :disabled="true"
                 :required="data.isManadatory"
               ></b-form-input>
-              <button class="btn text-black" @click="invokeMetamask()">
+              <button class="btn text-black" @click="invokeMetamask()" v-if="!done" >
                 <img
                   src="../../../assets/metamask.svg"
                   height="25px"
@@ -154,12 +154,12 @@ export default {
           }
         } 
       } catch (error) {
-        return this.notifyErr(Messages.EVENT_ACTIONS.ETH.INVALIDWEB3)
+        return this.notifyErr(error.message)
       }
     },
     async update() {
-      if (!this.isFieldValid() || this.data.value === "") {
-        return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
+      if (!this.isFieldValid() || this.value.userWalletAddress === "") {
+        return this.notifyErr(Messages.EVENT_ACTIONS.ETH.CONNECT_METAMASK);
       } else {
         try {
           let balance = await this.hasBalance();
@@ -182,13 +182,13 @@ export default {
       }
     },
     isFieldValid() {
-      if (isEmpty(this.data.value)) {
+      if (isEmpty(this.value.userWalletAddress)) {
         return false;
       }
-      if (isValidURL(this.data.value)) {
+      if (isValidURL(this.value.userWalletAddress)) {
         return false;
       }
-      if (!isValidText(this.data.value)) {
+      if (!isValidText(this.value.userWalletAddress)) {
         return false;
       }
       return true;

@@ -7,6 +7,11 @@ body {
     background: #F7F8FC;
     height: 100vh;
 }
+.markdown{
+padding: 0.1em;
+
+}
+
 .action-wrap {
     border: 1px solid rgba(0, 0, 0, 0.125);
     background: #fff;
