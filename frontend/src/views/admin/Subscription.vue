@@ -348,7 +348,14 @@ export default {
         }
         const json = await resp.json();
         this.subscriptions = json["subscriptions"];
-        if (this.subscriptions.length > 0) {
+        const usage = json["usage"]
+      
+        if(usage && (usage.totalUsed >= usage.totalAvailable)){
+          eventBus.$emit('UpdateAdminNav', false);
+          throw new Error(Messages.SUBSCRIPTIONS.SUBSCRIPTION_EXHAUSTED);
+        }
+        
+        if (usage && usage.totalAvailable > 0) {
           eventBus.$emit('UpdateAdminNav', true);
         } else {
           eventBus.$emit('UpdateAdminNav', false);
