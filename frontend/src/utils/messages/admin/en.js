@@ -79,7 +79,8 @@ const PARTICIPANTS = {
 }
 
 const SUBSCRIPTIONS = {
-    YOU_ARE_SUBSCRIBED: "Your are subscribed. SubscriptionId = "
+    YOU_ARE_SUBSCRIBED: "Your are subscribed. SubscriptionId = ",
+    SUBSCRIPTION_EXHAUSTED: "Your Subscription has been exhauseted. Please subscribe to New Plan"
     
 }
 
