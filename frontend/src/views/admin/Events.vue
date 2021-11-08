@@ -306,8 +306,7 @@ import apiClientMixin from '../../mixins/apiClientMixin';
 import { isValidURL,truncate} from "../../mixins/fieldValidationMixin.js";
 import CreateProjectSlide from './CreateProjectSlide/CreateProjectSlide.vue';
 import dayjs from "dayjs";
-import Messages from "../../utils/messages/admin/en"
-import MessagesParticipent from "../../utils/messages/participants/en";
+import Messages from "../../utils/messages/admin/en";
 export default {
   name: "Investor",
   components: { Loading, Datepicker, Paginate, CreateProjectSlide },
@@ -623,10 +622,10 @@ export default {
         }
         
         if(isNaN(parseInt(this.project.refereePoint)) || isNaN(parseInt(this.project.referralPoint))){
-        return this.notifyErr(MessagesParticipent.REF_POINT.NOT_VALID_INP);
+        return this.notifyErr(Messages.EVENTS.REF_POINT.NOT_VALID_INP);
         }
         if((parseInt(this.project.refereePoint)<0) || (parseInt(this.project.referralPoint)<0)){
-        return this.notifyErr(MessagesParticipent.REF_POINT.NOT_POS_INP);
+        return this.notifyErr(Messages.EVENTS.REF_POINT.NOT_POS_INP);
         }
         
         this.isLoading = true;
@@ -750,11 +749,6 @@ export default {
          if(!this.blockchainType){
           return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_BLOCKCHAIN_TYPE
         }
-
-        // if(!this.contractType){
-        //   // return this.notifyErr("hi");
-        //   return this.notifyErr("Please select Contract Type");
-        // }
 
         if(this.themeColor == "#ffffff"){
           return Messages.EVENTS.CREATE_EDIT_EVENT.THEME_NOT_WHITE
