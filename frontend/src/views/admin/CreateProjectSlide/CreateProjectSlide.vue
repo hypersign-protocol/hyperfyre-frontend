@@ -22,7 +22,7 @@
 <template>
   <div>
     <b-sidebar
-      backdrop
+      backdrop:static
       width="50%"
       id="sidebar-right"
       :title="isProjectEditing ? 'Edit Event' : 'Create Event'"
