@@ -94,13 +94,16 @@ export default {
           Messages.EVENT_ACTIONS.TELEGRAM_JOIN.TELEGRAM_AUTH
         );
       } else {
+
+        console.log(this.tg);
+        
         // this.tg.targetScreenName = tgIdInStore;
-        this.$emit(
+       /* this.$emit(
           "input",
           JSON.stringify({
             ...this.tg,
           })
-        );
+        );*/
       }
     },
     disableInput(data) {
