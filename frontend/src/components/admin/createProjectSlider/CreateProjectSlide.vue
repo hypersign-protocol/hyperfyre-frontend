@@ -120,7 +120,7 @@
               role="tabpanel"
             >
               <b-card-body>
-                <eventAction-congif
+                <eventAction-config
                   v-on="$listeners"
                   :eventActionList="socialList"
                   eventActionType="SOCIAL"
@@ -150,7 +150,7 @@
               role="tabpanel"
             >
               <b-card-body>
-                <eventAction-congif
+                <eventAction-config
                   v-on="$listeners"
                   :eventActionList="customList"
                   eventActionType="CUSTOM"
@@ -180,7 +180,7 @@
               role="tabpanel"
             >
               <b-card-body>
-                <eventAction-congif
+                <eventAction-config
                   v-on="$listeners"
                   :eventActionList="blockchainList"
                   eventActionType="BLOCKCHAIN"
@@ -211,7 +211,7 @@
               role="tabpanel"
             >
               <b-card-body>
-                <eventAction-congif
+                <eventAction-config
                   v-on="$listeners"
                   :eventActionList="smartContractlist"
                   eventActionType="SMARTCONTRACT"
@@ -235,16 +235,14 @@
 </template>
 
 <script>
-import BlockchainCongif from "./components/BlockchainCongif.vue";
-import EventActionCongif from "./components/EventActionCongif.vue";
+import EventActionConfig from "./components/EventActionConfig.vue";
 import GeneralConfig from "./components/GeneralConfig.vue";
 import ReferralConfig from "./components/ReferralConfig.vue";
 export default {
   name: "CreateProjectSlide",
   components: {
     GeneralConfig,
-    BlockchainCongif,
-    EventActionCongif,
+    EventActionConfig,
     ReferralConfig
   },
 
