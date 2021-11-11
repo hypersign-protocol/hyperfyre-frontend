@@ -54,6 +54,8 @@ import config from "../../../config";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
+import apiClient from "../../../mixins/apiClientMixin.js";
+
 export default {
   name: "TwitterRetweet",
   props: {
@@ -74,7 +76,7 @@ export default {
       },
     };
   },
-  mounted() {
+  async mounted() {
     try {
       if (this.data.value) {
         const tg = JSON.parse(this.data.value);
@@ -87,7 +89,7 @@ export default {
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
-    update() {
+    async update() {
       const tgIdInStore = this.tg.targetScreenName; //localStorage.getItem("telegramId");
       if (!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) {
         return this.notifyErr(
