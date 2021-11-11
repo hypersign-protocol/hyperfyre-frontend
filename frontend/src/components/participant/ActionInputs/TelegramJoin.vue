@@ -125,14 +125,9 @@ export default {
                 }else{
                   this.$emit("input",JSON.stringify({...this.tg,}))
                 }
-              }else if(res.status===400){             
-                  return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.ASK_ADMIN_TO_SET_GROUPID)
-              }else{
-              return this.notifyErr(result)
-
               }
         } catch (error) {
-          console.log(error);
+           return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.ASK_ADMIN_TO_SET_GROUPID)
         }               
               
              
