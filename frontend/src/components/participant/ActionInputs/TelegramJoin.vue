@@ -95,7 +95,7 @@ export default {
         );
       } else {
 
-        console.log(this.tg);
+        console.log(JSON.stringify( this.tg));
         
         // this.tg.targetScreenName = tgIdInStore;
        /* this.$emit(
@@ -128,7 +128,7 @@ export default {
 
             if (data.username || data.id) {
               this.tg.targetScreenName = data.username || data.id;
-
+                console.log(JSON.stringify(data));
               // localStorage.setItem("telegramId", data.username || data.id)
               window.open(urlToRedirect, "_blank");
             } else {
