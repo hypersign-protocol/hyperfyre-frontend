@@ -127,9 +127,8 @@ export default {
 
               const result = res.data;
 
-              console.log(result)
-  
-        
+             console.log(res );
+
         // this.tg.targetScreenName = tgIdInStore;
        /* this.$emit(
           "input",
