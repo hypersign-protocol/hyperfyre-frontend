@@ -304,7 +304,7 @@ import Paginate from "vuejs-paginate";
 import notificationMixins from '../../mixins/notificationMixins';
 import apiClientMixin from '../../mixins/apiClientMixin';
 import { isValidURL,truncate} from "../../mixins/fieldValidationMixin.js";
-import CreateProjectSlide from './CreateProjectSlide/CreateProjectSlide.vue';
+import CreateProjectSlide from '../../components/admin/createProjectSlider/CreateProjectSlide.vue';
 import dayjs from "dayjs";
 import Messages from "../../utils/messages/admin/en";
 export default {

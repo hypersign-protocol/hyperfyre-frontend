@@ -235,15 +235,13 @@
 </template>
 
 <script>
-import BlockchainCongif from "./BlockchainCongif.vue";
-import EventActionCongif from "./EventActionCongif.vue";
-import GeneralConfig from "./GeneralConfig.vue";
-import SocialConfig from "./SocialConfig.vue";
-import ReferralConfig from "../../../components/admin/ReferralConfig.vue";
+import BlockchainCongif from "./components/BlockchainCongif.vue";
+import EventActionCongif from "./components/EventActionCongif.vue";
+import GeneralConfig from "./components/GeneralConfig.vue";
+import ReferralConfig from "./components/ReferralConfig.vue";
 export default {
   name: "CreateProjectSlide",
   components: {
-    SocialConfig,
     GeneralConfig,
     BlockchainCongif,
     EventActionCongif,
