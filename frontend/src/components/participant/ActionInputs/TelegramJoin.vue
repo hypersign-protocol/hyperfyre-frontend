@@ -126,8 +126,16 @@ export default {
               });
 
               const result = res.data;
-
-             console.log(res );
+              if(res.status===200){
+                if(result.status==='left'){
+                  return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.JOIN_TG)
+                }else{
+                  this.$emit("input",JSON.stringify({...this.tg,}))
+                }
+              }else{
+                return this.notifyErr(result)
+              }
+             
 
         // this.tg.targetScreenName = tgIdInStore;
        /* this.$emit(

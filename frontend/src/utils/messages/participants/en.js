@@ -34,6 +34,7 @@ const EVENT_ACTIONS = {
         TELEGRAM_AUTH: "Error: Please authorize telegram to proceed",
         AUTH_FAILED: "Authentication Failed! Try again",
         FETCH_USERNAME_FAILED: "Could not fetch the username after telegram authentication",
+        JOIN_TG:"Please Join and then try again"
     },
     DISCORD_JOIN: {
         DISCORD_AUTH: "Error: Please authorize discord to proceed",
