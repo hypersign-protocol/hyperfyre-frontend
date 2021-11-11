@@ -74,6 +74,9 @@ export default {
         sourceScreenName: "",
         targetScreenName: "",
       },
+      tgdata:{
+        userID:"",
+      }
     };
   },
   async mounted() {
