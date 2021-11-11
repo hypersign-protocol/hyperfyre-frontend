@@ -94,8 +94,34 @@ export default {
           Messages.EVENT_ACTIONS.TELEGRAM_JOIN.TELEGRAM_AUTH
         );
       } else {
+        console.log(JSON.stringify( this.tgdata));
 
-        console.log(JSON.stringify( this.tg));
+
+
+                
+              const body = {
+                tgUserID: this.tgdata.userID,
+                tgGroupID: '@'+this.tg.sourceScreenName,
+                
+              };
+              let url = `${this.$config.studioServer.BASE_URL}api/v1/tg/verify`;
+
+              let headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${this.authToken}`,
+              };
+
+              const res = await apiClient.makeCall({
+                method: "POST",
+                url: url,
+                body: body,
+                header: headers,
+              });
+
+              const result = res.data;
+
+              console.log(result)
+  
         
         // this.tg.targetScreenName = tgIdInStore;
        /* this.$emit(
@@ -128,7 +154,7 @@ export default {
 
             if (data.username || data.id) {
               this.tg.targetScreenName = data.username || data.id;
-                console.log(JSON.stringify(data));
+                this.tgdata.userID=data.id;
               // localStorage.setItem("telegramId", data.username || data.id)
               window.open(urlToRedirect, "_blank");
             } else {
