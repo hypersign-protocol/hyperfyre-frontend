@@ -76,7 +76,9 @@ export default {
       },
       tgdata:{
         userID:"",
-      }
+      },
+      authToken: localStorage.getItem("authToken"),
+
     };
   },
   async mounted() {
