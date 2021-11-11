@@ -101,8 +101,8 @@ export default {
           Messages.EVENT_ACTIONS.TELEGRAM_JOIN.TELEGRAM_AUTH
         );
       } else {
-        console.log(JSON.stringify( this.tgdata));                
-              const body = {
+        try {
+          const body = {
                 tgUserID: this.tgdata.userID,
                 tgGroupID: '@'+this.tg.sourceScreenName,                
               };
@@ -131,6 +131,10 @@ export default {
               return this.notifyErr(result)
 
               }
+        } catch (error) {
+          console.log(error);
+        }               
+              
              
 
         // this.tg.targetScreenName = tgIdInStore;
