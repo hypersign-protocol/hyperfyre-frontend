@@ -125,14 +125,8 @@ export default {
                 }else{
                   this.$emit("input",JSON.stringify({...this.tg,}))
                 }
-              }else if(res.status===400){
-                const error_text=res.data.split(':').at(-1).trim();
-                if(error_text==='chat not found'){
+              }else if(res.status===400){             
                   return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.ASK_ADMIN_TO_SET_GROUPID)
-                }else{
-                  return this.notifyErr(error_text)
-                }
-
               }else{
               return this.notifyErr(result)
 
