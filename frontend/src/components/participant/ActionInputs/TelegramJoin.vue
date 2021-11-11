@@ -127,7 +127,7 @@ export default {
                 }
               }
         } catch (error) {
-           return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.ASK_ADMIN_TO_SET_GROUPID)
+           return this.notifyErr(error.message.split(":").at(-1))
         }               
               
              
