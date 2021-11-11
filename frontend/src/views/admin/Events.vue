@@ -323,7 +323,9 @@ export default {
         investorsCount: 0,
         social: {},
         projectStatus: true,
-        actions: []
+        actions: [],
+        refereePoint: 10,
+        referralPoint: 5
       }, 
       projects: [],   
       
@@ -713,40 +715,9 @@ export default {
         if(! (this.project.fromDate && this.project.toDate)){
           return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_DATE_TIME
         }
-
-        // if(!Object.keys(this.project.social).length){
-        //   return "Please fill in social configuration";
-        // }
-
-        // if(!Object.keys(this.project.social).includes("twitter")){
-        //   return "Add Twitter Info your project"
-        // }
-
-        // if(!Object.keys(this.project.social).includes("telegram")){
-        //   return "Add Telegram Info your project"
-        // }
-        
-        // if(this.project.social.twitter){
-
-
-
-        //     if(!this.project.social.twitter.twitterHandle || this.project.social.twitter.twitterHandle.trim() == ""){
-        //         return "Please provide a twitter handle"
-        //     }
-        //     if(!this.project.social.twitter.twitterPostFormat || this.project.social.twitter.twitterPostFormat.trim() == ""){
-        //         return "Please provide a Twitter Post Format"
-        //     }
-        // }
-
-
-        // if(this.project.social.telegram){
-
-        //      if(!this.project.social.telegram.telegramHandle || this.project.social.telegram.telegramHandle.trim() == ""){
-        //          return "Please provide a telegram handle"
-        //      }
-        // }        
        
-         if(!this.blockchainType){
+       
+        if(!this.blockchainType){
           return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_BLOCKCHAIN_TYPE
         }
 
@@ -800,7 +771,9 @@ export default {
         investorsCount: 0,
         social: {},
         projectStatus: true,
-        actions: []
+        actions: [],
+        refereePoint: 10,
+        referralPoint: 5
       }, 
       this.eventActionList = []
         this.selectedSocialMedia = null,
