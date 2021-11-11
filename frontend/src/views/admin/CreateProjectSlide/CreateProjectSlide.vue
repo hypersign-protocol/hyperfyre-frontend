@@ -22,13 +22,15 @@
 <template>
   <div>
     <b-sidebar
-      backdrop:static
+      backdrop
       width="50%"
       id="sidebar-right"
       :title="isProjectEditing ? 'Edit Event' : 'Create Event'"
       class="sidebarContainer background-transparent"
       right
       shadow
+      no-close-on-backdrop
+      backdrop-variant="dark"
     >
       <div class=" px-3 py-2">
         <div class="accordion" role="tablist">
@@ -75,7 +77,7 @@
                 v-b-toggle.accordion-2
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fa fa-user-plus"></i> Referal Configurations
+                ><i class="fa fa-user-plus"></i> Referral Configurations
               </b-button>
             </b-card-header>
             <b-collapse
