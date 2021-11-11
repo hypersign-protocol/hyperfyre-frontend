@@ -101,23 +101,16 @@ export default {
           Messages.EVENT_ACTIONS.TELEGRAM_JOIN.TELEGRAM_AUTH
         );
       } else {
-        console.log(JSON.stringify( this.tgdata));
-
-
-
-                
+        console.log(JSON.stringify( this.tgdata));                
               const body = {
                 tgUserID: this.tgdata.userID,
-                tgGroupID: '@'+this.tg.sourceScreenName,
-                
+                tgGroupID: '@'+this.tg.sourceScreenName,                
               };
               let url = `${this.$config.studioServer.BASE_URL}api/v1/tg/verify`;
-
               let headers = {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${this.authToken}`,
               };
-
               const res = await apiClient.makeCall({
                 method: "POST",
                 url: url,
@@ -132,8 +125,17 @@ export default {
                 }else{
                   this.$emit("input",JSON.stringify({...this.tg,}))
                 }
+              }else if(res.status===400){
+                const error_text=res.data.split(':').at(-1).trim();
+                if(error_text==='chat not found'){
+                  return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.ASK_ADMIN_TO_SET_GROUPID)
+                }else{
+                  return this.notifyErr(error_text)
+                }
+
               }else{
-                return this.notifyErr(result)
+              return this.notifyErr(result)
+
               }
              
 
