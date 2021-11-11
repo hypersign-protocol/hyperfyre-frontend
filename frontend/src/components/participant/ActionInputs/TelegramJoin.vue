@@ -127,7 +127,7 @@ export default {
                 }
               }
         } catch (error) {
-           return this.notifyErr(error.message.split(":").at(-1))
+           return this.notifyErr(error.split(":").at(-1))
         }               
               
              
