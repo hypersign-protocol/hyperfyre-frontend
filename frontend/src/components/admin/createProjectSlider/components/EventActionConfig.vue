@@ -88,6 +88,7 @@
           </div>
           <div class="col-lg-9 col-md-9 px-0">
               <input   v-model="selected.value" type="text"  :placeholder="selected.type=== null ? '':'Please Enter Your ' + [[ CapitaliseString(selected.type) ]] +' '+'handle' "  id="value" class="form-control w-100"  >
+              <span class="inputInfo" v-if="selected.type==='TELEGRAM_JOIN'">Make sure to add <a target="_blank" :href='`https://telegram.me/${hfTgBotId}?startgroup=any`'>Hyperfyre Telegram Bot</a> in your public group, for this functionality to work properly.</span>
           </div>  
         </div>
         <div class="row g-3 align-items-center w-100 mt-4" v-if="showRetweet">
@@ -131,7 +132,10 @@
   </div>
 </template>
 <style scoped>
-
+.inputInfo{
+  color: #808080b5;
+  font-size: smaller;
+}
 
 .pointer {
  cursor: pointer;
@@ -257,10 +261,12 @@ export default {
             "id": "",
             
       },
+      hfTgBotId: this.$config.verifierBot.TELEGRAM
     }
     
   },
   async mounted(){
+    console.log(this.$config)
     this.$root.$on('callClearFromProject',()=>{this.clearSelected()})
   },
   methods: {
