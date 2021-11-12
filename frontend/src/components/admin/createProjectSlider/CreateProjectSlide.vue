@@ -22,13 +22,15 @@
 <template>
   <div>
     <b-sidebar
-      backdrop:static
+      backdrop
       width="50%"
       id="sidebar-right"
       :title="isProjectEditing ? 'Edit Event' : 'Create Event'"
       class="sidebarContainer background-transparent"
       right
       shadow
+      no-close-on-backdrop
+      backdrop-variant="dark"
     >
       <div class=" px-3 py-2">
         <div class="accordion" role="tablist">
@@ -75,7 +77,7 @@
                 v-b-toggle.accordion-2
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fa fa-user-plus"></i> Referal Configurations
+                ><i class="fa fa-user-plus"></i> Referral Configurations
               </b-button>
             </b-card-header>
             <b-collapse
@@ -118,7 +120,7 @@
               role="tabpanel"
             >
               <b-card-body>
-                <eventAction-congif
+                <eventAction-config
                   v-on="$listeners"
                   :eventActionList="socialList"
                   eventActionType="SOCIAL"
@@ -148,7 +150,7 @@
               role="tabpanel"
             >
               <b-card-body>
-                <eventAction-congif
+                <eventAction-config
                   v-on="$listeners"
                   :eventActionList="customList"
                   eventActionType="CUSTOM"
@@ -178,7 +180,7 @@
               role="tabpanel"
             >
               <b-card-body>
-                <eventAction-congif
+                <eventAction-config
                   v-on="$listeners"
                   :eventActionList="blockchainList"
                   eventActionType="BLOCKCHAIN"
@@ -209,7 +211,7 @@
               role="tabpanel"
             >
               <b-card-body>
-                <eventAction-congif
+                <eventAction-config
                   v-on="$listeners"
                   :eventActionList="smartContractlist"
                   eventActionType="SMARTCONTRACT"
@@ -233,18 +235,14 @@
 </template>
 
 <script>
-import BlockchainCongif from "./BlockchainCongif.vue";
-import EventActionCongif from "./EventActionCongif.vue";
-import GeneralConfig from "./GeneralConfig.vue";
-import SocialConfig from "./SocialConfig.vue";
-import ReferralConfig from "../../../components/admin/ReferralConfig.vue";
+import EventActionConfig from "./components/EventActionConfig.vue";
+import GeneralConfig from "./components/GeneralConfig.vue";
+import ReferralConfig from "./components/ReferralConfig.vue";
 export default {
   name: "CreateProjectSlide",
   components: {
-    SocialConfig,
     GeneralConfig,
-    BlockchainCongif,
-    EventActionCongif,
+    EventActionConfig,
     ReferralConfig
   },
 
