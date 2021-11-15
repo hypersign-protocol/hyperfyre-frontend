@@ -16,12 +16,12 @@
               <i style="color: gray" v-if="eventAction.type.includes('DISCORD')"  class="fab fa-discord"></i>
               <i style="color: gray" v-if="eventAction.type.includes('INPUT_HYPERLINK')"  class="fa fa-link"></i>
               <i style="color: gray" v-if="eventAction.type.includes('INFO_TEXT')"  class="fa fa-info-circle"></i>
-              <img style="padding-right: 5px" src="../../../assets/external-link.svg"  v-if="eventAction.type.includes('HYPERLINK_URL')"   height="22px" />
+              <img style="padding-right: 5px" src="../../../../assets/external-link.svg"  v-if="eventAction.type.includes('HYPERLINK_URL')"   height="22px" />
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('_ETH')"   height="22px" />
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('ETHEREUM')"   height="22px" />
-              <img style="padding-right: 5px;" src="../../../assets/matic-logo.svg"  v-if="eventAction.type.includes('MATIC')"   height="20px" />
-              <img style="padding-right: 5px;" src="../../../assets/binance-logo.svg"  v-if="eventAction.type.includes('BINANCE')"   height="20px" />
-              <img style="padding-right: 5px" src="../../../assets/tezos.png"  v-if="eventAction.type.includes('_TEZ')"   height="22px" />
+              <img style="padding-right: 5px;" src="../../../../assets/matic-logo.svg"  v-if="eventAction.type.includes('MATIC')"   height="20px" />
+              <img style="padding-right: 5px;" src="../../../../assets/binance-logo.svg"  v-if="eventAction.type.includes('BINANCE')"   height="20px" />
+              <img style="padding-right: 5px" src="../../../../assets/tezos.png"  v-if="eventAction.type.includes('_TEZ')"   height="22px" />
             </span>
             <span >{{ truncate1(eventAction.title, 8) }}</span>
             <span style="color: gray;padding-left: 5px"><i style=""  class="fas fa-minus-circle"></i></span>
@@ -88,6 +88,7 @@
           </div>
           <div class="col-lg-9 col-md-9 px-0">
               <input   v-model="selected.value" type="text"  :placeholder="selected.type=== null ? '':'Please Enter Your ' + [[ CapitaliseString(selected.type) ]] +' '+'handle' "  id="value" class="form-control w-100"  >
+              <span class="inputInfo" v-if="selected.type==='TELEGRAM_JOIN'">Make sure to add <a target="_blank" :href='`https://telegram.me/${hfTgBotId}?startgroup=any`'>Hyperfyre Telegram Bot</a> in your public group, for this functionality to work properly.</span>
           </div>  
         </div>
         <div class="row g-3 align-items-center w-100 mt-4" v-if="showRetweet">
@@ -131,7 +132,10 @@
   </div>
 </template>
 <style scoped>
-
+.inputInfo{
+  color: #808080b5;
+  font-size: smaller;
+}
 
 .pointer {
  cursor: pointer;
@@ -182,10 +186,10 @@
 }
 </style>
 <script>
-import notificationMixins from '../../../mixins/notificationMixins';
-import {isEmpty,isValidURL, truncate,isdiscordLink,isContractValid,isretweetUrl} from '../../../mixins/fieldValidationMixin';
+import notificationMixins from '../../../../mixins/notificationMixins';
+import {isEmpty,isValidURL, truncate,isdiscordLink,isContractValid,isretweetUrl} from '../../../../mixins/fieldValidationMixin';
 import 'v-markdown-editor/dist/v-markdown-editor.css';
-import Messages from "../../../utils/messages/admin/en"
+import Messages from "../../../../utils/messages/admin/en"
 import Vue from 'vue'
 import Editor from 'v-markdown-editor'
 Vue.use(Editor);
@@ -257,10 +261,12 @@ export default {
             "id": "",
             
       },
+      hfTgBotId: this.$config.verifierBot.TELEGRAM
     }
     
   },
   async mounted(){
+    console.log(this.$config)
     this.$root.$on('callClearFromProject',()=>{this.clearSelected()})
   },
   methods: {

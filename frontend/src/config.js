@@ -25,6 +25,9 @@ const config = {
         BLOCKCHAIN_TEZ: "BLOCKCHAIN_TEZ",
         ETHEREUM_ERC20:"ETHEREUM_ERC20",
         ETHEREUM_ERC721:"ETHEREUM_ERC721" 
+    },
+    verifierBot: {
+        TELEGRAM: process.env.VUE_APP_TELEGRAM_VERIFIER_BOT
     }
 }
 
