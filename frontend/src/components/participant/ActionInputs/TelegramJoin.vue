@@ -54,6 +54,8 @@ import config from "../../../config";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
+import apiClient from "../../../mixins/apiClientMixin.js";
+
 export default {
   name: "TwitterRetweet",
   props: {
@@ -72,9 +74,14 @@ export default {
         sourceScreenName: "",
         targetScreenName: "",
       },
+      tgdata:{
+        userID:"",
+      },
+      authToken: localStorage.getItem("authToken"),
+
     };
   },
-  mounted() {
+  async mounted() {
     try {
       if (this.data.value) {
         const tg = JSON.parse(this.data.value);
@@ -87,20 +94,51 @@ export default {
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
-    update() {
+    async update() {
       const tgIdInStore = this.tg.targetScreenName; //localStorage.getItem("telegramId");
       if (!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) {
         return this.notifyErr(
           Messages.EVENT_ACTIONS.TELEGRAM_JOIN.TELEGRAM_AUTH
         );
       } else {
+        try {
+          const body = {
+                tgUserID: this.tgdata.userID,
+                tgGroupID: '@'+this.tg.sourceScreenName,                
+              };
+              let url = `${this.$config.studioServer.BASE_URL}api/v1/tg/verify`;
+              let headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${this.authToken}`,
+              };
+              const res = await apiClient.makeCall({
+                method: "POST",
+                url: url,
+                body: body,
+                header: headers,
+              });
+
+              const result = res.data;
+              if(res.status===200){
+                if(result.status==='left'){
+                  return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.JOIN_TG)
+                }else{
+                  this.$emit("input",JSON.stringify({...this.tg,}))
+                }
+              }
+        } catch (error) {
+           return this.notifyErr(error.split(":").at(-1))
+        }               
+              
+             
+
         // this.tg.targetScreenName = tgIdInStore;
-        this.$emit(
+       /* this.$emit(
           "input",
           JSON.stringify({
             ...this.tg,
           })
-        );
+        );*/
       }
     },
     disableInput(data) {
@@ -125,7 +163,7 @@ export default {
 
             if (data.username || data.id) {
               this.tg.targetScreenName = data.username || data.id;
-
+                this.tgdata.userID=data.id;
               // localStorage.setItem("telegramId", data.username || data.id)
               window.open(urlToRedirect, "_blank");
             } else {
