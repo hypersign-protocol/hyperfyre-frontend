@@ -182,13 +182,16 @@ export default {
             body: this.twitter,
             header: headers,
           });
-          return resp.data;
-        } else {
+          if(!resp.data){
           this.notifyErr(
             Messages.EVENT_ACTIONS.TWITTER_FOLLOW.TWITTER_SCREENS_BLANK
           );
-          return false;
+          }
+          return resp.data;
+        } else {
+          return false
         }
+        
       } catch (e) {
         this.notifyErr(e);
         return false;
