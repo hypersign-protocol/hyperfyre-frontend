@@ -108,36 +108,6 @@
             >
               <b-button
                 block
-                v-b-toggle.accordion-3
-                variant="info"
-                class="bg-transparent border-0 text-left text-primary"
-                ><i class="fas fa-share-alt"></i>  Social Configurations
-              </b-button>
-            </b-card-header>
-            <b-collapse
-              id="accordion-3"
-              accordion="my-accordion"
-              role="tabpanel"
-            >
-              <b-card-body>
-                <eventAction-config
-                  v-on="$listeners"
-                  :eventActionList="socialList"
-                  eventActionType="SOCIAL"
-                  :options="options.socialAction"
-                />
-              </b-card-body>
-            </b-collapse>
-          </b-card>
-
-          <b-card no-body class="mb-1">
-            <b-card-header
-              header-tag="header"
-              class="p-1 accordin-header accordion-header-theme"
-              role="tab"
-            >
-              <b-button
-                block
                 v-b-toggle.accordion-4
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
@@ -155,6 +125,36 @@
                   :eventActionList="customList"
                   eventActionType="CUSTOM"
                   :options="options.customAction"
+                />
+              </b-card-body>
+            </b-collapse>
+          </b-card>
+
+          <b-card no-body class="mb-1">
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-3
+                variant="info"
+                class="bg-transparent border-0 text-left text-primary"
+                ><i class="fas fa-share-alt"></i>  Social Configurations
+              </b-button>
+            </b-card-header>
+            <b-collapse
+              id="accordion-3"
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body>
+                <eventAction-config
+                  v-on="$listeners"
+                  :eventActionList="socialList"
+                  eventActionType="SOCIAL"
+                  :options="options.socialAction"
                 />
               </b-card-body>
             </b-collapse>
