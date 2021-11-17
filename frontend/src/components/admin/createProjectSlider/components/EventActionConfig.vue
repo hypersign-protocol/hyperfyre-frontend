@@ -266,7 +266,6 @@ export default {
     
   },
   async mounted(){
-    console.log(this.$config)
     this.$root.$on('callClearFromProject',()=>{this.clearSelected()})
   },
   methods: {
