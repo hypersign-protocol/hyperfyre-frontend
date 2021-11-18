@@ -1,6 +1,6 @@
 {
   "name": "whitelisting-frontend",
-  "version": "v3.0.4",
+  "version": "v5.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode production",
