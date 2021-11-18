@@ -58,7 +58,6 @@
 <script>
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import apiClient from "../../../mixins/apiClientMixin";
 import webAuth from "../../../mixins/twitterLogin";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
@@ -147,10 +146,8 @@ export default {
                     if (err) {
                       return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
                     }
-                    console.log(user);
                     const discordId = user.sub.split("|")[2];
                     const discordUserName=user.name;
-                    console.log(discordUserName);
                     localStorage.setItem("discordId", discordId);
                     localStorage.setItem("discordUserName",discordUserName)
                     window.open(urlToRedirect, "_blank");

@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     onBannerError(e) {
+      console.log(e.message);
       this.brokenUrl = true
     }
   }

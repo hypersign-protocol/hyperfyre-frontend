@@ -418,19 +418,18 @@ export default {
      parseActionValue(action){            
             switch (action.type) {
               case 'DISCORD_JOIN':
+              case 'TELEGRAM_JOIN':
               case 'TWITTER_FOLLOW':{
                 return JSON.parse(action.value).targetScreenName;
-                break;
               }
               case 'ETHEREUM_ERC20':
               case 'MATIC_ERC20':
               case 'BINANCE_ERC20':{              
                 return JSON.parse(action.value).userWalletAddress;
-              break;
+              
               }
               default:
                 return action.value;
-              break;
             }
           },
     async handleExport() {
