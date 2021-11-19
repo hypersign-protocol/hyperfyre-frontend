@@ -116,16 +116,14 @@
           </div>  
         </div>
         <div class="row g-3 justify-content-md-end w-100 mt-4" v-if="isCreate==true">
-          <div class="col-lg-9 col-md-9 px-0">
+          <div class="col-lg-6 col-md-9 px-0">
             <button @click="handleEventActionAdd()" class="btn btn-primary button-theme" type="button"> {{eventActionList.includes(selected) ? "Update" : "Add"}}</button>
           </div>  
         </div>
         <div class="row g-3 justify-content-md-end w-100 mt-4" v-else>
-          <div class="col-lg-3 col-md-9 px-0">
-            <button @click="handleEventActionUpdate()" class="btn btn-primary button-theme" type="button"> Update</button>
-          </div>  
-          <div class="col-lg-3 col-md-9 px-0">
-            <button @click="handleEventActionDelete()" class="btn btn-danger" type="button"> Delete</button>
+          <div class="col-lg-6 col-md-9 px-0">
+            <button @click="handleEventActionUpdate()" class="btn btn-link button-theme slight-left-margin" type="button"> Update</button>
+            <button @click="handleEventActionDelete()" class="btn btn-danger slight-left-margin" type="button"> Delete</button>
           </div>  
         </div>
       </div>
@@ -183,6 +181,10 @@
   border-collapse: #F1B319;
   color: black;
   border: 0;
+  
+}
+.slight-left-margin {
+margin-left: 2px;
 }
 </style>
 <script>
