@@ -105,18 +105,22 @@ export default {
   },
   methods: {
     async update() {
+      if (!localStorage.getItem("twitterId")){
+        return this.notifyErr(
+          Messages.EVENT_ACTIONS.TWITTER_FOLLOW.TWITTER_AUTH
+        );
+      }
       if (!(await this.hasFollowedTwitter())) {
         return this.notifyErr(
           Messages.EVENT_ACTIONS.TWITTER_FOLLOW.FOLLOW_FIRST
         );
-      } else {
-        this.$emit(
-          "input",
-          JSON.stringify({
-            ...this.twitter,
-          })
-        );
       }
+      this.$emit(
+        "input",
+        JSON.stringify({
+          ...this.twitter,
+        })
+      );
     },
     disableInput(data) {
       this.done = data;
