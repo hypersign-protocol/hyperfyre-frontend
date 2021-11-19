@@ -117,12 +117,12 @@
         </div>
         <div class="row g-3 justify-content-md-end w-100 mt-4" v-if="isCreate==true">
           <div class="col-lg-6 col-md-9 px-0">
-            <button @click="handleEventActionAdd()" class="btn btn-primary button-theme" type="button"> {{eventActionList.includes(selected) ? "Update" : "Add"}}</button>
+            <button @click="handleEventActionAdd()" class="btn button-theme" type="button"> {{eventActionList.includes(selected) ? "Update" : "Add"}}</button>
           </div>  
         </div>
         <div class="row g-3 justify-content-md-end w-100 mt-4" v-else>
           <div class="col-lg-6 col-md-9 px-0">
-            <button @click="handleEventActionUpdate()" class="btn btn-link button-theme slight-left-margin" type="button"> Update</button>
+            <button @click="handleEventActionUpdate()" class="btn button-theme slight-left-margin" type="button"> Update</button>
             <button @click="handleEventActionDelete()" class="btn btn-danger slight-left-margin" type="button"> Delete</button>
           </div>  
         </div>
