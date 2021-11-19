@@ -226,6 +226,7 @@ export default {
     };
   },
   created() {
+    localStorage.clear();
     // console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
     let websocketUrl = "ws://localhost:3003";
