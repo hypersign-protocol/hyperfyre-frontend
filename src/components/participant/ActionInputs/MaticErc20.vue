@@ -9,7 +9,6 @@
       <b-row>
         <b-col cols="1" sm="1" md="1">
           <img src="../../../assets/matic-logo.svg" height="25px" />
-          <!-- <img src="../../../assets/metamask.svg" height="25px" /> -->
         </b-col>
         <b-col cols="9" sm="9" class="text-left" md="9">
           <div class="text text-capitalize">{{ data.title }}</div>
@@ -56,10 +55,21 @@
             <ErrorMessage errorMessage="Install Metamask browser extension" />
           </b-col>
         </b-row>
+        <b-row v-if="!done">
+          <b-col cols="12" sm="12" md="12" >
+            <button class="btn btn-link center" @click="update()">Continue</button>
+          </b-col>
+        </b-row>
       </b-card-body>
     </b-collapse>
   </b-card>
 </template>
+<style scoped>
+.center{
+  display: block; margin-left: auto;margin-right: auto
+}
+</style>
+
 <script>
 import eventBus from "../../../eventBus.js";
 import apiClient from "../../../mixins/apiClientMixin.js";
