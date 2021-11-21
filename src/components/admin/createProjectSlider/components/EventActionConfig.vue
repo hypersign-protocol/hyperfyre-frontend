@@ -28,6 +28,7 @@
         </div>
         </div>
       </div>
+
       <div >
         <div class="row g-3 align-items-center w-100 mt-4">
           <div class=" text-left col-lg-3 col-md-3 text-left">
@@ -43,7 +44,16 @@
               <label for="title" class="col-form-label">Contract Address<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-9 col-md-9 px-0">
-              <input   v-model="selected.value" type="text"   id="title" class="form-control w-100" >
+              <input   v-model="contract.contractAddress" type="text"   id="title" class="form-control w-100" placeholder="Please enter ERC20 or compatible contract address" >
+          </div>  
+        </div>
+
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType === 'SMARTCONTRACT'">
+          <div class=" text-left col-lg-3 col-md-3 text-left">
+              <label for="title" class="col-form-label">Threshold Balance<span style="color: red">*</span>: </label>
+          </div>
+          <div class="col-lg-9 col-md-9 px-0">
+              <input   v-model="contract.thresholdBalance" type="number"   id="title" class="form-control w-100" placeholder="Enter minimum balance a user should have">
           </div>  
         </div>
 
@@ -245,7 +255,6 @@ export default {
         return true
       }
     }
-    
   },
   data(){
     return{
@@ -253,6 +262,10 @@ export default {
       flash: null,
       isCreate: true,
       currentSelectedId :0,
+      contract: {
+        contractAddress: "",
+        thresholdBalance: 0
+      },
       selected :{
             "type": null,
             "title": "",
@@ -292,6 +305,12 @@ export default {
             "score": 10,
             
       }
+
+      this.contract = {
+        contractAddress: "",
+        thresholdBalance : 0
+      }
+      
 
       this.selected = clearData
       this.currentSelectedId = null
@@ -401,10 +420,13 @@ export default {
           if(this.selected.type===null){
               isvalid = false
               this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE)
-            }else if(isEmpty(this.selected.value)){
+            }else if(isEmpty(this.contract.contractAddress)){
                 isvalid = false
                 this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY)
-            }else if(!isContractValid(this.selected.value)){
+            }else if(isEmpty(this.contract.thresholdBalance)){
+                isvalid = false
+                this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.THBALANCE_NOT_EMPTY)
+            }else if(!isContractValid(this.contract.contractAddress)){
               isvalid= false
               this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.VALID_CONTRACT_ADDRESS)
             }else if(isEmpty(this.selected.title)){
@@ -436,19 +458,19 @@ export default {
       // Code to Add an Action
       let isvalid = this.handleEventActionValidation()
       if(isvalid) {
+        if(this.eventActionType === 'SMARTCONTRACT'){
+          this.selected.value = JSON.stringify(this.contract); 
+        }
         this.selected["id"] = this.eventActionType + "_" +  this.eventActionList.length;
         this.eventActionList.push(this.selected);      
         this.$emit("updateEventActions", {
           type: "ADD",
           data: this.selected
-        })
+        });
         this.clearSelected()
       }
 
     },
-
-  
-      
     handleEventActionDelete(){
 
       // Code to delete an Action
@@ -463,10 +485,12 @@ export default {
 
     },
     handleEventActionUpdate(){
-
       // Code to update an Action
       let isvalid = this.handleEventActionValidation()
       if(isvalid) { 
+        if(this.eventActionType === 'SMARTCONTRACT'){
+          this.selected.value = JSON.stringify(this.contract); 
+        }
         this.eventActionList[this.currentSelectedId] = this.selected
         this.$emit("updateEventActions", {
           type: "UPDATE",
@@ -482,8 +506,13 @@ export default {
       // Code to update an Action
       this.flash=idx
       let updateData = this.eventActionList[idx]
-      this.currentSelectedId = idx
-      this.selected = updateData
+      this.currentSelectedId = idx;
+
+      this.selected = updateData;
+      if(this.eventActionType === 'SMARTCONTRACT'){
+        console.log(this.selected.value)
+          this.contract = { ...JSON.parse(this.selected.value) } 
+      }
       this.isCreate=false
 
     },

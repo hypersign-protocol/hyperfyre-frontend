@@ -95,19 +95,14 @@ export default {
       message_sign: "",
       value: {
         contractAddress: "",
-        userWalletAddress: ""
+        userWalletAddress: "",
+        thresholdBalance: 0
       }
     };
   },
   mounted() {
-
-    try {
-      if (this.data.value) {
-        const value = JSON.parse(this.data.value);
-        this.value = { ...value };
-      }
-    } catch (e) {
-      this.value.contractAddress = this.data.value;
+    if(this.data.value){
+      Object.assign(this.value, {...JSON.parse(this.data.value) })
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
     this.checkWeb3Injection();
@@ -142,12 +137,7 @@ export default {
           
           const generatedWalletAddr = await this.web3.eth.personal.ecRecover(this.message_sign, this.signature)
           
-          let isSigVerified =  false;
           if(generatedWalletAddr === wallet[0]){
-              isSigVerified = true;
-          } 
-      
-          if (isSigVerified) {
             this.value.userWalletAddress = wallet[0];
           } else{
             return this.notifyErr(Messages.EVENT_ACTIONS.ETH.INVALID_SIG)
@@ -162,17 +152,14 @@ export default {
         return this.notifyErr(Messages.EVENT_ACTIONS.ETH.CONNECT_METAMASK);
       } else {
         try {
-          let balance = await this.hasBalance();
+          let balance = await this.fetchBalance();
           if (balance !== undefined) {
-            // TODO: WEb3 wei
-            let wallet_balance = Number.parseInt(balance);
-            // TODO:: Make this check dynamic 
-            if (wallet_balance > 0) {
+            if (balance >= Number.parseFloat(this.value.thresholdBalance)) {
               this.$emit("input",  JSON.stringify({
                 ...this.value,
               }));
             } else {
-              throw new Error("Insufficient balance");
+              throw new Error(Messages.EVENT_ACTIONS.ETH.INSUFFICIENT_BALANCE);
             }
           }
         } catch (error) {
@@ -193,7 +180,7 @@ export default {
       }
       return true;
     },
-    async hasBalance() {
+    async fetchBalance() {
       const body = {
         actionType: this.data.type,
         data: this.value.userWalletAddress,

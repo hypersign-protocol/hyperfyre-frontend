@@ -51,7 +51,8 @@ const EVENT_ACTIONS = {
     ETH: {
         INVALIDWEB3: "Web3 provider not found. Please install Metamask wallet",
         INVALID_SIG: "Invalid signature",
-        CONNECT_METAMASK:"Connect your metamask wallet"
+        CONNECT_METAMASK:"Connect your metamask wallet",
+        INSUFFICIENT_BALANCE : "Insufficient balance"
     }
 }
 
