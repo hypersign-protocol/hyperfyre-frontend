@@ -22,17 +22,8 @@
           
         <b-row>
             
-          <b-col cols="12" sm="12" md="12"  >
-            
-           <div class="v-md-editor"  v-html="data.value" ></div>  <!-- <div class="follow">
-              <b-form-input
-                 type="textarea"
-                :placeholder="data.placeHolder"
-                v-model="data.value"
-                :disabled="done"
-                :required="data.isManadatory"
-              ></b-form-input>
-            </div> -->
+          <b-col cols="12" sm="12" md="12">
+           <div class="v-md-editor"  v-html="data.value" style="padding:10px"></div>  
           </b-col>
         </b-row>
       </b-card-body>
