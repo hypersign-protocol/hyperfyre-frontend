@@ -519,8 +519,7 @@ export default {
 
       this.selected = updateData;
       if(this.eventActionType === 'SMARTCONTRACT'){
-        console.log(this.selected.value)
-          this.contract = { ...JSON.parse(this.selected.value) } 
+        this.contract = { ...JSON.parse(this.selected.value) } 
       }
       this.isCreate=false
 
