@@ -303,7 +303,7 @@ import Datepicker from 'vuejs-datetimepicker'
 import Paginate from "vuejs-paginate";
 import notificationMixins from '../../mixins/notificationMixins';
 import apiClientMixin from '../../mixins/apiClientMixin';
-import { isValidURL,truncate} from "../../mixins/fieldValidationMixin.js";
+import { isValidURL,truncate,checkTitle,checkValue} from "../../mixins/fieldValidationMixin.js";
 import CreateProjectSlide from '../../components/admin/createProjectSlider/CreateProjectSlide.vue';
 import dayjs from "dayjs";
 import Messages from "../../utils/messages/admin/en";
@@ -705,7 +705,18 @@ export default {
     },
 
     checkIfEverythingIsFilled(){
+        const b=checkTitle(this.eventActionList, 'title');
+        if(b.includes(false)){
+          return ("Check if any Title field you left empty!");
+        }
 
+        let c= this.eventActionList;
+        c= c.filter((x) => (x.type!=="INPUT_TEXT") && (x.type!=="INPUT_NUMBER") && (x.type!=="INPUT_DATE") && (x.type!=="INPUT_HYPERLINK") && (x.type!=="BLOCKCHAIN_ETH") && (x.type!=="BLOCKCHAIN_TEZ"))
+        const d=checkValue(c, 'value');
+        if(d.includes(false)){
+          return ("Check if any Value field you left empty!");
+        }
+    
         if(!this.project.projectName){
           return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_NAME
         }   
