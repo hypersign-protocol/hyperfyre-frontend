@@ -317,6 +317,12 @@ export default {
     },
     handleEventActionValidation() {
       let isvalid = true
+
+      //////
+      //// WARNINGS: This is worst way of handeling validation
+      //// You should return or break the moment first error occured
+      //// But here you are checking all validation every time - waste of time!
+      ////////////
       switch (this.eventActionType) {
         case "SOCIAL":
             if(this.selected.type===null){
@@ -359,7 +365,7 @@ export default {
             } 
           break;
         case "CUSTOM":
-         if(this.selected.type===null){
+            if(this.selected.type===null){
               isvalid = false
               this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOM.CUSTOM_TYPE)
             }else if(isEmpty(this.selected.title)){
@@ -426,6 +432,9 @@ export default {
             }else if(isEmpty(this.contract.thresholdBalance)){
                 isvalid = false
                 this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.THBALANCE_NOT_EMPTY)
+            }else if(parseFloat(this.contract.thresholdBalance) < 0){
+                isvalid = false
+                this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.THBALANCE_NOT_NEGATIVE)
             }else if(!isContractValid(this.contract.contractAddress)){
               isvalid= false
               this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.VALID_CONTRACT_ADDRESS)
@@ -510,8 +519,7 @@ export default {
 
       this.selected = updateData;
       if(this.eventActionType === 'SMARTCONTRACT'){
-        console.log(this.selected.value)
-          this.contract = { ...JSON.parse(this.selected.value) } 
+        this.contract = { ...JSON.parse(this.selected.value) } 
       }
       this.isCreate=false
 
