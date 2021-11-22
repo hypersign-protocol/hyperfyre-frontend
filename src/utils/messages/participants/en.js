@@ -42,6 +42,7 @@ const EVENT_ACTIONS = {
         AUTH_FAILED: "Authentication Failed! Try again",
     },
     TWITTER_FOLLOW: {
+        TWITTER_AUTH:"Error: Please authorize and follow",
         FOLLOW_FIRST: "Error: Please follow first",
         TWITTER_SCREENS_BLANK: "Error: Source or target twitter screen name is  blank",
     },

@@ -32,21 +32,27 @@
         <b-row>
           <b-col cols="12" sm="12" md="12">
             <div class="extlink">
-				<button class="btn text-black"  >
-					<a :href="data.value" v-bind:class="{isDisabled : done}"  @click="isClicked()" target="_blank">
-						{{ truncate1(data.value, 50) }}
-						<img
-							src="../../../assets/external-link.svg"
-							height="20px"
-							width="20px"
-							:href="data.value"
-							target="_blank"
-						/>
-					</a>
-				</button> 
+              <button class="btn text-black center"  >
+                <a :href="data.value" v-bind:class="{isDisabled : done}"  @click="isClicked()" target="_blank">
+                  {{data.value}}
+                  <img
+                    src="../../../assets/external-link.svg"
+                    height="20px"
+                    width="20px"
+                    :href="data.value"
+                    target="_blank"
+                  />
+                </a>
+              </button> 
             </div>
           </b-col>
         </b-row>
+
+        <b-row v-if="!done">
+					<b-col cols="12" sm="12" md="12" >
+						<button class="btn btn-link center"  @click="update()">Continue</button>
+					</b-col>
+				</b-row>
       </b-card-body>
     </b-collapse>
   </b-card>
@@ -58,6 +64,11 @@
   opacity: 0.5;
   text-decoration: none;
 }
+
+.center{
+  display: block; margin-left: auto;margin-right: auto
+}
+
 </style>
 <script>
 import eventBus from "../../../eventBus.js";

@@ -51,10 +51,23 @@
             </div>
           </b-col>
         </b-row>
+
+        <b-row v-if="!done">
+					<b-col cols="12" sm="12" md="12" >
+						<button class="btn btn-link center" @click="update()">Continue</button>
+					</b-col>
+				</b-row>
       </b-card-body>
     </b-collapse>
   </b-card>
 </template>
+
+<style>
+.center{
+  display: block; margin-left: auto;margin-right: auto
+}
+</style>
+
 <script>
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";

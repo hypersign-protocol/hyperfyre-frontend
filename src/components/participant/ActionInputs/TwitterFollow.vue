@@ -54,10 +54,21 @@
             </div>
           </b-col>
         </b-row>
+
+        <b-row v-if="!done">
+					<b-col cols="12" sm="12" md="12" >
+						<button class="btn btn-link center"  @click="update()">Continue</button>
+					</b-col>
+				</b-row>
       </b-card-body>
     </b-collapse>
   </b-card>
 </template>
+<style scoped>
+.center{
+  display: block; margin-left: auto;margin-right: auto
+}
+</style>
 <script>
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
@@ -105,18 +116,20 @@ export default {
   },
   methods: {
     async update() {
+      if (!localStorage.getItem("twitterId")){
+        return this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_FOLLOW.TWITTER_AUTH);
+      }
       if (!(await this.hasFollowedTwitter())) {
         return this.notifyErr(
           Messages.EVENT_ACTIONS.TWITTER_FOLLOW.FOLLOW_FIRST
         );
-      } else {
-        this.$emit(
-          "input",
-          JSON.stringify({
-            ...this.twitter,
-          })
-        );
-      }
+      }  
+      this.$emit(
+        "input",
+         JSON.stringify({
+          ...this.twitter,
+        })
+      );
     },
     disableInput(data) {
       this.done = data;
