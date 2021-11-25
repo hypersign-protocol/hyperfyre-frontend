@@ -8,7 +8,7 @@ const EVENT={
 }
 const EVENTS = {
     REF_POINT:{
-        NOT_VALID_INP:'Please Enter Refree Point and Referral Point that Should be number',
+        NOT_VALID_INP:'Please enter valid Referee and Referral point',
         NOT_POS_INP:'Refree Point and Referral Point Should be Positive number'
     },
     VALIDATION:{
