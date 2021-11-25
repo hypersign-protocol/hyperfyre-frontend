@@ -6,7 +6,7 @@
           <div v-if="!eventActionList[idx].isDeleted" :class="flash == idx ?  
             'flash card rounded m-1 p-1 d-flex flex-row align-items-center' : 
             'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'" 
-          style="min-width: 113px">
+          style="min-width: 120px">
             <span>
               <i style="color: gray" v-if="eventAction.type.includes('TWITTER')" class="fab fa-twitter"></i>  
               <i style="color: gray" v-if="eventAction.type.includes('TELEGRAM')" class="fab fa-telegram-plane"></i>  
