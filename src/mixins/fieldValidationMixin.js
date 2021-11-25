@@ -62,11 +62,11 @@ export function isDate(date) {
 
 export function truncate(str, limit) {
   if (!str) {
-    throw new Error("String must be passed");
+    return
   }
 
   if (!limit) {
-    throw new Error("Limit must be passed");
+    return
   }
 
   // if less than limit then do nothing
@@ -78,6 +78,20 @@ export function truncate(str, limit) {
   const firstPart = str.substr(0, eachLen);
   const lastPart = str.slice(-eachLen);
   return firstPart + " ... " + lastPart;
+}
+
+export function checkTitle(arr, prop) {
+
+  const actionTitle = arr.map(item => item[prop]!=="");
+  return actionTitle;
+
+}
+
+export function checkValue(arr, prop) {
+
+  const actionValue = arr.map(item => item[prop]!=="");
+  return actionValue;
+
 }
 
 export function urlSanitizer(url, endsWith) {

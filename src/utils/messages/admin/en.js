@@ -7,6 +7,8 @@ const EVENT={
     INVALID_PROJECT_SLUG:"Invalid Event slug"
 }
 const EVENTS = {
+    CHECK_ALL_TITLE_EMPTY:"Check if any Title field you left empty",
+    CHECK_ALL_VALUE_EMPTY:"Check if any Value field you left empty",
     REF_POINT:{
         NOT_VALID_INP:'Please enter valid Referee and Referral point',
         NOT_POS_INP:'Refree Point and Referral Point Should be Positive number'
