@@ -429,7 +429,7 @@ export default {
             }else if(isEmpty(this.contract.contractAddress)){
                 isvalid = false
                 this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY)
-            }else if(isNaN(parseFloat(this.contract.thresholdBalance)) || parseFloat(this.contract.thresholdBalance) <= 0){
+            }else if(isNaN(parseFloat(this.contract.thresholdBalance)) || parseFloat(this.contract.thresholdBalance) < 0){
                 isvalid=false
                 this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.THBALANCE_NOT_NEGATIVE)
             }else if(!isContractValid(this.contract.contractAddress)){
