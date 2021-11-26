@@ -708,7 +708,6 @@ export default {
        
 
         for (let index = 0; index < this.eventActionList.length; index++) {
-          console.log(this.eventActionList[index].score);
           if(this.eventActionList[index].score===null || this.eventActionList[index].score===""){
               return (Messages.EVENTS.ACTIONS.SCORE_IS_NUM_ANY_LEFT)
           }
