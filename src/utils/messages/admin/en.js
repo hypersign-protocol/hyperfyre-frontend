@@ -62,8 +62,7 @@ const EVENTS = {
     SMARTCONTRACT:{
         CHOOSE_CONTRACT_TYPE: "Please choose Contract Type",
         ADDRESS_NOT_EMPTY: "Contract Address Should not be empty",
-        THBALANCE_NOT_EMPTY: "Threshold balance should not be empty",
-        THBALANCE_NOT_NEGATIVE: "Threshold balance should not be negative",
+        THBALANCE_NOT_NEGATIVE: "Enter the Threshold balance that should be a Positive Number",
         VALID_CONTRACT_ADDRESS: "Please enter valid Contract address"
     }
 
