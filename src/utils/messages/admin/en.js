@@ -36,6 +36,7 @@ const EVENTS = {
         TITLE_URL: "Do not put url in title",
         EMPTY_TITLE: "Title Should not be empty",
         SCORE_IS_NUM: "Please enter a Score that should be a number",
+        SCORE_IS_NUM_ANY_LEFT:"Check if there is any score field left empty",
         SCORE_IS_POSITIVE_NUM: "Please enter a Score that should be a Positive number",
         INVALID_EVENT_TYPE: "Invalid event type",
 
