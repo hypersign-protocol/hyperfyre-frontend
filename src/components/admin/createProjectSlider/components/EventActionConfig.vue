@@ -6,7 +6,7 @@
           <div v-if="!eventActionList[idx].isDeleted" :class="flash == idx ?  
             'flash card rounded m-1 p-1 d-flex flex-row align-items-center' : 
             'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'" 
-          style="min-width: 113px">
+          style="min-width: 120px">
             <span>
               <i style="color: gray" v-if="eventAction.type.includes('TWITTER')" class="fab fa-twitter"></i>  
               <i style="color: gray" v-if="eventAction.type.includes('TELEGRAM')" class="fab fa-telegram-plane"></i>  
@@ -429,11 +429,8 @@ export default {
             }else if(isEmpty(this.contract.contractAddress)){
                 isvalid = false
                 this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY)
-            }else if(isEmpty(this.contract.thresholdBalance)){
-                isvalid = false
-                this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.THBALANCE_NOT_EMPTY)
-            }else if(parseFloat(this.contract.thresholdBalance) < 0){
-                isvalid = false
+            }else if(isNaN(parseFloat(this.contract.thresholdBalance)) || parseFloat(this.contract.thresholdBalance) < 0){
+                isvalid=false
                 this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.THBALANCE_NOT_NEGATIVE)
             }else if(!isContractValid(this.contract.contractAddress)){
               isvalid= false
