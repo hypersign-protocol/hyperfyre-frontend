@@ -303,7 +303,7 @@ import Datepicker from 'vuejs-datetimepicker'
 import Paginate from "vuejs-paginate";
 import notificationMixins from '../../mixins/notificationMixins';
 import apiClientMixin from '../../mixins/apiClientMixin';
-import { isValidURL,truncate,checkTitle,checkValue, isEmpty} from "../../mixins/fieldValidationMixin.js";
+import { isValidURL,truncate,checkTitle,checkValue} from "../../mixins/fieldValidationMixin.js";
 import CreateProjectSlide from '../../components/admin/createProjectSlider/CreateProjectSlide.vue';
 import dayjs from "dayjs";
 import Messages from "../../utils/messages/admin/en";
