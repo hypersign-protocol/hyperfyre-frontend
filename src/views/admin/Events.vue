@@ -601,18 +601,6 @@ export default {
       if (!(this.project.fromDate && this.project.toDate)) {
         return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_DATE_TIME;
       }
-
-      if (!this.blockchainType) {
-        return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_BLOCKCHAIN_TYPE;
-      }
-
-      if (this.themeColor == '#ffffff') {
-        return Messages.EVENTS.CREATE_EDIT_EVENT.THEME_NOT_WHITE;
-      }
-
-      if (this.themeColor == this.fontColor && this.themeColor.trim().length && this.themeColor.trim().length) {
-        return Messages.EVENTS.CREATE_EDIT_EVENT.THEME_COLOR_NOT_SAME;
-      }
       return true;
     },
 
