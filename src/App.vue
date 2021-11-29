@@ -1,17 +1,26 @@
 <template>
   <div id="app">
     <NavBar title="HyperFyre" :show="showUserNav" />
-    <div :class="[
+    <div
+      :class="[
         showNavbar & !showUserNav
           ? isSidebarCollapsed
             ? 'showNavbar collapsed'
             : 'showNavbar notCollapsed'
           : 'hideNavbar',
-      ]">
-      <sidebar-menu class="sidebar-wrapper" @toggle-collapse="onToggleCollapse" @item-click="onItemClick" :theme="'white-theme'" width="220px" 
-      :menu="isSubscribed? menu : unsubsSubscribedMenu" v-if="showNavbar">
-        <span slot="header" style="background:#363740">
-          <div class="ml-1 mt-3 mb-2" style="padding-left:1px; text-align:center; margin-right: 2.25rem !important;" > 
+      ]"
+    >
+      <sidebar-menu
+        class="sidebar-wrapper"
+        @toggle-collapse="onToggleCollapse"
+        @item-click="onItemClick"
+        :theme="'white-theme'"
+        width="220px"
+        :menu="isSubscribed ? menu : unsubsSubscribedMenu"
+        v-if="showNavbar"
+      >
+        <span slot="header" style="background: #363740">
+          <div class="ml-1 mt-3 mb-2" style="padding-left: 1px; text-align: center; margin-right: 2.25rem !important">
             <img :src="require('./assets/logo.png')" alt="logo" width="150px" />
           </div>
           <!-- <p class="header-text">{{ $config.app.name }}</p> -->
@@ -29,58 +38,59 @@
 </template>
 <script>
 // Ref:  fa icons:  https://fontawesome.com/
-import NavBar from "./components/participant/NavBar.vue"
-import eventBus from "./eventBus";
+import NavBar from './components/participant/NavBar.vue';
+import eventBus from './eventBus';
 export default {
   components: {
-    NavBar
+    NavBar,
   },
   data() {
     return {
-      authToken: localStorage.getItem("authToken"),
+      authToken: localStorage.getItem('authToken'),
       isSidebarCollapsed: false,
-      authRoutes: ["register", "PKIIdLogin"],
+      authRoutes: ['register', 'PKIIdLogin'],
       showNavbar: false,
-      menu: [{
-          href: "/admin/dashboard",
-          title: "Dashboard",
-          icon: "fas fa-tachometer-alt",
+      menu: [
+        {
+          href: '/admin/dashboard',
+          title: 'Dashboard',
+          icon: 'fas fa-tachometer-alt',
         },
         {
-          href: "/admin/events",
-          title: "Events",
-          icon: "fas fa-calendar-alt",
+          href: '/admin/events',
+          title: 'Events',
+          icon: 'fas fa-calendar-alt',
         },
         {
-          href: "/admin/participants",
-          title: "Participants",
-          icon: "fas fa-users",
+          href: '/admin/participants',
+          title: 'Participants',
+          icon: 'fas fa-users',
           exactPath: true,
         },
         {
-          href: "/admin/subscription",
-          title: "Subscriptions",
-          icon: "fas fa-receipt",
+          href: '/admin/subscription',
+          title: 'Subscriptions',
+          icon: 'fas fa-receipt',
           exactPath: true,
         },
         {
-          href: "/admin/login",
-          title: "Logout",
-          icon: "fas fa-sign-out-alt",
+          href: '/admin/login',
+          title: 'Logout',
+          icon: 'fas fa-sign-out-alt',
           exactPath: true,
         },
       ],
       unsubsSubscribedMenu: [
         {
-          href: "/admin/subscription",
-          title: "Subscriptions",
-          icon: "fas fa-receipt",
+          href: '/admin/subscription',
+          title: 'Subscriptions',
+          icon: 'fas fa-receipt',
           exactPath: true,
         },
         {
-          href: "/admin/login",
-          title: "Logout",
-          icon: "fas fa-sign-out-alt",
+          href: '/admin/login',
+          title: 'Logout',
+          icon: 'fas fa-sign-out-alt',
           exactPath: true,
         },
       ],
@@ -92,52 +102,50 @@ export default {
   },
 
   mounted() {
-    eventBus.$on('UpdateAdminNav',   (isSubscribed) => {
-        this.isSubscribed = isSubscribed;
-    })
+    eventBus.$on('UpdateAdminNav', (isSubscribed) => {
+      this.isSubscribed = isSubscribed;
+    });
 
-    if(this.$route.meta.admin){
+    if (this.$route.meta.admin) {
       this.showNavbar =
-          window.location.pathname.includes("/admin/participants") ||
-          window.location.pathname.includes("/admin/events") ||
-          window.location.pathname.includes("/admin/dashboard") ||
-          window.location.pathname.includes("/admin/subscription") ?
-          true :
-          false;
-    }else{
-      this.showUserNav = window.location.pathname.includes("/form") ? true : false
+        window.location.pathname.includes('/admin/participants') ||
+        window.location.pathname.includes('/admin/events') ||
+        window.location.pathname.includes('/admin/dashboard') ||
+        window.location.pathname.includes('/admin/subscription')
+          ? true
+          : false;
+    } else {
+      this.showUserNav = window.location.pathname.includes('/form') ? true : false;
     }
   },
 
   updated() {
     this.showNavbar =
-          window.location.pathname.includes("/admin/participants") ||
-          window.location.pathname.includes("/admin/events") ||
-          window.location.pathname.includes("/admin/dashboard") ||
-          window.location.pathname.includes("/admin/subscription") ?
-          true :
-          false;
+      window.location.pathname.includes('/admin/participants') ||
+      window.location.pathname.includes('/admin/events') ||
+      window.location.pathname.includes('/admin/dashboard') ||
+      window.location.pathname.includes('/admin/subscription')
+        ? true
+        : false;
   },
 
   methods: {
     filterMenu() {
-      if (localStorage.getItem("user")) {
-        const user = JSON.parse(localStorage.getItem("user"));
+      if (localStorage.getItem('user')) {
+        const user = JSON.parse(localStorage.getItem('user'));
 
         if (user.isSubscribed) {
           return;
         }
         this.menu = this.menu.filter(
-          (x) =>
-             x.title.toLowerCase().includes("subscription") ||
-          x.title.toLowerCase().includes("logout")
+          (x) => x.title.toLowerCase().includes('subscription') || x.title.toLowerCase().includes('logout')
         );
       }
     },
 
     goToNextPage(route) {
       const r = this.menu.find((x) => x.name === route);
-      if (r.name === "Logout") this.logout();
+      if (r.name === 'Logout') this.logout();
       this.$router.push(r.path);
       if (this.$route.params.nextUrl != null) {
         this.$router.push(this.$route.params.nextUrl);
@@ -154,10 +162,10 @@ export default {
     },
     onItemClick() {
       if (
-        window.location.pathname.includes("investors") ||
-        window.location.pathname.includes("project") ||
-        window.location.pathname.includes("dashboard") ||
-        window.location.pathname.includes("/admin/subscription")
+        window.location.pathname.includes('investors') ||
+        window.location.pathname.includes('project') ||
+        window.location.pathname.includes('dashboard') ||
+        window.location.pathname.includes('/admin/subscription')
       ) {
         this.showNavbar = true;
       } else {
@@ -185,8 +193,8 @@ export default {
   padding: 5px;
   padding-left: 1.5%;
   text-align: left;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 2px 0px,
-    rgba(0, 0, 0, 0.02) 0px 3px 1px -2px, rgba(0, 0, 0, 0.01) 0px 1px 5px 0px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 2px 0px, rgba(0, 0, 0, 0.02) 0px 3px 1px -2px,
+    rgba(0, 0, 0, 0.01) 0px 1px 5px 0px;
 }
 
 .rightAlign {
@@ -204,7 +212,6 @@ export default {
   margin-left: 5px;
 }
 
-
 .subtitle {
   padding-left: 10px;
   color: gray;
@@ -218,7 +225,7 @@ export default {
   padding: 50px 20px;
 }
 
-.showNavbar.notCollapsed>.content-wrapper {
+.showNavbar.notCollapsed > .content-wrapper {
   width: calc(100vw - 200px);
   margin-left: auto;
 }
@@ -238,7 +245,7 @@ export default {
   display: none;
 }
 
-.header-text+hr {
+.header-text + hr {
   width: 80%;
 }
 

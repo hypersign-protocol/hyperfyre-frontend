@@ -2,9 +2,9 @@
   <b-row>
     <b-col md="12">
       <b-card no-body class="banner rounded-0">
-        <img :src="logoUrl" @error="onBannerError($event)" v-if="!brokenUrl">
+        <img :src="logoUrl" @error="onBannerError($event)" v-if="!brokenUrl" />
         <div class="no-banner" v-if="brokenUrl">
-          {{eventName}}
+          {{ eventName }}
         </div>
       </b-card>
     </b-col>
@@ -18,29 +18,29 @@ export default {
     fontColor: String,
     fromDate: String,
     toDate: String,
-    logoUrl: String
+    logoUrl: String,
   },
   data() {
     return {
-      brokenUrl: false
-    }
+      brokenUrl: false,
+    };
   },
   methods: {
     onBannerError(e) {
       console.log(e.message);
-      this.brokenUrl = true
-    }
-  }
+      this.brokenUrl = true;
+    },
+  },
 };
 </script>
 <style scoped>
-  .no-banner{
-    height: 200px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 40px;
-    font-weight: 600;
-  }
+.no-banner {
+  height: 200px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 600;
+}
 </style>

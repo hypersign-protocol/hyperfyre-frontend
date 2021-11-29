@@ -27,7 +27,6 @@
   list-style-type: none;
 }
 
-
 .dot {
   height: 15px;
   width: 15px;
@@ -38,7 +37,6 @@
   float: right;
 }
 
-
 .tile {
   background: white;
   border: 0;
@@ -47,10 +45,10 @@
   text-align: center;
 }
 
-.tile-profile{
+.tile-profile {
   text-align: left;
 }
-.tile-number{
+.tile-number {
   color: rgb(46, 46, 46);
   font-size: xxx-large;
 }
@@ -60,7 +58,7 @@
   word-wrap: break-word;
 }
 
-.accordion-header-theme{
+.accordion-header-theme {
   background-color: rgba(241, 179, 25, 0.24);
   border: 0;
   border-radius: 0px 0px 20px 20px;
@@ -71,28 +69,28 @@
   <div>
     <div class="row" style="margin-top: 2%">
       <div class="col-md-6">
-        <div class="card tile" >
+        <div class="card tile">
           <div class="card-body tile-number">{{ projectCount }}</div>
-          <div class="card-header accordion-header-theme" style="font-size:13px">TOTAL EVENTS</div>
+          <div class="card-header accordion-header-theme" style="font-size: 13px">TOTAL EVENTS</div>
         </div>
       </div>
-      <div class="col-md-6" >
+      <div class="col-md-6">
         <div class="card tile">
           <div class="card-body tile-number">{{ schemaCount }}</div>
-          <div class="card-header accordion-header-theme" style="font-size:13px">TOTAL PARTICIPANTS</div>
+          <div class="card-header accordion-header-theme" style="font-size: 13px">TOTAL PARTICIPANTS</div>
         </div>
       </div>
     </div>
     <div class="row" style="margin-top: 5%">
-      <div class="col-md-12 leftAlign ">
-        <div class="card tile tile-profile" >
+      <div class="col-md-12 leftAlign">
+        <div class="card tile tile-profile">
           <div class="card-body">
             <div class="row">
               <div class="col-md-4">
                 <img
                   src="../../assets/avatar.png"
                   alt="John"
-                  style="width: 100%;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);"
+                  style="width: 100%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)"
                 />
               </div>
               <div class="col-md-8" style="flex-wrap: wrap; padding: 20px">
@@ -102,9 +100,7 @@
                 </p>
                 <p>EMAIL</p>
                 <p class="fVal">{{ user.email }}</p>
-                <p v-if="user.phoneNumber">
-                  Phone Number: {{ user.phoneNumber }}
-                </p>
+                <p v-if="user.phoneNumber">Phone Number: {{ user.phoneNumber }}</p>
               </div>
             </div>
           </div>
@@ -116,7 +112,7 @@
 
 <script>
 export default {
-  name: "Profile",
+  name: 'Profile',
   mounted() {},
   components: {},
   data() {
@@ -127,25 +123,24 @@ export default {
       schemaCount: 0,
       projectCount: 0,
       user: {},
-      authToken: localStorage.getItem("authToken"),
+      authToken: localStorage.getItem('authToken'),
       projects: [],
     };
   },
   async created() {
-    const usrStr = localStorage.getItem("user");
+    const usrStr = localStorage.getItem('user');
     this.user = {
       ...JSON.parse(usrStr),
     };
-    
+
     await this.fetchProjects();
-   
   },
   methods: {
     async fetchProjects() {
       try {
         this.isLoading = true;
 
-        if (!this.user.id) throw new Error("No project owner found");
+        if (!this.user.id) throw new Error('No project owner found');
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
 
@@ -154,7 +149,7 @@ export default {
         };
         const resp = await fetch(url, {
           headers,
-          method: "GET",
+          method: 'GET',
         });
 
         if (!resp.ok) {
@@ -167,16 +162,14 @@ export default {
         this.projects = json;
         this.projects.map((x) => {
           investorCount += x.investorsCount;
-          x["whitelisting_link"] =
-            window.location.origin + "/form?projectId=" + x._id;
-          x["investors_link"] =
-            window.location.origin + "/admin/participants?projectId=" + x._id;
+          x['whitelisting_link'] = window.location.origin + '/form?projectId=' + x._id;
+          x['investors_link'] = window.location.origin + '/admin/participants?projectId=' + x._id;
         });
 
         this.projectCount = this.projects.length;
         this.schemaCount = investorCount;
         localStorage.setItem(
-          "userProjects",
+          'userProjects',
           JSON.stringify({
             projects: this.projects,
             count: this.projectCount,

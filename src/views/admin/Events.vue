@@ -69,102 +69,102 @@ i {
   border-radius: 3px;
 }
 .paginationContainer >>> li.active {
-  background-color: #F1B319;
+  background-color: #f1b319;
   color: #fff;
 }
 
-
-.button-theme{
-  background-color: #F1B319;
-  border-collapse: #F1B319;
+.button-theme {
+  background-color: #f1b319;
+  border-collapse: #f1b319;
   color: black;
   border: 0;
-
 }
 
-
-.theme{
+.theme {
   background-color: #363740;
   border-collapse: #363740;
   color: whitesmoke;
   border: 0;
-
 }
 
-.event-card{
+.event-card {
   float: left;
   max-width: 60rem;
   margin-right: 3%;
   margin-bottom: 2%;
-  border:0;
+  border: 0;
   border-radius: 20px;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
-.card-body-custom{
+.card-body-custom {
   color: rgb(46, 46, 46);
 }
 
-.event-card-footer{
-  padding: 7px; background-color: #F1B3193D;  border-radius: 0px 0px 20px 20px;
+.event-card-footer {
+  padding: 7px;
+  background-color: #f1b3193d;
+  border-radius: 0px 0px 20px 20px;
 }
 
-.event-card-header{
-  padding: 7px; background-color: white; color: black; font-size: larger; text-align: center; border-radius: 20px 20px 0px 0px
+.event-card-header {
+  padding: 7px;
+  background-color: white;
+  color: black;
+  font-size: larger;
+  text-align: center;
+  border-radius: 20px 20px 0px 0px;
 }
-.copy{
-	padding:3px; font-size: medium; cursor: pointer; color:grey
+.copy {
+  padding: 3px;
+  font-size: medium;
+  cursor: pointer;
+  color: grey;
 }
 
-.fixBanner{
-  min-width: 150px; min-height: 150px; max-width: 150px; max-height: 150px;
+.fixBanner {
+  min-width: 150px;
+  min-height: 150px;
+  max-width: 150px;
+  max-height: 150px;
 }
-
 </style>
 <template>
   <div class="home marginLeft marginRight">
-    <loading
-      :active.sync="isLoading"
-      :can-cancel="true"
-      :is-full-page="fullPage"
-    ></loading>
-
-
+    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
 
     <div class="row">
-        <div class="col-md-8">
-            <div class="form-group">
-              <input v-if="projects.length"  @keyup="handleSearch" type="text" class="form-control w-25" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Search events by name">
-            </div>
+      <div class="col-md-8">
+        <div class="form-group">
+          <input
+            v-if="projects.length"
+            @keyup="handleSearch"
+            type="text"
+            class="form-control w-25"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+            placeholder="Search events by name"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="text-right">
+          <button @click="openCreateSidebar" class="btn btn-primary button-theme">
+            Create <i class="fas fa-plus text-white"></i>
+          </button>
         </div>
 
-        <div class="col-md-4">
-          <div class="text-right">
-            <button @click="openCreateSidebar" class="btn btn-primary button-theme">Create <i class="fas fa-plus text-white"></i> </button>
-          </div>
-
-          <div>
-            <create-project-slide 
+        <div>
+          <create-project-slide
             :isProjectEditing="isProjectEditing"
-              :project="project"
-              @UpdateColors="UpdateColors"
-              :themeColor="themeColor"
-              :themeColorDefault="themeColorDefault"
-              :fontColor="fontColor"
-              :fontColorDefault="fontColorDefault"
-              :blockChainType="blockchainType"
-              :contractType="contractType"
-              :eventActionType="eventActionType"
-              :saveProject="saveProject"
-              :addedSocialMedias="addedSocialMedias"
-              :selectedSocialMedia="selectedSocialMedia"
-              :socialOptions="socialOptions"
-              :actionList="project.actions"
-              @updateEventActions="AddUpdateDelEventActions"
-             />
-          </div>
-
+            :project="project"
+            :saveProject="saveProject"
+            :actionList="project.actions"
+            @updateEventActions="AddUpdateDelEventActions"
+          />
         </div>
+      </div>
     </div>
 
     <div class="row" v-if="whitelistingLink != ''" style="margin-top: 2%">
@@ -172,42 +172,31 @@ i {
         <div class="card">
           <div class="card-body">
             <h4>
-              Congratulations!!! Your event is successfully created, you can
-              give this link to your users for whitelisting.
-              <a :href="whitelistingLink" target="_blank">{{
-                whitelistingLink
-              }}</a>
+              Congratulations!!! Your event is successfully created, you can give this link to your users for
+              whitelisting.
+              <a :href="whitelistingLink" target="_blank">{{ whitelistingLink }}</a>
             </h4>
           </div>
         </div>
       </div>
     </div>
 
-      <div v-if="!projectsToShow.length">
-          <h3>No events found, click on "create" button to create a new event!</h3>
-      </div>
+    <div v-if="!projectsToShow.length">
+      <h3>No events found, click on "create" button to create a new event!</h3>
+    </div>
 
     <div class="row" style="margin-top: 2%">
-      <div class="col-md-12 my-5 w-100" style="text-align: left;max-height:660px; overflow-y:scroll">
-        <div
-          class="card event-card"
-          v-for="project in projectsToShow"
-          v-bind:key="project.projectName"
-        >
-          <div
-            class="theme event-card-header"
-          >
-            <span style="">{{ truncate1(project.projectName,25) }}</span>
-            <span data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="Project Status" style="float:right">
+      <div class="col-md-12 my-5 w-100" style="text-align: left; max-height: 660px; overflow-y: scroll">
+        <div class="card event-card" v-for="project in projectsToShow" v-bind:key="project.projectName">
+          <div class="theme event-card-header">
+            <span style="">{{ truncate1(project.projectName, 25) }}</span>
+            <span data-toggle="tooltip" data-placement="bottom" title="Project Status" style="float: right">
               <span v-if="project.projectStatus == true">
-                <i class="fas fa-signal" style="color:green"></i> 
+                <i class="fas fa-signal" style="color: green"></i>
               </span>
-              <span  v-if="!project.projectStatus ||  project.projectStatus == false" >
-                <i class="fas fa-signal" style="color:red"></i>
+              <span v-if="!project.projectStatus || project.projectStatus == false">
+                <i class="fas fa-signal" style="color: red"></i>
               </span>
-
             </span>
           </div>
           <div class="card-body card-body-custom">
@@ -217,179 +206,106 @@ i {
               </div>
               <div class="col-md-8">
                 <ul style="list-style-type: none">
-                  <li
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="EventId"
-                  >
-                    <i class="far fa-id-card"></i
-                    ><span class="card-title">{{ project._id }}</span> <span @click="copy(project._id, 'EventId')" class="copy"><i class="far fa-copy"></i></span>
+                  <li data-toggle="tooltip" data-placement="bottom" title="EventId">
+                    <i class="far fa-id-card"></i><span class="card-title">{{ project._id }}</span>
+                    <span @click="copy(project._id, 'EventId')" class="copy"><i class="far fa-copy"></i></span>
                   </li>
-                  <li
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="Start Date"
-                  >
+                  <li data-toggle="tooltip" data-placement="bottom" title="Start Date">
                     <i class="fas fa-hourglass-start"></i>
                     {{ new Date(project.fromDate).toLocaleString() }}
                   </li>
-                  <li
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="End Date"
-                  >
-                    <i class="fas fa-hourglass-end"></i> {{ new Date(project.toDate).toLocaleString() }}
+                  <li data-toggle="tooltip" data-placement="bottom" title="End Date">
+                    <i class="fas fa-hourglass-end"></i>
+                    {{ new Date(project.toDate).toLocaleString() }}
                   </li>
 
-                  <li
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="Event Url"
-                  >
+                  <li data-toggle="tooltip" data-placement="bottom" title="Event Url">
                     <i class="fas fa-calendar-alt"></i>
-                    <a :href="project.whitelisting_link" target="_blank" class="card-body-custom"
-                      > Event Url</a
-                    ><span @click="copy(project.whitelisting_link, 'Form Url')" class="copy"><i class="far fa-copy"></i></span>
+                    <a :href="project.whitelisting_link" target="_blank" class="card-body-custom"> Event Url</a
+                    ><span @click="copy(project.whitelisting_link, 'Form Url')" class="copy"
+                      ><i class="far fa-copy"></i
+                    ></span>
                   </li>
 
-                  <li
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="Participants List"
-                  >
+                  <li data-toggle="tooltip" data-placement="bottom" title="Participants List">
                     <i class="fas fa-users"></i
                     ><a class="card-body-custom" :href="`/admin/participants?projectId=${project._id}`"
-                      >Participants ({{project.investorsCount}})</a
+                      >Participants ({{ project.investorsCount }})</a
                     >
                   </li>
-
                 </ul>
               </div>
             </div>
           </div>
-          <div
-            class="theme event-card-footer"
-          >
+          <div class="theme event-card-footer">
             <span
               style="float: right; cursor: pointer"
               data-toggle="tooltip"
               data-placement="bottom"
               title="Edit this event"
-              ><i class="fas fa-pencil-alt"  @click="editProject(project)"></i
+              ><i class="fas fa-pencil-alt" @click="editProject(project)"></i
             ></span>
           </div>
         </div>
       </div>
     </div>
-       <paginate
-        v-if="projectsToShow.length"
-        :pageCount="Math.ceil(this.projects.length / this.perPage)"
-         :clickHandler="paginateChange"
-        :prevText="'Prev'"
-        :nextText="'Next'"
-        :force-page="currentPage"
-        :containerClass="'paginationContainer'"
-        :page-class="'paginationItem'"
-      >
-      </paginate>
+    <paginate
+      v-if="projectsToShow.length"
+      :pageCount="Math.ceil(this.projects.length / this.perPage)"
+      :clickHandler="paginateChange"
+      :prevText="'Prev'"
+      :nextText="'Next'"
+      :force-page="currentPage"
+      :containerClass="'paginationContainer'"
+      :page-class="'paginationItem'"
+    >
+    </paginate>
   </div>
 </template>
 
 <script>
-import fetch from "node-fetch";
-import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
-import Datepicker from 'vuejs-datetimepicker'
-import Paginate from "vuejs-paginate";
+import fetch from 'node-fetch';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+import Datepicker from 'vuejs-datetimepicker';
+import Paginate from 'vuejs-paginate';
 import notificationMixins from '../../mixins/notificationMixins';
 import apiClientMixin from '../../mixins/apiClientMixin';
-import { isValidURL,truncate,checkTitle,checkValue} from "../../mixins/fieldValidationMixin.js";
+import { isValidURL, truncate, checkTitle, checkValue } from '../../mixins/fieldValidationMixin.js';
 import CreateProjectSlide from '../../components/admin/createProjectSlider/CreateProjectSlide.vue';
-import dayjs from "dayjs";
-import Messages from "../../utils/messages/admin/en";
+import dayjs from 'dayjs';
+import Messages from '../../utils/messages/admin/en';
 export default {
-  name: "Investor",
+  name: 'Investor',
   components: { Loading, Datepicker, Paginate, CreateProjectSlide },
-  
+
   data() {
     return {
       project: {
-        _id: "",
-        projectName: "",
-        logoUrl: "",
-        fromDate: "",
-        toDate: "",
-        ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
+        _id: '',
+        projectName: '',
+        logoUrl: '',
+        fromDate: '',
+        toDate: '',
+        ownerDid: '',
         investorsCount: 0,
-        social: {},
         projectStatus: true,
         actions: [],
         refereePoint: 10,
-        referralPoint: 5
-      }, 
-      projects: [],   
-      
-      selectedSocialMedia: null,
-      addedSocialMedias: [],
+        referralPoint: 5,
+      },
+      projects: [],
       eventActionList: [],
-      socialOptions: [
-          {value: null, label: "Select a Social Profile"},
-          {
-              label: "Twitter",
-              
-              value: {
-                  media: "twitter",
-                  icon: "fab fa-twitter",
-                  fields: [ 
-                      {name: "twitterHandle", type: "text", placeholder: "Twitter Handle", value:"" } ,
-                      {name: "twitterPostFormat", type: "text", placeholder: "Twitter Post Format", value: "" }
-                  ]
-              }, 
-              
-          },
-          {
-              label: "Telegram", 
-              value: {
-                  media: "telegram",
-                  icon:"fab fa-telegram-plane",
-                  fields: [ 
-                      {name: "telegramHandle", type: "text", placeholder: "Telegram Handle", value: "" } ,
-                      {name: "telegramAnnouncementChannel", type: "text", placeholder: "Telegram Announcement Channel", value: "", optional: true }
-                  ]
-              }, 
-              
-          }
-      ],
-
-      searchQuery: "",
-      projectsToShow : [],
+      searchQuery: '',
+      projectsToShow: [],
       perPage: 10,
       projectStatus: true,
-      blockchainType: "ETHEREUM",
-      contractType: "ERC20",
-      eventActionType: "ETHEREUM",
       currentPage: 1,
-      themeColor: "#494949",
-      themeColorDefault: "#494949",
-      fontColor: "#ffffff",
-      fontColorDefault: "#ffffff",
-
       isProjectEditing: false,
-      
-      cols: [
-        "Project Id",
-        "Project Name",
-        "WL Start Date",
-        "WL End Date",
-        "Logo Url",
-        "Investor List",
-        "Whitelisting Form",
-        "",
-      ],
-      whitelistingLink: "",
+      whitelistingLink: '',
       active: 0,
       host: location.hostname,
-      authToken: localStorage.getItem("authToken"),
+      authToken: localStorage.getItem('authToken'),
       isLoading: false,
       fullPage: true,
       user: {},
@@ -398,14 +314,11 @@ export default {
   },
 
   async mounted() {
-    //const usrStr = localStorage.getItem("user");
-    //this.user = null; JSON.parse(usrStr);
-
-    const usrStr = localStorage.getItem("user");
+    const usrStr = localStorage.getItem('user');
     this.user = {
       ...JSON.parse(usrStr),
     };
-    this.project.ownerDid = this.user.id; // : "did:hs:QWERTlkasd090123SWEE12322";
+    this.project.ownerDid = this.user.id;
     await this.fetchProjects();
   },
   beforeRouteEnter(to, from, next) {
@@ -415,53 +328,55 @@ export default {
   },
 
   methods: {
-    onBannerError(e){
-      e.target.src =require("../../assets/default-banner.png");
+    onBannerError(e) {
+      e.target.src = require('../../assets/default-banner.png');
     },
-    copy(textToCopy, contentType){
-			if(textToCopy){
-				navigator.clipboard.writeText(textToCopy).then(() => {
-						this.notifySuccess(`${contentType}, ${Messages.EVENTS.CREATE_EDIT_EVENT.COPIED_TO_CLIPBOARD}`);
-					})
-					.catch(err => {
-						this.notifyErr(Messages.EVENTS.CREATE_EDIT_EVENT.ERROR_WHILE_COPYING, err);
-					});
-			}
+    copy(textToCopy, contentType) {
+      if (textToCopy) {
+        navigator.clipboard
+          .writeText(textToCopy)
+          .then(() => {
+            this.notifySuccess(`${contentType}, ${Messages.EVENTS.CREATE_EDIT_EVENT.COPIED_TO_CLIPBOARD}`);
+          })
+          .catch((err) => {
+            this.notifyErr(Messages.EVENTS.CREATE_EDIT_EVENT.ERROR_WHILE_COPYING, err);
+          });
+      }
     },
-    openCreateSidebar(){
-      this.isProjectEditing = false
-      this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
-      
+    openCreateSidebar() {
+      this.isProjectEditing = false;
+      this.$root.$emit('bv::toggle::collapse', 'sidebar-right');
+
       this.resetAllValues();
-      this.$root.$emit('callClearFromProject');    
+      this.$root.$emit('callClearFromProject');
     },
-    AddUpdateDelEventActions(event){
-      const  { type, data } = event;
-      if(type){
-        switch(type){
-          case "ADD": {
-            this.eventActionList.push(data);            
+    AddUpdateDelEventActions(event) {
+      const { type, data } = event;
+      if (type) {
+        switch (type) {
+          case 'ADD': {
+            this.eventActionList.push(data);
             break;
           }
 
-          case "UPDATE": {
-            const { id, _id } =  data;          
-            this.eventActionList.map(x => {
-              if((x._id === _id) || x.id === id){
+          case 'UPDATE': {
+            const { id, _id } = data;
+            this.eventActionList.map((x) => {
+              if (x._id === _id || x.id === id) {
                 return data;
               }
-            })
+            });
             break;
           }
 
-          case "DELETE": {
-            const actionIndex = this.eventActionList.findIndex(x => x._id === data)
-            if(actionIndex > -1){
-              this.eventActionList[actionIndex]["isDeleted"] = true;
-            }else{
-              const actionIndex = this.eventActionList.findIndex(x => x.id === data)
-              if(actionIndex > -1){
-                this.eventActionList.splice(actionIndex, 1)
+          case 'DELETE': {
+            const actionIndex = this.eventActionList.findIndex((x) => x._id === data);
+            if (actionIndex > -1) {
+              this.eventActionList[actionIndex]['isDeleted'] = true;
+            } else {
+              const actionIndex = this.eventActionList.findIndex((x) => x.id === data);
+              if (actionIndex > -1) {
+                this.eventActionList.splice(actionIndex, 1);
               }
             }
             break;
@@ -469,54 +384,43 @@ export default {
         }
       }
     },
-    handleSearch(e){
-        if(e.target.value.length){
-          this.searchQuery = e.target.value.trim();
-          return this.projectsToShow = this.projects.filter(x => (x.projectName.toLowerCase().includes(e.target.value.toLowerCase())));
-        } else{
-          this.searchQuery = ""
-          this.paginateChange(this.currentPage)
-        }
-
+    handleSearch(e) {
+      if (e.target.value.length) {
+        this.searchQuery = e.target.value.trim();
+        return (this.projectsToShow = this.projects.filter((x) =>
+          x.projectName.toLowerCase().includes(e.target.value.toLowerCase())
+        ));
+      } else {
+        this.searchQuery = '';
+        this.paginateChange(this.currentPage);
+      }
     },
-    UpdateColors(e){
 
-     this.fontColor = e.fontColor
-    this.themeColor = e.themeColor
+    paginateChange(e) {
+      this.currentPage = e;
+      const skip = this.perPage * (e - 1);
 
-    },
-    paginateChange(e){
-
-      this.currentPage = e
-       const skip = this.perPage * (e - 1);
-
-       this.projectsToShow  = this.projects.slice(skip, this.perPage + skip);
+      this.projectsToShow = this.projects.slice(skip, this.perPage + skip);
     },
 
     handleThemeChange(e) {
-      this.themeColor = e.target.value
+      this.themeColor = e.target.value;
     },
     openCreateModal() {
-      
       this.isProjectEditing = false;
-      this.project = {}
-      this.eventActionList = this.eventActionList
-      this.blockchainType = "ETHEREUM";
-      this.contractType = "ERC20";
-      this.fontColor = this.fontColorDefault;
-      this.themeColor = this.themeColorDefault;
+      this.project = {};
+      this.eventActionList = this.eventActionList;
       this.projectStatus = true;
-      this.$bvModal.show("create-project-modal")      
+      this.$bvModal.show('create-project-modal');
     },
-    changeProjectStatus (event) {
-      this.project.projectStatus = event.target.options[event.target.options.selectedIndex].value === "false" ? false : true ;
+    changeProjectStatus(event) {
+      this.project.projectStatus =
+        event.target.options[event.target.options.selectedIndex].value === 'false' ? false : true;
     },
     async fetchProjects() {
       try {
-        
         this.isLoading = true;
-        if (!this.user.id) throw new Error("No project found");
-       
+        if (!this.user.id) throw new Error('No project found');
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.user.id}`;
 
@@ -525,7 +429,7 @@ export default {
         };
         const resp = await fetch(url, {
           headers,
-          method: "GET",
+          method: 'GET',
         });
 
         if (!resp.ok) {
@@ -536,12 +440,9 @@ export default {
         this.projects = json;
         this.projectsToShow = this.projects.slice(0, this.perPage);
         this.projects.map((x) => {
-          x["whitelisting_link"] =
-            window.location.origin + ( x.slug && x.slug != "" ?  "/form/" + x.slug :  "/form?projectId=" + x._id ) ;
-          x["investors_link"] =
-            window.location.origin +
-            "/admin/participants?projectId=" +
-            x._id;
+          x['whitelisting_link'] =
+            window.location.origin + (x.slug && x.slug != '' ? '/form/' + x.slug : '/form?projectId=' + x._id);
+          x['investors_link'] = window.location.origin + '/admin/participants?projectId=' + x._id;
         });
         this.notifySuccess(Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_FETCHED_NO + this.projects.length);
       } catch (e) {
@@ -560,142 +461,102 @@ export default {
     editProject(project) {
       this.resetAllValues();
       this.isProjectEditing = true;
-      this.project = {...project};
+      this.project = { ...project };
 
-      this.project.fromDate  =  dayjs(project.fromDate).format("YYYY-MM-DD hh:mm:ss");
-      this.project.toDate  =  dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
+      this.project.fromDate = dayjs(project.fromDate).format('YYYY-MM-DD hh:mm:ss');
+      this.project.toDate = dayjs(project.toDate).format('YYYY-MM-DD hh:mm:ss');
+      this.projectStatus = project.projectStatus;
+      // console.log(project.actions)
+      this.eventActionList = project.actions;
 
-
-      // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
-      this.project.social = {
-        twitter: {
-          isEnabled: true,
-          twitterHandle: this.project.twitterHandle,
-          twitterPostFormat: this.project.twitterPostFormat
-        },
-        telegram: {
-           isEnabled: true,
-          telegramHandle: this.project.telegramHandle,
-          telegramAnnouncementChannel : this.project.telegramAnnouncementChannel
-        }
-      }
-    
-      this.socialOptions.forEach(media => {
-        if(media.value){
-          media.value.fields.map(field => {
-            field.value = this.project[field.name]
-          })
-        }
-      })
-
-      this.socialOptions.map(x =>{ 
-        if(x.value){
-            this.addedSocialMedias.push(x.value)
-        }
-      })
-
-      this.blockchainType = project.blockchainType
-      this.contractType = project.contractType
-      this.themeColor = project.themeColor
-      this.fontColor = project.fontColor
-      this.projectStatus = project.projectStatus
-     // console.log(project.actions)
-      this.eventActionList = project.actions
-    
-    
-      this.$root.$emit('bv::toggle::collapse', 'sidebar-right') 
+      this.$root.$emit('bv::toggle::collapse', 'sidebar-right');
       this.$root.$emit('callClearFromProject');
     },
-    
-    async saveProject() {
-      
-      try {
 
-        if(this.checkIfEverythingIsFilled() !==  true){
-            return this.notifyErr( this.checkIfEverythingIsFilled());   
+    async saveProject() {
+      try {
+        if (this.checkIfEverythingIsFilled() !== true) {
+          return this.notifyErr(this.checkIfEverythingIsFilled());
         }
-        
-        if(this.isProjectNameValid()!==true){
+
+        if (this.isProjectNameValid() !== true) {
           return this.notifyErr(this.isProjectNameValid());
         }
-       
+
         if (this.isLogoUrlValid() !== true) {
           return this.notifyErr(this.isLogoUrlValid());
         }
-        
-        if(isNaN(parseInt(this.project.refereePoint)) || isNaN(parseInt(this.project.referralPoint))){
-        return this.notifyErr(Messages.EVENTS.REF_POINT.NOT_VALID_INP);
+
+        if (isNaN(parseInt(this.project.refereePoint)) || isNaN(parseInt(this.project.referralPoint))) {
+          return this.notifyErr(Messages.EVENTS.REF_POINT.NOT_VALID_INP);
         }
-        if((parseInt(this.project.refereePoint)<0) || (parseInt(this.project.referralPoint)<0)){
-        return this.notifyErr(Messages.EVENTS.REF_POINT.NOT_POS_INP);
+        if (parseInt(this.project.refereePoint) < 0 || parseInt(this.project.referralPoint) < 0) {
+          return this.notifyErr(Messages.EVENTS.REF_POINT.NOT_POS_INP);
         }
-        
+
         this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authToken}`,
         };
 
-        let method = "POST";
+        let method = 'POST';
 
         if (this.isProjectEditing) {
-          method = "PUT";
+          method = 'PUT';
         }
 
         this.project.toDate = new Date(this.project.toDate).toISOString();
         this.project.fromDate = new Date(this.project.fromDate).toISOString();
-       
-        this.project.themeColor = this.themeColor.trim().length ?  this.themeColor :  this.themeColorDefault
-        this.project.fontColor = this.fontColor.trim().length ?  this.fontColor :  this.fontColorDefault
-        this.project.blockchainType = this.blockchainType
-        this.project.contractType = this.contractType
-        this.project.actions = this.eventActionList
-        this.project.refereePoint=this.project.refereePoint.toString()
-        this.project.referralPoint=this.project.referralPoint.toString()
-    
-        const resp = await apiClientMixin.makeCall({url, body:this.project, method, header: headers })
 
-          if(!this.isProjectEditing){
-            ////  not using this for the time being just  to test
-            // this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/form/" + resp.data.slug :  "/form?projectId=" + resp.data._id ) 
-            this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/form/" + resp.data.slug :  "/form?projectId=" + resp.data._id ) 
-            
-          }
-        
+        this.project.actions = this.eventActionList;
+        this.project.refereePoint = this.project.refereePoint.toString();
+        this.project.referralPoint = this.project.referralPoint.toString();
+
+        const resp = await apiClientMixin.makeCall({
+          url,
+          body: this.project,
+          method,
+          header: headers,
+        });
+
+        if (!this.isProjectEditing) {
+          ////  not using this for the time being just  to test
+          // this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/form/" + resp.data.slug :  "/form?projectId=" + resp.data._id )
+          this.whitelistingLink =
+            window.location.origin +
+            (resp.data.slug && resp.data.slug != '' ? '/form/' + resp.data.slug : '/form?projectId=' + resp.data._id);
+        }
 
         setTimeout(() => {
-          this.whitelistingLink = "";
+          this.whitelistingLink = '';
         }, 10000);
         this.notifySuccess(Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_SAVED + resp.data._id);
         this.resetAllValues();
 
-        if(this.isProjectEditing){
-           await this.fetchProjects();
-            this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+        if (this.isProjectEditing) {
+          await this.fetchProjects();
+          this.$root.$emit('bv::toggle::collapse', 'sidebar-right');
           return;
         }
-    
-      
-        /// WARNING:: This code is redundant it seems. 
+
+        /// WARNING:: This code is redundant it seems.
         /// Not removing but handling the condition.
-        const userProjects = JSON.parse(localStorage.getItem("userProjects"));
-        if(userProjects){
-          userProjects.count += 1
-          userProjects.projects.push(resp.data)
-          localStorage.setItem("userProjects", JSON.stringify(userProjects))
+        const userProjects = JSON.parse(localStorage.getItem('userProjects'));
+        if (userProjects) {
+          userProjects.count += 1;
+          userProjects.projects.push(resp.data);
+          localStorage.setItem('userProjects', JSON.stringify(userProjects));
         }
-       
+
         await this.fetchProjects();
-        this.$bvModal.hide("create-project-modal");
-        this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
-        
-        
+        this.$bvModal.hide('create-project-modal');
+        this.$root.$emit('bv::toggle::collapse', 'sidebar-right');
       } catch (e) {
-        
-        if(e.errors){
-            this.errors = e.errors
-            this.$bvModal.show("err-modal");
+        if (e.errors) {
+          this.errors = e.errors;
+          this.$bvModal.show('err-modal');
         }
         this.notifyErr(e || e.message);
       } finally {
@@ -704,138 +565,106 @@ export default {
       }
     },
 
-    checkIfEverythingIsFilled(){
-       
-
-        for (let index = 0; index < this.eventActionList.length; index++) {
-          if(this.eventActionList[index].score===null || this.eventActionList[index].score===""){
-              return (Messages.EVENTS.ACTIONS.SCORE_IS_NUM_ANY_LEFT)
-          }
+    checkIfEverythingIsFilled() {
+      for (let index = 0; index < this.eventActionList.length; index++) {
+        if (this.eventActionList[index].score === null || this.eventActionList[index].score === '') {
+          return Messages.EVENTS.ACTIONS.SCORE_IS_NUM_ANY_LEFT;
         }
+      }
 
-        const eventActionTitle=checkTitle(this.eventActionList, 'title');
+      const eventActionTitle = checkTitle(this.eventActionList, 'title');
 
-        if(eventActionTitle.includes(false)){
-          return (Messages.EVENTS.CHECK_ALL_TITLE_EMPTY);
-        }
-        let eventActionValue= this.eventActionList;
-        eventActionValue= eventActionValue.filter((x) => (x.type!=="INPUT_TEXT") && (x.type!=="INPUT_NUMBER") && (x.type!=="INPUT_DATE") && (x.type!=="INPUT_HYPERLINK") && (x.type!=="BLOCKCHAIN_ETH") && (x.type!=="BLOCKCHAIN_TEZ"))
-        const filteredValueList=checkValue(eventActionValue, 'value');
-        if(filteredValueList.includes(false)){
-          return (Messages.EVENTS.CHECK_ALL_VALUE_EMPTY);
-        }
+      if (eventActionTitle.includes(false)) {
+        return Messages.EVENTS.CHECK_ALL_TITLE_EMPTY;
+      }
+      let eventActionValue = this.eventActionList;
+      eventActionValue = eventActionValue.filter(
+        (x) =>
+          x.type !== 'INPUT_TEXT' &&
+          x.type !== 'INPUT_NUMBER' &&
+          x.type !== 'INPUT_DATE' &&
+          x.type !== 'INPUT_HYPERLINK' &&
+          x.type !== 'BLOCKCHAIN_ETH' &&
+          x.type !== 'BLOCKCHAIN_TEZ'
+      );
+      const filteredValueList = checkValue(eventActionValue, 'value');
+      if (filteredValueList.includes(false)) {
+        return Messages.EVENTS.CHECK_ALL_VALUE_EMPTY;
+      }
 
-        if(!this.project.projectName){
-          return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_NAME
-        }   
-        if(!this.project.logoUrl){
-          return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_LOGO_URL
-        }
-        if(! (this.project.fromDate && this.project.toDate)){
-          return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_DATE_TIME
-        }
-       
-       
-        if(!this.blockchainType){
-          return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_BLOCKCHAIN_TYPE
-        }
+      if (!this.project.projectName) {
+        return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_NAME;
+      }
+      if (!this.project.logoUrl) {
+        return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_LOGO_URL;
+      }
+      if (!(this.project.fromDate && this.project.toDate)) {
+        return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_DATE_TIME;
+      }
 
-        if(this.themeColor == "#ffffff"){
-          return Messages.EVENTS.CREATE_EDIT_EVENT.THEME_NOT_WHITE
-        }
+      if (!this.blockchainType) {
+        return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_BLOCKCHAIN_TYPE;
+      }
 
-        if(this.themeColor == this.fontColor && (this.themeColor.trim().length && this.themeColor.trim().length) ){
-          return Messages.EVENTS.CREATE_EDIT_EVENT.THEME_COLOR_NOT_SAME
-        }
-        return true
+      if (this.themeColor == '#ffffff') {
+        return Messages.EVENTS.CREATE_EDIT_EVENT.THEME_NOT_WHITE;
+      }
 
-      
-    },  
+      if (this.themeColor == this.fontColor && this.themeColor.trim().length && this.themeColor.trim().length) {
+        return Messages.EVENTS.CREATE_EDIT_EVENT.THEME_COLOR_NOT_SAME;
+      }
+      return true;
+    },
 
-    isProjectNameValid(){
-      if(isValidURL(this.project.projectName)){
+    isProjectNameValid() {
+      if (isValidURL(this.project.projectName)) {
         return Messages.EVENTS.VALIDATION.INVALID_PROJECT_NAME;
       }
       return true;
     },
     isLogoUrlValid() {
-          if (!isValidURL(this.project.logoUrl)) {
-            return Messages.EVENTS.VALIDATION.INVALID_LOGO_URL;
-          }
-          return true;
-        },
+      if (!isValidURL(this.project.logoUrl)) {
+        return Messages.EVENTS.VALIDATION.INVALID_LOGO_URL;
+      }
+      return true;
+    },
 
     clear() {
       this.isProjectEditing = false;
       this.project = {
-        _id: "",
-        projectName: "",
-        logoUrl: "",
-        fromDate: "",
-        toDate: "",
-        onwerDid: "",
-        twitterHandle: "",
-        telegramHandle: "",
+        _id: '',
+        projectName: '',
+        logoUrl: '',
+        fromDate: '',
+        toDate: '',
+        onwerDid: '',
+        twitterHandle: '',
+        telegramHandle: '',
       };
     },
 
-    resetAllValues(){
-       this.project = {
-         _id: "",
-        projectName: "",
-        logoUrl: "",
-        fromDate: "",
-        toDate: "",
-        ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
+    resetAllValues() {
+      this.project = {
+        _id: '',
+        projectName: '',
+        logoUrl: '',
+        fromDate: '',
+        toDate: '',
+        ownerDid: 'did:hs:QWERTlkasd090123SWEE12322',
         investorsCount: 0,
-        social: {},
         projectStatus: true,
         actions: [],
         refereePoint: 10,
-        referralPoint: 5
-      }, 
-      this.eventActionList = []
-        this.selectedSocialMedia = null,
-        this.addedSocialMedias = [],
-        // TODO:  This is agian bad way 
-        //  need to use /api/v1/action API
-        this.socialOptions = [
-            {value: null, label: "Select a Social Profile"},
-            {
-                label: "Twitter",
-                value: {
-                    media: "twitter",
-                    icon: "fab fa-twitter",
-                    fields: []
-                }, 
-                
-            },
-            {
-                label: "Telegram", 
-                value: {
-                    media: "telegram",
-                    icon:"fab fa-telegram-plane",
-                    fields: []
-                }, 
-                
-            },
-            {
-                label: "Discord", 
-                value: {
-                    media: "discord",
-                    icon:"fab fa-discord",
-                    fields: []
-                }, 
-                
-            }
-      ]
-
+        referralPoint: 5,
+      };
+      this.eventActionList = [];
+      this.addedSocialMedias = [];
     },
-    truncate1(str,number){
-      return truncate(str,number)
-      }
+    truncate1(str, number) {
+      return truncate(str, number);
+    },
   },
-  
-  mixins: [notificationMixins]
+
+  mixins: [notificationMixins],
 };
 </script>

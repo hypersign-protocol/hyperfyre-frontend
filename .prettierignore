@@ -1,0 +1,12 @@
+node_modules
+dist
+hypersign.json
+*.png
+build
+test
+.env
+env.sample
+env.*
+public
+LICENSE
+*.log

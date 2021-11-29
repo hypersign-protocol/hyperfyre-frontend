@@ -15,77 +15,73 @@
 .fullbody {
   width: 100%;
 }
-.floatLeft{
+.floatLeft {
   float: left;
 }
 
-.floatRight{
+.floatRight {
   float: right;
 }
 
-.noBullet{
-  list-style-type:none;
+.noBullet {
+  list-style-type: none;
 }
 
 .title {
   color: grey;
   font-size: 18px;
 }
-
 </style>
 <template>
-   <div class="home  marginLeft marginRight">
-     <h3 class="leftAlign">Welcome, {{user.name}} !</h3>
-     <div class="row">
-        <div class="col-md-6">
-            <Profile/>
-        </div>
-        <div class="col-md-6">
-            <Charts/>
-        </div>
-     </div>    
+  <div class="home marginLeft marginRight">
+    <h3 class="leftAlign">Welcome, {{ user.name }} !</h3>
+    <div class="row">
+      <div class="col-md-6">
+        <Profile />
+      </div>
+      <div class="col-md-6">
+        <Charts />
+      </div>
+    </div>
   </div>
 </template>
 
-
 <script>
-import Profile from '@/components/admin/Profile.vue'
-import Charts from '@/components/admin/Charts.vue'
+import Profile from '@/components/admin/Profile.vue';
+import Charts from '@/components/admin/Charts.vue';
 import notificationMixins from '../../mixins/notificationMixins';
 export default {
-  name: "PanelPage",
-  mounted() {
-  },
-  components: { 
+  name: 'PanelPage',
+  mounted() {},
+  components: {
     Profile,
-    Charts
+    Charts,
   },
   data() {
     return {
       appList: [],
-     
+
       user: {},
-      appName: "",
-      authToken: localStorage.getItem('authToken')
+      appName: '',
+      authToken: localStorage.getItem('authToken'),
     };
   },
   created() {
-    const usrStr = localStorage.getItem('user');    
-     this.user = {
-       ...JSON.parse(usrStr)
-     }
+    const usrStr = localStorage.getItem('user');
+    this.user = {
+      ...JSON.parse(usrStr),
+    };
   },
   methods: {
-    gotosubpage: id => {
+    gotosubpage: (id) => {
       this.$router.push(`${id}`);
     },
-    logout(){
+    logout() {
       // console.log("Dashboard:: Logout method...")
       // localStorage.removeItem('authToken')
       // localStorage.removeItem('user')
       // localStorage.removeItem("credentials")
       // localStorage.removeItem("userData")
-      
       // if(this.$route.params.nextUrl != null){
       //               this.$router.push(this.$route.params.nextUrl)
       //           }else{
@@ -93,7 +89,6 @@ export default {
       //           }
     },
   },
-  mixins: [notificationMixins]
-  
+  mixins: [notificationMixins],
 };
 </script>

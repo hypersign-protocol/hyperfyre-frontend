@@ -36,9 +36,7 @@
             <div class="title text-left mb-1">Your Referral Link</div>
             <div class="text text-left">
               {{ referalLink }}
-              <span @click="copy" class="copy"
-                ><i class="far fa-copy"></i
-              ></span>
+              <span @click="copy" class="copy"><i class="far fa-copy"></i></span>
             </div>
           </b-col>
         </b-row>
@@ -56,10 +54,10 @@
 }
 </style>
 <script>
-import notificationMixin from "../../../mixins/notificationMixins";
-import Messages from "../../../utils/messages/participants/en";
+import notificationMixin from '../../../mixins/notificationMixins';
+import Messages from '../../../utils/messages/participants/en';
 export default {
-  name: "Profile",
+  name: 'Profile',
   props: {
     user: {
       required: true,
@@ -69,17 +67,14 @@ export default {
   data() {
     return {
       visible: false,
-      referalLink: "",
+      referalLink: '',
     };
   },
   updated() {
     if (this.user.email) {
-      this.referalLink = `${window.location.protocol +
-        "//" +
-        window.location.host +
-        window.location.pathname}?referrer=${encodeURIComponent(
-        this.user.email
-      )}`;
+      this.referalLink = `${
+        window.location.protocol + '//' + window.location.host + window.location.pathname
+      }?referrer=${encodeURIComponent(this.user.email)}`;
     }
   },
   mixins: [notificationMixin],

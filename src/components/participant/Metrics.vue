@@ -14,7 +14,7 @@
     </b-col>
     <b-col cols="4" sm="4" md="4">
       <div class="py-4">
-        <div class="number">{{ timeLeft}}</div>
+        <div class="number">{{ timeLeft }}</div>
         <div class="text">Days Left</div>
       </div>
     </b-col>
@@ -25,15 +25,15 @@ export default {
   props: {
     userScore: Number,
     totalEntries: Number,
-    timeLeft: Number
+    timeLeft: Number,
   },
 
   data() {
     return {
-      timeUnit: "Days"
-    }
-  }
-}
+      timeUnit: 'Days',
+    };
+  },
+};
 </script>
 <style scoped>
 .card {

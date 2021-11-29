@@ -90,29 +90,28 @@ h5 span {
   text-align: center;
 }
 
-.QRRefresh{
-  width:100%; 
-  align-content:center; 
-  height:100%; 
+.QRRefresh {
+  width: 100%;
+  align-content: center;
+  height: 100%;
   cursor: pointer;
   margin-top: 14%;
 }
 
-.button-theme{
-  background-color: #F1B319;
-  border-collapse: #F1B319;
+.button-theme {
+  background-color: #f1b319;
+  border-collapse: #f1b319;
   color: black;
   border: 0;
-
 }
 
-.event-card{
-  border:0;
+.event-card {
+  border: 0;
   border-radius: 10px;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
-.align-center{
+.align-center {
   margin-left: auto;
   margin-right: auto;
   display: block;
@@ -120,21 +119,17 @@ h5 span {
 </style>
 <template>
   <!-- <div class="row" style="margin-left: 35%;"> -->
-  <div style="justify-content: center; padding-top:3%">
-    <img class="align-center" style="margin-bottom: 20px" height="60px" src="../../assets/Hyperfyre_BY.svg"/>
-    <b-card no-body class="loginContent event-card ">
-      <loading
-        :active.sync="isLoading"
-        :can-cancel="true"
-        :is-full-page="fullPage"
-      ></loading>
+  <div style="justify-content: center; padding-top: 3%">
+    <img class="align-center" style="margin-bottom: 20px" height="60px" src="../../assets/Hyperfyre_BY.svg" />
+    <b-card no-body class="loginContent event-card">
+      <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
       <h4>Admin Login</h4>
-      <div class="row" style="margin-top:3%">
+      <div class="row" style="margin-top: 3%">
         <div v-if="QRRefresh" class="QRRefresh">
-          <i @click="reloadQR" class="fas fa-redo" style="font-size: xx-large; color: gray;"></i>
-          <p><label style="font-size:small; color:grey; margin-top:1%">
-            Session expired. Click to reload.
-          </label></p>
+          <i @click="reloadQR" class="fas fa-redo" style="font-size: xx-large; color: gray"></i>
+          <p>
+            <label style="font-size: small; color: grey; margin-top: 1%"> Session expired. Click to reload. </label>
+          </p>
         </div>
         <form class="col-md-12" v-else>
           <div class="form-group">
@@ -147,16 +142,12 @@ h5 span {
               logoBackgroundColor="white"
               logoCornerRadius="2"
             ></vue-qr>
-            <label style="font-size:small; color:grey; margin-top:1%"
-              >Scan QR code using Hypersign Mobile App</label
-            >
+            <label style="font-size: small; color: grey; margin-top: 1%">Scan QR code using Hypersign Mobile App</label>
             <div>
               <!-- <p style="font-size:small;"> Don’t have the app yet? <a href="#">Get it now</a></p> -->
-              <span style="font-size: small; color:grey; padding: 10px">
+              <span style="font-size: small; color: grey; padding: 10px">
                 Get the app on
-                <a
-                  href="https://play.google.com/store/apps/details?id=com.hypersign.cordova"
-                  target="__blank"
+                <a href="https://play.google.com/store/apps/details?id=com.hypersign.cordova" target="__blank"
                   >Android</a
                 >
                 or
@@ -167,36 +158,28 @@ h5 span {
 
           <h5><span>OR</span></h5>
 
-          <div class="mb-2 " >
-            <a
-              v-if="this.value != ''"
-              class="btn btn-hypersign  button-theme"
-              href="#"
-              @click.prevent="openWallet()"
-            >
-              <div  style="font-size: smaller; padding: 10px;">
-                Use Web Wallet
-              </div>
+          <div class="mb-2">
+            <a v-if="this.value != ''" class="btn btn-hypersign button-theme" href="#" @click.prevent="openWallet()">
+              <div style="font-size: smaller; padding: 10px">Use Web Wallet</div>
             </a>
           </div>
         </form>
-       
       </div>
     </b-card>
   </div>
 </template>
 
 <script>
-import VueQr from "vue-qr";
+import VueQr from 'vue-qr';
 
-import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
-import url from "url";
-import notificationMixins from "../../mixins/notificationMixins";
-import localStorageMixin from "../../mixins/localStorageMixin";
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+import url from 'url';
+import notificationMixins from '../../mixins/notificationMixins';
+import localStorageMixin from '../../mixins/localStorageMixin';
 
 export default {
-  name: "Login",
+  name: 'Login',
   components: {
     VueQr,
     Loading,
@@ -205,73 +188,69 @@ export default {
     return {
       walletWindow: null,
       QRRefresh: false,
-      src2: require("../../assets/icon.png"),
+      src2: require('../../assets/icon.png'),
       active: 0,
-      username: "",
-      password: "",
+      username: '',
+      password: '',
       host: location.hostname,
-      challenge: "dddd",
+      challenge: 'dddd',
       domain: location.host,
       credentials: {},
       userData: {},
-      value: "",
+      value: '',
       user: {},
-      verifiablePresentation: "",
+      verifiablePresentation: '',
       fullPage: true,
       isLoading: false,
       connection: null,
-      privateKey:
-        "3isrtEJ4gt1ZHkdUYYph1WFAtzfqAL5WM6Hh1NC2hmWnDfBypXjt5oUFdAqQdiess2vqqQ3iF6x4fDVuvLw454sn",
-      did: "did:hs:892325a4-75c9-465c-882b-91e3ca5143c3",
+      privateKey: '3isrtEJ4gt1ZHkdUYYph1WFAtzfqAL5WM6Hh1NC2hmWnDfBypXjt5oUFdAqQdiess2vqqQ3iF6x4fDVuvLw454sn',
+      did: 'did:hs:892325a4-75c9-465c-882b-91e3ca5143c3',
     };
   },
   created() {
     localStorage.clear();
     // console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
-    let websocketUrl = "ws://localhost:3003";
+    let websocketUrl = 'ws://localhost:3003';
 
     let parsedUrl = {};
     try {
       parsedUrl = url.parse(baseUrl);
       // console.log(parsedUrl);
-      websocketUrl =
-        parsedUrl.protocol === "https:"
-          ? `wss://${parsedUrl.host}`
-          : `ws://${parsedUrl.host}`;
+      websocketUrl = parsedUrl.protocol === 'https:' ? `wss://${parsedUrl.host}` : `ws://${parsedUrl.host}`;
       // console.log(websocketUrl);
     } catch (e) {
-      websocketUrl = "ws://localhost:3003";
+      websocketUrl = 'ws://localhost:3003';
     }
-    if (websocketUrl[websocketUrl.length - 1] == "/") {
+    if (websocketUrl[websocketUrl.length - 1] == '/') {
       websocketUrl = websocketUrl.substring(0, websocketUrl.length - 1);
     }
     // console.log(websocketUrl);
 
     // take it in the env
     this.connection = new WebSocket(this.$config.websocketUrl);
-    this.connection.onopen = function() {
-      console.log("Socket connection is open");
+    this.connection.onopen = function () {
+      console.log('Socket connection is open');
     };
 
     this.isLoading = true;
     var _this = this;
 
-    this.connection.onmessage = function({ data }) {
+    this.connection.onmessage = function ({ data }) {
       // console.log("Websocket connection messag receieved ", data);
       let messageData = JSON.parse(data);
       // console.log(messageData);
-      if (messageData.op == "init") {
+      if (messageData.op == 'init') {
         _this.isLoading = false;
         // console.log(messageData.data);
         _this.value = JSON.stringify(messageData.data);
-      } else if (messageData.op == "end") {
+      } else if (messageData.op == 'end') {
         _this.connection.close();
         const authorizationToken = messageData.data.token;
         // console.log(authorizationToken);
-        localStorage.setItem("authToken", authorizationToken);
+        localStorage.setItem('authToken', authorizationToken);
 
-        if (localStorage.getItem("authToken") != null) {
+        if (localStorage.getItem('authToken') != null) {
           if (this.walletWindow) {
             this.walletWindow.close();
           }
@@ -279,33 +258,32 @@ export default {
             _this.$router.push(_this.$route.params.nextUrl);
           } else {
             // console.log(_this.$router);
-            window.location.href =
-              window.location.origin + "/admin/dashboard";
+            window.location.href = window.location.origin + '/admin/dashboard';
             // _this.$router.push("dashboard");
           }
         }
-      } else if (messageData.op == "reload") {
+      } else if (messageData.op == 'reload') {
         // console.log("Timeout for clientId: " + messageData.data.clientId)
         _this.QRRefresh = true;
         _this.connection.close(4001, messageData.data.clientId);
       }
     };
-    this.connection.onerror = function(error) {
-      console.log("Websocket connection error ", error);
+    this.connection.onerror = function (error) {
+      console.log('Websocket connection error ', error);
     };
   },
   mounted() {
     this.clean();
   },
   methods: {
-    reloadQR(){
-      window.location.reload()
+    reloadQR() {
+      window.location.reload();
     },
     openWallet() {
-      if (this.value != "") {
+      if (this.value != '') {
         this.walletWindow = window.open(
           `${this.$config.webWalletAddress}/deeplink?url=${this.value}`,
-          "popUpWindow",
+          'popUpWindow',
           `height=800,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`
         );
       }

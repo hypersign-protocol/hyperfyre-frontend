@@ -1,10 +1,6 @@
 <template>
   <b-card no-body class="action-wrap">
-    <loading
-      :active.sync="isLoading"
-      :can-cancel="true"
-      :is-full-page="fullPage"
-    ></loading>
+    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
     <b-card-header
       :class="visible ? null : 'collapsed'"
       :aria-expanded="visible ? 'true' : 'false'"
@@ -23,12 +19,7 @@
             <img src="../../../assets/plus.svg" />
             {{ data.score }}
           </b-badge>
-          <img
-            class="check-mark"
-            src="../../../assets/check-circle-fill.svg"
-            height="25px"
-            v-if="done"
-          />
+          <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
         </b-col>
       </b-row>
     </b-card-header>
@@ -39,11 +30,7 @@
             <div class="follow">
               <button
                 :disabled="done"
-                @click="
-                  handleTwitterLogin(
-                    'https://twitter.com/intent/tweet?text=' + data.value
-                  )
-                "
+                @click="handleTwitterLogin('https://twitter.com/intent/tweet?text=' + data.value)"
                 class="btn btn-outline-twitter text-black mb-2"
               >
                 <img src="../../../assets/twitter.svg" />
@@ -61,30 +48,32 @@
         </b-row>
 
         <b-row v-if="!done">
-					<b-col cols="12" sm="12" md="12" >
-						<button class="btn btn-link center"  @click="update()">Continue</button>
-					</b-col>
-				</b-row>
+          <b-col cols="12" sm="12" md="12">
+            <button class="btn btn-link center" @click="update()">Continue</button>
+          </b-col>
+        </b-row>
       </b-card-body>
     </b-collapse>
   </b-card>
 </template>
 <style scoped>
-.center{
-  display: block; margin-left: auto;margin-right: auto
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
 <script>
-import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
-import apiClient from "../../../mixins/apiClientMixin";
-import webAuth from "../../../mixins/twitterLogin";
-import eventBus from "../../../eventBus.js";
-import notificationMixins from "../../../mixins/notificationMixins";
-import Messages from "../../../utils/messages/participants/en";
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+import apiClient from '../../../mixins/apiClientMixin';
+import webAuth from '../../../mixins/twitterLogin';
+import eventBus from '../../../eventBus.js';
+import notificationMixins from '../../../mixins/notificationMixins';
+import Messages from '../../../utils/messages/participants/en';
 export default {
   components: { Loading },
-  name: "TwitterRetweet",
+  name: 'TwitterRetweet',
   props: {
     idValue: {
       required: true,
@@ -95,10 +84,10 @@ export default {
   },
   data() {
     return {
-      authToken: localStorage.getItem("authToken"),
+      authToken: localStorage.getItem('authToken'),
       visible: false,
       done: this.data.isDone,
-      retweetUrl: "",
+      retweetUrl: '',
       isLoading: false,
       fullPage: true,
     };
@@ -110,16 +99,14 @@ export default {
     async update() {
       try {
         if (!(await this.hasRetweeted())) {
-          throw new Error(
-            Messages.EVENT_ACTIONS.TWITTER_RETWEET.INVALID_RETWEET
-          );
+          throw new Error(Messages.EVENT_ACTIONS.TWITTER_RETWEET.INVALID_RETWEET);
         } else {
-          this.$emit("input", this.retweetUrl);
+          this.$emit('input', this.retweetUrl);
         }
       } catch (e) {
         const { errors } = e;
         if (errors && errors.length > 0) {
-          this.notifyErr(errors[0]["msg"]);
+          this.notifyErr(errors[0]['msg']);
         } else {
           this.notifyErr(e.message);
         }
@@ -130,32 +117,29 @@ export default {
     },
     handleTwitterLogin(urlToRedirect) {
       try {
-        if (!localStorage.getItem("twitterId")) {
+        if (!localStorage.getItem('twitterId')) {
           webAuth.popup.authorize(
             {
-              connection: "twitter",
+              connection: 'twitter',
               owp: true,
             },
             (err, authRes) => {
               if (!err) {
-                webAuth.client.userInfo(
-                  authRes.accessToken,
-                  async (err, user) => {
-                    if (err) {
-                      return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
-                    }
-
-                    const twitterId = user.sub.split("|")[1];
-                    localStorage.setItem("twitterId", twitterId);
-
-                    window.open(urlToRedirect, "_blank");
+                webAuth.client.userInfo(authRes.accessToken, async (err, user) => {
+                  if (err) {
+                    return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
                   }
-                );
+
+                  const twitterId = user.sub.split('|')[1];
+                  localStorage.setItem('twitterId', twitterId);
+
+                  window.open(urlToRedirect, '_blank');
+                });
               }
             }
           );
         } else {
-          window.open(urlToRedirect, "_blank");
+          window.open(urlToRedirect, '_blank');
           // this.twitter.targetScreenName = localStorage.getItem("twitterHandle")
         }
       } catch (e) {
@@ -164,14 +148,14 @@ export default {
     },
     async hasRetweeted() {
       if (!this.retweetUrl) {
-        throw new Error("Retweet url cannot be empty");
+        throw new Error('Retweet url cannot be empty');
       }
       this.isLoading = true;
-      const twitterId = localStorage.getItem("twitterId");
+      const twitterId = localStorage.getItem('twitterId');
       if (twitterId) {
         let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
         let headers = {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authToken}`,
         };
 
@@ -181,11 +165,11 @@ export default {
           tweetText: this.data.value,
           needUserDetails: false,
           checkIfFollowed: false,
-          sourceScreenName: "",
+          sourceScreenName: '',
         };
 
         const resp = await apiClient.makeCall({
-          method: "POST",
+          method: 'POST',
           url: url,
           body,
           header: headers,

@@ -1,10 +1,6 @@
 <template>
   <b-card no-body class="action-wrap">
-    <loading
-      :active.sync="isLoading"
-      :can-cancel="true"
-      :is-full-page="fullPage"
-    ></loading>
+    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
     <b-card-header
       :class="visible ? null : 'collapsed'"
       :aria-expanded="visible ? 'true' : 'false'"
@@ -23,12 +19,7 @@
             <img src="../../../assets/plus.svg" />
             {{ data.score }}
           </b-badge>
-          <img
-            class="check-mark"
-            src="../../../assets/check-circle-fill.svg"
-            height="25px"
-            v-if="done"
-          />
+          <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
         </b-col>
       </b-row>
     </b-card-header>
@@ -39,9 +30,7 @@
             <div class="follow">
               <button
                 :disabled="done"
-                @click="
-                  handleDiscordLogin(discord.sourceScreenName)
-                "
+                @click="handleDiscordLogin(discord.sourceScreenName)"
                 class="btn btn-outline-discord text-black"
               >
                 <!-- <img src="../../../assets/discord.png" height="20px"/> -->
@@ -53,31 +42,33 @@
         </b-row>
 
         <b-row v-if="!done">
-					<b-col cols="12" sm="12" md="12" >
-						<button class="btn btn-link center" @click="update()">Continue</button>
-					</b-col>
-				</b-row>
+          <b-col cols="12" sm="12" md="12">
+            <button class="btn btn-link center" @click="update()">Continue</button>
+          </b-col>
+        </b-row>
       </b-card-body>
     </b-collapse>
   </b-card>
 </template>
 
 <style>
-.center{
-  display: block; margin-left: auto;margin-right: auto
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
 
 <script>
-import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
-import webAuth from "../../../mixins/twitterLogin";
-import eventBus from "../../../eventBus.js";
-import notificationMixins from "../../../mixins/notificationMixins";
-import Messages from "../../../utils/messages/participants/en";
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+import webAuth from '../../../mixins/twitterLogin';
+import eventBus from '../../../eventBus.js';
+import notificationMixins from '../../../mixins/notificationMixins';
+import Messages from '../../../utils/messages/participants/en';
 export default {
   components: { Loading },
-  name: "TwitterRetweet",
+  name: 'TwitterRetweet',
   props: {
     idValue: {
       required: true,
@@ -90,12 +81,12 @@ export default {
     return {
       visible: false,
       done: this.data.isDone,
-      authToken: localStorage.getItem("authToken"),
+      authToken: localStorage.getItem('authToken'),
       actions: [],
       discord: {
-        sourceScreenName: "",
-        targetScreenName: "",
-        channelName: ""
+        sourceScreenName: '',
+        targetScreenName: '',
+        channelName: '',
       },
       isLoading: false,
       fullPage: true,
@@ -103,12 +94,12 @@ export default {
   },
   async mounted() {
     try {
-        if(localStorage.getItem("discordId")){
-          localStorage.removeItem("discordId")
-          }
-        if (localStorage.getItem("discordUserName")) {
-              localStorage.removeItem("discordUserName")
-        }
+      if (localStorage.getItem('discordId')) {
+        localStorage.removeItem('discordId');
+      }
+      if (localStorage.getItem('discordUserName')) {
+        localStorage.removeItem('discordUserName');
+      }
       if (this.data.value) {
         const discord = JSON.parse(this.data.value);
         this.discord = { ...discord };
@@ -121,22 +112,23 @@ export default {
   },
   methods: {
     async update() {
-      const tgIdInStore = localStorage.getItem("discordId"); 
-      const discordScreenName=localStorage.getItem("discordUserName")
-      if ((!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) && (!discordScreenName || discordScreenName == "undefined" || discordScreenName == null)) {
-        return this.notifyErr(
-          Messages.EVENT_ACTIONS.DISCORD_JOIN.DISCORD_AUTH
-        );
+      const tgIdInStore = localStorage.getItem('discordId');
+      const discordScreenName = localStorage.getItem('discordUserName');
+      if (
+        (!tgIdInStore || tgIdInStore == 'undefined' || tgIdInStore == null) &&
+        (!discordScreenName || discordScreenName == 'undefined' || discordScreenName == null)
+      ) {
+        return this.notifyErr(Messages.EVENT_ACTIONS.DISCORD_JOIN.DISCORD_AUTH);
       } else {
         this.discord.targetScreenName = discordScreenName;
         this.$emit(
-          "input",
+          'input',
           JSON.stringify({
             ...this.discord,
           })
         );
-        localStorage.removeItem("discordUserName")
-        localStorage.removeItem("discordId")
+        localStorage.removeItem('discordUserName');
+        localStorage.removeItem('discordId');
       }
     },
     disableInput(data) {
@@ -144,39 +136,35 @@ export default {
     },
     handleDiscordLogin(urlToRedirect) {
       try {
-        if (!localStorage.getItem("discordId")) {
+        if (!localStorage.getItem('discordId')) {
           webAuth.popup.authorize(
             {
-              connection: "discord",
+              connection: 'discord',
               owp: true,
             },
             (err, authRes) => {
-  
               if (!err) {
-                webAuth.client.userInfo(
-                  authRes.accessToken,
-                  async (err, user) => {
-                    if (err) {
-                      return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
-                    }
-                    const discordId = user.sub.split("|")[2];
-                    const discordUserName=user.name;
-                    localStorage.setItem("discordId", discordId);
-                    localStorage.setItem("discordUserName",discordUserName)
-                    window.open(urlToRedirect, "_blank");
+                webAuth.client.userInfo(authRes.accessToken, async (err, user) => {
+                  if (err) {
+                    return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
                   }
-                );
+                  const discordId = user.sub.split('|')[2];
+                  const discordUserName = user.name;
+                  localStorage.setItem('discordId', discordId);
+                  localStorage.setItem('discordUserName', discordUserName);
+                  window.open(urlToRedirect, '_blank');
+                });
               }
             }
           );
         } else {
-          window.open(urlToRedirect, "_blank");
+          window.open(urlToRedirect, '_blank');
           // this.twitter.targetScreenName = localStorage.getItem("twitterHandle")
         }
       } catch (e) {
         return this.notifyErr(e.message ? e.message : JSON.stringify(e));
       }
-    }
+    },
   },
   mixins: [notificationMixins],
 };

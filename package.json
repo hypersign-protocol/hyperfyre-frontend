@@ -10,6 +10,7 @@
     "build-stage": "vue-cli-service build --mode staging",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
+    "pretty": "prettier --config .prettierrc.json --write *",
     "predeploy": "npm run build"
   },
   "dependencies": {

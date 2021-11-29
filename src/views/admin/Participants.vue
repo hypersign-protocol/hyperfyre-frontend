@@ -107,62 +107,37 @@ label {
 </style>
 <template>
   <div class="home marginLeft marginRight">
-    <loading
-      :active.sync="isLoading"
-      :can-cancel="true"
-      :is-full-page="fullPage"
-    ></loading>
+    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
 
     <b-modal hide-footer id="modal-1" title="Lottery">
-      <p
-        class="my-4  border rounded-lg p-2 modal-text"
-        style="background:#f0f9ff"
-      >
-        <b>Lottery</b> is the process of selecting winners of an event. Upon
-        clicking on "<b>Execute button</b>", the lottery process begins, which
-        may take sometime and screen may freeze. Once done, you will get
-        selected records in excel sheet. The winner selection is primarly based
-        on their "<b>score</b>" unless checked "<b>randomly</b>".
+      <p class="my-4 border rounded-lg p-2 modal-text" style="background: #f0f9ff">
+        <b>Lottery</b> is the process of selecting winners of an event. Upon clicking on "<b>Execute button</b>", the
+        lottery process begins, which may take sometime and screen may freeze. Once done, you will get selected records
+        in excel sheet. The winner selection is primarly based on their "<b>score</b>" unless checked "<b>randomly</b>".
       </p>
-      <div class="d-flex mx-auto  justify-content-between px-4">
+      <div class="d-flex mx-auto justify-content-between px-4">
         <div class="bold">Total Records</div>
         <div class="bold">{{ project.count }}</div>
       </div>
-      <div class="d-flex mx-auto  justify-content-between px-4 mt-4">
+      <div class="d-flex mx-auto justify-content-between px-4 mt-4">
         <div class="bold">Number of winners to choose</div>
         <div class="bold">
-          <input
-            v-model="recordsForLottery"
-            type="number"
-            class="form-control"
-            placeholder="No. of records"
-          />
+          <input v-model="recordsForLottery" type="number" class="form-control" placeholder="No. of records" />
         </div>
       </div>
-      <div class="d-flex mx-auto  justify-content-between px-4 mt-4">
+      <div class="d-flex mx-auto justify-content-between px-4 mt-4">
         <div class="bold">Check to choose randomly (optional)</div>
         <div class="bold">
-          <input
-            v-model="isRandom"
-            type="checkbox"
-            class=""
-            title="Check to choose randomly"
-          />
+          <input v-model="isRandom" type="checkbox" class="" title="Check to choose randomly" />
         </div>
       </div>
 
       <div class="mt-5 text-center">
-        <button
-          @click="handleLottery"
-          type="button"
-          class="btn btn-primary button-theme"
-        >
-          Execute
-        </button>
+        <button @click="handleLottery" type="button" class="btn btn-primary button-theme">Execute</button>
       </div>
     </b-modal>
 
-    <div class="row " style="margin-top: 2%">
+    <div class="row" style="margin-top: 2%">
       <div class="d-flex justify-content-between col-md-12">
         <div class="projectSelector">
           <b-form-select
@@ -244,17 +219,17 @@ label {
 </template>
 
 <script>
-import fetch from "node-fetch";
-import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
-import Paginate from "vuejs-paginate";
-import notificationMixins from "../../mixins/notificationMixins";
-import apiClientMixin from "../../mixins/apiClientMixin";
-import FileDownload from "js-file-download";
-const issuedImgLink = require("../../assets/issued-icon.png");
-import Messages from "../../utils/messages/admin/en";
+import fetch from 'node-fetch';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+import Paginate from 'vuejs-paginate';
+import notificationMixins from '../../mixins/notificationMixins';
+import apiClientMixin from '../../mixins/apiClientMixin';
+import FileDownload from 'js-file-download';
+const issuedImgLink = require('../../assets/issued-icon.png');
+import Messages from '../../utils/messages/admin/en';
 export default {
-  name: "Investor",
+  name: 'Investor',
   components: { Loading, Paginate },
 
   data() {
@@ -270,7 +245,7 @@ export default {
           this.sortChange(params);
         },
       },
-      tableSearch: "",
+      tableSearch: '',
       perPage: 10,
       currentPage: 2,
       computed: {
@@ -281,7 +256,7 @@ export default {
       isRandom: false,
       pageSelectDropdown: [],
       expandOption: {
-        trigger: "row",
+        trigger: 'row',
         render: ({ row }) => {
           return (
             <div style="text-align:center; background-color: whitesmoke">
@@ -297,7 +272,7 @@ export default {
                   {row.actions.map((action) => (
                     <tr>
                       <td>{action.title}</td>
-                      <td >{this.parseActionValue(action)}</td>
+                      <td>{this.parseActionValue(action)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -308,35 +283,35 @@ export default {
       },
       columns: [
         {
-          field: "",
-          key: "a",
+          field: '',
+          key: 'a',
           // 设置需要显示展开图标的列
-          type: "expand",
-          title: "",
+          type: 'expand',
+          title: '',
           width: 50,
-          align: "center",
+          align: 'center',
         },
         {
-          field: "name",
-          key: "b",
-          title: "Name",
-          align: "left",
-          sortBy: "",
+          field: 'name',
+          key: 'b',
+          title: 'Name',
+          align: 'left',
+          sortBy: '',
           width: 250,
         },
         {
-          field: "email",
-          key: "c",
-          title: "Email",
-          align: "left",
-          sortBy: "asc",
+          field: 'email',
+          key: 'c',
+          title: 'Email',
+          align: 'left',
+          sortBy: 'asc',
           width: 300,
         },
         {
-          field: "actions",
-          key: "e",
-          title: "Actions",
-          align: "left",
+          field: 'actions',
+          key: 'e',
+          title: 'Actions',
+          align: 'left',
           width: 250,
           renderBodyCell: ({ row, column }) => {
             const actions = row[column.field];
@@ -344,38 +319,38 @@ export default {
           },
         },
         {
-          field: "numberOfReferals",
-          key: "h",
-          title: "Score",
-          align: "right",
-          sortBy: "desc",
+          field: 'numberOfReferals',
+          key: 'h',
+          title: 'Score',
+          align: 'right',
+          sortBy: 'desc',
           width: 100,
         },
       ],
 
       investor: {
-        did: "did:hs:TEqweqweqwe12",
-        email: "",
-        name: "",
-        ethAddress: "",
-        twitterHandle: "",
-        telegramHandle: "",
+        did: 'did:hs:TEqweqweqwe12',
+        email: '',
+        name: '',
+        ethAddress: '',
+        twitterHandle: '',
+        telegramHandle: '',
         hasTwitted: false,
         hasJoinedTGgroup: false,
-        projectId: "",
+        projectId: '',
         isVerfiedByHypersign: false,
         isVerificationComplete: false,
-        tweetUrl: "",
+        tweetUrl: '',
         numberOfReferals: 0,
         actions: [],
       },
       project: {
         count: 20,
-        projectName: "",
-        logoUrl: "",
-        fromDate: "",
-        toDate: "",
-        ownerDid: "",
+        projectName: '',
+        logoUrl: '',
+        fromDate: '',
+        toDate: '',
+        ownerDid: '',
         investors: [],
       },
 
@@ -385,7 +360,7 @@ export default {
       isDataSaved: false,
       active: 0,
       host: location.hostname,
-      authToken: localStorage.getItem("authToken"),
+      authToken: localStorage.getItem('authToken'),
       isLoading: false,
       fullPage: true,
     };
@@ -399,12 +374,12 @@ export default {
       this.fetchProjectData(0, this.perPage);
     }
 
-    const userProjectStr = localStorage.getItem("userProjects");
+    const userProjectStr = localStorage.getItem('userProjects');
     const userProjectsData = JSON.parse(userProjectStr);
     this.projects = userProjectsData.projects;
     this.projects.unshift({
       _id: null,
-      projectName: "Select an event",
+      projectName: 'Select an event',
     });
   },
 
@@ -415,34 +390,33 @@ export default {
   },
 
   methods: {
-     parseActionValue(action){            
-            switch (action.type) {
-              case 'DISCORD_JOIN':
-              case 'TELEGRAM_JOIN':
-              case 'TWITTER_FOLLOW':{
-                return JSON.parse(action.value).targetScreenName;
-              }
-              case 'ETHEREUM_ERC20':
-              case 'MATIC_ERC20':
-              case 'BINANCE_ERC20':{              
-                return JSON.parse(action.value).userWalletAddress;
-              
-              }
-              default:
-                return action.value;
-            }
-          },
+    parseActionValue(action) {
+      switch (action.type) {
+        case 'DISCORD_JOIN':
+        case 'TELEGRAM_JOIN':
+        case 'TWITTER_FOLLOW': {
+          return JSON.parse(action.value).targetScreenName;
+        }
+        case 'ETHEREUM_ERC20':
+        case 'MATIC_ERC20':
+        case 'BINANCE_ERC20': {
+          return JSON.parse(action.value).userWalletAddress;
+        }
+        default:
+          return action.value;
+      }
+    },
     async handleExport() {
       try {
         this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.project._id}?fetchInvestors=true&isExport=true&limit=${this.project.count}`;
         const headers = {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authToken}`,
         };
 
         const res = await apiClientMixin.makeCall({
-          method: "GET",
+          method: 'GET',
           url,
           header: headers,
           isFile: true,
@@ -458,10 +432,7 @@ export default {
       }
     },
     async handleLottery() {
-      if (
-        this.recordsForLottery > this.project.count ||
-        this.recordsForLottery <= 0
-      ) {
+      if (this.recordsForLottery > this.project.count || this.recordsForLottery <= 0) {
         return this.notifyErr(Messages.PARTICIPANTS.LOTTERY.NO_OF_RECORDS);
       }
       try {
@@ -473,7 +444,7 @@ export default {
         };
 
         const res = await apiClientMixin.makeCall({
-          method: "GET",
+          method: 'GET',
           header: headers,
           url,
           isFile: true,
@@ -490,49 +461,49 @@ export default {
     sortChange(params) {
       this.project.investors.sort((a, b) => {
         if (params.name) {
-          if (params.name === "asc") {
+          if (params.name === 'asc') {
             return a.name.localeCompare(b.name);
-          } else if (params.name === "desc") {
+          } else if (params.name === 'desc') {
             return b.name.localeCompare(a.name);
           } else {
             return 0;
           }
         } else if (params.email) {
-          if (params.email === "asc") {
+          if (params.email === 'asc') {
             return a.email.localeCompare(b.email);
-          } else if (params.email === "desc") {
+          } else if (params.email === 'desc') {
             return b.email.localeCompare(a.email);
           } else {
             return 0;
           }
         } else if (params.did) {
-          if (params.did === "asc") {
+          if (params.did === 'asc') {
             return a.did.localeCompare(b.did);
-          } else if (params.did === "desc") {
+          } else if (params.did === 'desc') {
             return b.did.localeCompare(a.did);
           } else {
             return 0;
           }
         } else if (params.ethAddress) {
-          if (params.ethAddress === "asc") {
+          if (params.ethAddress === 'asc') {
             return a.ethAddress.localeCompare(b.ethAddress);
-          } else if (params.ethAddress === "desc") {
+          } else if (params.ethAddress === 'desc') {
             return b.ethAddress.localeCompare(a.ethAddress);
           } else {
             return 0;
           }
         } else if (params.twitterHandle) {
-          if (params.twitterHandle === "asc") {
+          if (params.twitterHandle === 'asc') {
             return a.twitterHandle.localeCompare(b.twitterHandle);
-          } else if (params.twitterHandle === "desc") {
+          } else if (params.twitterHandle === 'desc') {
             return b.twitterHandle.localeCompare(a.twitterHandle);
           } else {
             return 0;
           }
         } else if (params.telegramHandle) {
-          if (params.telegramHandle === "asc") {
+          if (params.telegramHandle === 'asc') {
             return a.telegramHandle.localeCompare(b.telegramHandle);
-          } else if (params.telegramHandle === "desc") {
+          } else if (params.telegramHandle === 'desc') {
             return b.telegramHandle.localeCompare(a.telegramHandle);
           } else {
             return 0;
@@ -560,7 +531,7 @@ export default {
     },
     async fetchProjectInvestors(e) {
       if (e) {
-        this.tableSearch = "";
+        this.tableSearch = '';
         this.investor.projectId = e;
         await this.fetchProjectData(0, this.perPage);
         this.holdInvestors = this.project.investors;
@@ -570,14 +541,10 @@ export default {
     filterVerified(label) {
       // console.log(label);
 
-      if (label == "onlyVerified") {
-        this.project.investors = this.sourceData.investors.filter(
-          (x) => x.isVerificationComplete
-        );
-      } else if (label == "onlyNotVerified") {
-        this.project.investors = this.sourceData.investors.filter(
-          (x) => !x.isVerificationComplete
-        );
+      if (label == 'onlyVerified') {
+        this.project.investors = this.sourceData.investors.filter((x) => x.isVerificationComplete);
+      } else if (label == 'onlyNotVerified') {
+        this.project.investors = this.sourceData.investors.filter((x) => !x.isVerificationComplete);
       } else {
         this.project = this.sourceData;
       }
@@ -586,21 +553,17 @@ export default {
     filterIssued(label) {
       // console.log(label);
 
-      if (label == "onlyIssued") {
-        this.project.investors = this.sourceData.investors.filter(
-          (x) => x.isVerfiedByHypersign
-        );
-      } else if (label == "onlyNotIssued") {
-        this.project.investors = this.sourceData.investors.filter(
-          (x) => !x.isVerfiedByHypersign
-        );
+      if (label == 'onlyIssued') {
+        this.project.investors = this.sourceData.investors.filter((x) => x.isVerfiedByHypersign);
+      } else if (label == 'onlyNotIssued') {
+        this.project.investors = this.sourceData.investors.filter((x) => !x.isVerfiedByHypersign);
       } else {
         this.project = this.sourceData;
       }
     },
 
     paginateChange(e) {
-      if (typeof e == "number") {
+      if (typeof e == 'number') {
         this.currentPage = e;
         this.paginateValue = e;
       } else {
@@ -624,17 +587,17 @@ export default {
       try {
         this.isLoading = true;
 
-        if (!this.investor.projectId) throw new Error("No project found");
+        if (!this.investor.projectId) throw new Error('No project found');
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.investor.projectId}?fetchInvestors=true&limit=${limit}&skip=${skip}&searchQuery=${this.tableSearch}`;
         // console.log(url);
         const headers = {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authToken}`,
         };
         const resp = await fetch(url, {
           headers,
-          method: "GET",
+          method: 'GET',
         });
 
         if (!resp.ok) {
@@ -648,14 +611,9 @@ export default {
         this.project.toDate = this.formateDate(this.project.toDate);
         this.projectFetched = true;
 
-        this.pageSelectDropdown = Array.from(
-          { length: Math.ceil(this.project.count / this.perPage) },
-          (_, i) => i + 1
-        );
+        this.pageSelectDropdown = Array.from({ length: Math.ceil(this.project.count / this.perPage) }, (_, i) => i + 1);
 
-        this.notifySuccess(
-          Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_FETCHED + json.projectName
-        );
+        this.notifySuccess(Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_FETCHED + json.projectName);
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
@@ -665,15 +623,15 @@ export default {
 
     clear() {
       this.investor = {
-        did: "did:hs:TEqweqweqwe12",
-        email: "",
-        name: "",
-        ethAddress: "",
-        twitterHandle: "",
-        telegramHandle: "",
+        did: 'did:hs:TEqweqweqwe12',
+        email: '',
+        name: '',
+        ethAddress: '',
+        twitterHandle: '',
+        telegramHandle: '',
         hasTwitted: false,
         hasJoinedTGgroup: false,
-        projectId: "606742855244b589bc100083",
+        projectId: '606742855244b589bc100083',
       };
     },
   },

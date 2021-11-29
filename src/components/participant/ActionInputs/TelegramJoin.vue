@@ -18,12 +18,7 @@
             <img src="../../../assets/plus.svg" />
             {{ data.score }}
           </b-badge>
-          <img
-            class="check-mark"
-            src="../../../assets/check-circle-fill.svg"
-            height="25px"
-            v-if="done"
-          />
+          <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
         </b-col>
       </b-row>
     </b-card-header>
@@ -34,9 +29,7 @@
             <div class="follow">
               <button
                 :disabled="done"
-                @click="
-                  handleTelegramLogin(`https://telegram.me/${data.value}`)
-                "
+                @click="handleTelegramLogin(`https://telegram.me/${data.value}`)"
                 class="btn btn-outline-telegram"
               >
                 <img src="../../../assets/telegram.svg" />
@@ -47,28 +40,30 @@
         </b-row>
 
         <b-row v-if="!done">
-					<b-col cols="12" sm="12" md="12" >
-						<button class="btn btn-link center"  @click="update()">Continue</button>
-					</b-col>
-				</b-row>
+          <b-col cols="12" sm="12" md="12">
+            <button class="btn btn-link center" @click="update()">Continue</button>
+          </b-col>
+        </b-row>
       </b-card-body>
     </b-collapse>
   </b-card>
 </template>
 <style scoped>
-.center{
-  display: block; margin-left: auto;margin-right: auto
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
 <script>
-import config from "../../../config";
-import eventBus from "../../../eventBus.js";
-import notificationMixins from "../../../mixins/notificationMixins";
-import Messages from "../../../utils/messages/participants/en";
-import apiClient from "../../../mixins/apiClientMixin.js";
+import config from '../../../config';
+import eventBus from '../../../eventBus.js';
+import notificationMixins from '../../../mixins/notificationMixins';
+import Messages from '../../../utils/messages/participants/en';
+import apiClient from '../../../mixins/apiClientMixin.js';
 
 export default {
-  name: "TwitterRetweet",
+  name: 'TwitterRetweet',
   props: {
     idValue: {
       required: true,
@@ -82,14 +77,13 @@ export default {
       visible: false,
       done: this.data.isDone,
       tg: {
-        sourceScreenName: "",
-        targetScreenName: "",
+        sourceScreenName: '',
+        targetScreenName: '',
       },
-      tgdata:{
-        userID:"",
+      tgdata: {
+        userID: '',
       },
-      authToken: localStorage.getItem("authToken"),
-
+      authToken: localStorage.getItem('authToken'),
     };
   },
   async mounted() {
@@ -107,44 +101,40 @@ export default {
   methods: {
     async update() {
       const tgIdInStore = this.tg.targetScreenName; //localStorage.getItem("telegramId");
-      if (!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) {
-        return this.notifyErr(
-          Messages.EVENT_ACTIONS.TELEGRAM_JOIN.TELEGRAM_AUTH
-        );
+      if (!tgIdInStore || tgIdInStore == 'undefined' || tgIdInStore == null) {
+        return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.TELEGRAM_AUTH);
       } else {
         try {
           const body = {
-                tgUserID: this.tgdata.userID,
-                tgGroupID: '@'+this.tg.sourceScreenName,                
-              };
-              let url = `${this.$config.studioServer.BASE_URL}api/v1/tg/verify`;
-              let headers = {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${this.authToken}`,
-              };
-              const res = await apiClient.makeCall({
-                method: "POST",
-                url: url,
-                body: body,
-                header: headers,
-              });
+            tgUserID: this.tgdata.userID,
+            tgGroupID: '@' + this.tg.sourceScreenName,
+          };
+          let url = `${this.$config.studioServer.BASE_URL}api/v1/tg/verify`;
+          let headers = {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.authToken}`,
+          };
+          const res = await apiClient.makeCall({
+            method: 'POST',
+            url: url,
+            body: body,
+            header: headers,
+          });
 
-              const result = res.data;
-              if(res.status===200){
-                if(result.status==='left'){
-                  return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.JOIN_TG)
-                }else{
-                  this.$emit("input",JSON.stringify({...this.tg,}))
-                }
-              }
+          const result = res.data;
+          if (res.status === 200) {
+            if (result.status === 'left') {
+              return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.JOIN_TG);
+            } else {
+              this.$emit('input', JSON.stringify({ ...this.tg }));
+            }
+          }
         } catch (error) {
-           return this.notifyErr(error.split(":").at(-1))
-        }               
-              
-             
+          return this.notifyErr(error.split(':').at(-1));
+        }
 
         // this.tg.targetScreenName = tgIdInStore;
-       /* this.$emit(
+        /* this.$emit(
           "input",
           JSON.stringify({
             ...this.tg,
@@ -163,27 +153,20 @@ export default {
 
         // if (!localStorage.getItem("telegramId")) {
         // const that =  this;
-        window.Telegram.Login.auth(
-          { bot_id: config.telegramBotId, request_access: true },
-          (data) => {
-            if (!data) {
-              return this.notifyErr(
-                Messages.EVENT_ACTIONS.TELEGRAM_JOIN.AUTH_FAILED
-              );
-            }
-
-            if (data.username || data.id) {
-              this.tg.targetScreenName = data.username || data.id;
-                this.tgdata.userID=data.id;
-              // localStorage.setItem("telegramId", data.username || data.id)
-              window.open(urlToRedirect, "_blank");
-            } else {
-              return this.notifyErr(
-                Messages.EVENT_ACTIONS.TELEGRAM_JOIN.FETCH_USERNAME_FAILED
-              );
-            }
+        window.Telegram.Login.auth({ bot_id: config.telegramBotId, request_access: true }, (data) => {
+          if (!data) {
+            return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.AUTH_FAILED);
           }
-        );
+
+          if (data.username || data.id) {
+            this.tg.targetScreenName = data.username || data.id;
+            this.tgdata.userID = data.id;
+            // localStorage.setItem("telegramId", data.username || data.id)
+            window.open(urlToRedirect, '_blank');
+          } else {
+            return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.FETCH_USERNAME_FAILED);
+          }
+        });
 
         // } else {
         // 	window.open(urlToRedirect, "_blank");

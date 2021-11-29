@@ -17,7 +17,6 @@
   background-color: rgba(241, 179, 25, 0.24);
   border: 0;
 }
-
 </style>
 <template>
   <div>
@@ -32,46 +31,23 @@
       no-close-on-backdrop
       backdrop-variant="dark"
     >
-      <div class=" px-3 py-2">
+      <div class="px-3 py-2">
         <div class="accordion" role="tablist">
-          <b-card no-body class="mb-1 ">
-            <b-card-header
-              header-tag="header"
-              class="p-1 border-0 accordin-header accordion-header-theme"
-              role="tab"
-            >
-              <b-button
-                block
-                v-b-toggle.accordion-1
-                class="bg-transparent border-0 text-left text-primary"
-                ><i class="fas fa-cog"></i>  General Configurations</b-button
+          <b-card no-body class="mb-1">
+            <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme" role="tab">
+              <b-button block v-b-toggle.accordion-1 class="bg-transparent border-0 text-left text-primary"
+                ><i class="fas fa-cog"></i> General Configurations</b-button
               >
             </b-card-header>
-            <b-collapse
-              id="accordion-1"
-              visible
-              accordion="my-accordion"
-              role="tabpanel"
-            >
+            <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <general-config
-                  :isProjectEditing="isProjectEditing"
-                  :themeColor="themeColor"
-                  :fontColor="fontColor"
-                  :fontColorDefault="fontColorDefault"
-                  :themeColorDefault="themeColorDefault"
-                  :project="project"
-                />
+                <general-config :project="project" :isProjectEditing="isProjectEditing" />
               </b-card-body>
             </b-collapse>
           </b-card>
 
           <b-card no-body class="mb-1">
-            <b-card-header
-              header-tag="header"
-              class="p-1 accordin-header accordion-header-theme"
-              role="tab"
-            >
+            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" role="tab">
               <b-button
                 block
                 v-b-toggle.accordion-2
@@ -80,45 +56,24 @@
                 ><i class="fa fa-user-plus"></i> Referral Configurations
               </b-button>
             </b-card-header>
-            <b-collapse
-              id="accordion-2"
-              accordion="my-accordion"
-              role="tabpanel"
-            >
+            <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <referral-config
-                  v-on="$listeners"
-                  :project="project"                  
-                />
-                <!-- <eventAction-congif
-                  v-on="$listeners"
-                  :eventActionList="smartContractlist"
-                  eventActionType="SMARTCONTRACT"
-                  :options="options.smartContractAction"
-                /> -->
+                <referral-config v-on="$listeners" :project="project" />
               </b-card-body>
             </b-collapse>
           </b-card>
 
           <b-card no-body class="mb-1">
-            <b-card-header
-              header-tag="header"
-              class="p-1 accordin-header accordion-header-theme"
-              role="tab"
-            >
+            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" role="tab">
               <b-button
                 block
                 v-b-toggle.accordion-4
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fab fa-intercom"></i>  Custom Inputs Configurations
+                ><i class="fab fa-intercom"></i> Custom Inputs Configurations
               </b-button>
             </b-card-header>
-            <b-collapse
-              id="accordion-4"
-              accordion="my-accordion"
-              role="tabpanel"
-            >
+            <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
               <b-card-body>
                 <eventAction-config
                   v-on="$listeners"
@@ -131,24 +86,16 @@
           </b-card>
 
           <b-card no-body class="mb-1">
-            <b-card-header
-              header-tag="header"
-              class="p-1 accordin-header accordion-header-theme"
-              role="tab"
-            >
+            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" role="tab">
               <b-button
                 block
                 v-b-toggle.accordion-3
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fas fa-share-alt"></i>  Social Configurations
+                ><i class="fas fa-share-alt"></i> Social Configurations
               </b-button>
             </b-card-header>
-            <b-collapse
-              id="accordion-3"
-              accordion="my-accordion"
-              role="tabpanel"
-            >
+            <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
               <b-card-body>
                 <eventAction-config
                   v-on="$listeners"
@@ -161,24 +108,16 @@
           </b-card>
 
           <b-card no-body class="mb-1">
-            <b-card-header
-              header-tag="header"
-              class="p-1 accordin-header accordion-header-theme"
-              role="tab"
-            >
+            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" role="tab">
               <b-button
                 block
                 v-b-toggle.accordion-5
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fab fa-bitcoin"></i>  Wallet Configurations
+                ><i class="fab fa-bitcoin"></i> Wallet Configurations
               </b-button>
             </b-card-header>
-            <b-collapse
-              id="accordion-5"
-              accordion="my-accordion"
-              role="tabpanel"
-            >
+            <b-collapse id="accordion-5" accordion="my-accordion" role="tabpanel">
               <b-card-body>
                 <eventAction-config
                   v-on="$listeners"
@@ -192,24 +131,16 @@
 
           <!-- Smart Contract Config -->
           <b-card no-body class="mb-1">
-            <b-card-header
-              header-tag="header"
-              class="p-1 accordin-header accordion-header-theme"
-              role="tab"
-            >
+            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" role="tab">
               <b-button
                 block
                 v-b-toggle.accordion-6
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fas fa-file-contract"></i>  Smart Contract Configurations
+                ><i class="fas fa-file-contract"></i> Smart Contract Configurations
               </b-button>
             </b-card-header>
-            <b-collapse
-              id="accordion-6"
-              accordion="my-accordion"
-              role="tabpanel"
-            >
+            <b-collapse id="accordion-6" accordion="my-accordion" role="tabpanel">
               <b-card-body>
                 <eventAction-config
                   v-on="$listeners"
@@ -222,65 +153,32 @@
           </b-card>
           <!--  -->
         </div>
-        <button
-          class="btn btn-primary mt-3 button-theme"
-          type="button"
-          @click="saveProject"
-        >
-          Submit
-        </button>
+        <button class="btn btn-primary mt-3 button-theme" type="button" @click="saveProject">Submit</button>
       </div>
     </b-sidebar>
   </div>
 </template>
 
 <script>
-import EventActionConfig from "./components/EventActionConfig.vue";
-import GeneralConfig from "./components/GeneralConfig.vue";
-import ReferralConfig from "./components/ReferralConfig.vue";
+import EventActionConfig from './components/EventActionConfig.vue';
+import GeneralConfig from './components/GeneralConfig.vue';
+import ReferralConfig from './components/ReferralConfig.vue';
 export default {
-  name: "CreateProjectSlide",
+  name: 'CreateProjectSlide',
   components: {
     GeneralConfig,
     EventActionConfig,
-    ReferralConfig
+    ReferralConfig,
   },
 
   props: {
     project: {
       type: Object,
     },
-    themeColor: {
-      type: String,
-    },
-    fontColor: {
-      type: String,
-    },
-    themeColorDefault: {
-      type: String,
-    },
-    fontColorDefault: {
-      type: String,
-    },
-    blockChainType: {
-      type: String,
-    },
-    contractType:{
-      type: String
-    },
     saveProject: {
       type: Function,
     },
-    addedSocialMedias: {
-      type: Array,
-    },
     actionList: {
-      type: Array,
-    },
-    selectedSocialMedia: {
-      type: Object,
-    },
-    socialOptions: {
       type: Array,
     },
     isProjectEditing: {
@@ -290,84 +188,79 @@ export default {
 
   computed: {
     // a computed getter
-    customList: function() {
-      if (this.actionList && this.actionList.length > 0) {
-        return this.actionList.filter(
-          (x) => 
-            x.type.indexOf("INPUT_") > -1 ||  x.type.indexOf("HYPERLINK_URL") > -1 || x.type.indexOf("INFO_TEXT") > -1
-        );
-      } else {
-        return [];
-      }
-    },
-
-    socialList: function() {
+    customList: function () {
       if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
           (x) =>
-            x.type.indexOf("TWITTER_") > -1 || x.type.indexOf("TELEGRAM_") > -1 || x.type.indexOf("DISCORD_") > -1
+            x.type.indexOf('INPUT_') > -1 || x.type.indexOf('HYPERLINK_URL') > -1 || x.type.indexOf('INFO_TEXT') > -1
         );
       } else {
         return [];
       }
     },
 
-    blockchainList: function() {
+    socialList: function () {
       if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
-          (x) => x.type.indexOf("BLOCKCHAIN_") > -1
+          (x) => x.type.indexOf('TWITTER_') > -1 || x.type.indexOf('TELEGRAM_') > -1 || x.type.indexOf('DISCORD_') > -1
         );
       } else {
         return [];
       }
     },
-    smartContractlist: function(){
-      if (this.actionList && this.actionList.length >0){
-        return this.actionList.filter(
-          (x)=> x.type.indexOf("ETHEREUM_")  > -1 
-          || x.type.indexOf("MATIC_") > -1
-          || x.type.indexOf("BINANCE_") > -1
-        );
-      }else{
+
+    blockchainList: function () {
+      if (this.actionList && this.actionList.length > 0) {
+        return this.actionList.filter((x) => x.type.indexOf('BLOCKCHAIN_') > -1);
+      } else {
         return [];
       }
-    }
+    },
+    smartContractlist: function () {
+      if (this.actionList && this.actionList.length > 0) {
+        return this.actionList.filter(
+          (x) => x.type.indexOf('ETHEREUM_') > -1 || x.type.indexOf('MATIC_') > -1 || x.type.indexOf('BINANCE_') > -1
+        );
+      } else {
+        return [];
+      }
+    },
   },
-  
+
   data() {
     return {
       /// TODO: Need to do it in a neat way
       // Use api https://localhost:6006/api/v1/actions
-      // it returns: 
+      // it returns:
       // {"actionTypes":["INPUT_TEXT","INPUT_NUMBER","TWITTER_FOLLOW","TWITTER_RETWEET","TELEGRAM_JOIN","DISCORD_JOIN","BLOCKCHAIN_ETH","BLOCKCHAIN_TEZ","HYPERSIGN_AUTH"],"length":9}
       options: {
         customAction: [
-          { text: "Select Input type", value: null },
-          { text: "TEXT", value: "INPUT_TEXT" },
-          { text: "NUMBER", value: "INPUT_NUMBER" },
-          { text: "DATE", value: "INPUT_DATE" },
-          { text: "LINK", value: "INPUT_HYPERLINK" },
-          { text: "HYPERLINK", value: "HYPERLINK_URL"},
-          { text: "INFO", value: "INFO_TEXT"}
+          { text: 'Select Input type', value: null },
+          { text: 'TEXT', value: 'INPUT_TEXT' },
+          { text: 'NUMBER', value: 'INPUT_NUMBER' },
+          { text: 'DATE', value: 'INPUT_DATE' },
+          { text: 'LINK', value: 'INPUT_HYPERLINK' },
+          { text: 'HYPERLINK', value: 'HYPERLINK_URL' },
+          { text: 'INFO', value: 'INFO_TEXT' },
         ],
         socialAction: [
-          { text: "Select Social Action type", value: null },
-          { text: "Twitter Follow", value: "TWITTER_FOLLOW" },
-          { text: "Twitter Retweet", value: "TWITTER_RETWEET" },
-          { text: "Telegram Join", value: "TELEGRAM_JOIN" },
-          { text: "Discord Join", value: "DISCORD_JOIN" },
+          { text: 'Select Social Action type', value: null },
+          { text: 'Twitter Follow', value: 'TWITTER_FOLLOW' },
+          { text: 'Twitter Retweet', value: 'TWITTER_RETWEET' },
+          { text: 'Telegram Join', value: 'TELEGRAM_JOIN' },
+          { text: 'Discord Join', value: 'DISCORD_JOIN' },
         ],
         blockchainAction: [
-          { text: "Select Blockchain type", value: null },
-          { text: "Ethereum", value: "BLOCKCHAIN_ETH" },
-          { text: "Tezos", value: "BLOCKCHAIN_TEZ" },
+          { text: 'Select Blockchain type', value: null },
+          { text: 'Ethereum', value: 'BLOCKCHAIN_ETH' },
+          { text: 'Tezos', value: 'BLOCKCHAIN_TEZ' },
         ],
-        smartContractAction:[
-          { text: "Select Contract Type", value:null},
-          { text: "Ethereum ERC20", value:"ETHEREUM_ERC20"},
-          { text: "Polygon ERC20", value:"MATIC_ERC20"},
-          { text: "Binance ERC20", value:"BINANCE_ERC20"},
-        ]
+        smartContractAction: [
+          { text: 'Select Contract Type', value: null },
+          { text: 'Ethereum ERC20', value: 'ETHEREUM_ERC20' },
+          { text: 'Polygon ERC20', value: 'MATIC_ERC20' },
+          { text: 'Binance ERC20', value: 'BINANCE_ERC20' },
+        ],
       },
     };
   },
