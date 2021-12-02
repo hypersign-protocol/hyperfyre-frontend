@@ -7,8 +7,10 @@ const EVENT={
     INVALID_PROJECT_SLUG:"Invalid Event slug"
 }
 const EVENTS = {
+    CHECK_ALL_TITLE_EMPTY:"Check if any Title field you left empty",
+    CHECK_ALL_VALUE_EMPTY:"Check if any Value field you left empty",
     REF_POINT:{
-        NOT_VALID_INP:'Please Enter Refree Point and Referral Point that Should be number',
+        NOT_VALID_INP:'Please enter valid Referee and Referral point',
         NOT_POS_INP:'Refree Point and Referral Point Should be Positive number'
     },
     VALIDATION:{
@@ -34,6 +36,7 @@ const EVENTS = {
         TITLE_URL: "Do not put url in title",
         EMPTY_TITLE: "Title Should not be empty",
         SCORE_IS_NUM: "Please enter a Score that should be a number",
+        SCORE_IS_NUM_ANY_LEFT:"Check if there is any score field left empty",
         SCORE_IS_POSITIVE_NUM: "Please enter a Score that should be a Positive number",
         INVALID_EVENT_TYPE: "Invalid event type",
 
@@ -60,8 +63,7 @@ const EVENTS = {
     SMARTCONTRACT:{
         CHOOSE_CONTRACT_TYPE: "Please choose Contract Type",
         ADDRESS_NOT_EMPTY: "Contract Address Should not be empty",
-        THBALANCE_NOT_EMPTY: "Threshold balance should not be empty",
-        THBALANCE_NOT_NEGATIVE: "Threshold balance should not be negative",
+        THBALANCE_NOT_NEGATIVE: "Enter the Threshold balance that should be a Positive Number",
         VALID_CONTRACT_ADDRESS: "Please enter valid Contract address"
     }
 
