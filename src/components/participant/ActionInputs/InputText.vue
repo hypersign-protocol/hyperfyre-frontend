@@ -61,7 +61,6 @@
 import eventBus from "../../../eventBus.js";
 import {
   isValidURL,
-  isValidText,
   isEmpty,
 } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
@@ -99,9 +98,6 @@ export default {
         return false;
       }
       if (isValidURL(this.data.value)) {
-        return false;
-      }
-      if (!isValidText(this.data.value)) {
         return false;
       }
       return true;
