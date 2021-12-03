@@ -303,7 +303,7 @@ import Datepicker from 'vuejs-datetimepicker'
 import Paginate from "vuejs-paginate";
 import notificationMixins from '../../mixins/notificationMixins';
 import apiClientMixin from '../../mixins/apiClientMixin';
-import { isValidURL,truncate} from "../../mixins/fieldValidationMixin.js";
+import { isValidURL,truncate,checkTitle,checkValue} from "../../mixins/fieldValidationMixin.js";
 import CreateProjectSlide from '../../components/admin/createProjectSlider/CreateProjectSlide.vue';
 import dayjs from "dayjs";
 import Messages from "../../utils/messages/admin/en";
@@ -705,6 +705,25 @@ export default {
     },
 
     checkIfEverythingIsFilled(){
+       
+
+        for (let index = 0; index < this.eventActionList.length; index++) {
+          if(this.eventActionList[index].score===null || this.eventActionList[index].score===""){
+              return (Messages.EVENTS.ACTIONS.SCORE_IS_NUM_ANY_LEFT)
+          }
+        }
+
+        const eventActionTitle=checkTitle(this.eventActionList, 'title');
+
+        if(eventActionTitle.includes(false)){
+          return (Messages.EVENTS.CHECK_ALL_TITLE_EMPTY);
+        }
+        let eventActionValue= this.eventActionList;
+        eventActionValue= eventActionValue.filter((x) => (x.type!=="INPUT_TEXT") && (x.type!=="INPUT_NUMBER") && (x.type!=="INPUT_DATE") && (x.type!=="INPUT_HYPERLINK") && (x.type!=="BLOCKCHAIN_ETH") && (x.type!=="BLOCKCHAIN_TEZ"))
+        const filteredValueList=checkValue(eventActionValue, 'value');
+        if(filteredValueList.includes(false)){
+          return (Messages.EVENTS.CHECK_ALL_VALUE_EMPTY);
+        }
 
         if(!this.project.projectName){
           return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_NAME
