@@ -2,16 +2,16 @@
   <b-card no-body class="action-wrap">
     <b-card-header
       :class="visible ? null : 'collapsed'"
-      :aria-expanded="visible ? 'true' : 'false'"
+      :aria-expanded="visible='true'"
       aria-controls="profile"
-      @click="visible = !visible"
+
     >
       <b-row>
         <b-col cols="1" sm="1" md="1">
           <img src="../../../assets/person-fill.svg" height="25px" />
         </b-col>
         <b-col cols="9" sm="9" class="text-left" md="9">
-          <div class="text">Your Profile</div>
+          <div class="text">Your Profile & Referral</div>
         </b-col>
       </b-row>
     </b-card-header>
