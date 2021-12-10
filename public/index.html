@@ -30,7 +30,7 @@
     </script>
     <!-- End Google Tag Manager -->
 
-    
+    <!-- <link rel="stylesheet" href="../src/assets/css/theme.css"> -->
 
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -44,13 +44,13 @@
     rel="icon" 
     type="image/png" 
     sizes="32x32" 
-    href="/favicon-32x32.png"
+    href="/<%= process.env.VUE_APP_BRANDING_SLUG %>.png"
     >
     <link 
     rel="icon" 
     type="image/png" 
     sizes="16x16" 
-    href="/favicon-16x16.png"
+    href="/<%= process.env.VUE_APP_BRANDING_SLUG %>.png"
     >
     <link 
     rel="manifest" 
@@ -65,7 +65,7 @@
     <meta name="theme-color" content="#ffffff">
 
 
-    <title>HyperFyre</title>
+    <title><%=process.env.VUE_APP_TITLE %></title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/vue-easytable/libs/theme-default/index.css"

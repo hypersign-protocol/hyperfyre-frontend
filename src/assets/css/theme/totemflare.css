@@ -1,0 +1,57 @@
+
+:root{
+  --pie-chart-foreground:#60c860;
+  --pie-chart-background:#ed5c5c;
+
+
+  --admin-nav-background:#363740;
+}
+
+
+.nav-bar {
+  padding: 10px 100px !important;
+  background: #363740!important;
+}
+
+.button-theme {
+    background-color: #69E0C9 !important;
+    border-collapse: #69E0C9 !important;
+    color: black;
+    border: 0;
+  }
+  
+ 
+
+  .pricing-card.popular:before {
+    content: "";
+    display: block;
+    height: 7px;
+    width: 100%;
+    background: #69E0C9 !important;
+}
+.accordion-header-theme {
+  background-color: #69e0c85b !important;
+  border: 0;
+}
+.btn-plan.free {
+    border-color: #69E0C9 !important;
+}
+.btn-plan.popular {
+    background: #69E0C9 !important;
+    border-color: #69E0C9 !important;
+}
+.btn-score {
+    background: #69E0C9;
+    position: relative;
+    right: 10px;
+    color: #000;
+    float: right;
+}
+.event-card-footer{
+    padding: 7px; background-color: #69e0c85b !important;  border-radius: 0px 0px 20px 20px;
+  }
+
+  .paginationContainer  li.active{
+    background-color: #69E0C9 !important;
+    color: #fff;
+  }

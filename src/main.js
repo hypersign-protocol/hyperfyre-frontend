@@ -11,6 +11,7 @@ import 'vue-css-donut-chart/dist/vcdonut.css';
 import "@mdi/font/css/materialdesignicons.css";
 import "@mdi/light-font/css/materialdesignicons-light.css";
 import './assets/css/style.css';
+import (`../src/assets/css/theme/${process.env.VUE_APP_BRANDING_SLUG}.css`);
 import {
   VeTable,
   VePagination,

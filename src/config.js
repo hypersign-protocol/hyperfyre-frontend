@@ -6,7 +6,9 @@ const config = {
     app: {
         name: process.env.VUE_APP_TITLE,
         decription: process.env.VUE_APP_DESC,
-        version: process.env.VUE_APP_VERSION
+        version: process.env.VUE_APP_VERSION,
+        branding:process.env.VUE_APP_BRANDING_SLUG,
+        chartcolorforground:process.env.VUE_APP_PIE_CHART_FOREGROUND
     },
     recaptchaSiteKey: process.env.VUE_APP_RECAPTCHA_SITE_KEY,
     webWalletAddress: urlSanitizer(process.env.VUE_APP_WEBWALLET_URL,false),

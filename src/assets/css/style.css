@@ -7,6 +7,9 @@ body {
     background: #F7F8FC;
     height: 100vh;
 }
+
+
+
 .markdown{
 padding: 0.1em;
 
@@ -59,7 +62,7 @@ padding: 0.1em;
 }
 .nav-bar {
     padding: 10px 100px !important;
-    background: #363740;
+    background: #3a3640;
 }
 .menu {
     display: flex;
@@ -276,13 +279,7 @@ ul.social-links li:hover {
     height: 100%;
     object-fit: cover;
 }
-.btn-score {
-    background: #F1B319;
-    position: relative;
-    right: 10px;
-    color: #000;
-    float: right;
-}
+
 .check-mark {
     position: relative;
     right: 10px;
@@ -517,6 +514,9 @@ ul.social-links li:hover {
 .subscription-column {
     margin-bottom: 10px;
 }
+
+
+
 @media only screen and (min-width: 1904px) {
     .pro-feature ul li {
         font-size: 15px;
@@ -584,3 +584,5 @@ ul.social-links li:hover {
         max-width: 25%;
     }
 }
+
+

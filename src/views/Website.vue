@@ -3,7 +3,7 @@
         <div class="row header">
             <div class="col-md-4">
                 <img
-                    :src="require('../assets/logo.png')"
+                    :src="require(`../assets/${$config.app.branding}/logo.png`)"
                     alt="logo"
                     width="120px"
                 />

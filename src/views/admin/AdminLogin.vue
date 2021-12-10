@@ -98,13 +98,13 @@ h5 span {
   margin-top: 14%;
 }
 
-.button-theme{
+/* .button-theme{
   background-color: #F1B319;
   border-collapse: #F1B319;
   color: black;
   border: 0;
 
-}
+} */
 
 .event-card{
   border:0;
@@ -121,7 +121,7 @@ h5 span {
 <template>
   <!-- <div class="row" style="margin-left: 35%;"> -->
   <div style="justify-content: center; padding-top:3%">
-    <img class="align-center" style="margin-bottom: 20px" height="60px" src="../../assets/Hyperfyre_BY.svg"/>
+    <img class="align-center" style="margin-bottom: 20px" height="60px" v-bind:src="require(`../../assets/${$config.app.branding}/brand.svg`)"/>
     <b-card no-body class="loginContent event-card ">
       <loading
         :active.sync="isLoading"

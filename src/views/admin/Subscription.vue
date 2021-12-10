@@ -110,7 +110,7 @@ i {
       </div>
     </div>
     <template v-for="plan in plans">
-      <button type="button" class="btn btn-outline-dark btn-plan free" :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''" v-if="plan.price === 0" :disabled="subscriptions.find((el) => el.planId === plan._id)" @click="subscribe(plan._id)">Free Basic Plan</button>
+      <button type="button" class="btn btn-outline-dark btn-plan free" :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''" v-if="plan.price === 0" :disabled="subscriptions.find((el) => el.planId === plan._id)" @click="subscribe(plan._id)" v-bind:key="plan.id">Free Basic Plan</button>
     </template>
     <div class="divider">
       <small class="small-desc">
