@@ -20,3 +20,22 @@ https://fyre.hypersign.id
 [src](https://sequencediagram.org/index.html#initialData=C4S2BsFMAIFUGdICdrgPYHMQDtoENsATaAMxHHBw2gHUAZUtJAW1PQHcAoTgBzyVABjEH2zBoAV0RJe-ISILiAFvACyaAEblIAQR49ZAkMNHj24AApNgecAFpBlSGMPzT0c1YG270gG7IrsYKYtAa6IIA1oJKeDjc2GjAMGgBKFLIADQeltY+jiDOwABccNLQRcjw0MBKMACSACIA8h5KYJCU8KDY1LAASgw4NXVhSGjs0tyeefYFRdB2AHw5Xjb2-silAHKQ7KiYw0iQAI4SkN0JSSlpq7O+yGmlKwDizsh4ydV40DG2UL1IAAdbArADKIAw2GqzAu8DwGBgUio+H00B4SBAfk+MEikAAnqUAFREwggQgAfXgkOwJOmuW8G0eyEWyzujIcTjExKJAEV+hTYfB4YiSaUAN5-CjORHZPD6RpNbJkrDrCEYAC+V2S0FSLIySGyMw5825-N+aEIMHlPEg-GqaFwtRg6CwuHggmOzm1N310kyKnUWigeh4pQQLLQtuhIxgzE02lRPHwRBBlSQ32gFnq22gAHpSFRkBicOJgGhJNgIpFoGB6Wt8lzxHZloGEyH9KUwYICNVndBzYJLTB2GAlNAhSKYD7dbc28HdJ3oCsAGrIEAkfFJgDk1RVYFs6p5ZMpaQ3+JJIJWEZQiCggmA1RJAAkwRSdLAACrPikAYX6ACijSXqC0DqjG-b8oKcIItaRDQG82AfF80AgtA6FrpiZB4OEkAUhYxyIGInwgI60AABQrhYACUPJ+IIVKQnS3DztooaLEsxrrA8SBPNAJKYRuIA4VA+GEUUJGOsxXE+JsKAADwtks4RoFEfw4MUJL0RSZ6bmK0C6YUfajBiFwSaAjr1vccnQIpbIyXMTalIkoBkBcsa-E50DwBIgiCHCnAOZyhShPZDLcaaJQIWg7nlvxRLmBSJBMMwJLorBVkmk2rJLORABs1EGsUnDwHw-mLAAHIF4WycyKBKaxHZhmBvn+cKJVlTAABMnAub66T+uyEVeTehYUMZI7tMkXQ9NQyUsCmxCmcK0AAEQ+RozBgKtYQSMA5bYNw1UNo5IXNisQVyaUiWEJ8eC9dcs4spddVduWhE5BSt02It0DHHghBbvNBnrmQPYWYdL28SySlDY2Z1dq17mrQAmmgEjQN9Pz-YDjAoIZ4OkdgO3cEAA)
 
 
+
+
+
+
+
+### Dynamic Theme Config 
+
+#### File Changes for every new Brand
+- favicon -> {brandname}.png inside public folder eg. hyperfyre.png
+- Inside src/assets folder create a new folder with the name of brand and put brand.svg and logo.png file
+- inside src/assets/csss/theme put {brand}.css file along with the same structure of other css file eg. src/assets/css/theme/hyperfyre.css  file
+
+
+#### .env Config 
+
+- VUE_APP_TITLE={title of the brand} eg HyperFyre
+- VUE_APP_BRANDING_SLUG=name of the brand eg hyperfyre     
+
+
