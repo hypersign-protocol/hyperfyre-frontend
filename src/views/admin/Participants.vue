@@ -565,6 +565,10 @@ export default {
         await this.fetchProjectData(0, this.perPage);
         this.holdInvestors = this.project.investors;
       }
+      else{
+      this.project.investors=[];
+      }
+    
     },
 
     filterVerified(label) {
