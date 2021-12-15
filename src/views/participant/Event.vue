@@ -239,6 +239,7 @@ export default {
         this.userEventData = {
           ...userEventData
         }
+        this.fetchEventData();
       }
     }
     
