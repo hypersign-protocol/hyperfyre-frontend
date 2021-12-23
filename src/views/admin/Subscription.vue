@@ -110,7 +110,7 @@ i {
       </div>
     </div>
     <template v-for="plan in plans">
-      <button type="button" class="btn btn-outline-dark btn-plan free" :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''" v-if="plan.price === 0" :disabled="subscriptions.find((el) => el.planId === plan._id)" @click="subscribe(plan._id)">Free Basic Plan</button>
+      <button type="button" class="btn btn-outline-dark btn-plan free" :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''" v-if="plan.price === 0" :key="plan._id" :disabled="subscriptions.find((el) => el.planId === plan._id)" @click="subscribe(plan._id)">Free Basic Plan</button>
     </template>
     <div class="divider">
       <small class="small-desc">
@@ -130,7 +130,7 @@ i {
                 <span>$</span>
                 {{ plan.price }}
               </div>
-              <button type="button" class="btn btn-outline-dark btn-plan" :class="(plan.planName === 'Lambo') ? 'popular' : ''" @click="subscribe(plan['_id'])">Select Plan</button>
+              <button type="button" class="btn btn-outline-dark btn-plan" :class="(plan.planName === 'Lambo') ? 'popular' : ''" @click="openSelectPlanSidebar(plan)">Select Plan</button>
               <div class="pro-feature">
                 <ul>
                   <li>
@@ -216,6 +216,16 @@ i {
         </table>
       </div>
     </div>
+    <div>
+      <select-plan-slide 
+        :isProjectEditing="isProjectEditing"
+        :themeColor="themeColor"
+        :themeColorDefault="themeColorDefault"
+        :fontColor="fontColor"
+        :fontColorDefault="fontColorDefault"
+        :plan="plan"
+        />
+    </div>
   </div>
 </template>
 <script>
@@ -223,12 +233,13 @@ import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
+import SelectPlanSlide from '../../components/admin/selectPlanSlider/SelectPlanSlide.vue';
 import Messages from "../../utils/messages/admin/en"
 import eventBus from '../../eventBus';
 
 export default {
   name: "Subscription",
-  components: { Loading },
+  components: { Loading, SelectPlanSlide},
 
   data() {
     return {
@@ -248,7 +259,14 @@ export default {
       support: {
         ETH: 'ethereum',
         BSC: 'binance-logo'
-      }
+      },
+      currentPage: 1,
+      themeColor: "#494949",
+      themeColorDefault: "#494949",
+      fontColor: "#ffffff",
+      fontColorDefault: "#ffffff",
+      isProjectEditing: false,
+      plan:{}
     };
   },
 
@@ -409,6 +427,20 @@ export default {
         this.isLoading = false;
       }
     },
+
+    openSelectPlanSidebar(data){
+      this.isProjectEditing = false
+      data.emoji = this.getEmoji(data.planName)
+      this.plan = data
+      this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+      
+      this.resetAllValues();
+      this.$root.$emit('callClearFromProject');    
+    },
+
+    resetAllValues() {
+      console.log('Reset-Functaion')
+    }
   },
 
   mixins: [notificationMixins],
