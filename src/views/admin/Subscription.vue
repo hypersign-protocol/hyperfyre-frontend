@@ -396,6 +396,21 @@ export default {
 
         this.isLoading = true;
 
+        // Payment Type
+        // Crypto or Fiat ?
+        // MOOPAY  ( SOLANA, ETHE, POLYGON )
+        // PAYU    
+
+        /**
+         * {
+         *  "planId":"2222",
+         *  "curr" : "HID|USDT|USDC|INR|USD",
+         *  "network": "ETH|SOL|MATIC|BSC|ONE",
+         *  "currType": "FIAT|CRYPTO",
+         *  "coupon": "HID302022"
+         * }
+         */
+
         const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription`;
         let headers = {
           "Content-Type": "application/json",
