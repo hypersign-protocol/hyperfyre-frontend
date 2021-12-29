@@ -1,0 +1,943 @@
+id: aCKS0gC-W0qLtTt088V6dQ
+projectId: CLryygF0lEC5NG9Rm-Zz2w
+projectName: My first Project
+created: 2021-12-20T09:17:37.3080544Z
+owner: Raj Patil
+protocol: 1
+tests:
+- id: HZ04WjiL6Uu5Tl5WvxUqxA
+  name: Test_For_Retweet_User_Page
+  description: This test was auto generated from steps of the 'Test_For_Social_Actions_On_User_Page' test
+  platform: Web
+  type: Web
+  driverType: Chrome
+  version: 1.0
+  creationDate: 2021-12-15T09:54:58.0000000
+  modificationDate: 2021-12-20T05:03:23.0000000
+  settings:
+    automationAssistant: false
+    appId: ryJFEWFFZUiWFb-gV8pDcQ
+    stepSleepTime: 500
+    stepTimeout: 15000
+    stepSleepTiming: Before
+    stepFailureBehaviorType: Abort
+    stepTakeScreenshotConditionType: Failure
+  application:
+    id: ryJFEWFFZUiWFb-gV8pDcQ
+    name: USER SIDE TETING
+    url: https://hswhitelist.netlify.app/form/user-side-testing
+    platform: Web
+  steps:
+  - id: Nrk5qe2e9ECysORQ-VaSxA
+    comments: ''
+    enabled: false
+    invertResult: false
+    order: 1
+    repeat: 1
+    type: Test
+    targetTestId: T_7nU3_f4EKRu05KPAMcpQ
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      source: None
+    parameterMaps: []
+    conditions: []
+    validations: []
+    contexts: []
+  - id: tNM3CzbDvkiGmVK-LJSnFw
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 2
+    repeat: 1
+    type: Action
+    elementId: bRYNOtcf9ECQU-bXqA6gUw
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 5e4cb36f-7757-4d63-8216-ba4e69496416
+      source: System
+    parameterMaps: []
+    conditions: []
+    validations: []
+    contexts: []
+  - id: tOUM-wbEzU2MNliQs35tWw
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 3
+    repeat: 1
+    type: Action
+    elementId: Ttji0ux61EirQAZkpmvH_g
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 5e4cb36f-7757-4d63-8216-ba4e69496416
+      source: System
+    parameterMaps: []
+    conditions: []
+    validations: []
+    contexts: []
+  - id: n3urVyZGFUufAiVUk2z_oQ
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 4
+    repeat: 1
+    type: Action
+    elementId: P90rMTJDJEi7AmEfCV8Xxw
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 5e4cb36f-7757-4d63-8216-ba4e69496416
+      source: System
+    parameterMaps: []
+    conditions: []
+    validations: []
+    contexts: []
+  - id: qwEMANkh-EiivjBGLrPCuQ
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 5
+    repeat: 1
+    type: Addon
+    elementId: bRYNOtcf9ECQU-bXqA6gUw
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: U2veSbE9E0aIfg5GFB2HtQ
+      source: Store
+      addonId: inW2AJJ04ku45E9-RN2zqA
+    parameterMaps:
+    - name: timeout
+      value: ''
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: Ad1g6UIRmkSTTTdmSA0tqA
+    enabled: true
+    invertResult: false
+    order: 6
+    repeat: 1
+    type: Action
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: a5d4eb31-51f0-4c62-8832-60c6bcd51a16
+      source: System
+    parameterMaps:
+    - name: x
+      value: 0
+      direction: Input
+    - name: y
+      value: 202
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: 7UvmG9B1gk2Si8nBPbrGJw
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 7
+    repeat: 1
+    type: Action
+    elementId: CiajjSAl10u3dr0eXLd6jA
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 5e4cb36f-7757-4d63-8216-ba4e69496416
+      source: System
+    parameterMaps: []
+    conditions: []
+    validations: []
+    contexts: []
+  - id: noV0NOalTk2l_-3HJPaRzA
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 8
+    repeat: 1
+    type: Action
+    elementId: NSTFGJ3K0UKwL_2PEDvmRg
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 5e4cb36f-7757-4d63-8216-ba4e69496416
+      source: System
+    parameterMaps: []
+    conditions: []
+    validations: []
+    contexts: []
+  - id: WOoHOZ7rZEaA4whfz5_iRQ
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 9
+    repeat: 1
+    type: Action
+    elementId: af4Vk5UJYUuAhbClUTxg6A
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 5e4cb36f-7757-4d63-8216-ba4e69496416
+      source: System
+    parameterMaps: []
+    conditions: []
+    validations: []
+    contexts: []
+  - id: BKHLskpwFUGGWk7vSSiEhg
+    enabled: true
+    invertResult: false
+    order: 10
+    repeat: 1
+    type: Action
+    elementId: af4Vk5UJYUuAhbClUTxg6A
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 02d572b2-d610-4700-9ad3-40076ddb9807
+      source: System
+    parameterMaps: []
+    conditions: []
+    validations: []
+    contexts: []
+  - id: vWIY544p8kqDrF2m9uzA-A
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 11
+    repeat: 1
+    type: Action
+    elementId: 98W9rsacyUiflISMMwzuLQ
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Continue
+      takeScreenshotConditionType: Failure
+    action:
+      id: 85da72d0-c5a4-4587-be33-8cb3b5fa7910
+      source: System
+    parameterMaps:
+    - name: text
+      value: Retweet url cannot be empty
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: jooJcLmm00GrQavW4-dOeA
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 12
+    repeat: 1
+    type: Addon
+    elementId: NSTFGJ3K0UKwL_2PEDvmRg
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: -G2kQ0SSqECMtfr1JGAdww
+      source: Store
+      addonId: LFtMVbTf9EW7YK8qK4xzlQ
+    parameterMaps:
+    - name: keys
+      value: abc
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: mcT1Bhb0ck22r50QqdKwfQ
+    enabled: true
+    invertResult: false
+    order: 13
+    repeat: 1
+    type: Action
+    elementId: af4Vk5UJYUuAhbClUTxg6A
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 02d572b2-d610-4700-9ad3-40076ddb9807
+      source: System
+    parameterMaps: []
+    conditions: []
+    validations: []
+    contexts: []
+  - id: 2xRgx45hgE2Baqj2hEvnyw
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 14
+    repeat: 1
+    type: Action
+    elementId: qwVHsxnsAECvepLyugub7w
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Continue
+      takeScreenshotConditionType: Failure
+    action:
+      id: 85da72d0-c5a4-4587-be33-8cb3b5fa7910
+      source: System
+    parameterMaps:
+    - name: text
+      value: 'Error: Invalid retweet'
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: piex3xlhPEWyzuFp6LIKvg
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 15
+    repeat: 1
+    type: Addon
+    elementId: NSTFGJ3K0UKwL_2PEDvmRg
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: xWYLHslQSEqQxvVZ_g3Jqg
+      source: Store
+      addonId: inW2AJJ04ku45E9-RN2zqA
+    parameterMaps:
+    - name: timeout
+      value: ''
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: I9CP04hA8kCC9Rl0vW3TCg
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 16
+    repeat: 1
+    type: Addon
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: BmXFbV7XGUa3i7nGAbpybQ
+      source: Store
+      addonId: Xey4bVsJQEODIUN7ssaJMg
+    parameterMaps:
+    - name: key
+      value: twitterId
+      direction: Input
+    - name: value
+      value: 1470734051866783744
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: ovEKhOpBSkG1rGbvLtEO4g
+    enabled: true
+    invertResult: false
+    order: 17
+    repeat: 1
+    type: Action
+    elementId: CiajjSAl10u3dr0eXLd6jA
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 02d572b2-d610-4700-9ad3-40076ddb9807
+      source: System
+    parameterMaps: []
+    conditions: []
+    validations: []
+    contexts: []
+  - id: F-Vqk--35EKqjjnRuAcSMg
+    enabled: true
+    invertResult: false
+    order: 18
+    repeat: 1
+    type: Action
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 3a7a12fb-66a4-47c2-aaf0-deeb7b1f748a
+      source: System
+    parameterMaps:
+    - name: index
+      value: 1
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: nB94XXRq1U2blX1yBA2plw
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 19
+    repeat: 1
+    type: Action
+    elementId: ico8yEooS0CcK5p8zFS4ow
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 225caec3-3231-45d5-a3f3-c4c59b7ab385
+      source: System
+    parameterMaps:
+    - name: text
+      value: '{{TweetUrl}}'
+      direction: Output
+    conditions: []
+    validations: []
+    contexts: []
+  - id: fH0LlO6l80aqZ3V3LgtOMg
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 20
+    repeat: 1
+    type: Addon
+    elementId: Bq2giS1E50K6NYJFngLIkQ
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: U2veSbE9E0aIfg5GFB2HtQ
+      source: Store
+      addonId: inW2AJJ04ku45E9-RN2zqA
+    parameterMaps:
+    - name: timeout
+      value: ''
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: OY74lX1F6UC5bNOD6XxPiw
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 21
+    repeat: 1
+    type: Action
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 6cc71ddb-1aaf-433c-aa94-56d944aac433
+      source: System
+    parameterMaps:
+    - name: index
+      value: 1
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: cqgvNqPY2EKrlxXGZZlU9Q
+    enabled: true
+    invertResult: false
+    order: 22
+    repeat: 1
+    type: Action
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 3a7a12fb-66a4-47c2-aaf0-deeb7b1f748a
+      source: System
+    parameterMaps:
+    - name: index
+      value: 0
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: HivbXroWCkmoX32ecMOeQg
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 23
+    repeat: 1
+    type: Addon
+    elementId: NSTFGJ3K0UKwL_2PEDvmRg
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: -G2kQ0SSqECMtfr1JGAdww
+      source: Store
+      addonId: LFtMVbTf9EW7YK8qK4xzlQ
+    parameterMaps:
+    - name: keys
+      value: '{{TweetUrl}}'
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: l84kxnC3OUikYu94ir32zQ
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 24
+    repeat: 1
+    type: Addon
+    elementId: af4Vk5UJYUuAhbClUTxg6A
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: U2veSbE9E0aIfg5GFB2HtQ
+      source: Store
+      addonId: inW2AJJ04ku45E9-RN2zqA
+    parameterMaps:
+    - name: timeout
+      value: ''
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: j5s-956730e9na3bgjcl8w
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 25
+    repeat: 1
+    type: Action
+    elementId: OiUdyOEe5Ei4kD9lliI65g
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 5e4cb36f-7757-4d63-8216-ba4e69496416
+      source: System
+    parameterMaps: []
+    conditions: []
+    validations: []
+    contexts: []
+  - id: cJOejBgLz0GOjuyCvOCPXA
+    enabled: true
+    invertResult: false
+    order: 26
+    repeat: 1
+    type: Action
+    elementId: bRYNOtcf9ECQU-bXqA6gUw
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 02d572b2-d610-4700-9ad3-40076ddb9807
+      source: System
+    parameterMaps: []
+    conditions: []
+    validations: []
+    contexts: []
+  parameters:
+  - name: TweetUrl
+    description: ''
+    value: 'https://twitter.com/hypersignchain/status/1454424567884046346 '
+    type: Input
+auxTests:
+- id: T_7nU3_f4EKRu05KPAMcpQ
+  name: authToken&url
+  description: This test was auto generated from steps of the 'Test_For_TwitterFollow_User_Page' test
+  platform: Web
+  type: Web
+  driverType: Chrome
+  version: 1.0
+  creationDate: 2021-12-15T12:17:27.0000000
+  modificationDate: 2021-12-20T04:41:25.0000000
+  settings:
+    automationAssistant: true
+    appId: NC2UPjA6C0O5CxOISY9KYg
+    stepSleepTime: 500
+    stepTimeout: 15000
+    stepSleepTiming: Before
+    stepFailureBehaviorType: Abort
+    stepTakeScreenshotConditionType: Failure
+  steps:
+  - id: x3xbThk6qkyq68lG51U9Cw
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 1
+    repeat: 1
+    type: Addon
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: BmXFbV7XGUa3i7nGAbpybQ
+      source: Store
+      addonId: Xey4bVsJQEODIUN7ssaJMg
+    parameterMaps:
+    - name: key
+      value: authToken
+      direction: Input
+    - name: value
+      value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQ3NlX0FfMjRfUmFqX1BhdGlsIiwiZW1haWwiOiJyYWoudi5wYXRpbDEwOEBnbWFpbC5jb20iLCJpZCI6ImRpZDpoczoxYTQwMDFjZi0xNWFkLTQ3NjYtOTEzMS0xYzJlMzZiZjIzNDAiLCJpYXQiOjE2Mzk5NzQ1MTAsImV4cCI6MTY0MDA5NDUxMH0.9jxQFgbOt1wCFn6jACiTMSoTUsHnOppvLUOo1tNiVh8
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: BP1f5u5x9Umy7TUCc20QWA
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 2
+    repeat: 1
+    type: Action
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 49c5d8d8-4ba8-42f0-823d-702e6acfb23a
+      source: System
+    parameterMaps:
+    - name: url
+      value: https://hswhitelist.netlify.app/form/complete-social-flow03
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  parameters: []
+elements:
+- id: bRYNOtcf9ECQU-bXqA6gUw
+  name: Retweet
+  type:
+    id: jUwODgyNjAyNzk2NTk1NjM
+    name: Div
+    source: System
+  locators:
+  - name: XPATH
+    value: //div[2]/div[. = 'Retweet']
+    priority: 0
+  - name: XPATH
+    value: //div[4]/div[2]/div/div/div
+    priority: 1
+  - name: XPATH
+    value: /html/body/div[1]/div[1]/div[1]/div/div[3]/div[4]/div[2]/div/div[2]/div
+    priority: 2
+- id: Ttji0ux61EirQAZkpmvH_g
+  name: RetweetScore10
+  description: ''
+  type:
+    id: jUwODgyNjAyNzk2NTk1NjU
+    name: span
+    source: System
+  locators:
+  - name: XPATH
+    value: //div[4]//span[name() = 'span']
+    priority: 0
+  - name: XPATH
+    value: >-
+      //div[4]//span[. = '
+                  10
+                ']
+    priority: 1
+  - name: XPATH
+    value: //div[4]//span
+    priority: 2
+  - name: XPATH
+    value: /html/body/div[1]/div[1]/div[1]/div/div[3]/div[4]/div[2]/div/div[3]/span
+    priority: 3
+- id: P90rMTJDJEi7AmEfCV8Xxw
+  name: RetweetIcon
+  description: ''
+  type:
+    id: jUwODgyNjAyNzk2NTk1NTI
+    name: Image
+    source: System
+  locators:
+  - name: XPATH
+    value: //div[4]/div[2]/div/div/img[name() = 'img']
+    priority: 0
+  - name: XPATH
+    value: //div[4]/div[2]/div/div/img
+    priority: 1
+  - name: XPATH
+    value: /html/body/div[1]/div[1]/div[1]/div/div[3]/div[4]/div[2]/div/div[1]/img
+    priority: 2
+- id: CiajjSAl10u3dr0eXLd6jA
+  name: RetweetButton
+  description: ''
+  type:
+    id: jUwODgyNjAyNzk2NTk1NDc
+    name: Button
+    source: System
+  locators:
+  - name: XPATH
+    value: //div[4]/div[3]/div/div[1]//button[name() = 'button']
+    priority: 0
+  - name: XPATH
+    value: >-
+      //button[. = '
+                      Retweet
+                    ']
+    priority: 1
+  - name: XPATH
+    value: //div[4]/div[3]/div/div[1]//button
+    priority: 2
+  - name: XPATH
+    value: /html/body/div[1]/div[1]/div[1]/div/div[3]/div[4]/div[3]/div/div[1]/div/div/button
+    priority: 3
+- id: af4Vk5UJYUuAhbClUTxg6A
+  name: RetweetContinue
+  description: ''
+  type:
+    id: jUwODgyNjAyNzk2NTk1NDc
+    name: Button
+    source: System
+  locators:
+  - name: XPATH
+    value: //div[4]/div[3]/div/div[2]//button[name() = 'button']
+    priority: 0
+  - name: XPATH
+    value: //div[4]//button[. = 'Continue']
+    priority: 1
+  - name: XPATH
+    value: //div[4]/div[3]/div/div[2]//button
+    priority: 2
+  - name: XPATH
+    value: /html/body/div[1]/div[1]/div[1]/div/div[3]/div[4]/div[3]/div/div[2]/div/button
+    priority: 3
+- id: NSTFGJ3K0UKwL_2PEDvmRg
+  name: RetweetBox
+  description: ''
+  type:
+    id: jUwODgyNjAyNzk2NTk1NDY
+    name: Textbox
+    source: System
+  locators:
+  - name: XPATH
+    value: //input[@placeholder = 'https://twitter.com/<twitterHandle>/status/<tweetId>']
+    priority: 0
+  - name: CSSSELECTOR
+    value: '#__BVID__38'
+    priority: 1
+  - name: XPATH
+    value: //input
+    priority: 2
+  - name: XPATH
+    value: /html/body/div[1]/div[1]/div[1]/div/div[3]/div[4]/div[3]/div/div[1]/div/div/input
+    priority: 3
+- id: 98W9rsacyUiflISMMwzuLQ
+  name: Retweet url cannot be empty
+  type:
+    id: jUwODgyNjAyNzk2NTk1NjM
+    name: Div
+    source: System
+  locators:
+  - name: XPATH
+    value: //div[. = 'Retweet url cannot be empty']
+    priority: 0
+  - name: XPATH
+    value: //span//div[2]
+    priority: 1
+  - name: XPATH
+    value: /html/body/div[1]/div[2]/span/div/div/div[2]
+    priority: 2
+- id: qwVHsxnsAECvepLyugub7w
+  name: Invalid re-tweet url
+  type:
+    id: jUwODgyNjAyNzk2NTk1NjM
+    name: Div
+    source: System
+  locators:
+  - name: XPATH
+    value: //div[. = 'Invalid re-tweet url']
+    priority: 0
+  - name: XPATH
+    value: //span//div[2]
+    priority: 1
+  - name: XPATH
+    value: /html/body/div[1]/div[2]/span/div/div/div[2]
+    priority: 2
+- id: Bq2giS1E50K6NYJFngLIkQ
+  name: TweetButton
+  description: ''
+  type:
+    id: jUwODgyNjAyNzk2NTk1NDc
+    name: Button
+    source: System
+  locators:
+  - name: XPATH
+    value: //div[2]/div[4][name() = 'div']
+    priority: 0
+  - name: XPATH
+    value: //div[4][. = 'Tweet']
+    priority: 1
+  - name: XPATH
+    value: //div[2]/div[4]
+    priority: 2
+  - name: XPATH
+    value: /html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[2]/div[4]
+    priority: 3
+- id: ico8yEooS0CcK5p8zFS4ow
+  name: https://twitter.com/hypersignchain/st...1
+  type:
+    id: jUwODgyNjAyNzk2NTk1NjU
+    name: span
+    source: System
+  locators:
+  - name: XPATH
+    value: //span/span/span[. = 'https://twitter.com/hypersignchain/status/1454424567884046346']
+    priority: 0
+  - name: XPATH
+    value: //span/span/span
+    priority: 1
+  - name: XPATH
+    value: /html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/label/div[1]/div/div/div/div/div/div/div/div/div/span[1]/span/span
+    priority: 2
+- id: OiUdyOEe5Ei4kD9lliI65g
+  name: RetweetTick
+  description: ''
+  type:
+    id: jUwODgyNjAyNzk2NTk1NTI
+    name: Image
+    source: System
+  locators:
+  - name: XPATH
+    value: //div[4]/div[2]/div/div[3]/img[name() = 'img']
+    priority: 0
+  - name: XPATH
+    value: //div[4]/div[2]/div/div[3]/img
+    priority: 1
+  - name: XPATH
+    value: /html/body/div[1]/div[1]/div[1]/div/div[3]/div[4]/div[2]/div/div[3]/img
+    priority: 2
+projectParameters: []
+addons:
+- id: Xey4bVsJQEODIUN7ssaJMg
+  source: Store
+  version: 1.1.9
+  actions:
+  - id: BmXFbV7XGUa3i7nGAbpybQ
+    name: Set value for item in local storage
+    description: Set value {{value}} for {{key}} in local storage
+    className: io.testproject.addons.web.localstorage.SetItemInLocalStorage
+  minSdkLevel: 2
+  minSdkVersion: 0.63.1
+  sdkGeneration: 1
+  language: Java
+  hash: 2D35A7CE404CDBD8C628208C7BF6C79678E47DC6F249518E97AC68E19F0A0B6D
+- id: LFtMVbTf9EW7YK8qK4xzlQ
+  source: Store
+  version: 0.1
+  actions:
+  - id: -G2kQ0SSqECMtfr1JGAdww
+    name: Clear {{element}} contents and type {{keys}}
+    description: Run Clear {{element}} contents and type {{keys}}
+    className: io.testproject.addon.combined.actions.ClearAndTypeAction
+  minSdkLevel: 2
+  minSdkVersion: 0.65.0
+  sdkGeneration: 1
+  language: Java
+  hash: 8EF4181CC7B4137B2586CB8A2BDBFAB49C348D8273E96A9C6A85E4AA91C6650D
+- id: inW2AJJ04ku45E9-RN2zqA
+  source: Store
+  version: 2.10
+  actions:
+  - id: U2veSbE9E0aIfg5GFB2HtQ
+    name: Click if visible
+    description: Click {{element}} if it's visible
+    className: io.testproject.addon.ClickActions.ClickIfVisibleWeb
+  - id: xWYLHslQSEqQxvVZ_g3Jqg
+    name: Clear contents (if visible)
+    description: Clear the contents of {{element}} if it's visible
+    className: io.testproject.addon.ClearContentsActions.ClearContentsIfVisibleWeb
+  minSdkLevel: 2
+  minSdkVersion: 0.65.0
+  sdkGeneration: 1
+  language: Java
+  hash: CB217F4B750B6C3441DDB87E262A5C710BB3891BAE1F68FFF01CF07AEB036675
