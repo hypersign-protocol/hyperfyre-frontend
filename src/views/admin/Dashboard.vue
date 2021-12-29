@@ -53,7 +53,7 @@
 import Profile from '@/components/admin/Profile.vue'
 import Charts from '@/components/admin/Charts.vue'
 import notificationMixins from '../../mixins/notificationMixins';
-import KommunicateChat from "../../KommunicateChat.vue"
+import KommunicateChat from "../../components/KommunicateChat.vue"
 export default {
   name: "PanelPage",
   mounted() {

@@ -4,6 +4,7 @@
 </template>
 
 <script>
+import config from "../config"
 export default {
     methods: {
     },
@@ -14,7 +15,7 @@ export default {
     /*---------------- Kommunicate settings start ----------------*/
 
      var kommunicateSettings = {
-      "appId": "1f12be37b40ae6ab3c6f24f99f09c9dcf",  
+      "appId": config.kommunicateAppId,  
       "automaticChatOpenOnNavigation": true,
       "popupWidget": true,
       "onInit": function () {
