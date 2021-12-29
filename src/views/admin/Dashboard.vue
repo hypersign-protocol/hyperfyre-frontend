@@ -44,6 +44,7 @@
             <Charts/>
         </div>
      </div>    
+     <KommunicateChat v-if="initiatekommunicate"/>
   </div>
 </template>
 
@@ -52,13 +53,15 @@
 import Profile from '@/components/admin/Profile.vue'
 import Charts from '@/components/admin/Charts.vue'
 import notificationMixins from '../../mixins/notificationMixins';
+import KommunicateChat from "../../components/KommunicateChat.vue"
 export default {
   name: "PanelPage",
   mounted() {
   },
   components: { 
     Profile,
-    Charts
+    Charts,
+    KommunicateChat
   },
   data() {
     return {
@@ -76,6 +79,11 @@ export default {
      }
   },
   methods: {
+    initiatekommunicate(){
+      if (localStorage.getItem("user")) {
+        return true
+      }
+    },
     gotosubpage: id => {
       this.$router.push(`${id}`);
     },
