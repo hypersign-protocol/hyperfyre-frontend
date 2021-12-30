@@ -22,6 +22,7 @@ import {
 import VueSidebarMenu from "vue-sidebar-menu";
 import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 import VueMeta from 'vue-meta';
+import SalesIQ from "./SalesIQ"
 
 
 // Tell Vue to install the plugin.
@@ -52,6 +53,10 @@ Vue.prototype.$config = config;
 Vue.use(VueSidebarMenu);
 
 Vue.use(VueMeta)
+
+// Using plugin
+Vue.use(SalesIQ, {widgetcode: config.zohoWidgetCode, domain: 'https://salesiq.zoho.in/widget'});
+
 
 new Vue({
   router,
