@@ -58,8 +58,7 @@ export default {
   },
   components: { 
     Profile,
-    Charts,
-    KommunicateChat
+    Charts
   },
   data() {
     return {
