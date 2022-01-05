@@ -200,6 +200,7 @@ i {
               <th>Plan Name</th>
               <th>Limit</th>
               <th>Status</th>
+              <th>Payment Status</th>
             </tr>
           </thead>
           <tbody>
@@ -211,6 +212,7 @@ i {
               <td>{{ getPlanName(row.planId) }}</td>
               <td>{{ row.leftOverNoRequests }}</td>
               <td>{{ row.isActive ? "Active" : "Inactive" }}</td>
+              <td>{{ row.isPaid ? "Payment Successful" : "Payment Pending" }}</td>
             </tr>
           </tbody>
         </table>
@@ -448,7 +450,7 @@ export default {
       data.emoji = this.getEmoji(data.planName)
       this.plan = data
       this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
-      
+      console.log(this.plan);
       this.resetAllValues();
       this.$root.$emit('callClearFromProject');    
     },
@@ -460,4 +462,4 @@ export default {
 
   mixins: [notificationMixins],
 };
-</script>
+</script>Dummy30

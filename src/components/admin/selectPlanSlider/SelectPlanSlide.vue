@@ -143,7 +143,7 @@
         <div>
             <div class="row" style="margin-top: 2%;">
               <div class="col-md-12">
-                <b-button block variant="primary" class="btn-plan popular">Pay ${{grandTotal}}</b-button>
+                <b-button block variant="primary" class="btn-plan popular" @click="payment">Pay ${{grandTotal}}</b-button>
               </div>
             </div>
         </div>
@@ -194,7 +194,8 @@ export default {
   computed: {
     // a computed getter
    grandTotal () {
-     return this.plan.price - this.discount
+     this.plan.grandTotal=this.plan.price - this.discount
+     return this.plan.grandTotal
    }
    
   },
@@ -205,11 +206,13 @@ export default {
       // Use api https://localhost:6006/api/v1/actions
       // it returns: 
       // {"actionTypes":["INPUT_TEXT","INPUT_NUMBER","TWITTER_FOLLOW","TWITTER_RETWEET","TELEGRAM_JOIN","DISCORD_JOIN","BLOCKCHAIN_ETH","BLOCKCHAIN_TEZ","HYPERSIGN_AUTH"],"length":9}
+      authToken: localStorage.getItem("authToken"),
       subTotal:0,
       discount:0,
       selectedCurrency:'',
       selectedNetwork:'',
       "marketPairs": [],
+     
       options: {
         currency: [
           { html: "$HID ( flat 30% discount on sub total) <a target='_blank' href='https://coinmarketcap.com/currencies/hypersign-identity/markets/'> <i class='fas fa-exclamation-circle'></i></a>", 
@@ -282,6 +285,61 @@ export default {
         this.isLoading = false;
       }
     },
+    async payment(){
+        console.log("clicked");
+        var planbody={}
+        this.plan.selectedCurrency=this.selectedCurrency
+        this.plan.selectedNetwork=this.selectedNetwork
+        this.plan.coupon_code='Dummy30'
+         planbody=Object.assign(planbody,this.plan)
+        
+        //{
+        //   "blockchainSupport":this.plan.blockchainSupport,
+        //   "description":this.plan.description,
+        //   "emoji":this.plan.emoji,
+        //   "grandTotal":this.plan.grandTotal,
+        //   "noOfRepeatitiveActions":this.plan.noOfRepeatitiveActions,
+        //   "noOfWinners":this.plan.noOfWinners,
+        //   "otherFeatures":this.plan.otherFeatures,
+        //   "planName":this.plan.planName,
+        //   "price":this.plan.price,
+        //   "totalNoOfRequests":this.plan.totalNoOfRequests,
+        //   "visible":this.plan.visible,
+        //   "__v":this.plan.
+
+        // }
+       
+        var planId=this.plan._id
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+      
+        const resp = await fetch(url, {
+          method: "POST",
+          body: JSON.stringify({
+            planId,planbody
+          }),
+          headers,
+        });
+        const json = await resp.json();
+        if(json){
+          if (!resp.ok) {
+            return this.notifyErr(json)
+          }else{
+            
+            console.log(json.payment.embeded_payment_link);
+            window.open(json.payment.quick_Pay)
+          }
+        }else{
+          throw new Error('Error while subscritption')
+        }      
+        
+        // console.log(this.selectedCurrency);
+        // console.log(this.selectedNetwork);
+       //this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+    }
   },
 };
 </script>
