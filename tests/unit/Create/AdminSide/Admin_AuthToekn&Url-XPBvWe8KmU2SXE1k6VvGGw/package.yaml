@@ -1,0 +1,121 @@
+id: SADSTIJ3tkC1sVnWkWCiyw
+projectId: CLryygF0lEC5NG9Rm-Zz2w
+projectName: My first Project
+created: 2021-12-20T09:31:38.6548842Z
+owner: Raj Patil
+protocol: 1
+tests:
+- id: XPBvWe8KmU2SXE1k6VvGGw
+  name: Admin_AuthToekn&Url
+  description: This test was auto generated from steps of the 'Test_For_General_Config' test
+  platform: Web
+  type: Web
+  driverType: Chrome
+  version: 1.0
+  creationDate: 2021-12-17T05:58:57.0000000
+  modificationDate: 2021-12-20T08:29:16.0000000
+  settings:
+    automationAssistant: false
+    appId: Sn4o5Vrhc0C8dnMGs3eeSw
+    stepSleepTime: 500
+    stepTimeout: 15000
+    stepSleepTiming: Before
+    stepFailureBehaviorType: Abort
+    stepTakeScreenshotConditionType: Failure
+  application:
+    id: Sn4o5Vrhc0C8dnMGs3eeSw
+    name: test hyperfyrenew
+    url: https://hswhitelist.netlify.app/admin/events
+    platform: Web
+  steps:
+  - id: mLBJYW_OxEK9vn7hKkxhcg
+    comments: Navigates the specified URL (Auto-generated)
+    enabled: true
+    invertResult: false
+    order: 1
+    repeat: 1
+    type: Action
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 49c5d8d8-4ba8-42f0-823d-702e6acfb23a
+      source: System
+    parameterMaps:
+    - name: url
+      value: https://hswhitelist.netlify.app/admin/login
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: jqO9rDD3rESFM07cKcvi8g
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 2
+    repeat: 1
+    type: Addon
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: BmXFbV7XGUa3i7nGAbpybQ
+      source: Store
+      addonId: Xey4bVsJQEODIUN7ssaJMg
+    parameterMaps:
+    - name: value
+      value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQ3NlX0FfMjRfUmFqX1BhdGlsIiwiZW1haWwiOiJyYWoudi5wYXRpbDEwOEBnbWFpbC5jb20iLCJpZCI6ImRpZDpoczoxYTQwMDFjZi0xNWFkLTQ3NjYtOTEzMS0xYzJlMzZiZjIzNDAiLCJpYXQiOjE2Mzk5NzQ1MTAsImV4cCI6MTY0MDA5NDUxMH0.9jxQFgbOt1wCFn6jACiTMSoTUsHnOppvLUOo1tNiVh8
+      direction: Input
+    - name: key
+      value: authToken
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  - id: ZkueLwVVSkqaEfRzC-QKcw
+    comments: ''
+    enabled: true
+    invertResult: false
+    order: 3
+    repeat: 1
+    type: Action
+    settings:
+      sleepTime: -1
+      timeout: -1
+      sleepTiming: Inherit
+      failureBehaviorType: Inherit
+      takeScreenshotConditionType: Inherit
+    action:
+      id: 49c5d8d8-4ba8-42f0-823d-702e6acfb23a
+      source: System
+    parameterMaps:
+    - name: url
+      value: https://hswhitelist.netlify.app/admin/events
+      direction: Input
+    conditions: []
+    validations: []
+    contexts: []
+  parameters: []
+auxTests: []
+elements: []
+projectParameters: []
+addons:
+- id: Xey4bVsJQEODIUN7ssaJMg
+  source: Store
+  version: 1.1.9
+  actions:
+  - id: BmXFbV7XGUa3i7nGAbpybQ
+    name: Set value for item in local storage
+    description: Set value {{value}} for {{key}} in local storage
+    className: io.testproject.addons.web.localstorage.SetItemInLocalStorage
+  minSdkLevel: 2
+  minSdkVersion: 0.63.1
+  sdkGeneration: 1
+  language: Java
+  hash: 2D35A7CE404CDBD8C628208C7BF6C79678E47DC6F249518E97AC68E19F0A0B6D

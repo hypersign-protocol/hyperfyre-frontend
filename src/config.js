@@ -15,6 +15,7 @@ const config = {
     auth0Domain:urlSanitizer(process.env.VUE_APP_AUTH0_DOMAIN,false),
     auth0ClinetId: process.env.VUE_APP_AUTH0_CLIENT_ID,
     telegramBotId: process.env.VUE_APP_TELEGRAM_BOT_ID,
+    zohoWidgetCode:process.env.VUE_APP_ZOHO_WIDGET_CODE,
     eventActionType: {
         INPUT_TEXT: "INPUT_TEXT",
         INPUT_NUMBER :"INPUT_NUMBER",

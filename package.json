@@ -1,6 +1,6 @@
 {
-  "name": "whitelisting-frontend",
-  "version": "v5.0.1",
+  "name": "hyperfye-frontend",
+  "version": "v5.0.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode production",
