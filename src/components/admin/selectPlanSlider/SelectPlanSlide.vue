@@ -329,8 +329,7 @@ export default {
             return this.notifyErr(json)
           }else{
             
-            console.log(json.payment.embeded_payment_link);
-            window.open(json.payment.quick_Pay)
+            window.location.replace(json.payment.quick_Pay)
           }
         }else{
           throw new Error('Error while subscritption')

@@ -212,7 +212,7 @@ i {
               <td>{{ getPlanName(row.planId) }}</td>
               <td>{{ row.leftOverNoRequests }}</td>
               <td>{{ row.isActive ? "Active" : "Inactive" }}</td>
-              <td>{{ row.isPaid ? "Payment Successful" : "Payment Pending" }}</td>
+             
             </tr>
           </tbody>
         </table>
@@ -393,7 +393,12 @@ export default {
         if (!planId) {
           return;
         }
-
+        var planbody={}
+        this.plan.selectedCurrency=this.selectedCurrency
+        this.plan.selectedNetwork=this.selectedNetwork
+        this.plan.coupon_code='Free120'
+        this.plan.grandTotal=0
+        planbody=Object.assign(planbody,this.plan)
         // console.log(planId);
 
         this.isLoading = true;
@@ -421,7 +426,7 @@ export default {
         const resp = await fetch(url, {
           method: "POST",
           body: JSON.stringify({
-            planId,
+            planId,planbody
           }),
           headers,
         });
