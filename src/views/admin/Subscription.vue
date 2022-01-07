@@ -200,7 +200,7 @@ i {
               <th>Plan Name</th>
               <th>Limit</th>
               <th>Status</th>
-              <th>Payment Status</th>
+             
             </tr>
           </thead>
           <tbody>
