@@ -15,6 +15,7 @@ const router = new Router({
       path: "/form/:slug",
       name: "Event",
       component: () => import(/* webpackChunkName: "investorLogin" */ './views/participant/Event.vue'),
+      meta: (route) => ({ requiresAuth: false, title: 'Hyperfyre - ' + route.params.slug, tabbar: false })
     },
     {
       path: "/",
