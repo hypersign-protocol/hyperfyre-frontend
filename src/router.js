@@ -74,6 +74,9 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
+  if (nearestWithTitle) document.title = nearestWithTitle.meta.title;
+  
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     const authToken = localStorage.getItem("authToken");
     if (authToken) {
