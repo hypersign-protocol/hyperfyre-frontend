@@ -98,6 +98,7 @@ export default {
     }
   },
   async created() {
+    document.title = "Hyperfyre - "+ this.$route.slug
     try{
       this.authToken = localStorage.getItem("authToken");
       const userDetail = localStorage.getItem("user")
