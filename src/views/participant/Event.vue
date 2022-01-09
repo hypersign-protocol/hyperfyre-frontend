@@ -98,7 +98,6 @@ export default {
     }
   },
   async created() {
-    document.title = "Hyperfyre - "+ this.$route.slug
     try{
       this.authToken = localStorage.getItem("authToken");
       const userDetail = localStorage.getItem("user")
@@ -110,6 +109,7 @@ export default {
 
       if (this.$route.params["slug"]) {
         this.eventSlug = this.$route.params["slug"];
+        document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.fetchEventData();
         await this.fetchUserInfoOnLogin();
       }
