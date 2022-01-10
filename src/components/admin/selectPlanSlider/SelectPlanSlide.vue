@@ -157,6 +157,7 @@ import InputDate from '../../participant/ActionInputs/InputDate.vue';
 import EventActionConfig from "./components/EventActionConfig.vue";
 import GeneralConfig from "./components/GeneralConfig.vue";
 import ReferralConfig from "./components/ReferralConfig.vue";
+
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -287,6 +288,7 @@ export default {
       }
     },
     async payment(){
+     
         console.log("clicked");
         var planbody={}
         this.plan.selectedCurrency=this.selectedCurrency

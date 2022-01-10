@@ -394,10 +394,12 @@ export default {
           return;
         }
         var planbody={}
-        this.plan.selectedCurrency=this.selectedCurrency
-        this.plan.selectedNetwork=this.selectedNetwork
+        this.plan.selectedCurrency='HIDD'
+        this.plan.selectedNetwork='MATICC'
         this.plan.coupon_code='Free120'
-        this.plan.grandTotal=0
+        this.plan.grandTotal='0'
+        this.plan.price='0'
+
         planbody=Object.assign(planbody,this.plan)
         // console.log(planId);
 
@@ -437,7 +439,8 @@ export default {
             return this.notifyErr(json)
           }else{
             this.fetchSubscription();
-            this.notifySuccess(Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED + json["_id"]);
+            console.log(json);
+            this.notifySuccess(Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED + json["newSub"]["_id"]);
           }
         }else{
           throw new Error('Error while subscritption')
