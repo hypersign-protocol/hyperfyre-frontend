@@ -194,6 +194,7 @@ export default {
   computed: {
     // a computed getter
    grandTotal () {
+     // eslint-disable-next-line vue/no-side-effects-in-computed-properties
      this.plan.grandTotal=this.plan.price - this.discount
      return this.plan.grandTotal
    }
@@ -328,8 +329,8 @@ export default {
           if (!resp.ok) {
             return this.notifyErr(json)
           }else{
-            
-            window.location.replace(json.payment.quick_Pay)
+            window.open(json.payment.quick_Pay)
+           // window.location.replace(json.payment.quick_Pay)
           }
         }else{
           throw new Error('Error while subscritption')
