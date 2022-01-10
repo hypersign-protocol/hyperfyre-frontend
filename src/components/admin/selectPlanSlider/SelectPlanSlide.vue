@@ -157,6 +157,7 @@ import InputDate from '../../participant/ActionInputs/InputDate.vue';
 import EventActionConfig from "./components/EventActionConfig.vue";
 import GeneralConfig from "./components/GeneralConfig.vue";
 import ReferralConfig from "./components/ReferralConfig.vue";
+
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -194,6 +195,7 @@ export default {
   computed: {
     // a computed getter
    grandTotal () {
+     // eslint-disable-next-line vue/no-side-effects-in-computed-properties
      this.plan.grandTotal=this.plan.price - this.discount
      return this.plan.grandTotal
    }
@@ -286,6 +288,7 @@ export default {
       }
     },
     async payment(){
+     
         console.log("clicked");
         var planbody={}
         this.plan.selectedCurrency=this.selectedCurrency
@@ -328,8 +331,8 @@ export default {
           if (!resp.ok) {
             return this.notifyErr(json)
           }else{
-            
-            window.location.replace(json.payment.quick_Pay)
+            window.open(json.payment.quick_Pay)
+           // window.location.replace(json.payment.quick_Pay)
           }
         }else{
           throw new Error('Error while subscritption')

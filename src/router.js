@@ -15,6 +15,7 @@ const router = new Router({
       path: "/form/:slug",
       name: "Event",
       component: () => import(/* webpackChunkName: "investorLogin" */ './views/participant/Event.vue'),
+      meta: (route) => ({ requiresAuth: false, title: 'Hyperfyre - ' + route.params.slug, tabbar: false })
     },
     {
       path: "/",
@@ -73,6 +74,10 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  if(to.meta.title){
+    document.title = to.meta.title;
+  }
+  
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     const authToken = localStorage.getItem("authToken");
     if (authToken) {

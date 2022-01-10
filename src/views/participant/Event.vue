@@ -109,6 +109,7 @@ export default {
 
       if (this.$route.params["slug"]) {
         this.eventSlug = this.$route.params["slug"];
+        document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.fetchEventData();
         await this.fetchUserInfoOnLogin();
       }
