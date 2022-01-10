@@ -220,13 +220,13 @@ export default {
           { html: "$HID ( flat 30% discount on sub total) <a target='_blank' href='https://coinmarketcap.com/currencies/hypersign-identity/markets/'> <i class='fas fa-exclamation-circle'></i></a>", 
             value: 'HID', 
             disabled: false  
-          },
-          { text: "$USDT", value: 'USDT', disabled: false  },
-          { text: "$USDC", value: 'USDC', disabled: false  },
-          { text: "$DAI", value: 'DAI', disabled: false  },
+          },{ text: "$MATIC", value: 'MATIC', disabled: false  },
+          { text: "$USDT", value: 'USDT', disabled: true  },
+          { text: "$USDC", value: 'USDC', disabled: true  },
+          { text: "$DAI", value: 'DAI', disabled: true  },
         ],
         network: [
-          { text: "Ethereum", value: 'ETH', disabled: false  },
+          { text: "Ethereum (Coming Soon..)", value: 'ETH', disabled: true  },
           { text: "Polygon", value: 'MATIC', disabled: false  },
           { text: "Harmony (Coming Soon..)", value: 'ONE', disabled: true  },
           { text: "Binance Smart Chain (Coming Soon..)", value: 'BSC', disabled: true  },
