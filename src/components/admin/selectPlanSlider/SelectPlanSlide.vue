@@ -221,12 +221,13 @@ export default {
             value: 'HID', 
             disabled: false  
           },{ text: "$MATIC", value: 'MATIC', disabled: false  },
+          { text: "$ETHEREUM", value: 'ETH', disabled: false  },
           { text: "$USDT", value: 'USDT', disabled: true  },
           { text: "$USDC", value: 'USDC', disabled: true  },
           { text: "$DAI", value: 'DAI', disabled: true  },
         ],
         network: [
-          { text: "Ethereum (Coming Soon..)", value: 'ETH', disabled: true  },
+          { text: "Ethereum", value: 'ETH', disabled: false  },
           { text: "Polygon", value: 'MATIC', disabled: false  },
           { text: "Harmony (Coming Soon..)", value: 'ONE', disabled: true  },
           { text: "Binance Smart Chain (Coming Soon..)", value: 'BSC', disabled: true  },
