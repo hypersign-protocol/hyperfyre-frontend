@@ -92,7 +92,7 @@
             </div>
             <div class="row" style="margin-top: 2%;">
               <div class="col-md-6"><b>Discount</b></div>
-              <div class="col-md-6"> - $ {{ discount }}</div>
+              <div class="col-md-6"> $ {{ discount }}</div>
             </div>
             <!-- <div class="row" style="margin-top: 2%;">
               <div class="col-md-6"><b>Subtotal</b></div>
