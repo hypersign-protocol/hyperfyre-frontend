@@ -83,7 +83,8 @@ const PARTICIPANTS = {
 
 const SUBSCRIPTIONS = {
     YOU_ARE_SUBSCRIBED: "Your are subscribed. SubscriptionId = ",
-    SUBSCRIPTION_EXHAUSTED: "Your Subscription has been exhauseted. Please subscribe to New Plan"
+    SUBSCRIPTION_EXHAUSTED: "Your Subscription has been exhauseted. Please subscribe to New Plan",
+    SELECT_CURRENCY_AND_NETWORK: "Please select Currency and network"
     
 }
 

@@ -157,7 +157,8 @@ import InputDate from '../../participant/ActionInputs/InputDate.vue';
 import EventActionConfig from "./components/EventActionConfig.vue";
 import GeneralConfig from "./components/GeneralConfig.vue";
 import ReferralConfig from "./components/ReferralConfig.vue";
-
+import notificationMixins from "../../../mixins/notificationMixins";
+import Messages from "../../../utils/messages/admin/en";
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -324,8 +325,8 @@ export default {
       }
     },
     async payment(){
-     
-        console.log("clicked");
+      if(!(this.selectedCurrency=='' || this.selectedNetwork==''))
+       { 
         var planbody={}
         this.plan.selectedCurrency=this.selectedCurrency
         this.plan.selectedNetwork=this.selectedNetwork
@@ -377,7 +378,11 @@ export default {
         // console.log(this.selectedCurrency);
         // console.log(this.selectedNetwork);
        //this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+      }else{
+       this.notifyErr(Messages.SUBSCRIPTIONS.SELECT_CURRENCY_AND_NETWORK);
     }
+  }
   },
+   mixins: [notificationMixins]
 };
 </script>
