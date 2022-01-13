@@ -58,7 +58,7 @@
                     :options="options.currency"
                     :aria-describedby="ariaDescribedby"
                     name="radio-options-currency"
-                    @change="setDiscount"
+                    @change="setDiscount(selectedCurrency)"
                     stacked
                   ></b-form-radio-group>
                 </b-form-group>
@@ -221,7 +221,7 @@ export default {
             value: 'HID', 
             disabled: false  
           },{ text: "$MATIC", value: 'MATIC', disabled: false  },
-          { text: "$ETHEREUM", value: 'ETH', disabled: false  },
+          { text: "$ETH", value: 'ETH', disabled: false  },
           { text: "$USDT", value: 'USDT', disabled: true  },
           { text: "$USDC", value: 'USDC', disabled: true  },
           { text: "$DAI", value: 'DAI', disabled: true  },
@@ -248,15 +248,42 @@ export default {
       this.discount=0;
       this.selectedCurrency='';
       this.selectedNetwork='';
+      this.options.network=[ 
+        { text: "Ethereum", value: 'ETH', disabled: false  },
+        { text: "Polygon", value: 'MATIC', disabled: false  },
+        { text: "Harmony (Coming Soon..)", value: 'ONE', disabled: true  },
+        { text: "Binance Smart Chain (Coming Soon..)", value: 'BSC', disabled: true  }]
     },
     setDiscount (__arg) {
       if(__arg){
         if (__arg=='HID') {
+          this.selectedNetwork='';
+           this.options.network=[ { text: "Ethereum", value: 'ETH', disabled: false  },
+          { text: "Polygon", value: 'MATIC', disabled: false  },
+          { text: "Harmony (Coming Soon..)", value: 'ONE', disabled: true  },
+          { text: "Binance Smart Chain (Coming Soon..)", value: 'BSC', disabled: true  }]
           this.discount = (this.plan.price * 30 )/100
         } else {
           this.discount = 0
+          
+        }
+        if(__arg=='MATIC'){
+          
+          this.options.network=[ { text: "Ethereum", value: 'ETH', disabled: true  },
+          { text: "Polygon", value: 'MATIC', disabled: false  },
+          { text: "Harmony (Coming Soon..)", value: 'ONE', disabled: true  },
+          { text: "Binance Smart Chain (Coming Soon..)", value: 'BSC', disabled: true  }]
+          this.selectedNetwork="MATIC"
+        }
+        if(__arg=="ETH"){
+          this.options.network=[ { text: "Ethereum", value: 'ETH', disabled: false  },
+          { text: "Polygon", value: 'MATIC', disabled: true  },
+          { text: "Harmony (Coming Soon..)", value: 'ONE', disabled: true  },
+          { text: "Binance Smart Chain (Coming Soon..)", value: 'BSC', disabled: true  }]
+          this.selectedNetwork="ETH";
         }
       }
+      
     },
     getHidPrice () {
       let arr = this.marketPairs
