@@ -110,7 +110,7 @@ i {
       </div>
     </div>
     <template v-for="plan in plans">
-      <button type="button" class="btn btn-outline-dark btn-plan free" :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''" v-if="plan.price === 0" :disabled="subscriptions.find((el) => el.planId === plan._id)" @click="subscribe(plan._id)">Free Basic Plan</button>
+      <button type="button" class="btn btn-outline-dark btn-plan free" :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''" v-if="plan.price === 0" :key="plan._id" :disabled="subscriptions.find((el) => el.planId === plan._id)" @click="subscribe(plan._id)">Free Basic Plan</button>
     </template>
     <div class="divider">
       <small class="small-desc">
@@ -130,7 +130,7 @@ i {
                 <span>$</span>
                 {{ plan.price }}
               </div>
-              <button type="button" class="btn btn-outline-dark btn-plan" :class="(plan.planName === 'Lambo') ? 'popular' : ''" @click="subscribe(plan['_id'])">Select Plan</button>
+              <button type="button" class="btn btn-outline-dark btn-plan" :class="(plan.planName === 'Lambo') ? 'popular' : ''" @click="openSelectPlanSidebar(plan)">Select Plan</button>
               <div class="pro-feature">
                 <ul>
                   <li>
@@ -200,6 +200,7 @@ i {
               <th>Plan Name</th>
               <th>Limit</th>
               <th>Status</th>
+             
             </tr>
           </thead>
           <tbody>
@@ -211,10 +212,21 @@ i {
               <td>{{ getPlanName(row.planId) }}</td>
               <td>{{ row.leftOverNoRequests }}</td>
               <td>{{ row.isActive ? "Active" : "Inactive" }}</td>
+             
             </tr>
           </tbody>
         </table>
       </div>
+    </div>
+    <div>
+      <select-plan-slide 
+        :isProjectEditing="isProjectEditing"
+        :themeColor="themeColor"
+        :themeColorDefault="themeColorDefault"
+        :fontColor="fontColor"
+        :fontColorDefault="fontColorDefault"
+        :plan="plan"
+        />
     </div>
   </div>
 </template>
@@ -223,12 +235,13 @@ import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
+import SelectPlanSlide from '../../components/admin/selectPlanSlider/SelectPlanSlide.vue';
 import Messages from "../../utils/messages/admin/en"
 import eventBus from '../../eventBus';
 
 export default {
   name: "Subscription",
-  components: { Loading },
+  components: { Loading, SelectPlanSlide},
 
   data() {
     return {
@@ -248,7 +261,14 @@ export default {
       support: {
         ETH: 'ethereum',
         BSC: 'binance-logo'
-      }
+      },
+      currentPage: 1,
+      themeColor: "#494949",
+      themeColorDefault: "#494949",
+      fontColor: "#ffffff",
+      fontColorDefault: "#ffffff",
+      isProjectEditing: false,
+      plan:{}
     };
   },
 
@@ -258,6 +278,8 @@ export default {
 
   created() {
     const usrStr = localStorage.getItem("user");
+    document.title = "Hyperfyre - Subscriptions";
+
     if (usrStr) {
       this.user = {
         ...JSON.parse(usrStr),
@@ -373,10 +395,32 @@ export default {
         if (!planId) {
           return;
         }
+        var planbody={}
+        this.plan.selectedCurrency='HIDD'
+        this.plan.selectedNetwork='MATICC'
+        this.plan.coupon_code='Free120'
+        this.plan.grandTotal='0'
+        this.plan.price='0'
 
+        planbody=Object.assign(planbody,this.plan)
         // console.log(planId);
 
         this.isLoading = true;
+
+        // Payment Type
+        // Crypto or Fiat ?
+        // MOOPAY  ( SOLANA, ETHE, POLYGON )
+        // PAYU    
+
+        /**
+         * {
+         *  "planId":"2222",
+         *  "curr" : "HID|USDT|USDC|INR|USD",
+         *  "network": "ETH|SOL|MATIC|BSC|ONE",
+         *  "currType": "FIAT|CRYPTO",
+         *  "coupon": "HID302022"
+         * }
+         */
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription`;
         let headers = {
@@ -386,7 +430,7 @@ export default {
         const resp = await fetch(url, {
           method: "POST",
           body: JSON.stringify({
-            planId,
+            planId,planbody
           }),
           headers,
         });
@@ -397,7 +441,8 @@ export default {
             return this.notifyErr(json)
           }else{
             this.fetchSubscription();
-            this.notifySuccess(Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED + json["_id"]);
+            console.log(json);
+            this.notifySuccess(Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED + json["newSub"]["_id"]);
           }
         }else{
           throw new Error('Error while subscritption')
@@ -409,6 +454,20 @@ export default {
         this.isLoading = false;
       }
     },
+
+    openSelectPlanSidebar(data){
+      this.isProjectEditing = false
+      data.emoji = this.getEmoji(data.planName)
+      this.plan = data
+      this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+      console.log(this.plan);
+      this.resetAllValues();
+      this.$root.$emit('callClearFromProject');    
+    },
+
+    resetAllValues() {
+      console.log('Reset-Functaion')
+    }
   },
 
   mixins: [notificationMixins],

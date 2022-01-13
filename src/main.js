@@ -52,7 +52,6 @@ Vue.prototype.$config = config;
 Vue.use(VueSidebarMenu);
 
 Vue.use(VueMeta)
-
 new Vue({
   router,
   render: (h) => h(App),

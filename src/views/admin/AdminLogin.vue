@@ -227,6 +227,7 @@ export default {
   },
   created() {
     localStorage.clear();
+     document.title = "Hyperfyre - Login";
     // console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
     let websocketUrl = "ws://localhost:3003";
