@@ -264,7 +264,8 @@ export default {
       // console.log(messageData);
       if (messageData.op == "init") {
         _this.isLoading = false;
-        // console.log(messageData.data);
+        /// Sending provider from here........
+        messageData.data['provider'] = 'google';
         _this.value = JSON.stringify(messageData.data);
       } else if (messageData.op == "end") {
         _this.connection.close();
