@@ -77,7 +77,7 @@ export default {
       this.referalLink = `${window.location.protocol +
         "//" +
         window.location.host +
-        window.location.pathname}?referrer=${encodeURIComponent(
+        window.location.pathname}?referrer=${btoa(
         this.user.email
       )}`;
     }
