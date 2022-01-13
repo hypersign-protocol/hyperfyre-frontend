@@ -175,7 +175,7 @@ h5 span {
               @click.prevent="openWallet()"
             >
               <div  style="font-size: smaller; padding: 10px;">
-                Use Web Wallet
+                Click To Login
               </div>
             </a>
           </div>
