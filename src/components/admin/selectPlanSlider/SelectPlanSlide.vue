@@ -92,7 +92,7 @@
             </div>
             <div class="row" style="margin-top: 2%;">
               <div class="col-md-6"><b>Discount</b></div>
-              <div class="col-md-6"> - $ {{ discount }}</div>
+              <div class="col-md-6"> $ {{ discount }}</div>
             </div>
             <!-- <div class="row" style="margin-top: 2%;">
               <div class="col-md-6"><b>Subtotal</b></div>
@@ -236,11 +236,19 @@ export default {
     };
   },
   created() {
+    this.$root.$on('resetPlanSlide',()=>{
+      this.resetAllValues();
+    })
     this.subTotal = this.plan.price
     this.fetchTokenPriceCMC();
     console.log("Created-Fired")
   },
   methods: {
+      resetAllValues() {
+      this.discount=0;
+      this.selectedCurrency='';
+      this.selectedNetwork='';
+    },
     setDiscount (__arg) {
       if(__arg){
         if (__arg=='HID') {

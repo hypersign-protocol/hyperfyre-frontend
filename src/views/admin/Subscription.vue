@@ -461,14 +461,11 @@ export default {
       this.plan = data
       this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
       console.log(this.plan);
-      this.resetAllValues();
-      this.$root.$emit('callClearFromProject');    
+      this.$root.$emit('resetPlanSlide');    
     },
 
-    resetAllValues() {
-      console.log('Reset-Functaion')
-    }
-  },
+
+ },
 
   mixins: [notificationMixins],
 };
