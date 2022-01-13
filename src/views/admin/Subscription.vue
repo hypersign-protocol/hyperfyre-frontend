@@ -192,7 +192,7 @@ i {
     </b-row>
     <div class="row" style="margin-top: 2%;">
       <div class="col-md-12">
-        <table v-if="subscriptions.length" class="table table-bordered" style="background:#FFFF">
+        <table v-if="activeSubscriptions.length" class="table table-bordered" style="background:#FFFF">
           <thead class="thead-light">
             <tr>
               <th>Subscription Id</th>
@@ -204,7 +204,7 @@ i {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="row in subscriptions" :key="row._d">
+            <tr v-for="row in activeSubscriptions" :key="row._d">
               <th>
                 {{ row._id }}
               </th>
@@ -251,6 +251,7 @@ export default {
       fullPage: true,
       plans: [],
       subscriptions: [],
+      activeSubscriptions:[],
       user: {},
       emojis: {
         Lambo: '&#128665;',
@@ -370,6 +371,7 @@ export default {
         }
         const json = await resp.json();
         this.subscriptions = json["subscriptions"];
+        this.activeSubscriptions=this.subscriptions.filter((x) => (x.isActive==true))
         const usage = json["usage"]
       
         if(usage && (usage.totalUsed >= usage.totalAvailable)){
