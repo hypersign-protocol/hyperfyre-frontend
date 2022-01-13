@@ -236,11 +236,19 @@ export default {
     };
   },
   created() {
+    this.$root.$on('resetPlanSlide',()=>{
+      this.resetAllValues();
+    })
     this.subTotal = this.plan.price
     this.fetchTokenPriceCMC();
     console.log("Created-Fired")
   },
   methods: {
+      resetAllValues() {
+      this.discount=0;
+      this.selectedCurrency='';
+      this.selectedNetwork='';
+    },
     setDiscount (__arg) {
       if(__arg){
         if (__arg=='HID') {
