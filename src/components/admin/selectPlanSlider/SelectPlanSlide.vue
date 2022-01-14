@@ -107,7 +107,7 @@
               <div class="col-md-6">$ {{ grandTotal }}</div>
             </div>
         </div>
-        <hr v-if="selectedNetwork" />
+        <hr/>
         <div>
             <b-alert show variant="info" v-if="selectedCurrency=='HID' && selectedNetwork=='ETH'">
               <p>You would need {{(grandTotal/getHidPrice()).toFixed(3)}} HID to make this payment </p>
@@ -139,7 +139,6 @@
               </b>.
             </b-alert>
         </div>
-        <hr/>
         <div>
             <div class="row" style="margin-top: 2%;">
               <div class="col-md-12">
