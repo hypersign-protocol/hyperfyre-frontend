@@ -25,15 +25,17 @@
       <div class="footer">Powered By: <a href="https://hypersign.id/" target="_blank"> HyperSign</a></div>
     </div>
     <notifications group="foo" />
+    <KommunicateChat v-if="showChat"/>
   </div>
 </template>
 <script>
 // Ref:  fa icons:  https://fontawesome.com/
 import NavBar from "./components/participant/NavBar.vue"
 import eventBus from "./eventBus";
+import KommunicateChat from "./components/admin/KommunicateChat.vue"
 export default {
   components: {
-    NavBar
+    NavBar,KommunicateChat
   },
   data() {
     return {
@@ -88,6 +90,7 @@ export default {
 
       // Nav for user's end
       showUserNav: false,
+      showChat:true
     };
   },
 
@@ -108,7 +111,11 @@ export default {
       this.showUserNav = window.location.pathname.includes("/form") ? true : false
     }
   },
-
+ created(){
+   this.showChat =window.location.pathname.includes("/form") ||
+   window.location.pathname.includes("/admin/login")
+   ? false : true;
+ },
   updated() {
     this.showNavbar =
           window.location.pathname.includes("/admin/participants") ||
@@ -117,6 +124,7 @@ export default {
           window.location.pathname.includes("/admin/subscription") ?
           true :
           false;
+  
   },
 
   methods: {
