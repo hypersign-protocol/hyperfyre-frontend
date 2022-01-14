@@ -367,8 +367,8 @@ export default {
           if (!resp.ok) {
             return this.notifyErr(json)
           }else{
-            window.open(json.payment.quick_Pay)
-           // window.location.replace(json.payment.quick_Pay)
+            //window.open(json.payment.quick_Pay)
+            window.location.replace(json.payment.quick_Pay)
           }
         }else{
           throw new Error('Error while subscritption')
