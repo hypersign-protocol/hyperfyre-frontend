@@ -360,11 +360,11 @@ export default {
         blockchainAction: [
           { text: "Select Blockchain type", value: null },
           { text: "Ethereum", value: "BLOCKCHAIN_ETH" },
-          { text: "Polygon", value: "BLOCKCHAIN_ETH" },
-          { text: "Binance Smart chain", value: "BLOCKCHAIN_ETH" },
-          { text: "Harmony", value: "BLOCKCHAIN_ETH" },
-          { text: "Avalanche", value: "BLOCKCHAIN_ETH" },
-          { text: "Reef", value: "BLOCKCHAIN_ETH" },
+          { text: "Polygon", value: "BLOCKCHAIN_MATIC" },
+          { text: "Binance Smart chain", value: "BLOCKCHAIN_BSC" },
+          { text: "Harmony", value: "BLOCKCHAIN_ONE" },
+          { text: "Avalanche", value: "BLOCKCHAIN_AVAX" },
+          { text: "Reef", value: "BLOCKCHAIN_REEF" },
           { text: "Tezos", value: "BLOCKCHAIN_TEZ" },
         ],
         smartContractAction:[
