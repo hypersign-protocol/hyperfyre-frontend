@@ -90,7 +90,7 @@ export default {
 
       // Nav for user's end
       showUserNav: false,
-      showChat:true
+      showChat:false
     };
   },
 
@@ -111,11 +111,6 @@ export default {
       this.showUserNav = window.location.pathname.includes("/form") ? true : false
     }
   },
- created(){
-   this.showChat =window.location.pathname.includes("/form") ||
-   window.location.pathname.includes("/admin/login")
-   ? false : true;
- },
   updated() {
     this.showNavbar =
           window.location.pathname.includes("/admin/participants") ||
@@ -124,7 +119,13 @@ export default {
           window.location.pathname.includes("/admin/subscription") ?
           true :
           false;
-  
+    this.showChat = 
+          window.location.pathname.includes("/admin/participants") ||
+          window.location.pathname.includes("/admin/events") ||
+          window.location.pathname.includes("/admin/dashboard") ||
+          window.location.pathname.includes("/admin/subscription") ?
+          true :
+          false;
   },
 
   methods: {
