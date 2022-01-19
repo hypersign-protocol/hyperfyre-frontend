@@ -257,7 +257,6 @@ export default {
     setDiscount (__arg) {
       if(__arg){
         if (__arg=='HID') {
-          this.selectedNetwork='';
            this.options.network=[ { text: "Ethereum", value: 'ETH', disabled: false  },
           { text: "Polygon", value: 'MATIC', disabled: false  },
           { text: "Harmony (Coming Soon..)", value: 'ONE', disabled: true  },

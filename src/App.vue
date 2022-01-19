@@ -12,7 +12,7 @@
       :menu="isSubscribed? menu : unsubsSubscribedMenu" v-if="showNavbar">
         <span slot="header" style="background:#363740">
           <div class="ml-1 mt-3 mb-2" style="padding-left:1px; text-align:center; margin-right: 2.25rem !important;" > 
-            <img :src="require('./assets/logo.png')" alt="logo" width="150px" />
+          <a href="/admin/dashboard"><img :src="require('./assets/logo.png')" alt="logo" width="150px" /></a>
           </div>
           <!-- <p class="header-text">{{ $config.app.name }}</p> -->
           <hr class="rule" />
