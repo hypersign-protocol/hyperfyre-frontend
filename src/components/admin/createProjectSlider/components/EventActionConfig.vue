@@ -17,11 +17,16 @@
               <i style="color: gray" v-if="eventAction.type.includes('INPUT_HYPERLINK')"  class="fa fa-link"></i>
               <i style="color: gray" v-if="eventAction.type.includes('INFO_TEXT')"  class="fa fa-info-circle"></i>
               <img style="padding-right: 5px" src="../../../../assets/external-link.svg"  v-if="eventAction.type.includes('HYPERLINK_URL')"   height="22px" />
-              <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('_ETH')"   height="22px" />
-              <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('ETHEREUM')"   height="22px" />
-              <img style="padding-right: 5px;" src="../../../../assets/matic-logo.svg"  v-if="eventAction.type.includes('MATIC')"   height="20px" />
-              <img style="padding-right: 5px;" src="../../../../assets/binance-logo.svg"  v-if="eventAction.type.includes('BINANCE')"   height="20px" />
-              <img style="padding-right: 5px" src="../../../../assets/tezos.png"  v-if="eventAction.type.includes('_TEZ')"   height="22px" />
+              <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_ETH')"   height="22px" />
+              <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('ETHEREUM_ERC20')"   height="22px" />
+              <img style="padding-right: 5px;" src="../../../../assets/matic-logo.svg"  v-if="eventAction.type.includes('MATIC_ERC20')"   height="20px" />
+              <img style="padding-right: 5px;" src="../../../../assets/binance-logo.svg"  v-if="eventAction.type.includes('BINANCE_ERC20')"   height="20px" />
+              <img style="padding-right: 5px" src="../../../../assets/tezos.png"  v-if="eventAction.type.includes('BLOCKCHAIN_TEZ')"   height="22px" />
+              <img style="padding-right: 5px" src="../../../../assets/binance-logo.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_BSC')"   height="22px" />
+              <img style="padding-right: 5px;" src="../../../../assets/matic-logo.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_MATIC')"   height="20px" />
+              <img style="padding-right: 5px;" src="../../../../assets/harmony.png"  v-if="eventAction.type.includes('BLOCKCHAIN_ONE')"   height="20px" />
+              <img style="padding-right: 5px;" src="../../../../assets/avalanche.png"  v-if="eventAction.type.includes('BLOCKCHAIN_AVAX')"   height="20px" />
+              <img style="padding-right: 5px;" src="../../../../assets/Reef.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_REEF')"   height="20px" />
             </span>
             <span >{{ truncate1(eventAction.title, 8) }}</span>
             <span style="color: gray;padding-left: 5px"><i style=""  class="fas fa-minus-circle"></i></span>
