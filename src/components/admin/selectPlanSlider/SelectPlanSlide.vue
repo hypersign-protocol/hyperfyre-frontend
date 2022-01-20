@@ -241,7 +241,7 @@ export default {
     })
     this.subTotal = this.plan.price
     this.fetchTokenPriceCMC();
-    console.log("Created-Fired")
+    
   },
   methods: {
       resetAllValues() {
