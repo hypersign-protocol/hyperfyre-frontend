@@ -274,16 +274,17 @@ export default {
   },
 
   computed: {
-    // a computed getter
+  // a computed 
   },
 
-  created() {
+  async created() {
     const usrStr = localStorage.getItem("user");
     if (usrStr) {
       this.user = {
         ...JSON.parse(usrStr),
       };
     }
+    
 
     this.fetchPlan();
     // const plansInStorage = localStorage.getItem("plans");
@@ -291,8 +292,18 @@ export default {
     // this.plans = JSON.parse(plansInStorage);
     // }
 
-    this.fetchSubscription();
+   await this.fetchSubscription();
+   if(this.$route.query.hash!==undefined && this.$route.query.code!==undefined &&this.$route.query.extra!==undefined){
+    let {extra}={...this.$route.query}
+    extra=JSON.parse(decodeURIComponent(extra))
+   
+    let subsID=extra._id;
+    
+    this.showAlert(this.$route.query,subsID)
 
+
+
+   }
     // const subscriptionsInStorage = localStorage.getItem("subscriptions");
     // if(subscriptionsInStorage){
     //   const parsedSub = JSON.parse(subscriptionsInStorage)
@@ -303,6 +314,148 @@ export default {
   },
 
   methods: {
+   showAlert(data,subsID){
+    
+     const subsInfo= this.activeSubscriptions.find(elm=>{
+       
+       return elm._id===subsID
+     })
+   
+     
+let paymentData;
+     if(subsInfo===undefined){
+       paymentData="Payment Not Successfull"
+     }else{
+     paymentData=subsInfo.paymentData
+     }
+     
+     
+     
+      // console.log(JSON.stringify(data));
+      // console.log(JSON.parse(decodeURIComponent(data.extra)));
+this.$swal.fire({
+  position:'center',
+  focusConfirm: true,
+  
+  html:subsInfo===undefined?`<div class="col-sm-12 text-left">
+								<span>Transaction Hash</span>
+								 <strong id='txn-hash'>${data.hash}</strong> 
+                 <i style="cursor:pointer" onclick="(function(){
+                  
+                     let str=document.getElementById('txn-hash').innerHTML 
+                    
+                     return navigator.clipboard.writeText(str)
+                     }
+                     )();" class="fa fa-clone" aria-hidden="true"></i>
+							</div> <br><br><div class="col-sm-6 text-left">
+								<span>Subscription Id</span>
+								<strong>${subsID}</strong>
+
+               
+							</div>
+              <br>
+              <div  class="intro" style="color:red">
+					Payment Status : <strong>Payment Faild</strong>
+          </div>
+              <br>
+              <div>Contact to <strong> Hyperfyre </strong>team</div>              		<div style="color:black" class="footer">
+					Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong>Hypermine</strong>
+				</div>
+              `:`                        
+<div class="receipt-content">
+    <div class="container bootstrap snippets bootdey">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="invoice-wrapper">
+					<div class="intro">
+						Hi <strong>${this.user.name}</strong>, 
+						<br>
+						This is the receipt for a payment of <strong>${paymentData.amount.toPrecision(6)}</strong> (${paymentData.token.token}) for your Plan <strong>${this.getPlanName(subsInfo.planId)}</strong>
+					</div>
+  <br>
+	<div class="payment-info">
+						<div class="row">
+							<div class="col-sm-12 text-left">
+								<span>Transaction Hash</span>
+								 <strong id='txn-hash'>${paymentData.transaction}</strong> 
+                 <i onclick="(function(){
+                  
+                     let str=document.getElementById('txn-hash').innerHTML 
+                    
+                     return navigator.clipboard.writeText(str)
+                     }
+                     )();" class="fa fa-clone" style="cursor:pointer" aria-hidden="true"></i>
+							</div>
+
+              
+						
+						</div>
+					</div>
+<br>
+					<div class="payment-info">
+						<div class="row">
+							<div class="col-sm-6 text-left">
+								<span>Subscription Id</span>
+								<strong>${subsID}</strong>
+							</div>
+							<div class="col-sm-6 text-right">
+								<span>Payment Date</span>
+								<strong>${new Date(paymentData.paidAt).toLocaleDateString()}</strong>
+							</div>
+						</div>
+					</div>
+
+					<div class="payment-details">
+						<div class="row">
+							<div class="col-sm-6 text-left">
+								<span>Client Name</span>
+                </br>
+								<strong>
+									${this.user.name}
+								</strong>
+                </div>
+                	<div class="col-sm-6 text-right">
+							<span>Email Id.</span>
+              </br>
+									<strong>
+										${this.user.email}
+									</strong>
+								
+							</div>
+							
+						</div>
+					</div>
+
+				
+				</div>
+        	<br>
+					<div class="intro" style="color:green">
+					Payment Status : <strong>${paymentData.status==='validated'?'Confirmed':'Not Paid'}</strong>
+          </div>
+
+				<div class="footer" style="color:black">
+					Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong>Hypermine</strong>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>   
+        
+        `,
+  toast:false,
+  title:'<h5>Payment Information</h5>',
+  icon:subsInfo===undefined?'error':'success',
+  
+  showConfirmButton:false,
+  width:'50rem',
+ background:"white"
+
+
+
+
+
+})
+    },
     showFeature(plan) {
       plan.visible = !plan.visible
     },
@@ -441,7 +594,7 @@ export default {
             return this.notifyErr(json)
           }else{
             this.fetchSubscription();
-            console.log(json);
+        
             this.notifySuccess(Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED + json["newSub"]["_id"]);
           }
         }else{
@@ -460,7 +613,7 @@ export default {
       data.emoji = this.getEmoji(data.planName)
       this.plan = data
       this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
-      console.log(this.plan);
+    
       this.$root.$emit('resetPlanSlide');    
     },
 
