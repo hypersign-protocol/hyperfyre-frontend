@@ -298,7 +298,7 @@ export default {
     extra=JSON.parse(decodeURIComponent(extra))
   
     let subsID=extra._id;
-    console.log(code ,hash,extra,status);
+    
     this.showAlert(this.$route.query,subsID)
 
 
@@ -321,7 +321,7 @@ export default {
        
        return elm._id===subsID
      })
-   console.log(subsInfo);
+ 
    
 let paymentData;
 let truncatedHash;
