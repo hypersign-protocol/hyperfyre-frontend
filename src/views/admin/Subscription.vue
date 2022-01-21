@@ -322,7 +322,7 @@ export default {
        return elm._id===subsID
      })
  
-   
+ 
 let paymentData;
 let truncatedHash;
 let tr;
@@ -331,7 +331,7 @@ let tr;
      tr=paymentData.transaction;
     truncatedHash=truncate(tr,35)
      
-  let color= (paymentData.status==='paid')?'teal':'green'
+  let color= (paymentData.status==='paid')?'teal':(paymentData.status==='validated'?'green':paymentData.status==='failed'?'red':'teal')
      
      
       // console.log(JSON.stringify(data));
@@ -417,11 +417,11 @@ this.$swal.fire({
 				</div>
         	<br>
 					<div class="intro"    style="color:${color}">
-					Payment Status : <strong>${paymentData.status==='validated'?'Confirmed':'Pending'}</strong>
+					Payment Status : <strong>${paymentData.status==='validated'?'Confirmed':(paymentData.status==='paid'?'Pending':'Failed')}</strong>
          
         </div>
         	<div class="intro"    style="color:${color}">
-					Subscription Status : <strong>${subsInfo.isActive===true?'Activated':'Pending'}</strong>
+					Subscription Status : <strong>${subsInfo.isActive===true?'Activated':(paymentData.status==='failed'?'Canceled':'Pending')}</strong>
          
         </div>
         <div class="intro" style="color:red">
@@ -438,7 +438,7 @@ this.$swal.fire({
         `,
   toast:false,
   title:'<h5>Payment Information</h5>',
-  icon:paymentData.status==='paid'?'info':'success',
+  icon:paymentData.status==='validated'?'success':paymentData.status==='paid'?'info':paymentData.status==='failed'?'error':'warning',
   
   showConfirmButton:false,
   width:'50rem',
@@ -519,7 +519,7 @@ this.$swal.fire({
         this.activeSubscriptions=this.subscriptions.filter((x) => (x.isActive===true))
         this.paidSubscriptions=this.subscriptions.filter((x) => {
         
-          return x.isPaid===true})
+          return  x.paymentData?true:(x.isPaid===true)})
          
         const usage = json["usage"]
       
