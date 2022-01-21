@@ -238,7 +238,7 @@ import notificationMixins from "../../mixins/notificationMixins";
 import SelectPlanSlide from '../../components/admin/selectPlanSlider/SelectPlanSlide.vue';
 import Messages from "../../utils/messages/admin/en"
 import eventBus from '../../eventBus';
-
+import { truncate } from '../../mixins/fieldValidationMixin';
 export default {
   name: "Subscription",
   components: { Loading, SelectPlanSlide},
@@ -296,11 +296,11 @@ export default {
 
    await this.fetchSubscription();
    if(this.$route.query.hash!==undefined && this.$route.query.code!==undefined &&this.$route.query.extra!==undefined){
-    let {extra}={...this.$route.query}
+    let {code,hash,extra,status}={...this.$route.query}
     extra=JSON.parse(decodeURIComponent(extra))
-   
+  
     let subsID=extra._id;
-    
+    console.log(code ,hash,extra,status);
     this.showAlert(this.$route.query,subsID)
 
 
@@ -318,19 +318,22 @@ export default {
   methods: {
    showAlert(data,subsID){
     
-     const subsInfo= this.activeSubscriptions.find(elm=>{
+     const subsInfo= this.paidSubscriptions.find(elm=>{
+
        
        return elm._id===subsID
      })
+   console.log(subsInfo);
    
-     
 let paymentData;
-     if(subsInfo===undefined){
-       paymentData="Payment Not Successfull"
-     }else{
-     paymentData=subsInfo.paymentData
-     }
+let truncatedHash;
+let tr;
+    
+     paymentData=subsInfo.paymentData;
+     tr=paymentData.transaction;
+    truncatedHash=truncate(tr,35)
      
+  let color= (paymentData.status==='paid')?'teal':'green'
      
      
       // console.log(JSON.stringify(data));
@@ -339,31 +342,7 @@ this.$swal.fire({
   position:'center',
   focusConfirm: true,
   
-  html:subsInfo===undefined?`<div class="col-sm-12 text-left">
-								<span>Transaction Hash</span>
-								 <strong id='txn-hash'>${data.hash}</strong> 
-                 <i style="cursor:pointer" onclick="(function(){
-                  
-                     let str=document.getElementById('txn-hash').innerHTML 
-                    
-                     return navigator.clipboard.writeText(str)
-                     }
-                     )();" class="fa fa-clone" aria-hidden="true"></i>
-							</div> <br><br><div class="col-sm-6 text-left">
-								<span>Subscription Id</span>
-								<strong>${subsID}</strong>
-
-               
-							</div>
-              <br>
-              <div  class="intro" style="color:red">
-					Payment Status : <strong>Payment Faild</strong>
-          </div>
-              <br>
-              <div>Contact to <strong> Hyperfyre </strong>team</div>              		<div style="color:black" class="footer">
-					Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong>Hypermine</strong>
-				</div>
-              `:`                        
+  html:`                        
 <div class="receipt-content">
     <div class="container bootstrap snippets bootdey">
 		<div class="row">
@@ -378,8 +357,9 @@ this.$swal.fire({
 	<div class="payment-info">
 						<div class="row">
 							<div class="col-sm-12 text-left">
-								<span>Transaction Hash</span>
-								 <strong id='txn-hash'>${paymentData.transaction}</strong> 
+								<span>Transaction Hash</span><br>
+								 <strong id='txn-hash1'>${truncatedHash}</strong> 
+                 <strong id='txn-hash' style="display:none">${tr}</strong> 
                  <i onclick="(function(){
                   
                      let str=document.getElementById('txn-hash').innerHTML 
@@ -398,7 +378,14 @@ this.$swal.fire({
 						<div class="row">
 							<div class="col-sm-6 text-left">
 								<span>Subscription Id</span>
-								<strong>${subsID}</strong>
+								<strong id='sub-id'>${subsID}</strong>
+                <i onclick="(function(){
+                  
+                     let str=document.getElementById('sub-id').innerHTML 
+                    
+                     return navigator.clipboard.writeText(str)
+                     }
+                     )();" class="fa fa-clone" style="cursor:pointer" aria-hidden="true"></i>
 							</div>
 							<div class="col-sm-6 text-right">
 								<span>Payment Date</span>
@@ -431,11 +418,18 @@ this.$swal.fire({
 				
 				</div>
         	<br>
-					<div class="intro" style="color:green">
-					Payment Status : <strong>${paymentData.status==='validated'?'Confirmed':'Not Paid'}</strong>
-          </div>
-
-				<div class="footer" style="color:black">
+					<div class="intro"    style="color:${color}">
+					Payment Status : <strong>${paymentData.status==='validated'?'Confirmed':'Pending'}</strong>
+         
+        </div>
+        	<div class="intro"    style="color:${color}">
+					Subscription Status : <strong>${subsInfo.isActive===true?'Activated':'Pending'}</strong>
+         
+        </div>
+        <div class="intro" style="color:red">
+           <strong>Please Contact Hyperfyre Team if your subscription is not activated within 10 mins of payment</strong>
+        </div>
+      <div class="footer" style="color:black">
 					Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong>Hypermine</strong>
 				</div>
 			</div>
@@ -446,7 +440,7 @@ this.$swal.fire({
         `,
   toast:false,
   title:'<h5>Payment Information</h5>',
-  icon:subsInfo===undefined?'error':'success',
+  icon:paymentData.status==='paid'?'info':'success',
   
   showConfirmButton:false,
   width:'50rem',
@@ -524,7 +518,11 @@ this.$swal.fire({
         }
         const json = await resp.json();
         this.subscriptions = json["subscriptions"];
-        this.activeSubscriptions=this.subscriptions.filter((x) => (x.isActive==true))
+        this.activeSubscriptions=this.subscriptions.filter((x) => (x.isActive===true))
+        this.paidSubscriptions=this.subscriptions.filter((x) => {
+        
+          return x.isPaid===true})
+         
         const usage = json["usage"]
       
         if(usage && (usage.totalUsed >= usage.totalAvailable)){
