@@ -238,7 +238,7 @@ import notificationMixins from "../../mixins/notificationMixins";
 import SelectPlanSlide from '../../components/admin/selectPlanSlider/SelectPlanSlide.vue';
 import Messages from "../../utils/messages/admin/en"
 import eventBus from '../../eventBus';
-
+import { truncate } from '../../mixins/fieldValidationMixin';
 export default {
   name: "Subscription",
   components: { Loading, SelectPlanSlide},
@@ -323,10 +323,14 @@ export default {
    
      
 let paymentData;
+let truncatedHash;
+let tr;
      if(subsInfo===undefined){
        paymentData="Payment Not Successfull"
      }else{
-     paymentData=subsInfo.paymentData
+     paymentData=subsInfo.paymentData;
+     truncatedHash=paymentData.transaction;
+    tr = truncate(truncatedHash,35);
      }
      
      
@@ -349,8 +353,14 @@ this.$swal.fire({
                      )();" class="fa fa-clone" aria-hidden="true"></i>
 							</div> <br><br><div class="col-sm-6 text-left">
 								<span>Subscription Id</span>
-								<strong>${subsID}</strong>
-
+								<strong id='sub-id'>${subsID}</strong>
+                 <i style="cursor:pointer" onclick="(function(){
+                  
+                     let str=document.getElementById('sub-id').innerHTML 
+                    
+                     return navigator.clipboard.writeText(str)
+                     }
+                     )();" class="fa fa-clone" aria-hidden="true"></i>
                
 							</div>
               <br>
@@ -376,8 +386,8 @@ this.$swal.fire({
 	<div class="payment-info">
 						<div class="row">
 							<div class="col-sm-12 text-left">
-								<span>Transaction Hash</span>
-								 <strong id='txn-hash'>${paymentData.transaction}</strong> 
+								<span>Transaction Hash</span><br>
+								 <strong id='txn-hash'>${tr}</strong> 
                  <i onclick="(function(){
                   
                      let str=document.getElementById('txn-hash').innerHTML 
@@ -396,7 +406,14 @@ this.$swal.fire({
 						<div class="row">
 							<div class="col-sm-6 text-left">
 								<span>Subscription Id</span>
-								<strong>${subsID}</strong>
+								<strong id='sub-id'>${subsID}</strong>
+                <i onclick="(function(){
+                  
+                     let str=document.getElementById('sub-id').innerHTML 
+                    
+                     return navigator.clipboard.writeText(str)
+                     }
+                     )();" class="fa fa-clone" style="cursor:pointer" aria-hidden="true"></i>
 							</div>
 							<div class="col-sm-6 text-right">
 								<span>Payment Date</span>
