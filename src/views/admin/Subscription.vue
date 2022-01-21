@@ -211,7 +211,7 @@ i {
               <td>{{ new Date(row.subscriptionDate).toLocaleString() }}</td>
               <td>{{ getPlanName(row.planId) }}</td>
               <td>{{ row.leftOverNoRequests }}</td>             
-              <td>{{ row.paymentData ? (row.paymentData.status==='validated'?"Active":row.paymentData.status==='paid'?"Pending":row.paymentData.status==='failed'?"Cancelled":"Inactive" ): "Inactive" }}</td>
+              <td>{{ row.paymentData ? (row.paymentData.status==='validated'?"Active":row.paymentData.status==='paid'?"Pending":row.paymentData.status==='failed'?"Cancelled":"Inactive" ): row.isActive? "Active":"Inactive" }}</td>
              
             </tr>
           </tbody>
