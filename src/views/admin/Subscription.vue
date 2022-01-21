@@ -204,14 +204,14 @@ i {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="row in activeSubscriptions" :key="row._d">
+            <tr v-for="row in subscriptions" :key="row._d">
               <th>
                 {{ row._id }}
               </th>
               <td>{{ new Date(row.subscriptionDate).toLocaleString() }}</td>
               <td>{{ getPlanName(row.planId) }}</td>
-              <td>{{ row.leftOverNoRequests }}</td>
-              <td>{{ row.isActive ? "Active" : "Inactive" }}</td>
+              <td>{{ row.leftOverNoRequests }}</td>             
+              <td>{{ row.paymentData ? (row.paymentData.status==='validated'?"Active":row.paymentData.status==='paid'?"Pending":row.paymentData.status==='failed'?"Cancelled":"Inactive" ): "Inactive" }}</td>
              
             </tr>
           </tbody>
@@ -423,14 +423,14 @@ this.$swal.fire({
          
         </div>
         	<div class="intro"    style="color:${color}">
-					Subscription Status : <strong>${subsInfo.isActive===true?'Activated':(paymentData.status==='failed'?'Canceled':'Pending')}</strong>
+					Subscription Status : <strong>${subsInfo.isActive===true?'Activated':(paymentData.status==='failed'?'Cancelled':'Pending')}</strong>
          
         </div>
         <div class="intro" style="color:red">
            <strong>Please Contact Hyperfyre Team if your subscription is not activated within 10 mins of payment</strong>
         </div>
       <div class="footer" style="color:black">
-					Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong>Hypermine</strong>
+					Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong> <a style="text-decoration:node;color:black" href="http://fyre.hypersign.id/">Hyperfyre</a> </strong>
 				</div>
 			</div>
 		</div>
@@ -441,7 +441,7 @@ this.$swal.fire({
   toast:false,
   title:'<h5>Payment Information</h5>',
   icon:paymentData.status==='validated'?'success':paymentData.status==='paid'?'info':paymentData.status==='failed'?'error':'warning',
-  
+   showCloseButton: true,
   showConfirmButton:false,
   width:'50rem',
  background:"white"
@@ -518,7 +518,7 @@ this.$swal.fire({
         }
         const json = await resp.json();
         this.subscriptions = json["subscriptions"];
-        this.activeSubscriptions=this.subscriptions.filter((x) => (x.isActive===true))
+        this.activeSubscriptions=this.subscriptions.filter((x) => (x.paymentData?true:x.isActive===true))
         this.paidSubscriptions=this.subscriptions.filter((x) => {
         
           return  x.paymentData?true:(x.isPaid===true)})
