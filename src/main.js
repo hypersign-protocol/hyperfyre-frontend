@@ -11,6 +11,10 @@ import 'vue-css-donut-chart/dist/vcdonut.css';
 import "@mdi/font/css/materialdesignicons.css";
 import "@mdi/light-font/css/materialdesignicons-light.css";
 import './assets/css/style.css';
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+
 import {
   VeTable,
   VePagination,
@@ -26,7 +30,11 @@ import VueMeta from 'vue-meta';
 
 // Tell Vue to install the plugin.
 // Vue.use(VuejsDialog.main.default);
-
+const options = {
+  confirmButtonColor: '#41b882',
+  cancelButtonColor: '#ff7674',
+};
+Vue.use(VueSweetalert2,options);
 // Vue.use(vDialog);
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
@@ -52,7 +60,6 @@ Vue.prototype.$config = config;
 Vue.use(VueSidebarMenu);
 
 Vue.use(VueMeta)
-
 new Vue({
   router,
   render: (h) => h(App),

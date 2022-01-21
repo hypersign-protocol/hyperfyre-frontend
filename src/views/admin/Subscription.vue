@@ -110,7 +110,7 @@ i {
       </div>
     </div>
     <template v-for="plan in plans">
-      <button type="button" class="btn btn-outline-dark btn-plan free" :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''" v-if="plan.price === 0" :disabled="subscriptions.find((el) => el.planId === plan._id)" @click="subscribe(plan._id)">Free Basic Plan</button>
+      <button type="button" class="btn btn-outline-dark btn-plan free" :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''" v-if="plan.price === 0" :key="plan._id" :disabled="subscriptions.find((el) => el.planId === plan._id)" @click="subscribe(plan._id)">Free Basic Plan</button>
     </template>
     <div class="divider">
       <small class="small-desc">
@@ -130,7 +130,7 @@ i {
                 <span>$</span>
                 {{ plan.price }}
               </div>
-              <button type="button" class="btn btn-outline-dark btn-plan" :class="(plan.planName === 'Lambo') ? 'popular' : ''" @click="subscribe(plan['_id'])">Select Plan</button>
+              <button type="button" class="btn btn-outline-dark btn-plan" :class="(plan.planName === 'Lambo') ? 'popular' : ''" @click="openSelectPlanSidebar(plan)">Select Plan</button>
               <div class="pro-feature">
                 <ul>
                   <li>
@@ -192,7 +192,7 @@ i {
     </b-row>
     <div class="row" style="margin-top: 2%;">
       <div class="col-md-12">
-        <table v-if="subscriptions.length" class="table table-bordered" style="background:#FFFF">
+        <table v-if="activeSubscriptions.length" class="table table-bordered" style="background:#FFFF">
           <thead class="thead-light">
             <tr>
               <th>Subscription Id</th>
@@ -200,6 +200,7 @@ i {
               <th>Plan Name</th>
               <th>Limit</th>
               <th>Status</th>
+             
             </tr>
           </thead>
           <tbody>
@@ -209,12 +210,23 @@ i {
               </th>
               <td>{{ new Date(row.subscriptionDate).toLocaleString() }}</td>
               <td>{{ getPlanName(row.planId) }}</td>
-              <td>{{ row.leftOverNoRequests }}</td>
-              <td>{{ row.isActive ? "Active" : "Inactive" }}</td>
+              <td>{{ row.leftOverNoRequests }}</td>             
+              <td>{{ row.paymentData ? (row.paymentData.status==='validated'?"Active":row.paymentData.status==='paid'?"Pending":row.paymentData.status==='failed'?"Cancelled":"Inactive" ): "Inactive" }}</td>
+             
             </tr>
           </tbody>
         </table>
       </div>
+    </div>
+    <div>
+      <select-plan-slide 
+        :isProjectEditing="isProjectEditing"
+        :themeColor="themeColor"
+        :themeColorDefault="themeColorDefault"
+        :fontColor="fontColor"
+        :fontColorDefault="fontColorDefault"
+        :plan="plan"
+        />
     </div>
   </div>
 </template>
@@ -223,12 +235,13 @@ import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
+import SelectPlanSlide from '../../components/admin/selectPlanSlider/SelectPlanSlide.vue';
 import Messages from "../../utils/messages/admin/en"
 import eventBus from '../../eventBus';
-
+import { truncate } from '../../mixins/fieldValidationMixin';
 export default {
   name: "Subscription",
-  components: { Loading },
+  components: { Loading, SelectPlanSlide},
 
   data() {
     return {
@@ -238,6 +251,7 @@ export default {
       fullPage: true,
       plans: [],
       subscriptions: [],
+      activeSubscriptions:[],
       user: {},
       emojis: {
         Lambo: '&#128665;',
@@ -248,21 +262,31 @@ export default {
       support: {
         ETH: 'ethereum',
         BSC: 'binance-logo'
-      }
+      },
+      currentPage: 1,
+      themeColor: "#494949",
+      themeColorDefault: "#494949",
+      fontColor: "#ffffff",
+      fontColorDefault: "#ffffff",
+      isProjectEditing: false,
+      plan:{}
     };
   },
 
   computed: {
-    // a computed getter
+  // a computed 
   },
 
-  created() {
+  async created() {
     const usrStr = localStorage.getItem("user");
+    document.title = "Hyperfyre - Subscriptions";
+
     if (usrStr) {
       this.user = {
         ...JSON.parse(usrStr),
       };
     }
+    
 
     this.fetchPlan();
     // const plansInStorage = localStorage.getItem("plans");
@@ -270,8 +294,18 @@ export default {
     // this.plans = JSON.parse(plansInStorage);
     // }
 
-    this.fetchSubscription();
+   await this.fetchSubscription();
+   if(this.$route.query.hash!==undefined && this.$route.query.code!==undefined &&this.$route.query.extra!==undefined){
+    let {code,hash,extra,status}={...this.$route.query}
+    extra=JSON.parse(decodeURIComponent(extra))
+  
+    let subsID=extra._id;
+    
+    this.showAlert(this.$route.query,subsID)
 
+
+
+   }
     // const subscriptionsInStorage = localStorage.getItem("subscriptions");
     // if(subscriptionsInStorage){
     //   const parsedSub = JSON.parse(subscriptionsInStorage)
@@ -282,6 +316,142 @@ export default {
   },
 
   methods: {
+   showAlert(data,subsID){
+    
+     const subsInfo= this.paidSubscriptions.find(elm=>{
+
+       
+       return elm._id===subsID
+     })
+ 
+ 
+let paymentData;
+let truncatedHash;
+let tr;
+    
+     paymentData=subsInfo.paymentData;
+     tr=paymentData.transaction;
+    truncatedHash=truncate(tr,35)
+     
+  let color= (paymentData.status==='paid')?'teal':(paymentData.status==='validated'?'green':paymentData.status==='failed'?'red':'teal')
+     
+     
+      // console.log(JSON.stringify(data));
+      // console.log(JSON.parse(decodeURIComponent(data.extra)));
+this.$swal.fire({
+  position:'center',
+  focusConfirm: true,
+  
+  html:`                        
+<div class="receipt-content">
+    <div class="container bootstrap snippets bootdey">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="invoice-wrapper">
+					<div class="intro">
+						Hi <strong>${this.user.name}</strong>, 
+						<br>
+						This is the receipt for a payment of <strong>${paymentData.amount.toPrecision(6)}</strong> (${paymentData.token.token}) for your Plan <strong>${this.getPlanName(subsInfo.planId)}</strong>
+					</div>
+  <br>
+	<div class="payment-info">
+						<div class="row">
+							<div class="col-sm-12 text-left">
+								<span>Transaction Hash</span><br>
+								 <strong id='txn-hash1'>${truncatedHash}</strong> 
+                 <strong id='txn-hash' style="display:none">${tr}</strong> 
+                 <i onclick="(function(){
+                  
+                     let str=document.getElementById('txn-hash').innerHTML 
+                    
+                     return navigator.clipboard.writeText(str)
+                     }
+                     )();" class="fa fa-clone" style="cursor:pointer" aria-hidden="true"></i>
+							</div>
+
+              
+						
+						</div>
+					</div>
+<br>
+					<div class="payment-info">
+						<div class="row">
+							<div class="col-sm-6 text-left">
+								<span>Subscription Id</span>
+								<strong id='sub-id'>${subsID}</strong>
+                <i onclick="(function(){
+                  
+                     let str=document.getElementById('sub-id').innerHTML 
+                    
+                     return navigator.clipboard.writeText(str)
+                     }
+                     )();" class="fa fa-clone" style="cursor:pointer" aria-hidden="true"></i>
+							</div>
+							<div class="col-sm-6 text-right">
+								<span>Payment Date</span>
+								<strong>${new Date(paymentData.paidAt).toLocaleDateString()}</strong>
+							</div>
+						</div>
+					</div>
+
+					<div class="payment-details">
+						<div class="row">
+							<div class="col-sm-6 text-left">
+								<span>Client Name</span>
+                </br>
+								<strong>
+									${this.user.name}
+								</strong>
+                </div>
+                	<div class="col-sm-6 text-right">
+							<span>Email Id.</span>
+              </br>
+									<strong>
+										${this.user.email}
+									</strong>
+								
+							</div>
+							
+						</div>
+					</div>
+
+				
+				</div>
+        	<br>
+					<div class="intro"    style="color:${color}">
+					Payment Status : <strong>${paymentData.status==='validated'?'Confirmed':(paymentData.status==='paid'?'Pending':'Failed')}</strong>
+         
+        </div>
+        	<div class="intro"    style="color:${color}">
+					Subscription Status : <strong>${subsInfo.isActive===true?'Activated':(paymentData.status==='failed'?'Cancelled':'Pending')}</strong>
+         
+        </div>
+        <div class="intro" style="color:red">
+           <strong>Please Contact Hyperfyre Team if your subscription is not activated within 10 mins of payment</strong>
+        </div>
+      <div class="footer" style="color:black">
+					Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong> <a style="text-decoration:node;color:black" href="http://fyre.hypersign.id/">Hyperfyre</a> </strong>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>   
+        
+        `,
+  toast:false,
+  title:'<h5>Payment Information</h5>',
+  icon:paymentData.status==='validated'?'success':paymentData.status==='paid'?'info':paymentData.status==='failed'?'error':'warning',
+   showCloseButton: true,
+  showConfirmButton:false,
+  width:'50rem',
+ background:"white"
+
+
+
+
+
+})
+    },
     showFeature(plan) {
       plan.visible = !plan.visible
     },
@@ -348,6 +518,11 @@ export default {
         }
         const json = await resp.json();
         this.subscriptions = json["subscriptions"];
+        this.activeSubscriptions=this.subscriptions.filter((x) => (x.paymentData?true:x.isActive===true))
+        this.paidSubscriptions=this.subscriptions.filter((x) => {
+        
+          return  x.paymentData?true:(x.isPaid===true)})
+         
         const usage = json["usage"]
       
         if(usage && (usage.totalUsed >= usage.totalAvailable)){
@@ -373,10 +548,32 @@ export default {
         if (!planId) {
           return;
         }
+        var planbody={}
+        this.plan.selectedCurrency='HIDD'
+        this.plan.selectedNetwork='MATICC'
+        this.plan.coupon_code='Free120'
+        this.plan.grandTotal='0'
+        this.plan.price='0'
 
+        planbody=Object.assign(planbody,this.plan)
         // console.log(planId);
 
         this.isLoading = true;
+
+        // Payment Type
+        // Crypto or Fiat ?
+        // MOOPAY  ( SOLANA, ETHE, POLYGON )
+        // PAYU    
+
+        /**
+         * {
+         *  "planId":"2222",
+         *  "curr" : "HID|USDT|USDC|INR|USD",
+         *  "network": "ETH|SOL|MATIC|BSC|ONE",
+         *  "currType": "FIAT|CRYPTO",
+         *  "coupon": "HID302022"
+         * }
+         */
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription`;
         let headers = {
@@ -386,7 +583,7 @@ export default {
         const resp = await fetch(url, {
           method: "POST",
           body: JSON.stringify({
-            planId,
+            planId,planbody
           }),
           headers,
         });
@@ -397,7 +594,8 @@ export default {
             return this.notifyErr(json)
           }else{
             this.fetchSubscription();
-            this.notifySuccess(Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED + json["_id"]);
+        
+            this.notifySuccess(Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED + json["newSub"]["_id"]);
           }
         }else{
           throw new Error('Error while subscritption')
@@ -409,7 +607,18 @@ export default {
         this.isLoading = false;
       }
     },
-  },
+
+    openSelectPlanSidebar(data){
+      this.isProjectEditing = false
+      data.emoji = this.getEmoji(data.planName)
+      this.plan = data
+      this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
+    
+      this.$root.$emit('resetPlanSlide');    
+    },
+
+
+ },
 
   mixins: [notificationMixins],
 };

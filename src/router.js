@@ -33,6 +33,7 @@ const router = new Router({
       path: "/admin/login",
       name: "AdminLogin",
       component: () => import(/* webpackChunkName: "adminLogin" */ './views/admin/AdminLogin.vue'),
+      meta: (route) => ({ requiresAuth: true, title: 'Hyperfyre - Admin Login' ,tabbar: false })
     },
     {
       path: "/admin/dashboard",
@@ -41,6 +42,7 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         admin: true,
+        title: 'Hyperfyre - Admin Dashboard'
       },
     },
     {
@@ -68,12 +70,17 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         admin: true,
+        title: 'Hyperfyre - Subscription'
       },
     },
   ],
 });
 
 router.beforeEach((to, from, next) => {
+  if(to.meta.title){
+    document.title = to.meta.title;
+  }
+  
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     const authToken = localStorage.getItem("authToken");
     if (authToken) {

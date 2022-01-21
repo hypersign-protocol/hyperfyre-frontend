@@ -12,7 +12,7 @@
       :menu="isSubscribed? menu : unsubsSubscribedMenu" v-if="showNavbar">
         <span slot="header" style="background:#363740">
           <div class="ml-1 mt-3 mb-2" style="padding-left:1px; text-align:center; margin-right: 2.25rem !important;" > 
-            <img :src="require('./assets/logo.png')" alt="logo" width="150px" />
+          <a href="/admin/dashboard"><img :src="require('./assets/logo.png')" alt="logo" width="150px" /></a>
           </div>
           <!-- <p class="header-text">{{ $config.app.name }}</p> -->
           <hr class="rule" />
@@ -25,15 +25,17 @@
       <div class="footer">Powered By: <a href="https://hypersign.id/" target="_blank"> HyperSign</a></div>
     </div>
     <notifications group="foo" />
+    <KommunicateChat v-if="showChat"/>
   </div>
 </template>
 <script>
 // Ref:  fa icons:  https://fontawesome.com/
 import NavBar from "./components/participant/NavBar.vue"
 import eventBus from "./eventBus";
+import KommunicateChat from "./components/admin/KommunicateChat.vue"
 export default {
   components: {
-    NavBar
+    NavBar,KommunicateChat
   },
   data() {
     return {
@@ -88,6 +90,7 @@ export default {
 
       // Nav for user's end
       showUserNav: false,
+      showChat:false
     };
   },
 
@@ -108,9 +111,15 @@ export default {
       this.showUserNav = window.location.pathname.includes("/form") ? true : false
     }
   },
-
   updated() {
     this.showNavbar =
+          window.location.pathname.includes("/admin/participants") ||
+          window.location.pathname.includes("/admin/events") ||
+          window.location.pathname.includes("/admin/dashboard") ||
+          window.location.pathname.includes("/admin/subscription") ?
+          true :
+          false;
+    this.showChat = 
           window.location.pathname.includes("/admin/participants") ||
           window.location.pathname.includes("/admin/events") ||
           window.location.pathname.includes("/admin/dashboard") ||

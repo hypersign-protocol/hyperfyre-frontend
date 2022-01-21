@@ -1,0 +1,9 @@
+browsers:
+- Chrome
+- Firefox
+# Is the agent should restart the browser/application before each test
+restartDriver: false
+# Is to excute test in parallel
+testsConcurrency: false
+# Is to Excute test's targets in parallel
+targetsConcurrency: false

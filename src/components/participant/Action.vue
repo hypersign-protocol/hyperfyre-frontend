@@ -24,6 +24,11 @@ import TelegramJoin from "./ActionInputs/TelegramJoin.vue";
 import InputText from "./ActionInputs/InputText.vue";
 import BlockchainEth from "./ActionInputs/BlockchainEth.vue";
 import BlockchainTez from "./ActionInputs/BlockchainTez.vue";
+import BlockchainAvax from "./ActionInputs/BlockchainAvax.vue";
+import BlockchainBsc from "./ActionInputs/BlockchainBsc.vue";
+import BlockchainMatic from "./ActionInputs/BlockchainMatic.vue";
+import BlockchainOne from "./ActionInputs/BlockchainOne.vue";
+import BlockchainReef from "./ActionInputs/BlockchainReef.vue";
 import EthereumErc20 from "./ActionInputs/EthereumErc20.vue";
 import EthereumErc721 from "./ActionInputs/EthereumErc721.vue"
 import MaticErc20 from "./ActionInputs/MaticErc20.vue"
@@ -56,6 +61,11 @@ export default {
     InputText,
     BlockchainEth,
     BlockchainTez,
+    BlockchainAvax,
+    BlockchainBsc,
+    BlockchainMatic,
+    BlockchainOne,
+    BlockchainReef,
     EthereumErc20,
     EthereumErc721,
     MaticErc20,
