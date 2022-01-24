@@ -82,6 +82,7 @@ import webAuth from "../../../mixins/twitterLogin";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
+import { isretweetUrl } from '../../../mixins/fieldValidationMixin';
 export default {
   components: { Loading },
   name: "TwitterRetweet",
@@ -165,6 +166,10 @@ export default {
     async hasRetweeted() {
       if (!this.retweetUrl) {
         throw new Error("Retweet url cannot be empty");
+      }
+      if(isretweetUrl(this.retweetUrl)){
+        this.retweetUrl='';
+        return false;
       }
       this.isLoading = true;
       const twitterId = localStorage.getItem("twitterId");
