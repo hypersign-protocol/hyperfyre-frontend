@@ -22,6 +22,10 @@ https://app.fyre.hypersign.id
 
 ## Installing & Building
 
+node version = 14.17.1
+npm version=8.3.1
+
+
 ```bash
 npm i # to install packages
 npm run dev # to run in development
@@ -29,3 +33,9 @@ npm run build # to build for production
 ```
 
 
+
+Step 1:Create a braunch with version number(make sure all the code is save in stage develop and version brunch)
+Step 2: check node and version 
+Step 3:remove node modules and packge-lock.json check for appropiate node version given in readme
+Step 4:then  run npm i and finally run npm run build to build for s3
+Step 5; login into AWS console (before deploying  makesure backend is deployed for production)
