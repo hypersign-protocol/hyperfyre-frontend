@@ -21,6 +21,7 @@
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('ETHEREUM_ERC20')"   height="22px" />
               <img style="padding-right: 5px;" src="../../../../assets/matic-logo.svg"  v-if="eventAction.type.includes('MATIC_ERC20')"   height="20px" />
               <img style="padding-right: 5px;" src="../../../../assets/binance-logo.svg"  v-if="eventAction.type.includes('BINANCE_ERC20')"   height="20px" />
+              <img style="padding-right: 5px;" src="../../../../assets/Reef.svg"  v-if="eventAction.type.includes('REEF_ERC20')"   height="20px" />
               <img style="padding-right: 5px" src="../../../../assets/tezos.png"  v-if="eventAction.type.includes('BLOCKCHAIN_TEZ')"   height="22px" />
               <img style="padding-right: 5px" src="../../../../assets/binance-logo.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_BSC')"   height="22px" />
               <img style="padding-right: 5px;" src="../../../../assets/matic-logo.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_MATIC')"   height="20px" />
