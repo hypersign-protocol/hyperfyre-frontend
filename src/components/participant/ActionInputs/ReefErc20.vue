@@ -34,16 +34,17 @@
         <b-row v-if="!showerror">
           <b-col cols="12" sm="12" md="12">
             <div class="metamask">
-              <b-form-input
+              <b-form-select
                 type="text"
                 :placeholder="data.placeHolder"
+                :options="options"
                 v-model="value.userWalletAddress"
-                :disabled="true"
+                :disabled="false"
                 :required="data.isManadatory"
-              ></b-form-input>
-              <button class="btn text-black" @click="invokeMetamask()" v-if="!done">
+              ></b-form-select>
+              <button class="btn text-black" @click="signMessage()" v-if="!done">
                 <img
-                  src="../../../assets/metamask.svg"
+                  src="../../../assets/reef.png"
                   height="25px"
                   width="25px"
                 />
@@ -53,7 +54,7 @@
         </b-row>
         <b-row v-else>
           <b-col cols="12" sm="12" md="12">
-            <ErrorMessage errorMessage="Install Metamask browser extension" />
+            <ErrorMessage errorMessage="Install Reef browser extension" />
           </b-col>
         </b-row>
         <b-row v-if="!done">
@@ -83,7 +84,7 @@ import {
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
-import Web3 from "web3";
+
 export default {
   name: "ReefErc20",
   props: {
@@ -104,62 +105,74 @@ export default {
       authToken: localStorage.getItem("authToken"),
       showerror: false,
       signature: "",
-      message_sign: "",
+      message_sign: "You are Signing this Message to confirm your Paricipation",
+      
+      options:[{value: '', text: 'Please select an option'}],
       value: {
         contractAddress: "",
-        userWalletAddress: "",
+        userWalletAddress: '',
         thresholdBalance: 0
-      }
+      },
+      wallet:[],
+      walletSignObj:""
+      
     };
   },
-  mounted() {
+ 
+  async mounted() {
 
     if(this.data.value){
         Object.assign(this.value, {...JSON.parse(this.data.value) })
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
-    this.checkWeb3Injection();
+   await this.checkWeb3Injection();
+  await  this.invokeReef()
+    await this.fetchAccounts()
   },
   methods: {
-    checkWeb3Injection() {
+   async checkWeb3Injection() {
       try {
-        if (ethereum && ethereum.isMetaMask) {
-          this.web3 = new Web3(window.ethereum);
+        if (window.injectedWeb3) {
+          this.web3 = window.injectedWeb3
+          
         }
       } catch (error) {
         console.log(error);
         this.showerror = true;
       }
+
+
+
+
     },
-    async signMessage() {
-      const message =
-        "You are Signing this message to ensure your participation in this event";
-      this.message_sign = message;
-      return await this.web3.eth.personal.sign(
-        message,
-        ethereum.selectedAddress
-      );
-    },
-    async invokeMetamask() {
-      try {
-        if (ethereum.isMetaMask) {
-          const wallet = await ethereum.request({
-            method: "eth_requestAccounts",
-          });
-          this.signature  = await this.signMessage();
-          
-          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(this.message_sign, this.signature)
-          
-          let isSigVerified =  false;
-          if(generatedWalletAddr === wallet[0]){
-              isSigVerified = true;
-          } 
+    async fetchAccounts() {
       
-          if (isSigVerified) {
-            this.value.userWalletAddress = wallet[0];
-          } else{
-            return this.notifyErr(Messages.EVENT_ACTIONS.ETH.INVALID_SIG)
-          }
+      for (let i in this.wallet) {
+       
+             this.options.push({value:this.wallet[i],text: 'Address: '+ this.wallet[i].address.slice(0,12)+'...'+this.wallet[i].address.slice(38,48)+'  Name: '+this.wallet[i].name})
+            }
+    },
+    async invokeReef() {
+      try {
+       
+        if (this.web3.reef) {
+           
+           let sign;
+         await window.injectedWeb3.reef.enable()
+          .then(async walletObj=>{
+            this.wallet =  await walletObj.accounts.get();
+            this.walletSignObj=walletObj
+            
+          })
+
+
+         
+
+         
+         // const walletAddr= await wallet.get
+          
+          
+          
         } 
       } catch (error) {
         return this.notifyErr(error.message)
@@ -173,6 +186,9 @@ export default {
           let balance = await this.fetchBalance();
           if (balance !== undefined) {
             if (balance >= Number.parseFloat(this.value.thresholdBalance)) {
+              this.value.contractAddress=this.value.contractAddress.address
+              console.log(JSON.stringify({...this.value}));
+              this.value.userBalance=balance
               this.$emit("input",  JSON.stringify({
                 ...this.value,
               }));
@@ -187,26 +203,28 @@ export default {
       }
     },
     isFieldValid() {
-      if (isEmpty(this.value.userWalletAddress)) {
+      if (isEmpty(this.value.userWalletAddress.address)) {
         return false;
       }
-      if (isValidURL(this.value.userWalletAddress)) {
+      if (isValidURL(this.value.userWalletAddress.address)) {
         return false;
       }
-      if (!isValidText(this.value.userWalletAddress)) {
+      if (!isValidText(this.value.userWalletAddress.address)) {
         return false;
       }
       return true;
     },
     async fetchBalance() {
+      console.log(this.value.userWalletAddress);
+      this.signature=await this.walletSignObj.signer.signRaw(this.value.userWalletAddress)
       const body = {
         actionType: this.data.type,
-        data: this.value.userWalletAddress,
+        data: this.value.userWalletAddress.address,
         contractAddress: this.value.contractAddress,
         signature: this.signature,
         message: this.message_sign,
       };
-      let url = `${this.$config.studioServer.BASE_URL}api/v1/action/contract/call`;
+      let url = `${this.$config.studioServer.BASE_URL}api/v1/action/contract/reef`;
 
       let headers = {
         "Content-Type": "application/json",
@@ -220,9 +238,9 @@ export default {
         header: headers,
       });
 
-      const result = res.data;
-
-      return result;
+      const result = res.data.balance.hex;
+  
+      return Number(result);
     },
     disableInput(data) {
       this.done = data;
