@@ -54,6 +54,9 @@ const EVENT_ACTIONS = {
         INVALID_SIG: "Invalid signature",
         CONNECT_METAMASK:"Connect your metamask wallet",
         INSUFFICIENT_BALANCE : "Insufficient balance"
+    },
+    REEF: {
+        CONNECT_REEF_WALLET: "Connect your reef wallet by selcting address options"
     }
 }
 
