@@ -3,7 +3,11 @@ module.exports = {
     ? '/'
     : '/',
   chainWebpack: config => {
-      config.plugins.delete("prefetch");
+      config.module.rule('comlink')
+        .test('/\.worker\.js$/i')
+        .use('comlink-loader')
+          .loader('comlink-loader')
+          .end();
     },
   devServer: {
       port: 9002

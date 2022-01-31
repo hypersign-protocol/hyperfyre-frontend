@@ -1,4 +1,10 @@
 <style scoped>
+.result-container {
+  display: flex;
+}
+.result {
+  flex: 1;
+}
 .addmargin {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -180,7 +186,28 @@ h5 span {
             </a>
           </div>
         </form>
-       
+       <div class="result without-webworker">
+        <label for="without-webworker">Without web worker</label>
+        <input
+          type="number"
+          id="without-webworker"
+          name="without-webworker"
+          v-model="final"
+          max="45"
+        />
+        <div>{{ count }}</div>
+      </div>
+      <div class="result with-webworker">
+        <label for="with-webworker">With web worker</label>
+        <input
+          type="number"
+          id="with-webworker"
+          name="with-webworker"
+          v-model="wwFinal"
+          max="45"
+        />
+        <div>{{ wwCount }}</div>
+      </div>
       </div>
     </b-card>
   </div>
@@ -194,6 +221,34 @@ import "vue-loading-overlay/dist/vue-loading.css";
 import url from "url";
 import notificationMixins from "../../mixins/notificationMixins";
 import localStorageMixin from "../../mixins/localStorageMixin";
+import { fibonacci } from '../../utils/fibonacci'
+import { wwFibonacci } from '../../workers/utils.worker'
+
+var debounce = (func, delay) => {
+  let Timer
+  return function() {
+    const context = this
+    const args = arguments
+    clearTimeout(Timer)
+    Timer
+      = setTimeout(() =>
+        func.apply(context, args), delay)
+  }
+}
+
+const debounceFibonacci = debounce((instance, final) => {
+  if (!final) {
+    return
+  }
+  instance.count = fibonacci(final)
+}, 250)
+
+const debounceFibonacciAsync = debounce(async (instance, final) => {
+  if (!final) {
+    return
+  }
+  instance.wwCount = await wwFibonacci(final)
+}, 250)
 
 export default {
   name: "Login",
@@ -203,6 +258,10 @@ export default {
   },
   data() {
     return {
+      final: 0,
+      wwFinal: 0,
+      count: 0,
+      wwCount: 0,
       walletWindow: null,
       QRRefresh: false,
       src2: require("../../assets/icon.png"),
@@ -296,6 +355,14 @@ export default {
   },
   mounted() {
     this.clean();
+  },
+  watch: {
+    final(final) {
+      debounceFibonacci(this, final)
+    },
+    wwFinal(final) {
+      debounceFibonacciAsync(this, final)
+    }
   },
   methods: {
     reloadQR(){
