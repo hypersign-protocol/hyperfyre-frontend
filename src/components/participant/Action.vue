@@ -31,18 +31,20 @@ import BlockchainMatic from "./ActionInputs/BlockchainMatic.vue";
 import BlockchainOne from "./ActionInputs/BlockchainOne.vue";
 import BlockchainReef from "./ActionInputs/BlockchainReef.vue";
 import EthereumErc20 from "./ActionInputs/EthereumErc20.vue";
-import EthereumErc721 from "./ActionInputs/EthereumErc721.vue"
-import MaticErc20 from "./ActionInputs/MaticErc20.vue"
-import BinanceErc20 from "./ActionInputs/BinanceErc20.vue"
+import MaticErc20 from "./ActionInputs/MaticErc20.vue";
+import BinanceErc20 from "./ActionInputs/BinanceErc20.vue";
+import ReefErc20 from "./ActionInputs/ReefErc20.vue";
 import InputDate from "./ActionInputs/InputDate.vue";
 import InputNumber from "./ActionInputs/InputNumber.vue";
 import InputHyperlink from "./ActionInputs/InputHyperlink.vue";
+
 import PrizeCard from "./ActionInputs/PrizeCard.vue";
 import eventBus from "../../eventBus.js"
+
 import apiClient from "../../mixins/apiClientMixin";
 import notificationMixins from "../../mixins/notificationMixins";
 import config from "../../config";
-import Messsages from "../../utils/messages/participants/en"
+import Messsages from "../../utils/messages/participants/en";
 export default {
   name: "Action",
   props: {
@@ -73,8 +75,8 @@ export default {
     BlockchainOne,
     BlockchainReef,
     EthereumErc20,
-    EthereumErc721,
     MaticErc20,
+    ReefErc20,
     InputDate,
     InputNumber,
     BinanceErc20,
