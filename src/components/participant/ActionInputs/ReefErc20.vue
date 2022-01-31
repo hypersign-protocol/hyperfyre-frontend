@@ -42,13 +42,6 @@
                 :disabled="false"
                 :required="data.isManadatory"
               ></b-form-select>
-              <button class="btn text-black" @click="signMessage()" v-if="!done">
-                <img
-                  src="../../../assets/reef.png"
-                  height="25px"
-                  width="25px"
-                />
-              </button>
             </div>
           </b-col>
         </b-row>
@@ -107,7 +100,7 @@ export default {
       signature: "",
       message_sign: "You are Signing this Message to confirm your Paricipation",
       
-      options:[{value: '', text: 'Please select an option'}],
+      options:[{value: '', text: 'Please select your reef wallet'}],
       value: {
         contractAddress: "",
         userWalletAddress: '',
@@ -180,7 +173,7 @@ export default {
     },
     async update() {
       if (!this.isFieldValid() || this.value.userWalletAddress === "") {
-        return this.notifyErr(Messages.EVENT_ACTIONS.ETH.CONNECT_METAMASK);
+        return this.notifyErr(Messages.EVENT_ACTIONS.REEF.CONNECT_REEF_WALLET);
       } else {
         try {
           let balance = await this.fetchBalance();
