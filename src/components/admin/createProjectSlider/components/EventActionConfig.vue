@@ -499,7 +499,7 @@ export default {
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_TYPE)
           }else if(isEmpty(this.selected.title)){
             isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE);
+            this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_NAME_NOT_EMPTY);
           }else if(isEmpty(this.prizeDetails.winners)){
             isvalid = false
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.EMPTY_NO_OF_WINNERS)
