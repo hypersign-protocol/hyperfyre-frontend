@@ -36,10 +36,9 @@
             <div class="metamask">
               <b-form-select
                 type="text"
-                :placeholder="data.placeHolder"
                 :options="options"
                 v-model="value.userWalletAddress"
-                :disabled="false"
+                :disabled="done"
                 :required="data.isManadatory"
               ></b-form-select>
             </div>
