@@ -719,7 +719,9 @@ export default {
           return (Messages.EVENTS.CHECK_ALL_TITLE_EMPTY);
         }
         let eventActionValue= this.eventActionList;
-        eventActionValue= eventActionValue.filter((x) => (x.type!=="INPUT_TEXT") && (x.type!=="INPUT_NUMBER") && (x.type!=="INPUT_DATE") && (x.type!=="INPUT_HYPERLINK") && (x.type!=="BLOCKCHAIN_ETH") &&(x.type!=="BLOCKCHAIN_MATIC")&&(x.type!=="BLOCKCHAIN_BSC") &&(x.type!=="BLOCKCHAIN_ONE") &&(x.type!=="BLOCKCHAIN_AVAX") &&(x.type!=="BLOCKCHAIN_REEF") &&(x.type!=="BLOCKCHAIN_TEZ"))
+        eventActionValue= eventActionValue.filter((x) => (x.type!=="INPUT_TEXT") && (x.type!=="INPUT_NUMBER") && (x.type!=="INPUT_DATE") && (x.type!=="INPUT_HYPERLINK") 
+        && (x.type!=="BLOCKCHAIN_ETH") &&(x.type!=="BLOCKCHAIN_MATIC")&&(x.type!=="BLOCKCHAIN_BSC") &&(x.type!=="BLOCKCHAIN_ONE") &&(x.type!=="BLOCKCHAIN_AVAX") 
+        &&(x.type!=="BLOCKCHAIN_REEF") &&(x.type!=="BLOCKCHAIN_TEZ") &&(x.type!=="PRIZE_CARD"))
         const filteredValueList=checkValue(eventActionValue, 'value');
         if(filteredValueList.includes(false)){
           return (Messages.EVENTS.CHECK_ALL_VALUE_EMPTY);

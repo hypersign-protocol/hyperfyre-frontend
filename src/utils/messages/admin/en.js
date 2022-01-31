@@ -65,6 +65,12 @@ const EVENTS = {
         ADDRESS_NOT_EMPTY: "Contract Address Should not be empty",
         THBALANCE_NOT_NEGATIVE: "Enter the Threshold balance that should be a Positive Number",
         VALID_CONTRACT_ADDRESS: "Please enter valid Contract address"
+    },
+    
+    PRIZECARD:{
+        PRIZE_TYPE: "Please select prize type",
+        EMPTY_NO_OF_WINNERS: "Number of Winners Should not be empty",
+        EMPTY_PRIZE_PER_WINNER: "Prize Per Winner Should not empty"
     }
 
     }
