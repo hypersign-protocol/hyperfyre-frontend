@@ -14,7 +14,7 @@
     </b-card>
     <template v-if="authToken != '' && authToken != null">
       <ErrorMessage v-if="!eventData.projectStatus" errorMessage="Event is over" />
-      <Action v-if="eventData.projectStatus" :userProfile="userProfileData" :ActionSchema="eventActionsToShow" @UserUpdateEvent="updateUserData" />
+      <Action v-if="eventData.projectStatus" :userProfile="userProfileData" :ActionSchema="eventActionsToShow" :prizeData="prizeData" @UserUpdateEvent="updateUserData" />
     </template>
   </div>
 </template>
@@ -52,7 +52,8 @@ export default {
       eventSlug: "",
       userProfileData: {},
       isLoading: false,
-      fullPage: true
+      fullPage: true,
+      prizeData:[]
     }
   },
   /***
@@ -211,10 +212,14 @@ export default {
         this.userEventData = {
           ...res.data[0]
         }
-
-
-        const eventActions = this.eventData.actions;
-
+        
+        this.prizeData=this.eventData.actions.filter((x) => {
+        return x.type ==='PRIZE_CARD'
+        })
+        const actionWithoutPrize=this.eventData.actions.filter((x) => {
+        return x.type !=='PRIZE_CARD'
+        })
+        const eventActions = actionWithoutPrize;
 
         if (this.userEventData.actions && this.userEventData.actions.length > 0) {
           this.eventActionsToShow = eventActions.map(ea => {

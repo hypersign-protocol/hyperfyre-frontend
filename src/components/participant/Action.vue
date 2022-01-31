@@ -6,6 +6,7 @@
       :is-full-page="fullPage"
     ></loading>
     <Profile :user="userProfile"/>
+    <prize-card :prizeData="prizeData"/>
     <template v-for="(actionItem,index) in ActionSchema">
       <component :is="CapitaliseString(actionItem.type)" :key="index" :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
     </template>
@@ -36,6 +37,7 @@ import BinanceErc20 from "./ActionInputs/BinanceErc20.vue"
 import InputDate from "./ActionInputs/InputDate.vue";
 import InputNumber from "./ActionInputs/InputNumber.vue";
 import InputHyperlink from "./ActionInputs/InputHyperlink.vue";
+import PrizeCard from "./ActionInputs/PrizeCard.vue";
 import eventBus from "../../eventBus.js"
 import apiClient from "../../mixins/apiClientMixin";
 import notificationMixins from "../../mixins/notificationMixins";
@@ -51,6 +53,10 @@ export default {
     userProfile:{
       required: true,
       type: Object
+    },
+    prizeData:{
+      required: true,
+      type: Array
     }
   },
   components: {
@@ -77,6 +83,7 @@ export default {
     HyperlinkUrl,
     InputHyperlink,
     InfoText,
+    PrizeCard,
     RecaptchaToken: ""
   },
   mounted(){
