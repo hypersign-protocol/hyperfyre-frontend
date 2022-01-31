@@ -6,7 +6,7 @@
       :is-full-page="fullPage"
     ></loading>
     <Profile :user="userProfile"/>
-    <prize-card :prizeData="prizeData"/>
+    <prize-card v-if="isPrizedata" :prizeData="prizeData"/>
     <template v-for="(actionItem,index) in ActionSchema">
       <component :is="CapitaliseString(actionItem.type)" :key="index" :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
     </template>
@@ -110,6 +110,13 @@ export default {
        isLoading:false,
        fullPage: true
     };
+  },
+  computed:{
+      isPrizedata(){
+      if(this.prizeData.length>0){
+        return true;
+      }
+    }
   },
   methods: {
 
