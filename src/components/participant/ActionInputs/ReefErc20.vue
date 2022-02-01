@@ -125,8 +125,7 @@ export default {
    async checkWeb3Injection() {
       try {
         if (window.injectedWeb3) {
-          this.web3 = window.injectedWeb3
-          
+          this.web3 = await window.injectedWeb3
         }
         else{
            this.showerror = true;
