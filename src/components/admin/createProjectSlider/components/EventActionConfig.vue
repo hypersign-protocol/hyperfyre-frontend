@@ -50,7 +50,7 @@
               <label for="prize" class="col-form-label">Prize name<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-9 col-md-9 px-0">
-              <input   v-model="selected.title" type="text"   id="title" class="form-control w-100" placeholder="Please enter Prize Name" >
+              <input   v-model="selected.title" type="text"   id="title" class="form-control w-100" placeholder="Please enter prize name" >
           </div>  
         </div>
         <div class="row g-3 align-items-center w-100 mt-4" v-if="prize">
@@ -58,7 +58,7 @@
               <label for="winners" class="col-form-label">Number of Winners<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-9 col-md-9 px-0">
-              <input   v-model="prizeDetails.winners" type="text"   id="title" class="form-control w-100" placeholder="Please enter Prize Name" >
+              <input   v-model="prizeDetails.winners" type="text"   id="title" class="form-control w-100" placeholder="Please enter number of winners " >
           </div>  
         </div>
         <div class="row g-3 align-items-center w-100 mt-4" v-if="prize">
@@ -66,7 +66,7 @@
               <label for="prixeValue" class="col-form-label">Prize Per Winner<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-9 col-md-9 px-0">
-              <input   v-model="prizeDetails.prizeValue" type="text"   id="title" class="form-control w-100" placeholder="Please enter Prize Name" >
+              <input   v-model="prizeDetails.prizeValue" type="text"   id="title" class="form-control w-100" placeholder="Please enter prize per winner" >
           </div>  
         </div>
          <!-- contract address -->
@@ -499,7 +499,7 @@ export default {
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_TYPE)
           }else if(isEmpty(this.selected.title)){
             isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE);
+            this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_NAME_NOT_EMPTY);
           }else if(isEmpty(this.prizeDetails.winners)){
             isvalid = false
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.EMPTY_NO_OF_WINNERS)
