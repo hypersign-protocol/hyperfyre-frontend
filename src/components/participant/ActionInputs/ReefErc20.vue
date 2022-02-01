@@ -129,9 +129,11 @@ export default {
           this.web3 = window.injectedWeb3
           
         }
+        else{
+           this.showerror = true;
+        }
       } catch (error) {
         console.log(error);
-        this.showerror = true;
       }
 
 
