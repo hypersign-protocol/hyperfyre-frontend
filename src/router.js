@@ -44,6 +44,15 @@ const router = new Router({
       },
     },
     {
+      path: "/admin/teammate",
+      name: "Teammate",
+      component: () => import(/* webpackChunkName: "dashboard" */ './views/admin/TeamMate.vue') ,
+      meta: {
+        requiresAuth: true,
+        admin: true,
+      },
+    },
+    {
       path: "/admin/participants",
       name: "Participants",
       component: () => import(/* webpackChunkName: "investors" */ './views/admin/Participants.vue') ,
