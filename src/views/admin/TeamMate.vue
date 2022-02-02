@@ -41,7 +41,7 @@
           </div>
     <div class="row" style="margin-top: 2%;">
       <div class="col-md-12">
-        <table  class="table table-bordered" style="background:#FFFF">
+        <table  v-if="teammates.length" class="table table-bordered" style="background:#FFFF">
           <thead class="thead-light">
             <tr>
               <th>Name</th>
@@ -51,19 +51,18 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr  v-for="row in teammates" :key="row._d">
               <th>
-                {{ result.name }}
+                {{ row.name }}
               </th>
-              <td>{{ result.email}}</td>
-              <td>{{ result.status }}</td>
+              <td>{{ row.email}}</td>
+              <td>{{ row.status }}</td>
              
             </tr>
           </tbody>
         </table>
       </div>
     </div>
- 
   </div>
 </template>
 
@@ -72,19 +71,17 @@
 import notificationMixins from "../../mixins/notificationMixins";
 export default {
   name: "Teammate",
-  mounted() {},
   components: {},
   data() {
     return {
-    result:{
-      email: "",
-      name: "",
-      status:"",
-    },
+    teammates:[],
       user: {},
       appName: "",
       authToken: localStorage.getItem("authToken"),
     };
+  },
+ async mounted(){
+    await this.getTeammates();
   },
   created() {
     const usrStr = localStorage.getItem("user");
@@ -93,28 +90,47 @@ export default {
     };
   },
   methods: {
+  async getTeammates(){
+      const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/`;
+        const headers = {
+          Authorization: `Bearer ${this.authToken}`,
+        };
+        const resp = await fetch(url, {
+          headers,
+          method: "GET",
+        });
+    
+        if (!resp.ok) {
+          return this.notifyErr(resp.statusText);
+        }
+        else{
+            this.teammates = await resp.json();
+        }
+    },
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
     },
     async invite() {
     await this.$swal.fire({
-  title: 'Login Form',
-  html: `<input type="email" id="email" class="swal2-input" placeholder="Email">
-  <input type="name" id="name" class="swal2-input" placeholder="Name">`,
-  confirmButtonText: 'Add Teammate',
-  focusConfirm: false,
-  preConfirm: () => {
+    title: 'Invite Form',
+    html: `<input type="email" id="email" class="swal2-input" placeholder="Email">
+    <input type="name" id="name" class="swal2-input" placeholder="Name">`,
+    confirmButtonText: 'Add Teammate',
+    focusConfirm: false,
+    showCloseButton:true,
+    allowOutsideClick:false,
+    preConfirm: () => {
     const email = this.$swal.getPopup().querySelector('#email').value
     const name = this.$swal.getPopup().querySelector('#name').value
     if (!email || !name) {
       this.$swal.showValidationMessage(`Please enter email and name`)
     }
-    this.result.email=email;
-    this.result.name=name;
-    return { email: email, name: name }
+   
+    return {  name: name, email: email }
    
   }
 }).then(async(data) => {
+  if(data.value){
   const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/add`;
         let headers = {
           "Content-Type": "application/json",
@@ -130,15 +146,17 @@ export default {
         const json = await resp.json();
         if(json){
           if (!resp.ok) {
-            return this.notifyErr(json)
+            return this.notifyErr(json);
           }else{
            this.notifySuccess("sent Successfully");
-           this.result.status='Invitation sent'
-          }
+           console.log(json);
+           await this.getTeammates();
+           }
         }else{
-          throw new Error('Error while Invitation se')
+          throw new Error('Error while Invitation se');
         }
-})
+}
+    })
 
     },
   },

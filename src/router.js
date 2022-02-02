@@ -30,6 +30,11 @@ const router = new Router({
       redirect: "/admin/login",
     },
     {
+      path: "/invitation",
+      name: "Invitation",
+      component: () => import(/* webpackChunkName: "adminLogin" */ './views/Invitation.vue'),
+    },
+    {
       path: "/admin/login",
       name: "AdminLogin",
       component: () => import(/* webpackChunkName: "adminLogin" */ './views/admin/AdminLogin.vue'),
@@ -94,7 +99,7 @@ router.beforeEach((to, from, next) => {
       const url = `${config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
       fetch(url, {
         headers: {
-          Authorization: `Bearer ${authToken}`,
+          Authorization: `Bearer ${authToken}`
         },
         method: "POST",
       })
