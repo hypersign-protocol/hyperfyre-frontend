@@ -204,7 +204,7 @@ i {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="row in subscriptions" :key="row._d">
+            <tr v-for="row in subscriptions" :key="row._id">
               <th>
                 {{ row._id }}
               </th>

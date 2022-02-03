@@ -1,4 +1,19 @@
 <style scoped>
+.paginationContainer {
+  display: flex;
+  list-style: none;
+
+  justify-content: center;
+}
+.paginationContainer >>> li {
+  padding: 2px 10px;
+  margin: 0 2px;
+  border-radius: 3px;
+}
+.paginationContainer >>> li.active {
+  background-color: #f1b319;
+  color: #fff;
+}
 .addmargin {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -47,21 +62,34 @@
               <th>Name</th>
               <th>Email</th>
               <th>Status</th>
-             
+              <th>Remove</th>
             </tr>
           </thead>
           <tbody>
-            <tr  v-for="row in teammates" :key="row._d">
+            <tr  v-for="row in teammates" :key="row._id">
               <th>
                 {{ row.name }}
               </th>
               <td>{{ row.email}}</td>
-              <td>{{ row.status }}</td>
-             
+              <td v-if="row.status===`active`"><h5>  <b-badge style="text-transform:uppercase;" variant="success">{{  row.status}}</b-badge></h5></td>
+              <td v-else><h5> <b-badge style="text-transform:uppercase;" variant="danger">{{  row.status}}</b-badge></h5></td>
+              <td @click="remove(row._id)"><button style="text-transform:uppercase;" class="btn btn-danger button-theme btn-sm"><i class="fas fa-trash"></i> Remove</button></td>
             </tr>
           </tbody>
         </table>
       </div>
+    </div>
+   <div class="d-flex mt-5">
+      <paginate
+        :pageCount="Math.ceil(this.teammates.length / this.perPage)"
+        :clickHandler="paginateChange"
+        :prevText="'Prev'"
+        v-model="paginateValue"
+        :nextText="'Next'"
+        :containerClass="'paginationContainer'"
+        :page-class="'paginationItem '"
+      >
+      </paginate>
     </div>
   </div>
 </template>
@@ -69,11 +97,17 @@
 
 <script>
 import notificationMixins from "../../mixins/notificationMixins";
+import Paginate from "vuejs-paginate";
 export default {
   name: "Teammate",
-  components: {},
+  components: {Paginate},
   data() {
     return {
+    paginateValue: 1,
+    perPage: 10,
+    currentPage: 2,
+    length:[],
+    pageSelectDropdown: [],
     teammates:[],
       user: {},
       appName: "",
@@ -115,7 +149,8 @@ export default {
     title: 'Invite Form',
     html: `<input type="email" id="email" class="swal2-input" placeholder="Email">
     <input type="name" id="name" class="swal2-input" placeholder="Name">`,
-    confirmButtonText: 'Add Teammate',
+    confirmButtonText: '<span style="color:black">Invite</span>',
+    confirmButtonColor:'#f1b319',
     focusConfirm: false,
     showCloseButton:true,
     allowOutsideClick:false,
@@ -159,6 +194,35 @@ export default {
     })
 
     },
+  async remove(id){
+      if(id){
+        console.log(id);
+  const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/delete`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+        const resp = await fetch(url, {
+          method: "DELETE",
+          body: JSON.stringify({
+            _id:id
+          }),
+          headers,
+        });
+        const json = await resp.json();
+        if(json){
+          if (!resp.ok) {
+            return this.notifyErr(json);
+          }else{
+           this.notifySuccess("Removed Successfully");
+           console.log(json);
+           await this.getTeammates();
+           }
+        }else{
+          throw new Error('Error while Removing ');
+        }
+}
+  }
   },
   mixins: [notificationMixins],
 };
