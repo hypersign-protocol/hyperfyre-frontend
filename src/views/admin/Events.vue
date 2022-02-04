@@ -299,7 +299,6 @@ i {
 import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import Datepicker from 'vuejs-datetimepicker'
 import Paginate from "vuejs-paginate";
 import notificationMixins from '../../mixins/notificationMixins';
 import apiClientMixin from '../../mixins/apiClientMixin';
@@ -309,7 +308,7 @@ import dayjs from "dayjs";
 import Messages from "../../utils/messages/admin/en";
 export default {
   name: "Investor",
-  components: { Loading, Datepicker, Paginate, CreateProjectSlide },
+  components: { Loading,  Paginate, CreateProjectSlide },
   
   data() {
     return {
@@ -390,6 +389,7 @@ export default {
       active: 0,
       host: location.hostname,
       authToken: localStorage.getItem("authToken"),
+      accessToken:localStorage.getItem("accessToken"),
       isLoading: false,
       fullPage: true,
       user: {},
@@ -402,6 +402,7 @@ export default {
     //this.user = null; JSON.parse(usrStr);
 
     const usrStr = localStorage.getItem("user");
+    
     this.user = {
       ...JSON.parse(usrStr),
     };
@@ -517,11 +518,12 @@ export default {
         this.isLoading = true;
         if (!this.user.id) throw new Error("No project found");
        
-
+          
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.user.id}`;
 
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
+          AccessToken:`Bearer ${this.accessToken}`
         };
         const resp = await fetch(url, {
           headers,
@@ -635,6 +637,7 @@ export default {
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
+          AccessToken:`Bearer ${this.accessToken}`
         };
 
         let method = "POST";

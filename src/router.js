@@ -30,6 +30,11 @@ const router = new Router({
       redirect: "/admin/login",
     },
     {
+      path: "/invitation",
+      name: "Invitation",
+      component: () => import(/* webpackChunkName: "adminLogin" */ './views/Invitation.vue'),
+    },
+    {
       path: "/admin/login",
       name: "AdminLogin",
       component: () => import(/* webpackChunkName: "adminLogin" */ './views/admin/AdminLogin.vue'),
@@ -43,6 +48,15 @@ const router = new Router({
         requiresAuth: true,
         admin: true,
         title: 'Hyperfyre - Admin Dashboard'
+      },
+    },
+    {
+      path: "/admin/teammate",
+      name: "Teammate",
+      component: () => import(/* webpackChunkName: "dashboard" */ './views/admin/TeamMate.vue') ,
+      meta: {
+        requiresAuth: true,
+        admin: true,
       },
     },
     {
@@ -83,12 +97,14 @@ router.beforeEach((to, from, next) => {
   
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     const authToken = localStorage.getItem("authToken");
+    
     if (authToken) {
       // console.log("Yes auth token");
       const url = `${config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
       fetch(url, {
         headers: {
           Authorization: `Bearer ${authToken}`,
+          
         },
         method: "POST",
       })
@@ -101,7 +117,8 @@ router.beforeEach((to, from, next) => {
             });
           } else {
             localStorage.setItem("user", JSON.stringify(json.message));
-
+          
+            Vue.prototype.$accounts=json.accounts
             if (to.meta.admin && !json.message.isSubscribed && to.path != "/admin/subscription") {
               eventBus.$emit('UpdateAdminNav', false);
               next({
