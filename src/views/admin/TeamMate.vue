@@ -38,7 +38,7 @@
      <div class="text-right">
             <button @click="invite()" class="btn btn-warning button-theme"><i class="fas fa-plus text-black"></i> Invite </button>
           </div>
-    <h4 v-if="teammates.length" >Your Team</h4>
+    <h3 v-if="teammates.length" >Your Team</h3>
     <div class="row" style="margin-top: 2%;">
       <div class="col-md-12">
         <table  v-if="teammates.length" class="table table-bordered" style="background:#FFFF">

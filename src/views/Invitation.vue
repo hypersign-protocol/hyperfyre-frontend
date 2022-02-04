@@ -2,11 +2,6 @@
     <div class="body">
         <div class="row header">
             <div class="col-md-4">
-                <img
-                    :src="require('../assets/logo.png')"
-                    alt="logo"
-                    width="120px"
-                />
             </div>
             <!-- <div class="col-md-8">
                 <button class="btn btn-default btn-lg">
@@ -16,9 +11,9 @@
         </div>
         <div class="row content">
             <div class="col-md-12" style="">
-                <h1 class="bold">HyperFyre</h1>
+                <h1 class="bold" style="color:#ffc107">HyperFyre</h1>
                 <div  class="typewriter"> 
-                <h4>Build Resilient and Dependable Communities, Securely</h4>
+                <h4>Viral Marketing Tools For Web3</h4>
                 </div>
                 <button  class="btn btn-default btn-lg" style="margin-top:2%">
                     <a href="/app" target="_blank">Click here to Log in</a>
