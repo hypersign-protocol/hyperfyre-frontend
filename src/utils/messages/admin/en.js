@@ -70,6 +70,9 @@ const EVENTS = {
     
     PRIZECARD:{
         PRIZE_TYPE: "Please select prize type",
+        PRIZE_NAME_NOT_URL:"Please enter valid prize name",
+        PRIZE_NUMBER_OF_WINNER_NOT_URL:"Please enter valid number of winners",
+        PRIZE_PER_WINNER_NOT_URL:"Please enter valid prize per winner",
         PRIZE_NAME_NOT_EMPTY:"Prize name should not be empty",
         EMPTY_NO_OF_WINNERS: "Number of Winners Should not be empty",
         EMPTY_PRIZE_PER_WINNER: "Prize Per Winner Should not empty"
