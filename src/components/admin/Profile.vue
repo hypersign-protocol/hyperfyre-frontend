@@ -98,7 +98,7 @@
               <div class="col-md-8" style="flex-wrap: wrap; padding: 20px">
                 <p>DID</p>
                 <p class="fVal">
-                   <a v-if="accessuser.id" target="_blank">{{ accessuser.id }}</a>
+                   <a v-if="accessuser.adminDid" target="_blank">{{ accessuser.adminDid }}</a>
 
                     <a v-else target="_blank">{{ user.id }}</a>
                 </p>
