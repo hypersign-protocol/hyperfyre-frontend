@@ -45,6 +45,7 @@ export default {
         { label: "Requests left", value: this.unused, color: "#60c860" },
       ],
       authToken: localStorage.getItem("authToken"),
+      accessToken:localStorage.getItem("accessToken"),
     };
   },
   async created() {
@@ -72,6 +73,7 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription?usage=true`;
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
+          AccessToken:`Bearer ${this.accessToken}`
         };
         const resp = await fetch(url, {
           headers,

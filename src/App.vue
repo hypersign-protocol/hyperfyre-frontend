@@ -49,6 +49,12 @@ export default {
           icon: "fas fa-tachometer-alt",
         },
         {
+          href: "/admin/teammate",
+          title: "Teammate",
+          icon: "fas fa-user-plus",
+          exactPath: true,
+        },
+        {
           href: "/admin/events",
           title: "Events",
           icon: "fas fa-calendar-alt",
@@ -104,7 +110,8 @@ export default {
           window.location.pathname.includes("/admin/participants") ||
           window.location.pathname.includes("/admin/events") ||
           window.location.pathname.includes("/admin/dashboard") ||
-          window.location.pathname.includes("/admin/subscription") ?
+          window.location.pathname.includes("/admin/subscription") ||
+          window.location.pathname.includes("/admin/teammate") ?
           true :
           false;
     }else{
@@ -116,14 +123,16 @@ export default {
           window.location.pathname.includes("/admin/participants") ||
           window.location.pathname.includes("/admin/events") ||
           window.location.pathname.includes("/admin/dashboard") ||
-          window.location.pathname.includes("/admin/subscription") ?
+          window.location.pathname.includes("/admin/subscription") ||
+          window.location.pathname.includes("/admin/teammate") ?
           true :
           false;
     this.showChat = 
           window.location.pathname.includes("/admin/participants") ||
           window.location.pathname.includes("/admin/events") ||
           window.location.pathname.includes("/admin/dashboard") ||
-          window.location.pathname.includes("/admin/subscription") ?
+          window.location.pathname.includes("/admin/subscription") ||
+          window.location.pathname.includes("/admin/teammate") ?
           true :
           false;
   },
@@ -166,7 +175,8 @@ export default {
         window.location.pathname.includes("investors") ||
         window.location.pathname.includes("project") ||
         window.location.pathname.includes("dashboard") ||
-        window.location.pathname.includes("/admin/subscription")
+        window.location.pathname.includes("/admin/subscription")||
+        window.location.pathname.includes("/admin/teammate")
       ) {
         this.showNavbar = true;
       } else {

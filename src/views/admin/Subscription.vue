@@ -110,7 +110,7 @@ i {
       </div>
     </div>
     <template v-for="plan in plans">
-      <button type="button" class="btn btn-outline-dark btn-plan free" :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''" v-if="plan.price === 0" :key="plan._id" :disabled="subscriptions.find((el) => el.planId === plan._id)" @click="subscribe(plan._id)">Free Basic Plan</button>
+      <button  type="button" class="btn btn-outline-dark btn-plan free" :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''" v-if="plan.price === 0" :key="plan._id" :disabled="subscriptions.find((el) => el.planId === plan._id)" @click="subscribe(plan._id)">Free Basic Plan</button>
     </template>
     <div class="divider">
       <small class="small-desc">
@@ -130,7 +130,7 @@ i {
                 <span>$</span>
                 {{ plan.price }}
               </div>
-              <button type="button" class="btn btn-outline-dark btn-plan" :class="(plan.planName === 'Lambo') ? 'popular' : ''" @click="openSelectPlanSidebar(plan)">Select Plan</button>
+              <button v-if="!accessuser.adminName && !accessToken" type="button" class="btn btn-outline-dark btn-plan" :class="(plan.planName === 'Lambo') ? 'popular' : ''" @click="openSelectPlanSidebar(plan)">Select Plan</button>
               <div class="pro-feature">
                 <ul>
                   <li>
@@ -204,7 +204,7 @@ i {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="row in subscriptions" :key="row._d">
+            <tr v-for="row in subscriptions" :key="row._id">
               <th>
                 {{ row._id }}
               </th>
@@ -246,6 +246,7 @@ export default {
   data() {
     return {
       authToken: localStorage.getItem("authToken"),
+      accessToken: localStorage.getItem("accessToken"),
       showAllFeatures: false,
       isLoading: false,
       fullPage: true,
@@ -253,6 +254,7 @@ export default {
       subscriptions: [],
       activeSubscriptions:[],
       user: {},
+      accessuser:{},
       emojis: {
         Lambo: '&#128665;',
         Moon: '&#127773;',
@@ -284,6 +286,13 @@ export default {
         ...JSON.parse(usrStr),
       };
     }
+     const accessUser = localStorage.getItem("accessuser");
+    if (accessUser) {
+      this.accessuser = {
+        ...JSON.parse(accessUser),
+      };
+    }
+    
     
 
     this.fetchPlan();
@@ -294,7 +303,7 @@ export default {
 
    await this.fetchSubscription();
    if(this.$route.query.hash!==undefined && this.$route.query.code!==undefined &&this.$route.query.extra!==undefined){
-    let {code,hash,extra,status}={...this.$route.query}
+    let {extra}={...this.$route.query}
     extra=JSON.parse(decodeURIComponent(extra))
   
     let subsID=extra._id;
@@ -469,6 +478,7 @@ this.$swal.fire({
         const url = `${this.$config.studioServer.BASE_URL}api/v1/plan?authToken=${this.authToken}`;
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
+          AccessToken:`Bearer ${this.accessToken}`
         };
         const resp = await fetch(url, {
           headers,
@@ -505,6 +515,7 @@ this.$swal.fire({
         const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription?usage=true`;
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
+          AccessToken:`Bearer ${this.accessToken}`
         };
         const resp = await fetch(url, {
           headers,
@@ -577,6 +588,7 @@ this.$swal.fire({
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
+          AccessToken:`Bearer ${this.accessToken}`
         };
         const resp = await fetch(url, {
           method: "POST",
