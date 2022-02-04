@@ -34,11 +34,11 @@
 </style>
 <template>
   <div class="home marginLeft marginRight">
-    <h3 class="leftAlign">Welcome, {{ user.name }} !</h3>
+    <h3 v-if="teammates.length" class="leftAlign">Hi {{ user.name }}, Your Teams and Admins</h3>
      <div class="text-right">
             <button @click="invite()" class="btn btn-warning button-theme"><i class="fas fa-plus text-black"></i> Invite Teammate </button>
           </div>
-    <h4 >These are your teammates</h4>
+    <h4 v-if="teammates.length" >These are your teammates</h4>
     <div class="row" style="margin-top: 2%;">
       <div class="col-md-12">
         <table  v-if="teammates.length" class="table table-bordered" style="background:#FFFF">
@@ -62,26 +62,26 @@
             </tr>
           </tbody>
         </table>
-        <hr>
-        <h3 class="leftAlign">Your are part of these teams!</h3>
-         <table  v-if="teammates.length" class="table table-bordered" style="background:#FFFF">
+        <hr v-if="$accounts.length">
+        <h3 v-if="$accounts.length" class="leftAlign">Your are part of these teams!</h3>
+         <table  v-if="$accounts.length" class="table table-bordered" style="background:#FFFF">
           <thead class="thead-light">
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Status</th>
-              <th>Switch</th>
+              <th>Admin Name</th>
+              <th>Admin Email</th>
+            
+              <th>Login</th>
             </tr>
           </thead>
           <tbody>
-            <tr  v-for="row in teammates" :key="row._id">
+            <tr  v-for="row in $accounts" :key="row._id">
               <th>
-                {{ row.name }}
+                {{ row.adminName==="Self"?row.name:row.adminName }}
               </th>
               <td>{{ row.email}}</td>
               <td v-if="row.status===`active`"><h5>  <b-badge style="text-transform:uppercase;" variant="success">{{  row.status}}</b-badge></h5></td>
-              <td v-else><h5> <b-badge style="text-transform:uppercase;" variant="danger">{{  row.status}}</b-badge></h5></td>
-              <td @click="switchAccount(row._id)"><button style="text-transform:uppercase;" class="btn btn-danger button-theme btn-sm"><i class="fa fa-refresh"></i> Switch</button></td>
+             
+              <td @click="switchAccount(row)"><button style="text-transform:uppercase;" class="btn btn-danger button-theme btn-sm"><i class="fa fa-refresh"></i> Switch</button></td>
             </tr>
           </tbody>
         </table>
@@ -114,11 +114,22 @@ export default {
     };
   },
   methods: {
-  switchAccount(id){
-    console.log(id);
-  },
+  switchAccount(row){
+    if(row.adminName==="Self"){
+      localStorage.removeItem('authToken')
+      localStorage.removeItem("accessuser")
+      localStorage.removeItem("accessToken")
+      localStorage.setItem('authToken',row.authToken)
+      
+       this.$router.push('/admin/dashboard')
+    }else{
+    localStorage.setItem('accessToken',row.authToken)
+    localStorage.setItem('accessuser',JSON.stringify({adminName:row.adminName,adminEmail:row.email,adminDid:row.adminDid}))
+  this.$router.push('/admin/dashboard')
+    }
+ },
   async getTeammates(){
-      const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/`;
+      const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team`;
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
         };
@@ -167,7 +178,8 @@ export default {
         const resp = await fetch(url, {
           method: "POST",
           body: JSON.stringify({
-            data
+            name:data.value.name,
+            email:data.value.email
           }),
           headers,
         });
@@ -198,7 +210,7 @@ export default {
         const resp = await fetch(url, {
           method: "DELETE",
           body: JSON.stringify({
-            _id:id
+            id:id
           }),
           headers,
         });

@@ -98,10 +98,13 @@
               <div class="col-md-8" style="flex-wrap: wrap; padding: 20px">
                 <p>DID</p>
                 <p class="fVal">
-                  <a target="_blank">{{ user.id }}</a>
+                   <a v-if="accessuser.id" target="_blank">{{ accessuser.id }}</a>
+
+                    <a v-else target="_blank">{{ user.id }}</a>
                 </p>
                 <p>EMAIL</p>
-                <p class="fVal">{{ user.email }}</p>
+                <p v-if="accessuser.adminEmail" class="fVal">{{ accessuser.adminEmail }}</p>
+                 <p v-else class="fVal">{{ user.email }}</p>
                 <p v-if="user.phoneNumber">
                   Phone Number: {{ user.phoneNumber }}
                 </p>
@@ -127,7 +130,9 @@ export default {
       schemaCount: 0,
       projectCount: 0,
       user: {},
+      accessuser:{},
       authToken: localStorage.getItem("authToken"),
+      accessToken:localStorage.getItem("accessToken"),
       projects: [],
     };
   },
@@ -136,6 +141,10 @@ export default {
     this.user = {
       ...JSON.parse(usrStr),
     };
+      const accessUser=localStorage.getItem('accessuser') 
+     this.accessuser={
+        ...JSON.parse(accessUser)
+     }
     
     await this.fetchProjects();
    
@@ -151,6 +160,7 @@ export default {
 
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
+          AccessToken:`Bearer ${this.accessToken}`
         };
         const resp = await fetch(url, {
           headers,

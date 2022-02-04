@@ -386,6 +386,7 @@ export default {
       active: 0,
       host: location.hostname,
       authToken: localStorage.getItem("authToken"),
+      accessToken:localStorage.getItem("accessToken"),
       isLoading: false,
       fullPage: true,
     };
@@ -439,6 +440,7 @@ export default {
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
+          AccessToken: `Bearer ${this.accessToken}`
         };
 
         const res = await apiClientMixin.makeCall({
@@ -470,6 +472,7 @@ export default {
 
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
+          AccessToken: `Bearer ${this.accessToken}`
         };
 
         const res = await apiClientMixin.makeCall({
@@ -635,6 +638,7 @@ export default {
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
+          AccessToken: `Bearer ${this.accessToken}`
         };
         const resp = await fetch(url, {
           headers,
