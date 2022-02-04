@@ -428,6 +428,10 @@ export default {
                 return JSON.parse(action.value).userWalletAddress;
               
               }
+              case 'REEF_ERC20':{
+          
+                return JSON.parse(action.value).userWalletAddress.address
+              }
               default:
                 return action.value;
             }
