@@ -281,6 +281,8 @@ export default {
 
   async created() {
     const usrStr = localStorage.getItem("user");
+    document.title = "Hyperfyre - Subscriptions";
+
     if (usrStr) {
       this.user = {
         ...JSON.parse(usrStr),

@@ -175,7 +175,7 @@ h5 span {
               @click.prevent="openWallet()"
             >
               <div  style="font-size: smaller; padding: 10px;">
-                Use Web Wallet
+                Click To Login
               </div>
             </a>
           </div>
@@ -227,6 +227,7 @@ export default {
   },
   created() {
     localStorage.clear();
+     document.title = "Hyperfyre - Login";
     // console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
     let websocketUrl = "ws://localhost:3003";
@@ -263,7 +264,8 @@ export default {
       // console.log(messageData);
       if (messageData.op == "init") {
         _this.isLoading = false;
-        // console.log(messageData.data);
+        /// Sending provider from here........
+        messageData.data['provider'] = 'google';
         _this.value = JSON.stringify(messageData.data);
       } else if (messageData.op == "end") {
         _this.connection.close();
