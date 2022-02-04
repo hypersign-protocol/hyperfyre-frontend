@@ -7,6 +7,7 @@ const EVENT={
     INVALID_PROJECT_SLUG:"Invalid Event slug"
 }
 const EVENTS = {
+    CHECK_ALL_TYPE:"PLease Check if any type left empty",
     CHECK_ALL_TITLE_EMPTY:"Check if any Title field you left empty",
     CHECK_ALL_VALUE_EMPTY:"Check if any Value field you left empty",
     REF_POINT:{
