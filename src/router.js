@@ -45,7 +45,7 @@ const router = new Router({
       name: "AdminLogin",
 
       component: () => import(/* webpackChunkName: "adminLogin" */ './views/admin/AdminLogin.vue'),
-      meta: (route) => ({ requiresAuth: true, title: 'Hyperfyre - Admin Login' ,tabbar: false })
+      meta: () => ({ requiresAuth: true, title: 'Hyperfyre - Admin Login' ,tabbar: false })
 
     },
     {
@@ -62,8 +62,8 @@ const router = new Router({
       },
     },
     {
-      path: "/admin/teammate",
-      name: "Teammate",
+      path: "/admin/teams",
+      name: "Teams",
       component: () =>
         import(
           /* webpackChunkName: "dashboard" */ "./views/admin/TeamMate.vue"
@@ -71,6 +71,7 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         admin: true,
+        title: 'Hyperfyre - Teams'
       },
     },
     {

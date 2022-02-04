@@ -34,11 +34,11 @@
 </style>
 <template>
   <div class="home marginLeft marginRight">
-    <h3 v-if="teammates.length" class="leftAlign">Hi {{ user.name }}, Your Teams and Admins</h3>
+    <!--h3 v-if="teammates.length" class="leftAlign">Hi {{ user.name }}, Your Teams and Admins</h3-->
      <div class="text-right">
-            <button @click="invite()" class="btn btn-warning button-theme"><i class="fas fa-plus text-black"></i> Invite Teammate </button>
+            <button @click="invite()" class="btn btn-warning button-theme"><i class="fas fa-plus text-black"></i> Invite </button>
           </div>
-    <h4 v-if="teammates.length" >These are your teammates</h4>
+    <h4 v-if="teammates.length" >Your Team</h4>
     <div class="row" style="margin-top: 2%;">
       <div class="col-md-12">
         <table  v-if="teammates.length" class="table table-bordered" style="background:#FFFF">
@@ -76,12 +76,28 @@
           <tbody>
             <tr  v-for="row in $accounts" :key="row._id">
               <th>
-                {{ row.adminName==="Self"?row.name:row.adminName }}
+                {{ row.adminName }}
               </th>
-              <td>{{ row.email}}</td>
-              <td v-if="row.status===`active`"><h5>  <b-badge style="text-transform:uppercase;" variant="success">{{  row.status}}</b-badge></h5></td>
+              <td>{{ row.email}}</td>             
              
-              <td @click="switchAccount(row)"><button style="text-transform:uppercase;" class="btn btn-danger button-theme btn-sm"><i class="fa fa-refresh"></i> Switch</button></td>
+              <td v-if="isAdmin(row.email)" >
+                <button :disabled=true style="text-transform:uppercase;" class="btn btn-success button-theme btn-sm ">
+                  <i class="fa fa-refresh">
+                  
+                  </i>
+                   Active
+                </button>
+              </td>
+
+              <td v-else @click="switchAccount(row)">
+                <button style="text-transform:uppercase;" class="btn btn-danger button-theme btn-sm">
+                  <i class="fa fa-refresh">
+                  
+                  </i>
+                   Switch
+                </button>
+              </td>
+
             </tr>
           </tbody>
         </table>
@@ -100,6 +116,7 @@ export default {
     return {
     teammates:[],
       user: {},
+      accessuser:{},
       appName: "",
       authToken: localStorage.getItem("authToken"),
     };
@@ -112,8 +129,21 @@ export default {
     this.user = {
       ...JSON.parse(usrStr),
     };
+     const aceesUser = localStorage.getItem("accessuser");
+    this.accessuser = {
+      ...JSON.parse(aceesUser),
+    };
   },
   methods: {
+    isAdmin(email){
+      if(this.accessuser.adminEmail!==undefined){
+        return this.accessuser.adminEmail===email;
+      }
+      else if(this.user.email===email){
+          return true;
+      }
+      return false;
+    },
   switchAccount(row){
     if(row.adminName==="Self"){
       localStorage.removeItem('authToken')
