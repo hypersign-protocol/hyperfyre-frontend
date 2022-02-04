@@ -1,19 +1,4 @@
 <style scoped>
-.paginationContainer {
-  display: flex;
-  list-style: none;
-
-  justify-content: center;
-}
-.paginationContainer >>> li {
-  padding: 2px 10px;
-  margin: 0 2px;
-  border-radius: 3px;
-}
-.paginationContainer >>> li.active {
-  background-color: #f1b319;
-  color: #fff;
-}
 .addmargin {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -50,10 +35,10 @@
 <template>
   <div class="home marginLeft marginRight">
     <h3 class="leftAlign">Welcome, {{ user.name }} !</h3>
-
      <div class="text-right">
             <button @click="invite()" class="btn btn-warning button-theme"><i class="fas fa-plus text-black"></i> Invite Teammate </button>
           </div>
+    <h4 >These are your teammates</h4>
     <div class="row" style="margin-top: 2%;">
       <div class="col-md-12">
         <table  v-if="teammates.length" class="table table-bordered" style="background:#FFFF">
@@ -77,19 +62,30 @@
             </tr>
           </tbody>
         </table>
+        <hr>
+        <h3 class="leftAlign">Your are part of these teams!</h3>
+         <table  v-if="teammates.length" class="table table-bordered" style="background:#FFFF">
+          <thead class="thead-light">
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Switch</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr  v-for="row in teammates" :key="row._id">
+              <th>
+                {{ row.name }}
+              </th>
+              <td>{{ row.email}}</td>
+              <td v-if="row.status===`active`"><h5>  <b-badge style="text-transform:uppercase;" variant="success">{{  row.status}}</b-badge></h5></td>
+              <td v-else><h5> <b-badge style="text-transform:uppercase;" variant="danger">{{  row.status}}</b-badge></h5></td>
+              <td @click="switchAccount(row._id)"><button style="text-transform:uppercase;" class="btn btn-danger button-theme btn-sm"><i class="fa fa-refresh"></i> Switch</button></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
-   <div class="d-flex mt-5">
-      <paginate
-        :pageCount="Math.ceil(this.teammates.length / this.perPage)"
-        :clickHandler="paginateChange"
-        :prevText="'Prev'"
-        v-model="paginateValue"
-        :nextText="'Next'"
-        :containerClass="'paginationContainer'"
-        :page-class="'paginationItem '"
-      >
-      </paginate>
     </div>
   </div>
 </template>
@@ -97,17 +93,11 @@
 
 <script>
 import notificationMixins from "../../mixins/notificationMixins";
-import Paginate from "vuejs-paginate";
 export default {
   name: "Teammate",
-  components: {Paginate},
+  components: {},
   data() {
     return {
-    paginateValue: 1,
-    perPage: 10,
-    currentPage: 2,
-    length:[],
-    pageSelectDropdown: [],
     teammates:[],
       user: {},
       appName: "",
@@ -124,6 +114,9 @@ export default {
     };
   },
   methods: {
+  switchAccount(id){
+    console.log(id);
+  },
   async getTeammates(){
       const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/`;
         const headers = {
