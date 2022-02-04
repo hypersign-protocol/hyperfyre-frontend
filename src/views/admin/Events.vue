@@ -712,7 +712,11 @@ export default {
               return (Messages.EVENTS.ACTIONS.SCORE_IS_NUM_ANY_LEFT)
           }
         }
-
+       for(let index=0; index < this.eventActionList.length; index++){
+         if(this.eventActionList[index].type===null){
+           return (Messages.EVENTS.CHECK_ALL_TYPE);
+         }
+       }
         const eventActionTitle=checkTitle(this.eventActionList, 'title');
 
         if(eventActionTitle.includes(false)){
