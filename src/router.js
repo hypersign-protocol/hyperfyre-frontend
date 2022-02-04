@@ -2,26 +2,31 @@ import Vue from "vue";
 import Router from "vue-router";
 import config from "./config";
 import fetch from "node-fetch";
-import eventBus from './eventBus';
-
-
+import eventBus from "./eventBus";
 
 Vue.use(Router);
 
 const router = new Router({
-  mode: "history",  
+  mode: "history",
   routes: [
     {
       path: "/form/:slug",
       name: "Event",
-      component: () => import(/* webpackChunkName: "investorLogin" */ './views/participant/Event.vue'),
-      meta: (route) => ({ requiresAuth: false, title: 'Hyperfyre - ' + route.params.slug, tabbar: false })
+      component: () =>
+        import(
+          /* webpackChunkName: "investorLogin" */ "./views/participant/Event.vue"
+        ),
+      meta: (route) => ({
+        requiresAuth: false,
+        title: "Hyperfyre - " + route.params.slug,
+        tabbar: false,
+      }),
     },
     {
       path: "/",
-      redirect: "/admin/login"
+      redirect: "/admin/login",
     },
-     {
+    {
       path: "/app",
       redirect: "/admin/login",
     },
@@ -32,18 +37,24 @@ const router = new Router({
     {
       path: "/invitation",
       name: "Invitation",
-      component: () => import(/* webpackChunkName: "adminLogin" */ './views/Invitation.vue'),
+      component: () =>
+        import(/* webpackChunkName: "adminLogin" */ "./views/Invitation.vue"),
     },
     {
       path: "/admin/login",
       name: "AdminLogin",
+
       component: () => import(/* webpackChunkName: "adminLogin" */ './views/admin/AdminLogin.vue'),
       meta: (route) => ({ requiresAuth: true, title: 'Hyperfyre - Admin Login' ,tabbar: false })
+
     },
     {
       path: "/admin/dashboard",
       name: "Dashboard",
-      component: () => import(/* webpackChunkName: "dashboard" */ './views/admin/Dashboard.vue') ,
+      component: () =>
+        import(
+          /* webpackChunkName: "dashboard" */ "./views/admin/Dashboard.vue"
+        ),
       meta: {
         requiresAuth: true,
         admin: true,
@@ -53,7 +64,10 @@ const router = new Router({
     {
       path: "/admin/teammate",
       name: "Teammate",
-      component: () => import(/* webpackChunkName: "dashboard" */ './views/admin/TeamMate.vue') ,
+      component: () =>
+        import(
+          /* webpackChunkName: "dashboard" */ "./views/admin/TeamMate.vue"
+        ),
       meta: {
         requiresAuth: true,
         admin: true,
@@ -62,7 +76,10 @@ const router = new Router({
     {
       path: "/admin/participants",
       name: "Participants",
-      component: () => import(/* webpackChunkName: "investors" */ './views/admin/Participants.vue') ,
+      component: () =>
+        import(
+          /* webpackChunkName: "investors" */ "./views/admin/Participants.vue"
+        ),
       meta: {
         requiresAuth: true,
         admin: true,
@@ -71,7 +88,8 @@ const router = new Router({
     {
       path: "/admin/events",
       name: "Events",
-      component: () => import(/* webpackChunkName: "project" */ './views/admin/Events.vue') ,
+      component: () =>
+        import(/* webpackChunkName: "project" */ "./views/admin/Events.vue"),
       meta: {
         requiresAuth: true,
         admin: true,
@@ -80,7 +98,10 @@ const router = new Router({
     {
       path: "/admin/subscription",
       name: "subscription",
-      component: () => import(/* webpackChunkName: "subscription" */ './views/admin/Subscription.vue') ,
+      component: () =>
+        import(
+          /* webpackChunkName: "subscription" */ "./views/admin/Subscription.vue"
+        ),
       meta: {
         requiresAuth: true,
         admin: true,
@@ -91,20 +112,19 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if(to.meta.title){
+  if (to.meta.title) {
     document.title = to.meta.title;
   }
-  
+
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     const authToken = localStorage.getItem("authToken");
-    
+
     if (authToken) {
       // console.log("Yes auth token");
       const url = `${config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
       fetch(url, {
         headers: {
           Authorization: `Bearer ${authToken}`,
-          
         },
         method: "POST",
       })
@@ -117,21 +137,29 @@ router.beforeEach((to, from, next) => {
             });
           } else {
             localStorage.setItem("user", JSON.stringify(json.message));
-          
-            Vue.prototype.$accounts=json.accounts
-            if (to.meta.admin && !json.message.isSubscribed && to.path != "/admin/subscription") {
-              eventBus.$emit('UpdateAdminNav', false);
+            Vue.prototype.$accounts = json.accounts;
+            if (json.accounts.length==0) {            
+            
+              localStorage.removeItem("accessToken")
+              localStorage.removeItem("accessuser")
+            }
+            if (
+              to.meta.admin &&
+              !json.message.isSubscribed &&
+              to.path != "/admin/subscription"
+            ) {
+              eventBus.$emit("UpdateAdminNav", false);
               next({
-                  path: '/admin/subscription',
-                  params: { nextUrl: to.fullPath }
-              })
+                path: "/admin/subscription",
+                params: { nextUrl: to.fullPath },
+              });
             } else {
-                next()
+              next();
             }
           }
         })
         .catch((e) => {
-          console.log(e)
+          console.log(e);
           next({
             path: to.meta.admin ? "/admin/login" : "/login",
             params: { nextUrl: to.fullPath },
@@ -139,11 +167,11 @@ router.beforeEach((to, from, next) => {
         });
     } else {
       next({
-        path: to.meta.admin ? "/admin/login" : (
-          !to.query["referrer"] ? 
-          `/login/${to.params["slug"]}` :
-          `/login/${to.params["slug"]}?referrer=${to.query["referrer"]}`
-        ),
+        path: to.meta.admin
+          ? "/admin/login"
+          : !to.query["referrer"]
+          ? `/login/${to.params["slug"]}`
+          : `/login/${to.params["slug"]}?referrer=${to.query["referrer"]}`,
         params: { nextUrl: to.fullPath },
       });
     }
