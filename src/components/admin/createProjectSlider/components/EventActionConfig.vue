@@ -500,12 +500,21 @@ export default {
           }else if(isEmpty(this.selected.title)){
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_NAME_NOT_EMPTY);
+          }else if(isValidURL(this.selected.title)){
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_NAME_NOT_URL);
           }else if(isEmpty(this.prizeDetails.winners)){
             isvalid = false
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.EMPTY_NO_OF_WINNERS)
+          }else if(isValidURL(this.prizeDetails.winners)){
+            isvalid = false
+            this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_NUMBER_OF_WINNER_NOT_URL)
           }else if(isEmpty(this.prizeDetails.prizeValue)){
             isvalid = false
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.EMPTY_PRIZE_PER_WINNER)
+          }else if(isValidURL(this.prizeDetails.prizeValue)){
+            isvalid = false
+            this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_PER_WINNER_NOT_URL)
           }
           break;
         default:
