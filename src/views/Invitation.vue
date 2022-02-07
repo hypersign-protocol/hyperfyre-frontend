@@ -10,13 +10,13 @@
             </div> -->
         </div>
         <div class="row content">
-            <div class="col-md-12" style="">
-                <h1 class="bold" style="color:#ffc107">HyperFyre</h1>
+            <div class="col-md-12" >
+                 <img class="align-center" style="margin-bottom: 20px" width="auto" height="auto" src="../assets/Hyperfyre_BY.svg"/>
                 <div  class="typewriter"> 
                 <h4>Viral Marketing Tools For Web3</h4>
                 </div>
                 <button  class="btn btn-default btn-lg" style="margin-top:2%">
-                    <a href="/app" target="_blank">Click here to Log in</a>
+                    <a href="/app" target="_blank">Click here to Login to admin dashboard</a>
                 </button>
             </div>
         </div>
@@ -38,7 +38,6 @@ export default {
     name:"Invitation",
 async mounted(){
     if(await this.$route.query.auth){
-        console.log(this.$route.query.auth);
         await this.invokeStatus();
     }
 },
@@ -58,17 +57,13 @@ methods:{
         }
         else{
             const msg = await resp.json();
-            console.log(msg.message);
            return this.$swal.fire({
             position: 'center',
             icon: 'success',
             title: `${msg.message}`,
             showConfirmButton: false,
-            timer: 2000
-})
-            // return this.notifySuccess(msg.message);
-
-
+            timer: 5000
+            })
         }
     }
 },
