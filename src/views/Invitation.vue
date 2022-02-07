@@ -16,7 +16,7 @@
                 <h4>Viral Marketing Tools For Web3</h4>
                 </div>
                 <button  class="btn btn-default btn-lg" style="margin-top:2%">
-                    <a href="/app" target="_blank">Click here to Login</a>
+                    <a href="/app" target="_blank">Click here to Log in</a>
                 </button>
             </div>
         </div>

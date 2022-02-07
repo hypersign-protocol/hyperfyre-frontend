@@ -63,7 +63,7 @@
           </tbody>
         </table>
         <hr v-if="$accounts.length">
-        <h3 v-if="$accounts.length" class="leftAlign">You are part of these teams!</h3>
+        <h3 v-if="$accounts.length" class="leftAlign">Your are part of these teams!</h3>
          <table  v-if="$accounts.length" class="table table-bordered" style="background:#FFFF">
           <thead class="thead-light">
             <tr>
@@ -219,6 +219,7 @@ export default {
             return this.notifyErr(json);
           }else{
            this.notifySuccess("sent Successfully");
+           console.log(json);
            await this.getTeammates();
            }
         }else{
@@ -230,6 +231,7 @@ export default {
     },
   async remove(id){
       if(id){
+        console.log(id);
   const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/delete`;
         let headers = {
           "Content-Type": "application/json",
@@ -248,6 +250,7 @@ export default {
             return this.notifyErr(json);
           }else{
            this.notifySuccess("Removed Successfully");
+           console.log(json);
            await this.getTeammates();
            }
         }else{
