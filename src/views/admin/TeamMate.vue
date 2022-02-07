@@ -37,7 +37,7 @@
     <!--h3 v-if="teammates.length" class="leftAlign">Hi {{ user.name }}, Your Teams and Admins</h3-->
     <div class="text-right">
       <button @click="invite()" class="btn btn-warning button-theme">
-        <i class="fas fa-plus text-black"></i> Invite
+         Invite <i class="fas fa-plus text-black"></i>
       </button>
     </div>
     <h3 v-if="teammates.length">Your Team</h3>
@@ -53,7 +53,7 @@
               <th>Name</th>
               <th>Email</th>
               <th>Status</th>
-              <th>Remove</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -67,13 +67,15 @@
                   <b-badge
                     style="text-transform: uppercase"
                     variant="success"
+                    title="Teammate has accepted the invitation"
                     >{{ row.status }}</b-badge
                   >
                 </h5>
               </td>
               <td v-else>
                 <h5>
-                  <b-badge style="text-transform: uppercase" variant="danger">{{
+                  <b-badge style="text-transform: uppercase" variant="danger"
+                  title="Teammate has not yet accepted the invitation">{{
                     row.status
                   }}</b-badge>
                 </h5>
@@ -82,8 +84,9 @@
                 <button
                   style="text-transform: uppercase"
                   class="btn btn-danger button-theme btn-sm"
+                  title="Click to remove the teammate"
                 >
-                  <i class="fas fa-trash"></i> Remove
+                  <i class="fas fa-trash"></i>
                 </button>
               </td>
             </tr>
@@ -99,7 +102,7 @@
               <th>Admin Name</th>
               <th>Admin Email</th>
             
-              <th>Login</th>
+              <th>Login As</th>
             </tr>
           </thead>
           <tbody>
@@ -115,7 +118,6 @@
                   style="text-transform: uppercase"
                   class="btn btn-success button-theme btn-sm"
                 >
-                  <i class="fa fa-refresh"> </i>
                   Active
                 </button>
               </td>
@@ -124,8 +126,8 @@
                 <button
                   style="text-transform: uppercase"
                   class="btn btn-danger button-theme btn-sm"
+                  title="Click to switch to this account"
                 >
-                  <i class="fa fa-refresh"> </i>
                   Switch
                 </button>
               </td>
@@ -233,7 +235,7 @@ export default {
           title: "Invite Form",
           html: `<input type="email" id="email" class="swal2-input" placeholder="Email">
     <input type="name" id="name" class="swal2-input" placeholder="Name">`,
-          confirmButtonText: '<span style="color:black">Invite</span>',
+          confirmButtonText: '<span style="color:black">Send Invitation</span>',
           confirmButtonColor: "#f1b319",
           focusConfirm: false,
           showCloseButton: true,
@@ -243,7 +245,7 @@ export default {
             this.name = this.$swal.getPopup().querySelector("#name").value;
             if (!this.email || !this.isEmail(this.email)|| !this.name || isValidURL(this.name)) {
               this.$swal.showValidationMessage(
-                `Please enter  valid email and name`
+                `Please enter valid email and name`
               );
             }
             return { name: this.name, email: this.email };
@@ -269,7 +271,7 @@ export default {
               if (!resp.ok) {
                 return this.notifyErr(json);
               } else {
-                this.notifySuccess("sent Successfully");
+                this.notifySuccess("Invitation Sent");
                 await this.getTeammates();
               }
             } else {
@@ -280,7 +282,6 @@ export default {
     },
     async remove(id) {
       if (id) {
-        console.log(id);
         const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/delete`;
         let headers = {
           "Content-Type": "application/json",
@@ -298,12 +299,11 @@ export default {
           if (!resp.ok) {
             return this.notifyErr(json);
           } else {
-            this.notifySuccess("Removed Successfully");
-            console.log(json);
+            this.notifySuccess("Removed teammate Successfully");
             await this.getTeammates();
           }
         } else {
-          throw new Error("Error while Removing ");
+          throw new Error("Error while Removing");
         }
       }
     },

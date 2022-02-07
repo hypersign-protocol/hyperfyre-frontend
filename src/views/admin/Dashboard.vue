@@ -35,8 +35,8 @@
 </style>
 <template>
    <div class="home  marginLeft marginRight">
-     <h3 v-if="accessuser.adminName && accessuser.adminName!=='Self'"  class="leftAlign">Welcome, {{user.name}}  You have logged in as  {{accessuser.adminName}} ! </h3>
-      <h3 v-else class="leftAlign">Welcome, {{user.name}} </h3>
+     <h3 v-if="accessuser.adminName && accessuser.adminName!=='Self'"  class="leftAlign">Welcome {{user.name}},  you have logged in as  {{accessuser.adminName}} ! </h3>
+      <h3 v-else class="leftAlign">Welcome {{user.name}} </h3>
      <div  class="row">
         <div class="col-md-6">
             <Profile/>
