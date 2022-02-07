@@ -51,9 +51,16 @@ methods:{
           headers,
           method: "GET",
         });
-    
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
+        if(resp.status===400){
+            const errorMsg=await resp.json();
+           return this.$swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `${errorMsg}`,
+            showConfirmButton: false,
+            timer: 5000
+            })
+          
         }
         else{
             const msg = await resp.json();
