@@ -219,7 +219,6 @@ export default {
             return this.notifyErr(json);
           }else{
            this.notifySuccess("sent Successfully");
-           console.log(json);
            await this.getTeammates();
            }
         }else{
@@ -231,7 +230,6 @@ export default {
     },
   async remove(id){
       if(id){
-        console.log(id);
   const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/delete`;
         let headers = {
           "Content-Type": "application/json",
@@ -250,7 +248,6 @@ export default {
             return this.notifyErr(json);
           }else{
            this.notifySuccess("Removed Successfully");
-           console.log(json);
            await this.getTeammates();
            }
         }else{
