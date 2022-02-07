@@ -121,7 +121,7 @@ h5 span {
 <template>
   <!-- <div class="row" style="margin-left: 35%;"> -->
   <div style="justify-content: center; padding-top:3%">
-    <img class="align-center" style="margin-bottom: 20px" height="60px" src="../../assets/Hyperfyre_BY.svg"/>
+    <a href="https://fyre.hypersign.id/" target="_blank"><img class="align-center" style="margin-bottom: 20px" height="60px" src="../../assets/Hyperfyre_BY.svg"/></a>
     <b-card no-body class="loginContent event-card ">
       <loading
         :active.sync="isLoading"
