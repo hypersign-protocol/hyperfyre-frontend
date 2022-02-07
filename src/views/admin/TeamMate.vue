@@ -63,7 +63,7 @@
           </tbody>
         </table>
         <hr v-if="$accounts.length">
-        <h3 v-if="$accounts.length" class="leftAlign">Your are part of these teams!</h3>
+        <h3 v-if="$accounts.length" class="leftAlign">You are part of these teams!</h3>
          <table  v-if="$accounts.length" class="table table-bordered" style="background:#FFFF">
           <thead class="thead-light">
             <tr>
