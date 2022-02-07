@@ -22,6 +22,7 @@
     "js-file-download": "^0.4.12",
     "marked": "^3.0.8",
     "node-fetch": "^2.6.0",
+    "simple-vue-validator": "^0.16.0",
     "v-markdown-editor": "^1.2.6",
     "valid-url": "^1.0.9",
     "vue": "^2.5.16",
