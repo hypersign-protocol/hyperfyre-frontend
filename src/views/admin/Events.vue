@@ -160,6 +160,7 @@ i {
               :selectedSocialMedia="selectedSocialMedia"
               :socialOptions="socialOptions"
               :actionList="project.actions"
+              :tagList="project.tags"
               @updateEventActions="AddUpdateDelEventActions"
              />
           </div>
@@ -323,11 +324,12 @@ export default {
         social: {},
         projectStatus: true,
         actions: [],
+        tags:[],
         refereePoint: 10,
         referralPoint: 5
       }, 
       projects: [],   
-      
+      tagArray:[],
       selectedSocialMedia: null,
       addedSocialMedias: [],
       eventActionList: [],
@@ -438,7 +440,40 @@ export default {
     },
     AddUpdateDelEventActions(event){
       const  { type, data } = event;
-      if(type){
+      if(type && data.type.includes("_TAG")){
+        console.log(data);
+        switch(type){
+          case "ADD": {
+            this.tagArray.push(data);            
+            break;
+          }
+
+          case "UPDATE": {
+            const { id, _id } =  data;          
+            this.tagArray.map(x => {
+              if((x._id === _id) || x.id === id){
+                return data;
+              }
+            })
+            break;
+          }
+
+          case "DELETE": {
+            const actionIndex = this.tagArray.findIndex(x => x._id === data)
+            if(actionIndex > -1){
+              this.tagArray[actionIndex]["isDeleted"] = true;
+            }else{
+              const actionIndex = this.tagArray.findIndex(x => x.id === data)
+              if(actionIndex > -1){
+                this.tagArray.splice(actionIndex, 1)
+              }
+            }
+            break;
+          }
+        }
+      }
+        else if(type){
+        console.log(data);
         switch(type){
           case "ADD": {
             this.eventActionList.push(data);            
@@ -502,6 +537,7 @@ export default {
       this.isProjectEditing = false;
       this.project = {}
       this.eventActionList = this.eventActionList
+      this.tagArray = this.tagArray
       this.blockchainType = "ETHEREUM";
       this.contractType = "ERC20";
       this.fontColor = this.fontColorDefault;
@@ -601,8 +637,8 @@ export default {
       this.themeColor = project.themeColor!==undefined?project.themeColor:this.themeColor
       this.fontColor = project.fontColor!==undefined?project.fontColor:this.fontColor
       this.projectStatus = project.projectStatus
-     // console.log(project.actions)
       this.eventActionList = project.actions
+      this.tagArray = project.tags
     
     
       this.$root.$emit('bv::toggle::collapse', 'sidebar-right') 
@@ -654,6 +690,7 @@ export default {
         this.project.blockchainType = this.blockchainType
         this.project.contractType = this.contractType
         this.project.actions = this.eventActionList
+        this.project.tags = this.tagArray
         this.project.refereePoint=this.project.refereePoint.toString()
         this.project.referralPoint=this.project.referralPoint.toString()
     
@@ -716,12 +753,18 @@ export default {
           }
         }
        for(let index=0; index < this.eventActionList.length; index++){
-         if(this.eventActionList[index].type===null){
+         if(this.eventActionList[index].type===null && this.tagArray[index].type===null){
            return (Messages.EVENTS.CHECK_ALL_TYPE);
          }
        }
+      //  console.log(this.eventActionList);
+      //   const eventActionListNotTitle = this.eventActionList.filter((x) =>{
+      //    x.type.includes("_TAG")
+      //    console.log(x.type);
+      //   })
+        console.log(this.eventActionList);
+        console.log(this.tagArray);
         const eventActionTitle=checkTitle(this.eventActionList, 'title');
-
         if(eventActionTitle.includes(false)){
           return (Messages.EVENTS.CHECK_ALL_TITLE_EMPTY);
         }
@@ -800,9 +843,11 @@ export default {
         social: {},
         projectStatus: true,
         actions: [],
+        tags:[],
         refereePoint: 10,
         referralPoint: 5
       }, 
+      this.tagArray = []
       this.eventActionList = []
         this.selectedSocialMedia = null,
         this.addedSocialMedias = [],

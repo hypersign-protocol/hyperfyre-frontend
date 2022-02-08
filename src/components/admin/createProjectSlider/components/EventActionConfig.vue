@@ -17,6 +17,7 @@
               <i style="color: gray" v-if="eventAction.type.includes('INPUT_HYPERLINK')"  class="fa fa-link"></i>
               <i style="color: gray" v-if="eventAction.type.includes('INFO_TEXT')"  class="fa fa-info-circle"></i>
               <i style="color: gray" v-if="eventAction.type.includes('PRIZE_')" class="fas fa-gift"></i>
+              <i style="color: gray" v-if="eventAction.type.includes('_TAG')" class="fa fa-tag"></i>
               <img style="padding-right: 5px" src="../../../../assets/external-link.svg"  v-if="eventAction.type.includes('HYPERLINK_URL')"   height="22px" />
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_ETH')"   height="22px" />
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('ETHEREUM_ERC20')"   height="22px" />
@@ -30,7 +31,8 @@
               <img style="padding-right: 5px;" src="../../../../assets/avalanche.png"  v-if="eventAction.type.includes('BLOCKCHAIN_AVAX')"   height="20px" />
               <img style="padding-right: 5px;" src="../../../../assets/Reef.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_REEF')"   height="20px" />
             </span>
-            <span >{{ truncate1(eventAction.title, 8) }}</span>
+            <span v-if="eventActionType=='TAGS'" >{{ CapitaliseString(eventAction.type) }}</span>
+            <span v-else>{{ truncate1(eventAction.title, 8) }}</span>
             <span style="color: gray;padding-left: 5px"><i style=""  class="fas fa-minus-circle"></i></span>
         </div>
         </div>
@@ -88,7 +90,7 @@
           </div>  
         </div>
 
-        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType!='PRIZE'">
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType!='PRIZE' && eventActionType!='TAGS'">
           <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="title" class="col-form-label">Title<span style="color: red">*</span>: </label>
           </div>
@@ -254,7 +256,7 @@ export default {
   },
   computed:{
     noSocialhandle(){
-      if(this.eventActionType !='CUSTOM' && this.eventActionType !='BLOCKCHAIN' && this.eventActionType !='SMARTCONTRACT' && this.selected.type!='TWITTER_RETWEET' && this.selected.type!='DISCORD_JOIN' && this.eventActionType !='PRIZE')
+      if(this.eventActionType !='CUSTOM' && this.eventActionType !='BLOCKCHAIN' && this.eventActionType !='SMARTCONTRACT' && this.selected.type!='TWITTER_RETWEET' && this.selected.type!='DISCORD_JOIN' && this.eventActionType !='PRIZE' && this.eventActionType !='TAGS')
       return true
     },
     url(){
@@ -263,7 +265,7 @@ export default {
     },
    
     placeH(){
-      if(this.eventActionType != 'SOCIAL'  && this.selected.type !='HYPERLINK_URL' && this.selected.type !='INFO_TEXT' && this.eventActionType !='PRIZE' && this.selected.type!='REEF_ERC20')
+      if(this.eventActionType != 'SOCIAL'  && this.selected.type !='HYPERLINK_URL' && this.selected.type !='INFO_TEXT' && this.eventActionType !='PRIZE' && this.selected.type!='REEF_ERC20' && this.eventActionType != 'TAGS')
       return true
     },
     info(){
@@ -272,7 +274,7 @@ export default {
       }
     },
     noScore(){
-      if((this.eventActionType === 'CUSTOM' && this.selected.type ==='INFO_TEXT') || this.eventActionType ==='PRIZE'){
+      if((this.eventActionType === 'CUSTOM' && this.selected.type ==='INFO_TEXT') || this.eventActionType ==='PRIZE' || this.eventActionType === 'TAGS'){
         return true
       }
     },
@@ -517,6 +519,12 @@ export default {
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_PER_WINNER_NOT_URL)
           }
           break;
+          case "TAGS":
+          if(this.selected.type===null){
+            isvalid= false;
+            this.notifyErr("Please select tag")
+          }
+          break;
         default:
           this.notifyErr(Messages.EVENTS.ACTIONS.INVALID_EVENT_TYPE)
       }
@@ -538,6 +546,10 @@ export default {
         if(this.eventActionType ==='PRIZE'){
           this.selected.value = JSON.stringify(this.prizeDetails);
           console.log(this.selected.value);
+        }
+         if(this.eventActionType ==='TAGS'){
+          this.selected.type = this.selected.type;
+          console.log(this.selected.type);
         }
         this.selected["id"] = this.eventActionType + "_" +  this.eventActionList.length;
         this.eventActionList.push(this.selected);      
@@ -572,6 +584,10 @@ export default {
         if(this.eventActionType ==='PRIZE'){
           this.selected.value = JSON.stringify(this.prizeDetails);
         }
+        if(this.eventActionType ==='TAGS'){
+          this.selected.type = this.selected.type;
+          console.log(this.selected.type);
+        }
         this.eventActionList[this.currentSelectedId] = this.selected
         this.$emit("updateEventActions", {
           type: "UPDATE",
@@ -590,6 +606,7 @@ export default {
       this.currentSelectedId = idx;
 
       this.selected = updateData;
+      console.log(this.selected);
       if(this.eventActionType === 'SMARTCONTRACT'){
         this.contract = { ...JSON.parse(this.selected.value) } 
       }

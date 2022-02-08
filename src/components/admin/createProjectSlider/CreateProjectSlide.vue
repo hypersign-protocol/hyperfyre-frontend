@@ -251,6 +251,37 @@
             </b-collapse>
           </b-card>
           <!--  -->
+  <!-- Tags Implementation -->
+         <b-card no-body class="mb-1">
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-8
+                variant="info"
+                class="bg-transparent border-0 text-left text-primary"
+                ><i class="fa fa-tag"></i>  Tags Configuration
+              </b-button>
+            </b-card-header>
+            <b-collapse
+              id="accordion-8"
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body>
+                <eventAction-config
+                  v-on="$listeners"
+                  :eventActionList="tagsDetails"
+                  eventActionType="TAGS"
+                  :options="options.tags"
+                />
+              </b-card-body>
+            </b-collapse>
+          </b-card>
+  <!--  -->
         </div>
         <button
           class="btn btn-primary mt-3 button-theme"
@@ -316,6 +347,9 @@ export default {
     isProjectEditing: {
       type: Boolean,
     },
+    tagList:{
+      type: Array,
+    }
   },
 
   computed: {
@@ -373,6 +407,15 @@ export default {
         return [];
       }
     },
+    tagsDetails: function() {
+      if (this.tagList && this.tagList.length > 0) {
+        return this.tagList.filter(
+          (x) => x.type.indexOf("_TAG") > -1 
+        );
+      } else {
+        return [];
+      }
+    },
   },
   
   data() {
@@ -418,6 +461,19 @@ export default {
         prizeDetails:[
           { text: "Select Prize Type", value:null},
           { text: "Prize Card", value:"PRIZE_CARD"},
+        ],
+        tags:[
+          { text: "Select Tags", value:null},
+          { text: "Play 2 Earn", value:"PLAY2_EARN_TAG"},
+          { text: "Air Drop", value:"AIR_DROP_TAG"},
+          { text: "Ethereum", value:"ETHEREUM_TAG"},
+          { text: "Polygon", value:"POLYGON_TAG"},
+          { text: "Avalanche", value:"AVALANCHE_TAG"},
+          { text: "Harmony", value:"HARMONY_TAG"},
+          { text: "Decentralized Identity", value:"DID_TAG"},
+          { text: "NFT", value:"NFT_TAG"},
+          { text: "Meta Verse", value:"METAVERSE_TAG"},
+          { text: "DEFI", value:"DEFI_TAG"},
         ]
       },
     };
