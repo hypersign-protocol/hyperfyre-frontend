@@ -43,7 +43,7 @@
         <div class="col-md-6">
             <Charts/>
         </div>
-     </div>    
+     </div> 
   </div>
 </template>
 
