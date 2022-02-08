@@ -276,7 +276,7 @@ export default {
         { text: "Polygon", value: "MATIC", disabled: false },
         { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
         {
-          text: "Binance Smart Chain (Coming Soon..)",
+          text: "Binance Smart Chain",
           value: "BSC",
           disabled: true,
         },
@@ -290,7 +290,7 @@ export default {
             { text: "Polygon", value: "MATIC", disabled: false },
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
             {
-              text: "Binance Smart Chain (Coming Soon..)",
+              text: "Binance Smart Chain",
               value: "BSC",
               disabled: true,
             },
@@ -305,7 +305,7 @@ export default {
             { text: "Polygon", value: "MATIC", disabled: false },
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
             {
-              text: "Binance Smart Chain (Coming Soon..)",
+              text: "Binance Smart Chain",
               value: "BSC",
               disabled: true,
             },
@@ -318,7 +318,7 @@ export default {
             { text: "Polygon", value: "MATIC", disabled: true },
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
             {
-              text: "Binance Smart Chain (Coming Soon..)",
+              text: "Binance Smart Chain",
               value: "BSC",
               disabled: true,
             },
