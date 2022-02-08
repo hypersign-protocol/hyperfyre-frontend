@@ -327,8 +327,8 @@ export default {
         }
         if (__arg == "BNB") {
           this.options.network = [
-            { text: "Ethereum", value: "ETH", disabled: false },
-            { text: "Polygon", value: "MATIC", disabled: false },
+            { text: "Ethereum", value: "ETH", disabled: true },
+            { text: "Polygon", value: "MATIC", disabled: true },
             { text: "Binance Smart Chain ", value: "BSC", disabled: false },
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
           ];
