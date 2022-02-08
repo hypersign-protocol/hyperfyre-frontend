@@ -536,6 +536,14 @@ export default {
 
         const json = await resp.json();
         this.projects = json;
+        localStorage.removeItem("userProjects")
+        localStorage.setItem(
+          "userProjects",
+          JSON.stringify({
+            projects: this.projects,
+            count: this.projects.length,
+          })
+        );
         this.projectsToShow = this.projects.slice(0, this.perPage);
         this.projects.map((x) => {
           x["whitelisting_link"] =
