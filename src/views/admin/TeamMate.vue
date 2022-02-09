@@ -34,7 +34,7 @@
 </style>
 <template>
   <div class="home marginLeft marginRight">
-    <!--h3 v-if="teammates.length" class="leftAlign">Hi {{ user.name }}, Your Teams and Admins</h3-->
+    <h3 v-if="!teammates.length" class="leftAlign">No teams found, click on 'Invite' button to add team</h3>
     <div class="text-right">
       <button @click="invite()" class="btn btn-warning button-theme">
          Invite <i class="fas fa-plus text-black"></i>
