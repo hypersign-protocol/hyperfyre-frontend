@@ -230,7 +230,7 @@ margin-left: 2px;
 </style>
 <script>
 import notificationMixins from '../../../../mixins/notificationMixins';
-import {isEmpty,isValidURL, truncate,isdiscordLink,isContractValid,isretweetUrl} from '../../../../mixins/fieldValidationMixin';
+import {isEmpty,isValidURL, truncate,isdiscordLink,isContractValid,isretweetUrl,isNum} from '../../../../mixins/fieldValidationMixin';
 import 'v-markdown-editor/dist/v-markdown-editor.css';
 import Messages from "../../../../utils/messages/admin/en"
 import Vue from 'vue'
@@ -254,41 +254,69 @@ export default {
   },
   computed:{
     noSocialhandle(){
-      if(this.eventActionType !='CUSTOM' && this.eventActionType !='BLOCKCHAIN' && this.eventActionType !='SMARTCONTRACT' && this.selected.type!='TWITTER_RETWEET' && this.selected.type!='DISCORD_JOIN' && this.eventActionType !='PRIZE')
-      return true
+      if(this.eventActionType !='CUSTOM' && this.eventActionType !='BLOCKCHAIN' && this.eventActionType !='SMARTCONTRACT' && this.selected.type!='TWITTER_RETWEET' && this.selected.type!='DISCORD_JOIN' && this.eventActionType !='PRIZE'){
+      return true;
+      }
+      else{
+        return false;
+      }
     },
     url(){
-      if(this.eventActionType === 'CUSTOM' && this.selected.type ==='HYPERLINK_URL')
-      return true
+      if(this.eventActionType === 'CUSTOM' && this.selected.type ==='HYPERLINK_URL'){
+      return true;
+      }
+      else{
+        return false;
+      }
     },
    
     placeH(){
       if(this.eventActionType != 'SOCIAL'  && this.selected.type !='HYPERLINK_URL' && this.selected.type !='INFO_TEXT' && this.eventActionType !='PRIZE' && this.selected.type!='REEF_ERC20')
-      return true
+      {
+        return true;
+      }
+      else{
+        return false;
+      }
     },
     info(){
       if(this.eventActionType === 'CUSTOM' && this.selected.type ==='INFO_TEXT'){
-      return true
+      return true;
+      }
+      else{
+        return false;
       }
     },
     noScore(){
       if((this.eventActionType === 'CUSTOM' && this.selected.type ==='INFO_TEXT') || this.eventActionType ==='PRIZE'){
-        return true
+        return true;
+      }
+      else{
+        return false;
       }
     },
     showRetweet(){
       if(this.eventActionType ==='SOCIAL' &&  this.selected.type==='TWITTER_RETWEET'){
-        return true
+        return true;
+      }
+      else{
+        return false;
       }
     },
     showInvitelink(){
       if(this.eventActionType ==='SOCIAL' &&  this.selected.type==='DISCORD_JOIN'){
-        return true
+        return true;
+      }
+      else{
+        return false;
       }
     },
     prize(){
       if(this.eventActionType ==='PRIZE'){
-        return true
+        return true;
+      }
+      else{
+        return false;
       }
     }
   },
@@ -506,9 +534,9 @@ export default {
           }else if(isEmpty(this.prizeDetails.winners)){
             isvalid = false
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.EMPTY_NO_OF_WINNERS)
-          }else if(isValidURL(this.prizeDetails.winners)){
+          }else if(isValidURL(this.prizeDetails.winners) || !isNum(this.prizeDetails.winners)){
             isvalid = false
-            this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_NUMBER_OF_WINNER_NOT_URL)
+            this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_NUMBER_OF_WINNER)
           }else if(isEmpty(this.prizeDetails.prizeValue)){
             isvalid = false
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.EMPTY_PRIZE_PER_WINNER)
@@ -532,12 +560,10 @@ export default {
       let isvalid = this.handleEventActionValidation()
       if(isvalid) {
         if(this.eventActionType === 'SMARTCONTRACT'){
-          this.selected.value = JSON.stringify(this.contract); 
-          console.log(this.selected.value);
+          this.selected.value = JSON.stringify(this.contract);
         }
         if(this.eventActionType ==='PRIZE'){
           this.selected.value = JSON.stringify(this.prizeDetails);
-          console.log(this.selected.value);
         }
         this.selected["id"] = this.eventActionType + "_" +  this.eventActionList.length;
         this.eventActionList.push(this.selected);      
