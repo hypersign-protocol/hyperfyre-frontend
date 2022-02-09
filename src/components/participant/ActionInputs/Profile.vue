@@ -27,15 +27,9 @@
             <div class="text text-left">{{ user.email }}</div>
           </b-col>
           <b-col cols="12" sm="5" md="5">
-            <div class="title text-left mb-1">DID</div>
-            <div class="text text-left">{{ user.id }}</div>
-          </b-col>
-        </b-row>
-        <b-row v-if="referalLink">
-          <b-col cols="12" sm="12" md="12">
             <div class="title text-left mb-1">Your Referral Link</div>
             <div class="text text-left">
-              {{ referalLink }}
+              {{ truncate1(referalLink,25) }}
               <span @click="copy" class="copy"
                 ><i class="far fa-copy"></i
               ></span>
@@ -58,6 +52,7 @@
 <script>
 import notificationMixin from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
+import {truncate} from "../../../mixins/fieldValidationMixin";
 export default {
   name: "Profile",
   props: {
@@ -96,6 +91,9 @@ export default {
           });
       }
     },
+    truncate1(str, number){
+      return truncate(str, number)
+    }
   },
 };
 </script>

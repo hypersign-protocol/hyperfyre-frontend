@@ -299,7 +299,6 @@ i {
 import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import Datepicker from 'vuejs-datetimepicker'
 import Paginate from "vuejs-paginate";
 import notificationMixins from '../../mixins/notificationMixins';
 import apiClientMixin from '../../mixins/apiClientMixin';
@@ -309,7 +308,7 @@ import dayjs from "dayjs";
 import Messages from "../../utils/messages/admin/en";
 export default {
   name: "Investor",
-  components: { Loading, Datepicker, Paginate, CreateProjectSlide },
+  components: { Loading,  Paginate, CreateProjectSlide },
   
   data() {
     return {
@@ -390,6 +389,7 @@ export default {
       active: 0,
       host: location.hostname,
       authToken: localStorage.getItem("authToken"),
+      accessToken:localStorage.getItem("accessToken"),
       isLoading: false,
       fullPage: true,
       user: {},
@@ -402,6 +402,7 @@ export default {
     //this.user = null; JSON.parse(usrStr);
 
     const usrStr = localStorage.getItem("user");
+    
     this.user = {
       ...JSON.parse(usrStr),
     };
@@ -517,11 +518,12 @@ export default {
         this.isLoading = true;
         if (!this.user.id) throw new Error("No project found");
        
-
+          
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.user.id}`;
 
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
+          AccessToken:`Bearer ${this.accessToken}`
         };
         const resp = await fetch(url, {
           headers,
@@ -534,6 +536,14 @@ export default {
 
         const json = await resp.json();
         this.projects = json;
+        localStorage.removeItem("userProjects")
+        localStorage.setItem(
+          "userProjects",
+          JSON.stringify({
+            projects: this.projects,
+            count: this.projects.length,
+          })
+        );
         this.projectsToShow = this.projects.slice(0, this.perPage);
         this.projects.map((x) => {
           x["whitelisting_link"] =
@@ -635,6 +645,7 @@ export default {
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
+          AccessToken:`Bearer ${this.accessToken}`
         };
 
         let method = "POST";
@@ -712,14 +723,20 @@ export default {
               return (Messages.EVENTS.ACTIONS.SCORE_IS_NUM_ANY_LEFT)
           }
         }
-
+       for(let index=0; index < this.eventActionList.length; index++){
+         if(this.eventActionList[index].type===null){
+           return (Messages.EVENTS.CHECK_ALL_TYPE);
+         }
+       }
         const eventActionTitle=checkTitle(this.eventActionList, 'title');
 
         if(eventActionTitle.includes(false)){
           return (Messages.EVENTS.CHECK_ALL_TITLE_EMPTY);
         }
         let eventActionValue= this.eventActionList;
-        eventActionValue= eventActionValue.filter((x) => (x.type!=="INPUT_TEXT") && (x.type!=="INPUT_NUMBER") && (x.type!=="INPUT_DATE") && (x.type!=="INPUT_HYPERLINK") && (x.type!=="BLOCKCHAIN_ETH") &&(x.type!=="BLOCKCHAIN_MATIC")&&(x.type!=="BLOCKCHAIN_BSC") &&(x.type!=="BLOCKCHAIN_ONE") &&(x.type!=="BLOCKCHAIN_AVAX") &&(x.type!=="BLOCKCHAIN_REEF") &&(x.type!=="BLOCKCHAIN_TEZ"))
+        eventActionValue= eventActionValue.filter((x) => (x.type!=="INPUT_TEXT") && (x.type!=="INPUT_NUMBER") && (x.type!=="INPUT_DATE") && (x.type!=="INPUT_HYPERLINK") 
+        && (x.type!=="BLOCKCHAIN_ETH") &&(x.type!=="BLOCKCHAIN_MATIC")&&(x.type!=="BLOCKCHAIN_BSC") &&(x.type!=="BLOCKCHAIN_ONE") &&(x.type!=="BLOCKCHAIN_AVAX") 
+        &&(x.type!=="BLOCKCHAIN_REEF") &&(x.type!=="BLOCKCHAIN_TEZ") &&(x.type!=="PRIZE_CARD"))
         const filteredValueList=checkValue(eventActionValue, 'value');
         if(filteredValueList.includes(false)){
           return (Messages.EVENTS.CHECK_ALL_VALUE_EMPTY);

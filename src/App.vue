@@ -8,11 +8,12 @@
             : 'showNavbar notCollapsed'
           : 'hideNavbar',
       ]">
-      <sidebar-menu class="sidebar-wrapper" @toggle-collapse="onToggleCollapse" @item-click="onItemClick" :theme="'white-theme'" width="220px" 
+      <sidebar-menu class="sidebar-wrapper" @toggle-collapse="onToggleCollapse" :collapsed="isSidebarCollapsed" @item-click="onItemClick" :theme="'white-theme'" width="220px" 
       :menu="isSubscribed? menu : unsubsSubscribedMenu" v-if="showNavbar">
         <span slot="header" style="background:#363740">
           <div class="ml-1 mt-3 mb-2" style="padding-left:1px; text-align:center; margin-right: 2.25rem !important;" > 
-          <a href="/admin/dashboard"><img :src="require('./assets/logo.png')" alt="logo" width="150px" /></a>
+          <a  v-if="!isSidebarCollapsed" href="/admin/dashboard"><img :src="require('./assets/logo.png')" alt="logo" width="175vw" /></a>
+          <a v-if="isSidebarCollapsed" href="/admin/dashboard"><img :src="require('./assets/favicon.png')" alt="logo" width="35vw" /></a>
           </div>
           <!-- <p class="header-text">{{ $config.app.name }}</p> -->
           <hr class="rule" />
@@ -40,7 +41,7 @@ export default {
   data() {
     return {
       authToken: localStorage.getItem("authToken"),
-      isSidebarCollapsed: false,
+      isSidebarCollapsed: true,
       authRoutes: ["register", "PKIIdLogin"],
       showNavbar: false,
       menu: [{
@@ -48,6 +49,7 @@ export default {
           title: "Dashboard",
           icon: "fas fa-tachometer-alt",
         },
+        
         {
           href: "/admin/events",
           title: "Events",
@@ -64,6 +66,13 @@ export default {
           title: "Subscriptions",
           icon: "fas fa-receipt",
           exactPath: true,
+        },
+        {
+          href: "/admin/teams",
+          title: "Teams",
+          icon: "fas fa-user-plus",
+          exactPath: true,
+          
         },
         {
           href: "/admin/login",
@@ -95,6 +104,7 @@ export default {
   },
 
   mounted() {
+    
     eventBus.$on('UpdateAdminNav',   (isSubscribed) => {
         this.isSubscribed = isSubscribed;
     })
@@ -104,7 +114,8 @@ export default {
           window.location.pathname.includes("/admin/participants") ||
           window.location.pathname.includes("/admin/events") ||
           window.location.pathname.includes("/admin/dashboard") ||
-          window.location.pathname.includes("/admin/subscription") ?
+          window.location.pathname.includes("/admin/subscription") ||
+          window.location.pathname.includes("/admin/teams") ?
           true :
           false;
     }else{
@@ -116,14 +127,16 @@ export default {
           window.location.pathname.includes("/admin/participants") ||
           window.location.pathname.includes("/admin/events") ||
           window.location.pathname.includes("/admin/dashboard") ||
-          window.location.pathname.includes("/admin/subscription") ?
+          window.location.pathname.includes("/admin/subscription") ||
+          window.location.pathname.includes("/admin/teams") ?
           true :
           false;
     this.showChat = 
           window.location.pathname.includes("/admin/participants") ||
           window.location.pathname.includes("/admin/events") ||
           window.location.pathname.includes("/admin/dashboard") ||
-          window.location.pathname.includes("/admin/subscription") ?
+          window.location.pathname.includes("/admin/subscription") ||
+          window.location.pathname.includes("/admin/teams") ?
           true :
           false;
   },
@@ -166,7 +179,8 @@ export default {
         window.location.pathname.includes("investors") ||
         window.location.pathname.includes("project") ||
         window.location.pathname.includes("dashboard") ||
-        window.location.pathname.includes("/admin/subscription")
+        window.location.pathname.includes("/admin/subscription")||
+        window.location.pathname.includes("/admin/teams")
       ) {
         this.showNavbar = true;
       } else {

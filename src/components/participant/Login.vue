@@ -84,6 +84,7 @@ export default {
       let messageData = JSON.parse(data);
       if (messageData.op == "init") {
         _this.isLoading = false;
+         messageData.data['provider'] = 'google';
         _this.value = JSON.stringify(messageData.data);
         _this.socketMessage = null;
       } else if (messageData.op == "end") {

@@ -7,6 +7,7 @@ const EVENT={
     INVALID_PROJECT_SLUG:"Invalid Event slug"
 }
 const EVENTS = {
+    CHECK_ALL_TYPE:"PLease Check if any type left empty",
     CHECK_ALL_TITLE_EMPTY:"Check if any Title field you left empty",
     CHECK_ALL_VALUE_EMPTY:"Check if any Value field you left empty",
     REF_POINT:{
@@ -65,6 +66,16 @@ const EVENTS = {
         ADDRESS_NOT_EMPTY: "Contract Address Should not be empty",
         THBALANCE_NOT_NEGATIVE: "Enter the Threshold balance that should be a Positive Number",
         VALID_CONTRACT_ADDRESS: "Please enter valid Contract address"
+    },
+    
+    PRIZECARD:{
+        PRIZE_TYPE: "Please select prize type",
+        PRIZE_NAME_NOT_URL:"Please enter valid prize name",
+        PRIZE_NUMBER_OF_WINNER_NOT_URL:"Please enter valid number of winners",
+        PRIZE_PER_WINNER_NOT_URL:"Please enter valid prize per winner",
+        PRIZE_NAME_NOT_EMPTY:"Prize name should not be empty",
+        EMPTY_NO_OF_WINNERS: "Number of Winners Should not be empty",
+        EMPTY_PRIZE_PER_WINNER: "Prize Per Winner Should not empty"
     }
 
     }

@@ -99,7 +99,37 @@
               </b-card-body>
             </b-collapse>
           </b-card>
-
+<!--Prize  -->
+          <b-card no-body class="mb-1 ">
+            <b-card-header
+              header-tag="header"
+              class="p-1 border-0 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-3
+                class="bg-transparent border-0 text-left text-primary"
+                ><i class="fas fa-gift"></i> Prize Configurations  </b-button
+              >
+            </b-card-header>
+            <b-collapse
+              id="accordion-3"
+              visible
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body>
+                <event-action-config
+                  v-on="$listeners"
+                  :eventActionList="prizeList"
+                  eventActionType="PRIZE"
+                  :options="options.prizeDetails"
+                />
+              </b-card-body>
+            </b-collapse>
+          </b-card>
+<!--End Prize  -->
           <b-card no-body class="mb-1">
             <b-card-header
               header-tag="header"
@@ -138,14 +168,14 @@
             >
               <b-button
                 block
-                v-b-toggle.accordion-3
+                v-b-toggle.accordion-5
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 ><i class="fas fa-share-alt"></i>  Social Configurations
               </b-button>
             </b-card-header>
             <b-collapse
-              id="accordion-3"
+              id="accordion-5"
               accordion="my-accordion"
               role="tabpanel"
             >
@@ -168,14 +198,14 @@
             >
               <b-button
                 block
-                v-b-toggle.accordion-5
+                v-b-toggle.accordion-6
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 ><i class="fab fa-bitcoin"></i>  Wallet Configurations
               </b-button>
             </b-card-header>
             <b-collapse
-              id="accordion-5"
+              id="accordion-6"
               accordion="my-accordion"
               role="tabpanel"
             >
@@ -199,14 +229,14 @@
             >
               <b-button
                 block
-                v-b-toggle.accordion-6
+                v-b-toggle.accordion-7
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 ><i class="fas fa-file-contract"></i>  Smart Contract Configurations
               </b-button>
             </b-card-header>
             <b-collapse
-              id="accordion-6"
+              id="accordion-7"
               accordion="my-accordion"
               role="tabpanel"
             >
@@ -327,11 +357,22 @@ export default {
           (x)=> x.type.indexOf("ETHEREUM_")  > -1 
           || x.type.indexOf("MATIC_") > -1
           || x.type.indexOf("BINANCE_") > -1
+          || x.type.indexOf("REEF_") > -1
         );
-      }else{
+      }
+      else{
         return [];
       }
-    }
+    },
+    prizeList: function() {
+      if (this.actionList && this.actionList.length > 0) {
+        return this.actionList.filter(
+          (x) => x.type.indexOf("PRIZE_") > -1 
+        );
+      } else {
+        return [];
+      }
+    },
   },
   
   data() {
@@ -372,6 +413,11 @@ export default {
           { text: "Ethereum ERC20", value:"ETHEREUM_ERC20"},
           { text: "Polygon ERC20", value:"MATIC_ERC20"},
           { text: "Binance ERC20", value:"BINANCE_ERC20"},
+          { text: "Reef ERC20", value:"REEF_ERC20"},
+        ],
+        prizeDetails:[
+          { text: "Select Prize Type", value:null},
+          { text: "Prize Card", value:"PRIZE_CARD"},
         ]
       },
     };
