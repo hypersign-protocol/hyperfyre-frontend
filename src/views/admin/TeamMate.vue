@@ -142,7 +142,7 @@
 <script>
 import notificationMixins from "../../mixins/notificationMixins";
 import SimpleVueValidation from "simple-vue-validator";
-import { isValidURL } from '../../mixins/fieldValidationMixin';
+import { isValidURL,isValidText } from '../../mixins/fieldValidationMixin';
 export default {
   name: "Teammate",
   components: {},
@@ -243,7 +243,7 @@ export default {
           preConfirm: () => {
             this.email = this.$swal.getPopup().querySelector("#email").value;
             this.name = this.$swal.getPopup().querySelector("#name").value;
-            if (!this.email || !this.isEmail(this.email)|| !this.name || isValidURL(this.name)) {
+            if (!this.email || !this.isEmail(this.email)|| !this.name || isValidURL(this.name) || !isValidText(this.name)) {
               this.$swal.showValidationMessage(
                 `Please enter valid email and name`
               );
