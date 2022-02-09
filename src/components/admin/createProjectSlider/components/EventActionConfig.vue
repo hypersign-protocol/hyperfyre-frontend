@@ -23,7 +23,9 @@
               <img style="padding-right: 5px;" src="../../../../assets/matic-logo.svg"  v-if="eventAction.type.includes('MATIC_ERC20')"   height="20px" />
               <img style="padding-right: 5px;" src="../../../../assets/binance-logo.svg"  v-if="eventAction.type.includes('BINANCE_ERC20')"   height="20px" />
               <img style="padding-right: 5px;" src="../../../../assets/Reef.svg"  v-if="eventAction.type.includes('REEF_ERC20')"   height="20px" />
-              <img style="padding-right: 5px;" src="../../../../assets/moonbeam.png"  v-if="eventAction.type.includes('MOON_ERC20')"   height="20px" />
+              <img style="padding-right: 5px;" src="../../../../assets/moonbase-alpha.svg"  v-if="eventAction.type.includes('MOON_ERC20')"   height="22px" />
+              <img style="padding-right: 5px;" src="../../../../assets/moon-river.png"  v-if="eventAction.type.includes('MOONRIVER_ERC20')"   height="20px" />
+              <img style="padding-right: 5px;" src="../../../../assets/moonbeam.png"  v-if="eventAction.type.includes('MOONBEAM_ERC20')"   height="20px" />
               <img style="padding-right: 5px" src="../../../../assets/tezos.png"  v-if="eventAction.type.includes('BLOCKCHAIN_TEZ')"   height="22px" />
               <img style="padding-right: 5px" src="../../../../assets/binance-logo.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_BSC')"   height="22px" />
               <img style="padding-right: 5px;" src="../../../../assets/matic-logo.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_MATIC')"   height="20px" />
