@@ -32,6 +32,7 @@ import BlockchainOne from "./ActionInputs/BlockchainOne.vue";
 import BlockchainReef from "./ActionInputs/BlockchainReef.vue";
 import EthereumErc20 from "./ActionInputs/EthereumErc20.vue";
 import MaticErc20 from "./ActionInputs/MaticErc20.vue";
+import MoonErc20 from "./ActionInputs/MoonErc20.vue"
 import BinanceErc20 from "./ActionInputs/BinanceErc20.vue";
 import ReefErc20 from "./ActionInputs/ReefErc20.vue";
 import InputDate from "./ActionInputs/InputDate.vue";
@@ -86,6 +87,7 @@ export default {
     InputHyperlink,
     InfoText,
     PrizeCard,
+    MoonErc20,
     RecaptchaToken: ""
   },
   mounted(){
@@ -112,6 +114,7 @@ export default {
     };
   },
   computed:{
+      // eslint-disable-next-line vue/return-in-computed-property
       isPrizedata(){
       if(this.prizeData.length>0){
         return true;
