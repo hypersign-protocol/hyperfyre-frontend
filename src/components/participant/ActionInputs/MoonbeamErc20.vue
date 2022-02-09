@@ -8,7 +8,7 @@
     >
       <b-row>
         <b-col cols="1" sm="1" md="1">
-          <img src="../../../assets/moonbase-alpha.svg" height="25px" />
+          <img src="../../../assets/moonbeam.png" height="25px" />
         </b-col>
         <b-col cols="9" sm="9" class="text-left" md="9">
           <div class="text text-capitalize">{{ data.title }}</div>
@@ -83,7 +83,7 @@ import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
 import Web3 from "web3";
 export default {
-  name: "MoonErc20",
+  name: "MoonbeamErc20",
   props: {
     idValue: {
       required: true,
