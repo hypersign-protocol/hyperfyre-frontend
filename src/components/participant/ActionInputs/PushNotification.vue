@@ -32,19 +32,28 @@
         <b-row>
           <b-col cols="12" sm="12" md="12">
             <div class="follow">
-              <b-form-input
+              <!-- <b-form-input
                 type="text"
                 :placeholder="data.placeHolder"
                 v-model="data.value"
                 :disabled="done"
                 :required="data.isManadatory"
-              ></b-form-input>
+              ></b-form-input> -->
+              <button
+                :disabled="done"
+                class="btn btn-outline-twitter text-black"
+                @click="getBrowserSubscription()"
+              >
+                Subscribe
+              </button>
             </div>
           </b-col>
         </b-row>
         <b-row v-if="!done">
-          <b-col cols="12" sm="12" md="12" >
-            <button class="btn btn-link center"  @click="update()">Continue</button>
+          <b-col cols="12" sm="12" md="12">
+            <button class="btn btn-link center" @click="update()">
+              Continue
+            </button>
           </b-col>
         </b-row>
       </b-card-body>
@@ -52,19 +61,19 @@
   </b-card>
 </template>
 <style scoped>
-.center{
-  display: block; margin-left: auto;margin-right: auto
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
 
 <script>
 import eventBus from "../../../eventBus.js";
-import {
-  isValidURL,
-  isEmpty,
-} from "../../../mixins/fieldValidationMixin";
+import { isValidURL, isEmpty } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
+import config from "../../../config";
 export default {
   name: "PushNotification",
   props: {
@@ -82,16 +91,43 @@ export default {
     };
   },
   mounted() {
+    if (this.$route.query) {
+      
+      if (this.$route.query.subsId === localStorage.getItem("subsId")) {
+        this.data.value = "Subscribed";
+        this.giveScore();
+      }
+    }
+
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
-    update() {
+    async giveScore() {
       if (!this.isFieldValid()) {
+        
         this.data.value = "";
         return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
       } else {
         this.$emit("input", this.data.value);
       }
+    },
+    async update() {
+      const response = await fetch(
+        config.studioServer.BASE_URL + "api/v1/push/verifyNotification",
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+          body: JSON.stringify({
+            subObj: this.data.subObj,
+            id: this.data.subscription._id,
+            url: location.href,
+          }),
+        }
+      );
+      return response.json()
     },
     isFieldValid() {
       if (isEmpty(this.data.value)) {
@@ -104,6 +140,76 @@ export default {
     },
     disableInput(data) {
       this.done = data;
+    },
+
+    async saveSubscription(subscription) {
+      const response = await fetch(
+        config.studioServer.BASE_URL + "api/v1/push/subscribe",
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+          body: JSON.stringify({ subObj: subscription }),
+        }
+      );
+      return response.json();
+    },
+    urlB64ToUint8Array(base64String) {
+      const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+      const base64 = (base64String + padding)
+        // eslint-disable-next-line no-useless-escape
+        .replace(/\-/g, "+")
+        .replace(/_/g, "/");
+      const rawData = atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+      for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+      }
+      return outputArray;
+    },
+
+    async getBrowserSubscription() {
+      if ("Notification" in window && navigator.serviceWorker) {
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+          this.notifySuccess("Notification Granted");
+          try {
+            await navigator.serviceWorker
+              .register(`/service-worker.js`, { scope: "/" })
+              .then(async () => {
+                return await navigator.serviceWorker.ready;
+              })
+              .then(async (reg) => {
+                const applicationServerKey = await this.urlB64ToUint8Array(
+                  config.webpush_public_key
+                );
+                reg.addEventListener("updatefound", () => {
+                 reg.update()
+                });
+                reg.pushManager
+                  .subscribe({ applicationServerKey, userVisibleOnly: true })
+                  .then(async (e) => {
+                   // console.log(JSON.stringify(e));
+
+                    this.data.subObj = e;
+                    this.data.subscription = await this.saveSubscription(e);
+                    localStorage.setItem("subsId", this.data.subscription._id);
+                  });
+              });
+
+            await this.notifySuccess("Registerd");
+          } catch (error) {
+            console.log(error);
+            return this.notifyErr("Service Worker Registration Faild");
+          }
+        } else if (permission === "blocked" || permission === "denied") {
+          return this.notifyErr("Notification Blocked");
+        }
+      } else {
+        return this.notifyErr("Notification Not Supported");
+      }
     },
   },
   mixins: [notificationMixins],
