@@ -160,6 +160,7 @@ i {
               :selectedSocialMedia="selectedSocialMedia"
               :socialOptions="socialOptions"
               :actionList="project.actions"
+              :tagList="project.tags"
               @updateEventActions="AddUpdateDelEventActions"
              />
           </div>
@@ -324,10 +325,11 @@ export default {
         projectStatus: true,
         actions: [],
         refereePoint: 10,
-        referralPoint: 5
+        referralPoint: 5,
+        tags:[],
       }, 
       projects: [],   
-      
+      tagsTemp:[],
       selectedSocialMedia: null,
       addedSocialMedias: [],
       eventActionList: [],
@@ -439,6 +441,7 @@ export default {
     AddUpdateDelEventActions(event){
       const  { type, data } = event;
       if(type){
+        if(!(data.type.includes("_TAG"))){
         switch(type){
           case "ADD": {
             this.eventActionList.push(data);            
@@ -456,11 +459,14 @@ export default {
           }
 
           case "DELETE": {
-            const actionIndex = this.eventActionList.findIndex(x => x._id === data)
+            if(data._id){
+            const actionIndex = this.eventActionList.findIndex(x => x._id == data._id)
             if(actionIndex > -1){
               this.eventActionList[actionIndex]["isDeleted"] = true;
-            }else{
-              const actionIndex = this.eventActionList.findIndex(x => x.id === data)
+            }
+            }
+            else{
+              const actionIndex = this.eventActionList.findIndex(x => x.id === data.id)
               if(actionIndex > -1){
                 this.eventActionList.splice(actionIndex, 1)
               }
@@ -469,8 +475,44 @@ export default {
           }
         }
       }
-    },
+      else{
+          switch(type){
+          case "ADD": {
+            this.tagsTemp.push(data);            
+            break;
+          }
+
+          case "UPDATE": {
+            const { id, _id } =  data;          
+            this.tagsTemp.map(x => {
+              if((x._id === _id) || x.id === id){
+                return data;
+              }
+            })
+            break;
+          }
+
+          case "DELETE": {
+            if(data._id){
+            const actionIndex = this.tagsTemp.findIndex(x => console.log(x._id === data._id))
+            if(actionIndex > -1){
+              this.tagsTemp[actionIndex]["isDeleted"] = true;
+            }
+            }
+            else{
+              const actionIndex = this.tagsTemp.findIndex(x => x.id === data.id)
+              if(actionIndex > -1){
+                this.tagsTemp.splice(actionIndex, 1)
+              }
+            }
+            break;
+          }
+        }
+      }
+    }
+  },
     handleSearch(e){
+      console.log(e);
         if(e.target.value.length){
           this.searchQuery = e.target.value.trim();
           return this.projectsToShow = this.projects.filter(x => (x.projectName.toLowerCase().includes(e.target.value.toLowerCase())));
@@ -611,6 +653,7 @@ export default {
       this.projectStatus = project.projectStatus
      // console.log(project.actions)
       this.eventActionList = project.actions
+      this.tagsTemp = project.tags
     
     
       this.$root.$emit('bv::toggle::collapse', 'sidebar-right') 
@@ -662,6 +705,7 @@ export default {
         this.project.blockchainType = this.blockchainType
         this.project.contractType = this.contractType
         this.project.actions = this.eventActionList
+        this.project.tags = this.tagsTemp
         this.project.refereePoint=this.project.refereePoint.toString()
         this.project.referralPoint=this.project.referralPoint.toString()
     
@@ -809,9 +853,11 @@ export default {
         projectStatus: true,
         actions: [],
         refereePoint: 10,
-        referralPoint: 5
+        referralPoint: 5,
+        tags:[],
       }, 
-      this.eventActionList = []
+      this.eventActionList = [],
+      this.tagsTemp = [],
         this.selectedSocialMedia = null,
         this.addedSocialMedias = [],
         // TODO:  This is agian bad way 

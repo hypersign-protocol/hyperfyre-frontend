@@ -17,6 +17,7 @@
               <i style="color: gray" v-if="eventAction.type.includes('INPUT_HYPERLINK')"  class="fa fa-link"></i>
               <i style="color: gray" v-if="eventAction.type.includes('INFO_TEXT')"  class="fa fa-info-circle"></i>
               <i style="color: gray" v-if="eventAction.type.includes('PRIZE_')" class="fas fa-gift"></i>
+              <i style="color: gray" v-if="eventAction.type.includes('_TAG')" class="fas fa-tags"></i>
               <img style="padding-right: 5px" src="../../../../assets/external-link.svg"  v-if="eventAction.type.includes('HYPERLINK_URL')"   height="22px" />
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_ETH')"   height="22px" />
               <img style="padding-right: 5px" src="/img/ethereum.2b470564.svg"  v-if="eventAction.type.includes('ETHEREUM_ERC20')"   height="22px" />
@@ -33,7 +34,7 @@
               <img style="padding-right: 5px;" src="../../../../assets/avalanche.png"  v-if="eventAction.type.includes('BLOCKCHAIN_AVAX')"   height="20px" />
               <img style="padding-right: 5px;" src="../../../../assets/Reef.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_REEF')"   height="20px" />
             </span>
-            <span >{{ truncate1(eventAction.title, 8) }}</span>
+            <span>{{ eventAction.type.includes('_TAG')? CapitaliseString(eventAction.type):truncate1(eventAction.title, 8)}}</span>
             <span style="color: gray;padding-left: 5px"><i style=""  class="fas fa-minus-circle"></i></span>
         </div>
         </div>
@@ -91,7 +92,7 @@
           </div>  
         </div>
 
-        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType!='PRIZE'">
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType!='PRIZE' && eventActionType!=='TAGS'">
           <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="title" class="col-form-label">Title<span style="color: red">*</span>: </label>
           </div>
@@ -257,7 +258,7 @@ export default {
   },
   computed:{
     noSocialhandle(){
-      if(this.eventActionType !='CUSTOM' && this.eventActionType !='BLOCKCHAIN' && this.eventActionType !='SMARTCONTRACT' && this.selected.type!='TWITTER_RETWEET' && this.selected.type!='DISCORD_JOIN' && this.eventActionType !='PRIZE'){
+      if(this.eventActionType !='CUSTOM' && this.eventActionType !='BLOCKCHAIN' && this.eventActionType !='SMARTCONTRACT' && this.selected.type!='TWITTER_RETWEET' && this.selected.type!='DISCORD_JOIN' && this.eventActionType !='PRIZE' && this.eventActionType!=='TAGS'){
       return true;
       }
       else{
@@ -274,7 +275,7 @@ export default {
     },
    
     placeH(){
-      if(this.eventActionType != 'SOCIAL'  && this.selected.type !='HYPERLINK_URL' && this.selected.type !='INFO_TEXT' && this.eventActionType !='PRIZE' && this.selected.type!='REEF_ERC20')
+      if(this.eventActionType != 'SOCIAL'  && this.selected.type !='HYPERLINK_URL' && this.selected.type !='INFO_TEXT' && this.eventActionType !='PRIZE' && this.selected.type!='REEF_ERC20' && this.eventActionType!=='TAGS')
       {
         return true;
       }
@@ -291,7 +292,7 @@ export default {
       }
     },
     noScore(){
-      if((this.eventActionType === 'CUSTOM' && this.selected.type ==='INFO_TEXT') || this.eventActionType ==='PRIZE'){
+      if((this.eventActionType === 'CUSTOM' && this.selected.type ==='INFO_TEXT') || this.eventActionType ==='PRIZE' || this.eventActionType==='TAGS'){
         return true;
       }
       else{
@@ -548,6 +549,13 @@ export default {
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_PER_WINNER_NOT_URL)
           }
           break;
+          case "TAGS":{
+            if(this.selected.type===null){
+            isvalid= false;
+            this.notifyErr("Please select tag");
+          }
+          }
+          break;
         default:
           this.notifyErr(Messages.EVENTS.ACTIONS.INVALID_EVENT_TYPE)
       }
@@ -585,7 +593,7 @@ export default {
       this.eventActionList.splice(this.currentSelectedId, 1);
       this.$emit("updateEventActions", {
         type: "DELETE",
-        data: actionToDelete._id || actionToDelete.id
+        data: actionToDelete
       })
       this.clearSelected();
       this.isCreate=true
