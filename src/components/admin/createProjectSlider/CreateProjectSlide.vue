@@ -392,6 +392,7 @@ export default {
           { text: "LINK", value: "INPUT_HYPERLINK" },
           { text: "HYPERLINK", value: "HYPERLINK_URL" },
           { text: "INFO", value: "INFO_TEXT" },
+          
         ],
         socialAction: [
           { text: "Select Social Action type", value: null },
