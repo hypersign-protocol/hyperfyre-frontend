@@ -7,9 +7,11 @@
     ></loading>
     <Profile :user="userProfile"/>
     <prize-card v-if="isPrizedata" :prizeData="prizeData"/>
+   
     <template v-for="(actionItem,index) in ActionSchema">
       <component :is="CapitaliseString(actionItem.type)" :key="index" :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
     </template>
+     <push-notification />
   </div>
 </template>
 <script>
@@ -37,10 +39,11 @@ import MoonbeamErc20 from "./ActionInputs/MoonbeamErc20.vue"
 import MoonriverErc20 from "./ActionInputs/MoonriverErc20.vue"
 import BinanceErc20 from "./ActionInputs/BinanceErc20.vue";
 import ReefErc20 from "./ActionInputs/ReefErc20.vue";
+
 import InputDate from "./ActionInputs/InputDate.vue";
 import InputNumber from "./ActionInputs/InputNumber.vue";
 import InputHyperlink from "./ActionInputs/InputHyperlink.vue";
-
+import PushNotification from "./ActionInputs/PushNotification.vue"
 import PrizeCard from "./ActionInputs/PrizeCard.vue";
 import eventBus from "../../eventBus.js"
 
@@ -92,6 +95,7 @@ export default {
     MoonErc20,
     MoonbeamErc20,
     MoonriverErc20,
+    PushNotification,
     RecaptchaToken: ""
   },
   mounted(){
