@@ -1,31 +1,33 @@
-
-
-
-
-
-
-
-self.addEventListener("install", () => {
-  
+self.addEventListener("install",async () => {
   console.log("Service worker installing...");
   // Add a call to skipWaiting here
 });
 
-
-self.addEventListener("activate",()=>{
+self.addEventListener("activate", async () => {
   console.log("Service Worker actives");
-})
+});
 
-self.addEventListener('notificationclick',(e)=>{
-  clients.openWindow(e.action)
-  
-})
+self.addEventListener("notificationclick", (e) => {
+ // console.log(e.notification.data.url);
 
-self.addEventListener("push", function (e) {
+  switch (e.action) {
+    case "open_url":
+      // eslint-disable-next-line no-undef
+      clients.openWindow(e.notification.data.url);
+      break;
 
-  
-  
+    default:
+      // eslint-disable-next-line no-undef
+      clients.openWindow(e.notification.data.url);
 
+      break;
+  }
+});
+
+self.addEventListener("push", async function (e) {
+ 
+  const data=e.data.json()
+ 
   // var options = {
   //   body: body,
   //   icon: "/mstile-150x150.png",
@@ -40,14 +42,16 @@ self.addEventListener("push", function (e) {
   //     {
   //       action: "explore",
   //       title: "Explore this new world",
-        
+
   //     },
   //     {
   //       action: "close",
   //       title: "I don't want any of this",
-        
+
   //     },
   //   ],
   // };
-  e.waitUntil(self.registration.showNotification("Push Notification", e.data.json()));
+  e.waitUntil(
+    self.registration.showNotification(data.data.title, e.data.json())
+  );
 });
