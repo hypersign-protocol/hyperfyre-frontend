@@ -2,7 +2,6 @@
 "use strict";
 
 self.addEventListener("install", function () {
-
   console.log("Service worker installing...");
   // Add a call to skipWaiting here
 });
@@ -11,11 +10,24 @@ self.addEventListener("activate", function () {
   console.log("Service Worker actives");
 });
 
-self.addEventListener('notificationclick', function (e) {
-  clients.openWindow(e.action);
+self.addEventListener("notificationclick", function (e) {
+  console.log(e.notification.data.url);
+
+  switch (e.action) {
+    case "open_url":
+      clients.openWindow(e.notification.data.url);
+      break;
+
+    default:
+      clients.openWindow(e.notification.data.url);
+
+      break;
+  }
 });
 
-self.addEventListener("push", function (e) {
+self.addEventListener("push", async function (e) {
+
+  var data = e.data.json();
 
   // var options = {
   //   body: body,
@@ -40,7 +52,7 @@ self.addEventListener("push", function (e) {
   //     },
   //   ],
   // };
-  e.waitUntil(self.registration.showNotification("Push Notification", e.data.json()));
+  e.waitUntil(self.registration.showNotification(data.data.title, e.data.json()));
 });
 
 },{}]},{},[1]);

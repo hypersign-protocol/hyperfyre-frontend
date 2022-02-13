@@ -92,7 +92,6 @@ export default {
   },
   mounted() {
     if (this.$route.query) {
-      
       if (this.$route.query.subsId === localStorage.getItem("subsId")) {
         this.data.value = "Subscribed";
         this.giveScore();
@@ -104,7 +103,6 @@ export default {
   methods: {
     async giveScore() {
       if (!this.isFieldValid()) {
-        
         this.data.value = "";
         return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
       } else {
@@ -112,6 +110,7 @@ export default {
       }
     },
     async update() {
+      if(localStorage.getItem("subsId")!==undefined){
       const response = await fetch(
         config.studioServer.BASE_URL + "api/v1/push/verifyNotification",
         {
@@ -127,7 +126,8 @@ export default {
           }),
         }
       );
-      return response.json()
+      return response.json();
+      }
     },
     isFieldValid() {
       if (isEmpty(this.data.value)) {
@@ -176,6 +176,17 @@ export default {
         if (permission === "granted") {
           this.notifySuccess("Notification Granted");
           try {
+            try {
+               const brave = await navigator.brave.isBrave();
+            if (brave) {
+              alert(
+                "Brave browser Detected User Google Service to Enable Push brave://settings/privacy"
+              );
+            }
+            } catch (error) {
+             console.log("Not Brave");
+            }
+           
             await navigator.serviceWorker
               .register(`/service-worker.js`, { scope: "/" })
               .then(async () => {
@@ -186,22 +197,25 @@ export default {
                   config.webpush_public_key
                 );
                 reg.addEventListener("updatefound", () => {
-                 reg.update()
-                });
+                  reg.update();
+                })
+                
+
                 reg.pushManager
                   .subscribe({ applicationServerKey, userVisibleOnly: true })
                   .then(async (e) => {
-                   // console.log(JSON.stringify(e));
+                    // console.log(JSON.stringify(e));
 
                     this.data.subObj = e;
                     this.data.subscription = await this.saveSubscription(e);
+                   // console.log(e);
                     localStorage.setItem("subsId", this.data.subscription._id);
                   });
               });
 
             await this.notifySuccess("Registerd");
           } catch (error) {
-            console.log(error);
+           // console.log(error);
             return this.notifyErr("Service Worker Registration Faild");
           }
         } else if (permission === "blocked" || permission === "denied") {
