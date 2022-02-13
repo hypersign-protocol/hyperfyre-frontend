@@ -1,6 +1,58 @@
 <style scoped>
+.inputInfo{
+  color: #808080b5;
+  font-size: smaller;
+}
 
+.pointer {
+ cursor: pointer;
+}
+.selected-media-wrapper{
+    margin-top: 20px;
+    border: 1px dashed;
+    max-height: 100px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
 
+}
+.card i{
+    cursor: pointer;
+}
+.card{
+    transition: all 0.5s;
+
+}
+.card i{
+    margin-right: 4px;
+}
+.flash{
+    cursor: pointer;
+    background-color: #1faa596b;
+    border: 0;
+    box-shadow: 2px 0 10px rgb(0 0 0 / 10%);
+    animation: flash 0.4s cubic-bezier(1, 0, 0, 1);
+}
+
+.fa-minus-circle{
+    font-size: 14px;
+}
+@keyframes flash {
+    0%{
+        opacity: 0;
+      
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+.button-theme{
+  background-color: #F1B319;
+  border-collapse: #F1B319;
+  color: black;
+  border: 0;
+  
+}
 .datetime-picker{
    background-color: #fff;
     background-clip: padding-box;
@@ -103,24 +155,71 @@
                     />
             </div>  
     </div>
+<!-- Tile -->
+   <div v-if="eventActionList.length" style="overflow-y:auto" class="selected-media-wrapper d-flex p-2 mb-4" >
+      <div @click="handleEventActionClick(idx)"           
+          v-for="(eventAction, idx) in eventActionList" v-bind:Key="idx" >
+          <div v-if="!eventActionList[idx].isDeleted" :class="flash == idx ?  
+            'flash card rounded m-1 p-1 d-flex flex-row align-items-center' : 
+            'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'" 
+          style="min-width: 120px">
+            <span>
+              <i style="color: gray" v-if="eventAction.type.includes('_TAG')" class="fas fa-tags"></i> 
+            </span>
+            <span>{{ CapitaliseString(eventAction.type)}}</span>
+            <span style="color: gray;padding-left: 5px"><i style=""  class="fas fa-minus-circle"></i></span>
+         </div>
+      </div>
+   </div>
+
+<!--  Tile End  -->
+     <div >
+      
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="flash==idx" >
+          <div class=" text-left col-lg-3 col-md-3 text-left">
+              <label for="type" class="col-form-label">Choose tag<span style="color: red">*</span>: </label>
+          </div>
+          <div class="col-lg-9 col-md-9 px-0" >
+            <b-form-select v-model="selected.type" :options="options"></b-form-select>
+          </div>  
+        </div>
+
+        <div class="row g-3 justify-content-md-end w-100 mt-4" v-if="isCreate==true">
+          <div class="col-lg-6 col-md-9 px-0">
+            <button @click="handleEventActionAdd()" class="btn button-theme" type="button"> {{eventActionList.includes(selected) ? "Delete" : "Add"}}</button>
+          </div>  
+        </div>
+        <div class="row g-3 justify-content-md-end w-100 mt-4" v-else>
+          <div class="col-lg-6 col-md-9 px-0">
+            <button @click="handleEventActionDelete()" class="btn btn-danger slight-left-margin" type="button"> Delete</button>
+          </div>  
+        </div>
+      </div>
   
   </div>
 </template>
 
 <script>
 import Datepicker from 'vuejs-datetimepicker'
-
-
+import notificationMixins from "../../../../mixins/notificationMixins"
+import Messages from "../../../../utils/messages/admin/en"
 export default {
   name: "GeneralConfig",
   components: {Datepicker},
   data(){
       return{
-            themeColorLocal: this.themeColor,
-            fontColorLocal: this.fontColor
+        idx:null,
+        flash: null,
+        isCreate: true,
+        currentSelectedId :0,
+        themeColorLocal: this.themeColor,
+        fontColorLocal: this.fontColor,
+        selected :{
+          "type": null,
+          "id": "",
+        },
       }
-      
-  },
+    },
   props:{
       project:{
           type: Object
@@ -139,8 +238,96 @@ export default {
       },
     isProjectEditing: {
       type: Boolean
+    },
+    eventActionType: {
+      type: String,
+    },
+    eventActionList : {
+      type: Array,
+      required: true,
+    },
+    options: {
+      type: Array
     }
-  }
+  },
+   async mounted(){
+    this.$root.$on('callClearFromProject',()=>{this.clearSelected()})
+  },
+  methods:{
+    CapitaliseString(string) {
+      let res = string.split('_');
+      let first = res[0][0].toUpperCase() + res[0].substring(1).toLowerCase()
+      return first +' '
+    },
+    handleEventActionAdd(){
+      // Code to Add an Action
+      let isvalid = this.handleEventActionValidation()
+      if(isvalid) {
+        this.selected["id"] = this.eventActionType + "_" +  this.eventActionList.length;
+        this.eventActionList.push(this.selected);      
+        this.$emit("updateTagActions", {
+          type: "ADD",
+          data: this.selected
+        });
+        this.clearSelected()
+      }
+
+    },
+    handleEventActionDelete(){
+
+      // Code to delete an Action
+      const actionToDelete = this.eventActionList[this.currentSelectedId];
+      this.eventActionList.splice(this.currentSelectedId, 1);
+      this.$emit("updateTagActions", {
+        type: "DELETE",
+        data: actionToDelete
+      })
+      this.clearSelected();
+      this.isCreate=true
+
+    },
+    clearSelected () {
+      this.flash=null;
+      this.isCreate=true
+      let clearData = {            
+            "type": null,
+            
+      }
+      this.selected = clearData
+      this.currentSelectedId = null
+    },
+   
+    handleEventActionValidation() {
+      let isvalid = true
+
+      //////
+      //// WARNINGS: This is worst way of handeling validation
+      //// You should return or break the moment first error occured
+      //// But here you are checking all validation every time - waste of time!
+      ////////////
+      switch (this.eventActionType) {
+        case "TAGS":
+            if(this.selected.type===null){
+              isvalid = false
+              this.notifyErr(Messages.EVENTS.CREATE_EDIT_EVENT.CHOOSE_TAG) 
+              }
+          break;
+        default:
+          this.notifyErr(Messages.EVENTS.ACTIONS.INVALID_EVENT_TYPE)
+      }
+    return isvalid
+    },
+    handleEventActionClick(idx){
+      this.flash=idx
+      let updateData = this.eventActionList[idx]
+      this.currentSelectedId = idx;
+
+      this.selected = updateData;
+      this.isCreate=false
+
+    },
+  },
+    mixins: [notificationMixins]
 };
 
 

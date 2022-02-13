@@ -161,7 +161,9 @@ i {
               :socialOptions="socialOptions"
               :actionList="project.actions"
               :tagList="project.tags"
+              :tagFdb="tagFdb"
               @updateEventActions="AddUpdateDelEventActions"
+              @updateTagActions="AddUpdateDelTagActions"
              />
           </div>
 
@@ -328,6 +330,7 @@ export default {
         referralPoint: 5,
         tags:[],
       }, 
+      tagFdb:[],
       projects: [],   
       tagsTemp:[],
       selectedSocialMedia: null,
@@ -410,6 +413,7 @@ export default {
     };
     this.project.ownerDid = this.user.id; // : "did:hs:QWERTlkasd090123SWEE12322";
     await this.fetchProjects();
+    await this.getTags();
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
@@ -418,6 +422,22 @@ export default {
   },
 
   methods: {
+    async getTags() {
+      const url = `${this.$config.studioServer.BASE_URL}api/v1/tag`;
+      const headers = {
+        Authorization: `Bearer ${this.authToken}`,
+      };
+      const resp = await fetch(url, {
+        headers,
+        method: "GET",
+      });
+
+      if (!resp.ok) {
+        return this.notifyErr(resp.statusText);
+      } else{
+         this.tagFdb = await resp.json();
+      }
+    },
     onBannerError(e){
       e.target.src =require("../../assets/default-banner.png");
     },
@@ -438,10 +458,37 @@ export default {
       this.resetAllValues();
       this.$root.$emit('callClearFromProject');    
     },
+    AddUpdateDelTagActions(event){
+    const  { type, data } = event;
+      if(type){
+          switch(type){
+          case "ADD": {
+            this.tagsTemp.push(data);            
+            break;
+          }
+
+          case "DELETE": {
+            if(data._id){
+            const actionIndex = this.tagsTemp.findIndex(x => x._id == data._id)
+            if(actionIndex > -1){
+              this.tagsTemp[actionIndex]["isDeleted"] = true;
+            }
+            }
+            else{
+              const actionIndex = this.tagsTemp.findIndex(x => (x.id == data.id))
+              if(actionIndex > -1){
+                this.tagsTemp.splice(actionIndex, 1)
+              }
+            }
+           
+            break;
+          }
+        }
+      }
+    },
     AddUpdateDelEventActions(event){
       const  { type, data } = event;
       if(type){
-        if(!(data.type.includes("_TAG"))){
         switch(type){
           case "ADD": {
             this.eventActionList.push(data);            
@@ -475,44 +522,8 @@ export default {
           }
         }
       }
-      else{
-          switch(type){
-          case "ADD": {
-            this.tagsTemp.push(data);            
-            break;
-          }
-
-          case "UPDATE": {
-            const { id, _id } =  data;          
-            this.tagsTemp.map(x => {
-              if((x._id === _id) || x.id === id){
-                return data;
-              }
-            })
-            break;
-          }
-
-          case "DELETE": {
-            if(data._id){
-            const actionIndex = this.tagsTemp.findIndex(x => console.log(x._id === data._id))
-            if(actionIndex > -1){
-              this.tagsTemp[actionIndex]["isDeleted"] = true;
-            }
-            }
-            else{
-              const actionIndex = this.tagsTemp.findIndex(x => x.id === data.id)
-              if(actionIndex > -1){
-                this.tagsTemp.splice(actionIndex, 1)
-              }
-            }
-            break;
-          }
-        }
-      }
-    }
-  },
+    },
     handleSearch(e){
-      console.log(e);
         if(e.target.value.length){
           this.searchQuery = e.target.value.trim();
           return this.projectsToShow = this.projects.filter(x => (x.projectName.toLowerCase().includes(e.target.value.toLowerCase())));
@@ -752,7 +763,7 @@ export default {
             this.errors = e.errors
             this.$bvModal.show("err-modal");
         }
-        this.notifyErr(e || e.message);
+        this.notifyErr(e || e.message || e.msg);
       } finally {
         this.isLoading = false;
         // this.clear();
@@ -795,7 +806,9 @@ export default {
         if(! (this.project.fromDate && this.project.toDate)){
           return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_DATE_TIME
         }
-       
+        if((this.tagsTemp.length<1)){
+          return Messages.EVENTS.CREATE_EDIT_EVENT.CHOOSE_ATLEAST_ONE_TAG
+        }
        
         if(!this.blockchainType){
           return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_BLOCKCHAIN_TYPE
