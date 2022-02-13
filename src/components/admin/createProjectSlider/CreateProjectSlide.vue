@@ -55,12 +55,16 @@
             >
               <b-card-body>
                 <general-config
+                  v-on="$listeners"
                   :isProjectEditing="isProjectEditing"
                   :themeColor="themeColor"
                   :fontColor="fontColor"
                   :fontColorDefault="fontColorDefault"
                   :themeColorDefault="themeColorDefault"
                   :project="project"
+                  :eventActionList="tag"
+                  eventActionType="TAGS"
+                  :options="getTagDb"
                 />
               </b-card-body>
             </b-collapse>
@@ -256,7 +260,7 @@
           </b-card>
           <!--  -->
           <!-- Tags Config -->
-          <b-card no-body class="mb-1">
+          <!-- <b-card no-body class="mb-1">
             <b-card-header
               header-tag="header"
               class="p-1 accordin-header accordion-header-theme"
@@ -286,7 +290,7 @@
                 />
               </b-card-body>
             </b-collapse>
-          </b-card>
+          </b-card> -->
         </div>
         <button
           class="btn btn-primary mt-3 button-theme"
@@ -354,11 +358,27 @@ export default {
     },
     tagList:{
       type: Array,
+    },
+    tagFdb:{
+      type: Array,
     }
   },
 
   computed: {
     // a computed getter
+    getTagDb: function () {
+      if(this.tagFdb && this.tagFdb.length >0){
+        for(let index = 0; index < this.tagFdb.length; index++){
+          this.options.tagDetails.push({
+            text:this.tagFdb[index].tagName, value:this.tagFdb[index].type
+          })
+        }
+        return this.options.tagDetails
+      }
+      else{
+        return [];
+      }
+    },
     customList: function () {
       if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
@@ -475,16 +495,6 @@ export default {
         ],
         tagDetails: [
           { text: "Select Tag Type", value: null },
-          { text: "Play 2 Earn", value: "PLAY2EARN_TAG" },
-          { text: "Air Drop", value: "AIRDROP_TAG" },
-          { text: "Ethereum", value: "ETHEREUM_TAG" },
-          { text: "Polygon", value: "POLYGON_TAG" },
-          { text: "Avalanche", value: "AVALANCHE_TAG" },
-          { text: "Harmony", value: "HARMONY_TAG" },
-          { text: "Decentralized Identity", value: "DID_TAG" },
-          { text: "NFT", value: "NFT_TAG" },
-          { text: "Meta Verse", value: "METAVERSE_TAG" },
-          { text: "DEFI", value: "DEFI_TAG" },
         ],
       },
     };
