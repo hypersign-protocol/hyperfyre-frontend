@@ -103,6 +103,22 @@
                     />
             </div>  
     </div>
+    <div class="row g-3 align-items-center w-100 mt-4">
+            <div class="col-lg-3 col-md-3 text-left">
+                <label for="endDate" class="col-form-label" title="Check to notify all platform users about this event">Enable Notifications: </label>
+            </div>
+            <div class="col-lg-9 col-md-9 px-0">
+                <!-- <input disabled  v-model="project.toDate" type="text"   id="fromDate" class="form-control w-100" > -->
+                <!-- <Datepicker 
+                class="datepicker"
+                    v-model="project.toDate"
+                    name="toDate"
+                    format="YYYY-MM-DD h:i:s" 
+                    /> -->
+                  
+                    <input type="checkbox" v-model="project.isNotificaionEnabled" title="Check to notify all platform users about this event" id="">
+            </div>  
+    </div>
   
   </div>
 </template>
