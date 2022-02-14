@@ -318,6 +318,7 @@ export default {
         logoUrl: "",
         fromDate: "",
         toDate: "",
+        isNotificaionEnabled:false,
         ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
         investorsCount: 0,
         social: {},
@@ -783,6 +784,7 @@ export default {
         },
 
     clear() {
+      
       this.isProjectEditing = false;
       this.project = {
         _id: "",
@@ -793,6 +795,7 @@ export default {
         onwerDid: "",
         twitterHandle: "",
         telegramHandle: "",
+        isNotificaionEnabled:false
       };
     },
 
@@ -808,6 +811,7 @@ export default {
         social: {},
         projectStatus: true,
         actions: [],
+        isNotificaionEnabled:false,
         refereePoint: 10,
         referralPoint: 5
       }, 
