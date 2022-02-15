@@ -28,33 +28,37 @@ self.addEventListener("notificationclick", function (e) {
 });
 
 self.addEventListener("push", async function (e) {
+  try {
 
-  var data = e.data.json();
+    var data = e.data.json();
 
-  // var options = {
-  //   body: body,
-  //   icon: "/mstile-150x150.png",
-  //   image: "",
-  //   vibrate: [100, 50, 100],
-  //   sound: "clip",
-  //   data: {
-  //     dateOfArrival: Date.now(),
-  //     primaryKey: 1,
-  //   },
-  //   actions: [
-  //     {
-  //       action: "explore",
-  //       title: "Explore this new world",
+    // var options = {
+    //   body: body,
+    //   icon: "/mstile-150x150.png",
+    //   image: "",
+    //   vibrate: [100, 50, 100],
+    //   sound: "clip",
+    //   data: {
+    //     dateOfArrival: Date.now(),
+    //     primaryKey: 1,
+    //   },
+    //   actions: [
+    //     {
+    //       action: "explore",
+    //       title: "Explore this new world",
 
-  //     },
-  //     {
-  //       action: "close",
-  //       title: "I don't want any of this",
+    //     },
+    //     {
+    //       action: "close",
+    //       title: "I don't want any of this",
 
-  //     },
-  //   ],
-  // };
-  e.waitUntil(self.registration.showNotification(data.data.title, e.data.json()));
+    //     },
+    //   ],
+    // };
+    e.waitUntil(self.registration.showNotification(data.data.title, e.data.json()));
+  } catch (e) {
+    return;
+  }
 });
 
 },{}]},{},[1]);

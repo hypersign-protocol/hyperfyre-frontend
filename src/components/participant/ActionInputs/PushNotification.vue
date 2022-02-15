@@ -91,6 +91,7 @@ export default {
     };
   },
   mounted() {
+    
     if (this.$route.query) {
       if (this.$route.query.subsId === localStorage.getItem("subsId")) {
         this.data.value = "Subscribed";
@@ -103,31 +104,36 @@ export default {
   methods: {
     async giveScore() {
       if (!this.isFieldValid()) {
-        this.data.value = "";
+        this.data.subObj = "";
         return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
       } else {
+        this.data.value="Subscribed"
         this.$emit("input", this.data.value);
       }
     },
     async update() {
-      if(localStorage.getItem("subsId")!==undefined){
-      const response = await fetch(
-        config.studioServer.BASE_URL + "api/v1/push/verifyNotification",
-        {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-          body: JSON.stringify({
-            subObj: this.data.subObj,
-            id: this.data.subscription._id,
-            url: location.href,
-          }),
-        }
-      );
-      return response.json();
+      // if(localStorage.getItem("subsId")!==undefined){
+      // const response = await fetch(
+      //   config.studioServer.BASE_URL + "api/v1/push/verifyNotification",
+      //   {
+      //     method: "post",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      //     },
+      //     body: JSON.stringify({
+      //       subObj: this.data.subObj,
+      //       id: this.data.subscription._id,
+      //       url: location.href,
+      //     }),
+      //   }
+      // );
+      // return response.json();
+      if(this.data.subObj !==undefined && this.data.subscription!==undefined){
+        this.data.value="Notificaion Subscribed"
+         this.$emit("input", this.data.value);
       }
+      
     },
     isFieldValid() {
       if (isEmpty(this.data.value)) {
