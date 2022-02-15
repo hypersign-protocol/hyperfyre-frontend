@@ -25,7 +25,9 @@ self.addEventListener("notificationclick", (e) => {
 });
 
 self.addEventListener("push", async function (e) {
- 
+try {
+
+
   const data=e.data.json()
  
   // var options = {
@@ -54,4 +56,7 @@ self.addEventListener("push", async function (e) {
   e.waitUntil(
     self.registration.showNotification(data.data.title, e.data.json())
   );
+}catch(e){
+  return
+}
 });
