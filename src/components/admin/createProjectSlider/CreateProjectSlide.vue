@@ -43,6 +43,7 @@
                 block
                 v-b-toggle.accordion-1
                 class="bg-transparent border-0 text-left text-primary"
+                 title="Create General configuration for your event"
                 ><i class="fas fa-cog"></i> General Configurations</b-button
               >
             </b-card-header>
@@ -54,12 +55,16 @@
             >
               <b-card-body>
                 <general-config
+                  v-on="$listeners"
                   :isProjectEditing="isProjectEditing"
                   :themeColor="themeColor"
                   :fontColor="fontColor"
                   :fontColorDefault="fontColorDefault"
                   :themeColorDefault="themeColorDefault"
                   :project="project"
+                  :eventActionList="tag"
+                  eventActionType="TAGS"
+                  :options="getTagDb"
                 />
               </b-card-body>
             </b-collapse>
@@ -76,6 +81,7 @@
                 v-b-toggle.accordion-2
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
+                 title="Create Referral configuration for your event"
                 ><i class="fa fa-user-plus"></i> Referral Configurations
               </b-button>
             </b-card-header>
@@ -106,6 +112,7 @@
                 block
                 v-b-toggle.accordion-3
                 class="bg-transparent border-0 text-left text-primary"
+                 title="Create Prize configuration for your event"
                 ><i class="fas fa-gift"></i> Prize Configurations
               </b-button>
             </b-card-header>
@@ -137,6 +144,7 @@
                 v-b-toggle.accordion-4
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
+                 title="Create Custom Inputs configuration for your event"
                 ><i class="fab fa-intercom"></i> Custom Inputs Configurations
               </b-button>
             </b-card-header>
@@ -167,6 +175,7 @@
                 v-b-toggle.accordion-5
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
+                title="Create Social configuration for your event"
                 ><i class="fas fa-share-alt"></i> Social Configurations
               </b-button>
             </b-card-header>
@@ -197,6 +206,7 @@
                 v-b-toggle.accordion-6
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
+                 title="Create Wallet configuration for your event"
                 ><i class="fab fa-bitcoin"></i> Wallet Configurations
               </b-button>
             </b-card-header>
@@ -228,6 +238,7 @@
                 v-b-toggle.accordion-7
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
+                 title="Create Smart contract configuration for your event"
                 ><i class="fas fa-file-contract"></i> Smart Contract
                 Configurations
               </b-button>
@@ -248,6 +259,38 @@
             </b-collapse>
           </b-card>
           <!--  -->
+          <!-- Tags Config -->
+          <!-- <b-card no-body class="mb-1">
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-8
+                variant="info"
+                class="bg-transparent border-0 text-left text-primary"
+                title="Create Tags configuration for your event"
+                ><i class="fas fa-tags"></i> Tags
+                Configurations
+              </b-button>
+            </b-card-header>
+            <b-collapse
+              id="accordion-8"
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body>
+                <eventAction-config
+                  v-on="$listeners"
+                  :eventActionList="tag"
+                  eventActionType="TAGS"
+                  :options="options.tagDetails"
+                />
+              </b-card-body>
+            </b-collapse>
+          </b-card> -->
         </div>
         <button
           class="btn btn-primary mt-3 button-theme"
@@ -313,10 +356,29 @@ export default {
     isProjectEditing: {
       type: Boolean,
     },
+    tagList:{
+      type: Array,
+    },
+    tagFdb:{
+      type: Array,
+    }
   },
 
   computed: {
     // a computed getter
+    getTagDb: function () {
+      if(this.tagFdb && this.tagFdb.length >0){
+        for(let index = 0; index < this.tagFdb.length; index++){
+          this.options.tagDetails.push({
+            text:this.tagFdb[index].tagName, value:this.tagFdb[index].type
+          })
+        }
+        return this.options.tagDetails
+      }
+      else{
+        return [];
+      }
+    },
     customList: function () {
       if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
@@ -375,6 +437,13 @@ export default {
         return [];
       }
     },
+    tag: function () {
+      if (this.tagList && this.tagList.length > 0) {
+        return this.tagList.filter((x) => x.type.indexOf("_TAG") > -1);
+      } else {
+        return [];
+      }
+    },
   },
 
   data() {
@@ -424,6 +493,9 @@ export default {
         prizeDetails: [
           { text: "Select Prize Type", value: null },
           { text: "Prize Card", value: "PRIZE_CARD" },
+        ],
+        tagDetails: [
+          { text: "Select Tag Type", value: null },
         ],
       },
     };

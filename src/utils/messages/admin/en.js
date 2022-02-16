@@ -29,7 +29,9 @@ const EVENTS = {
         PROJECT_DATE_TIME: "Please specify a start and end date",
         PROJECT_BLOCKCHAIN_TYPE: "Please provide Blockchain Type",
         THEME_NOT_WHITE: "Theme color cannot be white",
-        THEME_COLOR_NOT_SAME: "Theme color and font color cannot be same"
+        THEME_COLOR_NOT_SAME: "Theme color and font color cannot be same",
+        CHOOSE_ATLEAST_ONE_TAG: "Please choose atleast one tag",
+        CHOOSE_TAG:"Please choose Tag"
     },
     
     ACTIONS:{
