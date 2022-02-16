@@ -33,7 +33,7 @@
               <img style="padding-right: 5px;" src="../../../../assets/avalanche.png"  v-if="eventAction.type.includes('BLOCKCHAIN_AVAX')"   height="20px" />
               <img style="padding-right: 5px;" src="../../../../assets/Reef.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_REEF')"   height="20px" />
             </span>
-            <span >{{ truncate1(eventAction.title, 8) }}</span>
+            <span>{{ truncate1(eventAction.title, 8)}}</span>
             <span style="color: gray;padding-left: 5px"><i style=""  class="fas fa-minus-circle"></i></span>
         </div>
         </div>
@@ -91,7 +91,7 @@
           </div>  
         </div>
 
-        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType!='PRIZE'">
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType!='PRIZE' && eventActionType!=='TAGS'">
           <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="title" class="col-form-label">Title<span style="color: red">*</span>: </label>
           </div>
@@ -585,7 +585,7 @@ export default {
       this.eventActionList.splice(this.currentSelectedId, 1);
       this.$emit("updateEventActions", {
         type: "DELETE",
-        data: actionToDelete._id || actionToDelete.id
+        data: actionToDelete
       })
       this.clearSelected();
       this.isCreate=true
