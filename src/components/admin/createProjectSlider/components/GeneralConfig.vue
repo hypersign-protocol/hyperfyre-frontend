@@ -71,9 +71,17 @@
     border: none !important;
     min-width: none !important;
 }
+
 .slight-left-margin {
 margin-left: 2px;
 }
+
+
+ input.largerCheckbox {
+            transform :scale(1.25)
+            
+        }
+
 </style>
 
 <template>
@@ -155,6 +163,7 @@ margin-left: 2px;
                     />
             </div>  
     </div>
+
 <!-- Tile -->
    <div v-if="eventActionList.length" style="overflow-y:auto" class="selected-media-wrapper d-flex p-2 mb-4" >
       <div @click="handleEventActionClick(idx)"           
@@ -196,6 +205,28 @@ margin-left: 2px;
           </div>  
         </div>
       </div>
+
+    <div class="row g-3 align-items-center w-100 mt-4">
+            <div v-if="project.isNotificaionEnabled" class="col-lg-3 col-md-3 text-left">
+                <label for="endDate" class="col-form-label" title="Check to notify all platform users about this event">Enabled Notifications: </label>
+            </div>
+               <div v-else class="col-lg-3 col-md-3 text-left">
+                <label for="endDate" class="col-form-label" title="Check to notify all platform users about this event">Enable Notifications: </label>
+            </div>
+            
+            <div class="col-lg-9 col-md-9 px-0">
+                <!-- <input disabled  v-model="project.toDate" type="text"   id="fromDate" class="form-control w-100" > -->
+                <!-- <Datepicker 
+                class="datepicker"
+                    v-model="project.toDate"
+                    name="toDate"
+                    format="YYYY-MM-DD h:i:s" 
+                    /> -->
+                  
+                    <input  class="largerCheckbox" type="checkbox" v-model="project.isNotificaionEnabled" title="Check to notify all platform users about this event" id="">
+            </div>  
+    </div>
+
   
   </div>
 </template>
