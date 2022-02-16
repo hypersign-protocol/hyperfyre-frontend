@@ -71,9 +71,9 @@
     border: none !important;
     min-width: none !important;
 }
-
-
-
+.slight-left-margin {
+margin-left: 2px;
+}
 </style>
 
 <template>
@@ -186,12 +186,13 @@
 
         <div class="row g-3 justify-content-md-end w-100 mt-4" v-if="isCreate==true">
           <div class="col-lg-6 col-md-9 px-0">
-            <button @click="handleEventActionAdd()" class="btn button-theme" type="button"> {{eventActionList.includes(selected) ? "Delete" : "Add"}}</button>
+            <button @click="handleEventActionAdd()" class="btn button-theme" type="button"> {{eventActionList.includes(selected) ? "Cancel" : "Add"}}</button>
           </div>  
         </div>
         <div class="row g-3 justify-content-md-end w-100 mt-4" v-else>
           <div class="col-lg-6 col-md-9 px-0">
             <button @click="handleEventActionDelete()" class="btn btn-danger slight-left-margin" type="button"> Delete</button>
+            <button @click="handleEventActionCancel()" class="btn button-theme slight-left-margin" type="button"> Cancel</button>
           </div>  
         </div>
       </div>
@@ -285,6 +286,9 @@ export default {
       this.clearSelected();
       this.isCreate=true
 
+    },
+    handleEventActionCancel(){
+      this.clearSelected();
     },
     clearSelected () {
       this.flash=null;

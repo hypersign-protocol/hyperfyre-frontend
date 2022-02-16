@@ -13,7 +13,8 @@ import "@mdi/light-font/css/materialdesignicons-light.css";
 import './assets/css/style.css';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
-
+import Multiselect from "vue-multiselect";
+import "vue-multiselect/dist/vue-multiselect.min.css";
 
 import {
   VeTable,
@@ -58,7 +59,7 @@ Vue.use(Donut);
 Vue.prototype.$config = config;
 
 Vue.use(VueSidebarMenu);
-
+Vue.component("multiselect", Multiselect);
 Vue.use(VueMeta)
 new Vue({
   router,
