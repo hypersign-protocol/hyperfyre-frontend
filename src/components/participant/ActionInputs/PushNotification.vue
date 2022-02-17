@@ -132,6 +132,8 @@ export default {
       if(this.data.subObj !==undefined && this.data.subscription!==undefined){
         this.data.value="Notificaion Subscribed"
          this.$emit("input", this.data.value);
+      }else{
+        this.notifyErr(Messages.EVENT_ACTIONS.SUBS.SUBS_NOTIFICATION)
       }
       
     },
