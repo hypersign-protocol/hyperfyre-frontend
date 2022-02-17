@@ -21,7 +21,10 @@
         <table
           v-if="prizeData.length"
           class="table table-bordered"
-          style="background: #ffff"
+          style="background: #ffff
+          table-layout:fixed;
+          word-wrap:break-word;"
+          
         >
           <thead class="thead-light">
             <tr>
@@ -32,12 +35,14 @@
           </thead>
           <tbody>
             <tr v-for="row in prizeData" :key="row._id">
-              <th>
-                {{ row.title }}
+              <th class="wrapword" >
+                  {{row.title}}
               </th>
-              <td>{{ JSON.parse(row.value).winners }}</td>
-              <td>
-                {{ JSON.parse(row.value).prizeValue }}
+              <td class="wrapword">
+                  {{ JSON.parse(row.value).winners }}
+                </td>
+              <td class="wrapword">
+                  {{ JSON.parse(row.value).prizeValue }}
               </td>
             </tr>
           </tbody>
@@ -62,3 +67,15 @@ export default {
   },
 };
 </script>
+<style scoped>
+  .wrapword {
+    white-space: -moz-pre-wrap !important;
+    white-space: -webkit-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
+}
+</style>
