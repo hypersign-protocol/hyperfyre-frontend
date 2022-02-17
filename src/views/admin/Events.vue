@@ -30,6 +30,9 @@
 .floatRight {
   float: right;
 }
+#floatRight {
+  float: right;
+}
 .card-header {
   background: aliceblue;
   padding: 0px;
@@ -137,6 +140,14 @@ i {
   max-height: 150px;
 }
 </style>
+<style>
+.multiselect__tags {
+        border-radius: 0.25rem;
+        border: 1px solid #ced4da;
+        background: #fff;
+        font-weight:400;
+    }
+</style>
 <template>
   <div class="home marginLeft marginRight">
     <loading
@@ -146,8 +157,8 @@ i {
     ></loading>
 
     <div class="row">
-      <div class="col-sm">
-        <div class="form-group">
+      <div class="col-md-4">
+        <div class="form-group" style="width:925px">
           <input
             v-if="projects.length"
             @keyup="handleSearch"
@@ -159,31 +170,24 @@ i {
           />
         </div>
       </div>
-      <div class="col-sm">
-        <!-- <div class="form-group"> -->
-        <!-- <b-form-select
-          v-model="selected" @change="handleSearchByTag"
-          :options="this.tagToSearch"
-          ></b-form-select> -->
-        <div>
+
+      <div class="col-md-4">
+        <div id="floatRight">
+
           <multiselect
             v-model="selected"
-            tag-placeholder="Add this as new tag"
-            placeholder="Search Events by Tags"
+            placeholder="Search events by tags"
             label="text"
             track-by="value"
             :options="this.tagToSearch"
             :multiple="true"
-            :taggable="true"
+            :taggable="false"
             :close-on-select="false"
             :clear-on-select="false"
             @input="onInputTag"
           >
           </multiselect>
-          <!-- <button v-if="this.selected.length" @click="FilterTags">Filter events by tags</button> -->
-          <!-- <button v-if="this.selected.length" @click="resetTag">Reset</button> -->
         </div>
-        <div></div>
       </div>
       <div class="col-md-4">
         <div class="text-right">

@@ -248,6 +248,11 @@ export default {
                 `Please enter valid email and name`
               );
             }
+            if(this.name.length>20){
+              this.$swal.showValidationMessage(
+                `Please enter name upto 20 character`
+              );
+            }
             return { name: this.name, email: this.email };
           },
         })
