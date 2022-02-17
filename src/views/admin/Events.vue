@@ -165,7 +165,7 @@ i {
           v-model="selected" @change="handleSearchByTag"
           :options="this.tagToSearch"
           ></b-form-select> -->
-        <div>
+        <div  v-if="projects.length">
           <multiselect
             v-model="selected"
             tag-placeholder="Add this as new tag"
