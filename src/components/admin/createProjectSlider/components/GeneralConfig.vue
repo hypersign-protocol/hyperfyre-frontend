@@ -287,9 +287,15 @@ export default {
   },
   methods:{
     CapitaliseString(string) {
+      if((string.includes("NFT_TAG"))|| string.includes("DEFI_TAG")){
+     let res = string.substring(0, string.indexOf('_'))
+      return res
+      }
+      else{
       let res = string.split('_');
       let first = res[0][0].toUpperCase() + res[0].substring(1).toLowerCase()
-      return first +' '
+      return first 
+      }
     },
     handleEventActionAdd(){
       // Code to Add an Action

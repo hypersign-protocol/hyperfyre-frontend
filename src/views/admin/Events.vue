@@ -170,8 +170,10 @@ i {
           />
         </div>
       </div>
+
       <div class="col-md-4">
         <div id="floatRight">
+
           <multiselect
             v-model="selected"
             placeholder="Search events by tags"
