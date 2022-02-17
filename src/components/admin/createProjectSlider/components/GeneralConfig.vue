@@ -346,11 +346,22 @@ export default {
               isvalid = false
               this.notifyErr(Messages.EVENTS.CREATE_EDIT_EVENT.CHOOSE_TAG) 
               }
+              else if(this.isPresent()){
+              isvalid = false
+              this.notifyErr(Messages .EVENTS.CREATE_EDIT_EVENT.DUPLICATE_TAG)
+              }
           break;
         default:
           this.notifyErr(Messages.EVENTS.ACTIONS.INVALID_EVENT_TYPE)
       }
     return isvalid
+    },
+    isPresent(){
+       const element = this.eventActionList.find((value) => {
+            return value.type === this.selected.type;
+        });
+        return typeof element === "undefined" ? false : true;
+    
     },
     handleEventActionClick(idx){
       this.flash=idx
