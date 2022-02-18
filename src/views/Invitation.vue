@@ -52,11 +52,20 @@ methods:{
           method: "GET",
         });
         if(resp.status===400){
-            const errorMsg=await resp.json();
+            let errorMsg=await resp.json();
+            if(errorMsg.Error){
+            return this.$swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `${errorMsg.Error}`,
+            showConfirmButton: false,
+            timer: 5000
+            })
+            }else
            return this.$swal.fire({
             position: 'center',
             icon: 'warning',
-            title: `${errorMsg}`,
+            title: `${errorMsg.message}`,
             showConfirmButton: false,
             timer: 5000
             })
