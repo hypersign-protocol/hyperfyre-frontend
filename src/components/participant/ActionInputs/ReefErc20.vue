@@ -208,7 +208,7 @@ export default {
       return true;
     },
     async fetchBalance() {
-      console.log(this.value.userWalletAddress);
+      
       this.signature=await this.walletSignObj.signer.signRaw(this.value.userWalletAddress)
       const body = {
         actionType: this.data.type,

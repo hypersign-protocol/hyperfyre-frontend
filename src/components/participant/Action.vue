@@ -11,7 +11,7 @@
     <template v-for="(actionItem,index) in ActionSchema">
       <component :is="CapitaliseString(actionItem.type)" :key="index" :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
     </template>
-     <push-notification />
+     
   </div>
 </template>
 <script>

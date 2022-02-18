@@ -130,7 +130,7 @@ export default {
       // );
       // return response.json();
       if(this.data.subObj !==undefined && this.data.subscription!==undefined){
-        this.data.value="Notificaion Subscribed"
+        this.data.value="Notification Subscribed"
          this.$emit("input", this.data.value);
       }else{
         this.notifyErr(Messages.EVENT_ACTIONS.SUBS.SUBS_NOTIFICATION)
