@@ -274,26 +274,19 @@ export default {
       this.options.network = [
         { text: "Ethereum", value: "ETH", disabled: false },
         { text: "Polygon", value: "MATIC", disabled: false },
+        {text: "Binance Smart Chain",value: "BSC",disabled: false},
         { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
-        {
-          text: "Binance Smart Chain",
-          value: "BSC",
-          disabled: true,
-        },
       ];
     },
     setDiscount(__arg) {
       if (__arg) {
-        if (__arg == "HID") {
+        if (__arg == "HID") { 
+          this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: false },
+            {text: "Binance Smart Chain",value: "BSC",disabled: true},
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
-            {
-              text: "Binance Smart Chain",
-              value: "BSC",
-              disabled: true,
-            },
           ];
           this.discount = (this.plan.price * 30) / 100;
         } else {
@@ -303,12 +296,8 @@ export default {
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: true },
             { text: "Polygon", value: "MATIC", disabled: false },
+            { text: "Binance Smart Chain",value: "BSC",disabled: true,},
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
-            {
-              text: "Binance Smart Chain",
-              value: "BSC",
-              disabled: true,
-            },
           ];
           this.selectedNetwork = "MATIC";
         }
@@ -317,11 +306,7 @@ export default {
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: true },
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
-            {
-              text: "Binance Smart Chain",
-              value: "BSC",
-              disabled: true,
-            },
+            { text: "Binance Smart Chain",value: "BSC",disabled: true,},
           ];
           this.selectedNetwork = "ETH";
         }
@@ -332,9 +317,10 @@ export default {
             { text: "Binance Smart Chain ", value: "BSC", disabled: false },
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
           ];
-          //this.selectedNetwork = "ETH";
+          this.selectedNetwork = "BSC";
         }
          if (__arg == "USDT") {
+          this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: false },
@@ -344,6 +330,7 @@ export default {
           //this.selectedNetwork = "ETH";
         }
          if (__arg == "USDC") {
+          this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: false },
