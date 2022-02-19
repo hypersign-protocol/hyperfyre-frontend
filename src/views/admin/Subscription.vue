@@ -211,8 +211,18 @@ i {
               <td>{{ new Date(row.subscriptionDate).toLocaleString() }}</td>
               <td>{{ getPlanName(row.planId) }}</td>
               <td>{{ row.leftOverNoRequests }}</td>             
-              <td>{{ row.paymentData ? (row.paymentData.status==='validated'?"Active":row.paymentData.status==='paid'?"Pending":row.paymentData.status==='failed'?"Cancelled":"Inactive" ): row.isActive? "Active":"Inactive" }}</td>
-             
+              <td>
+                {{  row.paymentData ? 
+                       (row.paymentData.status==='validated' || row.paymentData.activated === 'by HyperFyre Activation Team'?
+                         "Active": 
+                         (row.paymentData.status==='paid'?
+                           "Pending":
+                            ( row.paymentData.status === 'failed'? "Cancelled" :"Inactive" )
+                         )
+                       ): 
+                      row.isActive? "Active":"Inactive" 
+                }}
+              </td>
             </tr>
           </tbody>
         </table>
