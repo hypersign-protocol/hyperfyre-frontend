@@ -257,7 +257,7 @@ export default {
   padding: 50px 20px;
 }
 .container-collapsed {
-  padding-left: 200px;
+  /* padding-left: 200px; */
 }
 .showNavbar.notCollapsed>.content-wrapper {
   width: calc(100vw - 200px);
