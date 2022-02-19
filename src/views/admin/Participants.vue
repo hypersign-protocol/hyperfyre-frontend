@@ -115,8 +115,8 @@ label {
 
     <b-modal hide-footer id="modal-1" title="Lottery">
       <p
-        class="my-4  border rounded-lg p-2 modal-text"
-        style="background:#f0f9ff"
+        class="my-4 border rounded-lg p-2 modal-text"
+        style="background: #f0f9ff"
       >
         <b>Lottery</b> is the process of selecting winners of an event. Upon
         clicking on "<b>Execute button</b>", the lottery process begins, which
@@ -124,11 +124,11 @@ label {
         selected records in excel sheet. The winner selection is primarly based
         on their "<b>score</b>" unless checked "<b>randomly</b>".
       </p>
-      <div class="d-flex mx-auto  justify-content-between px-4">
+      <div class="d-flex mx-auto justify-content-between px-4">
         <div class="bold">Total Records</div>
         <div class="bold">{{ project.count }}</div>
       </div>
-      <div class="d-flex mx-auto  justify-content-between px-4 mt-4">
+      <div class="d-flex mx-auto justify-content-between px-4 mt-4">
         <div class="bold">Number of winners to choose</div>
         <div class="bold">
           <input
@@ -139,7 +139,7 @@ label {
           />
         </div>
       </div>
-      <div class="d-flex mx-auto  justify-content-between px-4 mt-4">
+      <div class="d-flex mx-auto justify-content-between px-4 mt-4">
         <div class="bold">Check to choose randomly (optional)</div>
         <div class="bold">
           <input
@@ -162,7 +162,7 @@ label {
       </div>
     </b-modal>
 
-    <div class="row " style="margin-top: 2%">
+    <div class="row" style="margin-top: 2%">
       <div class="d-flex justify-content-between col-md-12">
         <div class="projectSelector">
           <b-form-select
@@ -297,7 +297,7 @@ export default {
                   {row.actions.map((action) => (
                     <tr>
                       <td>{action.title}</td>
-                      <td >{this.parseActionValue(action)}</td>
+                      <td>{this.parseActionValue(action)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -386,7 +386,7 @@ export default {
       active: 0,
       host: location.hostname,
       authToken: localStorage.getItem("authToken"),
-      accessToken:localStorage.getItem("accessToken"),
+      accessToken: localStorage.getItem("accessToken"),
       isLoading: false,
       fullPage: true,
     };
@@ -416,27 +416,28 @@ export default {
   },
 
   methods: {
-     parseActionValue(action){            
-            switch (action.type) {
-              case 'DISCORD_JOIN':
-              case 'TELEGRAM_JOIN':
-              case 'TWITTER_FOLLOW':{
-                return JSON.parse(action.value).targetScreenName;
-              }
-              case 'ETHEREUM_ERC20':
-              case 'MATIC_ERC20':
-              case 'BINANCE_ERC20':{              
-                return JSON.parse(action.value).userWalletAddress;
-              
-              }
-              case 'REEF_ERC20':{
-          
-                return JSON.parse(action.value).userWalletAddress.address
-              }
-              default:
-                return action.value;
-            }
-          },
+    parseActionValue(action) {
+      switch (action.type) {
+        case "DISCORD_JOIN":
+        case "TELEGRAM_JOIN":
+        case "TWITTER_FOLLOW": {
+          return JSON.parse(action.value).targetScreenName;
+        }
+        case "ETHEREUM_ERC20":
+        case "MATIC_ERC20":
+        case "BINANCE_ERC20":
+        case "MOONRIVER_ERC20":
+        case "MOONBEAM_ERC20":
+        case "MOON_ERC20": {
+          return JSON.parse(action.value).userWalletAddress;
+        }
+        case "REEF_ERC20": {
+          return JSON.parse(action.value).userWalletAddress.address;
+        }
+        default:
+          return action.value;
+      }
+    },
     async handleExport() {
       try {
         this.isLoading = true;
@@ -444,7 +445,7 @@ export default {
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
-          AccessToken: `Bearer ${this.accessToken}`
+          AccessToken: `Bearer ${this.accessToken}`,
         };
 
         const res = await apiClientMixin.makeCall({
@@ -476,7 +477,7 @@ export default {
 
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
-          AccessToken: `Bearer ${this.accessToken}`
+          AccessToken: `Bearer ${this.accessToken}`,
         };
 
         const res = await apiClientMixin.makeCall({
@@ -571,11 +572,9 @@ export default {
         this.investor.projectId = e;
         await this.fetchProjectData(0, this.perPage);
         this.holdInvestors = this.project.investors;
+      } else {
+        this.project.investors = [];
       }
-      else{
-      this.project.investors=[];
-      }
-    
     },
 
     filterVerified(label) {
@@ -642,7 +641,7 @@ export default {
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
-          AccessToken: `Bearer ${this.accessToken}`
+          AccessToken: `Bearer ${this.accessToken}`,
         };
         const resp = await fetch(url, {
           headers,

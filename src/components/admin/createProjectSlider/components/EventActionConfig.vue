@@ -23,6 +23,9 @@
               <img style="padding-right: 5px;" src="../../../../assets/matic-logo.svg"  v-if="eventAction.type.includes('MATIC_ERC20')"   height="20px" />
               <img style="padding-right: 5px;" src="../../../../assets/binance-logo.svg"  v-if="eventAction.type.includes('BINANCE_ERC20')"   height="20px" />
               <img style="padding-right: 5px;" src="../../../../assets/Reef.svg"  v-if="eventAction.type.includes('REEF_ERC20')"   height="20px" />
+              <img style="padding-right: 5px;" src="../../../../assets/moonbase-alpha.svg"  v-if="eventAction.type.includes('MOON_ERC20')"   height="22px" />
+              <img style="padding-right: 5px;" src="../../../../assets/moon-river.png"  v-if="eventAction.type.includes('MOONRIVER_ERC20')"   height="20px" />
+              <img style="padding-right: 5px;" src="../../../../assets/moonbeam.png"  v-if="eventAction.type.includes('MOONBEAM_ERC20')"   height="20px" />
               <img style="padding-right: 5px" src="../../../../assets/tezos.png"  v-if="eventAction.type.includes('BLOCKCHAIN_TEZ')"   height="22px" />
               <img style="padding-right: 5px" src="../../../../assets/binance-logo.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_BSC')"   height="22px" />
               <img style="padding-right: 5px;" src="../../../../assets/matic-logo.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_MATIC')"   height="20px" />
@@ -30,7 +33,7 @@
               <img style="padding-right: 5px;" src="../../../../assets/avalanche.png"  v-if="eventAction.type.includes('BLOCKCHAIN_AVAX')"   height="20px" />
               <img style="padding-right: 5px;" src="../../../../assets/Reef.svg"  v-if="eventAction.type.includes('BLOCKCHAIN_REEF')"   height="20px" />
             </span>
-            <span >{{ truncate1(eventAction.title, 8) }}</span>
+            <span>{{ truncate1(eventAction.title, 8)}}</span>
             <span style="color: gray;padding-left: 5px"><i style=""  class="fas fa-minus-circle"></i></span>
         </div>
         </div>
@@ -88,7 +91,7 @@
           </div>  
         </div>
 
-        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType!='PRIZE'">
+        <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType!='PRIZE' && eventActionType!=='TAGS'">
           <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="title" class="col-form-label">Title<span style="color: red">*</span>: </label>
           </div>
@@ -230,7 +233,7 @@ margin-left: 2px;
 </style>
 <script>
 import notificationMixins from '../../../../mixins/notificationMixins';
-import {isEmpty,isValidURL, truncate,isdiscordLink,isContractValid,isretweetUrl} from '../../../../mixins/fieldValidationMixin';
+import {isEmpty,isValidURL, truncate,isdiscordLink,isContractValid,isretweetUrl,isNum} from '../../../../mixins/fieldValidationMixin';
 import 'v-markdown-editor/dist/v-markdown-editor.css';
 import Messages from "../../../../utils/messages/admin/en"
 import Vue from 'vue'
@@ -254,41 +257,69 @@ export default {
   },
   computed:{
     noSocialhandle(){
-      if(this.eventActionType !='CUSTOM' && this.eventActionType !='BLOCKCHAIN' && this.eventActionType !='SMARTCONTRACT' && this.selected.type!='TWITTER_RETWEET' && this.selected.type!='DISCORD_JOIN' && this.eventActionType !='PRIZE')
-      return true
+      if(this.eventActionType !='CUSTOM' && this.eventActionType !='BLOCKCHAIN' && this.eventActionType !='SMARTCONTRACT' && this.selected.type!='TWITTER_RETWEET' && this.selected.type!='DISCORD_JOIN' && this.eventActionType !='PRIZE'){
+      return true;
+      }
+      else{
+        return false;
+      }
     },
     url(){
-      if(this.eventActionType === 'CUSTOM' && this.selected.type ==='HYPERLINK_URL')
-      return true
+      if(this.eventActionType === 'CUSTOM' && this.selected.type ==='HYPERLINK_URL'){
+      return true;
+      }
+      else{
+        return false;
+      }
     },
    
     placeH(){
       if(this.eventActionType != 'SOCIAL'  && this.selected.type !='HYPERLINK_URL' && this.selected.type !='INFO_TEXT' && this.eventActionType !='PRIZE' && this.selected.type!='REEF_ERC20')
-      return true
+      {
+        return true;
+      }
+      else{
+        return false;
+      }
     },
     info(){
       if(this.eventActionType === 'CUSTOM' && this.selected.type ==='INFO_TEXT'){
-      return true
+      return true;
+      }
+      else{
+        return false;
       }
     },
     noScore(){
       if((this.eventActionType === 'CUSTOM' && this.selected.type ==='INFO_TEXT') || this.eventActionType ==='PRIZE'){
-        return true
+        return true;
+      }
+      else{
+        return false;
       }
     },
     showRetweet(){
       if(this.eventActionType ==='SOCIAL' &&  this.selected.type==='TWITTER_RETWEET'){
-        return true
+        return true;
+      }
+      else{
+        return false;
       }
     },
     showInvitelink(){
       if(this.eventActionType ==='SOCIAL' &&  this.selected.type==='DISCORD_JOIN'){
-        return true
+        return true;
+      }
+      else{
+        return false;
       }
     },
     prize(){
       if(this.eventActionType ==='PRIZE'){
-        return true
+        return true;
+      }
+      else{
+        return false;
       }
     }
   },
@@ -506,9 +537,9 @@ export default {
           }else if(isEmpty(this.prizeDetails.winners)){
             isvalid = false
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.EMPTY_NO_OF_WINNERS)
-          }else if(isValidURL(this.prizeDetails.winners)){
+          }else if(isValidURL(this.prizeDetails.winners) || !isNum(this.prizeDetails.winners)){
             isvalid = false
-            this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_NUMBER_OF_WINNER_NOT_URL)
+            this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_NUMBER_OF_WINNER)
           }else if(isEmpty(this.prizeDetails.prizeValue)){
             isvalid = false
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.EMPTY_PRIZE_PER_WINNER)
@@ -532,12 +563,10 @@ export default {
       let isvalid = this.handleEventActionValidation()
       if(isvalid) {
         if(this.eventActionType === 'SMARTCONTRACT'){
-          this.selected.value = JSON.stringify(this.contract); 
-          console.log(this.selected.value);
+          this.selected.value = JSON.stringify(this.contract);
         }
         if(this.eventActionType ==='PRIZE'){
           this.selected.value = JSON.stringify(this.prizeDetails);
-          console.log(this.selected.value);
         }
         this.selected["id"] = this.eventActionType + "_" +  this.eventActionList.length;
         this.eventActionList.push(this.selected);      
@@ -556,7 +585,7 @@ export default {
       this.eventActionList.splice(this.currentSelectedId, 1);
       this.$emit("updateEventActions", {
         type: "DELETE",
-        data: actionToDelete._id || actionToDelete.id
+        data: actionToDelete
       })
       this.clearSelected();
       this.isCreate=true
