@@ -203,7 +203,9 @@
           <label for="endDate" class="col-form-label">Notification: </label>
       </div>
       <div class="col-lg-9 col-md-9 px-0"> 
-        <input  class="largerCheckbox" type="checkbox" v-model="project.isNotificaionEnabled" title="Check to notify all platform users about this event" id="">
+        <b-form-checkbox v-model="project.isNotificaionEnabled" name="check-button" switch>
+        </b-form-checkbox>
+        <!-- <input  class="largerCheckbox" type="checkbox" v-model="project.isNotificaionEnabled" title="Check to notify all platform users about this event" id=""> -->
       </div>  
     </div>
 
