@@ -187,7 +187,7 @@
      <div >
         <div class="row g-3 align-items-center w-100 mt-4">
           <div class=" text-left col-lg-3 col-md-3 text-left">
-              <label for="type" class="col-form-label">Choose tag<span style="color: red">*</span>: </label>
+              <label for="type" class="col-form-label">Tags<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-8 col-md-8 px-0" >
             <b-form-select v-model="selected.type" :options="options"></b-form-select>
@@ -200,7 +200,7 @@
 
     <div class="row g-3 align-items-center w-100 mt-4">
       <div class="col-lg-3 col-md-3 text-left">
-          <label for="endDate" class="col-form-label" title="Check to notify all platform users about this event">Enable Notifications: </label>
+          <label for="endDate" class="col-form-label">Notification: </label>
       </div>
       <div class="col-lg-9 col-md-9 px-0"> 
         <input  class="largerCheckbox" type="checkbox" v-model="project.isNotificaionEnabled" title="Check to notify all platform users about this event" id="">
