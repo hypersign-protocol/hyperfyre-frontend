@@ -143,7 +143,11 @@ i {
         border: 1px solid #ced4da;
         background: #fff;
         font-weight:400;
-    }
+  }
+
+  .multiselect__tag{
+    background:   #f1b319;
+  }
 </style>
 <template>
   <div class="home marginLeft marginRight">
