@@ -157,13 +157,12 @@
                 <label for="endDate" class="col-form-label">End Date<span style="color: red">*</span>: </label>
             </div>
             <div class="col-lg-9 col-md-9 px-0">
-                <!-- <input disabled  v-model="project.toDate" type="text"   id="fromDate" class="form-control w-100" > -->
                 <Datepicker 
                 class="datepicker"
                     v-model="project.toDate"
                     name="toDate"
                     format="YYYY-MM-DD h:i:s" 
-                    />
+                />
             </div>  
     </div>
 
@@ -186,7 +185,6 @@
 
 <!--  Tile End  -->
      <div >
-      
         <div class="row g-3 align-items-center w-100 mt-4">
           <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="type" class="col-form-label">Choose tag<span style="color: red">*</span>: </label>
@@ -198,41 +196,15 @@
             <button @click="handleEventActionAdd()" class="btn button-theme slight-left-margin-5" type="button"> {{eventActionList.includes(selected) ? "Cancel" : "Add"}}</button>
           </div>
         </div>
-
-        <!-- <div class="row g-3 justify-content-md-end w-100 mt-4" v-if="isCreate==true">
-          <div class="col-lg-6 col-md-9 px-0">
-            <button @click="handleEventActionAdd()" class="btn button-theme" type="button"> {{eventActionList.includes(selected) ? "Cancel" : "Add"}}</button>
-          </div>  
-        </div> -->
-
-
-        <!-- <div class="row g-3 justify-content-md-end w-100 mt-4" v-else>
-          <div class="col-lg-6 col-md-9 px-0">
-            <button @click="handleEventActionDelete()" class="btn btn-danger slight-left-margin" type="button"> Delete</button>
-            <button @click="handleEventActionCancel()" class="btn button-theme slight-left-margin" type="button"> Cancel</button>
-          </div>  
-        </div> -->
       </div>
 
     <div class="row g-3 align-items-center w-100 mt-4">
-            <div v-if="project.isNotificaionEnabled" class="col-lg-3 col-md-3 text-left">
-                <label for="endDate" class="col-form-label" title="Check to notify all platform users about this event">Enabled Notifications: </label>
-            </div>
-               <div v-else class="col-lg-3 col-md-3 text-left">
-                <label for="endDate" class="col-form-label" title="Check to notify all platform users about this event">Enable Notifications: </label>
-            </div>
-            
-            <div class="col-lg-9 col-md-9 px-0">
-                <!-- <input disabled  v-model="project.toDate" type="text"   id="fromDate" class="form-control w-100" > -->
-                <!-- <Datepicker 
-                class="datepicker"
-                    v-model="project.toDate"
-                    name="toDate"
-                    format="YYYY-MM-DD h:i:s" 
-                    /> -->
-                  
-                    <input  class="largerCheckbox" type="checkbox" v-model="project.isNotificaionEnabled" title="Check to notify all platform users about this event" id="">
-            </div>  
+      <div class="col-lg-3 col-md-3 text-left">
+          <label for="endDate" class="col-form-label" title="Check to notify all platform users about this event">Enable Notifications: </label>
+      </div>
+      <div class="col-lg-9 col-md-9 px-0"> 
+        <input  class="largerCheckbox" type="checkbox" v-model="project.isNotificaionEnabled" title="Check to notify all platform users about this event" id="">
+      </div>  
     </div>
 
   
