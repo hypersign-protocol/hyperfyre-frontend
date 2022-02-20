@@ -177,7 +177,7 @@
             <span>
               <i style="color: gray" v-if="eventAction.type.includes('_TAG')" class="fas fa-tags"></i> 
             </span>
-            <span>{{ CapitaliseString(eventAction.type)}}</span>
+            <span>{{ getTagText(eventAction.type)}}</span>
             <span style="color: gray;padding-left: 5px" ><i style=""  class="fas fa-minus-circle"></i></span>
          </div>
       </div>
@@ -264,18 +264,12 @@ export default {
   },
    async mounted(){
     this.$root.$on('callClearFromProject',()=>{this.clearSelected()})
+    
   },
   methods:{
-    CapitaliseString(string) {
-      if((string.includes("NFT_TAG"))|| string.includes("DEFI_TAG")){
-     let res = string.substring(0, string.indexOf('_'))
-      return res
-      }
-      else{
-      let res = string.split('_');
-      let first = res[0][0].toUpperCase() + res[0].substring(1).toLowerCase()
-      return first 
-      }
+    getTagText(tagType) {
+      const t = this.options.find(x => x.value === tagType)
+      return t?  t.text : "";
     },
     handleEventActionAdd(){
       // Code to Add an Action
