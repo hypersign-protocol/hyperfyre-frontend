@@ -17,7 +17,6 @@
   background-color: rgba(241, 179, 25, 0.24);
   border: 0;
 }
-
 </style>
 <template>
   <div>
@@ -32,9 +31,9 @@
       no-close-on-backdrop
       backdrop-variant="dark"
     >
-      <div class=" px-3 py-2">
+      <div class="px-3 py-2">
         <div class="accordion" role="tablist">
-          <b-card no-body class="mb-1 ">
+          <b-card no-body class="mb-1">
             <b-card-header
               header-tag="header"
               class="p-1 border-0 accordin-header accordion-header-theme"
@@ -44,7 +43,8 @@
                 block
                 v-b-toggle.accordion-1
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fas fa-cog"></i>  General Configurations</b-button
+                 title="Create General configuration for your event"
+                ><i class="fas fa-cog"></i> General Configurations</b-button
               >
             </b-card-header>
             <b-collapse
@@ -55,12 +55,16 @@
             >
               <b-card-body>
                 <general-config
+                  v-on="$listeners"
                   :isProjectEditing="isProjectEditing"
                   :themeColor="themeColor"
                   :fontColor="fontColor"
                   :fontColorDefault="fontColorDefault"
                   :themeColorDefault="themeColorDefault"
                   :project="project"
+                  :eventActionList="tag"
+                  eventActionType="TAGS"
+                  :options="getTagDb"
                 />
               </b-card-body>
             </b-collapse>
@@ -77,6 +81,7 @@
                 v-b-toggle.accordion-2
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
+                 title="Create Referral configuration for your event"
                 ><i class="fa fa-user-plus"></i> Referral Configurations
               </b-button>
             </b-card-header>
@@ -86,10 +91,7 @@
               role="tabpanel"
             >
               <b-card-body>
-                <referral-config
-                  v-on="$listeners"
-                  :project="project"                  
-                />
+                <referral-config v-on="$listeners" :project="project" />
                 <!-- <eventAction-congif
                   v-on="$listeners"
                   :eventActionList="smartContractlist"
@@ -99,8 +101,8 @@
               </b-card-body>
             </b-collapse>
           </b-card>
-<!--Prize  -->
-          <b-card no-body class="mb-1 ">
+          <!--Prize  -->
+          <b-card no-body class="mb-1">
             <b-card-header
               header-tag="header"
               class="p-1 border-0 accordin-header accordion-header-theme"
@@ -110,8 +112,9 @@
                 block
                 v-b-toggle.accordion-3
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fas fa-gift"></i> Prize Configurations  </b-button
-              >
+                 title="Create Prize configuration for your event"
+                ><i class="fas fa-gift"></i> Prize Configurations
+              </b-button>
             </b-card-header>
             <b-collapse
               id="accordion-3"
@@ -129,7 +132,7 @@
               </b-card-body>
             </b-collapse>
           </b-card>
-<!--End Prize  -->
+          <!--End Prize  -->
           <b-card no-body class="mb-1">
             <b-card-header
               header-tag="header"
@@ -141,7 +144,8 @@
                 v-b-toggle.accordion-4
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fab fa-intercom"></i>  Custom Inputs Configurations
+                 title="Create Custom Inputs configuration for your event"
+                ><i class="fab fa-intercom"></i> Custom Inputs Configurations
               </b-button>
             </b-card-header>
             <b-collapse
@@ -171,7 +175,8 @@
                 v-b-toggle.accordion-5
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fas fa-share-alt"></i>  Social Configurations
+                title="Create Social configuration for your event"
+                ><i class="fas fa-share-alt"></i> Social Configurations
               </b-button>
             </b-card-header>
             <b-collapse
@@ -201,7 +206,8 @@
                 v-b-toggle.accordion-6
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fab fa-bitcoin"></i>  Wallet Configurations
+                 title="Create Wallet configuration for your event"
+                ><i class="fab fa-bitcoin"></i> Wallet Configurations
               </b-button>
             </b-card-header>
             <b-collapse
@@ -232,7 +238,9 @@
                 v-b-toggle.accordion-7
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                ><i class="fas fa-file-contract"></i>  Smart Contract Configurations
+                 title="Create Smart contract configuration for your event"
+                ><i class="fas fa-file-contract"></i> Smart Contract
+                Configurations
               </b-button>
             </b-card-header>
             <b-collapse
@@ -251,6 +259,38 @@
             </b-collapse>
           </b-card>
           <!--  -->
+          <!-- Tags Config -->
+          <!-- <b-card no-body class="mb-1">
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-8
+                variant="info"
+                class="bg-transparent border-0 text-left text-primary"
+                title="Create Tags configuration for your event"
+                ><i class="fas fa-tags"></i> Tags
+                Configurations
+              </b-button>
+            </b-card-header>
+            <b-collapse
+              id="accordion-8"
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body>
+                <eventAction-config
+                  v-on="$listeners"
+                  :eventActionList="tag"
+                  eventActionType="TAGS"
+                  :options="options.tagDetails"
+                />
+              </b-card-body>
+            </b-collapse>
+          </b-card> -->
         </div>
         <button
           class="btn btn-primary mt-3 button-theme"
@@ -273,7 +313,7 @@ export default {
   components: {
     GeneralConfig,
     EventActionConfig,
-    ReferralConfig
+    ReferralConfig,
   },
 
   props: {
@@ -295,8 +335,8 @@ export default {
     blockChainType: {
       type: String,
     },
-    contractType:{
-      type: String
+    contractType: {
+      type: String,
     },
     saveProject: {
       type: Function,
@@ -316,33 +356,56 @@ export default {
     isProjectEditing: {
       type: Boolean,
     },
+    tagList:{
+      type: Array,
+    },
+    tagFdb:{
+      type: Array,
+    }
   },
 
   computed: {
     // a computed getter
-    customList: function() {
-      if (this.actionList && this.actionList.length > 0) {
-        return this.actionList.filter(
-          (x) => 
-            x.type.indexOf("INPUT_") > -1 ||  x.type.indexOf("HYPERLINK_URL") > -1 || x.type.indexOf("INFO_TEXT") > -1
-        );
-      } else {
+    getTagDb: function () {
+      if(this.tagFdb && this.tagFdb.length >0){
+        for(let index = 0; index < this.tagFdb.length; index++){
+          this.options.tagDetails.push({
+            text:this.tagFdb[index].tagName, value:this.tagFdb[index].type
+          })
+        }
+        return this.options.tagDetails
+      }
+      else{
         return [];
       }
     },
-
-    socialList: function() {
+    customList: function () {
       if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
           (x) =>
-            x.type.indexOf("TWITTER_") > -1 || x.type.indexOf("TELEGRAM_") > -1 || x.type.indexOf("DISCORD_") > -1
+            x.type.indexOf("INPUT_") > -1 ||
+            x.type.indexOf("HYPERLINK_URL") > -1 ||
+            x.type.indexOf("INFO_TEXT") > -1
         );
       } else {
         return [];
       }
     },
 
-    blockchainList: function() {
+    socialList: function () {
+      if (this.actionList && this.actionList.length > 0) {
+        return this.actionList.filter(
+          (x) =>
+            x.type.indexOf("TWITTER_") > -1 ||
+            x.type.indexOf("TELEGRAM_") > -1 ||
+            x.type.indexOf("DISCORD_") > -1
+        );
+      } else {
+        return [];
+      }
+    },
+
+    blockchainList: function () {
       if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
           (x) => x.type.indexOf("BLOCKCHAIN_") > -1
@@ -351,35 +414,43 @@ export default {
         return [];
       }
     },
-    smartContractlist: function(){
-      if (this.actionList && this.actionList.length >0){
-        return this.actionList.filter(
-          (x)=> x.type.indexOf("ETHEREUM_")  > -1 
-          || x.type.indexOf("MATIC_") > -1
-          || x.type.indexOf("BINANCE_") > -1
-          || x.type.indexOf("REEF_") > -1
-        );
-      }
-      else{
-        return [];
-      }
-    },
-    prizeList: function() {
+    smartContractlist: function () {
       if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
-          (x) => x.type.indexOf("PRIZE_") > -1 
+          (x) =>
+            x.type.indexOf("ETHEREUM_") > -1 ||
+            x.type.indexOf("MATIC_") > -1 ||
+            x.type.indexOf("BINANCE_") > -1 ||
+            x.type.indexOf("REEF_") > -1 ||
+            x.type.indexOf("MOONBEAM_") > -1 ||
+            x.type.indexOf("MOONRIVER_") > -1 ||
+            x.type.indexOf("MOON_") > -1
         );
       } else {
         return [];
       }
     },
+    prizeList: function () {
+      if (this.actionList && this.actionList.length > 0) {
+        return this.actionList.filter((x) => x.type.indexOf("PRIZE_") > -1);
+      } else {
+        return [];
+      }
+    },
+    tag: function () {
+      if (this.tagList && this.tagList.length > 0) {
+        return this.tagList.filter((x) => x.type.indexOf("_TAG") > -1);
+      } else {
+        return [];
+      }
+    },
   },
-  
+
   data() {
     return {
       /// TODO: Need to do it in a neat way
       // Use api https://localhost:6006/api/v1/actions
-      // it returns: 
+      // it returns:
       // {"actionTypes":["INPUT_TEXT","INPUT_NUMBER","TWITTER_FOLLOW","TWITTER_RETWEET","TELEGRAM_JOIN","DISCORD_JOIN","BLOCKCHAIN_ETH","BLOCKCHAIN_TEZ","HYPERSIGN_AUTH"],"length":9}
       options: {
         customAction: [
@@ -388,8 +459,9 @@ export default {
           { text: "NUMBER", value: "INPUT_NUMBER" },
           { text: "DATE", value: "INPUT_DATE" },
           { text: "LINK", value: "INPUT_HYPERLINK" },
-          { text: "HYPERLINK", value: "HYPERLINK_URL"},
-          { text: "INFO", value: "INFO_TEXT"}
+          { text: "HYPERLINK", value: "HYPERLINK_URL" },
+          { text: "INFO", value: "INFO_TEXT" },
+          
         ],
         socialAction: [
           { text: "Select Social Action type", value: null },
@@ -408,17 +480,23 @@ export default {
           { text: "Reef", value: "BLOCKCHAIN_REEF" },
           { text: "Tezos", value: "BLOCKCHAIN_TEZ" },
         ],
-        smartContractAction:[
-          { text: "Select Contract Type", value:null},
-          { text: "Ethereum ERC20", value:"ETHEREUM_ERC20"},
-          { text: "Polygon ERC20", value:"MATIC_ERC20"},
-          { text: "Binance ERC20", value:"BINANCE_ERC20"},
-          { text: "Reef ERC20", value:"REEF_ERC20"},
+        smartContractAction: [
+          { text: "Select Contract Type", value: null },
+          { text: "Ethereum ERC20", value: "ETHEREUM_ERC20" },
+          { text: "Polygon ERC20", value: "MATIC_ERC20" },
+          { text: "Binance ERC20", value: "BINANCE_ERC20" },
+          { text: "Moon Beam ERC20", value: "MOONBEAM_ERC20" },
+          { text: "Moon River ERC20", value: "MOONRIVER_ERC20" },
+          { text: "Moon Alpha(testnet) ERC20", value: "MOON_ERC20" },
+          { text: "Reef ERC20", value: "REEF_ERC20" },
         ],
-        prizeDetails:[
-          { text: "Select Prize Type", value:null},
-          { text: "Prize Card", value:"PRIZE_CARD"},
-        ]
+        prizeDetails: [
+          { text: "Select Prize Type", value: null },
+          { text: "Prize Card", value: "PRIZE_CARD" },
+        ],
+        tagDetails: [
+          { text: "Select Tag Type", value: null },
+        ],
       },
     };
   },

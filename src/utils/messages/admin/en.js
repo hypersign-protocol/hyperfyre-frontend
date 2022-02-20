@@ -29,7 +29,10 @@ const EVENTS = {
         PROJECT_DATE_TIME: "Please specify a start and end date",
         PROJECT_BLOCKCHAIN_TYPE: "Please provide Blockchain Type",
         THEME_NOT_WHITE: "Theme color cannot be white",
-        THEME_COLOR_NOT_SAME: "Theme color and font color cannot be same"
+        THEME_COLOR_NOT_SAME: "Theme color and font color cannot be same",
+        CHOOSE_ATLEAST_ONE_TAG: "Please choose atleast one tag",
+        CHOOSE_TAG:"Please choose Tag",
+        DUPLICATE_TAG:"Duplicate tags are not allowed"
     },
     
     ACTIONS:{
@@ -71,7 +74,7 @@ const EVENTS = {
     PRIZECARD:{
         PRIZE_TYPE: "Please select prize type",
         PRIZE_NAME_NOT_URL:"Please enter valid prize name",
-        PRIZE_NUMBER_OF_WINNER_NOT_URL:"Please enter valid number of winners",
+        PRIZE_NUMBER_OF_WINNER:"Please enter valid number of winners",
         PRIZE_PER_WINNER_NOT_URL:"Please enter valid prize per winner",
         PRIZE_NAME_NOT_EMPTY:"Prize name should not be empty",
         EMPTY_NO_OF_WINNERS: "Number of Winners Should not be empty",
