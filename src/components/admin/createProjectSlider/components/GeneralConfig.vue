@@ -177,8 +177,8 @@
             <span>
               <i style="color: gray" v-if="eventAction.type.includes('_TAG')" class="fas fa-tags"></i> 
             </span>
-            <span>{{ getTagText(eventAction.type)}}</span>
-            <span style="color: gray;padding-left: 5px" ><i style=""  class="fas fa-minus-circle"></i></span>
+            <span style="width:90%">{{ getTagText(eventAction.type)}}</span>
+            <span style="color: gray;padding-left: 5px" ><i class="fas fa-minus-circle"></i></span>
          </div>
       </div>
    </div>
