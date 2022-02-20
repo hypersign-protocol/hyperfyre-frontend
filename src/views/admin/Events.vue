@@ -157,7 +157,7 @@ i {
     ></loading>
 
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="form-group" style="width:925px">
           <input
             v-if="projects.length"
@@ -171,7 +171,7 @@ i {
         </div>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div id="floatRight">
 
           <multiselect
@@ -189,7 +189,7 @@ i {
           </multiselect>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div class="text-right">
           <button
             @click="openCreateSidebar"
