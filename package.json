@@ -1,14 +1,14 @@
 {
   "name": "hyperfye-frontend",
-  "version": "v5.0.2",
+  "version": "v5.0.5",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode production",
-    "watch":"watchify src/serviceWorker.js  -o public/service-worker.js  -v [ babelify --presets [es2015] ]",
+    "watch": "watchify src/serviceWorker.js  -o public/service-worker.js  -v [ babelify --presets [es2015] ]",
     "start:dev": " vue-cli-service serve --mode staging ",
-    "dev":"npm run watch & npm run start:dev",
+    "dev": "npm run watch & npm run start:dev",
     "setEnv": "cp env.staging .env",
-    "serviceworker":"browserify src/serviceWorker.js  -o public/service-worker.js  -v [ babelify --presets [es2015] ]",
+    "serviceworker": "browserify src/serviceWorker.js  -o public/service-worker.js  -v [ babelify --presets [es2015] ]",
     "build": " npm run serviceworker & vue-cli-service build ",
     "build-stage": "vue-cli-service build --mode staging",
     "lint": "vue-cli-service lint",
@@ -63,7 +63,8 @@
     "eslint-plugin-vue": "^5.2.3",
     "prettier": "^2.4.1",
     "vue-template-compiler": "^2.5.16"
-  }, "browserify": {
+  },
+  "browserify": {
     "transform": [
       [
         "babelify",
