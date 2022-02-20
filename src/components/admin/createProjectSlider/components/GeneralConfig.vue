@@ -73,7 +73,11 @@
 }
 
 .slight-left-margin {
-margin-left: 2px;
+  margin-left: 2px;
+}
+
+.slight-left-margin-5{
+  margin-left: 5px;
 }
 
 
@@ -147,7 +151,6 @@ margin-left: 2px;
     </div>
 
 
-
       
     <div class="row g-3 align-items-center w-100 mt-4">
             <div class="col-lg-3 col-md-3 text-left">
@@ -166,7 +169,7 @@ margin-left: 2px;
 
 <!-- Tile -->
    <div v-if="eventActionList.length" style="overflow-y:auto" class="selected-media-wrapper d-flex p-2 mb-4" >
-      <div @click="handleEventActionClick(idx)"           
+      <div @click="handleEventActionClick(idx)"  title="Click to delete this tag"   
           v-for="(eventAction, idx) in eventActionList" v-bind:Key="idx" >
           <div v-if="!eventActionList[idx].isDeleted" :class="flash == idx ?  
             'flash card rounded m-1 p-1 d-flex flex-row align-items-center' : 
@@ -176,7 +179,7 @@ margin-left: 2px;
               <i style="color: gray" v-if="eventAction.type.includes('_TAG')" class="fas fa-tags"></i> 
             </span>
             <span>{{ CapitaliseString(eventAction.type)}}</span>
-            <span style="color: gray;padding-left: 5px"><i style=""  class="fas fa-minus-circle"></i></span>
+            <span style="color: gray;padding-left: 5px" ><i style=""  class="fas fa-minus-circle"></i></span>
          </div>
       </div>
    </div>
@@ -184,26 +187,31 @@ margin-left: 2px;
 <!--  Tile End  -->
      <div >
       
-        <div class="row g-3 align-items-center w-100 mt-4" v-if="flash==idx" >
+        <div class="row g-3 align-items-center w-100 mt-4">
           <div class=" text-left col-lg-3 col-md-3 text-left">
               <label for="type" class="col-form-label">Choose tag<span style="color: red">*</span>: </label>
           </div>
-          <div class="col-lg-9 col-md-9 px-0" >
+          <div class="col-lg-8 col-md-8 px-0" >
             <b-form-select v-model="selected.type" :options="options"></b-form-select>
           </div>  
+          <div class="col-lg-1 col-md-1 px-0" >
+            <button @click="handleEventActionAdd()" class="btn button-theme slight-left-margin-5" type="button"> {{eventActionList.includes(selected) ? "Cancel" : "Add"}}</button>
+          </div>
         </div>
 
-        <div class="row g-3 justify-content-md-end w-100 mt-4" v-if="isCreate==true">
+        <!-- <div class="row g-3 justify-content-md-end w-100 mt-4" v-if="isCreate==true">
           <div class="col-lg-6 col-md-9 px-0">
             <button @click="handleEventActionAdd()" class="btn button-theme" type="button"> {{eventActionList.includes(selected) ? "Cancel" : "Add"}}</button>
           </div>  
-        </div>
-        <div class="row g-3 justify-content-md-end w-100 mt-4" v-else>
+        </div> -->
+
+
+        <!-- <div class="row g-3 justify-content-md-end w-100 mt-4" v-else>
           <div class="col-lg-6 col-md-9 px-0">
             <button @click="handleEventActionDelete()" class="btn btn-danger slight-left-margin" type="button"> Delete</button>
             <button @click="handleEventActionCancel()" class="btn button-theme slight-left-margin" type="button"> Cancel</button>
           </div>  
-        </div>
+        </div> -->
       </div>
 
     <div class="row g-3 align-items-center w-100 mt-4">
@@ -375,8 +383,8 @@ export default {
       this.currentSelectedId = idx;
 
       this.selected = updateData;
-      this.isCreate=false
-
+      this.isCreate=false;
+      this.handleEventActionDelete();
     },
   },
     mixins: [notificationMixins]
