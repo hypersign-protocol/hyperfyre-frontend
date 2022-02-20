@@ -30,9 +30,6 @@
 .floatRight {
   float: right;
 }
-#floatRight {
-  float: right;
-}
 .card-header {
   background: aliceblue;
   padding: 0px;
@@ -172,8 +169,7 @@ i {
       </div>
 
       <div class="col-md-3">
-        <div id="floatRight">
-
+        <div>
           <multiselect
             v-model="selected"
             placeholder="Search events by tags"
