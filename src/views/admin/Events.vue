@@ -30,9 +30,6 @@
 .floatRight {
   float: right;
 }
-#floatRight {
-  float: right;
-}
 .card-header {
   background: aliceblue;
   padding: 0px;
@@ -146,7 +143,11 @@ i {
         border: 1px solid #ced4da;
         background: #fff;
         font-weight:400;
-    }
+  }
+
+  .multiselect__tag{
+    background:   #f1b319;
+  }
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -157,7 +158,7 @@ i {
     ></loading>
 
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="form-group" style="width:925px">
           <input
             v-if="projects.length"
@@ -171,9 +172,8 @@ i {
         </div>
       </div>
 
-      <div class="col-md-4">
-        <div id="floatRight">
-
+      <div class="col-md-3">
+        <div>
           <multiselect
             v-model="selected"
             placeholder="Search events by tags"
@@ -189,7 +189,7 @@ i {
           </multiselect>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div class="text-right">
           <button
             @click="openCreateSidebar"
