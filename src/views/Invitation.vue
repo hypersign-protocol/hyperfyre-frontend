@@ -53,13 +53,24 @@ methods:{
         });
         if(resp.status===400){
             const errorMsg=await resp.json();
-           return this.$swal.fire({
+            if(errorMsg.Error){
+            return this.$swal.fire({
             position: 'center',
             icon: 'warning',
-            title: `${errorMsg}`,
+            title: `${errorMsg.Error}`,
             showConfirmButton: false,
             timer: 5000
             })
+            }
+            else{
+           return this.$swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: `${errorMsg.message}`,
+            showConfirmButton: false,
+            timer: 5000
+            })
+        }
           
         }
         else{
