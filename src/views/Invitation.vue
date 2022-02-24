@@ -56,7 +56,7 @@ methods:{
            return this.$swal.fire({
             position: 'center',
             icon: 'warning',
-            title: `${errorMsg}`,
+            title: `${errorMsg.Error}`,
             showConfirmButton: false,
             timer: 5000
             })
