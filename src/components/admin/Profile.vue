@@ -89,11 +89,12 @@
           <div class="card-body">
             <div class="row">
               <div class="col-md-4">
-                <img
+                <!-- <img
                   src="../../assets/avatar.png"
                   alt="John"
                   style="width: 100%;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);"
-                />
+                /> -->
+                <b-avatar style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);" square size="8rem" variant="info" :src="getProfileIcon(user.name) "></b-avatar>
               </div>
               <div class="col-md-8" style="flex-wrap: wrap; padding: 20px">
                 <p>DID</p>
@@ -118,10 +119,13 @@
 </template>
 
 <script>
+import profileIconMixins from "../../mixins/profileIconMixins";
+
 export default {
   name: "Profile",
   mounted() {},
   components: {},
+  mixins: [profileIconMixins],
   data() {
     return {
       active: 0,
