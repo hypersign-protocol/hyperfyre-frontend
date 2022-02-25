@@ -284,7 +284,7 @@ i {
               title="Start Date"
             >
               <i class="fas fa-hourglass-start"></i>
-              {{ new Date(project.fromDate).toLocaleString() }}
+              {{ formateDate(project.fromDate)}}
             </li>
             <li
               data-toggle="tooltip"
@@ -292,7 +292,7 @@ i {
               title="End Date"
             >
               <i class="fas fa-hourglass-end"></i>
-              {{ new Date(project.toDate).toLocaleString() }}
+              {{ formateDate(project.toDate) }}
             </li>
 
             <li
@@ -794,7 +794,14 @@ export default {
       this.$router.push(`${id}`);
     },
     formateDate(d) {
-      return new Date(d).toLocaleString();
+      if(d) {
+        let date = new Date(d);
+        return date.toDateString() + " " + date.toLocaleString('en-US', { hour: 'numeric', hour12: true });
+      } else {
+        return new Date()
+      }
+      
+      // return new Date(d).toLocaleString();
     },
     editProject(project) {
       this.resetAllValues();
