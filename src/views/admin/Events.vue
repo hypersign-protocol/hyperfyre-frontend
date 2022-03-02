@@ -131,10 +131,10 @@ i {
 }
 
 .fixBanner {
-  min-width: 150px;
-  min-height: 150px;
-  max-width: 150px;
-  max-height: 150px;
+  min-width: 400px;
+  min-height: 200px;
+  max-width: 400px;
+  max-height: 200px;
 }
 </style>
 <style>
@@ -250,117 +250,113 @@ i {
     </div>
     <div class="row" style="margin-top: 2%">
       <div
-        class="col-md-12 my-5 w-100"
-        style="text-align: left; max-height: 660px; overflow-y: scroll"
+        class="col-md-4"
+        v-for="project in projectsToShow"
+        v-bind:key="project.projectName"
       >
-        <div
-          class="card event-card"
-          v-for="project in projectsToShow"
-          v-bind:key="project.projectName"
+      <div>
+        <b-card
+          :title="truncate1(project.projectName,25)"
+          :img-src="project.logoUrl"
+          img-alt="Image"
+          img-top
+          img-height="150"
+          tag="article"
+          style="max-width: 20rem;margin-top:20px;"
+          class="mb-2"
+          @error="onBannerError($event)"
         >
-          <div class="theme event-card-header">
-            <span style="">{{ truncate1(project.projectName, 25) }}</span>
-            <span
+          <ul style="list-style-type: none;padding-left: 0px;">
+            <li
               data-toggle="tooltip"
               data-placement="bottom"
-              title="Project Status"
-              style="float: right"
+              title="EventId"
             >
-              <span v-if="project.projectStatus == true">
-                <i class="fas fa-signal" style="color: green"></i>
+              <i class="far fa-id-card"></i
+              ><span class="card-title">{{ project._id }}</span>
+              <span @click="copy(project._id, 'EventId')" class="copy"
+                ><i class="far fa-copy"></i
+              ></span>
+            </li>
+            <li
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Start Date"
+            >
+              <i class="fas fa-hourglass-start"></i>
+              {{ formateDate(project.fromDate)}}
+            </li>
+            <li
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="End Date"
+            >
+              <i class="fas fa-hourglass-end"></i>
+              {{ formateDate(project.toDate) }}
+            </li>
+
+            <li
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Event Url"
+            >
+              <i class="fas fa-calendar-alt"></i>
+              <a
+                :href="project.whitelisting_link"
+                target="_blank"
+                class="card-body-custom"
+              >
+                Event Url</a
+              ><span
+                @click="copy(project.whitelisting_link, 'Form Url')"
+                class="copy"
+                ><i class="far fa-copy"></i
+              ></span>
+            </li>
+
+            <li
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Participants List"
+            >
+              <i class="fas fa-users"></i
+              ><a
+                class="card-body-custom"
+                :href="`/admin/participants?projectId=${project._id}`"
+                >Participants ({{ project.investorsCount }})</a
+              >
+            </li>
+            <li
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Edit Event"
+            >
+              <i class="fas fa-pencil-alt" ></i>          
+              <b-link href="#" variant="primary" @click="editProject(project)">Edit Event </b-link>
+            </li>
+          </ul>
+          <footer>
+            <small >
+                <b-badge  v-for="tag in project.tags"
+                :key="tag.id"
+                pill 
+                variant="secondary">{{tag.type.split('_')[0]}}</b-badge>
+            </small>
+            <small style="float:right">
+              <span v-if="project.projectStatus == true" data-toggle="tooltip" title="Active">
+              <i class="fas fa-signal" style="color: green"></i>
               </span>
               <span
-                v-if="!project.projectStatus || project.projectStatus == false"
+              v-if="!project.projectStatus || project.projectStatus == false"
+              data-toggle="tooltip" title="Inactive"
               >
-                <i class="fas fa-signal" style="color: red"></i>
+              <i class="fas fa-signal" style="color: red"></i>
               </span>
-            </span>
-          </div>
-          <div class="card-body card-body-custom">
-            <div class="row">
-              <div class="col-md-4">
-                <img
-                  :src="project.logoUrl"
-                  class="fixBanner"
-                  @error="onBannerError($event)"
-                />
-              </div>
-              <div class="col-md-8">
-                <ul style="list-style-type: none">
-                  <li
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="EventId"
-                  >
-                    <i class="far fa-id-card"></i
-                    ><span class="card-title">{{ project._id }}</span>
-                    <span @click="copy(project._id, 'EventId')" class="copy"
-                      ><i class="far fa-copy"></i
-                    ></span>
-                  </li>
-                  <li
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="Start Date"
-                  >
-                    <i class="fas fa-hourglass-start"></i>
-                    {{ new Date(project.fromDate).toLocaleString() }}
-                  </li>
-                  <li
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="End Date"
-                  >
-                    <i class="fas fa-hourglass-end"></i>
-                    {{ new Date(project.toDate).toLocaleString() }}
-                  </li>
-
-                  <li
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="Event Url"
-                  >
-                    <i class="fas fa-calendar-alt"></i>
-                    <a
-                      :href="project.whitelisting_link"
-                      target="_blank"
-                      class="card-body-custom"
-                    >
-                      Event Url</a
-                    ><span
-                      @click="copy(project.whitelisting_link, 'Form Url')"
-                      class="copy"
-                      ><i class="far fa-copy"></i
-                    ></span>
-                  </li>
-
-                  <li
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="Participants List"
-                  >
-                    <i class="fas fa-users"></i
-                    ><a
-                      class="card-body-custom"
-                      :href="`/admin/participants?projectId=${project._id}`"
-                      >Participants ({{ project.investorsCount }})</a
-                    >
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="theme event-card-footer">
-            <span
-              style="float: right; cursor: pointer"
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Edit this event"
-              ><i class="fas fa-pencil-alt" @click="editProject(project)"></i
-            ></span>
-          </div>
-        </div>
+            </small>
+          </footer>
+        </b-card>
       </div>
+    </div>
     </div>
     <paginate
       v-if="projectsToShow.length"
@@ -399,6 +395,7 @@ export default {
 
   data() {
     return {
+      requiredColumn:2,
       project: {
         _id: "",
         projectName: "",
@@ -556,6 +553,7 @@ export default {
       }
     },
     onBannerError(e) {
+      console.log(e.target)
       e.target.src = require("../../assets/default-banner.png");
     },
     copy(textToCopy, contentType) {
@@ -796,7 +794,14 @@ export default {
       this.$router.push(`${id}`);
     },
     formateDate(d) {
-      return new Date(d).toLocaleString();
+      if(d) {
+        let date = new Date(d);
+        return date.toDateString() + " " + date.toLocaleString('en-US', { hour: 'numeric', hour12: true });
+      } else {
+        return new Date()
+      }
+      
+      // return new Date(d).toLocaleString();
     },
     editProject(project) {
       this.resetAllValues();
@@ -1125,7 +1130,18 @@ export default {
       return truncate(str, number);
     },
   },
+  computed: {
+    columns () {
+      let columns = []
 
+      let mid = Math.ceil(this.projectsToShow.length / this.requiredColumn)
+      for (let col = 0; col < this.requiredColumn; col++) {
+        console.log(this.projectsToShow.slice(col * mid, col * mid + mid))
+        columns.push(this.projectsToShow.slice(col * mid, col * mid + mid))
+      }
+      return columns
+    }
+  },
   mixins: [notificationMixins],
 };
 </script>

@@ -9,7 +9,7 @@
     <b-col cols="4" sm="4" class="border-right" md="4">
       <div class="py-4">
         <div class="number">{{ totalEntries }}</div>
-        <div class="text">Total Entries</div>
+        <div class="text">Total Users</div>
       </div>
     </b-col>
     <b-col cols="4" sm="4" md="4">

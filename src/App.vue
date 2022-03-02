@@ -1,26 +1,36 @@
 <template>
   <div id="app">
     <NavBar title="HyperFyre" :show="showUserNav" />
-    <div :class="[
+    <!-- <div :class="[
         showNavbar & !showUserNav
           ? isSidebarCollapsed
             ? 'showNavbar collapsed'
             : 'showNavbar notCollapsed'
           : 'hideNavbar',
+      ]"> -->
+    <div :class="[
+        isSidebarCollapsed 
+            ? 'container-collapsed-not hideNavbar'
+            : 'container-collapsed',
       ]">
       <sidebar-menu class="sidebar-wrapper" @toggle-collapse="onToggleCollapse" :collapsed="isSidebarCollapsed" @item-click="onItemClick" :theme="'white-theme'" width="220px" 
       :menu="isSubscribed? menu : unsubsSubscribedMenu" v-if="showNavbar">
-        <span slot="header" style="background:#363740">
+        <div slot="header" style="background:#363740">
           <div class="ml-1 mt-3 mb-2" style="padding-left:1px; text-align:center; margin-right: 2.25rem !important;" > 
           <a  v-if="!isSidebarCollapsed" href="/admin/dashboard"><img :src="require('./assets/logo.png')" alt="logo" width="175vw" /></a>
           <a v-if="isSidebarCollapsed" href="/admin/dashboard"><img :src="require('./assets/favicon.png')" alt="logo" width="35vw" /></a>
           </div>
           <!-- <p class="header-text">{{ $config.app.name }}</p> -->
           <hr class="rule" />
-        </span>
+        </div>
         <span slot="footer" class="text-center">{{ $config.app.version }}</span>
       </sidebar-menu>
-      <div class="content-wrapper">
+      <!-- <div class="content-wrapper"> -->
+       <div :class="[
+        showNavbar
+            ? 'content-wrapper'
+            : 'content-wrapper-not',
+      ]">
         <router-view />
       </div>
       <div class="footer">Powered By: <a href="https://hypersign.id/" target="_blank"> HyperSign</a></div>
@@ -62,24 +72,35 @@ export default {
           exactPath: true,
         },
         {
-          href: "/admin/subscription",
-          title: "Subscriptions",
-          icon: "fas fa-receipt",
-          exactPath: true,
-        },
-        {
-          href: "/admin/teams",
-          title: "Teams",
-          icon: "fas fa-user-plus",
-          exactPath: true,
-          
-        },
-        {
-          href: "/admin/login",
-          title: "Logout",
-          icon: "fas fa-sign-out-alt",
-          exactPath: true,
-        },
+          title: "Settings",
+          icon: "fas fa-cog",
+          badge: {
+            text: 'new',
+            class: 'vsm--badge_default'
+            // attributes: {}
+            // element: 'span'
+          },
+          child: [
+            {
+              href: "/admin/teams",
+              title: "Teams",
+              icon: "fas fa-user-plus",
+              exactPath: true,
+            },
+            {
+              href: "/admin/subscription",
+              title: "Subscriptions",
+              icon: "fas fa-receipt",
+              exactPath: true,
+            },
+            {
+              href: "/admin/login",
+              title: "Logout",
+              icon: "fas fa-sign-out-alt",
+              exactPath: true,
+            },
+          ]
+        }
       ],
       unsubsSubscribedMenu: [
         {
@@ -237,10 +258,12 @@ export default {
   margin-bottom: 1%;
 }
 
-.showNavbar .content-wrapper {
+.content-wrapper {
   padding: 50px 20px;
 }
-
+.container-collapsed {
+  padding-left: 150px;
+}
 .showNavbar.notCollapsed>.content-wrapper {
   width: calc(100vw - 200px);
   margin-left: auto;
