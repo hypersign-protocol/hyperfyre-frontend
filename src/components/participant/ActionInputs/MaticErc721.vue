@@ -163,7 +163,7 @@ export default {
       } else {
         try {
           let balance = await this.fetchBalance();
-          if (balance.Users_Nft !== undefined) {
+          if (balance !== undefined) {
             if (balance.Users_Nft >= Number.parseFloat(this.value.thresholdBalance)) {
               this.$emit("input",  JSON.stringify({
                 ...this.value,
