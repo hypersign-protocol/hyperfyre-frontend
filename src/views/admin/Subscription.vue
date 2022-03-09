@@ -337,139 +337,129 @@ export default {
   methods: {
    showAlert(data,subsID){
     
-     const subsInfo= this.paidSubscriptions.find(elm=>{
+      const subsInfo= this.paidSubscriptions.find(elm=>{
+        return elm._id===subsID
+      })
 
-       
-       return elm._id===subsID
-     })
- 
- 
-let paymentData;
-let truncatedHash;
-let tr;
-    
-     paymentData=subsInfo.paymentData;
-     tr=paymentData.transaction;
-    truncatedHash=truncate(tr,35)
-     
-  let color= (paymentData.status==='paid')?'teal':(paymentData.status==='validated'?'green':paymentData.status==='failed'?'red':'teal')
-     
-     
+      let paymentData;
+      let truncatedHash;
+      let tr;
+
+      paymentData=subsInfo.paymentData;
+      tr=paymentData.transaction;
+      truncatedHash=truncate(tr,35)
+        
+      let color= (paymentData.status==='paid')?'teal':(paymentData.status==='validated'?'green':paymentData.status==='failed'?'red':'teal')
       // console.log(JSON.stringify(data));
       // console.log(JSON.parse(decodeURIComponent(data.extra)));
-this.$swal.fire({
-  position:'center',
-  focusConfirm: true,
-  
-  html:`                        
-<div class="receipt-content">
-    <div class="container bootstrap snippets bootdey">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="invoice-wrapper">
-					<div class="intro">
-						Hi <strong>${this.user.name}</strong>, 
-						<br>
-						This is the receipt for a payment of <strong>${paymentData.amount.toPrecision(6)}</strong> (${paymentData.token.token}) for your Plan <strong>${this.getPlanName(subsInfo.planId)}</strong>
-					</div>
-  <br>
-	<div class="payment-info">
-						<div class="row">
-							<div class="col-sm-12 text-left">
-								<span>Transaction Hash</span><br>
-								 <strong id='txn-hash1'>${truncatedHash}</strong> 
-                 <strong id='txn-hash' style="display:none">${tr}</strong> 
-                 <i onclick="(function(){
-                  
-                     let str=document.getElementById('txn-hash').innerHTML 
-                    
-                     return navigator.clipboard.writeText(str)
-                     }
-                     )();" class="fa fa-clone" style="cursor:pointer" aria-hidden="true"></i>
-							</div>
+      this.$swal.fire({
+        position:'center',
+        focusConfirm: true,
+        html:`                        
+        <div class="receipt-content">
+        <div class="container bootstrap snippets bootdey">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="invoice-wrapper">
+              <div class="intro">
+                Hi <strong>${this.user.name}</strong>, 
+                <br>
+                This is the receipt for a payment of <strong>${paymentData.amount.toPrecision(6)}</strong> (${paymentData.token.token}) for your Plan <strong>${this.getPlanName(subsInfo.planId)}</strong>
+              </div>
+        <br>
+        <div class="payment-info">
+                <div class="row">
+                  <div class="col-sm-12 text-left">
+                    <span>Transaction Hash</span><br>
+                      <strong id='txn-hash1'>${truncatedHash}</strong> 
+                      <strong id='txn-hash' style="display:none">${tr}</strong> 
+                      <i onclick="(function(){
+                      
+                          let str=document.getElementById('txn-hash').innerHTML 
+                        
+                          return navigator.clipboard.writeText(str)
+                          }
+                          )();" class="fa fa-clone" style="cursor:pointer" aria-hidden="true"></i>
+                  </div>
 
-              
-						
-						</div>
-					</div>
-<br>
-					<div class="payment-info">
-						<div class="row">
-							<div class="col-sm-6 text-left">
-								<span>Subscription Id</span>
-								<strong id='sub-id'>${subsID}</strong>
-                <i onclick="(function(){
                   
-                     let str=document.getElementById('sub-id').innerHTML 
-                    
-                     return navigator.clipboard.writeText(str)
-                     }
-                     )();" class="fa fa-clone" style="cursor:pointer" aria-hidden="true"></i>
-							</div>
-							<div class="col-sm-6 text-right">
-								<span>Payment Date</span>
-								<strong>${new Date(paymentData.paidAt).toLocaleDateString()}</strong>
-							</div>
-						</div>
-					</div>
-
-					<div class="payment-details">
-						<div class="row">
-							<div class="col-sm-6 text-left">
-								<span>Client Name</span>
-                </br>
-								<strong>
-									${this.user.name}
-								</strong>
+                
                 </div>
-                	<div class="col-sm-6 text-right">
-							<span>Email Id.</span>
-              </br>
-									<strong>
-										${this.user.email}
-									</strong>
-								
-							</div>
-							
-						</div>
-					</div>
+              </div>
+        <br>
+              <div class="payment-info">
+                <div class="row">
+                  <div class="col-sm-6 text-left">
+                    <span>Subscription Id</span>
+                    <strong id='sub-id'>${subsID}</strong>
+                    <i onclick="(function(){
+                      
+                          let str=document.getElementById('sub-id').innerHTML 
+                        
+                          return navigator.clipboard.writeText(str)
+                          }
+                          )();" class="fa fa-clone" style="cursor:pointer" aria-hidden="true"></i>
+                  </div>
+                  <div class="col-sm-6 text-right">
+                    <span>Payment Date</span>
+                    <strong>${new Date(paymentData.paidAt).toLocaleDateString()}</strong>
+                  </div>
+                </div>
+              </div>
 
-				
-				</div>
-        	<br>
-					<div class="intro"    style="color:${color}">
-					Payment Status : <strong>${paymentData.status==='validated'?'Confirmed':(paymentData.status==='paid'?'Pending':'Failed')}</strong>
-         
+              <div class="payment-details">
+                <div class="row">
+                  <div class="col-sm-6 text-left">
+                    <span>Client Name</span>
+                    </br>
+                    <strong>
+                      ${this.user.name}
+                    </strong>
+                    </div>
+                      <div class="col-sm-6 text-right">
+                  <span>Email Id.</span>
+                  </br>
+                      <strong>
+                        ${this.user.email}
+                      </strong>
+                    
+                  </div>
+                  
+                </div>
+              </div>
+
+            
+            </div>
+              <br>
+              <div class="intro"    style="color:${color}">
+              Payment Status : <strong>${paymentData.status==='validated'?'Confirmed':(paymentData.status==='paid'?'Pending':'Failed')}</strong>
+              
+            </div>
+              <div class="intro"    style="color:${color}">
+              Subscription Status : <strong>${subsInfo.isActive===true?'Activated':(paymentData.status==='failed'?'Cancelled':'Pending')}</strong>
+              
+            </div>
+            <div class="intro" style="color:red">
+                <strong>Please Contact Hyperfyre Team if your subscription is not activated within 10 mins of payment</strong>
+            </div>
+          <div class="footer" style="color:black">
+              Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong> <a style="text-decoration:node;color:black" href="http://fyre.hypersign.id/">Hyperfyre</a> </strong>
+            </div>
+          </div>
         </div>
-        	<div class="intro"    style="color:${color}">
-					Subscription Status : <strong>${subsInfo.isActive===true?'Activated':(paymentData.status==='failed'?'Cancelled':'Pending')}</strong>
-         
         </div>
-        <div class="intro" style="color:red">
-           <strong>Please Contact Hyperfyre Team if your subscription is not activated within 10 mins of payment</strong>
-        </div>
-      <div class="footer" style="color:black">
-					Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong> <a style="text-decoration:node;color:black" href="http://fyre.hypersign.id/">Hyperfyre</a> </strong>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>   
-        
-        `,
-  toast:false,
-  title:'<h5>Payment Information</h5>',
-  icon:paymentData.status==='validated'?'success':paymentData.status==='paid'?'info':paymentData.status==='failed'?'error':'warning',
-   showCloseButton: true,
-  showConfirmButton:false,
-  width:'50rem',
- background:"white"
+        </div>   
+            
+            `,
+        toast:false,
+        title:'<h5>Payment Information</h5>',
+        icon:paymentData.status==='validated'?'success':paymentData.status==='paid'?'info':paymentData.status==='failed'?'error':'warning',
+        showCloseButton: true,
+        showConfirmButton:false,
+        width:'50rem',
+        background:"white"
 
-
-
-
-
-})
+      })
     },
     showFeature(plan) {
       plan.visible = !plan.visible
