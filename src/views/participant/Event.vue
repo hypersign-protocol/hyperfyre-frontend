@@ -6,7 +6,7 @@
       :is-full-page="fullPage"
     ></loading>
     <b-card no-body class="mx-auto overflow-hidden mt-3 border-0" style="max-width: 600px;">
-      <Metrics :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0" :totalEntries="eventData && eventData.count ? eventData.count : 0" :timeLeft="timeLeft" />
+      <Metrics :authToken="authToken" @getLeaderBoard="fetchLeaderBoard" :leaderBoardData="leaderBoardData" :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0" :totalEntries="eventData && eventData.count ? eventData.count : 0" :timeLeft="timeLeft" />
       <Banner :eventName="eventData.projectName" :themeColor="eventData.themeColor" :fontColor="eventData.fontColor" :fromDate="new Date(eventData.fromDate).toLocaleString()" :toDate="new Date(eventData.toDate).toLocaleString()" :logoUrl="eventData.logoUrl" />
       <template v-if="authToken == '' || authToken == null">
         <Login :themeColor="eventData.themeColor" :fontColor="eventData.fontColor" @AuthTokenUpdateEvent="updateAuthentication" />
@@ -28,6 +28,7 @@ import Action from "../../components/participant/Action.vue";
 import Metrics from "../../components/participant/Metrics.vue";
 import notificationMixins from "../../mixins/notificationMixins";
 import apiClient from "../../mixins/apiClientMixin";
+import profileIconMixins from "../../mixins/profileIconMixins";
 import eventBus from "../../eventBus.js"
 import Messages from "../../utils/messages/admin/en"
 export default {
@@ -53,7 +54,8 @@ export default {
       userProfileData: {},
       isLoading: false,
       fullPage: true,
-      prizeData:[]
+      prizeData:[],
+      leaderBoardData:[]
     }
   },
   /***
@@ -240,6 +242,25 @@ export default {
       
       this.isLoading=false;
     },
+    async fetchLeaderBoard() {
+      this.isLoading=true
+      if (this.eventSlug && this.eventSlug != "" && this.authToken) {
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.eventData._id}/participants/score?limit=100`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+        const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
+        
+        this.leaderBoardData = resp.data
+        this.showLeaderBoardAlert(resp.data)
+        // console.log(this.leaderBoardData) 
+      } else {
+        this.notifyErr(Messages.EVENT.INVALID_AUTH_TOKEN)
+      }
+      this.isLoading=false;
+    },
+    
     updateUserData(userEventData) {
       if (userEventData) {
         this.userEventData = {
@@ -247,10 +268,39 @@ export default {
         }
         this.fetchEventData();
       }
-    }
+    },
+    showLeaderBoardAlert(data){
+        
+        var swal_html = `<div class="list-group list-group-flush list-group-numbered">`;
+        data.forEach((element, index) => {
+          let img1 = this.getProfileIcon(element.name+index)
+          swal_html=swal_html+`<div class="list-group-item d-flex align-items-center">
+          <span class="b-avatar mr-3 badge-info rounded-circle">
+            <span class="b-avatar-img">
+              <img src="`+img1+`" alt="avatar">
+            </span><!---->
+          </span> 
+          <span class="mr-auto">`+element.name+`</span> 
+          <span class="badge badge-primary ">`+element.numberOfReferals+`</span>
+        </div> `
+        })
+        swal_html =swal_html+ `</div>`;
+        this.$swal.fire({
+          position:'center',
+          focusConfirm: true,
+          html:swal_html,
+          toast:false,
+          title:'<h5>Leader Board</h5>',
+          showCloseButton: true,
+          showConfirmButton:false,
+          width:'50rem',
+          background:"white"
+
+        })
+    },
     
   },
-  mixins:[notificationMixins],
+  mixins:[notificationMixins,profileIconMixins],
 };
 </script>
 <style scoped>

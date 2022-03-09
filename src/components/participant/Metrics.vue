@@ -19,7 +19,7 @@
       </div>
     </b-col>
     <b-col cols="3" sm="3" md="3">
-      <div class="py-4">
+      <div class="py-4" @click="showLeaderBoard()">
         <div class="number"><i class="fas fa-table" ></i></div>
         <div class="text">Leader Board</div>
       </div>
@@ -27,6 +27,7 @@
   </b-row>
 </template>
 <script>
+
 export default {
   props: {
     userScore: Number,
@@ -37,6 +38,11 @@ export default {
   data() {
     return {
       timeUnit: "Days"
+    }
+  },
+  methods:{
+    showLeaderBoard() {
+      this.$emit('getLeaderBoard');
     }
   }
 }
