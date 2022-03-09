@@ -271,7 +271,7 @@ export default {
     },
     showLeaderBoardAlert(data){
         
-        var swal_html = `<div class="list-group list-group-flush list-group-numbered">`;
+        var swal_html = `<div class="list-group list-group-flush leaderBoard">`;
         data.forEach((element, index) => {
           let img1 = this.getProfileIcon(element.name+index)
           swal_html=swal_html+`<div class="list-group-item d-flex align-items-center">
@@ -304,6 +304,11 @@ export default {
 };
 </script>
 <style scoped>
+
+.leaderBoard {
+  max-height:300px;
+  overflow: scroll;
+}
 .content {
   margin-top: 20px;
   padding: 2px;
