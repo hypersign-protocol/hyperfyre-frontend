@@ -290,7 +290,7 @@ export default {
           focusConfirm: true,
           html:swal_html,
           toast:false,
-          title:'<h5>Leader Board</h5>',
+          title:'<h5>Leaderboard</h5>',
           showCloseButton: true,
           showConfirmButton:false,
           width:'50rem',

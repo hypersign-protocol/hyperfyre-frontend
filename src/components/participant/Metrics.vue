@@ -21,7 +21,7 @@
     <b-col cols="3" sm="3" md="3">
       <div class="py-4" @click="showLeaderBoard()">
         <div class="number"><i class="fas fa-table" ></i></div>
-        <div class="text">Leader Board</div>
+        <div class="text">Leaderboard</div>
       </div>
     </b-col>
   </b-row>
