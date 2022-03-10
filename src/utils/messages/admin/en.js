@@ -4,7 +4,8 @@ const DASHBOARD = {
 const EVENT={
     ERROR_OCCURED: "Error occurred: ",
     INVALID_RESPONSE: "Invalid response",
-    INVALID_PROJECT_SLUG:"Invalid Event slug"
+    INVALID_PROJECT_SLUG:"Invalid Event slug",
+    INVALID_AUTH_TOKEN:"Please! login"
 }
 const EVENTS = {
     CHECK_ALL_TYPE:"PLease Check if any type left empty",
