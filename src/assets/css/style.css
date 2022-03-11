@@ -273,7 +273,7 @@ ul.social-links li:hover {
     color: #8B8B8B;
 }
 .banner img {
-    height: 100%;
+    width: 100%;
     object-fit: cover;
 }
 .btn-score {
