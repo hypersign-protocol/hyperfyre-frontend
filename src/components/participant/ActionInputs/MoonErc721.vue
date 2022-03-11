@@ -8,7 +8,7 @@
     >
       <b-row>
         <b-col cols="1" sm="1" md="1">
-          <img src="../../../assets/moonbeam.png" height="25px" />
+          <img src="../../../assets/moonbase-alpha.svg" height="25px" />
         </b-col>
         <b-col cols="9" sm="9" class="text-left" md="9">
           <div class="text text-capitalize">{{ data.title }}</div>
@@ -83,7 +83,7 @@ import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
 import Web3 from "web3";
 export default {
-  name: "MoonbeamErc20",
+  name: "MoonErc721",
   props: {
     idValue: {
       required: true,
@@ -124,7 +124,6 @@ export default {
           this.web3 = new Web3(window.window.ethereum);
         }
       } catch (error) {
-        console.log(error);
         this.showerror = true;
       }
     },
@@ -164,7 +163,8 @@ export default {
         try {
           let balance = await this.fetchBalance();
           if (balance !== undefined) {
-            if (balance >= Number.parseFloat(this.value.thresholdBalance)) {
+            
+            if (balance.Users_Nft >= Number.parseFloat(this.value.thresholdBalance)) {
               this.$emit("input",  JSON.stringify({
                 ...this.value,
               }));
@@ -198,7 +198,7 @@ export default {
         signature: this.signature,
         message: this.message_sign,
       };
-      let url = `${this.$config.studioServer.BASE_URL}api/v1/action/contract/call`;
+      let url = `${this.$config.studioServer.BASE_URL}api/v1/action/contract/nft`;
 
       let headers = {
         "Content-Type": "application/json",

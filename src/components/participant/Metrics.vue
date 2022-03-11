@@ -1,26 +1,33 @@
 <template>
   <b-row class="metrics-info border-bottom-0">
-    <b-col cols="4" sm="4" class="border-right" md="4">
+    <b-col cols="3" sm="3" class="border-right" md="3">
       <div class="py-4">
         <div class="number">{{ userScore }}</div>
         <div class="text">Your Score</div>
       </div>
     </b-col>
-    <b-col cols="4" sm="4" class="border-right" md="4">
+    <b-col cols="3" sm="3" class="border-right" md="3">
       <div class="py-4">
         <div class="number">{{ totalEntries }}</div>
         <div class="text">Total Users</div>
       </div>
     </b-col>
-    <b-col cols="4" sm="4" md="4">
+    <b-col cols="3" sm="3" class="border-right" md="3">
       <div class="py-4">
         <div class="number">{{ timeLeft}}</div>
         <div class="text">Days Left</div>
       </div>
     </b-col>
+    <b-col cols="3" sm="3" md="3">
+      <div class="py-4" @click="showLeaderBoard()">
+        <div class="number"><i class="fas fa-table" ></i></div>
+        <div class="text">Leaderboard</div>
+      </div>
+    </b-col>
   </b-row>
 </template>
 <script>
+
 export default {
   props: {
     userScore: Number,
@@ -31,6 +38,11 @@ export default {
   data() {
     return {
       timeUnit: "Days"
+    }
+  },
+  methods:{
+    showLeaderBoard() {
+      this.$emit('getLeaderBoard');
     }
   }
 }

@@ -43,7 +43,7 @@
                 block
                 v-b-toggle.accordion-1
                 class="bg-transparent border-0 text-left text-primary"
-                 title="Create General configuration for your event"
+                title="Create General configuration for your event"
                 ><i class="fas fa-cog"></i> General Configurations</b-button
               >
             </b-card-header>
@@ -81,7 +81,7 @@
                 v-b-toggle.accordion-2
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                 title="Create Referral configuration for your event"
+                title="Create Referral configuration for your event"
                 ><i class="fa fa-user-plus"></i> Referral Configurations
               </b-button>
             </b-card-header>
@@ -112,7 +112,7 @@
                 block
                 v-b-toggle.accordion-3
                 class="bg-transparent border-0 text-left text-primary"
-                 title="Create Prize configuration for your event"
+                title="Create Prize configuration for your event"
                 ><i class="fas fa-gift"></i> Prize Configurations
               </b-button>
             </b-card-header>
@@ -144,7 +144,7 @@
                 v-b-toggle.accordion-4
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                 title="Create Custom Inputs configuration for your event"
+                title="Create Custom Inputs configuration for your event"
                 ><i class="fab fa-intercom"></i> Custom Inputs Configurations
               </b-button>
             </b-card-header>
@@ -206,7 +206,7 @@
                 v-b-toggle.accordion-6
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                 title="Create Wallet configuration for your event"
+                title="Create Wallet configuration for your event"
                 ><i class="fab fa-bitcoin"></i> Wallet Configurations
               </b-button>
             </b-card-header>
@@ -238,7 +238,7 @@
                 v-b-toggle.accordion-7
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                 title="Create Smart contract configuration for your event"
+                title="Create Smart contract configuration for your event"
                 ><i class="fas fa-file-contract"></i> Smart Contract
                 Configurations
               </b-button>
@@ -356,26 +356,27 @@ export default {
     isProjectEditing: {
       type: Boolean,
     },
-    tagList:{
+    tagList: {
       type: Array,
     },
-    tagFdb:{
+    tagFdb: {
       type: Array,
-    }
+    },
   },
 
   computed: {
     // a computed getter
     getTagDb: function () {
-      if(this.tagFdb && this.tagFdb.length >0){
-        for(let index = 0; index < this.tagFdb.length; index++){
+      if (this.tagFdb && this.tagFdb.length > 0) {
+        for (let index = 0; index < this.tagFdb.length; index++) {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.options.tagDetails.push({
-            text:this.tagFdb[index].tagName, value:this.tagFdb[index].type
-          })
+            text: this.tagFdb[index].tagName,
+            value: this.tagFdb[index].type,
+          });
         }
-        return this.options.tagDetails
-      }
-      else{
+        return this.options.tagDetails;
+      } else {
         return [];
       }
     },
@@ -461,7 +462,6 @@ export default {
           { text: "LINK", value: "INPUT_HYPERLINK" },
           { text: "HYPERLINK", value: "HYPERLINK_URL" },
           { text: "INFO", value: "INFO_TEXT" },
-          
         ],
         socialAction: [
           { text: "Select Social Action type", value: null },
@@ -483,20 +483,25 @@ export default {
         smartContractAction: [
           { text: "Select Contract Type", value: null },
           { text: "Ethereum ERC20", value: "ETHEREUM_ERC20" },
+          { text: "Ethereum ERC721", value: "ETHEREUM_ERC721" },
           { text: "Polygon ERC20", value: "MATIC_ERC20" },
+          { text: "Polygon ERC721", value: "MATIC_ERC721" },
           { text: "Binance ERC20", value: "BINANCE_ERC20" },
+          { text: "Binance ERC721", value: "BINANCE_ERC721" },
           { text: "Moon Beam ERC20", value: "MOONBEAM_ERC20" },
+          { text: "Moon Beam ERC721", value: "MOONBEAM_ERC721" },
           { text: "Moon River ERC20", value: "MOONRIVER_ERC20" },
+          { text: "Moon River ERC721", value: "MOONRIVER_ERC721" },
           { text: "Moon Alpha(testnet) ERC20", value: "MOON_ERC20" },
+           { text: "Moon Alpha(testnet) ERC721", value: "MOON_ERC721" },
           { text: "Reef ERC20", value: "REEF_ERC20" },
+          { text: "Reef ERC721", value: "REEF_ERC721" },
         ],
         prizeDetails: [
           { text: "Select Prize Type", value: null },
           { text: "Prize Card", value: "PRIZE_CARD" },
         ],
-        tagDetails: [
-          { text: "Select Tag Type", value: null },
-        ],
+        tagDetails: [{ text: "Select Tag Type", value: null }],
       },
     };
   },

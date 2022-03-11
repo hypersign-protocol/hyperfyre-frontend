@@ -152,7 +152,7 @@ export default {
 
     async saveSubscription(subscription) {
       const response = await fetch(
-        config.studioServer.BASE_URL + "api/v1/push/subscribe",
+        config.studioServer.BASE_URL + "api/v1/notification/push/subscribe",
         {
           method: "post",
           headers: {
