@@ -199,6 +199,7 @@ export default {
         this.$router.push("/admin/dashboard");
       } else {
         localStorage.setItem("accessToken", row.authToken);
+        console.log(row);
         localStorage.setItem(
           "accessuser",
           JSON.stringify({
@@ -207,7 +208,8 @@ export default {
             adminDid: row.adminDid,
           })
         );
-        this.$router.push("/admin/dashboard");
+         this.$router.push("/admin/dashboard");
+        
       }
     },
     async getTeammates() {
