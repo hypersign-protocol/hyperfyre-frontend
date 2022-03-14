@@ -431,7 +431,18 @@ export default {
         case "MOON_ERC20": {
           return JSON.parse(action.value).userWalletAddress;
         }
+        case "ETHEREUM_ERC721":
+        case "MATIC_ERC721":
+        case "BINANCE_ERC721":
+        case "MOONRIVER_ERC721":
+        case "MOONBEAM_ERC721":
+        case "MOON_ERC721": {
+          return JSON.parse(action.value).userWalletAddress;
+        }
         case "REEF_ERC20": {
+          return JSON.parse(action.value).userWalletAddress.address;
+        }
+        case "REEF_ERC721": {
           return JSON.parse(action.value).userWalletAddress.address;
         }
         default:
