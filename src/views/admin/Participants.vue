@@ -253,6 +253,8 @@ import apiClientMixin from "../../mixins/apiClientMixin";
 import FileDownload from "js-file-download";
 const issuedImgLink = require("../../assets/issued-icon.png");
 import Messages from "../../utils/messages/admin/en";
+import eventBus from '../../eventBus';
+
 export default {
   name: "Investor",
   components: { Loading, Paginate },
@@ -393,6 +395,7 @@ export default {
   },
 
   async mounted() {
+    this.fetchSubscription()
     if (this.$route.query.projectId) {
       this.selectedProjectId = this.$route.query.projectId;
       this.selectedProject = this.$route.query.projectId;
@@ -416,6 +419,54 @@ export default {
   },
 
   methods: {
+    async fetchSubscription() {
+      try {
+        this.isLoading = true;
+
+        // if (!this.user.id) throw new Error("No project owner found");
+
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription?usage=true`;
+        const headers = {
+          Authorization: `Bearer ${this.authToken}`,
+          AccessToken: `Bearer ${this.accessToken}`,
+        };
+        const resp = await fetch(url, {
+          headers,
+          method: "GET",
+        });
+
+        if (!resp.ok) {
+          return this.notifyErr(resp.statusText);
+        }
+        const json = await resp.json();
+        this.subscriptions = json["subscriptions"];
+        this.activeSubscriptions = this.subscriptions.filter((x) =>
+          x.paymentData ? true : x.isActive === true
+        );
+        this.paidSubscriptions = this.subscriptions.filter((x) => {
+          return x.paymentData ? true : x.isPaid === true;
+        });
+
+        const usage = json["usage"];
+
+        if (usage && usage.totalUsed >= usage.totalAvailable) {
+          this.$router.push("/admin/subscription");
+          eventBus.$emit("UpdateAdminNav", false);
+        }
+
+        if (usage && usage.totalAvailable > 0) {
+          eventBus.$emit("UpdateAdminNav", true);
+        } else {
+          eventBus.$emit("UpdateAdminNav", false);
+        }
+        // localStorage.setItem("subscriptions", JSON.stringify(json));
+        // this.notifySuccess("No. of projects fetched " + this.projects.length);
+      } catch (e) {
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     parseActionValue(action) {
       switch (action.type) {
         case "DISCORD_JOIN":
