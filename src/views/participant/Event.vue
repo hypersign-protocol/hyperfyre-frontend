@@ -182,6 +182,7 @@ export default {
       this.isLoading=false;
     },
     async fetchUserInfoOnLogin() {
+      try{
       this.isLoading= true
       if (this.authToken != "" && this.authToken && this.userAuthData.email) {
         
@@ -191,13 +192,13 @@ export default {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
         }
-
         const res = await apiClient.makeCall({
           url,
           header: headers,
           method: "GET",
         })
 
+          console.log(res);
         if(res.data.length == 0){
            // a user can participate in event 
            // Participate in event
@@ -239,8 +240,11 @@ export default {
           this.eventActionsToShow = eventActions
         }
       }
-      
-      this.isLoading=false;
+      }catch(e){
+        eventBus.$emit('logout')
+      }finally{
+        this.isLoading=false;
+      }     
     },
     async fetchLeaderBoard() {
       this.isLoading=true
