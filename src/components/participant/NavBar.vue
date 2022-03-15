@@ -30,6 +30,7 @@ export default {
 		if (localStorage.getItem('authToken')) {
 			this.authToken = localStorage.getItem("authToken")
 		}
+		eventBus.$on('logout',this.logout)
 	},
 	methods: {
 		async setAuth(data) {
