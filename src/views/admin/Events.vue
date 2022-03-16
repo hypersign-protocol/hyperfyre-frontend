@@ -611,7 +611,7 @@ export default {
       }
     },
     onBannerError(e) {
-      console.log(e.target);
+      //console.log(e.target);
       e.target.src = require("../../assets/default-banner.png");
     },
     copy(textToCopy, contentType) {
@@ -1194,7 +1194,7 @@ export default {
 
       let mid = Math.ceil(this.projectsToShow.length / this.requiredColumn);
       for (let col = 0; col < this.requiredColumn; col++) {
-        console.log(this.projectsToShow.slice(col * mid, col * mid + mid));
+        //console.log(this.projectsToShow.slice(col * mid, col * mid + mid));
         columns.push(this.projectsToShow.slice(col * mid, col * mid + mid));
       }
       return columns;
