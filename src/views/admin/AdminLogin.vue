@@ -293,7 +293,7 @@ export default {
       }
     };
     this.connection.onerror = function(error) {
-      console.log("Websocket connection error ", error);
+      //console.log("Websocket connection error ", error);
     };
   },
   mounted() {

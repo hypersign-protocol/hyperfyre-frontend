@@ -198,7 +198,7 @@ export default {
           method: "GET",
         })
 
-          console.log(res);
+       //   console.log(res);
         if(res.data.length == 0){
            // a user can participate in event 
            // Participate in event
