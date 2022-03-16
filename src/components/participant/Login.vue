@@ -10,15 +10,15 @@
               </div>
             </template>
             <template v-else-if="value && value != ''">
-              <b-button variant="warning" class="btn-login" @click.prevent="openWallet()">Click To Login
-                <vue-recaptcha
+              <b-button variant="warning" class="btn-login" @click.prevent="openWalletAfterRecaptcha()">Click To Login
+                <!--<vue-recaptcha
                   ref="recaptcha"
                   size="invisible"
                   :sitekey="$config.recaptchaSiteKey"
                   :loadRecaptchaScript="true"
                   @verify="onCaptchaVerified"
                   @expired="onCaptchaExpired"
-                ></vue-recaptcha>
+                ></vue-recaptcha>-->
               </b-button>
             </template>
           </b-card-text>

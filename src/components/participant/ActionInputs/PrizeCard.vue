@@ -75,7 +75,6 @@ export default {
     white-space: -o-pre-wrap;
     white-space: pre-wrap;
     word-wrap: break-word;
-    word-break: break-all;
     white-space: normal;
 }
 </style>
