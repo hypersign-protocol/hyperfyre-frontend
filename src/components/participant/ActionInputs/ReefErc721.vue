@@ -180,7 +180,7 @@ export default {
           if (balance !== undefined) {
             if (balance >= Number.parseFloat(this.value.thresholdBalance)) {
               this.value.contractAddress=this.value.contractAddress.address
-              console.log(JSON.stringify({...this.value}));
+              //console.log(JSON.stringify({...this.value}));
               this.value.userBalance=balance
               this.$emit("input",  JSON.stringify({
                 ...this.value,
