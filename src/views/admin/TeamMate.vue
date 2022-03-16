@@ -199,7 +199,7 @@ export default {
         this.$router.push("/admin/dashboard");
       } else {
         localStorage.setItem("accessToken", row.authToken);
-        console.log(row);
+        //console.log(row);
         localStorage.setItem(
           "accessuser",
           JSON.stringify({
