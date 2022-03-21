@@ -50,9 +50,13 @@
                             x-large
                             @click="next()"
                           >
-                            Continue
+                            <span v-if="navigationTab !== 'review'"
+                              >Continue</span
+                            >
+                            <span v-else>Submit</span>
                           </v-btn>
                           <v-btn
+                            v-if="navigationTab !== 'basic-info'"
                             color="primary"
                             class="letter-s-0 ma-auto border-r-2 text-capitalize font-16 line-h-19 font-weight-bold color-primary-100"
                             depressed
@@ -137,12 +141,10 @@ export default {
       const index = this.navigation.findIndex(
         (el) => el.slug === this.navigationTab
       );
-      console.log(index);
-      // if (index >= 0) {
-      const nextIndex = (index - 1) % this.navigation.length;
-      console.log(this.navigtion[nextIndex]);
-      this.navigationTab = this.navigtion[nextIndex].slug;
-      // }
+
+      const prevIndex =
+        (index + this.navigation.length - 1) % this.navigation.length;
+      this.navigationTab = this.navigation[prevIndex].slug;
 
       // this[`${name.replace(/\s/g, "")}`]();
     },
