@@ -1,7 +1,7 @@
 <template>
 	<b-navbar class="nav-bar" toggleable="lg" v-if="show">
-		<b-navbar-brand href="https://fyre.hypersign.id/">
-			<img src="../../assets/logo.png" height="35px">
+		<b-navbar-brand href="https://fyre.hypersign.id/" target="blank">
+			<img src="../../assets/logo.png"  height="35px">
 		</b-navbar-brand>
 		<a href="#" class="menu ml-auto text-white text-decoration-none" v-if="authToken != '' && authToken != null" @click="logout">
 			<img src="../../assets/box-arrow-right.svg" height="30px">
