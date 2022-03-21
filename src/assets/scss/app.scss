@@ -1,0 +1,16 @@
+@import "_variables";
+@import "helper";
+@import "style";
+
+html {
+	overflow: auto;
+	font-family: $body-family;
+	font-feature-settings: 'salt'on;
+}
+
+body,
+.v-application {
+	letter-spacing: 0px !important;
+	font-family: $body-family;
+	font-feature-settings: 'salt'on;
+}

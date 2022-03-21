@@ -1,0 +1,297 @@
+@for $i from 1 through 75 {
+	.font-#{$i} {
+		font-size:#{$i}px !important;
+	}
+}
+
+
+
+@for $i from 1 through 75 {
+	.line-h-#{$i} {
+		line-height:#{$i}px !important;
+	}
+}
+
+
+@for $i from 0 through 75 {
+	.letter-s-#{$i} {
+		letter-spacing:#{$i}px !important;
+	}
+}
+
+
+@for $i from 0 through 200 {
+
+	//Margin Classes
+	.mt-#{$i} {
+		margin-top:#{$i}px !important;
+	}
+
+	.mb-#{$i} {
+		margin-bottom:#{$i}px !important;
+	}
+
+	.ml-#{$i} {
+		margin-left:#{$i}px !important;
+	}
+
+	.mr-#{$i} {
+		margin-right:#{$i}px !important;
+	}
+
+	.mx-#{$i} {
+		margin-left:#{$i}px !important;
+		margin-right:#{$i}px !important;
+	}
+
+	.my-#{$i} {
+		margin-top:#{$i}px !important;
+		margin-bottom:#{$i}px !important;
+	}
+
+	.ma-#{$i} {
+		margin:#{$i}px !important;
+	}
+
+	//Padding Classes
+	.pt-#{$i} {
+		padding-top:#{$i}px !important;
+	}
+
+	.pb-#{$i} {
+		padding-bottom:#{$i}px !important;
+	}
+
+	.pl-#{$i} {
+		padding-left:#{$i}px !important;
+	}
+
+	.pr-#{$i} {
+		padding-right:#{$i}px !important;
+	}
+
+	.px-#{$i} {
+		padding-left:#{$i}px !important;
+		padding-right:#{$i}px !important;
+	}
+
+	.py-#{$i} {
+		padding-top:#{$i}px !important;
+		padding-bottom:#{$i}px !important;
+	}
+
+	.pa-#{$i} {
+		padding:#{$i}px !important;
+	}
+}
+
+
+
+.font-weight- {
+	&-extra-bold {
+		font-weight: 800 !important;
+	}
+
+	&-bold {
+		font-weight: 700 !important;
+	}
+
+	&-semibold {
+		font-weight: 600 !important;
+	}
+
+	&-medium {
+		font-weight: 500 !important;
+	}
+
+	&-regular {
+		font-weight: 400 !important;
+	}
+}
+
+
+.position- {
+	&-relative {
+		position: relative !important;
+	}
+
+	&-absolute {
+		position: absolute !important;
+	}
+
+	&-fixed {
+		position: fixed !important;
+	}
+}
+
+@for $i from 0 through 200 {
+	.border-b-#{$i} {
+		border-bottom:#{$i}px solid #fff !important;
+	}
+
+}
+
+
+
+@for $i from 50 through 1000 {
+	@if($i % 50==0) {
+		.max-width-#{$i} {
+			max-width:#{$i}px !important;
+		}
+	}
+}
+
+@for $i from 25 through 1000 {
+	@if($i % 25==0) {
+		.min-height-#{$i} {
+			min-height:#{$i}px !important;
+		}
+	}
+}
+
+
+@for $i from 1 through 1000 {
+	.width-#{$i} {
+		width:#{$i}px !important;
+	}
+}
+
+@for $i from 1 through 1000 {
+	.height-#{$i} {
+		height:#{$i}px !important;
+	}
+}
+
+
+//RGB Mixer
+@mixin rgba-color($hexcolor, $opacity) {
+	color: rgba($hexcolor, $opacity);
+}
+
+//RGB Mixer Bg
+@mixin rgba-bg($hexcolor, $opacity) {
+	background-color: rgba($hexcolor, $opacity);
+}
+
+
+
+@each $map in $my-colours {
+	$name: nth($map, 1);
+	$list: map-get($my-colours, $name);
+
+	@for $i from 1 through length($list) {
+		.color-#{$name}-#{$i}00 {
+			color: nth($list, $i) !important;
+		}
+	}
+}
+
+
+@each $map in $bg-colours {
+	$name: nth($map, 1);
+	$list: map-get($bg-colours, $name);
+
+	@for $i from 1 through length($list) {
+		.bg-#{$name}-#{$i}00 {
+			background-color: nth($list, $i) !important;
+		}
+	}
+}
+
+
+@for $i from 1 through 75 {
+	.border-r-#{$i} {
+		border-radius:#{$i}px !important;
+	}
+}
+
+@mixin vertical-center {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+}
+
+@mixin horizontal-center {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	-webkit-transform: translateX(-50%);
+	-ms-transform: translateX(-50%);
+}
+
+@mixin absolute-center {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	@include translate2d(-50%, -50%);
+}
+
+
+@mixin translate2d($x, $y) {
+	@include transform(translate($x, $y));
+}
+
+
+@mixin transform($var) {
+	transform: $var;
+	-ms-transform: $var;
+	-webkit-transform: $var;
+}
+
+.border-1 {
+	border: 1px solid #fff;
+}
+
+.cursor-pointer {
+	cursor: pointer !important;
+}
+
+@mixin gradient($direction: 24.5deg, $primary: #2AD798, $secondary: #6966FB) {
+	background: linear-gradient($direction, $primary 0.94%, $secondary 99.39%);
+}
+
+$tile-height: 20;
+
+@mixin tile-height($size) {
+	height: $size * $tile-height + px;
+}
+
+@for $i from 1 through 5 {
+	.tile-#{$i} {
+		@include tile-height($i);
+	}
+}
+
+
+
+$categories-colors-map : (#3A0088,
+#E61C5D,
+#005D6C,
+#FFBD39,
+#00BBF0,
+#EC610A,
+#FD2E2E,
+#07617D,
+#6C567B,
+#6A65D8,
+#000000);
+
+@mixin categories-text-color() {
+
+	@each $category,
+	$color in $categories-colors-map {
+		.gradient-#{$category} & {
+			background-color: rgba($color, 1);
+		}
+	}
+}
+
+.bg-black{
+	background-color: #000;
+}
+
+.list-none{
+	list-style: none;
+}
