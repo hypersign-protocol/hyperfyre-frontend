@@ -55,6 +55,7 @@ import MoonriverErc721 from "./ActionInputs/MoonriverErc721.vue";
 import BinanceErc20 from "./ActionInputs/BinanceErc20.vue";
 import ReefErc20 from "./ActionInputs/ReefErc20.vue";
 import ReefErc721 from "./ActionInputs/ReefErc721.vue";
+ import SumsubKyc from "./ActionInputs/SumsubKyc.vue"
 
 import InputDate from "./ActionInputs/InputDate.vue";
 import InputNumber from "./ActionInputs/InputNumber.vue";
@@ -118,6 +119,7 @@ export default {
     MoonriverErc20,
     MoonriverErc721,
     PushNotification,
+    SumsubKyc,
     RecaptchaToken: "",
   },
   mounted() {
