@@ -148,7 +148,7 @@ methods:{
                   color:#252733 !important
                 }
                 div.round-icon{
-                  background-image:linear-gradient(204deg,#008000,#008000) !important
+                  background-image:linear-gradient(204deg,#F1B319,#dedede) !important
                 }
               
               :root{
