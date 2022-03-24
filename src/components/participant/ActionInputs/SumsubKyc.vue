@@ -66,14 +66,11 @@
 </style>
 
 <script>
-import eventBus from "../../../eventBus.js";
-import { isValidURL, isEmpty } from "../../../mixins/fieldValidationMixin";
-import notificationMixins from "../../../mixins/notificationMixins";
-import Messages from "../../../utils/messages/participants/en";
-import config from "../../../config";
+
 import ErrorMessage from "../ErrorMessage.vue";
 import snsWebSdk from '@sumsub/websdk';
-import crypto from 'crypto'
+
+import apiClient from "../../../mixins/apiClientMixin.js";
 
 export default {
   name: "SumsubKyc",
@@ -97,6 +94,7 @@ export default {
     };
   },
   mounted() {
+      
       this.$root.$on('bv::collapse::state', (collapseId, isJustShown) => {
       if(collapseId.includes('KYC') && isJustShown){
       this.clicked()
@@ -112,9 +110,12 @@ export default {
 methods:{
  async clicked(){
  const token= await  this.getNewAccessToken()
+ console.log(token);
+ this.launchWebSdk(token.token)
   }
 ,
  launchWebSdk(accessToken, applicantEmail, applicantPhone, customI18nMessages) {
+  // customI18nMessages={"letter":"A"}
     let snsWebSdkInstance = snsWebSdk.init(
             accessToken,
             // token update callback, must return Promise
@@ -124,14 +125,38 @@ methods:{
         )
         .withConf({
             lang: 'en', //language of WebSDK texts and comments (ISO 639-1 format)
-            email: applicantEmail,
-            phone: applicantPhone,
-            i18n: customI18nMessages, //JSON of custom SDK Translations
+            // email: applicantEmail,
+            // phone: applicantPhone,
+             //i18n: customI18nMessages, //JSON of custom SDK Translations
             uiConf: {
-                customCss: "https://url.com/styles.css"
+               // customCss: "https://url.com/styles.css"
                 // URL to css file in case you need change it dynamically from the code
                 // the similar setting at Customizations tab will rewrite customCss
                 // you may also use to pass string with plain styles `customCssStr:`
+                customCssStr:` 
+                h4,p{
+                  color:black;
+                }              
+                button.continue,button.submit{
+                  color : black !important;
+                  background:#F1B319 !important;
+                }
+                div.tab-content{
+                  background-color:#faedcd !important
+                }
+                div.mobile-tabs{
+                  color:#252733 !important
+                }
+                div.round-icon{
+                  background-image:linear-gradient(204deg,#F1B319,#dedede) !important
+                }
+              
+              :root{
+                --primary-color:black !important;
+                --success-color:#f1b319 !important;
+              }
+                
+                `
             },
         })
         .withOptions({ addViewportTag: false, adaptIframeHeight: true})
@@ -150,38 +175,20 @@ methods:{
 },
 
  async getNewAccessToken() {
-    let externalUserId=encodeURIComponent('pratapmridha1@gmail.com') //'random-JSToken-5h83gk9'//"pratapmridha1@gmail.com"//'random-JSToken-' + Math.random().toString(36).substring(2, 9)
-    let ttlInSecs=1200
-    let method = 'POST';
-    let levelName=this.data.slug
-    console.log(externalUserId);
-    let url =`/resources/accessTokens?userId=${externalUserId}&ttlInSecs=${ttlInSecs}&levelName=${levelName}`
+    let url = `${this.$config.studioServer.BASE_URL}api/v1/sumsub/kyc/accesstoken`;
+  let headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.authToken}`,
+      };
+    const res = await apiClient.makeCall({
+        method: "POST",
+        url: url,
+        header: headers,
+        body:JSON.stringify({"actionId":this.data._id, "eventId":this.data.eventId})
+      });
+  console.log(this.data);
 
-
-    let ts= Math.floor(Date.now() / 1000);
-    const signature = crypto.createHmac('sha256',  config.sumsub_secret_key);
-   console.log(signature);
-    signature.update(ts+method.toUpperCase()+url)
-    console.log(ts+method.toUpperCase()+url);
-    let sig=signature.digest('hex')
-    let headers={
-      'Accept': 'application/json',
-      'X-App-Token': config.sumsub_app_token,
-      'X-App-Access-Ts':ts,
-      'X-App-Access-Sig':sig  ,
-    
-    }
-
-    let resp=await fetch(config.sumsub_api_baseurl+url,{
-      method:method,
-      headers:headers,
-      
-    })
-
-    console.log(await resp.json());
-
-  return 5;
-    //return Promise.resolve(newAccessToken)// get a new token from your backend
+    return Promise.resolve(res.data)// get a new token from your backend
   }
 }
 
