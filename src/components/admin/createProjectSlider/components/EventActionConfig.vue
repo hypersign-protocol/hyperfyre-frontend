@@ -276,18 +276,33 @@
       </div>
 
       <!--kyc Config -->
-      <div
+      <!-- <div
         class="row g-3 align-items-center w-100 mt-4"
         v-if="eventActionType === 'KYC'">     
         <input
             v-model="slug"
-            type="hidden"
+            type="text"
             id="slug"
            
           />
                 
+      </div> -->
+     <div class="row g-3 align-items-center w-100 mt-4" v-if="showKyc" hidden>
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="prixeValue" class="col-form-label"
+            >KYC<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+          <input
+            v-model="selected.slug"
+            type="text"
+            id="title"
+            class="form-control w-100"
+            readonly
+          />
+        </div>
       </div>
-     
       <!-- end kyc-->      
       <!-- contract address -->
       <div
@@ -726,6 +741,16 @@ export default {
         return false;
       }
     },
+    showKyc(){
+      if (
+        this.eventActionType === "KYC" &&
+        this.selected.type === "SUMSUB_KYC"
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     prize() {
       if (this.eventActionType === "PRIZE") {
         return true;
@@ -756,7 +781,7 @@ export default {
         value: "",
         score: 10,
         id: "",
-       
+        slug:this.$config.sumsub_slug,
       },
       hfTgBotId: this.$config.verifierBot.TELEGRAM,
     };
@@ -786,6 +811,7 @@ export default {
         isManadatory: true,
         value: "",
         score: 10,
+        slug:this.$config.sumsub_slug,
       };
       this.prizeDetails = {
         winners: "",

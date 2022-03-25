@@ -539,7 +539,9 @@ export default {
           { text: "Reef ERC20", value: "REEF_ERC20" },
           { text: "Reef ERC721", value: "REEF_ERC721" },
         ],
-        kycConfig:[{text:'SUMSUB',value:'SUMSUB_KYC'}],
+        kycConfig:[
+          {text:'Select kyc type',value:'null'},
+          {text:'SUMSUB',value:'SUMSUB_KYC'}],
         prizeDetails: [
           { text: "Select Prize Type", value: null },
           { text: "Prize Card", value: "PRIZE_CARD" },

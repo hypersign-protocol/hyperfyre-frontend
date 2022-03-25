@@ -17,7 +17,7 @@ const config = {
     telegramBotId: process.env.VUE_APP_TELEGRAM_BOT_ID,
     kommunicateAppId:process.env.VUE_APP_KOMMINICATE_APP_ID,
     webpush_public_key:process.env.VUE_APP_WEBPUSH_VAPID_PUBLIC_KEY,
-   
+    sumsub_slug:process.env.VUE_APP_SUMSUB_SLUG,
     eventActionType: {
         INPUT_TEXT: "INPUT_TEXT",
         INPUT_NUMBER :"INPUT_NUMBER",
