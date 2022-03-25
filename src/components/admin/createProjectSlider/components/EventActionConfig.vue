@@ -276,18 +276,40 @@
       </div>
 
       <!--kyc Config -->
-      <div
+      <!-- <div
         class="row g-3 align-items-center w-100 mt-4"
         v-if="eventActionType === 'KYC'">     
+         <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="title" class="col-form-label"
+            >Kyc slug<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0"> 
         <input
-            v-model="slug"
-            type="hidden"
+            v-model="selected.slug"
+            type="text"
             id="slug"
-           
+            class="form-control w-100"
+            
           />
-                
+        </div>
+      </div> -->
+     <div class="row g-3 align-items-center w-100 mt-4"  v-if="eventActionType === 'KYC'">
+        <div class="text-left col-lg-3 col-md-3 text-left" >
+          <label for="prixeValue" class="col-form-label"
+            >Kyc Slug<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+          <input
+            v-model="selected.slug"
+            type="text"
+            id="title"
+            class="form-control w-100"
+            placeholder="Enter KYC slug"
+          />
+        </div>
       </div>
-     
       <!-- end kyc-->      
       <!-- contract address -->
       <div
@@ -628,6 +650,7 @@ import Messages from "../../../../utils/messages/admin/en";
 import Vue from "vue";
 import Editor from "v-markdown-editor";
 
+
 Vue.use(Editor);
 
 export default {
@@ -756,12 +779,14 @@ export default {
         value: "",
         score: 10,
         id: "",
-       
+        slug:this.$config.sumsub_slug,
       },
+     
       hfTgBotId: this.$config.verifierBot.TELEGRAM,
     };
   },
   async mounted() {
+    
     this.$root.$on("callClearFromProject", () => {
       this.clearSelected();
     });
