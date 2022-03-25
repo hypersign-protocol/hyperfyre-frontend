@@ -80,6 +80,11 @@ const EVENTS = {
         PRIZE_NAME_NOT_EMPTY:"Prize name should not be empty",
         EMPTY_NO_OF_WINNERS: "Number of Winners Should not be empty",
         EMPTY_PRIZE_PER_WINNER: "Prize Per Winner Should not empty"
+    },
+    KYCACCORDIN:{
+        KYC_TYPE:"Please Select KYC provider",
+        KYC_TITLE:"KYC title should not be empty",
+        
     }
 
     }

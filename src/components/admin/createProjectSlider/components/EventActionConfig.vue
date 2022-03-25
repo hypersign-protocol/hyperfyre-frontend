@@ -274,6 +274,21 @@
           />
         </div>
       </div>
+
+      <!--kyc Config -->
+      <div
+        class="row g-3 align-items-center w-100 mt-4"
+        v-if="eventActionType === 'KYC'">     
+        <input
+            v-model="slug"
+            type="hidden"
+            id="slug"
+           
+          />
+                
+      </div>
+     
+      <!-- end kyc-->      
       <!-- contract address -->
       <div
         class="row g-3 align-items-center w-100 mt-4"
@@ -409,7 +424,7 @@
         </div>
       </div>
 
-      <div class="row g-3 align-items-center w-100 mt-4" v-if="placeH">
+      <div class="row g-3 align-items-center w-100 mt-4" v-if="placeH && eventActionType!=='KYC'">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="placeHolder" class="col-form-label">Place Holder: </label>
         </div>
@@ -422,7 +437,7 @@
           />
         </div>
       </div>
-      <div class="row g-3 align-items-center w-100 mt-4" v-if="noSocialhandle">
+      <div class="row g-3 align-items-center w-100 mt-4" v-if="noSocialhandle && eventActionType!=='KYC'">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="value" class="col-form-label"
             >Social Handle<span style="color: red">*</span>:
@@ -597,6 +612,7 @@
 }
 </style>
 <script>
+
 import notificationMixins from "../../../../mixins/notificationMixins";
 import {
   isEmpty,
@@ -611,6 +627,7 @@ import "v-markdown-editor/dist/v-markdown-editor.css";
 import Messages from "../../../../utils/messages/admin/en";
 import Vue from "vue";
 import Editor from "v-markdown-editor";
+
 Vue.use(Editor);
 
 export default {
@@ -739,6 +756,7 @@ export default {
         value: "",
         score: 10,
         id: "",
+       
       },
       hfTgBotId: this.$config.verifierBot.TELEGRAM,
     };
@@ -979,6 +997,22 @@ export default {
             );
           }
           break;
+          case "KYC":{
+            if (this.selected.type === null) {
+              isvalid = false;
+              this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_TYPE);
+            } else if (isEmpty(this.selected.title)) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE);
+          }else if (isNaN(parseInt(this.selected.score))) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM);
+          } else if (parseInt(this.selected.score) < 0) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM);
+          }
+            break;
+            } 
         default:
           this.notifyErr(Messages.EVENTS.ACTIONS.INVALID_EVENT_TYPE);
       }

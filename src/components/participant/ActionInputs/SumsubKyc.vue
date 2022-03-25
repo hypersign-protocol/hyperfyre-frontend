@@ -47,11 +47,11 @@
           </b-col>
         </b-row>
         <b-row v-if="!done">
-          <!-- <b-col cols="12" sm="12" md="12">
+          <b-col cols="12" sm="12" md="12">
             <button class="btn btn-link center" @click="update()">
               Continue
             </button>
-          </b-col> -->
+          </b-col>
         </b-row>
       </b-card-body>
     </b-collapse>
@@ -69,8 +69,10 @@
 
 import ErrorMessage from "../ErrorMessage.vue";
 import snsWebSdk from '@sumsub/websdk';
+import eventBus from "../../../eventBus.js";
 
 import apiClient from "../../../mixins/apiClientMixin.js";
+import notificationMixins from "../../../mixins/notificationMixins";
 
 export default {
   name: "SumsubKyc",
@@ -91,30 +93,54 @@ export default {
       done: this.data.isDone,
       authToken: localStorage.getItem("authToken"),
       showerror: false,
+      kycData:{}
+      
     };
   },
-  mounted() {
-      
+  async mounted() {
       this.$root.$on('bv::collapse::state', (collapseId, isJustShown) => {
       if(collapseId.includes('KYC') && isJustShown){
-      this.clicked()
+      this.dropDown()
       }
-        
+    eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
+
     })
-      console.log(JSON.parse(localStorage.getItem('user')).email);
-      
-      //this.launchWebSdk()
+    
         
     },
 
 methods:{
- async clicked(){
- const token= await  this.getNewAccessToken()
- console.log(token);
- this.launchWebSdk(token.token)
+  async update(){
+    console.log(this.kycData.reviewResult.reviewAnswer);
+    if(this.kycData.reviewResult.reviewAnswer==="GREEN" && this.kycData.reviewStatus==="completed"){
+  
+     this.$emit("input", "Kyc Done");
+    this.done=true
+    }else if(this.kycData.reviewResult.reviewAnswer==="RED"){
+      return this.notifyErr("You Kyc verfication has been declined")
+    }else{
+      return this.notifyWarning("You Kyc verfication is not completed")
+    }
+    
+  },
+ async dropDown(){
+ const data= await  this.getNewAccessToken() 
+ 
+ this.launchWebSdk(data.token)
+ this.kycData=data.kycData 
+ if(data.kycData!==undefined && data.kycData.reviewStatus==="completed"){  
+   if(data.kycData.reviewResult.reviewAnswer==="GREEN"){  
+   
+    this.notifySuccess("Your Kyc has been verified Claim your Sore now")
+   }
+  
+ }else if(data.kycData!==undefined && data.kycData.reviewStatus==="pending"){
+   this.notifyWarning("Wait Until Your kyc data gets verified by the kyc provider")
+ }
+ return
   }
 ,
- launchWebSdk(accessToken, applicantEmail, applicantPhone, customI18nMessages) {
+ launchWebSdk(accessToken/*, applicantEmail, applicantPhone, customI18nMessages*/) {
   // customI18nMessages={"letter":"A"}
     let snsWebSdkInstance = snsWebSdk.init(
             accessToken,
@@ -161,11 +187,12 @@ methods:{
         })
         .withOptions({ addViewportTag: false, adaptIframeHeight: true})
         // see below what kind of messages WebSDK generates
-        .on('idCheck.stepCompleted', (payload) => {
-            console.log('stepCompleted', payload)
+        .on('idCheck.stepCompleted', (payload) => {           
+            this.notifySuccess( `Completed Step : ${payload["step"]}`)
         })
         .on('idCheck.onError', (error) => {
             console.log('onError', error)
+            this.notifyErr(error.mesage)
         })
         .build();
 
@@ -176,7 +203,7 @@ methods:{
 
  async getNewAccessToken() {
     let url = `${this.$config.studioServer.BASE_URL}api/v1/sumsub/kyc/accesstoken`;
-  let headers = {
+    let headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.authToken}`,
       };
@@ -186,11 +213,12 @@ methods:{
         header: headers,
         body:JSON.stringify({"actionId":this.data._id, "eventId":this.data.eventId})
       });
-  console.log(this.data);
-
+  
     return Promise.resolve(res.data)// get a new token from your backend
   }
-}
-
+}, disableInput(data) {
+      this.done = data;
+    },
+ mixins: [notificationMixins],
 };
 </script>
