@@ -65,6 +65,11 @@
               v-if="eventAction.type.includes('PRIZE_')"
               class="fas fa-gift"
             ></i>
+             <i
+              style="color: gray"
+              v-if="eventAction.type.includes('SUMSUB_KYC')"
+              class="fas fa-id-card"
+            ></i>
             <img
               style="padding-right: 5px"
               src="../../../../assets/external-link.svg"

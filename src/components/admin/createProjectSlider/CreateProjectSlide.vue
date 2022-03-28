@@ -146,7 +146,7 @@
                 v-b-toggle.accordion-8
                 class="bg-transparent border-0 text-left text-primary"
                 title="Create Kyc configuration for your event"
-                ><i class="fas fa-gift"></i> e-KYC Configurations
+                ><i class="fas fa-id-card"></i> KYC Configurations 
               </b-button>
             </b-card-header>
             <b-collapse
