@@ -307,6 +307,7 @@
             id="title"
             class="form-control w-100"
             placeholder="Enter KYC slug"
+            readonly
           />
         </div>
       </div>
@@ -811,6 +812,7 @@ export default {
         isManadatory: true,
         value: "",
         score: 10,
+        slug:this.$config.sumsub_slug
       };
       this.prizeDetails = {
         winners: "",
