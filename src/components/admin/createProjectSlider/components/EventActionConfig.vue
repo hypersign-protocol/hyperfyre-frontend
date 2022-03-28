@@ -307,7 +307,7 @@
             id="title"
             class="form-control w-100"
             placeholder="Enter KYC slug"
-            readonly
+            
           />
         </div>
       </div>
@@ -780,7 +780,7 @@ export default {
         value: "",
         score: 10,
         id: "",
-        slug:this.$config.sumsub_slug,
+        slug:"",
       },
      
       hfTgBotId: this.$config.verifierBot.TELEGRAM,
@@ -812,7 +812,7 @@ export default {
         isManadatory: true,
         value: "",
         score: 10,
-        slug:this.$config.sumsub_slug
+        slug:""
       };
       this.prizeDetails = {
         winners: "",
@@ -1030,7 +1030,10 @@ export default {
               this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_TYPE);
             } else if (isEmpty(this.selected.title)) {
             isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE);
+            this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_TITLE);
+             }else if (isEmpty(this.selected.slug)) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_SLUG);
           }else if (isNaN(parseInt(this.selected.score))) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM);

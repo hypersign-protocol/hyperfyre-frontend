@@ -31,18 +31,22 @@
       <b-card-body class="user-details">
         <b-row>
           <b-col cols="12" sm="12" md="12">
+           
             <div v-if="!data.slug" class="follow">
               <!-- <b-form-input
                 type="text"
                 :placeholder="data.placeHolder"
                 v-model="data.value"
-                :disabled="done"
+                :disabled="done" 
                 :required="data.isManadatory"
               ></b-form-input> -->
-              <ErrorMessage errorMessage="e-KYC is not verified"/>
+              <ErrorMessage errorMessage="e-KYC Configuration error : Wrong Slug"/>
+            </div>
+            <div v-else-if="!done">
+                <div id="sumsub-websdk-container"></div>
             </div>
             <div v-else>
-                <div id="sumsub-websdk-container"></div>
+             <SuccessMessage successMessage="KYC Verification Complete"/>
             </div>
           </b-col>
         </b-row>
@@ -73,6 +77,7 @@ import eventBus from "../../../eventBus.js";
 
 import apiClient from "../../../mixins/apiClientMixin.js";
 import notificationMixins from "../../../mixins/notificationMixins";
+import SuccessMessage from '../SuccessMessage.vue';
 
 export default {
   name: "SumsubKyc",
@@ -86,6 +91,7 @@ export default {
   },
   components: {
     ErrorMessage,
+    SuccessMessage,
   },
   data() {
     return {
@@ -93,7 +99,7 @@ export default {
       done: this.data.isDone,
       authToken: localStorage.getItem("authToken"),
       showerror: false,
-      kycData:{}
+      kycData:{},     
       
     };
   },
@@ -111,34 +117,29 @@ export default {
 
 methods:{
   async update(){
-    console.log(this.kycData.reviewResult.reviewAnswer);
+   try{
     if(this.kycData.reviewResult.reviewAnswer==="GREEN" && this.kycData.reviewStatus==="completed"){
-  
-     this.$emit("input", "Kyc Done");
+     
+     
+    this.$emit("input", "true");
     this.done=true
     }else if(this.kycData.reviewResult.reviewAnswer==="RED"){
       return this.notifyErr("You Kyc verfication has been declined")
     }else{
       return this.notifyWarning("You Kyc verfication is not completed")
     }
+   }catch(e){
+      return this.notifyWarning("You Kyc verfication is not completed")
+   }
     
   },
  async dropDown(){
- const data= await  this.getNewAccessToken() 
+  if(!this.done){
+  const data= await  this.getNewAccessToken() 
  
- this.launchWebSdk(data.token)
- this.kycData=data.kycData 
- if(data.kycData!==undefined && data.kycData.reviewStatus==="completed"){  
-   if(data.kycData.reviewResult.reviewAnswer==="GREEN"){  
-   
-    this.notifySuccess("Your Kyc has been verified Claim your Sore now")
-   }
-  
- }else if(data.kycData!==undefined && data.kycData.reviewStatus==="pending"){
-   this.notifyWarning("Wait Until Your kyc data gets verified by the kyc provider")
- }
- return
+    this.launchWebSdk(data.token)
   }
+ }
 ,
  launchWebSdk(accessToken/*, applicantEmail, applicantPhone, customI18nMessages*/) {
   // customI18nMessages={"letter":"A"}
@@ -194,6 +195,11 @@ methods:{
             console.log('onError', error)
             this.notifyErr(error.mesage)
         })
+        .on('idCheck.applicantStatus',payload=>{
+          this.kycData=payload
+          this.notifySuccess("Your KYC status Updated")
+        })
+        
         .build();
 
     // you are ready to go:
