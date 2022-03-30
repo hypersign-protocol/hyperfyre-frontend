@@ -124,12 +124,12 @@ methods:{
     this.$emit("input", "true");
     this.done=true
     }else if(this.kycData.reviewResult.reviewAnswer==="RED"){
-      return this.notifyErr("You Kyc verfication has been declined")
+      return this.notifyErr("Your Kyc verfication has been declined")
     }else{
-      return this.notifyWarning("You Kyc verfication is not completed")
+      return this.notifyWarning("Your Kyc verfication is not completed")
     }
    }catch(e){
-      return this.notifyWarning("You Kyc verfication is not completed")
+      return this.notifyWarning("Your Kyc verfication is not completed")
    }
     
   },
