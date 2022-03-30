@@ -1029,25 +1029,31 @@ export default {
             );
           }
           break;
-          case "KYC":{
-            if (this.selected.type === null) {
-              isvalid = false;
-              this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_TYPE);
-            } else if (isEmpty(this.selected.title)) {
+        case "KYC": {
+          if (this.selected.type === null) {
             isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_TITLE);
-             }else if (isEmpty(this.selected.slug)) {
+            this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_TYPE);
+          } else if (isEmpty(this.selected.slug)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_SLUG);
-          }else if (isNaN(parseInt(this.selected.score))) {
+          } else if (isValidURL(this.selected.slug)) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.SLUG_NOT_URL);
+           } else if (isEmpty(this.selected.title)) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_TITLE);
+          } else if (isValidURL(this.selected.title)) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL);
+          } else if (isNaN(parseInt(this.selected.score))) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM);
           } else if (parseInt(this.selected.score) < 0) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM);
           }
-            break;
-            } 
+          break;
+        }
         default:
           this.notifyErr(Messages.EVENTS.ACTIONS.INVALID_EVENT_TYPE);
       }
