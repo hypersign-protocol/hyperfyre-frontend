@@ -121,15 +121,16 @@ methods:{
     if(this.kycData.reviewResult.reviewAnswer==="GREEN" && this.kycData.reviewStatus==="completed"){
      
      
-    this.$emit("input", "true");
+    this.$emit("input", "Verified");
     this.done=true
     }else if(this.kycData.reviewResult.reviewAnswer==="RED"){
       return this.notifyErr("Your Kyc verfication has been declined")
     }else{
-      return this.notifyWarning("Your Kyc verfication is not completed")
+      return this.notifyWarning("Your Kyc verfication is not completed, You will be notified via mail after verification")
     }
    }catch(e){
-      return this.notifyWarning("Your Kyc verfication is not completed")
+     
+      return this.notifyWarning("Your Kyc verfication is not completed, You will be notified via mail after verification")
    }
     
   },

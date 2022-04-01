@@ -85,7 +85,8 @@ const EVENTS = {
         KYC_TYPE:"Please Select KYC provider",
         KYC_TITLE:"KYC title should not be empty",
         KYC_SLUG:"KYC slug should not be empty",
-        SLUG_NOT_URL:"Do not put url in slug"
+        SLUG_NOT_URL:"Do not put url in slug",
+        KYC_LENGTH:"You cannot Add more then one KYC verification"
         
     }
 
