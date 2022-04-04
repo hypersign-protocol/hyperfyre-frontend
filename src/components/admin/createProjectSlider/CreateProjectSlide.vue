@@ -133,6 +133,41 @@
             </b-collapse>
           </b-card>
           <!--End Prize  -->
+
+          <!--KYC CONFIG-->
+          <b-card no-body class="mb-1">
+            <b-card-header
+              header-tag="header"
+              class="p-1 border-0 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-8
+                class="bg-transparent border-0 text-left text-primary"
+                title="Create Kyc configuration for your event"
+                ><i class="fas fa-id-card"></i> KYC Configurations 
+              </b-button>
+            </b-card-header>
+            <b-collapse
+              id="accordion-8"
+              visible
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body>
+                <event-action-config
+                  v-on="$listeners"
+                  :eventActionList="KycList"
+                  eventActionType="KYC"
+                  :options="options.kycConfig"
+                />
+              </b-card-body>
+            </b-collapse>
+          </b-card>
+          <!--END KYC CONFIG-->
+
+
           <b-card no-body class="mb-1">
             <b-card-header
               header-tag="header"
@@ -438,6 +473,13 @@ export default {
         return [];
       }
     },
+     KycList: function () {
+      if (this.actionList && this.actionList.length > 0) {
+        return this.actionList.filter((x) => x.type.indexOf("KYC") > -1);
+      } else {
+        return [];
+      }
+      },
     tag: function () {
       if (this.tagList && this.tagList.length > 0) {
         return this.tagList.filter((x) => x.type.indexOf("_TAG") > -1);
@@ -497,6 +539,8 @@ export default {
           { text: "Reef ERC20", value: "REEF_ERC20" },
           { text: "Reef ERC721", value: "REEF_ERC721" },
         ],
+        kycConfig:[{ text: "Select Provider", value: null},
+        {text:'SUMSUB',value:'SUMSUB_KYC'}],
         prizeDetails: [
           { text: "Select Prize Type", value: null },
           { text: "Prize Card", value: "PRIZE_CARD" },

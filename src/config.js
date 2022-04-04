@@ -17,6 +17,7 @@ const config = {
     telegramBotId: process.env.VUE_APP_TELEGRAM_BOT_ID,
     kommunicateAppId:process.env.VUE_APP_KOMMINICATE_APP_ID,
     webpush_public_key:process.env.VUE_APP_WEBPUSH_VAPID_PUBLIC_KEY,
+    investor_sign_key:process.env.VUE_APP_INVESTOR_API_SECRET_KEY,
     eventActionType: {
         INPUT_TEXT: "INPUT_TEXT",
         INPUT_NUMBER :"INPUT_NUMBER",

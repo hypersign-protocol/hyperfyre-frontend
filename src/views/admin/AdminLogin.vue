@@ -139,9 +139,9 @@ h5 span {
         <form class="col-md-12" v-else>
           <div class="form-group">
             <vue-qr
-              v-if="value != ''"
+              v-if="qr_data != ''"
               margin="1"
-              :text="value"
+              :text="qr_data"
               :size="200"
               :logoSrc="src2"
               logoBackgroundColor="white"
@@ -215,6 +215,7 @@ export default {
       credentials: {},
       userData: {},
       value: "",
+      qr_data:"",
       user: {},
       verifiablePresentation: "",
       fullPage: true,
@@ -267,6 +268,8 @@ export default {
         /// Sending provider from here........
         messageData.data['provider'] = 'google';
         _this.value = JSON.stringify(messageData.data);
+        _this.qr_data=`${_this.$config.webWalletAddress}/deeplink?url=${_this.value}`
+        console.log(_this.qr_data);
       } else if (messageData.op == "end") {
         _this.connection.close();
         const authorizationToken = messageData.data.token;
@@ -293,7 +296,7 @@ export default {
       }
     };
     this.connection.onerror = function(error) {
-      //console.log("Websocket connection error ", error);
+      console.log("Websocket connection error ", error);
     };
   },
   mounted() {
