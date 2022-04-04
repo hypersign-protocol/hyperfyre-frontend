@@ -1054,14 +1054,13 @@ export default {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM);
           }
-          else if(this.eventActionList.length<=1){
+          else if(this.eventActionList.length >= 1){
                isvalid = false
             
                this.notifyErr(Messages .EVENTS.ACTIONS.KYCACCORDIN.DUPLICATE_KYC)
 
            console.log(this.eventActionList, this.eventActionType)
-          //     if(this.isPresent()){
-          //     }
+         
            }
           break;
         }
@@ -1072,28 +1071,6 @@ export default {
       return isvalid;
     },
 
-//  isPresent(){
-//     const element = this.eventActionList.find((value) => {
-//       //console.log(element)
-//          console.log("---------"+this.selected.type)
-//          console.log(this.eventActionList.length)
-//          console.log(value.type)
-//         if (element.length!=1){
-//           console.log('---------------1')
-//         }
-// return element.length !=1
-//             // if(element.length>=1){
-//             //   return false
-//             // }
-             
-//         //     else if(value.type === this.selected.type){
-//         //       return false;
-//         //       }
-//         //   else{return true} 
-//           });
-//          return typeof element === "undefined" ? false : true;
-    
-//     },
     handleEventActionAdd() {
       // Code to Add an Action
       let isvalid = this.handleEventActionValidation();
