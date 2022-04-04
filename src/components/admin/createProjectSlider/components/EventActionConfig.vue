@@ -832,8 +832,6 @@ export default {
       this.currentSelectedId = null;
     },
     handleEventActionValidation() {
-            console.log(this.eventActionList, this.eventActionType)
-
       let isvalid = true;
 
       //////
@@ -1055,12 +1053,8 @@ export default {
             this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM);
           }
           else if(this.eventActionList.length >= 1){
-               isvalid = false
-            
-               this.notifyErr(Messages .EVENTS.ACTIONS.KYCACCORDIN.DUPLICATE_KYC)
-
-           console.log(this.eventActionList, this.eventActionType)
-         
+               isvalid = false   
+               this.notifyErr(Messages .EVENTS.ACTIONS.KYCACCORDIN.DUPLICATE_KYC)         
            }
           break;
         }
