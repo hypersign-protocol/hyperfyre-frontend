@@ -29,11 +29,6 @@
 <script>
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import Banner from "../../components/participant/Banner.vue";
-import Login from "../../components/participant/Login.vue";
-import ErrorMessage from "../../components/participant/ErrorMessage.vue";
-import Action from "../../components/participant/Action.vue";
-import Metrics from "../../components/participant/Metrics.vue";
 import notificationMixins from "../../mixins/notificationMixins";
 import apiClient from "../../mixins/apiClientMixin";
 import profileIconMixins from "../../mixins/profileIconMixins";
@@ -42,11 +37,6 @@ import Messages from "../../utils/messages/admin/en"
 export default {
   name: "Home",
   components: {
-    Banner,
-    Login,
-    Action,
-    Metrics,
-    ErrorMessage,
     Loading
   },
   
@@ -206,127 +196,6 @@ export default {
         this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG)
       }
       this.isLoading=false;
-    },
-    async fetchUserInfoOnLogin() {
-      try{
-      this.isLoading= true
-      if (this.authToken != "" && this.authToken && this.userAuthData.email) {
-        
-        this.userProfileData = this.userAuthData
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?email=${this.userAuthData.email}&projectId=${this.eventData._id}`;
-        let headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
-        }
-        const res = await apiClient.makeCall({
-          url,
-          header: headers,
-          method: "GET",
-        })
-
-       //   console.log(res);
-        if(res.data.length == 0){
-           // a user can participate in event 
-           // Participate in event
-          try{
-            const hypersignAuthAction  = this.eventData.actions.find(x => x.type == "HYPERSIGN_AUTH")
-            if(hypersignAuthAction){
-              eventBus.$emit('UpdateUserInfoFromEvent', { actionItem: hypersignAuthAction, value: "Authorized"});
-            }
-          }catch(e){
-            console.error(e);
-          }
-        }
-
-        this.userEventData = {
-          ...res.data[0]
-        }
-        
-        this.prizeData=this.eventData.actions.filter((x) => {
-        return x.type ==='PRIZE_CARD'
-        })
-        const actionWithoutPrize=this.eventData.actions.filter((x) => {
-        return x.type !=='PRIZE_CARD'
-        })
-        const eventActions = actionWithoutPrize;
-
-        if (this.userEventData.actions && this.userEventData.actions.length > 0) {
-          this.eventActionsToShow = eventActions.map(ea => {
-            const doneAction = this.userEventData.actions.find(ua => ua._id == ea._id)
-            if (doneAction) {
-              ea["isDone"] = true
-              ea.value = doneAction.value
-            } else {
-              ea["isDone"] = false
-            }
-            return ea
-          })
-
-        } else {
-          this.eventActionsToShow = eventActions
-        }
-      }
-      }catch(e){
-        eventBus.$emit('logout')
-      }finally{
-        this.isLoading=false;
-      }     
-    },
-    async fetchLeaderBoard() {
-      this.isLoading=true
-      if (this.eventSlug && this.eventSlug != "" && this.authToken) {
-        let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.eventData._id}/participants/score?limit=100`;
-        let headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
-        };
-        const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
-        
-        this.leaderBoardData = resp.data
-        this.showLeaderBoardAlert(resp.data)
-        // console.log(this.leaderBoardData) 
-      } else {
-        this.notifyErr(Messages.EVENT.INVALID_AUTH_TOKEN)
-      }
-      this.isLoading=false;
-    },
-    
-    updateUserData(userEventData) {
-      if (userEventData) {
-        this.userEventData = {
-          ...userEventData
-        }
-        this.fetchEventData();
-      }
-    },
-    showLeaderBoardAlert(data){
-        
-        var swal_html = `<div class="list-group list-group-flush" style="max-height:500px;overflow-y: scroll;">`;
-        data.forEach((element, index) => {
-          let img1 = this.getProfileIcon(element.name+index)
-          swal_html=swal_html+`<div class="list-group-item d-flex align-items-center">
-          <span class="b-avatar mr-3 badge-info rounded-circle">
-            <span class="b-avatar-img">
-              <img src="`+img1+`" alt="avatar">
-            </span><!---->
-          </span> 
-          <span class="mr-auto">`+element.name+`</span> 
-          <span class="badge badge-primary ">`+element.numberOfReferals+`</span>
-        </div> `
-        })
-        swal_html =swal_html+ `</div>`;
-        this.$swal.fire({
-          position:'center',
-          focusConfirm: true,
-          html:swal_html,
-          toast:false,
-          title:'<h5>Leaderboard</h5>',
-          showCloseButton: true,
-          showConfirmButton:false,
-          width:'50rem',
-          background:"white"
-
-        })
     },
     
   },
