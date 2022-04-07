@@ -23,6 +23,15 @@ const router = new Router({
       }),
     },
     {
+      path: "/user/home/",
+      name: "Home",
+      component: () =>
+        import(
+          /* webpackChunkName: "investorLogin" */ "./views/participant/Home.vue"
+        ),
+      meta: () => ({ requiresAuth: true, title: 'Hyperfyre - User Home', tabbar: false })
+    },
+    {
       path: "/",
       redirect: "/admin/login",
     },
