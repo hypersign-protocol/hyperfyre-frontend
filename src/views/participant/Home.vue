@@ -140,9 +140,9 @@ export default {
         return url
     },
     timeLeft (eventData) {
-      if (this.eventData.fromDate && this.eventData.projectStatus) {
+      if (eventData.fromDate && eventData.projectStatus) {
 
-        const toDateParse = new Date(this.eventData.toDate)
+        const toDateParse = new Date(eventData.toDate)
         const fromDateParse = new Date(new Date().toISOString()) // now
 
         return Math.ceil((toDateParse - fromDateParse) / (1000 * 60 * 60 * 24))
