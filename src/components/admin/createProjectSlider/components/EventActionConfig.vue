@@ -65,6 +65,11 @@
               v-if="eventAction.type.includes('PRIZE_')"
               class="fas fa-gift"
             ></i>
+             <i
+              style="color: gray"
+              v-if="eventAction.type.includes('SUMSUB_KYC')"
+              class="fas fa-id-card"
+            ></i>
             <img
               style="padding-right: 5px"
               src="../../../../assets/external-link.svg"
@@ -274,6 +279,44 @@
           />
         </div>
       </div>
+
+      <!--kyc Config -->
+      <!-- <div
+        class="row g-3 align-items-center w-100 mt-4"
+        v-if="eventActionType === 'KYC'">     
+         <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="title" class="col-form-label"
+            >Kyc slug<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0"> 
+        <input
+            v-model="selected.slug"
+            type="text"
+            id="slug"
+            class="form-control w-100"
+            
+          />
+        </div>
+      </div> -->
+     <div class="row g-3 align-items-center w-100 mt-4"  v-if="eventActionType === 'KYC'">
+        <div class="text-left col-lg-3 col-md-3 text-left" >
+          <label for="prixeValue" class="col-form-label"
+            >Kyc Slug<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+          <input
+            v-model="selected.slug"
+            type="text"
+            id="title"
+            class="form-control w-100"
+            placeholder="Enter KYC slug"
+            
+          />
+        </div>
+      </div>
+      <!-- end kyc-->      
       <!-- contract address -->
       <div
         class="row g-3 align-items-center w-100 mt-4"
@@ -409,7 +452,7 @@
         </div>
       </div>
 
-      <div class="row g-3 align-items-center w-100 mt-4" v-if="placeH">
+      <div class="row g-3 align-items-center w-100 mt-4" v-if="placeH && eventActionType!=='KYC'">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="placeHolder" class="col-form-label">Place Holder: </label>
         </div>
@@ -422,7 +465,7 @@
           />
         </div>
       </div>
-      <div class="row g-3 align-items-center w-100 mt-4" v-if="noSocialhandle">
+      <div class="row g-3 align-items-center w-100 mt-4" v-if="noSocialhandle && eventActionType!=='KYC'">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="value" class="col-form-label"
             >Social Handle<span style="color: red">*</span>:
@@ -597,6 +640,7 @@
 }
 </style>
 <script>
+
 import notificationMixins from "../../../../mixins/notificationMixins";
 import {
   isEmpty,
@@ -611,6 +655,8 @@ import "v-markdown-editor/dist/v-markdown-editor.css";
 import Messages from "../../../../utils/messages/admin/en";
 import Vue from "vue";
 import Editor from "v-markdown-editor";
+
+
 Vue.use(Editor);
 
 export default {
@@ -739,11 +785,14 @@ export default {
         value: "",
         score: 10,
         id: "",
+        slug:"",
       },
+     
       hfTgBotId: this.$config.verifierBot.TELEGRAM,
     };
   },
   async mounted() {
+    
     this.$root.$on("callClearFromProject", () => {
       this.clearSelected();
     });
@@ -768,6 +817,7 @@ export default {
         isManadatory: true,
         value: "",
         score: 10,
+        slug:""
       };
       this.prizeDetails = {
         winners: "",
@@ -979,6 +1029,35 @@ export default {
             );
           }
           break;
+          case "KYC": {
+          if (this.selected.type === null) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_TYPE);
+          } else if (isEmpty(this.selected.slug)) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_SLUG);
+          } else if (isValidURL(this.selected.slug)) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.SLUG_NOT_URL);
+           } else if (isEmpty(this.selected.title)) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_TITLE);
+          } else if (isValidURL(this.selected.title)) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL);
+          } else if (isNaN(parseInt(this.selected.score))) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM);
+          } else if (parseInt(this.selected.score) < 0) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM);
+          }
+          else if(this.eventActionList.length >= 1){
+               isvalid = false   
+               this.notifyErr(Messages .EVENTS.ACTIONS.KYCACCORDIN.DUPLICATE_KYC)         
+           }
+          break;
+        }
         default:
           this.notifyErr(Messages.EVENTS.ACTIONS.INVALID_EVENT_TYPE);
       }

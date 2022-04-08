@@ -1034,6 +1034,7 @@ export default {
     },
 
     checkIfEverythingIsFilled() {
+      
       for (let index = 0; index < this.eventActionList.length; index++) {
         if (
           this.eventActionList[index].score === null ||
@@ -1041,12 +1042,19 @@ export default {
         ) {
           return Messages.EVENTS.ACTIONS.SCORE_IS_NUM_ANY_LEFT;
         }
-      }
-      for (let index = 0; index < this.eventActionList.length; index++) {
-        if (this.eventActionList[index].type === null) {
+         if (this.eventActionList[index].type === null) {
           return Messages.EVENTS.CHECK_ALL_TYPE;
         }
+        if(this.eventActionList[index].type==="SUMSUB_KYC"){
+     
+          if(this.eventActionList[index].slug===""){
+            return Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_SLUG;
+          }
+        }
       }
+      // for (let index = 0; index < this.eventActionList.length; index++) {
+       
+      // }
       const eventActionTitle = checkTitle(this.eventActionList, "title");
 
       if (eventActionTitle.includes(false)) {
@@ -1067,7 +1075,8 @@ export default {
           x.type !== "BLOCKCHAIN_REEF" &&
           x.type !== "BLOCKCHAIN_TEZ" &&
           x.type !== "PRIZE_CARD" &&
-          x.type !== "PUSH_NOTIFICATION"
+          x.type !== "PUSH_NOTIFICATION"&&
+          x.type!=="SUMSUB_KYC"
       );
       const filteredValueList = checkValue(eventActionValue, "value");
       if (filteredValueList.includes(false)) {

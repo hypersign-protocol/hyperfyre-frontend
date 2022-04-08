@@ -18,6 +18,17 @@ export default{
               type: "error",
               text: msg,
             });
+           
           },
+          notifyWarning(msg) {
+            this.isLoading = false;
+            this.$notify({
+              group: "foo",
+              title: "Warning",
+              type: "warn",
+              text: msg,
+            });
+          },
+       
     }
 }

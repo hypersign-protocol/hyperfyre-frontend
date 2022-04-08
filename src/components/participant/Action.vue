@@ -55,6 +55,7 @@ import MoonriverErc721 from "./ActionInputs/MoonriverErc721.vue";
 import BinanceErc20 from "./ActionInputs/BinanceErc20.vue";
 import ReefErc20 from "./ActionInputs/ReefErc20.vue";
 import ReefErc721 from "./ActionInputs/ReefErc721.vue";
+ import SumsubKyc from "./ActionInputs/SumsubKyc.vue"
 
 import InputDate from "./ActionInputs/InputDate.vue";
 import InputNumber from "./ActionInputs/InputNumber.vue";
@@ -62,7 +63,7 @@ import InputHyperlink from "./ActionInputs/InputHyperlink.vue";
 import PushNotification from "./ActionInputs/PushNotification.vue";
 import PrizeCard from "./ActionInputs/PrizeCard.vue";
 import eventBus from "../../eventBus.js";
-
+import crypto from 'crypto'
 import apiClient from "../../mixins/apiClientMixin";
 import notificationMixins from "../../mixins/notificationMixins";
 import config from "../../config";
@@ -118,6 +119,7 @@ export default {
     MoonriverErc20,
     MoonriverErc721,
     PushNotification,
+    SumsubKyc,
     RecaptchaToken: "",
   },
   mounted() {
@@ -173,7 +175,12 @@ export default {
           ...this.userData,
           actions: this.actions,
         };
+        const ts=Math.floor(Date.now() / 1000);
+        const endPoint='api/v1/investor'
 
+        const signature=crypto.createHmac('sha256',config.investor_sign_key)
+        signature.update(ts+endPoint+JSON.stringify(body))
+        const sig=signature.digest('hex')
         let url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${this.RecaptchaToken}`;
         if (this.$route.query.referrer && this.$route.query.referrer != "") {
           url += `&referrer=${this.$route.query.referrer}`;
@@ -181,6 +188,9 @@ export default {
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
+          "sig-ts":ts,
+          "x-payload-hf-sign":sig
+
         };
 
         const resp = await apiClient.makeCall({
