@@ -5,24 +5,99 @@
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-
     <b-card no-body class="mx-auto overflow-hidden mt-3 border-0" style="max-width: 600px;">
-     <b-list-group>
-        <b-list-group-item v-for="event in eventList" :key="event._id" :to="routeUrl(event.slug)"  class="flex-column align-items-start">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{event.projectName}}</h5>
-            <small>{{timeLeft(event)}} days left</small>
+        <div>
+            <h1 class="mainTitle kdJiCp" >
+                Discover, participate, and win extraordinary Giveaways
+            </h1>
         </div>
-
-        <p class="mb-1">
-            <template >
-                <b-img-lazy v-bind="mainProps" :src="event.logoUrl" alt="Image 1"></b-img-lazy>
-            </template> 
-        </p>
-
-        <small>Donec id elit non mi porta.</small>
-        </b-list-group-item>
-    </b-list-group>
+        <div>
+            <h2 class="llcnwK kdJiCp ">Trending events on <span class="TrendingCollections">#HyperFyre</span> </h2>
+        </div>
+        
+        <div class="row flex-row flex-nowrap" style="overflow-x: scroll;">
+            <div 
+            class="col-12 col-sm-6 col-md-4 col-lg-3"
+            v-for="event in eventList" 
+            :key="event._id" 
+            :to="routeUrl(event.slug)"
+            >
+            <b-card
+                :img-src="event.logoUrl"
+                img-alt="Image"
+                img-height="150"
+                img-top
+                tag="article"
+                class="text-center"
+                bg-variant="dark"
+                text-variant="white"
+            >
+                <b-card-title style="font-size: larger;">
+                    {{ truncate1(event.projectName, 25) }}
+                </b-card-title>
+                <b-card-sub-title>
+                </b-card-sub-title>
+                <div class="col">
+                    <div class="card-profile-stats d-flex justify-content-center">
+                        <div>
+                            <span class="heading">{{event.investorsCount}}</span>
+                            <span class="description">Total User</span>
+                        </div>
+                        <div>
+                        <span class="heading">{{timeLeft(event)}} </span>
+                            <span class="description">Day Left</span>
+                        </div>
+                    </div>
+                </div>
+            </b-card>
+            </div>
+        </div>
+        <!--- List view ends --->
+        <div>
+            <h2 class="llcnwK kdJiCp ">Your events</h2>
+        </div>
+        <template v-if="authToken == '' || authToken == null">
+            <Login   @AuthTokenUpdateEvent="updateAuthentication" />
+        </template>
+        <template v-else>
+            <div class="row flex-row flex-nowrap" style="overflow-x: scroll;">
+                <div 
+                class="col-12 col-sm-6 col-md-4 col-lg-3"
+                v-for="event in userEventList" 
+                :key="event._id" 
+                :to="routeUrl(event.slug)"
+                >
+                <b-card
+                    :img-src="event.logoUrl"
+                    img-alt="Image"
+                    img-height="150"
+                    img-top
+                    tag="article"
+                    class="text-center"
+                    bg-variant="dark"
+                    text-variant="white"
+                >
+                    <b-card-title style="font-size: larger;">
+                        {{ truncate1(event.projectName, 25) }}
+                    </b-card-title>
+                    <b-card-sub-title>
+                    </b-card-sub-title>
+                    <div class="col">
+                        <div class="card-profile-stats d-flex justify-content-center">
+                            <div>
+                                <span class="heading">{{event.investorsCount}}</span>
+                                <span class="description">Total User</span>
+                            </div>
+                            <div>
+                            <span class="heading">{{timeLeft(event)}} </span>
+                                <span class="description">Day Left</span>
+                            </div>
+                        </div>
+                    </div>
+                </b-card>
+                </div>
+            </div>
+        </template>
     </b-card>
   </div>
 </template>
@@ -34,24 +109,33 @@ import apiClient from "../../mixins/apiClientMixin";
 import profileIconMixins from "../../mixins/profileIconMixins";
 import eventBus from "../../eventBus.js"
 import Messages from "../../utils/messages/admin/en"
+import Login from "../../components/participant/Login.vue";
+
+import {
+  truncate,
+} from "../../mixins/fieldValidationMixin.js";
 export default {
   name: "Home",
   components: {
-    Loading
+    Loading,
+    Login
   },
   
   data() {
     return {
+        slide: 0,
+        sliding: null,
         mainProps: {
             center: true,
             fluidGrow: true,
             blank: true,
             blankColor: '#bbb',
-            width: 300,
-            height: 150,
+            width: 150,
+            height: 75,
             class: 'my-5'
         },
       eventList:[],
+      userEventList:[],
       eventData: {},
       actions: [],
       authToken: "",
@@ -104,6 +188,7 @@ export default {
       const userDetail = localStorage.getItem("user")
       if (userDetail) {
         this.userAuthData = JSON.parse(userDetail)
+        this.fetchUserEventData()
       } else {
         await this.fetchUserDetails();
       }
@@ -121,7 +206,29 @@ export default {
 
   },
   methods: {
+    formateDate(d) {
+      if (d) {
+        let date = new Date(d);
+        return (
+          date.toDateString() +
+          " " +
+          date.toLocaleString("en-US", { hour: "numeric", hour12: true })
+        );
+      } else {
+        return new Date();
+      }
 
+      // return new Date(d).toLocaleString();
+    },
+    truncate1(str, number) {
+      return truncate(str, number);
+    },
+    onSlideStart(slide) {
+        this.sliding = true
+    },
+    onSlideEnd(slide) {
+        this.sliding = false
+    },
     routeUrl (slug) {
         let url ="#"
         if(slug) {
@@ -145,7 +252,7 @@ export default {
         this.authToken = authToken;
         eventBus.$emit('getAuthToken', authToken)
         await this.fetchUserDetails();
-        this.fetchUserInfoOnLogin();
+        this.fetchUserEventData();
       }catch(e){
         this.notifyErr(Messages.EVENT.ERROR_OCCURED + e.message);
       }
@@ -183,12 +290,13 @@ export default {
     async fetchEventData() {
       this.isLoading=true
       if (this.eventSlug && this.eventSlug != "") {
-        let url = `${this.$config.studioServer.BASE_URL}api/v1/home/events?limit=30&page=1`;
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/home/events?limit=20&page=1`;
         let headers = {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
         };
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
-        console.log(resp.data,"eventList")
+        // console.log(resp.data.liveEvents,"eventList")
         this.eventList = {
           ...resp.data.liveEvents
         }
@@ -197,13 +305,65 @@ export default {
       }
       this.isLoading=false;
     },
-    
+    async fetchUserEventData() {
+      this.isLoading=true
+      if (this.eventSlug && this.eventSlug != "") {
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/home/events?limit=20&page=1`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+        const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
+        // console.log(resp.data.liveEvents,"eventList")
+        this.userEventList = {
+          ...resp.data.liveEvents
+        }
+      } else {
+        this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG)
+      }
+      this.isLoading=false;
+    },    
   },
   mixins:[notificationMixins,profileIconMixins],
 };
 </script>
 <style scoped>
-
+.mainTitle {
+    font-size: 32px;
+    max-width: 550px;
+}
+.llcnwK {
+    font-weight: 600;
+    font-size: 24px;
+}
+.TrendingCollections{
+    display: inline-flex;
+    color: rgb(32, 129, 226);
+}
+.kdJiCp {
+    margin: 56px 8px;
+    text-align: center;
+}
+.card-profile-stats {
+    padding: 1rem 0;
+}
+.card-profile-stats>div {
+    text-align: center;
+    margin-right: 1rem;
+}
+.card-profile-stats>div .heading {
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: block;
+    text-transform:uppercase;
+}
+.card-profile-stats>div .description {
+    font-size: .875rem;
+    color: #adb5bd;
+}
+.bg-color {
+    background-color: rgb(48, 51, 57);
+}
 .content {
   margin-top: 20px;
   padding: 2px;
