@@ -196,8 +196,7 @@ methods:{
         .on('idCheck.stepCompleted', (payload) => {           
             this.notifySuccess( `Completed Step : ${payload["step"]}`)
         })
-        .on('idCheck.onError', (error) => {
-            console.log('onError', error)
+        .on('idCheck.onError', (error) => {           
             this.notifyErr(error.mesage)
         })
         .on('idCheck.applicantStatus',payload=>{
