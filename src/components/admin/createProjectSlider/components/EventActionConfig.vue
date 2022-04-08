@@ -1052,7 +1052,7 @@ export default {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM);
           }
-          else if(this.eventActionList.length >= 1){
+          else if(this.eventActionList.length > 1){
                isvalid = false   
                this.notifyErr(Messages .EVENTS.ACTIONS.KYCACCORDIN.DUPLICATE_KYC)         
            }
