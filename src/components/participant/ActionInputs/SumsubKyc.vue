@@ -140,6 +140,10 @@ methods:{
  
     this.launchWebSdk(data.token)
   }
+ },
+ async refreshToken(){
+    const data= await  this.getNewAccessToken() 
+    return data.token
  }
 ,
  launchWebSdk(accessToken/*, applicantEmail, applicantPhone, customI18nMessages*/) {
@@ -149,7 +153,7 @@ methods:{
             // token update callback, must return Promise
             // Access token expired
             // get a new one and pass it to the callback to re-initiate the WebSDK
-            () => this.getNewAccessToken()
+            () => this.refreshToken()
         )
         .withConf({
             lang: 'en', //language of WebSDK texts and comments (ISO 639-1 format)
