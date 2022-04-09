@@ -63,7 +63,7 @@
         <template v-else>
             <div class="row flex-row flex-nowrap" style="overflow-x: scroll;">
                 <div 
-                class="col-12 col-sm-6 col-md-4 col-lg-3"
+                class="col-12 col-sm-6 col-md-4 col-lg-3 "
                 v-for="event in userEventList" 
                 :key="event._id" 
                 @click="gotoUrl(event.slug)"
@@ -75,7 +75,7 @@
                     img-width="300"
                     img-top
                     tag="article"
-                    class="text-center"
+                    class="text-center rounded"
                     bg-variant="dark"
                     text-variant="white"
                 >
@@ -86,10 +86,10 @@
                     </b-card-sub-title>
                     <div class="col">
                         <div class="card-profile-stats d-flex justify-content-center">
-                            <div>
+                            <!-- <div>
                                 <span class="heading">{{event.investorsCount}}</span>
                                 <span class="description">Total User</span>
-                            </div>
+                            </div> -->
                             <div>
                             <span class="heading">{{timeLeft(event)}} </span>
                                 <span class="description">Day Left</span>
@@ -319,9 +319,9 @@ export default {
           Authorization: `Bearer ${this.authToken}`,
         };
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
-        console.log(resp.data.liveEvents,"eventList")
+        // console.log(resp.data,"eventList")
         this.userEventList = {
-          ...resp.data.liveEvents
+          ...resp.data
         }
       } else {
         this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG)
@@ -333,6 +333,10 @@ export default {
 };
 </script>
 <style scoped>
+.card:hover{ 
+    box-shadow: 1px 8px 20px grey;
+-webkit-transition:  box-shadow .6s ease-in;
+}
 .mainTitle {
     font-size: 32px;
 }
