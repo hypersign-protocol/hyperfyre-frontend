@@ -5,7 +5,7 @@
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-    <b-card no-body class="mx-auto overflow-hidden mt-3 border-0" style="max-width: 600px;">
+    <div class="container mx-auto overflow-hidden mt-3 border-0">
         <div>
             <h1 class="mainTitle kdJiCp" >
                 Discover, participate, and win extraordinary Giveaways
@@ -20,12 +20,13 @@
             class="col-12 col-sm-6 col-md-4 col-lg-3"
             v-for="event in eventList" 
             :key="event._id" 
-            :to="routeUrl(event.slug)"
+            @click="gotoUrl(event.slug)"
             >
             <b-card
                 :img-src="event.logoUrl"
                 img-alt="Image"
                 img-height="150"
+                img-width="300"
                 img-top
                 tag="article"
                 class="text-center"
@@ -65,12 +66,13 @@
                 class="col-12 col-sm-6 col-md-4 col-lg-3"
                 v-for="event in userEventList" 
                 :key="event._id" 
-                :to="routeUrl(event.slug)"
+                @click="gotoUrl(event.slug)"
                 >
                 <b-card
                     :img-src="event.logoUrl"
                     img-alt="Image"
                     img-height="150"
+                    img-width="300"
                     img-top
                     tag="article"
                     class="text-center"
@@ -98,7 +100,7 @@
                 </div>
             </div>
         </template>
-    </b-card>
+    </div>
   </div>
 </template>
 <script>
@@ -206,6 +208,9 @@ export default {
 
   },
   methods: {
+    gotoUrl(path) {
+        this.$router.push("/form/"+path);
+    },
     formateDate(d) {
       if (d) {
         let date = new Date(d);
@@ -308,13 +313,13 @@ export default {
     async fetchUserEventData() {
       this.isLoading=true
       if (this.eventSlug && this.eventSlug != "") {
-        let url = `${this.$config.studioServer.BASE_URL}api/v1/home/events?limit=20&page=1`;
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/investor/events?limit=20&page=1`;
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
         };
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
-        // console.log(resp.data.liveEvents,"eventList")
+        console.log(resp.data.liveEvents,"eventList")
         this.userEventList = {
           ...resp.data.liveEvents
         }
@@ -330,7 +335,6 @@ export default {
 <style scoped>
 .mainTitle {
     font-size: 32px;
-    max-width: 550px;
 }
 .llcnwK {
     font-weight: 600;

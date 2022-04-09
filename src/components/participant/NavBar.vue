@@ -19,9 +19,9 @@ color: white !important;
 		<!-- <a href="#" class="menu ml-auto text-white text-decoration-none" v-if="authToken != '' && authToken != null" @click="logout">
 			<img src="../../assets/box-arrow-right.svg" height="30px">
 		</a> -->
-		<b-nav-item-dropdown size="sm" right text="" class="btn-secondary m-2 menu ml-auto text-white text-decoration-none" v-if="authToken != '' && authToken != null">
+		<b-nav-item-dropdown size="sm" right  class="btn-secondary m-2 menu ml-auto text-white text-decoration-none" v-if="authToken != '' && authToken != null">
 			<template #button-content>
-				<b-icon icon="menu-button-wide"></b-icon>
+				<b-icon style="color:white" icon="menu-button-wide"></b-icon>
 			</template>
 			<b-dropdown-item to="/user/home/">
 				Home</b-dropdown-item>
