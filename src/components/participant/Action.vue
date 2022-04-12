@@ -53,6 +53,8 @@ import MoonbeamErc721 from "./ActionInputs/MoonbeamErc721.vue";
 import MoonriverErc20 from "./ActionInputs/MoonriverErc20.vue";
 import MoonriverErc721 from "./ActionInputs/MoonriverErc721.vue";
 import BinanceErc20 from "./ActionInputs/BinanceErc20.vue";
+import BinanceErc721 from "./ActionInputs/BinanceErc721.vue";
+
 import ReefErc20 from "./ActionInputs/ReefErc20.vue";
 import ReefErc721 from "./ActionInputs/ReefErc721.vue";
  import SumsubKyc from "./ActionInputs/SumsubKyc.vue"
@@ -106,6 +108,7 @@ export default {
     InputDate,
     InputNumber,
     BinanceErc20,
+    BinanceErc721,
     Loading,
     DiscordJoin,
     HyperlinkUrl,
