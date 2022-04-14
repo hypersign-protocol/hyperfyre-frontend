@@ -23,10 +23,11 @@ export default {
   data() {
     return {
       items: [
-        { tab: "Overview", slug: "overview" },
-        { tab: "Campaigns", slug: "campaigns" },
+        { tab: "Overview", slug: "/overview" },
+        { tab: "Campaigns", slug: "/campaigns" },
         { tab: "Account", slug: "account" },
         { tab: "Referrals", slug: "referrals" },
+        { tab: "Participants", slug: "/participants" },
       ],
     };
   },

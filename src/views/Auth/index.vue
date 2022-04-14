@@ -26,50 +26,54 @@
             <div v-if="QRRefresh" class="QRRefresh">
               <p class="mt-4 mb-2 black--text font-14 line-h-17">
                 Session expired.
-                <a @click="reloadQR" class="white--text font-14 line-h-17"
+                <a
+                  @click="reloadQR"
+                  class="text-decoration-underline white--text font-14 line-h-17"
                   >Click to reload.</a
                 >
               </p>
             </div>
-            <v-form ref="form" lazy-validation v-else>
-              <vue-qr
-                v-if="value != ''"
-                margin="1"
-                :text="value"
-                :size="200"
-                :logoSrc="src2"
-                logoBackgroundColor="white"
-                logoCornerRadius="2"
-              ></vue-qr>
-              <p class="mt-4 mb-2 black--text font-14 line-h-17">
-                Scan QR code using Hypersign Mobile App
-              </p>
-              <p class="black--text font-14 line-h-17">
-                Get the app on
-                <a
-                  class="white--text"
-                  href="https://play.google.com/store/apps/details?id=com.hypersign.cordova"
-                  target="__blank"
-                  >Android</a
-                >
-                or
-                <a class="white--text" href="">Web</a>
-              </p>
-            </v-form>
-            <v-divider></v-divider>
-            <p class="mt-4 mb-2 black--text font-14 line-h-17">OR</p>
-            <v-btn
-              v-if="this.value != ''"
-              :ripple="false"
-              color="primary"
-              class="background-theme gradient width-150 height-35 letter-s-0 ma-auto border-r-2 text-capitalize font-16 line-h-19 font-weight-bold white--text"
-              depressed
-              rounded
-              x-large
-              @click.prevent="openWallet()"
-            >
-              Click To Login
-            </v-btn>
+            <template v-else>
+              <v-form ref="form" lazy-validation>
+                <vue-qr
+                  v-if="value != ''"
+                  margin="1"
+                  :text="value"
+                  :size="200"
+                  :logoSrc="src2"
+                  logoBackgroundColor="white"
+                  logoCornerRadius="2"
+                ></vue-qr>
+                <p class="mt-4 mb-2 black--text font-14 line-h-17">
+                  Scan QR code using Hypersign Mobile App
+                </p>
+                <p class="black--text font-14 line-h-17">
+                  Get the app on
+                  <a
+                    class="white--text"
+                    href="https://play.google.com/store/apps/details?id=com.hypersign.cordova"
+                    target="__blank"
+                    >Android</a
+                  >
+                  or
+                  <a class="white--text" href="">Web</a>
+                </p>
+              </v-form>
+              <v-divider></v-divider>
+              <p class="mt-4 mb-2 black--text font-14 line-h-17">OR</p>
+              <v-btn
+                v-if="this.value != ''"
+                :ripple="false"
+                color="primary"
+                class="background-theme gradient width-150 height-35 letter-s-0 ma-auto border-r-2 text-capitalize font-16 line-h-19 font-weight-bold white--text"
+                depressed
+                rounded
+                x-large
+                @click.prevent="openWallet()"
+              >
+                Click To Login
+              </v-btn>
+            </template>
           </v-card-text>
         </v-card>
       </div>
@@ -132,7 +136,7 @@ export default {
     if (websocketUrl[websocketUrl.length - 1] == "/") {
       websocketUrl = websocketUrl.substring(0, websocketUrl.length - 1);
     }
-    // console.log(websocketUrl);
+    console.log(websocketUrl);
 
     // take it in the env
     this.connection = new WebSocket(this.$config.websocketUrl);
@@ -153,6 +157,7 @@ export default {
         /// Sending provider from here........
         messageData.data["provider"] = "google";
         _this.value = JSON.stringify(messageData.data);
+        console.log(_this.value);
       } else if (messageData.op == "end") {
         _this.connection.close();
         const authorizationToken = messageData.data.token;

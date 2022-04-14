@@ -6,7 +6,7 @@
         >Campaign Name</label
       >
       <v-text-field
-        v-model="form.name"
+        v-model="campaign.projectName"
         :rules="rules.name"
         hide-details="auto"
         dark
@@ -22,7 +22,7 @@
         >Campaign Description</label
       >
       <v-textarea
-        v-model="form.description"
+        v-model="campaign.description"
         hide-details="auto"
         dark
         solo
@@ -41,7 +41,7 @@
           ref="startMenu"
           v-model="startMenu"
           :close-on-content-click="false"
-          :return-value.sync="form.startDate"
+          :return-value.sync="campaign.fromDate"
           transition="scale-transition"
           offset-y
           min-width="auto"
@@ -49,7 +49,8 @@
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
               hide-details="auto"
-              :value="dateFormat(form.startDate)"
+              :value="dateFormat(campaign.fromDate, isEdit)"
+              :rules="rules.fromDate"
               dark
               flat
               solo
@@ -61,7 +62,7 @@
               v-on="on"
             ></v-text-field>
           </template>
-          <v-date-picker v-model="form.startDate" no-title scrollable>
+          <v-date-picker v-model="campaign.fromDate" no-title scrollable>
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="startMenu = false">
               Cancel
@@ -69,7 +70,7 @@
             <v-btn
               text
               color="primary"
-              @click="$refs.startMenu.save(form.startDate)"
+              @click="$refs.startMenu.save(campaign.fromDate)"
             >
               OK
             </v-btn>
@@ -84,7 +85,7 @@
           ref="endMenu"
           v-model="endMenu"
           :close-on-content-click="false"
-          :return-value.sync="form.endDate"
+          :return-value.sync="campaign.toDate"
           transition="scale-transition"
           offset-y
           min-width="auto"
@@ -92,7 +93,8 @@
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
               hide-details="auto"
-              :value="dateFormat(form.endDate)"
+              :value="dateFormat(campaign.toDate, isEdit)"
+              :rules="rules.toDate"
               dark
               flat
               solo
@@ -104,7 +106,7 @@
               v-on="on"
             ></v-text-field>
           </template>
-          <v-date-picker v-model="form.endDate" no-title scrollable>
+          <v-date-picker v-model="campaign.toDate" no-title scrollable>
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="endMenu = false">
               Cancel
@@ -112,7 +114,7 @@
             <v-btn
               text
               color="primary"
-              @click="$refs.endMenu.save(form.endDate)"
+              @click="$refs.endMenu.save(campaign.toDate)"
             >
               OK
             </v-btn>
@@ -121,13 +123,85 @@
       </div>
     </div>
     <div class="mb-4">
+      <label class="font-14 line-h-17 font-weight-regular mb-2">Tags</label>
+      <v-autocomplete
+        v-model="selected"
+        :rules="rules.tags"
+        :items="tags"
+        item-text="tagName"
+        item-value="type"
+        multiple
+        small-chips
+        autocomplete="off"
+        dark
+        flat
+        solo
+        outlined
+        class="form-input"
+        @change="getSelectedTags"
+      >
+        <template v-slot:selection="data">
+          <v-chip
+            class="este-chip tag-chip px-3"
+            v-bind="data.attrs"
+            :input-value="data.selected"
+          >
+            <span class="pr-2">
+              {{ data.item.tagName }}
+            </span>
+            <v-icon color="white" small @click.stop="removeTags(data.item)">
+              mdi-close
+            </v-icon>
+          </v-chip>
+        </template>
+        <template slot="append">
+          <v-icon>mdi-chevron-down</v-icon>
+        </template>
+      </v-autocomplete>
+    </div>
+    <div class="mb-4" v-if="isEdit">
+      <label class="font-14 line-h-17 font-weight-regular mb-2">Status</label>
+      <v-select
+        v-model="campaign.projectStatus"
+        :items="campaignStatus"
+        item-text="value"
+        item-value="id"
+        autocomplete="off"
+        dark
+        flat
+        solo
+        outlined
+        class="form-input"
+      >
+        <template slot="append">
+          <v-icon>mdi-chevron-down</v-icon>
+        </template>
+      </v-select>
+    </div>
+    <div class="mb-4">
+      <label class="font-14 line-h-17 font-weight-regular mb-2"
+        >Upload Banner</label
+      >
+      <v-text-field
+        :rules="rules.logoUrl.concat(isLogoUrlValid)"
+        v-model="campaign.logoUrl"
+        hide-details="auto"
+        dark
+        flat
+        solo
+        outlined
+        class="form-input"
+        placeholder="Please enter banner url"
+      ></v-text-field>
+    </div>
+    <div class="mb-4">
       <label class="font-14 line-h-17 font-weight-regular mb-2"
         >Upload Logo
         <v-icon size="20" color="#979EAF">mdi-help-circle-outline</v-icon>
       </label>
       <div class="d-flex align-center height-48">
         <v-file-input
-          v-model="form.logoUrl"
+          v-model="campaign.bannerUrl"
           hide-details="auto"
           dark
           flat
@@ -147,36 +221,6 @@
       <span class="font-12 line-h-14 font-weight-regular color-grey-300"
         >Upload a maximum of 2mb file in JPEG / PNG / SVG format</span
       >
-    </div>
-    <div class="mb-4">
-      <label class="font-14 line-h-17 font-weight-regular mb-2"
-        >Upload Banner
-        <v-icon size="20" color="#979EAF">mdi-help-circle-outline</v-icon>
-      </label>
-      <div class="d-flex align-center height-48">
-        <v-file-input
-          v-model="form.bannerUrl"
-          hide-details="auto"
-          dark
-          flat
-          solo
-          outlined
-          placeholder="Attach file here"
-          class="form-input"
-          prepend-icon=""
-        ></v-file-input>
-        <v-btn
-          elevation="0"
-          color="primary"
-          class="height-48 text-capitalize rounded-l-0 rounded-bl-0"
-          >Upload File</v-btn
-        >
-      </div>
-      <span class="font-12 line-h-14 font-weight-regular color-grey-300">
-        Upload a maximum of 2mb file in JPEG / PNG / SVG format
-        <br />
-        Size must be 3000px by 420px height
-      </span>
     </div>
     <div class="mb-4">
       <label class="font-14 line-h-17 font-weight-regular mb-2"
@@ -208,27 +252,112 @@
 </template>
 <script>
 import general from "@/mixins/general";
+import { isValidURL } from "@/mixins/fieldValidationMixin";
 export default {
   name: "BasicInfo",
   mixins: [general],
+  props: {
+    campaign: {
+      type: Object,
+    },
+    isEdit: {
+      type: Boolean,
+      required: true,
+    },
+  },
   data() {
     return {
+      authToken: localStorage.getItem("authToken"),
       startMenu: false,
       endMenu: false,
       rules: {
         name: [(v) => !!v || "Please enter project name"],
+        fromDate: [(v) => !!v || "Please enter start date"],
+        toDate: [(v) => !!v || "Please enter end date"],
+        logoUrl: [(v) => !!v || "Please enter banner url"],
+        tags: [(v) => !!v || "Please select tags"],
       },
-      form: {
-        name: null,
-        description: null,
-        startDate: new Date().toISOString().substr(0, 10),
-        endDate: new Date().toISOString().substr(0, 10),
-        logoUrl: null,
-        bannerUrl: null,
-        backgroundTheme: null,
-        backgroundBanner: null,
-      },
+      tags: [],
+      selected: [],
+      campaignStatus: [
+        {
+          id: true,
+          value: "Open",
+        },
+        {
+          id: false,
+          value: "Close",
+        },
+      ],
     };
+  },
+  computed: {
+    isLogoUrlValid() {
+      if (!isValidURL(this.campaign.logoUrl)) {
+        return "Please enter a valid url";
+      }
+      return true;
+    },
+  },
+  mounted() {
+    this.$root.$on("getBasicInfoFormData", this.emitFilledData);
+    this.getTags();
+  },
+
+  methods: {
+    emitFilledData() {
+      let _this = this;
+      _this.campaign.tags = [];
+      this.tags.forEach((el) => {
+        _this.selected.forEach((value) => {
+          if (el.type === value) {
+            _this.campaign.tags.push({ _id: el._id, type: el.type });
+          }
+        });
+      });
+      this.$root.$emit("getFilledData", this.form);
+    },
+
+    getSelectedTags() {
+      this.emitFilledData();
+    },
+    async getTags() {
+      const url = `${this.$config.studioServer.BASE_URL}api/v1/tag`;
+      const headers = {
+        Authorization: `Bearer ${this.authToken}`,
+      };
+      const resp = await fetch(url, {
+        headers,
+        method: "GET",
+      });
+
+      if (!resp.ok) {
+        return this.notifyErr(resp.statusText);
+      } else {
+        this.tags = await resp.json();
+      }
+      await this.loadTags();
+    },
+
+    async loadTags() {
+      console.log(this.isEdit);
+      console.log(this.campaign);
+      if (this.isEdit) {
+        console.log(this.campaign.tags);
+        this.selected = this.campaign.tags;
+        console.log(this.selected);
+      }
+    },
+
+    async removeTags(item) {
+      const index = this.campaign.tags.findIndex((x) => x.type === item.type);
+      if (index >= 0) {
+        this.campaign.tags.splice(index, 1);
+      } else {
+        const i = this.campaign.tags.findIndex((x) => x === item.type);
+        if (i >= 0) this.campaign.tags.splice(i, 1);
+      }
+    },
   },
 };
 </script>

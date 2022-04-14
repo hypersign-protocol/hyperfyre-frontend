@@ -20,7 +20,7 @@ const routes = [
   },
   {
     path: "/",
-    component: require("../views/Home").default,
+    component: require("../views/Admin").default,
     meta: { name: "Overview" },
     redirect: "/overview",
     name: "Home",
@@ -35,7 +35,7 @@ const routes = [
           slug: "overview",
         },
         component: () =>
-          import(/* webpackChunkName: "about" */ "../views/Overview.vue"),
+          import(/* webpackChunkName: "about" */ "../views/Admin/Overview.vue"),
       },
       {
         name: "Subscription",
@@ -49,7 +49,7 @@ const routes = [
         component: () =>
           import(
             /* webpackChunkName: "subscription" */
-            "../views/Subscription.vue"
+            "../views/Admin/Subscription.vue"
           ),
       },
       {
@@ -62,7 +62,9 @@ const routes = [
           slug: "campaigns",
         },
         component: () =>
-          import(/* webpackChunkName: "campaigns" */ "../views/Campaigns.vue"),
+          import(
+            /* webpackChunkName: "campaigns" */ "../views/Admin/Campaigns/index.vue"
+          ),
       },
       {
         name: "Referrals",
@@ -74,19 +76,9 @@ const routes = [
           slug: "referrals",
         },
         component: () =>
-          import(/* webpackChunkName: "referrals" */ "../views/Referral.vue"),
-      },
-      {
-        name: "Task View",
-        path: "/task-view",
-        meta: {
-          requiresAuth: true,
-          admin: true,
-          name: "Task View",
-          slug: "task-view",
-        },
-        component: () =>
-          import(/* webpackChunkName: "task-view" */ "../views/TaskView.vue"),
+          import(
+            /* webpackChunkName: "referrals" */ "../views/Admin/Referral.vue"
+          ),
       },
       {
         name: "Create Campaign",
@@ -100,10 +92,67 @@ const routes = [
         component: () =>
           import(
             /* webpackChunkName: "create-campaign" */
-            "../views/Campaign.vue"
+            "../views/Admin/Campaigns/campaign.vue"
+          ),
+      },
+      {
+        name: "Edit Campaign",
+        path: "/edit-campaign/:id",
+        meta: {
+          requiresAuth: true,
+          admin: true,
+          name: "Edit Campaign",
+          slug: "edit-campaign",
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "create-campaign" */
+            "../views/Admin/Campaigns/campaign.vue"
+          ),
+      },
+
+      {
+        name: "Participants",
+        path: "/participants",
+        meta: {
+          requiresAuth: true,
+          admin: true,
+          name: "Participants",
+          slug: "participants",
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "participants" */
+            "../views/Admin/Participants"
           ),
       },
     ],
+  },
+
+  {
+    name: "Task View",
+    path: "/task-view",
+    meta: {
+      requiresAuth: true,
+      admin: true,
+      name: "Task View",
+      slug: "task-view",
+    },
+    component: () =>
+      import(/* webpackChunkName: "task-view" */ "../views/TaskView.vue"),
+  },
+
+  {
+    path: "/form/:slug",
+    name: "Event",
+    component: () =>
+      import(/* webpackChunkName: "investorLogin" */ "../views/Participant"),
+    meta: {
+      requiresAuth: false,
+      admin: false,
+      name: "Investor Login",
+      slug: "form",
+    },
   },
 ];
 const router = new VueRouter({

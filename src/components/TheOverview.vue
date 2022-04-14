@@ -90,112 +90,7 @@
         </div>
       </v-col>
     </v-row>
-    <p class="color-grey-100 mt-40 font-14 font-weight-bold line-h-17">
-      Active Campaign (2)
-    </p>
-    <v-card elevation="0" flat class="bg-blue-100 border-r-8">
-      <v-card-text class="pa-0">
-        <v-row class="ma-0 bg-blue-100 border-r-8">
-          <v-col cols="12" md="6">
-            <div class="d-flex align-center">
-              <div
-                class="profile-icon width-47 height-47 bg-blue-200 border-r-50 mr-2"
-              >
-                <span class="white--text">C</span>
-              </div>
-              <div class="d-flex flex-column">
-                <div class="white--text font-14 line-h-22 font-weight-bold">
-                  Charlie Giveaway
-                </div>
-                <div
-                  class="color-grey-300 font-12 line-h-14 font-weight-regular"
-                >
-                  December 01, 2021, 4:20AM to 4:20PM EST
-                </div>
-              </div>
-            </div>
-          </v-col>
-          <v-col cols="12" md="6">
-            <div class="d-flex align-center justify-end">
-              <div
-                class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
-              >
-                <span class="white--text mr-2">4</span> Participants
-              </div>
-              <div class="d-flex">
-                <v-btn icon>
-                  <v-icon color="primary">mdi-close</v-icon>
-                </v-btn>
-                <v-btn icon>
-                  <v-icon color="primary">mdi-circle-edit-outline</v-icon>
-                </v-btn>
-              </div>
-            </div>
-          </v-col>
-        </v-row>
-      </v-card-text>
-    </v-card>
-    <v-card elevation="0" flat class="bg-blue-100 border-r-8 mt-4">
-      <v-card-text class="pa-0">
-        <v-row class="ma-0 bg-blue-100 border-r-8">
-          <v-col cols="12" md="6">
-            <div class="d-flex align-center">
-              <div
-                class="profile-icon width-47 height-47 bg-blue-200 border-r-50 mr-2"
-              >
-                <span class="white--text text-capitalize">B</span>
-              </div>
-              <div class="d-flex flex-column">
-                <div class="white--text font-14 line-h-22 font-weight-bold">
-                  Beta Giveaway
-                </div>
-                <div
-                  class="color-grey-300 font-12 line-h-14 font-weight-regular"
-                >
-                  December 01, 2021, 4:20AM to 4:20PM EST
-                </div>
-              </div>
-            </div>
-          </v-col>
-          <v-col cols="12" md="6">
-            <div class="d-flex align-center justify-end">
-              <div
-                class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
-              >
-                <span class="white--text mr-2">4</span> Participants
-              </div>
-              <div class="d-flex">
-                <v-btn icon>
-                  <v-icon color="primary">mdi-close</v-icon>
-                </v-btn>
-                <v-btn icon>
-                  <v-icon color="primary">mdi-circle-edit-outline</v-icon>
-                </v-btn>
-              </div>
-            </div>
-          </v-col>
-        </v-row>
-      </v-card-text>
-    </v-card>
-    <div class="d-flex align-center justify-space-between mt-33">
-      <p class="mb-0 color-grey-100 font-14 font-weight-bold line-h-17">
-        Completed (3)
-      </p>
-      <div class="d-flex align-center">
-        <p class="mb-0 color-grey-100 font-14 font-weight-regular line-h-17">
-          Filter:
-        </p>
-        <v-btn
-          color="primary"
-          text
-          class="font-14 font-weight-regular line-h-17 text-capitalize"
-          :ripple="false"
-        >
-          <v-icon color="primary">mdi-eye</v-icon>
-          show
-        </v-btn>
-      </div>
-    </div>
+    <campaignList></campaignList>
     <v-divider class="bg-blue-300 mt-70"></v-divider>
     <p class="white--text font-16 line-h-19 font-weight-bold mt-25">
       Stats of Solawind (@solawind)
@@ -472,9 +367,12 @@
   </div>
 </template>
 <script>
+import campaignList from "@/components/campaign/list";
 export default {
   name: "TheOverview",
-
+  components: {
+    campaignList,
+  },
   data() {
     return {
       user: JSON.parse(localStorage.getItem("user")),

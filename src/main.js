@@ -7,6 +7,12 @@ import config from "./config";
 Vue.config.productionTip = false;
 Vue.prototype.$config = config;
 
+Vue.use(require("vue-moment"));
+
+import Vue2Filters from "vue2-filters";
+
+Vue.use(Vue2Filters);
+
 new Vue({
   vuetify,
   router,

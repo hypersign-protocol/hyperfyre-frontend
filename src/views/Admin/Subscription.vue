@@ -251,8 +251,8 @@
 </template>
 <script>
 import fetch from "node-fetch";
-import eventBus from "../eventBus";
-import Messages from "../utils/messages/admin/en";
+import eventBus from "../../eventBus";
+import Messages from "../../utils/messages/admin/en";
 export default {
   name: "Subscription",
 

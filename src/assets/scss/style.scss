@@ -157,7 +157,7 @@
 	}
 }
 
-.este__tabs {
+.campaign__tabs {
 	.v-tab {
 		text-align: left;
 		text-transform: capitalize;
@@ -179,8 +179,15 @@
 		color: rgba(255, 255, 255, 0.4) !important;
 
 		.v-icon {
-			color: rgba(255, 255, 255, 0.4) !important;
+			// color: rgba(255, 255, 255, 0.4) !important;
 			margin-right: 20px;
+		}
+
+		&.done {
+			.v-icon {
+				color: green !important;
+				margin-right: 20px;
+			}
 		}
 
 		&.v-tab--active {
@@ -239,6 +246,7 @@
 
 	&.gradient {
 		background: linear-gradient(180deg, $secondary 0%, $primary 100%) !important;
+		// background: linear-gradient(248.91deg, #04CD8F 14.74%, #904DF8 83.73%) !important;
 		border: 0px;
 	}
 
@@ -280,17 +288,34 @@
 	}
 
 	.block-chain-support {
-		background-color: rgba(255,255,255,0.1);
+		background-color: rgba(255, 255, 255, 0.1);
 		border-bottom: 1px solid #e1e7eb;
 		border-top: 1px solid #e1e7eb;
 		margin: 0 0 20px;
 		padding: 12px 0;
 		height: 80px;
 		text-align: center;
-		.image{
+
+		.image {
 			display: flex;
-			align-items:center;
+			align-items: center;
 			justify-content: center;
 		}
 	}
+}
+
+.event-chip {
+	padding: 6px 10px !important;
+	letter-spacing: 0.2px;
+	border-radius: 100px !important;
+}
+
+.event-list {
+	background: #050505;
+	border: 1px solid #303443;
+	box-shadow: 0 6px 12px rgb(0 0 0 / 10%);
+}
+
+.btn-gradient-outline.v-btn.v-btn--disabled{
+	color: rgba(255, 255, 255, 0.5) !important;
 }

@@ -1,0 +1,126 @@
+<template>
+  <v-expansion-panel>
+    <v-expansion-panel-header class="px-0 font-12 line-h-15 white--text">
+      <div class="d-flex align-center">
+        <v-icon size="22" color="#313540" class="mr-2" v-if="!done">
+          mdi-circle</v-icon
+        >
+
+        <v-icon size="22" color="green" class="mr-2" v-if="done">
+          mdi-check-circle</v-icon
+        >
+        {{ data.title }}
+      </div>
+      <template v-slot:actions>
+        <v-chip
+          class="black--text font-weight-bold"
+          color="green"
+          small
+          label
+          @click="update()"
+          v-if="!done"
+        >
+          +{{ data.score }}
+        </v-chip>
+        <v-icon color="#fff"> mdi-chevron-down </v-icon>
+      </template>
+    </v-expansion-panel-header>
+    <v-expansion-panel-content class="font-14 line-h-32 color-grey-100">
+      <div class="d-flex flex-column align-center justify-center">
+        <v-form
+          v-model="data.isManadatory"
+          lazy-validation
+          ref="form"
+          class="text-center"
+        >
+          <v-text-field
+            v-model="data.value"
+            :disabled="done"
+            hide-details="auto"
+            :rules="rules.input"
+            dark
+            flat
+            solo
+            outlined
+            class="form-input mb-2"
+            :placeholder="data.placeHolder"
+          ></v-text-field>
+
+          <v-btn
+            v-if="!done"
+            @click="update"
+            :ripple="false"
+            class="btn-gradient-outline height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text"
+            depressed
+            rounded
+            x-large
+          >
+            Continue
+          </v-btn>
+        </v-form>
+      </div>
+    </v-expansion-panel-content>
+  </v-expansion-panel>
+</template>
+<script>
+import eventBus from "@/eventBus.js";
+import {
+  isValidURL,
+  isValidText,
+  isEmpty,
+} from "@/mixins/fieldValidationMixin";
+import notificationMixins from "@/mixins/notificationMixins";
+import Messages from "@/utils/messages/participants/en";
+export default {
+  name: "BlockchainOne",
+  props: {
+    idValue: {
+      required: true,
+    },
+    data: {
+      required: true,
+    },
+  },
+  data() {
+    return {
+      visible: false,
+      done: this.data.isDone,
+      rules: {
+        input: [(v) => !!v || "Please fill in the field"],
+      },
+    };
+  },
+  mounted() {
+    eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
+  },
+  methods: {
+    update() {
+      if (!this.isFieldValid()) {
+        this.data.value = "";
+        this.$store.dispatch("snackbar/SHOW", {
+          type: "error",
+          message: Messages.EVENT_ACTIONS.INVALID_INPUT,
+        });
+      } else {
+        this.$emit("input", this.data.value);
+      }
+    },
+    isFieldValid() {
+      if (isEmpty(this.data.value)) {
+        return false;
+      }
+      if (isValidURL(this.data.value)) {
+        return false;
+      }
+      if (!isValidText(this.data.value)) {
+        return false;
+      }
+      return true;
+    },
+    disableInput(data) {
+      this.done = data;
+    },
+  },
+  mixins: [notificationMixins],
+};
+</script>

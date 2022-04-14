@@ -5,7 +5,7 @@
 </template>
 <script>
 import TheOverview from "@/components/TheOverview";
-import eventBus from "../eventBus";
+import eventBus from "../../eventBus";
 export default {
   name: "Overview",
   components: {
