@@ -61,13 +61,13 @@
             <span class="white--text mr-2">45</span> Points
           </div>
           <div class="width-140 border-r-32 border-1">
-            <div class="px-2">
-              <v-icon color="#fff">mdi-account</v-icon>
-              <span class="font-12 line-h-15 white--text">
+            <div class="px-2 d-flex align-center justify-center">
+              <v-icon size="20" color="#fff">mdi-account</v-icon>
+              <span class="ml-1 font-12 line-h-15 white--text">
                 <v-icon color="#fff">mdil-dots-horizontal</v-icon>Az30x
               </span>
               <v-btn icon>
-                <v-icon color="primary">mdi-content-copy</v-icon>
+                <v-icon size="20" color="primary">mdi-content-copy</v-icon>
               </v-btn>
             </div>
           </div>
@@ -92,13 +92,13 @@
             <span class="white--text mr-2">45</span> Points
           </div>
           <div class="width-140 border-r-32 border-1">
-            <div class="px-2">
-              <v-icon color="#fff">mdi-account</v-icon>
-              <span class="font-12 line-h-15 white--text">
+            <div class="px-2 d-flex align-center justify-center">
+              <v-icon size="20" color="#fff">mdi-account</v-icon>
+              <span class="ml-1 font-12 line-h-15 white--text">
                 <v-icon color="#fff">mdil-dots-horizontal</v-icon>Az30x
               </span>
               <v-btn icon>
-                <v-icon color="primary">mdi-content-copy</v-icon>
+                <v-icon size="20" color="primary">mdi-content-copy</v-icon>
               </v-btn>
             </div>
           </div>
@@ -123,13 +123,13 @@
             <span class="white--text mr-2">45</span> Points
           </div>
           <div class="width-140 border-r-32 border-1">
-            <div class="px-2">
-              <v-icon color="#fff">mdi-account</v-icon>
-              <span class="font-12 line-h-15 white--text">
+            <div class="px-2 d-flex align-center justify-center">
+              <v-icon size="20" color="#fff">mdi-account</v-icon>
+              <span class="ml-1 font-12 line-h-15 white--text">
                 <v-icon color="#fff">mdil-dots-horizontal</v-icon>Az30x
               </span>
               <v-btn icon>
-                <v-icon color="primary">mdi-content-copy</v-icon>
+                <v-icon size="20" color="primary">mdi-content-copy</v-icon>
               </v-btn>
             </div>
           </div>
@@ -154,13 +154,13 @@
             <span class="white--text mr-2">45</span> Points
           </div>
           <div class="width-140 border-r-32 border-1">
-            <div class="px-2">
-              <v-icon color="#fff">mdi-account</v-icon>
-              <span class="font-12 line-h-15 white--text">
+            <div class="px-2 d-flex align-center justify-center">
+              <v-icon size="20" color="#fff">mdi-account</v-icon>
+              <span class="ml-1 font-12 line-h-15 white--text">
                 <v-icon color="#fff">mdil-dots-horizontal</v-icon>Az30x
               </span>
               <v-btn icon>
-                <v-icon color="primary">mdi-content-copy</v-icon>
+                <v-icon size="20" color="primary">mdi-content-copy</v-icon>
               </v-btn>
             </div>
           </div>
