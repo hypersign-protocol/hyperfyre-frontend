@@ -1,11 +1,11 @@
 <template>
   <div class="pt-42 pr-27">
     <div class="d-flex flex-column align-center">
-      <p
-        class="mb-2 font-24 line-h-29 font-weight-bold white--text"
-        v-if="userEventData && userEventData.numberOfReferals"
-      >
-        {{ userEventData.numberOfReferals }}
+      <p class="mb-2 font-24 line-h-29 font-weight-bold white--text">
+        <span v-if="userEventData && userEventData.numberOfReferals">{{
+          userEventData.numberOfReferals
+        }}</span>
+        <span v-else>0</span>
       </p>
       <p class="font-16 line-h-19 font-weight-bold color-grey-100">
         Total Points
