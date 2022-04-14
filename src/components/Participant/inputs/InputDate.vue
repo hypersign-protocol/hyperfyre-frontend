@@ -53,7 +53,7 @@
                 solo
                 outlined
                 placeholder="mm/dd/yyyy"
-                class="form-input date"
+                class="form-input date mb-2"
                 readonly
                 v-bind="attrs"
                 v-on="on"

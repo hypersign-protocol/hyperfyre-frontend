@@ -83,7 +83,6 @@ export default {
   },
   data() {
     return {
-      referalLink: null,
       authToken: localStorage.getItem("authToken"),
       recaptchaToken: null,
       user: JSON.parse(localStorage.getItem("user")),

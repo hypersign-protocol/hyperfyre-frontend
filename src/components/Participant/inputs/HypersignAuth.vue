@@ -3,7 +3,7 @@
     <v-expansion-panel-header class="px-0 font-12 line-h-15 white--text">
       <div class="d-flex align-center">
         <v-icon size="22" color="#313540" class="mr-2"> mdi-circle</v-icon>
-        Prize Details
+        Hypersign Auth
       </div>
       <template v-slot:actions>
         <v-chip class="black--text font-weight-bold" color="green" small label>
@@ -29,7 +29,7 @@
 </template>
 <script>
 export default {
-  name: "PrizeCard",
+  name: "HyperSignAuth",
 
   data() {
     return {};

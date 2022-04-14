@@ -32,11 +32,11 @@
                 </v-card>
                 <template v-if="authToken !== '' && authToken !== null">
                   <template v-if="!eventData.projectStatus">
-                    <p
-                      class="color-grey-100 font-14 line-h-17 font-weight-medium"
+                    <div
+                      class="font-20 line-h-24 font-weight-medium text-center py-8 bg-blue-100 mt-8 refer__wrap white--text"
                     >
                       Event is over
-                    </p>
+                    </div>
                   </template>
                   <Actions
                     v-if="eventData.projectStatus"
