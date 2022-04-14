@@ -269,6 +269,7 @@ export default {
     return {
       authToken: localStorage.getItem("authToken"),
       startMenu: false,
+      tagsDropdownChanged: false,
       endMenu: false,
       rules: {
         name: [(v) => !!v || "Please enter project name"],
@@ -291,6 +292,11 @@ export default {
       ],
     };
   },
+  watch: {
+    selected() {
+      this.tagsDropdownChanged = true;
+    },
+  },
   computed: {
     isLogoUrlValid() {
       if (!isValidURL(this.campaign.logoUrl)) {
@@ -307,7 +313,10 @@ export default {
   methods: {
     emitFilledData() {
       let _this = this;
-      _this.campaign.tags = [];
+      if (this.tagsDropdownChanged) {
+        _this.campaign.tags = [];
+      }
+
       this.tags.forEach((el) => {
         _this.selected.forEach((value) => {
           if (el.type === value) {

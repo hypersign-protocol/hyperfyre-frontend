@@ -48,7 +48,7 @@
                   />
                   Event URL
                   <v-icon
-                  size="20"
+                    size="20"
                     color="primary"
                     @click="copyContent(item.whitelisting_link)"
                     >mdi-content-copy</v-icon
@@ -119,6 +119,7 @@
                   />
                   Event URL
                   <v-icon
+                    size="20"
                     color="primary"
                     @click="copyContent(item.whitelisting_link)"
                     >mdi-content-copy</v-icon
