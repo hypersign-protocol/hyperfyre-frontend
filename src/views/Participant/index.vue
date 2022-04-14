@@ -31,6 +31,13 @@
                   </div>
                 </v-card>
                 <template v-if="authToken !== '' && authToken !== null">
+                  <template v-if="!eventData.projectStatus">
+                    <p
+                      class="color-grey-100 font-14 line-h-17 font-weight-medium"
+                    >
+                      Event is over
+                    </p>
+                  </template>
                   <Actions
                     v-if="eventData.projectStatus"
                     :userProfile="user"
@@ -217,6 +224,7 @@ export default {
               const hypersignAuthAction = this.eventData.actions.find(
                 (x) => x.type == "HYPERSIGN_AUTH"
               );
+              console.log(hypersignAuthAction);
               if (hypersignAuthAction) {
                 eventBus.$emit("UpdateUserInfoFromEvent", {
                   actionItem: hypersignAuthAction,

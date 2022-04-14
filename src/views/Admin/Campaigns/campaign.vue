@@ -375,7 +375,6 @@ export default {
     async loadCampaign() {
       if (this.$router.currentRoute.meta.slug === "create-campaign") {
         this.campaign = {
-          _id: "",
           projectName: "",
           logoUrl: "",
           fromDate: "",
@@ -514,7 +513,11 @@ export default {
           AccessToken: `Bearer ${this.accessToken}`,
         };
 
-        let method = "PUT";
+        let method = "POST";
+        if (this.isEdit) {
+          method = "PUT";
+        }
+
         const resp = await apiClientMixin.makeCall({
           url,
           body: this.campaign,
