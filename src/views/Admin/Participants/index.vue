@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <div class="overview__wrap">
-      <v-row class="mt-5">
+      <v-row class="mt-5 align-center">
         <v-col cols="12" md="4">
           <div>
             <label class="white--text font-14 line-h-17 font-weight-regular"
@@ -25,6 +25,42 @@
               </template>
             </v-select>
           </div>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-text-field
+            @input="isTyping = true"
+            v-model="search"
+            prepend-inner-icon="mdil-magnify"
+            hide-details="auto"
+            dark
+            flat
+            solo
+            outlined
+            class="form-input mb-2"
+            placeholder="Search for a participant…"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-btn
+            :ripple="false"
+            class="btn-gradient-outline height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text mr-4"
+            depressed
+            rounded
+            x-large
+            :loading="isExporting"
+            @click="handleExport"
+          >
+            Export All
+          </v-btn>
+          <v-btn
+            :ripple="false"
+            class="btn-gradient-outline height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text mr-4"
+            depressed
+            rounded
+            x-large
+          >
+            Lottery
+          </v-btn>
         </v-col>
       </v-row>
       <v-data-table
@@ -80,14 +116,18 @@
   </v-container>
 </template>
 <script>
-import eventBus from "../../../eventBus.js";
+import eventBus from "@/eventBus.js";
+import FileDownload from "js-file-download";
+import _ from "lodash";
 export default {
   data() {
     return {
+      search: null,
+      isTyping: false,
       campaign_id: null,
+      isExporting: false,
       participants: [],
       authToken: localStorage.getItem("authToken"),
-      accessToken: localStorage.getItem("accessToken"),
       campaigns: [],
       expanded: [],
       singleExpand: false,
@@ -130,6 +170,14 @@ export default {
       },
       deep: true,
     },
+    search: _.debounce(function () {
+      this.isTyping = false;
+    }, 1000),
+    isTyping: function (value) {
+      if (!value) {
+        this.getParticipants();
+      }
+    },
   },
 
   mounted() {
@@ -145,22 +193,17 @@ export default {
     async paginate(e) {
       this.itemsPerPage = e.itemsPerPage;
       this.page = e.page;
-      await this.readTheDataFromApi();
-    },
-    async readTheDataFromApi() {
-      this.loading = true;
-      await this.fetchProjectData(this.page, this.itemsPerPage);
-      this.loading = false;
+      await this.getParticipants();
     },
 
     async getParticipants() {
       if (!this.campaign_id) {
         this.$store.dispatch("snackbar/SHOW", {
           type: "error",
-          message: "No results found",
+          message: "Please select the campaign",
         });
       } else {
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.campaign_id}?fetchInvestors=true`;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.campaign_id}?fetchInvestors=true&searchQuery=${this.search}`;
         // console.log(url);
         const headers = {
           "Content-Type": "application/json",
@@ -176,10 +219,42 @@ export default {
           console.log(resp.statusText);
         }
         const json = await resp.json();
-        console.log(json.investors);
+        console.log(json);
 
         this.participants = json.investors;
         this.totalCount = json.investors.length;
+      }
+    },
+    async handleExport() {
+      if (!this.campaign_id) {
+        this.$store.dispatch("snackbar/SHOW", {
+          type: "error",
+          message: "Please select the campaign",
+        });
+      } else {
+        this.isExporting = true;
+        try {
+          const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.campaign_id}?fetchInvestors=true&isExport=true&limit=1`;
+          const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.authToken}`,
+            AccessToken: `Bearer ${this.accessToken}`,
+          };
+
+          const res = await fetch(url, {
+            headers,
+            method: "GET",
+            isFile: true,
+          });
+
+          FileDownload(res.data, `Participants_${this.campaign_id}.csv`);
+          this.isExporting = false;
+        } catch (e) {
+          this.isExporting = false;
+          this.notifyErr(e);
+        } finally {
+          this.isExporting = false;
+        }
       }
     },
 
@@ -219,61 +294,6 @@ export default {
         } else {
           eventBus.$emit("UpdateAdminNav", false);
         }
-      } catch (e) {
-        this.notifyErr(e.message);
-      } finally {
-        this.isLoading = false;
-      }
-    },
-
-    async fetchProjectInvestors(e) {
-      if (e) {
-        this.tableSearch = "";
-        this.investor.projectId = e;
-        await this.fetchProjectData(0, this.perPage);
-        this.holdInvestors = this.project.investors;
-      } else {
-        this.project.investors = [];
-      }
-    },
-
-    async fetchProjectData(skip, limit) {
-      try {
-        this.isLoading = true;
-
-        if (!this.investor.projectId) throw new Error("No project found");
-
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.investor.projectId}?fetchInvestors=true&limit=${limit}&skip=${skip}&searchQuery=${this.tableSearch}`;
-        // console.log(url);
-        const headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
-          AccessToken: `Bearer ${this.accessToken}`,
-        };
-        const resp = await fetch(url, {
-          headers,
-          method: "GET",
-        });
-
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
-        }
-        const json = await resp.json();
-
-        this.project = { ...json };
-        this.sourceData = { ...json };
-        this.project.fromDate = this.formateDate(this.project.fromDate);
-        this.project.toDate = this.formateDate(this.project.toDate);
-        this.projectFetched = true;
-
-        this.pageSelectDropdown = Array.from(
-          { length: Math.ceil(this.project.count / this.perPage) },
-          (_, i) => i + 1
-        );
-
-        // this.notifySuccess(
-        //   Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_FETCHED + json.projectName
-        // );
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
