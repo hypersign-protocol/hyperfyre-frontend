@@ -118,11 +118,12 @@
 <script>
 import eventBus from "@/eventBus.js";
 import FileDownload from "js-file-download";
+import apiClientMixin from "@/mixins/apiClientMixin";
 import _ from "lodash";
 export default {
   data() {
     return {
-      search: null,
+      search: "",
       isTyping: false,
       campaign_id: null,
       isExporting: false,
@@ -241,9 +242,10 @@ export default {
             AccessToken: `Bearer ${this.accessToken}`,
           };
 
-          const res = await fetch(url, {
-            headers,
+          const res = await apiClientMixin.makeCall({
             method: "GET",
+            url,
+            header: headers,
             isFile: true,
           });
 
