@@ -3,21 +3,28 @@
     <div class="overview__wrap">
       <v-row class="mt-5">
         <v-col cols="12" md="4">
-          <v-select
-            :items="campaigns"
-            item-text="projectName"
-            item-value="_id"
-            autocomplete="off"
-            dark
-            flat
-            solo
-            outlined
-            class="form-input"
-          >
-            <template slot="append">
-              <v-icon>mdi-chevron-down</v-icon>
-            </template>
-          </v-select>
+          <div>
+            <label class="white--text font-14 line-h-17 font-weight-regular"
+              >Select Campaigns</label
+            >
+            <v-select
+              v-model="campaign_id"
+              :items="campaigns"
+              item-text="projectName"
+              item-value="_id"
+              autocomplete="off"
+              dark
+              flat
+              solo
+              outlined
+              class="form-input"
+              @change="getParticipants"
+            >
+              <template slot="append">
+                <v-icon>mdi-chevron-down</v-icon>
+              </template>
+            </v-select>
+          </div>
         </v-col>
       </v-row>
       <v-data-table
@@ -34,8 +41,39 @@
         :server-items-length="totalCount"
         :options.sync="options"
       >
+        <template v-slot:item.score="{ item }">
+          {{ item.numberOfReferals }}
+        </template>
+        <template v-slot:item.name="{ item }">
+          {{ item.name }}
+        </template>
+        <template v-slot:item.actions="{ item }">
+          Performed {{ item.actions.length }} actions
+        </template>
         <template v-slot:expanded-item="{ headers, item }">
-          <td :colspan="headers.length">More info about {{ item.name }}</td>
+          <td :colspan="headers.length">
+            <div
+              class="my-5 font-16 line-h-19 font-weight--regular white--text text-center"
+            >
+              {{ item.name }}'s event actions list
+            </div>
+            <v-simple-table dark>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">Title</th>
+                    <th class="text-left">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in item.actions" :key="index">
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.value }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+          </td>
         </template>
       </v-data-table>
     </div>
@@ -46,6 +84,8 @@ import eventBus from "../../../eventBus.js";
 export default {
   data() {
     return {
+      campaign_id: null,
+      participants: [],
       authToken: localStorage.getItem("authToken"),
       accessToken: localStorage.getItem("accessToken"),
       campaigns: [],
@@ -59,11 +99,11 @@ export default {
           value: "name",
         },
         { text: "Email", value: "email" },
+        { text: "DID", value: "did" },
         { text: "Actions", value: "actions" },
         { text: "Score", value: "score" },
         { text: "", value: "data-table-expand" },
       ],
-      participants: [],
       page: 1,
       totalCount: 0,
       itemsPerPage: 10,
@@ -111,6 +151,36 @@ export default {
       this.loading = true;
       await this.fetchProjectData(this.page, this.itemsPerPage);
       this.loading = false;
+    },
+
+    async getParticipants() {
+      if (!this.campaign_id) {
+        this.$store.dispatch("snackbar/SHOW", {
+          type: "error",
+          message: "No results found",
+        });
+      } else {
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.campaign_id}?fetchInvestors=true`;
+        // console.log(url);
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+          AccessToken: `Bearer ${this.accessToken}`,
+        };
+        const resp = await fetch(url, {
+          headers,
+          method: "GET",
+        });
+
+        if (!resp.ok) {
+          console.log(resp.statusText);
+        }
+        const json = await resp.json();
+        console.log(json.investors);
+
+        this.participants = json.investors;
+        this.totalCount = json.investors.length;
+      }
     },
 
     async fetchSubscription() {
