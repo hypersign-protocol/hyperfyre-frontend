@@ -52,7 +52,9 @@ const EVENTS = {
         SOCIAL_HANDLE_EMPTY: "Social Handle Should not be empty",
         URL_IN_SOCIAL_HANDLE: "Do not put url in Social Handle",
         RETWEET_VALID_URL: "Plase Enter valid retweet url",
-        INVALID_INVITE_LINK: "Invalid Invite Link"
+        INVALID_INVITE_LINK: "Invalid Invite Link",
+        INVALID_TWITTER_USERNAME:"Invalid Twitter Username",
+        INVALID_TELEGRAM_USERNAME:"Invalid Telegram Username",
     },
 
     CUSTOM:{

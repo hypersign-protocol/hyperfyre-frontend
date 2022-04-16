@@ -481,7 +481,7 @@
                 : 'Please Enter Your ' +
                   [[CapitaliseString(selected.type)]] +
                   ' ' +
-                  'handle'
+                  'username without @'
             "
             id="value"
             class="form-control w-100"
@@ -490,7 +490,7 @@
             >Make sure to add
             <a
               target="_blank"
-              :href="`https://telegram.me/${hfTgBotId}?startgroup=any`"
+              :href="`https://telegram.me/hyperfyre_stage_bot?startgroup=any`"
               >Hyperfyre Telegram Bot</a
             >
             in your public group, for this functionality to work properly.</span
@@ -500,7 +500,7 @@
       <div class="row g-3 align-items-center w-100 mt-4" v-if="showRetweet">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="value" class="col-form-label"
-            >Retweet Url<span style="color: red">*</span>:
+            >Retweet URL<span style="color: red">*</span>:
           </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
@@ -508,7 +508,7 @@
             v-model="selected.value"
             type="text"
             :placeholder="
-              selected.type === null ? '' : 'Please Enter Your Retweet Url'
+              selected.type === null ? '' : 'Please Enter Your Retweet URL'
             "
             id="value"
             class="form-control w-100"
@@ -650,6 +650,8 @@ import {
   isContractValid,
   isretweetUrl,
   isNum,
+  isValidTwitterUsername,
+  isValidTelegramName
 } from "../../../../mixins/fieldValidationMixin";
 import "v-markdown-editor/dist/v-markdown-editor.css";
 import Messages from "../../../../utils/messages/admin/en";
@@ -850,6 +852,16 @@ export default {
           } else if (isValidURL(this.selected.title)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL);
+          } else if ((this.selected.type === "TWITTER_FOLLOW" || this.selected.type === "TELEGRAM_JOIN") && 
+          isEmpty(this.selected.value)) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.SOCIAL_HANDLE_EMPTY);
+          } else if (
+            this.selected.type === "TWITTER_FOLLOW" &&
+            isValidTwitterUsername(this.selected.value)
+          ) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVALID_TWITTER_USERNAME);
           } else if (
             this.selected.type === "TWITTER_RETWEET" &&
             isEmpty(this.selected.value)
@@ -857,14 +869,17 @@ export default {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.RETWEET_NOT_EMPTY);
           } else if (
+            this.selected.type === "TELEGRAM_JOIN" &&
+            isValidTelegramName(this.selected.value)
+          ) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVALID_TELEGRAM_USERNAME);
+          } else if (
             this.selected.type === "DISCORD_JOIN" &&
             isEmpty(this.selected.value)
           ) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVITE_NOT_EMPTY);
-          } else if (isEmpty(this.selected.value)) {
-            isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.SOCIAL_HANDLE_EMPTY);
           } else if (
             this.selected.type != "DISCORD_JOIN" &&
             this.selected.type != "TWITTER_RETWEET" &&
