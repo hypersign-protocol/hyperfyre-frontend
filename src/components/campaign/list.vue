@@ -46,7 +46,13 @@
                     type="text"
                     hidden
                   />
-                  Event URL
+                  <a
+                    :href="item.whitelisting_link"
+                    target="_blank"
+                    class="text-decoration-none font-14 line-h-22 font-weight-bold color-grey-300"
+                  >
+                    Event URL
+                  </a>
                   <v-icon
                     size="20"
                     color="primary"
@@ -117,7 +123,13 @@
                     type="text"
                     hidden
                   />
-                  Event URL
+                  <a
+                    :href="item.whitelisting_link"
+                    target="_blank"
+                    class="text-decoration-none font-14 line-h-22 font-weight-bold color-grey-300"
+                  >
+                    Event URL
+                  </a>
                   <v-icon
                     size="20"
                     color="primary"

@@ -21,10 +21,10 @@
           >Referral Link</span
         >
         <span>
-          {{ userProfile.referalLink | truncate(25) }}
+          {{ referralLink | truncate(25) }}
           <input
-            :id="userProfile.referalLink"
-            :value="`${userProfile.referalLink}`"
+            :id="referralLink"
+            :value="`${referralLink}`"
             type="text"
             hidden
           />
@@ -36,11 +36,13 @@
     </v-row>
     <div class="d-flex align-center justify-space-between">
       <p class="color-grey-100 font-14 line-h-17 font-weight-bold">To-Dos</p>
-      <p class="color-grey-100 font-14 line-h-17 font-weight-bold">1 of 8</p>
+      <p class="color-grey-100 font-14 line-h-17 font-weight-bold">
+        {{ completed.length }} of {{ campaignActions.length }}
+      </p>
     </div>
     <v-expansion-panels class="todo__wrap" flat multiple>
       <prize-card v-if="isPrizedata" :prizeData="prizeData"></prize-card>
-      <template v-for="(item, index) in ActionSchema">
+      <template v-for="(item, index) in campaignActions">
         <component
           :is="loadComponent(item)"
           :key="index"
@@ -68,7 +70,7 @@ export default {
     PrizeCard,
   },
   props: {
-    ActionSchema: {
+    campaignActions: {
       required: true,
       type: Array,
     },
@@ -109,14 +111,33 @@ export default {
         return true;
       }
     },
+    completed() {
+      return this.campaignActions.filter(
+        (campaign) => campaign.isDone === true
+      );
+    },
+    referralLink() {
+      if (this.user.email) {
+        return `${
+          window.location.protocol +
+          "//" +
+          window.location.host +
+          window.location.pathname
+        }?referrer=${btoa(this.user.email)}`;
+      } else {
+        return null;
+      }
+    },
   },
   methods: {
     loadComponent(item) {
-      const actionTypeName = this.titleCase(item.type);
-      return require(`@/components/Participant/inputs/${actionTypeName.replace(
-        /\s/g,
-        ""
-      )}.vue`).default;
+      if (item.type !== "HYPERSIGN_AUTH") {
+        const actionTypeName = this.titleCase(item.type);
+        return require(`@/components/Participant/inputs/${actionTypeName.replace(
+          /\s/g,
+          ""
+        )}.vue`).default;
+      }
     },
 
     titleCase(string) {

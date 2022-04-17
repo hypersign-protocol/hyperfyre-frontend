@@ -1,0 +1,8 @@
+<svg viewBox="0 0 220 192" width="220" height="192" fill="rgba(255,255,255, 0.1)" class="absolute -top-16 -right-16 text-gray-700 ng-tns-c294-40">
+	<defs class="ng-tns-c294-40">
+		<pattern id="837c3e70-6c3a-44e6-8854-cc48c737b659" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" class="ng-tns-c294-40">
+			<rect x="0" y="0" width="4" height="4" fill="rgba(255,255,255, 0.1)" class="ng-tns-c294-40"></rect>
+		</pattern>
+	</defs>
+	<rect width="220" height="192" fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)" class="ng-tns-c294-40"></rect>
+</svg>

@@ -5,12 +5,6 @@
         <v-icon size="22" color="#313540" class="mr-2"> mdi-circle</v-icon>
         Prize Details
       </div>
-      <template v-slot:actions>
-        <v-chip class="black--text font-weight-bold" color="green" small label>
-          +15
-        </v-chip>
-        <v-icon color="#fff"> mdi-chevron-down </v-icon>
-      </template>
     </v-expansion-panel-header>
     <v-expansion-panel-content class="font-14 line-h-32 color-grey-100">
       <div class="d-flex flex-column align-center justify-center">

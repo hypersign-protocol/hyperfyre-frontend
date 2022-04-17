@@ -17,7 +17,7 @@
         placeholder="Campaign Name"
       ></v-text-field>
     </div>
-    <div class="mb-4">
+    <div class="mb-2">
       <label class="font-14 line-h-17 font-weight-regular mb-2"
         >Campaign Description</label
       >
@@ -37,7 +37,40 @@
         <label class="font-14 line-h-17 font-weight-regular mb-2"
           >Start Date</label
         >
-        <v-menu
+        <div class="date-time">
+          <v-datetime-picker
+            dateFormat="MM/dd/yyyy"
+            v-model="fromDate"
+            :date-picker-props="dateProps"
+            :time-picker-props="timeProps"
+          >
+            <template slot="dateIcon">
+              <v-icon>mdil-calendar</v-icon>
+            </template>
+            <template slot="timeIcon">
+              <v-icon>mdil-clock</v-icon>
+            </template>
+            <template slot="actions" slot-scope="{ parent }">
+              <v-btn
+                :ripple="false"
+                text
+                color="primary"
+                @click.native="parent.clearHandler"
+              >
+                Clear
+              </v-btn>
+              <v-btn
+                :ripple="false"
+                text
+                color="primary"
+                @click="parent.okHandler"
+              >
+                OK
+              </v-btn>
+            </template>
+          </v-datetime-picker>
+        </div>
+        <!--  <v-menu
           ref="startMenu"
           v-model="startMenu"
           :close-on-content-click="false"
@@ -75,13 +108,48 @@
               OK
             </v-btn>
           </v-date-picker>
-        </v-menu>
+        </v-menu> -->
       </div>
       <div>
         <label class="font-14 line-h-17 font-weight-regular mb-2"
           >End Date</label
         >
-        <v-menu
+
+        <div class="date-time">
+          <v-datetime-picker
+            dateFormat="MM/dd/yyyy"
+            v-model="toDate"
+            :date-picker-props="dateProps"
+            :time-picker-props="timeProps"
+          >
+            <template slot="dateIcon">
+              <v-icon>mdil-calendar</v-icon>
+            </template>
+            <template slot="timeIcon">
+              <v-icon>mdil-clock</v-icon>
+            </template>
+            <template slot="actions" slot-scope="{ parent }">
+              <v-btn
+                :ripple="false"
+                text
+                color="primary"
+                @click.native="parent.clearHandler"
+              >
+                Clear
+              </v-btn>
+              <v-btn
+                :ripple="false"
+                text
+                color="primary"
+                @click="parent.okHandler"
+              >
+                OK
+              </v-btn>
+            </template>
+          </v-datetime-picker>
+        </div>
+
+        <!-- <v-menu
           ref="endMenu"
           v-model="endMenu"
           :close-on-content-click="false"
@@ -119,10 +187,10 @@
               OK
             </v-btn>
           </v-date-picker>
-        </v-menu>
+        </v-menu> -->
       </div>
     </div>
-    <div class="mb-4">
+    <div class="mb-2">
       <label class="font-14 line-h-17 font-weight-regular mb-2">Tags</label>
       <v-autocomplete
         v-model="selected"
@@ -137,6 +205,7 @@
         flat
         solo
         outlined
+        hide-details="auto"
         class="form-input"
         @change="getSelectedTags"
       >
@@ -159,7 +228,7 @@
         </template>
       </v-autocomplete>
     </div>
-    <div class="mb-4" v-if="isEdit">
+    <div class="mb-2" v-if="isEdit">
       <label class="font-14 line-h-17 font-weight-regular mb-2">Status</label>
       <v-select
         v-model="campaign.projectStatus"
@@ -180,7 +249,7 @@
     </div>
     <div class="mb-4">
       <label class="font-14 line-h-17 font-weight-regular mb-2"
-        >Upload Banner</label
+        >Banner URL</label
       >
       <v-text-field
         :rules="rules.logoUrl.concat(isLogoUrlValid)"
@@ -193,8 +262,11 @@
         class="form-input"
         placeholder="Please enter banner url"
       ></v-text-field>
+      <span class="font-12 line-h-14 font-weight-regular color-grey-300"
+        >Banner URL should be in the size of 600x300 pixels</span
+      >
     </div>
-    <div class="mb-4">
+    <!-- <div class="mb-4">
       <label class="font-14 line-h-17 font-weight-regular mb-2"
         >Upload Logo
         <v-icon size="20" color="#979EAF">mdi-help-circle-outline</v-icon>
@@ -214,7 +286,7 @@
         <v-btn
           elevation="0"
           color="primary"
-          class="height-48 text-capitalize rounded-l-0 rounded-bl-0"
+          class="height-48 text-capitalize rounded-l-0 rounded-bl-0 letter-s-0"
           >Upload File</v-btn
         >
       </div>
@@ -247,7 +319,7 @@
           >https://solawind.com/hellowallpaper.jpg/</span
         >
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -267,6 +339,12 @@ export default {
   },
   data() {
     return {
+      dateProps: {
+        "no-title": true,
+      },
+      timeProps: {
+        "no-title": true,
+      },
       authToken: localStorage.getItem("authToken"),
       startMenu: false,
       tagsDropdownChanged: false,
@@ -304,6 +382,24 @@ export default {
       }
       return true;
     },
+    fromDate() {
+      if (this.campaign.fromDate) {
+        return this.dateFormat(this.campaign.fromDate, this.isEdit);
+      } else {
+        return null;
+      }
+    },
+
+    toDate() {
+      console.log(this.campaign.toDate);
+      if (this.campaign.toDate) {
+        console.log(this.dateFormat(this.campaign.toDate, this.isEdit));
+
+        return this.dateFormat(this.campaign.toDate, this.isEdit);
+      } else {
+        return null;
+      }
+    },
   },
   mounted() {
     this.$root.$on("getBasicInfoFormData", this.emitFilledData);
@@ -312,6 +408,24 @@ export default {
 
   methods: {
     emitFilledData() {
+      // console.log(`this.tagsDropdownChanged : ${this.tagsDropdownChanged}`);
+      // console.log(this.campaign.tags);
+      // let _this = this;
+      // if (this.tagsDropdownChanged) {
+      //   _this.campaign.tags = [];
+      // }
+
+      // this.tags.forEach((el) => {
+      //   _this.selected.forEach((value) => {
+      //     if (el.type === value) {
+      //       _this.campaign.tags.push({ _id: el._id, type: el.type });
+      //     }
+      //   });
+      // });
+      this.$root.$emit("getFilledData", this.form);
+    },
+
+    getSelectedTags() {
       let _this = this;
       if (this.tagsDropdownChanged) {
         _this.campaign.tags = [];
@@ -324,11 +438,6 @@ export default {
           }
         });
       });
-      this.$root.$emit("getFilledData", this.form);
-    },
-
-    getSelectedTags() {
-      this.emitFilledData();
     },
     async getTags() {
       const url = `${this.$config.studioServer.BASE_URL}api/v1/tag`;

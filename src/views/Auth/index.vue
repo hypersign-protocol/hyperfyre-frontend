@@ -1,26 +1,68 @@
 <template>
-  <v-row no-gutters>
-    <v-col cols="12" md="6" class="white--text text-center">
-      <div class="position-relative login__wrap ma-auto text-center">
-        <div class="d-flex align-center justify-center mb-70">
-          <v-img
-            max-width="180"
-            lazy-src="@/assets/images/logo.png"
-            src="@/assets/images/logo.png"
-          ></v-img>
+  <v-row no-gutters class="black h-100">
+    <v-col cols="12" md="8" class="pa-0 white--text login__wrap--bg">
+      <div class="h-100">
+        <div class="d-flex align-center justify-end">
+          <svg
+            viewBox="0 0 220 192"
+            width="220"
+            height="192"
+            fill="rgba(255,255,255, 0.1)"
+            class="absolute -top-16 -right-16 text-gray-700 ng-tns-c294-40"
+          >
+            <defs class="ng-tns-c294-40">
+              <pattern
+                id="837c3e70-6c3a-44e6-8854-cc48c737b659"
+                x="0"
+                y="0"
+                width="20"
+                height="20"
+                patternUnits="userSpaceOnUse"
+                class="ng-tns-c294-40"
+              >
+                <rect
+                  x="0"
+                  y="0"
+                  width="4"
+                  height="4"
+                  fill="rgba(255,255,255, 0.1)"
+                  class="ng-tns-c294-40"
+                ></rect>
+              </pattern>
+            </defs>
+            <rect
+              width="220"
+              height="192"
+              fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)"
+              class="ng-tns-c294-40"
+            ></rect>
+          </svg>
         </div>
-        <p class="white--text font-weight--bold font-36 line-h-40">
-          Welcome to our community
-        </p>
+        <div class="position-relative d-flex align-center justify-center flex-column  mx-auto">
+          <v-img
+              max-width="200"
+              class="mb-70"
+              lazy-src="@/assets/images/logo.svg"
+              src="@/assets/images/logo.svg"
+            ></v-img>
+          <h1
+            class="white--text font-weight--bold font-48 line-h-49 letter-s-0 mb-6"
+          >
+            Welcome to our community
+          </h1>
+          <p class="font-16 line-h-19 white--text font-weight-medium">
+            Marketing apps designed to help you grow your business.
+          </p>
+        </div>
       </div>
     </v-col>
-    <v-col cols="12" md="6" class="white--text text-center">
-      <div class="position-relative login__wrap ma-auto max-width-500">
-        <v-card flat color="black" class="refer__wrap">
+    <v-col cols="12" md="4" class="pa-0 refer__wrap white--text text-center">
+      <div class="h-100 position-relative d-flex align-center justify-center ma-auto width-500">
+        <v-card flat color="white">
           <v-card-title
-            class="white--text flex-column justify-center mt-8 border-b-1"
+            class="pa-0 white--text flex-column justify-center mt-8 border-b-1"
           >
-            <h2 class="font-24 line-h-31">Login</h2>
+            <h2 class="font-24 line-h-31 color-primary-100">Login</h2>
           </v-card-title>
           <v-card-text class="px-10 py-8">
             <div v-if="QRRefresh" class="QRRefresh">
@@ -28,7 +70,7 @@
                 Session expired.
                 <a
                   @click="reloadQR"
-                  class="text-decoration-underline white--text font-14 line-h-17"
+                  class="text-decoration-underline color-primary-100 font-14 line-h-17"
                   >Click to reload.</a
                 >
               </p>
@@ -50,13 +92,13 @@
                 <p class="black--text font-14 line-h-17">
                   Get the app on
                   <a
-                    class="white--text"
+                    class="color-primary-100"
                     href="https://play.google.com/store/apps/details?id=com.hypersign.cordova"
                     target="__blank"
                     >Android</a
                   >
                   or
-                  <a class="white--text" href="">Web</a>
+                  <a class="color-primary-100" href="">Web</a>
                 </p>
               </v-form>
               <v-divider></v-divider>
@@ -65,13 +107,13 @@
                 v-if="this.value != ''"
                 :ripple="false"
                 color="primary"
-                class="background-theme gradient width-150 height-35 letter-s-0 ma-auto border-r-2 text-capitalize font-16 line-h-19 font-weight-bold white--text"
+                class="background-theme gradient width-250 height-35 letter-s-0 ma-auto border-r-2 text-capitalize font-16 line-h-19 font-weight-bold white--text"
                 depressed
                 rounded
                 x-large
                 @click.prevent="openWallet()"
               >
-                Click To Login
+                Click here to login
               </v-btn>
             </template>
           </v-card-text>

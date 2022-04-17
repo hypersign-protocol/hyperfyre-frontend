@@ -24,9 +24,23 @@
                   </p>
                 </div>
                 <v-card flat color="black" class="task-card">
-                  <div class="bg-blue-100 py-58 px-120 border-r-4">
+                  <div class="bg-blue-100 pa-4 border-r-4">
                     <div class="d-flex align-center justify-center">
-                      <img :src="eventData.logoUrl" />
+                      <v-img
+                        height="300"
+                        v-if="!brokenUrl"
+                        @error="onBannerError($event)"
+                        :lazy-src="eventData.logoUrl"
+                        :src="eventData.logoUrl"
+                      >
+                      </v-img>
+
+                      <div
+                        class="font-20 line-h-22 white--text font-weight-medium"
+                        v-if="brokenUrl"
+                      >
+                        {{ eventData.projectName }}
+                      </div>
                     </div>
                   </div>
                 </v-card>
@@ -41,7 +55,7 @@
                   <Actions
                     v-if="eventData.projectStatus"
                     :userProfile="user"
-                    :ActionSchema="eventActionsToShow"
+                    :campaignActions="eventActionsToShow"
                     :prizeData="prizeData"
                     @UserUpdateEvent="updateUserData"
                   />
@@ -89,6 +103,7 @@ export default {
       eventEndDate: null,
       eventActionsToShow: [],
       prizeData: [],
+      brokenUrl: false,
     };
   },
 
@@ -102,6 +117,10 @@ export default {
   },
 
   methods: {
+    onBannerError(e) {
+      console.log(e.message);
+      this.brokenUrl = true;
+    },
     async updateAuthentication(authToken) {
       try {
         this.authToken = authToken;
@@ -146,12 +165,6 @@ export default {
             ...res.data.message,
           };
 
-          this.user.referalLink = `${
-            window.location.protocol +
-            "//" +
-            window.location.host +
-            window.location.pathname
-          }?referrer=${btoa(this.user.email)}`;
           localStorage.setItem("user", JSON.stringify(this.user));
           this.userProfileData = JSON.parse(localStorage.getItem("user"));
         } else {

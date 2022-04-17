@@ -13,6 +13,11 @@ import Vue2Filters from "vue2-filters";
 
 Vue.use(Vue2Filters);
 
+import DatetimePicker from "vuetify-datetime-picker";
+// (Optional) import 'vuetify-datetime-picker/src/stylus/main.styl'
+
+Vue.use(DatetimePicker);
+
 new Vue({
   vuetify,
   router,

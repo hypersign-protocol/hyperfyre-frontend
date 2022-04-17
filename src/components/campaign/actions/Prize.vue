@@ -41,7 +41,7 @@
         <v-text-field
           v-model="form.title"
           :rules="rules.title"
-          placeholder="Name your title"
+          placeholder="Please enter prize name"
           hide-details="auto"
           dark
           flat
@@ -57,7 +57,7 @@
         <v-text-field
           v-model="details.winners"
           :rules="rules.number"
-          placeholder="Enter Place Holder"
+          placeholder="Please enter no of winners"
           hide-details="auto"
           dark
           flat
@@ -79,6 +79,7 @@
           solo
           outlined
           class="form-input"
+          placeholder="Please enter prize per winner"
         ></v-text-field>
       </div>
       <div

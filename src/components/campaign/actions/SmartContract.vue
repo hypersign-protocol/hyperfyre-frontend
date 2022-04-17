@@ -79,7 +79,7 @@
     <v-form ref="form">
       <div class="mb-4">
         <label class="font-14 line-h-17 font-weight-regular mb-2"
-          >Select Type</label
+          >Select Type <span class="red--text">*</span></label
         >
         <v-select
           v-model="form.type"
@@ -93,16 +93,17 @@
           solo
           outlined
           class="form-input"
+          placeholder="Please select type"
         ></v-select>
       </div>
       <div class="mb-4">
         <label class="font-14 line-h-17 font-weight-regular mb-2"
-          >Contact Address</label
+          >Contract Address <span class="red--text">*</span></label
         >
         <v-text-field
           v-model="details.contractAddress"
           :rules="rules.contractAddress"
-          placeholder="Place contract address"
+          placeholder="Please enter contract address"
           hide-details="auto"
           dark
           flat
@@ -111,14 +112,14 @@
           class="form-input"
         ></v-text-field>
       </div>
-      <div class="mb-4">
+      <div class="mb-4" v-if="isErc20">
         <label class="font-14 line-h-17 font-weight-regular mb-2"
-          >Balance</label
+          >Threshold Balance <span class="red--text">*</span></label
         >
         <v-text-field
           v-model="details.thresholdBalance"
           :rules="rules.number"
-          placeholder="Threshold Balance"
+          placeholder="Please enter threshold balance"
           hide-details="auto"
           dark
           flat
@@ -127,12 +128,31 @@
           class="form-input"
         ></v-text-field>
       </div>
+
+       <div class="mb-4" v-if="!isErc20">
+        <label class="font-14 line-h-17 font-weight-regular mb-2"
+          >Threshold NFT Count<span class="red--text">*</span></label
+        >
+        <v-text-field
+          v-model="details.thresholdBalance"
+          :rules="rules.number"
+          placeholder="Please enter threshold NFT count"
+          hide-details="auto"
+          dark
+          flat
+          solo
+          outlined
+          class="form-input"
+        ></v-text-field>
+      </div>
+
+
       <div class="mb-4">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">Title</label>
+        <label class="font-14 line-h-17 font-weight-regular mb-2">Title <span class="red--text">*</span></label>
         <v-text-field
           v-model="form.title"
           :rules="rules.title"
-          placeholder="Name your title"
+          placeholder="Please add title of your action 'Ex: Click on Metamask icon to connect wallet"
           hide-details="auto"
           dark
           flat
@@ -147,7 +167,7 @@
         >
         <v-text-field
           v-model="form.placeHolder"
-          placeholder="Enter Place Holder"
+          placeholder="0xCE7893c915356eCa955E2........"
           hide-details="auto"
           dark
           flat
@@ -157,7 +177,7 @@
         ></v-text-field>
       </div>
       <div class="mb-4">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">Score</label>
+        <label class="font-14 line-h-17 font-weight-regular mb-2">Score <span class="red--text">*</span></label>
         <v-text-field
           v-model="form.score"
           :rules="rules.number"
@@ -271,18 +291,17 @@ export default {
         placeHolder: "",
         isManadatory: true,
         value: null,
-
         score: 10,
         id: "",
         campaignName: "smart-contract",
       },
       details: {
         contractAddress: null,
-        thresholdBalance: null,
+        thresholdBalance: 0,
       },
       rules: {
-        title: [(v) => !!v || "Please enter title"],
-        type: [(v) => !!v || "Please select social type"],
+        title: [(v) => !!v || "Please add title of your action 'Ex: Click on Metamask icon to connect wallet"],
+        type: [(v) => !!v || "Please select type"],
         value: [(v) => !!v || "Please enter this field"],
         contractAddress: [(v) => !!v || "Please enter contract address"],
         number: [
@@ -293,6 +312,20 @@ export default {
         ],
       },
     };
+  },
+  computed: {
+    isErc20(){
+      if(this.form.type){
+        const type = this.form.type.replace('_', '');
+        if(type && type.includes('ERC20')){
+          return true
+        }else{
+          return false
+        }
+      }else{
+        return true
+      } 
+    }
   },
   methods: {
     edit(item, index) {
@@ -361,6 +394,7 @@ export default {
         _this.isEditing = false;
         _this.$refs.form.reset();
       }, 500);
+
     },
   },
 };

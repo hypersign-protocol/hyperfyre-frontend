@@ -472,11 +472,7 @@ export default {
     async Referral() {
       if (this.$refs.ReferralForm[0].validate()) {
         this.$root.$emit("getReferralFormData");
-        if (!this.isEdit) {
-          this.confirmation = true;
-        } else {
-          this.nextIndex();
-        }
+        this.nextIndex();
       }
     },
 
