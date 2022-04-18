@@ -25,10 +25,10 @@
         <div class="campaign-card">
           <div class="content">
             <div class="white--text font-32 font-weight-medium line-h-32">
-              {{ subscriptionStats.totalAvailable }}
+              {{ campaigns.length }}
             </div>
             <div class="font-20 font-weight-regular line-h-32 color-grey-200">
-              Limit
+              Total
             </div>
           </div>
         </div>
@@ -37,10 +37,10 @@
         <div class="campaign-card">
           <div class="content">
             <div class="white--text font-32 font-weight-medium line-h-32">
-              {{ subscriptionStats.totalUsed }}
+              {{ ongoing.length }}
             </div>
             <div class="font-20 font-weight-regular line-h-32 color-grey-200">
-              Request Consumed
+              Ongoing
             </div>
           </div>
         </div>
@@ -49,12 +49,10 @@
         <div class="campaign-card">
           <div class="content">
             <div class="white--text font-32 font-weight-medium line-h-32">
-              {{
-                subscriptionStats.totalAvailable - subscriptionStats.totalUsed
-              }}
+              {{ completed.length }}
             </div>
             <div class="font-20 font-weight-regular line-h-32 color-grey-200">
-              Remaining
+              Completed
             </div>
           </div>
         </div>
@@ -64,7 +62,7 @@
 </template>
 <script>
 export default {
-  name: "SubscriptionStats",
+  name: "CampaignStats",
 
   data() {
     return {
@@ -72,34 +70,65 @@ export default {
       accessuser: JSON.parse(localStorage.getItem("accessuser")),
       authToken: localStorage.getItem("authToken"),
       accessToken: localStorage.getItem("accessToken"),
+      campaigns: {},
       loading: false,
-      subscriptionStats: {},
     };
   },
   mounted() {
-    this.fetchSubscription();
+    this.getCampaigns();
+  },
+
+  computed: {
+    ongoing() {
+      if (this.campaigns && this.campaigns.length > 0) {
+        return this.campaigns.filter(
+          (campaign) => campaign.projectStatus === true
+        );
+      } else {
+        return [];
+      }
+    },
+
+    completed() {
+      if (this.campaigns && this.campaigns.length > 0) {
+        return this.campaigns.filter(
+          (campaign) => campaign.projectStatus === false
+        );
+      } else {
+        return [];
+      }
+    },
   },
 
   methods: {
-    async fetchSubscription() {
+    async getCampaigns() {
       this.loading = true;
       try {
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription?usage=true`;
-        const headers = {
-          Authorization: `Bearer ${this.authToken}`,
-          AccessToken: `Bearer ${this.accessToken}`,
-        };
-        const resp = await fetch(url, {
-          headers,
-          method: "GET",
-        });
+        if (!this.user.id) {
+          this.$store.dispatch("snackbar/SHOW", {
+            type: "error",
+            message: "No campaigns found",
+          });
+        } else {
+          const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.user.id}`;
 
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
+          const headers = {
+            Authorization: `Bearer ${this.authToken}`,
+            AccessToken: `Bearer ${this.accessToken}`,
+          };
+          const resp = await fetch(url, {
+            headers,
+            method: "GET",
+          });
+
+          if (!resp.ok) {
+            console.log(resp.statusText);
+          }
+
+          const json = await resp.json();
+          this.campaigns = json;
+          this.loading = false;
         }
-        const json = await resp.json();
-        this.subscriptionStats = json["usage"];
-        this.loading = false;
       } catch (e) {
         this.loading = false;
         this.$store.dispatch("snackbar/SHOW", {

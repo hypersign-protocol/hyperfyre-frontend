@@ -3,50 +3,8 @@
     <p class="white--text mt-24 font-20 font-weight-medium line-h-24">
       Good Morning, {{ user.name }}
     </p>
-    <p class="mt-40 font-16 font-weight-bold line-h-19 color-grey-100">
-      Campaigns
-    </p>
-    <v-row>
-      <v-col cols="12" md="4">
-        <div class="campaign-card">
-          <div class="content">
-            <div class="white--text font-32 font-weight-medium line-h-32">
-              1
-            </div>
-            <div class="font-20 font-weight-regular line-h-32 color-grey-200">
-              Featured
-            </div>
-          </div>
-        </div>
-      </v-col>
-      <v-col cols="12" md="4">
-        <div class="campaign-card">
-          <div class="content">
-            <div class="white--text font-32 font-weight-medium line-h-32">
-              2
-            </div>
-            <div class="font-20 font-weight-regular line-h-32 color-grey-200">
-              Upcoming
-            </div>
-          </div>
-        </div>
-      </v-col>
-      <v-col cols="12" md="4">
-        <div class="campaign-card">
-          <div class="content">
-            <div class="white--text font-32 font-weight-medium line-h-32">
-              10
-            </div>
-            <div class="font-20 font-weight-regular line-h-32 color-grey-200">
-              Completed
-            </div>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
-
+    <campaign-stats></campaign-stats>
     <subscription-stats></subscription-stats>
-
     <v-text-field
       dark
       class="mt-29 form-input"
@@ -372,11 +330,13 @@
 <script>
 import campaignList from "@/components/campaign/list";
 import SubscriptionStats from "@/components/Admin/SubscriptionStats";
+import CampaignStats from "@/components/Admin/CampaignStats";
 export default {
   name: "TheOverview",
   components: {
     campaignList,
     SubscriptionStats,
+    CampaignStats,
   },
   data() {
     return {
@@ -385,40 +345,7 @@ export default {
       authToken: localStorage.getItem("authToken"),
       accessToken: localStorage.getItem("accessToken"),
       panel: [0],
-      subscriptionStats: {},
     };
-  },
-  mounted() {
-    this.fetchSubscription();
-  },
-
-  methods: {
-    async fetchSubscription() {
-      try {
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription?usage=true`;
-        const headers = {
-          Authorization: `Bearer ${this.authToken}`,
-          AccessToken: `Bearer ${this.accessToken}`,
-        };
-        const resp = await fetch(url, {
-          headers,
-          method: "GET",
-        });
-
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
-        }
-        const json = await resp.json();
-        this.subscriptionStats = json["usage"];
-      } catch (e) {
-        this.$store.dispatch("snackbar/SHOW", {
-          type: "error",
-          message: e.message,
-        });
-      } finally {
-        this.isLoading = false;
-      }
-    },
   },
 };
 </script>
