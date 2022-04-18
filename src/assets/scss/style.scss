@@ -245,7 +245,7 @@
 	}
 
 	&.gradient {
-		background: linear-gradient(180deg, $secondary 0%, $primary 100%) !important;
+		background: linear-gradient(215.28deg, $secondary 0%, $primary 100%) !important;
 		// background: linear-gradient(248.91deg, #04CD8F 14.74%, #904DF8 83.73%) !important;
 		border: 0px;
 	}
@@ -271,10 +271,10 @@
 }
 
 .login__wrap--bg {
-	background: url('../images/bg.svg');
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
+	background-image: url('../images/bg.svg'), linear-gradient(24.5deg, #6966FB 0.94%, #2AD798 99.39%) !important;
 
 }
 
@@ -360,4 +360,39 @@
 			}
 		}
 	}
+}
+
+.auth--wrap{
+	.v-card__title {
+		border-bottom: 1px solid rgba(255,255,255,0.2) !important;
+	}
+}
+
+.divider {
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  z-index: 1;
+}
+.divider:before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 1px;
+  top: 15px;
+  left: 0;
+  background: rgba(255,255,255,0.2);
+}
+.small-desc {
+  display: inline-block;
+  padding: 0 20px;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 100%;
+  text-align: center;
+  letter-spacing: -0.2px;
+  color: white;
+  background: #171926;
 }

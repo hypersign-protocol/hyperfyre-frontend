@@ -129,7 +129,7 @@
         ></v-text-field>
       </div>
 
-       <div class="mb-4" v-if="!isErc20">
+      <div class="mb-4" v-if="!isErc20">
         <label class="font-14 line-h-17 font-weight-regular mb-2"
           >Threshold NFT Count<span class="red--text">*</span></label
         >
@@ -146,9 +146,10 @@
         ></v-text-field>
       </div>
 
-
       <div class="mb-4">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">Title <span class="red--text">*</span></label>
+        <label class="font-14 line-h-17 font-weight-regular mb-2"
+          >Title <span class="red--text">*</span></label
+        >
         <v-text-field
           v-model="form.title"
           :rules="rules.title"
@@ -177,7 +178,9 @@
         ></v-text-field>
       </div>
       <div class="mb-4">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">Score <span class="red--text">*</span></label>
+        <label class="font-14 line-h-17 font-weight-regular mb-2"
+          >Score <span class="red--text">*</span></label
+        >
         <v-text-field
           v-model="form.score"
           :rules="rules.number"
@@ -300,7 +303,11 @@ export default {
         thresholdBalance: 0,
       },
       rules: {
-        title: [(v) => !!v || "Please add title of your action 'Ex: Click on Metamask icon to connect wallet"],
+        title: [
+          (v) =>
+            !!v ||
+            "Please add title of your action 'Ex: Click on Metamask icon to connect wallet",
+        ],
         type: [(v) => !!v || "Please select type"],
         value: [(v) => !!v || "Please enter this field"],
         contractAddress: [(v) => !!v || "Please enter contract address"],
@@ -314,18 +321,18 @@ export default {
     };
   },
   computed: {
-    isErc20(){
-      if(this.form.type){
-        const type = this.form.type.replace('_', '');
-        if(type && type.includes('ERC20')){
-          return true
-        }else{
-          return false
+    isErc20() {
+      if (this.form.type) {
+        const type = this.form.type.replace("_", "");
+        if (type && type.includes("ERC20")) {
+          return true;
+        } else {
+          return false;
         }
-      }else{
-        return true
-      } 
-    }
+      } else {
+        return true;
+      }
+    },
   },
   methods: {
     edit(item, index) {
@@ -394,7 +401,6 @@ export default {
         _this.isEditing = false;
         _this.$refs.form.reset();
       }, 500);
-
     },
   },
 };

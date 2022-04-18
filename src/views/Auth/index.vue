@@ -1,6 +1,11 @@
 <template>
-  <v-row no-gutters class="black h-100">
-    <v-col cols="12" md="8" class="pa-0 white--text login__wrap--bg">
+  <v-row no-gutters class="h-100">
+    <v-col
+      cols="12"
+      md="8"
+      class="pa-0 white--text login__wrap--bg"
+      v-if="$vuetify.breakpoint.mdAndUp"
+    >
       <div class="h-100">
         <div class="d-flex align-center justify-end">
           <svg
@@ -25,7 +30,7 @@
                   y="0"
                   width="4"
                   height="4"
-                  fill="rgba(255,255,255, 0.1)"
+                  fill="rgba(0,0,0, 0.1)"
                   class="ng-tns-c294-40"
                 ></rect>
               </pattern>
@@ -38,13 +43,9 @@
             ></rect>
           </svg>
         </div>
-        <div class="position-relative d-flex align-center justify-center flex-column  mx-auto">
-          <v-img
-              max-width="200"
-              class="mb-70"
-              lazy-src="@/assets/images/logo.svg"
-              src="@/assets/images/logo.svg"
-            ></v-img>
+        <div
+          class="height-500 position-relative d-flex align-center justify-center flex-column ma-auto"
+        >
           <h1
             class="white--text font-weight--bold font-48 line-h-49 letter-s-0 mb-6"
           >
@@ -56,17 +57,28 @@
         </div>
       </div>
     </v-col>
-    <v-col cols="12" md="4" class="pa-0 refer__wrap white--text text-center">
-      <div class="h-100 position-relative d-flex align-center justify-center ma-auto width-500">
-        <v-card flat color="white">
-          <v-card-title
-            class="pa-0 white--text flex-column justify-center mt-8 border-b-1"
-          >
-            <h2 class="font-24 line-h-31 color-primary-100">Login</h2>
+    <v-col cols="12" md="4" class="pa-0 bg-black white--text text-center">
+      <div
+        class="h-100 position-relative d-flex flex-column align-center justify-center ma-auto"
+      >
+        <div>
+          <v-img
+            class="mb-10"
+            lazy-src="@/assets/images/logo.svg"
+            src="@/assets/images/logo.svg"
+          ></v-img>
+        </div>
+        <v-card flat color="auth--wrap bg-blue-100 py-5">
+          <v-card-title class="pa-0 white--text flex-column justify-center">
+            <h2
+              class="font-24 line-h-31 white--text font-weight--medium mb-6 font"
+            >
+              Login
+            </h2>
           </v-card-title>
           <v-card-text class="px-10 py-8">
             <div v-if="QRRefresh" class="QRRefresh">
-              <p class="mt-4 mb-2 black--text font-14 line-h-17">
+              <p class="mt-4 mb-2 white--text font-14 line-h-17">
                 Session expired.
                 <a
                   @click="reloadQR"
@@ -79,17 +91,17 @@
               <v-form ref="form" lazy-validation>
                 <vue-qr
                   v-if="value != ''"
-                  margin="1"
+                  :margin="1"
                   :text="value"
                   :size="200"
                   :logoSrc="src2"
                   logoBackgroundColor="white"
-                  logoCornerRadius="2"
+                  :logoCornerRadius="2"
                 ></vue-qr>
-                <p class="mt-4 mb-2 black--text font-14 line-h-17">
+                <p class="mt-4 mb-2 white--text font-14 line-h-17">
                   Scan QR code using Hypersign Mobile App
                 </p>
-                <p class="black--text font-14 line-h-17">
+                <p class="white--text font-14 line-h-17">
                   Get the app on
                   <a
                     class="color-primary-100"
@@ -101,8 +113,11 @@
                   <a class="color-primary-100" href="">Web</a>
                 </p>
               </v-form>
-              <v-divider></v-divider>
-              <p class="mt-4 mb-2 black--text font-14 line-h-17">OR</p>
+              <div class="divider my-6">
+                <span class="white--text font-14 line-h-17 small-desc">
+                  OR
+                </span>
+              </div>
               <v-btn
                 v-if="this.value != ''"
                 :ripple="false"
