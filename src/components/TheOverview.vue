@@ -44,6 +44,9 @@
         </div>
       </v-col>
     </v-row>
+
+    <subscription-stats></subscription-stats>
+
     <v-text-field
       dark
       class="mt-29 form-input"
@@ -368,16 +371,54 @@
 </template>
 <script>
 import campaignList from "@/components/campaign/list";
+import SubscriptionStats from "@/components/Admin/SubscriptionStats";
 export default {
   name: "TheOverview",
   components: {
     campaignList,
+    SubscriptionStats,
   },
   data() {
     return {
       user: JSON.parse(localStorage.getItem("user")),
+      accessuser: JSON.parse(localStorage.getItem("accessuser")),
+      authToken: localStorage.getItem("authToken"),
+      accessToken: localStorage.getItem("accessToken"),
       panel: [0],
+      subscriptionStats: {},
     };
+  },
+  mounted() {
+    this.fetchSubscription();
+  },
+
+  methods: {
+    async fetchSubscription() {
+      try {
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription?usage=true`;
+        const headers = {
+          Authorization: `Bearer ${this.authToken}`,
+          AccessToken: `Bearer ${this.accessToken}`,
+        };
+        const resp = await fetch(url, {
+          headers,
+          method: "GET",
+        });
+
+        if (!resp.ok) {
+          return this.notifyErr(resp.statusText);
+        }
+        const json = await resp.json();
+        this.subscriptionStats = json["usage"];
+      } catch (e) {
+        this.$store.dispatch("snackbar/SHOW", {
+          type: "error",
+          message: e.message,
+        });
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
 };
 </script>
