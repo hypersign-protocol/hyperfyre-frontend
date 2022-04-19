@@ -40,7 +40,7 @@
               {{ subscriptionStats.totalUsed }}
             </div>
             <div class="font-20 font-weight-regular line-h-32 color-grey-200">
-              Request Consumed
+              Consumed
             </div>
           </div>
         </div>
