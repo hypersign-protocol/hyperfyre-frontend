@@ -58,12 +58,26 @@
                 >
                   Event URL
                 </a>
-                <v-icon
-                  size="20"
-                  color="primary"
-                  @click="copyContent(item.whitelisting_link)"
-                  >mdi-content-copy</v-icon
+
+                <v-tooltip
+                  content-class="copy-tooltip"
+                  :open-on-hover="false"
+                  :open-on-click="true"
+                  color="#000"
+                  text-color="#fff"
+                  top
                 >
+                  <template v-slot:activator="{ on }">
+                    <v-icon
+                      size="20"
+                      color="primary"
+                      v-on="on"
+                      @click="copyContent(item.whitelisting_link)"
+                      >mdi-content-copy</v-icon
+                    >
+                  </template>
+                  <span>Copied to clipboard</span>
+                </v-tooltip>
               </div>
               <div
                 class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
@@ -72,11 +86,8 @@
                 Participants
               </div>
               <div class="d-flex">
-                <v-btn icon @click="deleteCampaign(item)">
-                  <v-icon color="primary">mdi-close</v-icon>
-                </v-btn>
                 <v-btn icon @click="edit(item)">
-                  <v-icon color="primary">mdi-circle-edit-outline</v-icon>
+                  <img src="@/assets/images/fe_edit.svg" />
                 </v-btn>
               </div>
             </div>
@@ -143,12 +154,25 @@
                 >
                   Event URL
                 </a>
-                <v-icon
-                  size="20"
-                  color="primary"
-                  @click="copyContent(item.whitelisting_link)"
-                  >mdi-content-copy</v-icon
+                <v-tooltip
+                  content-class="copy-tooltip"
+                  :open-on-hover="false"
+                  :open-on-click="true"
+                  color="#000"
+                  text-color="#fff"
+                  top
                 >
+                  <template v-slot:activator="{ on }">
+                    <v-icon
+                      size="20"
+                      color="primary"
+                      v-on="on"
+                      @click="copyContent(item.whitelisting_link)"
+                      >mdi-content-copy</v-icon
+                    >
+                  </template>
+                  <span>Copied to clipboard</span>
+                </v-tooltip>
               </div>
               <div
                 class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
@@ -157,11 +181,8 @@
                 Participants
               </div>
               <div class="d-flex">
-                <v-btn icon @click="deleteCampaign(item)">
-                  <v-icon color="primary">mdi-close</v-icon>
-                </v-btn>
                 <v-btn icon @click="edit(item)">
-                  <v-icon color="primary">mdi-circle-edit-outline</v-icon>
+                  <img src="@/assets/images/fe_edit.svg" />
                 </v-btn>
               </div>
             </div>
