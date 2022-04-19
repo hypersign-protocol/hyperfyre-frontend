@@ -56,9 +56,11 @@
 
 .form-input {
 	.v-input__control {
+		min-height: 41px !important;
+
 		.v-input__slot {
 			background: #000 !important;
-			min-height: 48px !important;
+			min-height: 41px !important;
 			border-radius: 2px !important;
 
 			fieldset {
@@ -411,13 +413,20 @@
 				color: #979EAF !important;
 			}
 
-			tbody>tr>td {
-				border-bottom: 0px !important;
-				font-weight: 500;
-				font-size: 16px !important;
-				line-height: 20px;
-				color: #FFFFFF !important;
+			tbody>tr {
+				&:hover {
+					background: transparent !important;
+					cursor: pointer;
+				}
 
+				td {
+					border-bottom: 0px !important;
+					font-weight: 500;
+					font-size: 16px !important;
+					line-height: 20px;
+					color: #FFFFFF !important;
+
+				}
 			}
 		}
 	}
@@ -494,4 +503,8 @@
 
 .notification-switch.v-input--switch.v-input--is-disabled:not(.v-input--is-dirty) .v-input--switch__thumb {
 	color: $primary !important;
+}
+
+.v-btn:hover:before{
+	opacity: 0 !important;
 }

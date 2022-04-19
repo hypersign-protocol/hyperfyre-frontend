@@ -1,6 +1,6 @@
 <template>
   <v-container class="bg-black py-0">
-    <v-toolbar color="black" class="menu" flat max-height="64px">
+    <v-toolbar color="black" class="menu mt-6" flat max-height="64px">
       <v-toolbar-items class="hidden-xs-only">
         <v-btn
           :ripple="false"
@@ -26,9 +26,8 @@ export default {
       items: [
         { tab: "Overview", slug: "/overview" },
         { tab: "Campaigns", slug: "/campaigns" },
-        { tab: "Account", slug: "account" },
-        { tab: "Referrals", slug: "referrals" },
         { tab: "Participants", slug: "/participants" },
+        { tab: "Referrals", slug: "referrals" },
       ],
       routeName: null,
     };

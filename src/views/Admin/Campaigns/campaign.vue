@@ -24,25 +24,19 @@
                   :class="item.filled ? 'done' : ''"
                 >
                   <template v-if="!isEdit">
-                    <v-icon
+                    <img
                       v-if="!item.filled"
-                      size="25"
-                      color="#313443"
-                      class="mr-2"
-                      >mdi-circle</v-icon
-                    >
-                    <v-icon
+                      class="mr-3"
+                      src="@/assets/images/empty-circle.svg"
+                    />
+                    <img
                       v-if="item.filled"
-                      size="25"
-                      color="green"
-                      class="mr-2"
-                      >mdi-check-circle</v-icon
-                    >
+                      class="mr-3"
+                      src="@/assets/images/check-circle.svg"
+                    />
                   </template>
                   <template v-if="isEdit">
-                    <v-icon size="25" color="green" class="mr-2"
-                      >mdi-check-circle</v-icon
-                    >
+                    <img class="mr-3" src="@/assets/images/check-circle.svg" />
                   </template>
 
                   {{ item.name }}
@@ -385,8 +379,8 @@ export default {
           social: {},
           projectStatus: true,
           actions: [],
-          refereePoint: null,
-          referralPoint: null,
+          refereePoint: 10,
+          referralPoint: 5,
           tags: [],
           themeColor: "#494949",
           fontColor: "#ffffff",

@@ -32,7 +32,7 @@
         placeholder="Enter description here for your campaign"
       ></v-textarea>
     </div> -->
-    <div class="d-flex align-center justify-space-between py-4">
+    <div class="d-flex align-center justify-space-between py-2">
       <div>
         <label class="font-14 line-h-17 font-weight-regular mb-2"
           >Start Date</label
@@ -423,20 +423,6 @@ export default {
 
   methods: {
     emitFilledData() {
-      // console.log(`this.tagsDropdownChanged : ${this.tagsDropdownChanged}`);
-      // console.log(this.campaign.tags);
-      // let _this = this;
-      // if (this.tagsDropdownChanged) {
-      //   _this.campaign.tags = [];
-      // }
-
-      // this.tags.forEach((el) => {
-      //   _this.selected.forEach((value) => {
-      //     if (el.type === value) {
-      //       _this.campaign.tags.push({ _id: el._id, type: el.type });
-      //     }
-      //   });
-      // });
       this.$root.$emit("getFilledData", this.form);
     },
 
