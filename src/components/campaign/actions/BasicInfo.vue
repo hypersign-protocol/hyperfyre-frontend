@@ -32,7 +32,7 @@
         placeholder="Enter description here for your campaign"
       ></v-textarea>
     </div> -->
-    <div class="d-flex align-center justify-space-between py-2">
+    <div class="mb-4 d-flex align-center justify-space-between py-2">
       <div>
         <label class="font-14 line-h-17 font-weight-regular mb-2"
           >Start Date</label
@@ -383,11 +383,19 @@ export default {
           value: "Close",
         },
       ],
+      fromDate: null,
+      toDate: null,
     };
   },
   watch: {
     selected() {
       this.tagsDropdownChanged = true;
+    },
+    fromDate(val) {
+      this.campaign.fromDate = val;
+    },
+    toDate(val) {
+      this.campaign.toDate = val;
     },
   },
   computed: {
@@ -396,24 +404,6 @@ export default {
         return "Please enter a valid url";
       }
       return true;
-    },
-    fromDate() {
-      if (this.campaign.fromDate) {
-        return this.dateFormat(this.campaign.fromDate, this.isEdit);
-      } else {
-        return null;
-      }
-    },
-
-    toDate() {
-      console.log(this.campaign.toDate);
-      if (this.campaign.toDate) {
-        console.log(this.dateFormat(this.campaign.toDate, this.isEdit));
-
-        return this.dateFormat(this.campaign.toDate, this.isEdit);
-      } else {
-        return null;
-      }
     },
   },
   mounted() {
@@ -459,12 +449,10 @@ export default {
     },
 
     async loadTags() {
-      console.log(this.isEdit);
-      console.log(this.campaign);
       if (this.isEdit) {
-        console.log(this.campaign.tags);
         this.selected = this.campaign.tags;
-        console.log(this.selected);
+        this.fromDate = new Date(this.campaign.fromDate);
+        this.toDate = new Date(this.campaign.toDate);
       }
     },
 

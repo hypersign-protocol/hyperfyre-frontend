@@ -89,7 +89,7 @@
                             :loading="loading"
                             @click="create"
                           >
-                            <span>Submit</span>
+                            <span>Confirm</span>
                           </v-btn>
                           <v-btn
                             v-if="navigationTab !== 'basic-info'"
@@ -124,6 +124,7 @@
                 max-width="115"
                 max-height="115"
                 src="@/assets/images/done.png"
+                class="mb-4"
               ></v-img>
               <p class="font-20 line-h-24 font-weight-bold white--text">
                 Campaign {{ campaignStatusMessage }}
@@ -371,8 +372,8 @@ export default {
         this.campaign = {
           projectName: "",
           logoUrl: "",
-          fromDate: "",
-          toDate: "",
+          fromDate: null,
+          toDate: null,
           isNotificaionEnabled: false,
           ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
           investorsCount: 0,
@@ -411,7 +412,6 @@ export default {
       const json = await resp.json();
       if (json) {
         this.campaign = json;
-        console.log(this.campaign.tags);
       }
     },
 

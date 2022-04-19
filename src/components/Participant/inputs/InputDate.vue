@@ -46,7 +46,7 @@
               <v-text-field
                 :disabled="done"
                 hide-details="auto"
-                :value="dateFormat(data.value, false)"
+                :value="dateFormat(data.value)"
                 :rules="rules.input"
                 dark
                 flat

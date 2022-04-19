@@ -1,21 +1,9 @@
 export default {
   methods: {
-    dateFormat(val, isEdit = false) {
-      if (isEdit === true) {
-        const value = new Date(val).valueOf();
-        if (!isNaN(value)) {
-          const dateVal = new Date(value).toISOString().slice(0, 10);
-          if (!dateVal) return null;
-          const [year, month, day] = dateVal.split("-");
-          return `${month}/${day}/${year}`;
-        } else {
-          return null;
-        }
-      } else {
-        if (!val) return null;
-        const [year, month, day] = val.split("-");
-        return `${month}/${day}/${year}`;
-      }
+    dateFormat(val) {
+      if (!val) return null;
+      const [year, month, day] = val.split("-");
+      return `${month}/${day}/${year}`;
     },
 
     copyContent(id) {

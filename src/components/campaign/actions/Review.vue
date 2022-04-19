@@ -103,26 +103,27 @@
         </v-btn>
       </div>
 
-      <v-simple-table dark>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Type</th>
-              <th class="text-left">Prize name</th>
-              <th class="text-left">Number of Winners</th>
-              <th class="text-left">Prize Per Winner</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in prizeList" :key="index">
-              <td>{{ item.type }}</td>
-              <td>{{ item.title }}</td>
-              <td>{{ JSON.parse(item.value).winners }}</td>
-              <td>{{ JSON.parse(item.value).prizeValue }}</td>
-            </tr>
-          </tbody>
+      <v-data-table
+        class="result-table campaign"
+        :headers="prizeHeaders"
+        :hide-default-footer="true"
+        :items="prizeList"
+        item-key="_id"
+        dark
+      >
+        <template v-slot:item.type="{ item }">
+          {{ item.type }}
         </template>
-      </v-simple-table>
+        <template v-slot:item.title="{ item }">
+          {{ item.title }}
+        </template>
+        <template v-slot:item.no_of_winners="{ item }">
+          {{ JSON.parse(item.value).winners }}
+        </template>
+        <template v-slot:item.prize_per_winner="{ item }">
+          {{ JSON.parse(item.value).prizeValue }}
+        </template>
+      </v-data-table>
 
       <v-divider dark class="my-4"></v-divider>
     </div>
@@ -141,26 +142,27 @@
         </v-btn>
       </div>
 
-      <v-simple-table dark>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Type</th>
-              <th class="text-left">Title</th>
-              <th class="text-left">Placeholder</th>
-              <th class="text-left">Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in customList" :key="index">
-              <td>{{ item.type }}</td>
-              <td>{{ item.title }}</td>
-              <td>{{ item.placeHolder }}</td>
-              <td>{{ item.score }}</td>
-            </tr>
-          </tbody>
+      <v-data-table
+        class="result-table campaign"
+        :headers="headers"
+        :hide-default-footer="true"
+        :items="customList"
+        item-key="_id"
+        dark
+      >
+        <template v-slot:item.type="{ item }">
+          {{ item.type }}
         </template>
-      </v-simple-table>
+        <template v-slot:item.title="{ item }">
+          {{ item.title }}
+        </template>
+        <template v-slot:item.placeHolder="{ item }">
+          {{ item.placeHolder }}
+        </template>
+        <template v-slot:item.score="{ item }">
+          {{ item.score }}
+        </template>
+      </v-data-table>
       <v-divider dark class="my-4"></v-divider>
     </div>
 
@@ -178,26 +180,27 @@
         </v-btn>
       </div>
 
-      <v-simple-table dark>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Type</th>
-              <th class="text-left">Title</th>
-              <th class="text-left">Social Handle</th>
-              <th class="text-left">Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in socialList" :key="index">
-              <td>{{ item.type }}</td>
-              <td>{{ item.title }}</td>
-              <td>{{ item.value }}</td>
-              <td>{{ item.score }}</td>
-            </tr>
-          </tbody>
+      <v-data-table
+        class="result-table campaign"
+        :headers="headers"
+        :hide-default-footer="true"
+        :items="socialList"
+        item-key="_id"
+        dark
+      >
+        <template v-slot:item.type="{ item }">
+          {{ item.type }}
         </template>
-      </v-simple-table>
+        <template v-slot:item.title="{ item }">
+          {{ item.title }}
+        </template>
+        <template v-slot:item.placeHolder="{ item }">
+          {{ item.placeHolder }}
+        </template>
+        <template v-slot:item.score="{ item }">
+          {{ item.score }}
+        </template>
+      </v-data-table>
 
       <v-divider dark class="my-4"></v-divider>
     </div>
@@ -215,26 +218,28 @@
           Edit
         </v-btn>
       </div>
-      <v-simple-table dark>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Blockchain</th>
-              <th class="text-left">Title</th>
-              <th class="text-left">Placeholder</th>
-              <th class="text-left">Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in blockchainList" :key="index">
-              <td>{{ item.type }}</td>
-              <td>{{ item.title }}</td>
-              <td>{{ item.placeHolder }}</td>
-              <td>{{ item.score }}</td>
-            </tr>
-          </tbody>
+      <v-data-table
+        class="result-table campaign"
+        :headers="headers"
+        :hide-default-footer="true"
+        :items="blockchainList"
+        item-key="_id"
+        dark
+      >
+        <template v-slot:item.type="{ item }">
+          {{ item.type }}
         </template>
-      </v-simple-table>
+        <template v-slot:item.title="{ item }">
+          {{ item.title }}
+        </template>
+        <template v-slot:item.placeHolder="{ item }">
+          {{ item.placeHolder }}
+        </template>
+        <template v-slot:item.score="{ item }">
+          {{ item.score }}
+        </template>
+      </v-data-table>
+
       <v-divider dark class="my-4"></v-divider>
     </div>
 
@@ -251,26 +256,28 @@
           Edit
         </v-btn>
       </div>
-      <v-simple-table dark>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Blockchain</th>
-              <th class="text-left">Contact Address</th>
-              <th class="text-left">Balance</th>
-              <th class="text-left">Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in smartContractlist" :key="index">
-              <td>{{ item.type }}</td>
-              <td>{{ JSON.parse(item.value).contractAddress }}</td>
-              <td>{{ JSON.parse(item.value).thresholdBalance }}</td>
-              <td>{{ item.score }}</td>
-            </tr>
-          </tbody>
+
+      <v-data-table
+        class="result-table campaign"
+        :headers="smartContractHeaders"
+        :hide-default-footer="true"
+        :items="smartContractlist"
+        item-key="_id"
+        dark
+      >
+        <template v-slot:item.type="{ item }">
+          {{ item.type }}
         </template>
-      </v-simple-table>
+        <template v-slot:item.contract_address="{ item }">
+          {{ JSON.parse(item.value).contractAddress }}
+        </template>
+        <template v-slot:item.balance="{ item }">
+          {{ JSON.parse(item.value).thresholdBalance }}
+        </template>
+        <template v-slot:item.score="{ item }">
+          {{ item.score }}
+        </template>
+      </v-data-table>
 
       <v-divider dark class="my-4"></v-divider>
     </div>
@@ -292,7 +299,80 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      headers: [
+        {
+          text: "Type",
+          align: "start",
+          sortable: false,
+          value: "type",
+        },
+        {
+          text: "Title",
+          sortable: false,
+          align: "left",
+          value: "title",
+        },
+        {
+          text: "Placeholder",
+          sortable: false,
+          value: "placeHolder",
+        },
+        {
+          text: "Score",
+          sortable: false,
+          value: "score",
+        },
+      ],
+
+      smartContractHeaders: [
+        {
+          text: "Type",
+          align: "start",
+          sortable: false,
+          value: "type",
+        },
+        {
+          text: "Contract Address",
+          sortable: false,
+          value: "contract_address",
+        },
+        {
+          text: "Threshold Balance ",
+          sortable: false,
+          value: "balance",
+        },
+        {
+          text: "Score",
+          sortable: false,
+          value: "score",
+        },
+      ],
+
+      prizeHeaders: [
+        {
+          text: "Type",
+          align: "start",
+          sortable: false,
+          value: "type",
+        },
+        {
+          text: "Prize Name",
+          sortable: false,
+          value: "title",
+        },
+        {
+          text: "No of Winners",
+          sortable: false,
+          value: "no_of_winners",
+        },
+        {
+          text: "Prize per Winner",
+          sortable: false,
+          value: "prize_per_winner",
+        },
+      ],
+    };
   },
   computed: {
     customList: function () {
