@@ -17,7 +17,7 @@
         placeholder="Campaign Name"
       ></v-text-field>
     </div>
-    <div class="mb-2">
+    <!--  <div class="mb-2">
       <label class="font-14 line-h-17 font-weight-regular mb-2"
         >Campaign Description</label
       >
@@ -31,7 +31,7 @@
         class="form-input"
         placeholder="Enter description here for your campaign"
       ></v-textarea>
-    </div>
+    </div> -->
     <div class="d-flex align-center justify-space-between py-4">
       <div>
         <label class="font-14 line-h-17 font-weight-regular mb-2"
@@ -266,6 +266,21 @@
         >Banner URL should be in the size of 600x300 pixels</span
       >
     </div>
+
+    <div class="mb-4 d-flex align-center">
+      <label class="font-14 line-h-17 font-weight-regular mr-4"
+        >Notification</label
+      >
+
+      <v-switch
+        :ripple="false"
+        hide-details="auto"
+        v-model="campaign.isNotificaionEnabled"
+        flat
+        class="mt-0 pt-0 notification-switch"
+      ></v-switch>
+    </div>
+
     <!-- <div class="mb-4">
       <label class="font-14 line-h-17 font-weight-regular mb-2"
         >Upload Logo

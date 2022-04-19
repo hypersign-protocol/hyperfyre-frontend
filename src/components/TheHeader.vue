@@ -8,23 +8,24 @@
       ></v-img>
       <v-spacer></v-spacer>
       <div class="d-flex align-center">
-        <v-img
+        <!--  <v-img
           max-width="16"
           lazy-src="@/assets/images/logo-icon.svg"
           src="@/assets/images/logo-icon.svg"
         ></v-img>
-        <span class="ml-2 white--text font-weight-medium">$0.0004</span>
+        <span class="ml-2 white--text font-weight-medium">$0.0004</span> -->
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               color="#6966FB"
               rounded
-              class="ml-2 white--text"
+              class="ml-2 white--text text-capitalize letter-s-0"
               v-bind="attrs"
               v-on="on"
             >
               <v-icon>mdi-account</v-icon>
-              <span> <v-icon>mdil-dots-horizontal</v-icon>5y420 </span>
+              <span v-if="user && user.name">{{ user.name }} </span>
+              <span v-else-if="user && user.email">{{ user.email }} </span>
               <v-icon>mdil-chevron-down</v-icon>
             </v-btn>
           </template>
@@ -53,11 +54,8 @@ export default {
 
   data() {
     return {
-      items: [
-        { title: "Account Settings", link: "settings" },
-        { title: "Subscription", link: "subscription" },
-        { title: "Payment Method", link: "settings" },
-      ],
+      items: [{ title: "Subscription", link: "subscription" }],
+      user: JSON.parse(localStorage.getItem("user")),
     };
   },
   methods: {

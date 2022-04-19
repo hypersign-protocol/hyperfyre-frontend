@@ -470,7 +470,28 @@
 }
 
 .copy-tooltip {
-  border-radius: 16px !important;
-  font-weight: bold;
-  text-align: center !important;
+	border-radius: 16px !important;
+	font-weight: bold;
+	text-align: center !important;
+}
+
+
+.notification-switch.v-input--switch .v-input--switch__thumb {
+	color: #B1B6D1 !important;
+}
+
+.notification-switch.v-input--switch .v-input--switch__track {
+	color: rgba(255, 255, 255, 0.38) !important;
+}
+
+.notification-switch.v-input--switch .v-input--switch__thumb.primary--text {
+	color: $primary !important;
+}
+
+.notification-switch.v-input--switch .v-input--switch__track.primary--text {
+	color: rgba(105, 102, 251, 0.9) !important;
+}
+
+.notification-switch.v-input--switch.v-input--is-disabled:not(.v-input--is-dirty) .v-input--switch__thumb {
+	color: $primary !important;
 }
