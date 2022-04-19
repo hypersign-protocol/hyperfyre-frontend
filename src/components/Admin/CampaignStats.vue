@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="mt-40 font-16 font-weight-bold line-h-19 color-grey-100">
-      Subscriptions
+      Campaigns
     </p>
     <v-row v-if="loading">
       <v-col cols="12" md="4">

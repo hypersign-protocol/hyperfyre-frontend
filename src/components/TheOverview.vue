@@ -1,7 +1,7 @@
 <template>
   <div class="overview__wrap">
     <p class="white--text mt-24 font-20 font-weight-medium line-h-24">
-      Good Morning, {{ user.name }}
+      {{ greeting }}, {{ user.name }}
     </p>
     <campaign-stats></campaign-stats>
     <subscription-stats></subscription-stats>
@@ -346,6 +346,21 @@ export default {
       accessToken: localStorage.getItem("accessToken"),
       panel: [0],
     };
+  },
+
+  computed: {
+    greeting() {
+      const myDate = new Date();
+      const hrs = myDate.getHours();
+
+      let greet;
+
+      if (hrs < 12) greet = "Good Morning";
+      else if (hrs >= 12 && hrs <= 17) greet = "Good Afternoon";
+      else if (hrs >= 17 && hrs <= 24) greet = "Good Evening";
+
+      return greet;
+    },
   },
 };
 </script>

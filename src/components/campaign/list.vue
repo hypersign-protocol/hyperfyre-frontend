@@ -3,167 +3,178 @@
     <p class="color-grey-100 mt-40 font-14 font-weight-bold line-h-17">
       On Going ( {{ ongoing.length }} )
     </p>
-    <template v-for="item in ongoing">
-      <v-card
-        elevation="0"
-        flat
-        class="bg-blue-100 border-r-8 mb-4"
-        :key="item._id"
-      >
-        <v-card-text class="pa-0">
-          <v-row class="ma-0 bg-blue-100 border-r-8">
-            <v-col cols="12" md="6">
-              <div class="d-flex align-center">
-                <div
-                  class="profile-icon width-47 height-47 bg-blue-200 border-r-50 mr-2"
-                >
-                  <span class="white--text text-capitalize">
-                    {{ item.projectName.charAt(0) }}
-                  </span>
+    <v-data-table
+      class="result-table campaign"
+      :headers="headers"
+      :hide-default-header="true"
+      :items="ongoing"
+      item-key="_id"
+      dark
+      :items-per-page="itemsPerPage"
+      :footer-props="footerProps"
+      :server-items-length="ongoing.length"
+      :options.sync="options"
+    >
+      <template v-slot:item.projectName="{ item }">
+        <v-row class="ma-0 bg-blue-100 border-r-8 result-row">
+          <v-col cols="12" md="6">
+            <div class="d-flex align-center">
+              <div
+                class="profile-icon width-47 height-47 bg-blue-200 border-r-50 mr-2"
+              >
+                <span class="white--text text-capitalize">
+                  {{ item.projectName.charAt(0) }}
+                </span>
+              </div>
+              <div class="d-flex flex-column">
+                <div class="white--text font-14 line-h-22 font-weight-bold">
+                  {{ item.projectName }}
                 </div>
-                <div class="d-flex flex-column">
-                  <div class="white--text font-14 line-h-22 font-weight-bold">
-                    {{ item.projectName }}
-                  </div>
-                  <div
-                    class="color-grey-300 font-12 line-h-14 font-weight-regular"
-                  >
-                    {{ item.fromDate | moment("MMMM Do YYYY, h:mm:ss a") }}
-                    -
-                    {{ item.toDate | moment("MMMM Do YYYY, h:mm:ss a") }}
-                  </div>
+                <div
+                  class="color-grey-300 font-12 line-h-14 font-weight-regular"
+                >
+                  {{ item.fromDate | moment("MMMM Do YYYY, h:mm:ss a") }}
+                  -
+                  {{ item.toDate | moment("MMMM Do YYYY, h:mm:ss a") }}
                 </div>
               </div>
-            </v-col>
-            <v-col cols="12" md="6">
-              <div class="d-flex align-center justify-end">
-                <div
-                  class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
+            </div>
+          </v-col>
+          <v-col cols="12" md="6">
+            <div class="d-flex align-center justify-end">
+              <div
+                class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
+              >
+                <input
+                  :id="item.whitelisting_link"
+                  :value="`${item.whitelisting_link}`"
+                  type="text"
+                  hidden
+                />
+                <a
+                  :href="item.whitelisting_link"
+                  target="_blank"
+                  class="text-decoration-none font-14 line-h-22 font-weight-bold color-grey-300"
                 >
-                  <input
-                    :id="item.whitelisting_link"
-                    :value="`${item.whitelisting_link}`"
-                    type="text"
-                    hidden
-                  />
-                  <a
-                    :href="item.whitelisting_link"
-                    target="_blank"
-                    class="text-decoration-none font-14 line-h-22 font-weight-bold color-grey-300"
-                  >
-                    Event URL
-                  </a>
-                  <v-icon
-                    size="20"
-                    color="primary"
-                    @click="copyContent(item.whitelisting_link)"
-                    >mdi-content-copy</v-icon
-                  >
-                </div>
-                <div
-                  class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
+                  Event URL
+                </a>
+                <v-icon
+                  size="20"
+                  color="primary"
+                  @click="copyContent(item.whitelisting_link)"
+                  >mdi-content-copy</v-icon
                 >
-                  <span class="white--text mr-2">{{
-                    item.investorsCount
-                  }}</span>
-                  Participants
-                </div>
-                <div class="d-flex">
-                  <v-btn icon @click="deleteCampaign(item)">
-                    <v-icon color="primary">mdi-close</v-icon>
-                  </v-btn>
-                  <v-btn icon @click="edit(item)">
-                    <v-icon color="primary">mdi-circle-edit-outline</v-icon>
-                  </v-btn>
-                </div>
               </div>
-            </v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>
-    </template>
+              <div
+                class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
+              >
+                <span class="white--text mr-2">{{ item.investorsCount }}</span>
+                Participants
+              </div>
+              <div class="d-flex">
+                <v-btn icon @click="deleteCampaign(item)">
+                  <v-icon color="primary">mdi-close</v-icon>
+                </v-btn>
+                <v-btn icon @click="edit(item)">
+                  <v-icon color="primary">mdi-circle-edit-outline</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </v-col>
+        </v-row>
+      </template>
+    </v-data-table>
     <p class="color-grey-100 mt-40 font-14 font-weight-bold line-h-17">
       Completed ( {{ completed.length }} )
     </p>
-    <template v-for="item in completed">
-      <v-card elevation="0" flat class="bg-blue-100 border-r-8" :key="item._id">
-        <v-card-text class="pa-0">
-          <v-row class="ma-0 bg-blue-100 border-r-8">
-            <v-col cols="12" md="6">
-              <div class="d-flex align-center">
-                <div
-                  class="profile-icon width-47 height-47 bg-blue-200 border-r-50 mr-2"
-                >
-                  <span class="white--text text-capitalize">
-                    {{ item.projectName.charAt(0) }}
-                  </span>
+
+    <v-data-table
+      class="result-table campaign"
+      :headers="headers"
+      :hide-default-header="true"
+      :items="completed"
+      item-key="_id"
+      dark
+      :items-per-page="itemsPerPage"
+      :footer-props="footerProps"
+      :server-items-length="completed.length"
+      :options.sync="options"
+    >
+      <template v-slot:item.projectName="{ item }">
+        <v-row class="ma-0 bg-blue-100 border-r-8 result-row">
+          <v-col cols="12" md="6">
+            <div class="d-flex align-center">
+              <div
+                class="profile-icon width-47 height-47 bg-blue-200 border-r-50 mr-2"
+              >
+                <span class="white--text text-capitalize">
+                  {{ item.projectName.charAt(0) }}
+                </span>
+              </div>
+              <div class="d-flex flex-column">
+                <div class="white--text font-14 line-h-22 font-weight-bold">
+                  {{ item.projectName }}
                 </div>
-                <div class="d-flex flex-column">
-                  <div class="white--text font-14 line-h-22 font-weight-bold">
-                    {{ item.projectName }}
-                  </div>
-                  <div
-                    class="color-grey-300 font-12 line-h-14 font-weight-regular"
-                  >
-                    {{ item.fromDate | moment("MMMM Do YYYY, h:mm:ss a") }}
-                    -
-                    {{ item.toDate | moment("MMMM Do YYYY, h:mm:ss a") }}
-                  </div>
+                <div
+                  class="color-grey-300 font-12 line-h-14 font-weight-regular"
+                >
+                  {{ item.fromDate | moment("MMMM Do YYYY, h:mm:ss a") }}
+                  -
+                  {{ item.toDate | moment("MMMM Do YYYY, h:mm:ss a") }}
                 </div>
               </div>
-            </v-col>
-            <v-col cols="12" md="6">
-              <div class="d-flex align-center justify-end">
-                <div
-                  class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
+            </div>
+          </v-col>
+          <v-col cols="12" md="6">
+            <div class="d-flex align-center justify-end">
+              <div
+                class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
+              >
+                <input
+                  :id="item.whitelisting_link"
+                  :value="`${item.whitelisting_link}`"
+                  type="text"
+                  hidden
+                />
+                <a
+                  :href="item.whitelisting_link"
+                  target="_blank"
+                  class="text-decoration-none font-14 line-h-22 font-weight-bold color-grey-300"
                 >
-                  <input
-                    :id="item.whitelisting_link"
-                    :value="`${item.whitelisting_link}`"
-                    type="text"
-                    hidden
-                  />
-                  <a
-                    :href="item.whitelisting_link"
-                    target="_blank"
-                    class="text-decoration-none font-14 line-h-22 font-weight-bold color-grey-300"
-                  >
-                    Event URL
-                  </a>
-                  <v-icon
-                    size="20"
-                    color="primary"
-                    @click="copyContent(item.whitelisting_link)"
-                    >mdi-content-copy</v-icon
-                  >
-                </div>
-                <div
-                  class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
+                  Event URL
+                </a>
+                <v-icon
+                  size="20"
+                  color="primary"
+                  @click="copyContent(item.whitelisting_link)"
+                  >mdi-content-copy</v-icon
                 >
-                  <span class="white--text mr-2">{{
-                    item.investorsCount
-                  }}</span>
-                  Participants
-                </div>
-                <div class="d-flex">
-                  <v-btn icon @click="deleteCampaign(item)">
-                    <v-icon color="primary">mdi-close</v-icon>
-                  </v-btn>
-                  <v-btn icon @click="edit(item)">
-                    <v-icon color="primary">mdi-circle-edit-outline</v-icon>
-                  </v-btn>
-                </div>
               </div>
-            </v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>
-    </template>
+              <div
+                class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
+              >
+                <span class="white--text mr-2">{{ item.investorsCount }}</span>
+                Participants
+              </div>
+              <div class="d-flex">
+                <v-btn icon @click="deleteCampaign(item)">
+                  <v-icon color="primary">mdi-close</v-icon>
+                </v-btn>
+                <v-btn icon @click="edit(item)">
+                  <v-icon color="primary">mdi-circle-edit-outline</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </v-col>
+        </v-row>
+      </template>
+    </v-data-table>
   </div>
 </template>
 <script>
 import Vue2Filters from "vue2-filters";
 import general from "@/mixins/general";
+import _ from "lodash";
 export default {
   name: "CampaignsList",
   mixins: [Vue2Filters.mixin, general],
@@ -172,8 +183,49 @@ export default {
       authToken: localStorage.getItem("authToken"),
       user: JSON.parse(localStorage.getItem("user")),
       campaigns: [],
+      headers: [
+        {
+          text: "Project",
+          align: "start",
+          sortable: false,
+          value: "projectName",
+        },
+      ],
+      page: 1,
+      totalCount: 0,
+      itemsPerPage: 10,
+      options: {},
+      sortOrder: "desc",
+      sortBy: "updated_at",
+      footerProps: {
+        itemsPerPageOptions: [10, 15, 20, 25, 50],
+        showFirstLastPage: true,
+        showCurrentPage: true,
+      },
     };
   },
+  watch: {
+    options: {
+      handler($event) {
+        const sortOrder = $event.sortDesc[0] ? "ASC" : "DESC";
+        if ($event.sortBy[0]) {
+          this.sortBy = $event.sortBy[0];
+          this.sortOrder = sortOrder;
+          this.paginate($event);
+        }
+      },
+      deep: true,
+    },
+    search: _.debounce(function () {
+      this.isTyping = false;
+    }, 1000),
+    isTyping: function (value) {
+      if (!value) {
+        this.getParticipants();
+      }
+    },
+  },
+
   created() {
     this.fetchProjects();
   },

@@ -1,32 +1,31 @@
 <template>
   <v-container>
     <div class="overview__wrap">
-      <v-row class="mt-5 align-center">
-        <v-col cols="12" md="4">
-          <div>
-            <label class="white--text font-14 line-h-17 font-weight-regular"
-              >Select Campaigns</label
-            >
-            <v-select
-              v-model="campaign_id"
-              :items="campaigns"
-              item-text="projectName"
-              item-value="_id"
-              autocomplete="off"
-              dark
-              flat
-              solo
-              outlined
-              class="form-input"
-              @change="getParticipants"
-            >
-              <template slot="append">
-                <v-icon>mdi-chevron-down</v-icon>
-              </template>
-            </v-select>
-          </div>
-        </v-col>
-        <v-col cols="12" md="4">
+      <div class="d-flex align-center justify-space-between mt-6">
+        <div class="d-flex flex-column">
+          <label class="white--text font-14 line-h-17 font-weight-regular mb-2"
+            >Select Campaigns</label
+          >
+          <v-select
+            v-model="campaign_id"
+            :items="campaigns"
+            item-text="projectName"
+            item-value="_id"
+            autocomplete="off"
+            dark
+            flat
+            solo
+            outlined
+            class="form-input"
+            placeholder="Please select campaign"
+            @change="getParticipants"
+          >
+            <template slot="append">
+              <v-icon>mdi-chevron-down</v-icon>
+            </template>
+          </v-select>
+        </div>
+        <div class="d-flex align-center justify-center">
           <v-text-field
             @input="isTyping = true"
             v-model="search"
@@ -36,14 +35,12 @@
             flat
             solo
             outlined
-            class="form-input mb-2"
+            class="form-input mb-2 mr-4"
             placeholder="Search for a participant…"
           ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="4">
           <v-btn
             :ripple="false"
-            class="btn-gradient-outline height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text mr-4"
+            class="background-theme gradient py-2 px-4 width-133 height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text mr-4"
             depressed
             rounded
             x-large
@@ -54,23 +51,23 @@
           </v-btn>
           <v-btn
             :ripple="false"
-            class="btn-gradient-outline height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text mr-4"
+            class="background-theme gradient py-2 px-4 width-133 height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text"
             depressed
             rounded
             x-large
           >
             Lottery
           </v-btn>
-        </v-col>
-      </v-row>
+        </div>
+      </div>
       <v-data-table
+        class="result-table"
         :headers="headers"
         :items="participants"
         :single-expand="singleExpand"
         :expanded.sync="expanded"
         item-key="name"
         show-expand
-        class="elevation-1"
         dark
         :items-per-page="itemsPerPage"
         :footer-props="footerProps"
