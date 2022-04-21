@@ -25,6 +25,7 @@
     "browserify": "^17.0.0",
     "dayjs": "^1.10.6",
     "dotenv": "^16.0.0",
+    "elliptic": "^6.5.4",
     "js-file-download": "^0.4.12",
     "marked": "^3.0.8",
     "node-fetch": "^2.6.0",

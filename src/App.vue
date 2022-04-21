@@ -88,6 +88,12 @@ export default {
               exactPath: true,
             },
             {
+              href: "/admin/createapp",
+              title: "App",
+              icon: "fa fa-plus",
+              exactPath: true,
+            },
+            {
               href: "/admin/subscription",
               title: "Subscriptions",
               icon: "fas fa-receipt",
@@ -136,7 +142,8 @@ export default {
           window.location.pathname.includes("/admin/events") ||
           window.location.pathname.includes("/admin/dashboard") ||
           window.location.pathname.includes("/admin/subscription") ||
-          window.location.pathname.includes("/admin/teams") ?
+          window.location.pathname.includes("/admin/teams") ||
+          window.location.pathname.includes("/admin/createapp") ?
           true :
           false;
     }else{
@@ -149,7 +156,8 @@ export default {
           window.location.pathname.includes("/admin/events") ||
           window.location.pathname.includes("/admin/dashboard") ||
           window.location.pathname.includes("/admin/subscription") ||
-          window.location.pathname.includes("/admin/teams") ?
+          window.location.pathname.includes("/admin/teams") ||
+          window.location.pathname.includes("/admin/createapp") ?
           true :
           false;
     this.showChat = 
@@ -157,7 +165,8 @@ export default {
           window.location.pathname.includes("/admin/events") ||
           window.location.pathname.includes("/admin/dashboard") ||
           window.location.pathname.includes("/admin/subscription") ||
-          window.location.pathname.includes("/admin/teams") ?
+          window.location.pathname.includes("/admin/teams") ||
+          window.location.pathname.includes("/admin/createapp") ?
           true :
           false;
   },
@@ -201,7 +210,8 @@ export default {
         window.location.pathname.includes("project") ||
         window.location.pathname.includes("dashboard") ||
         window.location.pathname.includes("/admin/subscription")||
-        window.location.pathname.includes("/admin/teams")
+        window.location.pathname.includes("/admin/teams") ||
+        window.location.pathname.includes("/admin/createapp")
       ) {
         this.showNavbar = true;
       } else {
