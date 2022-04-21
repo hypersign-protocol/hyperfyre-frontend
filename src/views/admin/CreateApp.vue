@@ -37,6 +37,12 @@
 </style>
 <template>
   <div class="home marginLeft marginRight">
+    <loading
+      :active.sync="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    ></loading>
+
     <div class="text-right">
     </div>
 			<div class="col-md-8">
@@ -108,9 +114,16 @@
 import notificationMixins from "../../mixins/notificationMixins";
 import elliptic from "elliptic"
 import FileDownload from "js-file-download";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
+import {
+  isValidURL,
+  isValidText
+} from "../../mixins/fieldValidationMixin"
+import Messages from "../../utils/messages/admin/en"
 export default {
   name: "CreateApp",
-  components: {},
+  components: {Loading},
   data() {
     return {
       isEdit:false,
@@ -120,6 +133,9 @@ export default {
         _id:"",
         publicKey:""
       },
+      isLoading: false,
+      fullPage: true,
+      errors: [],
       apps: [],
       authToken: localStorage.getItem("authToken"),
     };
@@ -138,6 +154,7 @@ this.getApp();
       this.app = {...row};
     },
     async getApp() {
+      this.isLoading=true;
       const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
       const headers = {
         Authorization: `Bearer ${this.authToken}`,
@@ -151,20 +168,23 @@ this.getApp();
         return this.notifyErr(resp.statusText);
       } else{
         this.apps = await resp.json();
+        this.isLoading=false;
       }
     },
-  async generateApp() {
-
-const ec = new elliptic.ec('secp256k1');
-  const keyPair = ec.genKeyPair();
-  const privKey = keyPair.getPrivate();
-  const pubKey = keyPair.getPublic();
-  const publickey=pubKey.encode('hex');
-  const privatekey=privKey.toString('hex');
-  this.app.publicKey = publickey;
-
-      console.log("hii");
-          if (!this.app.appNameame && this.app.baseUrl) {
+    async generateApp() {
+        try{
+        if (this.isEverythingisValid() !== true) {
+          return this.notifyErr(this.isEverythingisValid()); 
+        }
+        else{
+          this.isLoading=true;
+          const ec = new elliptic.ec('secp256k1');
+          const keyPair = ec.genKeyPair();
+          const privKey = keyPair.getPrivate();
+          const pubKey = keyPair.getPublic();
+          const publickey=pubKey.encode('hex');
+          const privatekey=privKey.toString('hex');
+          this.app.publicKey = publickey;
             const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
             let headers = {
               "Content-Type": "application/json",
@@ -191,9 +211,32 @@ const ec = new elliptic.ec('secp256k1');
                 this.getApp();
               }
             } else {
-              throw new Error("Error while Invitation sending");
+              throw new Error("Error while generating App");
             }
-          }
+        }
+        }catch (e) {
+        if (e.errors) {
+          this.errors = e.errors;
+        }
+        this.notifyErr(e || e.message || e.msg);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    isEverythingisValid(){
+      if(this.app.appName==""){
+        return Messages.APP.APP_NAME_NOT_EMPTY;
+      }
+      if ((isValidURL(this.app.appName))||(!isValidText(this.app.appName))) {
+        return Messages.APP.APP_NAME_URL;
+      }  
+      if(!this.app.baseUrl || this.app.baseUrl==""){
+        return Messages.APP.APP_BASE_URL_EMPTY;
+      }
+      if(!(isValidURL(this.app.baseUrl))){
+        return Messages.APP.APP_BASE_URL_NOT_VALID
+     }
+      return true
     },
     clearselected(){
       this.app.appName="";
