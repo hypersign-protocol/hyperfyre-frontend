@@ -219,7 +219,10 @@ export default {
       timeProps: {
         "no-title": true,
       },
+      user: JSON.parse(localStorage.getItem("user")),
+      accessUser: JSON.parse(localStorage.getItem("accessuser")),
       authToken: localStorage.getItem("authToken"),
+      accessToken: localStorage.getItem("accessToken"),
       startMenu: false,
       tagsDropdownChanged: false,
       endMenu: false,

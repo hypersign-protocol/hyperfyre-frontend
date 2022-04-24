@@ -280,8 +280,10 @@ export default {
   mixins: [Vue2Filters.mixin, general],
   data() {
     return {
-      authToken: localStorage.getItem("authToken"),
       user: JSON.parse(localStorage.getItem("user")),
+      accessUser: JSON.parse(localStorage.getItem("accessuser")),
+      authToken: localStorage.getItem("authToken"),
+      accessToken: localStorage.getItem("accessToken"),
       campaigns: [],
       ongoing: [],
       completed: [],

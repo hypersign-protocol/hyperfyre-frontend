@@ -56,6 +56,9 @@ export default {
     return {
       items: [{ title: "Subscription", link: "subscriptions" }],
       user: JSON.parse(localStorage.getItem("user")),
+      accessUser: JSON.parse(localStorage.getItem("accessuser")),
+      authToken: localStorage.getItem("authToken"),
+      accessToken: localStorage.getItem("accessToken"),
     };
   },
   methods: {

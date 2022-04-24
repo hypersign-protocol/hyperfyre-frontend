@@ -330,7 +330,10 @@ export default {
   },
   data() {
     return {
+      user: JSON.parse(localStorage.getItem("user")),
+      accessUser: JSON.parse(localStorage.getItem("accessuser")),
       authToken: localStorage.getItem("authToken"),
+      accessToken: localStorage.getItem("accessToken"),
       tags: [],
       headers: [
         {

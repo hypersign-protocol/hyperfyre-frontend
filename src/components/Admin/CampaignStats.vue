@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       user: JSON.parse(localStorage.getItem("user")),
-      accessuser: JSON.parse(localStorage.getItem("accessuser")),
+      accessUser: JSON.parse(localStorage.getItem("accessuser")),
       authToken: localStorage.getItem("authToken"),
       accessToken: localStorage.getItem("accessToken"),
       campaigns: {},

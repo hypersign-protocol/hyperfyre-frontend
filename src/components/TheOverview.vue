@@ -1,7 +1,13 @@
 <template>
   <div class="overview__wrap">
     <p class="white--text mt-24 font-20 font-weight-medium line-h-24">
-      {{ greeting }}, {{ user.name }}
+      {{ greeting }}, {{ user.name }},
+      <span
+        v-if="
+          accessUser && accessUser.adminName && accessUser.adminName !== 'Self'
+        "
+        >you have logged in as {{ accessUser.adminName }} !
+      </span>
     </p>
     <campaign-stats></campaign-stats>
     <subscription-stats></subscription-stats>
@@ -331,7 +337,7 @@ export default {
   data() {
     return {
       user: JSON.parse(localStorage.getItem("user")),
-      accessuser: JSON.parse(localStorage.getItem("accessuser")),
+      accessUser: JSON.parse(localStorage.getItem("accessuser")),
       authToken: localStorage.getItem("authToken"),
       accessToken: localStorage.getItem("accessToken"),
       panel: [0],
