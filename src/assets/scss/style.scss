@@ -331,6 +331,7 @@
 
 .date-time {
 	height: 41px;
+
 	.v-input {
 		padding-top: 0px !important;
 
@@ -506,30 +507,58 @@
 	color: $primary !important;
 }
 
-.v-btn:hover:before{
+.v-btn:hover:before {
 	opacity: 0 !important;
 }
 
-.banner-image{
-	object-fit : cover;
+.banner-image {
+	object-fit: cover;
 }
 
-::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color:    rgba(255,255,255,0.2);
-}
-:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-   color:    rgba(255,255,255,0.2);
-}
-::-moz-placeholder { /* Mozilla Firefox 19+ */
-   color:    rgba(255,255,255,0.2);
-}
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-   color:    rgba(255,255,255,0.2);
-}
-::-ms-input-placeholder { /* Microsoft Edge */
-   color:    rgba(255,255,255,0.2);
+::-webkit-input-placeholder {
+	/* WebKit, Blink, Edge */
+	color: rgba(255, 255, 255, 0.2);
 }
 
-::placeholder { /* Most modern browsers support this now. */
-   color:    rgba(255,255,255,0.2);
+:-moz-placeholder {
+	/* Mozilla Firefox 4 to 18 */
+	color: rgba(255, 255, 255, 0.2);
+}
+
+::-moz-placeholder {
+	/* Mozilla Firefox 19+ */
+	color: rgba(255, 255, 255, 0.2);
+}
+
+:-ms-input-placeholder {
+	/* Internet Explorer 10-11 */
+	color: rgba(255, 255, 255, 0.2);
+}
+
+::-ms-input-placeholder {
+	/* Microsoft Edge */
+	color: rgba(255, 255, 255, 0.2);
+}
+
+::placeholder {
+	/* Most modern browsers support this now. */
+	color: rgba(255, 255, 255, 0.2);
+}
+
+.btn--outline {
+	border: 1px solid #fff !important;
+	border-radius: 4px !important;
+	color: #fff !important;
+	background: transparent !important;
+
+	&.green {
+		border: 1px solid $secondary !important;
+		color: $secondary !important;
+		background: transparent !important;
+	}
+	&.red {
+		border: 1px solid #f44336 !important;
+		color: #f44336 !important;
+		background: transparent !important;
+	}
 }

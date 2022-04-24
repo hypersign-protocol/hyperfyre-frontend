@@ -118,7 +118,7 @@
           </td>
         </template>
       </v-data-table>
-      <v-dialog v-model="lotteryPopup">
+      <v-dialog v-model="lotteryPopup" :elevation="0">
         <v-card flat color="#26264F" width="450" class="ma-auto pa-6">
           <v-card-title
             class="px-0 pt-0 pb-5 white--text text-left d-flex align-center justify-space-between"

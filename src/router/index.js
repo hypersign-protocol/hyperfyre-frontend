@@ -39,7 +39,7 @@ const routes = [
       },
       {
         name: "Subscription",
-        path: "/subscription",
+        path: "/subscriptions",
         meta: {
           requiresAuth: true,
           admin: true,
@@ -124,6 +124,21 @@ const routes = [
           import(
             /* webpackChunkName: "participants" */
             "../views/Admin/Participants"
+          ),
+      },
+      {
+        name: "Teams",
+        path: "/teams",
+        meta: {
+          requiresAuth: true,
+          admin: true,
+          name: "Teams",
+          slug: "teams",
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "teams" */
+            "../views/Admin/Teams"
           ),
       },
     ],

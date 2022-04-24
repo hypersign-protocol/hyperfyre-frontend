@@ -120,58 +120,6 @@
                     Repeated Actions (Social/Inputs)
                   </li>
                 </ul>
-                <div class="block-chain-support my-8">
-                  <h4>Blockchain Support</h4>
-                  <div class="image">
-                    <template v-for="(item, index) in plan.blockchainSupport">
-                      <span :key="index">
-                        <img
-                          src="@/assets/images/ethereum.svg"
-                          height="25px"
-                          v-if="item === 'ETH'"
-                        />
-                        <img
-                          src="@/assets/images/binance-logo.svg"
-                          height="25px"
-                          v-if="item === 'BSC'"
-                        />
-                        <img
-                          src="@/assets/images/tezos.png"
-                          height="25px"
-                          v-if="item === 'XTZ'"
-                        />
-                        <img
-                          src="@/assets/images/harmony.png"
-                          height="25px"
-                          v-if="item === 'ONE'"
-                        />
-                        <img
-                          src="@/assets/images/polygon.png"
-                          height="25px"
-                          v-if="item === 'MATIC'"
-                        />
-                        <img
-                          src="@/assets/images/avalanche.png"
-                          height="25px"
-                          v-if="item === 'AVAX'"
-                        />
-                        <img
-                          src="@/assets/images/moonbeam.png"
-                          height="25px"
-                          v-if="item === 'GLMR'"
-                        />
-                        <img
-                          src="@/assets/images/moon-river.png"
-                          height="25px"
-                          v-if="item === 'MOVR'"
-                        />
-                        <template v-if="item === 'Custom'">
-                          {{ item }}
-                        </template>
-                      </span>
-                    </template>
-                  </div>
-                </div>
                 <v-expansion-panels accordion class="mb-5">
                   <v-expansion-panel>
                     <v-expansion-panel-header color="black"
@@ -206,46 +154,98 @@
           </v-row>
         </v-tab-item>
       </v-tabs-items>
-      <v-simple-table dark>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Subscription Id</th>
-              <th class="text-left">Subscription Date</th>
-              <th class="text-left">Plan Name</th>
-              <th class="text-left">Limit</th>
-              <th class="text-left">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in subscriptions" :key="row._id">
-              <th>
-                {{ row._id }}
-              </th>
-              <td>{{ new Date(row.subscriptionDate).toLocaleString() }}</td>
-              <td>{{ getPlanName(row.planId) }}</td>
-              <td>{{ row.leftOverNoRequests }}</td>
-              <td>
-                {{
-                  row.paymentData
-                    ? row.paymentData.status === "validated" ||
-                      row.paymentData.activated ===
-                        "by HyperFyre Activation Team"
-                      ? "Active"
-                      : row.paymentData.status === "paid"
-                      ? "Pending"
-                      : row.paymentData.status === "failed"
-                      ? "Cancelled"
-                      : "Inactive"
-                    : row.isActive
-                    ? "Active"
-                    : "Inactive"
-                }}
-              </td>
-            </tr>
-          </tbody>
+      <v-data-table
+        class="result-table campaign"
+        :headers="headers"
+        :hide-default-header="true"
+        :items="subscriptions"
+        item-key="_id"
+        dark
+        :search="search"
+        :loading="loading"
+      >
+        <template v-slot:item.subscription="{ item }">
+          <v-row class="ma-0 bg-blue-100 border-r-8 result-row">
+            <v-col cols="12" md="6">
+              <div class="d-flex align-center">
+                <div
+                  class="profile-icon width-47 height-47 bg-blue-200 border-r-50 mr-2"
+                >
+                  <span class="white--text text-capitalize">
+                    {{ getPlanName(item.planId).charAt(0) }}
+                  </span>
+                </div>
+                <div class="d-flex flex-column">
+                  <div class="white--text font-14 line-h-22 font-weight-bold">
+                    {{ getPlanName(item.planId) }}
+                  </div>
+                  <div
+                    class="color-grey-300 font-12 line-h-14 font-weight-regular"
+                  >
+                    {{
+                      item.subscriptionDate | moment("MMMM Do YYYY, h:mm:ss a")
+                    }}
+                  </div>
+                </div>
+              </div>
+            </v-col>
+            <v-col cols="12" md="6">
+              <div class="d-flex align-center justify-end">
+                <div
+                  class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
+                >
+                  <input
+                    :id="item._id"
+                    :value="`${item._id}`"
+                    type="text"
+                    hidden
+                  />
+                  <a
+                    :href="item._id"
+                    target="_blank"
+                    class="text-decoration-none font-14 line-h-22 font-weight-bold color-grey-300"
+                  >
+                    Subcription ID
+                  </a>
+
+                  <v-tooltip
+                    content-class="copy-tooltip"
+                    :open-on-hover="false"
+                    :open-on-click="true"
+                    color="#000"
+                    text-color="#fff"
+                    top
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-icon
+                        size="20"
+                        color="primary"
+                        v-on="on"
+                        @click="copyContent(item._id)"
+                        >mdi-content-copy</v-icon
+                      >
+                    </template>
+                    <span>Copied to clipboard</span>
+                  </v-tooltip>
+                </div>
+                <div
+                  class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
+                >
+                  <v-btn
+                    :ripple="false"
+                    class="btn--outline green py-2 px-4 height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--bold"
+                    depressed
+                    rounded
+                    x-large
+                  >
+                    Active
+                  </v-btn>
+                </div>
+              </div>
+            </v-col>
+          </v-row>
         </template>
-      </v-simple-table>
+      </v-data-table>
     </div>
   </v-container>
 </template>
@@ -253,9 +253,10 @@
 import fetch from "node-fetch";
 import eventBus from "../../eventBus";
 import Messages from "../../utils/messages/admin/en";
+import general from "@/mixins/general";
 export default {
   name: "Subscription",
-
+  mixins: [general],
   data() {
     return {
       subscriptionTypes: [{ label: "Monthly" }, { label: "Annually" }],
@@ -272,6 +273,14 @@ export default {
       subscriptions: [],
       activeSubscriptions: [],
       loading: false,
+      headers: [
+        {
+          text: "Subscription",
+          align: "start",
+          sortable: false,
+          value: "subscription",
+        },
+      ],
     };
   },
   created() {

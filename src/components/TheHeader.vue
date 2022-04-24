@@ -54,7 +54,7 @@ export default {
 
   data() {
     return {
-      items: [{ title: "Subscription", link: "subscription" }],
+      items: [{ title: "Subscription", link: "subscriptions" }],
       user: JSON.parse(localStorage.getItem("user")),
     };
   },

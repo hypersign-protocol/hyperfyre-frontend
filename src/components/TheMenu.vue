@@ -27,6 +27,8 @@ export default {
         { tab: "Overview", slug: "/overview" },
         { tab: "Campaigns", slug: "/campaigns" },
         { tab: "Participants", slug: "/participants" },
+        { tab: "Teams", slug: "/teams" },
+        { tab: "Subscriptions", slug: "/subscriptions" },
         { tab: "Referrals", slug: "referrals" },
       ],
       routeName: null,
