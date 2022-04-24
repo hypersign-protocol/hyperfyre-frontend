@@ -22,5 +22,10 @@ export default {
       }
       return splitStr.join("");
     },
+
+    positiveNumber: (v) => {
+      if (!isNaN(parseFloat(v)) && v >= 0 && v <= 999) return true;
+      return "Please enter a positive number between 0 and 999";
+    },
   },
 };

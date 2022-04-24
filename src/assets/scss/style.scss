@@ -509,3 +509,27 @@
 .v-btn:hover:before{
 	opacity: 0 !important;
 }
+
+.banner-image{
+	object-fit : cover;
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    rgba(255,255,255,0.2);
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    rgba(255,255,255,0.2);
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    rgba(255,255,255,0.2);
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:    rgba(255,255,255,0.2);
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+   color:    rgba(255,255,255,0.2);
+}
+
+::placeholder { /* Most modern browsers support this now. */
+   color:    rgba(255,255,255,0.2);
+}

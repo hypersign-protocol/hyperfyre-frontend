@@ -20,12 +20,12 @@
     <v-form ref="form">
       <div class="mb-4">
         <label class="font-14 line-h-17 font-weight-regular mb-2"
-          >Select Type</label
+          >Select Type <span class="red--text">*</span></label
         >
-        <v-select
+        <v-autocomplete
           v-model="form.type"
           :rules="rules.type"
-          :items="types"
+          :items="prizeTypes"
           item-text="text"
           item-value="value"
           hide-details="auto"
@@ -34,14 +34,21 @@
           solo
           outlined
           class="form-input"
-        ></v-select>
+          placeholder="Please select prize type"
+        >
+          <template slot="append">
+            <v-icon>mdil-chevron-down</v-icon>
+          </template></v-autocomplete
+        >
       </div>
       <div class="mb-4">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">Name</label>
+        <label class="font-14 line-h-17 font-weight-regular mb-2"
+          >Name <span class="red--text">*</span></label
+        >
         <v-text-field
           v-model="form.title"
           :rules="rules.title"
-          placeholder="Please enter prize name"
+          placeholder="Please enter prize name, ex: '$5000 worth of $HID '"
           hide-details="auto"
           dark
           flat
@@ -52,12 +59,12 @@
       </div>
       <div class="mb-4">
         <label class="font-14 line-h-17 font-weight-regular mb-2"
-          >No of Winners</label
+          >No of Winners <span class="red--text">*</span></label
         >
         <v-text-field
           v-model="details.winners"
           :rules="rules.number"
-          placeholder="Please enter no of winners"
+          placeholder="Please enter the number of winners ex: '1000'"
           hide-details="auto"
           dark
           flat
@@ -68,18 +75,18 @@
       </div>
       <div class="mb-4">
         <label class="font-14 line-h-17 font-weight-regular mb-2"
-          >Prize per Winner</label
+          >Prize per Winner <span class="red--text">*</span></label
         >
         <v-text-field
           v-model="details.prizeValue"
-          :rules="rules.number"
+          :rules="rules.prize"
           hide-details="auto"
           dark
           flat
           solo
           outlined
           class="form-input"
-          placeholder="Please enter prize per winner"
+          placeholder="Please enter the prize per winner ex: '250 BKS Tokens"
         ></v-text-field>
       </div>
       <div
@@ -143,8 +150,9 @@
 </template>
 <script>
 import Vue2Filters from "vue2-filters";
+import campaign from "@/mixins/campaign";
 export default {
-  mixins: [Vue2Filters.mixin],
+  mixins: [Vue2Filters.mixin, campaign],
   name: "Prize",
   props: {
     campaign: {
@@ -163,11 +171,6 @@ export default {
     return {
       isEditing: false,
       selectedIndex: 0,
-      types: [
-        { text: "Select Prize Type", value: null },
-        { text: "Prize Card", value: "PRIZE_CARD" },
-      ],
-      // list: [],
       form: {
         type: null,
         title: "",
@@ -185,14 +188,24 @@ export default {
       rules: {
         title: [(v) => !!v || "Please enter title"],
         type: [(v) => !!v || "Please select social type"],
+        prize: [(v) => !!v || "Please enter the prize per winner"],
         number: [
-          (v) => !!v || "This field is required",
+          (v) => !!v || "Please enter the number of winners",
           (v) =>
-            (v && v > 0) ||
-            "Please enter a positive number which is greate than 0",
+            (v && v > 0 && v <= 999) ||
+            "Please enter a positive number between 0 and 999",
         ],
       },
     };
+  },
+  watch: {
+    form: {
+      handler: function (val) {
+        console.log(val);
+        this.$emit("input", { form: "prizeForm", isChanged: true });
+      },
+      deep: true,
+    },
   },
   methods: {
     edit(item, index) {
@@ -256,6 +269,7 @@ export default {
         _this.selectedIndex = 0;
         _this.isEditing = false;
         _this.$refs.form.reset();
+        _this.$emit("input", { form: "prizeForm", isChanged: false });
       }, 500);
     },
   },

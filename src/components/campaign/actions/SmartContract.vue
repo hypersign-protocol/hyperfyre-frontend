@@ -81,10 +81,12 @@
         <label class="font-14 line-h-17 font-weight-regular mb-2"
           >Select Type <span class="red--text">*</span></label
         >
-        <v-select
+        <v-autocomplete
+          clear-icon="mdi-close"
+          :clearable="true"
           v-model="form.type"
           :rules="rules.type"
-          :items="types"
+          :items="smartContractTypes"
           item-text="text"
           item-value="value"
           hide-details="auto"
@@ -94,7 +96,11 @@
           outlined
           class="form-input"
           placeholder="Please select type"
-        ></v-select>
+        >
+          <template slot="append">
+            <v-icon>mdil-chevron-down</v-icon>
+          </template>
+        </v-autocomplete>
       </div>
       <div class="mb-4">
         <label class="font-14 line-h-17 font-weight-regular mb-2"
@@ -252,8 +258,10 @@
   </div>
 </template>
 <script>
+import campaign from "@/mixins/campaign";
 export default {
   name: "SmartContract",
+  mixins: [campaign],
   props: {
     campaign: {
       type: Object,
@@ -269,23 +277,6 @@ export default {
   },
   data() {
     return {
-      types: [
-        { text: "Select Contract Type", value: null },
-        { text: "Ethereum ERC20", value: "ETHEREUM_ERC20" },
-        { text: "Ethereum ERC721", value: "ETHEREUM_ERC721" },
-        { text: "Polygon ERC20", value: "MATIC_ERC20" },
-        { text: "Polygon ERC721", value: "MATIC_ERC721" },
-        { text: "Binance ERC20", value: "BINANCE_ERC20" },
-        { text: "Binance ERC721", value: "BINANCE_ERC721" },
-        { text: "Moon Beam ERC20", value: "MOONBEAM_ERC20" },
-        { text: "Moon Beam ERC721", value: "MOONBEAM_ERC721" },
-        { text: "Moon River ERC20", value: "MOONRIVER_ERC20" },
-        { text: "Moon River ERC721", value: "MOONRIVER_ERC721" },
-        { text: "Moon Alpha(testnet) ERC20", value: "MOON_ERC20" },
-        { text: "Moon Alpha(testnet) ERC721", value: "MOON_ERC721" },
-        { text: "Reef ERC20", value: "REEF_ERC20" },
-        { text: "Reef ERC721", value: "REEF_ERC721" },
-      ],
       isEditing: false,
       selectedIndex: 0,
       form: {
@@ -312,13 +303,21 @@ export default {
         value: [(v) => !!v || "Please enter this field"],
         contractAddress: [(v) => !!v || "Please enter contract address"],
         number: [
-          (v) => !!v || "This field is required",
+          (v) => !!v || "Please enter value",
           (v) =>
-            (v && v > 0) ||
-            "Please enter a positive number which is greate than 0",
+            (v && v > 0 && v <= 999) ||
+            "Please enter a positive number between 0 and 999",
         ],
       },
     };
+  },
+  watch: {
+    form: {
+      handler: function () {
+        this.$emit("input", { form: "smartContractForm", isChanged: true });
+      },
+      deep: true,
+    },
   },
   computed: {
     isErc20() {
@@ -399,7 +398,15 @@ export default {
       setTimeout(function () {
         _this.selectedIndex = 0;
         _this.isEditing = false;
-        _this.$refs.form.reset();
+
+        _this.form.type = null;
+        _this.form.title = null;
+        _this.form.value = null;
+        _this.form.placeHolder = null;
+        _this.details.contractAddress = null;
+        _this.details.thresholdBalance = 0;
+
+        // _this.$refs.form.reset();
       }, 500);
     },
   },

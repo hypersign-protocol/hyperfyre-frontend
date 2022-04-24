@@ -39,11 +39,15 @@
     </template>
     <v-form ref="form">
       <div class="mb-4">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">Type</label>
-        <v-select
+        <label class="font-14 line-h-17 font-weight-regular mb-2"
+          >Type <span class="red--text">*</span></label
+        >
+        <v-autocomplete
+          clear-icon="mdi-close"
+          :clearable="true"
           v-model="form.type"
           :rules="rules.type"
-          :items="types"
+          :items="customTypes"
           item-text="text"
           item-value="value"
           hide-details="auto"
@@ -52,10 +56,16 @@
           solo
           outlined
           class="form-input"
-        ></v-select>
+          placeholder="Please select type"
+          ><template slot="append">
+            <v-icon>mdil-chevron-down</v-icon>
+          </template></v-autocomplete
+        >
       </div>
       <div class="mb-4">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">Title</label>
+        <label class="font-14 line-h-17 font-weight-regular mb-2"
+          >Title <span class="red--text">*</span></label
+        >
         <v-text-field
           v-model="form.title"
           :rules="rules.title"
@@ -65,22 +75,23 @@
           solo
           outlined
           class="form-input"
+          placeholder="Please add title of Action 'Ex: Provide Country Name'"
         ></v-text-field>
       </div>
       <div class="mb-4">
         <label class="font-14 line-h-17 font-weight-regular mb-2"
           >Placeholder</label
         >
-        <v-textarea
+        <v-text-field
           v-model="form.placeHolder"
           hide-details="auto"
           dark
+          flat
           solo
-          auto-grow
-          rows="4"
+          outlined
           class="form-input"
-          placeholder="Enter description here for your campaign"
-        ></v-textarea>
+          placeholder="Please add placeholder for Action 'Ex: India'"
+        ></v-text-field>
       </div>
       <div class="mb-4" v-if="url">
         <label class="font-14 line-h-17 font-weight-regular mb-2">Url</label>
@@ -93,6 +104,7 @@
           solo
           outlined
           class="form-input"
+          placeholder="Please add url for of the hyperlink"
         ></v-text-field>
       </div>
       <div class="mb-4" v-if="info">
@@ -109,9 +121,12 @@
         ></v-text-field>
       </div>
       <div class="mb-4">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">Score</label>
+        <label class="font-14 line-h-17 font-weight-regular mb-2"
+          >Score <span class="red--text">*</span></label
+        >
         <v-text-field
           v-model="form.score"
+          :rules="rules.number"
           hide-details="auto"
           dark
           flat
@@ -180,8 +195,10 @@
   </div>
 </template>
 <script>
+import campaign from "@/mixins/campaign";
 export default {
   name: "Custom",
+  mixins: [campaign],
   props: {
     campaign: {
       type: Object,
@@ -198,15 +215,7 @@ export default {
   data() {
     return {
       items: ["Foo", "Bar", "Fizz", "Buzz"],
-      types: [
-        { text: "Select Input type", value: null },
-        { text: "TEXT", value: "INPUT_TEXT" },
-        { text: "NUMBER", value: "INPUT_NUMBER" },
-        { text: "DATE", value: "INPUT_DATE" },
-        { text: "LINK", value: "INPUT_HYPERLINK" },
-        { text: "HYPERLINK", value: "HYPERLINK_URL" },
-        { text: "INFO", value: "INFO_TEXT" },
-      ],
+
       isEditing: false,
       selectedIndex: 0,
       form: {
@@ -224,13 +233,21 @@ export default {
         type: [(v) => !!v || "Please select social type"],
         value: [(v) => !!v || "Please enter this field"],
         number: [
-          (v) => !!v || "This field is required",
+          (v) => !!v || "Please enter value",
           (v) =>
-            (v && v > 0) ||
-            "Please enter a positive number which is greate than 0",
+            (v && v > 0 && v <= 999) ||
+            "Please enter a positive number between 0 and 999",
         ],
       },
     };
+  },
+  watch: {
+    form: {
+      handler: function () {
+        this.$emit("input", { form: "customForm", isChanged: true });
+      },
+      deep: true,
+    },
   },
   computed: {
     url() {
@@ -303,7 +320,12 @@ export default {
       setTimeout(function () {
         _this.selectedIndex = 0;
         _this.isEditing = false;
-        _this.$refs.form.reset();
+
+        _this.form.type = null;
+        _this.form.title = null;
+        _this.form.value = null;
+        _this.form.placeHolder = null;
+        // _this.$refs.form.reset();
       }, 500);
     },
   },

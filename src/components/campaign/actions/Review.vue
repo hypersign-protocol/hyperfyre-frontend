@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="font-20 line-h-24 font-weight-bold">Review</p>
-    <div class="font-16 line-h-20 font-weight--bold">
+    <div class="font-16 line-h-19 font-weight--bold">
       Basic Info
       <v-btn
         @click="editTab('basic-info')"
@@ -15,50 +15,60 @@
       </v-btn>
     </div>
     <div class="mb-4">
-      <label class="font-14 line-h-17 font-weight-regular mb-2"
+      <label class="font-14 line-h-17 font-weight--regular color-grey-500 mb-2"
         >Campaign Name</label
       >
       <div>{{ campaign.projectName }}</div>
     </div>
     <div class="mb-4">
-      <label class="font-14 line-h-17 font-weight-regular mb-2"
-        >Campaign Description</label
-      >
-      <div>{{ campaign.description }}</div>
-    </div>
-    <div class="mb-4">
-      <label class="font-14 line-h-17 font-weight-regular mb-2"
+      <label class="font-14 line-h-17 font-weight--regular color-grey-500 mb-2"
         >Campaign Date</label
       >
       <div>
-        {{ campaign.fromDate | moment("MMMM Do YYYY, h:mm:ss a") }} to
+        {{ campaign.fromDate | moment("MMMM Do YYYY, h:mm:ss a") }}
+        <span class="font-14 line-h-17 font-weight--regular color-grey-500"
+          >to</span
+        >
         {{ campaign.toDate | moment("MMMM Do YYYY, h:mm:ss a") }}
       </div>
     </div>
     <div class="mb-4">
-      <label class="font-14 line-h-17 font-weight-regular mb-2"
-        >Background Banner</label
+      <label class="font-14 line-h-17 font-weight--regular color-grey-500 mb-2"
+        >Banner URL</label
       >
-      <div>
-        <img :src="campaign.logoUrl" />
+      <div class="mt-2">
+        <img
+          class="banner-image"
+          :src="campaign.logoUrl"
+          height="300"
+          width="600"
+        />
       </div>
     </div>
+    <!-- eslint-disable-next-line vue/valid-v-for -->
     <div class="mb-4">
-      <label class="font-14 line-h-17 font-weight-regular mb-2">Tags</label>
-      <div v-for="(item, index) in campaign.tags" :key="index">
-        {{ item }}
-      </div>
-    </div>
-    <div class="mb-4">
-      <label class="font-14 line-h-17 font-weight-regular mb-2"
-        >Background Theme</label
+      <label class="font-14 line-h-17 font-weight--regular color-grey-500 mb-2"
+        >Tags</label
       >
-      <div>
-        {{ campaign.themeColor }}
+      <div class="mt-4">
+        <template v-for="tag in tags">
+          <!-- eslint-disable-next-line vue/valid-v-for -->
+          <template v-for="item in campaign.tags">
+            <!-- eslint-disable-next-line vue/valid-v-for -->
+            <v-chip
+              v-if="tag.type === item.type"
+              :key="`chip-${item._id}-${tag.type}`"
+              dark
+              class="height-25 font-12 px-3 mr-2 mt-2"
+            >
+              {{ tag.tagName }}
+            </v-chip>
+          </template>
+        </template>
       </div>
     </div>
     <v-divider dark class="my-4"></v-divider>
-    <div class="font-16 line-h-20 font-weight--bold">
+    <div class="font-16 line-h-19 font-weight--bold">
       Referral
       <v-btn
         @click="editTab('referral')"
@@ -72,7 +82,7 @@
       </v-btn>
     </div>
     <div class="mb-4">
-      <label class="font-14 line-h-17 font-weight-regular mb-2"
+      <label class="font-14 line-h-17 font-weight--regular color-grey-500 mb-2"
         >Referee Points</label
       >
       <div>
@@ -80,7 +90,7 @@
       </div>
     </div>
     <div class="mb-4">
-      <label class="font-14 line-h-17 font-weight-regular mb-2"
+      <label class="font-14 line-h-17 font-weight--regular color-grey-500 mb-2"
         >Referral Points</label
       >
       <div>
@@ -89,7 +99,7 @@
     </div>
     <v-divider dark class="my-4"></v-divider>
     <div class="mb-4" v-if="prizeList.length > 0">
-      <div class="font-16 line-h-20 font-weight--bold">
+      <div class="font-16 line-h-19 font-weight--bold">
         Prize
         <v-btn
           @click="editTab('prize')"
@@ -112,7 +122,11 @@
         dark
       >
         <template v-slot:item.type="{ item }">
-          {{ item.type }}
+          <template v-for="(val, index) in prizeTypes">
+            <span v-if="val.value === item.type" :key="index">
+              {{ val.text }}</span
+            >
+          </template>
         </template>
         <template v-slot:item.title="{ item }">
           {{ item.title }}
@@ -129,7 +143,7 @@
     </div>
 
     <div class="mb-4" v-if="customList.length > 0">
-      <div class="font-16 line-h-20 font-weight--bold">
+      <div class="font-16 line-h-19 font-weight--bold">
         Custom
         <v-btn
           @click="editTab('custom')"
@@ -151,7 +165,11 @@
         dark
       >
         <template v-slot:item.type="{ item }">
-          {{ item.type }}
+          <template v-for="(val, index) in customTypes">
+            <span v-if="val.value === item.type" :key="index">
+              {{ val.text }}</span
+            >
+          </template>
         </template>
         <template v-slot:item.title="{ item }">
           {{ item.title }}
@@ -167,7 +185,7 @@
     </div>
 
     <div class="mb-4" v-if="socialList.length > 0">
-      <div class="font-16 line-h-20 font-weight--bold">
+      <div class="font-16 line-h-19 font-weight--bold">
         Social
         <v-btn
           @click="editTab('social')"
@@ -189,7 +207,11 @@
         dark
       >
         <template v-slot:item.type="{ item }">
-          {{ item.type }}
+          <template v-for="(val, index) in socialTypes">
+            <span v-if="val.value === item.type" :key="index">
+              {{ val.text }}</span
+            >
+          </template>
         </template>
         <template v-slot:item.title="{ item }">
           {{ item.title }}
@@ -206,7 +228,7 @@
     </div>
 
     <div class="mb-4" v-if="blockchainList.length > 0">
-      <div class="font-16 line-h-20 font-weight--bold">
+      <div class="font-16 line-h-19 font-weight--bold">
         Wallet
         <v-btn
           @click="editTab('wallet')"
@@ -227,7 +249,11 @@
         dark
       >
         <template v-slot:item.type="{ item }">
-          {{ item.type }}
+          <template v-for="(val, index) in walletTypes">
+            <span v-if="val.value === item.type" :key="index">
+              {{ val.text }}</span
+            >
+          </template>
         </template>
         <template v-slot:item.title="{ item }">
           {{ item.title }}
@@ -244,7 +270,7 @@
     </div>
 
     <div class="mb-4" v-if="smartContractlist.length > 0">
-      <div class="font-16 line-h-20 font-weight--bold">
+      <div class="font-16 line-h-19 font-weight--bold">
         Smart Contract
         <v-btn
           @click="editTab('wallet')"
@@ -266,7 +292,11 @@
         dark
       >
         <template v-slot:item.type="{ item }">
-          {{ item.type }}
+          <template v-for="(val, index) in smartContractTypes">
+            <span v-if="val.value === item.type" :key="index">
+              {{ val.text }}</span
+            >
+          </template>
         </template>
         <template v-slot:item.contract_address="{ item }">
           {{ JSON.parse(item.value).contractAddress }}
@@ -286,10 +316,10 @@
 <script>
 import { PencilAltIcon } from "@vue-hero-icons/outline";
 import Vue2Filters from "vue2-filters";
-import general from "@/mixins/general";
+import campaign from "@/mixins/campaign";
 export default {
   name: "Review",
-  mixins: [Vue2Filters.mixin, general],
+  mixins: [Vue2Filters.mixin, campaign],
   components: {
     PencilAltIcon,
   },
@@ -300,6 +330,8 @@ export default {
   },
   data() {
     return {
+      authToken: localStorage.getItem("authToken"),
+      tags: [],
       headers: [
         {
           text: "Type",
@@ -436,9 +468,29 @@ export default {
       }
     },
   },
+  mounted() {
+    this.getTags();
+  },
   methods: {
     editTab(tabName) {
       this.$root.$emit("setTab", tabName);
+    },
+
+    async getTags() {
+      const url = `${this.$config.studioServer.BASE_URL}api/v1/tag`;
+      const headers = {
+        Authorization: `Bearer ${this.authToken}`,
+      };
+      const resp = await fetch(url, {
+        headers,
+        method: "GET",
+      });
+
+      if (!resp.ok) {
+        return this.notifyErr(resp.statusText);
+      } else {
+        this.tags = await resp.json();
+      }
     },
   },
 };

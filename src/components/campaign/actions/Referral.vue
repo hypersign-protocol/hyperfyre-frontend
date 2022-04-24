@@ -14,6 +14,7 @@
         solo
         outlined
         class="form-input"
+        placeholder="Please enter referee points"
       ></v-text-field>
     </div>
     <div class="mb-4">
@@ -29,13 +30,16 @@
         solo
         outlined
         class="form-input"
+        placeholder="Please enter referral points"
       ></v-text-field>
     </div>
   </div>
 </template>
 <script>
+import general from "@/mixins/general";
 export default {
   name: "Referral",
+  mixins: [general],
   props: {
     campaign: {
       type: Object,
@@ -45,13 +49,21 @@ export default {
     return {
       rules: {
         number: [
-          (v) => !!v || "This field is required",
+          (v) => !!v || "Please enter points",
           (v) =>
-            (v && v > 0) ||
-            "Please enter a positive number which is greate than 0",
+            (v && v > 0 && v <= 999) ||
+            "Please enter a positive number between 0 and 999",
         ],
       },
     };
+  },
+  watch: {
+    form: {
+      handler: function () {
+        this.$emit("input", { form: "referralForm", isChanged: true });
+      },
+      deep: true,
+    },
   },
   created() {
     this.$root.$on("getReferralFormData", this.emitFilledData);

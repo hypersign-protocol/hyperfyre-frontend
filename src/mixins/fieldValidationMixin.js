@@ -43,7 +43,7 @@ export function isContractValid(str) {
   }
 }
 export function isdiscordLink(str) {
-  if (!str.includes("https://discord.gg/")) {
+  if (str && !str.includes("https://discord.gg/")) {
     return true;
   }
 }
@@ -55,7 +55,7 @@ export function isNum(str) {
   }
 }
 export function isretweetUrl(str) {
-  if (!str.match(/https:\/\/twitter\.com\/.*\/status\/[0-9]+/)) {
+  if (str && !str.match(/https:\/\/twitter\.com\/.*\/status\/[0-9]+/)) {
     return true;
   }
 }

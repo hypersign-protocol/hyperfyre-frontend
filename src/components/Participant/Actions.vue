@@ -4,19 +4,19 @@
       Your Profile & Referral
     </p>
     <v-row class="white--text text-left pb-8" no-gutters>
-      <v-col cols="12" md="4" class="d-flex flex-column justify-center">
+      <v-col cols="12" md="3" class="d-flex flex-column justify-center">
         <span class="color-grey-100 font-14 line-h-17 font-weight-bold"
           >Username</span
         >
         <span> {{ userProfile.name }}</span>
       </v-col>
-      <v-col cols="12" md="4" class="d-flex flex-column justify-center">
+      <v-col cols="12" md="3" class="d-flex flex-column justify-center">
         <span class="color-grey-100 font-14 line-h-17 font-weight-bold"
           >Email</span
         >
         <span> {{ userProfile.email }}</span>
       </v-col>
-      <v-col cols="12" md="4" class="d-flex flex-column justify-center">
+      <v-col cols="12" md="6" class="d-flex flex-column justify-center">
         <span class="color-grey-100 font-14 line-h-17 font-weight-bold"
           >Referral Link</span
         >

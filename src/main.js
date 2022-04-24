@@ -18,6 +18,18 @@ import DatetimePicker from "vuetify-datetime-picker";
 
 Vue.use(DatetimePicker);
 
+import moment from "moment";
+
+Vue.filter("moment", function (value, format) {
+  if (value === null || value === undefined || format === undefined) {
+    return "";
+  }
+  if (format === "from") {
+    return moment(value).fromNow();
+  }
+  return moment(value).format(format);
+});
+
 new Vue({
   vuetify,
   router,

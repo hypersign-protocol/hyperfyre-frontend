@@ -24,19 +24,25 @@
                   :class="item.filled ? 'done' : ''"
                 >
                   <template v-if="!isEdit">
-                    <img
+                    <v-icon
                       v-if="!item.filled"
-                      class="mr-3"
-                      src="@/assets/images/empty-circle.svg"
-                    />
-                    <img
+                      size="25"
+                      color="#313443"
+                      class="mr-2"
+                      >mdi-circle</v-icon
+                    >
+                    <v-icon
                       v-if="item.filled"
-                      class="mr-3"
-                      src="@/assets/images/check-circle.svg"
-                    />
+                      size="25"
+                      color="green"
+                      class="mr-2"
+                      >mdi-check-circle</v-icon
+                    >
                   </template>
                   <template v-if="isEdit">
-                    <img class="mr-3" src="@/assets/images/check-circle.svg" />
+                    <v-icon size="25" color="green" class="mr-2"
+                      >mdi-check-circle</v-icon
+                    >
                   </template>
 
                   {{ item.name }}
@@ -59,6 +65,7 @@
                           :campaign="campaign"
                           :isEdit="isEdit"
                           :list="loadList(item)"
+                          @input="emitForm"
                         ></component>
                         <div
                           class="d-flex flex-column align-center justify-center"
@@ -189,9 +196,7 @@
               src="@/assets/images/confirmation.png"
               class="mb-25"
             ></v-img>
-            <p class="font-18 line-h-22 font-weight-bold white--text">
-              Add a Custom Campaign Script
-            </p>
+            <p class="font-18 line-h-22 font-weight-bold white--text"></p>
             <p class="font-16 line-h-19 font-weight-regular white--text mb-25">
               Would you like to add and customize your campaign?
             </p>
@@ -246,6 +251,7 @@ export default {
       authToken: localStorage.getItem("authToken"),
       navigationTab: "basic-info",
       loading: false,
+      routeName: "",
       navigation: [
         {
           name: "Basic Info",
@@ -262,32 +268,32 @@ export default {
         {
           name: "Prize",
           slug: "prize",
-          valid: true,
+          valid: false,
           filled: false,
           method: "loadList",
         },
         {
           name: "Custom",
           slug: "custom",
-          valid: true,
+          valid: false,
           filled: false,
         },
         {
           name: "Social",
           slug: "social",
-          valid: true,
+          valid: false,
           filled: false,
         },
         {
           name: "Wallet",
           slug: "wallet",
-          valid: true,
+          valid: false,
           filled: false,
         },
         {
           name: "Smart Contract",
           slug: "smart-contract",
-          valid: true,
+          valid: false,
           filled: false,
         },
         {
@@ -297,28 +303,76 @@ export default {
       ],
 
       campaign: {},
+
+      customFormDetected: false,
+      prizeFormDetected: false,
+      referralFormDetected: false,
+      smartContractFormDetected: false,
+      socialFormDetected: false,
+      walletFormDetected: false,
+
+      campaignChanges: false,
     };
   },
-
+  beforeRouteLeave(to, from, next) {
+    const answer = window.confirm(
+      "Do you really want to leave? you have unsaved changes!"
+    );
+    if (answer) {
+      next();
+    } else {
+      next(false);
+    }
+  },
   watch: {
     $route: function (val) {
+      this.routeName = val.meta.slug;
       if (val.meta.slug === "create-campaign") {
         this.isEdit = false;
       } else if (val.meta.slug === "edit-campaign") {
         this.isEdit = true;
       }
     },
+
+    campaign: {
+      handler: function () {
+        this.campaignChanges = true;
+      },
+      deep: true,
+    },
   },
   mounted() {
     this.$root.$on("getFilledData", this.captureCampaignData);
     this.$root.$on("updateEventActions", this.AddUpdateDelEventActions);
     this.$root.$on("setTab", this.setNavigation);
-    // this.loadCampaign();
   },
   beforeMount() {
     this.loadCampaign();
   },
   methods: {
+    emitForm(data) {
+      console.log(data);
+      switch (data.form) {
+        case "socialForm":
+          this.socialFormDetected = data.isChanged;
+          break;
+        case "walletForm":
+          this.walletFormDetected = data.isChanged;
+          break;
+        case "smartContractForm":
+          this.smartContractFormDetected = data.isChanged;
+          break;
+        case "customForm":
+          this.customFormDetected = data.isChanged;
+          break;
+        case "referralForm":
+          this.referralFormDetected = data.isChanged;
+          break;
+        case "prizeForm":
+          this.prizeFormDetected = data.isChanged;
+          break;
+      }
+    },
     loadList(item) {
       let list = [];
       if (item.slug === "prize") {
@@ -471,23 +525,68 @@ export default {
     },
 
     async Custom() {
-      this.nextIndex();
+      if (this.customFormDetected) {
+        const answer = window.confirm(
+          "You have unsaved changes! Please save them before you continue"
+        );
+        if (answer) {
+          this.nextIndex();
+        }
+      } else {
+        this.nextIndex();
+      }
     },
 
     async Social() {
-      this.nextIndex();
+      if (this.socialFormDetected) {
+        const answer = window.confirm(
+          "You have unsaved changes! Please save them before you continue"
+        );
+        if (answer) {
+          this.nextIndex();
+        }
+      } else {
+        this.nextIndex();
+      }
     },
 
     async Wallet() {
-      this.nextIndex();
+      if (this.walletFormDetected) {
+        const answer = window.confirm(
+          "You have unsaved changes! Please save them before you continue"
+        );
+        if (answer) {
+          this.nextIndex();
+        }
+      } else {
+        this.nextIndex();
+      }
     },
 
     async Prize() {
-      this.nextIndex();
+      if (this.prizeFormDetected) {
+        const answer = window.confirm(
+          "You have unsaved changes! Please save them before you continue"
+        );
+        if (answer) {
+          this.nextIndex();
+        }
+      } else {
+        this.nextIndex();
+      }
     },
 
     async SmartContract() {
-      this.nextIndex();
+      if (this.smartContractFormDetected) {
+        const answer = window.confirm(
+          "You have unsaved changes! Please save them before you continue"
+        );
+        if (answer) {
+          this.nextIndex();
+        }
+      } else {
+        this.nextIndex();
+      }
     },
 
     captureCampaignData(data) {

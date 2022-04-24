@@ -38,11 +38,13 @@
     </template>
     <v-form ref="form">
       <div class="mb-4">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">App</label>
-        <v-select
+        <label class="font-14 line-h-17 font-weight-regular mb-2"
+          >Type <span class="red--text">*</span></label
+        >
+        <v-autocomplete
           v-model="form.type"
           :rules="rules.type"
-          :items="types"
+          :items="socialTypes"
           item-text="text"
           item-value="value"
           hide-details="auto"
@@ -51,10 +53,17 @@
           solo
           outlined
           class="form-input"
-        ></v-select>
+          placeholder="Please select type"
+          @change="socialHandleType"
+          ><template slot="append">
+            <v-icon>mdil-chevron-down</v-icon>
+          </template></v-autocomplete
+        >
       </div>
       <div class="mb-4">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">Title</label>
+        <label class="font-14 line-h-17 font-weight-regular mb-2"
+          >Title <span class="red--text">*</span></label
+        >
         <v-text-field
           v-model="form.title"
           placeholder="Name your title"
@@ -68,9 +77,9 @@
         ></v-text-field>
       </div>
       <div class="mb-4">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">{{
-          link
-        }}</label>
+        <label class="font-14 line-h-17 font-weight-regular mb-2"
+          >{{ link }} <span class="red--text">*</span></label
+        >
         <v-text-field
           v-model="form.value"
           :rules="rules.value.concat(isLinkValid)"
@@ -95,9 +104,12 @@
         >
       </div>
       <div class="mb-4">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">Score</label>
+        <label class="font-14 line-h-17 font-weight-regular mb-2"
+          >Score <span class="red--text">*</span></label
+        >
         <v-text-field
           v-model="form.score"
+          :rules="rules.number"
           hide-details="auto"
           dark
           flat
@@ -171,8 +183,10 @@ import {
   isdiscordLink,
   isretweetUrl,
 } from "@/mixins/fieldValidationMixin";
+import campaign from "@/mixins/campaign";
 export default {
   name: "Social",
+  mixins: [campaign],
   props: {
     campaign: {
       type: Object,
@@ -188,17 +202,16 @@ export default {
   },
   data() {
     return {
-      types: [
-        { text: "Select Social Action type", value: null },
-        { text: "Twitter Follow", value: "TWITTER_FOLLOW" },
-        { text: "Twitter Retweet", value: "TWITTER_RETWEET" },
-        { text: "Telegram Join", value: "TELEGRAM_JOIN" },
-        { text: "Discord Join", value: "DISCORD_JOIN" },
-      ],
       rules: {
         title: [(v) => !!v || "Please enter title"],
         type: [(v) => !!v || "Please select social type"],
         value: [(v) => !!v || "Please enter social handle"],
+        number: [
+          (v) => !!v || "Please enter value",
+          (v) =>
+            (v && v > 0 && v <= 999) ||
+            "Please enter a positive number between 0 and 999",
+        ],
       },
       isEditing: false,
       selectedIndex: 0,
@@ -213,31 +226,19 @@ export default {
         campaignName: "social",
       },
       hfTgBotId: this.$config.verifierBot.TELEGRAM,
+      placeHolderText: "Please add your handle 'Ex: hypersignchain' without @",
+      link: "Social Handle",
     };
   },
+  watch: {
+    form: {
+      handler: function () {
+        this.$emit("input", { form: "socialForm", isChanged: true });
+      },
+      deep: true,
+    },
+  },
   computed: {
-    placeHolderText() {
-      if (this.form.type === "TWITTER_FOLLOW") {
-        return "Please enter your twitter handle";
-      } else if (this.form.type === "TWITTER_RETWEET") {
-        return "Please enter your retweet url";
-      } else if (this.form.type === "TELEGRAM_JOIN") {
-        return "Please enter your telegram handle";
-      } else if (this.form.type === "DISCORD_JOIN") {
-        return "Please enter your discord server invite handle";
-      } else {
-        return "";
-      }
-    },
-    link() {
-      if (this.form.type === "TWITTER_RETWEET") {
-        return "Retweet url";
-      } else if (this.form.type === "DISCORD_JOIN") {
-        return "Invite Link";
-      } else {
-        return "Social Handle";
-      }
-    },
     isLinkValid() {
       if (
         this.form.type != "DISCORD_JOIN" &&
@@ -261,6 +262,35 @@ export default {
     },
   },
   methods: {
+    socialHandleType() {
+      if (this.form.type === "TWITTER_FOLLOW") {
+        this.placeHolderText =
+          "Please add your handle 'Ex: hypersignchain' without @";
+        this.link = "Social Handle";
+        this.rules.value = [
+          (v) => !!v || "Please add your handle 'Ex: hypersignchain' without @",
+        ];
+      } else if (this.form.type === "TWITTER_RETWEET") {
+        this.link = "Retweet url";
+        this.placeHolderText =
+          "Please enter your retweet url Ex: https://twitter.com/tweet/abc";
+        this.rules.value = [
+          (v) =>
+            !!v ||
+            "Please enter your retweet url Ex: https://twitter.com/tweet/abc",
+        ];
+      } else if (this.form.type === "TELEGRAM_JOIN") {
+        this.placeHolderText = "Please enter your telegram handle";
+        this.link = "Social Handle";
+        this.rules.value = [(v) => !!v || "Please enter your telegram handle"];
+      } else if (this.form.type === "DISCORD_JOIN") {
+        this.link = "Invite Link";
+        this.placeHolderText = "Please enter your discord server invite handle";
+        this.rules.value = [
+          (v) => !!v || "Please enter your discord server invite handle",
+        ];
+      }
+    },
     edit(item, index) {
       this.isEditing = true;
       this.selectedIndex = index;
@@ -323,7 +353,13 @@ export default {
       setTimeout(function () {
         _this.selectedIndex = 0;
         _this.isEditing = false;
-        _this.$refs.form.reset();
+
+        _this.form.type = null;
+        _this.form.title = null;
+        _this.form.value = null;
+        _this.form.placeHolder = null;
+
+        // _this.$refs.form.reset();
       }, 500);
     },
   },

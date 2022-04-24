@@ -62,12 +62,14 @@
     <v-form ref="form">
       <div class="mb-4">
         <label class="font-14 line-h-17 font-weight-regular mb-2"
-          >Select Blockchain</label
+          >Select Blockchain <span class="red--text">*</span></label
         >
-        <v-select
+        <v-autocomplete
+          clear-icon="mdi-close"
+          :clearable="true"
           v-model="form.type"
           :rules="rules.type"
-          :items="types"
+          :items="walletTypes"
           item-text="text"
           item-value="value"
           hide-details="auto"
@@ -76,14 +78,20 @@
           solo
           outlined
           class="form-input"
-        ></v-select>
+          placeholder="Please select type"
+          ><template slot="append">
+            <v-icon>mdil-chevron-down</v-icon>
+          </template></v-autocomplete
+        >
       </div>
       <div class="mb-4">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">Title</label>
+        <label class="font-14 line-h-17 font-weight-regular mb-2"
+          >Title <span class="red--text">*</span></label
+        >
         <v-text-field
           v-model="form.title"
           :rules="rules.title"
-          placeholder="Name your title"
+          placeholder="Please add title of your action 'Ex: Provide your metamask wallet"
           hide-details="auto"
           dark
           flat
@@ -98,7 +106,7 @@
         >
         <v-text-field
           v-model="form.placeHolder"
-          placeholder="Enter Place Holder"
+          placeholder="0xCE7893c915356eCa955E2........"
           hide-details="auto"
           dark
           flat
@@ -108,7 +116,9 @@
         ></v-text-field>
       </div>
       <div class="mb-4">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">Score</label>
+        <label class="font-14 line-h-17 font-weight-regular mb-2"
+          >Score <span class="red--text">*</span></label
+        >
         <v-text-field
           v-model="form.score"
           :rules="rules.number"
@@ -180,8 +190,10 @@
   </div>
 </template>
 <script>
+import campaign from "@/mixins/campaign";
 export default {
   name: "Wallet",
+  mixins: [campaign],
   props: {
     campaign: {
       type: Object,
@@ -197,16 +209,6 @@ export default {
   },
   data() {
     return {
-      types: [
-        { text: "Select Blockchain type", value: null },
-        { text: "Ethereum", value: "BLOCKCHAIN_ETH" },
-        { text: "Polygon", value: "BLOCKCHAIN_MATIC" },
-        { text: "Binance Smart chain", value: "BLOCKCHAIN_BSC" },
-        { text: "Harmony", value: "BLOCKCHAIN_ONE" },
-        { text: "Avalanche", value: "BLOCKCHAIN_AVAX" },
-        { text: "Reef", value: "BLOCKCHAIN_REEF" },
-        { text: "Tezos", value: "BLOCKCHAIN_TEZ" },
-      ],
       isEditing: false,
       selectedIndex: 0,
       form: {
@@ -224,14 +226,24 @@ export default {
         type: [(v) => !!v || "Please select social type"],
         value: [(v) => !!v || "Please enter this field"],
         number: [
-          (v) => !!v || "This field is required",
+          (v) => !!v || "Please enter value",
           (v) =>
-            (v && v > 0) ||
-            "Please enter a positive number which is greate than 0",
+            (v && v > 0 && v <= 999) ||
+            "Please enter a positive number between 0 and 999",
         ],
       },
     };
   },
+
+  watch: {
+    form: {
+      handler: function () {
+        this.$emit("input", { form: "walletForm", isChanged: true });
+      },
+      deep: true,
+    },
+  },
+
   methods: {
     edit(item, index) {
       this.isEditing = true;
@@ -295,7 +307,11 @@ export default {
       setTimeout(function () {
         _this.selectedIndex = 0;
         _this.isEditing = false;
-        _this.$refs.form.reset();
+        // _this.$refs.form.reset();
+        _this.form.type = null;
+        _this.form.title = null;
+        _this.form.value = null;
+        _this.form.placeHolder = null;
       }, 500);
     },
   },

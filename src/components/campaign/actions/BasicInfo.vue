@@ -3,7 +3,7 @@
     <p class="font-20 line-h-24 font-weight-bold">Basic Info</p>
     <div class="mb-4">
       <label class="font-14 line-h-17 font-weight-regular mb-2"
-        >Campaign Name</label
+        >Campaign Name <span class="red--text">*</span></label
       >
       <v-text-field
         v-model="campaign.projectName"
@@ -17,32 +17,18 @@
         placeholder="Campaign Name"
       ></v-text-field>
     </div>
-    <!--  <div class="mb-2">
-      <label class="font-14 line-h-17 font-weight-regular mb-2"
-        >Campaign Description</label
-      >
-      <v-textarea
-        v-model="campaign.description"
-        hide-details="auto"
-        dark
-        solo
-        auto-grow
-        rows="4"
-        class="form-input"
-        placeholder="Enter description here for your campaign"
-      ></v-textarea>
-    </div> -->
     <div class="mb-4 d-flex align-center justify-space-between py-2">
       <div>
         <label class="font-14 line-h-17 font-weight-regular mb-2"
-          >Start Date</label
+          >Start Date <span class="red--text">*</span></label
         >
-        <div class="date-time">
+        <div class="date-time mb-2">
           <v-datetime-picker
             dateFormat="MM/dd/yyyy"
             v-model="fromDate"
             :date-picker-props="dateProps"
             :time-picker-props="timeProps"
+            placeholder="Please enter start date"
           >
             <template slot="dateIcon">
               <v-icon>mdil-calendar</v-icon>
@@ -56,6 +42,7 @@
                 text
                 color="primary"
                 @click.native="parent.clearHandler"
+                class="font-12 line-h-14 color-primary-100 text-capitalize letter-s-0"
               >
                 Clear
               </v-btn>
@@ -64,55 +51,17 @@
                 text
                 color="primary"
                 @click="parent.okHandler"
+                class="font-12 line-h-14 color-primary-100 text-capitalize letter-s-0"
               >
                 OK
               </v-btn>
             </template>
           </v-datetime-picker>
         </div>
-        <!--  <v-menu
-          ref="startMenu"
-          v-model="startMenu"
-          :close-on-content-click="false"
-          :return-value.sync="campaign.fromDate"
-          transition="scale-transition"
-          offset-y
-          min-width="auto"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              hide-details="auto"
-              :value="dateFormat(campaign.fromDate, isEdit)"
-              :rules="rules.fromDate"
-              dark
-              flat
-              solo
-              outlined
-              placeholder="mm/dd/yyyy"
-              class="form-input date"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker v-model="campaign.fromDate" no-title scrollable>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="startMenu = false">
-              Cancel
-            </v-btn>
-            <v-btn
-              text
-              color="primary"
-              @click="$refs.startMenu.save(campaign.fromDate)"
-            >
-              OK
-            </v-btn>
-          </v-date-picker>
-        </v-menu> -->
       </div>
       <div>
         <label class="font-14 line-h-17 font-weight-regular mb-2"
-          >End Date</label
+          >End Date <span class="red--text">*</span></label
         >
 
         <div class="date-time">
@@ -134,6 +83,7 @@
                 text
                 color="primary"
                 @click.native="parent.clearHandler"
+                class="font-12 line-h-14 color-primary-100 text-capitalize letter-s-0"
               >
                 Clear
               </v-btn>
@@ -142,56 +92,19 @@
                 text
                 color="primary"
                 @click="parent.okHandler"
+                class="font-12 line-h-14 color-primary-100 text-capitalize letter-s-0"
               >
                 OK
               </v-btn>
             </template>
           </v-datetime-picker>
         </div>
-
-        <!-- <v-menu
-          ref="endMenu"
-          v-model="endMenu"
-          :close-on-content-click="false"
-          :return-value.sync="campaign.toDate"
-          transition="scale-transition"
-          offset-y
-          min-width="auto"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              hide-details="auto"
-              :value="dateFormat(campaign.toDate, isEdit)"
-              :rules="rules.toDate"
-              dark
-              flat
-              solo
-              outlined
-              placeholder="mm/dd/yyyy"
-              class="form-input date"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker v-model="campaign.toDate" no-title scrollable>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="endMenu = false">
-              Cancel
-            </v-btn>
-            <v-btn
-              text
-              color="primary"
-              @click="$refs.endMenu.save(campaign.toDate)"
-            >
-              OK
-            </v-btn>
-          </v-date-picker>
-        </v-menu> -->
       </div>
     </div>
     <div class="mb-2">
-      <label class="font-14 line-h-17 font-weight-regular mb-2">Tags</label>
+      <label class="font-14 line-h-17 font-weight-regular mb-2"
+        >Tags <span class="red--text">*</span></label
+      >
       <v-autocomplete
         v-model="selected"
         :rules="rules.tags"
@@ -208,10 +121,11 @@
         hide-details="auto"
         class="form-input"
         @change="getSelectedTags"
+        placeholder="Please select tags"
       >
         <template v-slot:selection="data">
           <v-chip
-            class="este-chip tag-chip px-3"
+            class="height-25 font-12 px-3"
             v-bind="data.attrs"
             :input-value="data.selected"
           >
@@ -224,7 +138,7 @@
           </v-chip>
         </template>
         <template slot="append">
-          <v-icon>mdi-chevron-down</v-icon>
+          <v-icon>mdil-chevron-down</v-icon>
         </template>
       </v-autocomplete>
     </div>
@@ -249,7 +163,7 @@
     </div>
     <div class="mb-4">
       <label class="font-14 line-h-17 font-weight-regular mb-2"
-        >Banner URL</label
+        >Banner URL <span class="red--text">*</span></label
       >
       <v-text-field
         :rules="rules.logoUrl.concat(isLogoUrlValid)"
@@ -280,61 +194,6 @@
         class="mt-0 pt-0 notification-switch"
       ></v-switch>
     </div>
-
-    <!-- <div class="mb-4">
-      <label class="font-14 line-h-17 font-weight-regular mb-2"
-        >Upload Logo
-        <v-icon size="20" color="#979EAF">mdi-help-circle-outline</v-icon>
-      </label>
-      <div class="d-flex align-center height-48">
-        <v-file-input
-          v-model="campaign.bannerUrl"
-          hide-details="auto"
-          dark
-          flat
-          solo
-          outlined
-          placeholder="Attach file here"
-          class="form-input"
-          prepend-icon=""
-        ></v-file-input>
-        <v-btn
-          elevation="0"
-          color="primary"
-          class="height-48 text-capitalize rounded-l-0 rounded-bl-0 letter-s-0"
-          >Upload File</v-btn
-        >
-      </div>
-      <span class="font-12 line-h-14 font-weight-regular color-grey-300"
-        >Upload a maximum of 2mb file in JPEG / PNG / SVG format</span
-      >
-    </div>
-    <div class="mb-4">
-      <label class="font-14 line-h-17 font-weight-regular mb-2"
-        >Background Theme
-        <v-icon size="20" color="#979EAF">mdi-help-circle-outline</v-icon>
-      </label>
-      <div class="d-flex align-center height-48">
-        <span class="background-theme outline"></span>
-        <span class="background-theme primary"></span>
-        <span class="background-theme secondary"></span>
-        <span class="background-theme gradient"></span>
-      </div>
-    </div>
-    <div class="mb-4">
-      <span class="font-16 line-h-19 font-weight-regular white--text">Or</span>
-    </div>
-    <div class="mb-4">
-      <label class="font-14 line-h-17 font-weight-regular mb-2"
-        >Background Banner
-        <v-icon size="20" color="#979EAF">mdi-help-circle-outline</v-icon>
-      </label>
-      <div class="d-flex align-center height-48">
-        <span class="font-16 line-h-19 font-weight-regular color-grey-300"
-          >https://solawind.com/hellowallpaper.jpg/</span
-        >
-      </div>
-    </div> -->
   </div>
 </template>
 <script>
@@ -369,7 +228,7 @@ export default {
         fromDate: [(v) => !!v || "Please enter start date"],
         toDate: [(v) => !!v || "Please enter end date"],
         logoUrl: [(v) => !!v || "Please enter banner url"],
-        tags: [(v) => !!v || "Please select tags"],
+        tags: [(v) => !!(v && v.length) || "Please select tags"],
       },
       tags: [],
       selected: [],

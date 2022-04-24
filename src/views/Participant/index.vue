@@ -14,7 +14,7 @@
               />
             </v-col>
             <v-divider vertical class="task-border"></v-divider>
-            <v-col cols="12" md="9" class="pa-0">
+            <v-col cols="12" md="8" class="pa-0">
               <div class="pt-42 pl-146">
                 <div class="d-flex align-center mb-6 cursor-pointer">
                   <p
@@ -23,24 +23,20 @@
                     {{ eventData.projectName }}
                   </p>
                 </div>
-                <v-card flat color="black" class="task-card">
-                  <div class="bg-blue-100 pa-4 border-r-4">
-                    <div class="d-flex align-center justify-center">
-                      <v-img
-                        height="300"
-                        v-if="!brokenUrl"
-                        @error="onBannerError($event)"
-                        :lazy-src="eventData.logoUrl"
-                        :src="eventData.logoUrl"
-                      >
-                      </v-img>
-
-                      <div
-                        class="font-20 line-h-22 white--text font-weight-medium"
-                        v-if="brokenUrl"
-                      >
-                        {{ eventData.projectName }}
-                      </div>
+                <v-card flat color="black" width="600" class="task-card">
+                  <div class="border-r-4">
+                    <img
+                      v-if="!brokenUrl"
+                      @error="onBannerError($event)"
+                      class="banner-image"
+                      :src="eventData.logoUrl"
+                      width="600"
+                    />
+                    <div
+                      class="font-20 line-h-22 white--text font-weight-medium"
+                      v-if="brokenUrl"
+                    >
+                      {{ eventData.projectName }}
                     </div>
                   </div>
                 </v-card>
