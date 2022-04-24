@@ -316,12 +316,12 @@ export default {
     },
 
     async removeTags(item) {
-      const index = this.campaign.tags.findIndex((x) => x.type === item.type);
+      const index = this.selected.findIndex((x) => x.type === item.type);
       if (index >= 0) {
-        this.campaign.tags.splice(index, 1);
+        this.selected.splice(index, 1);
       } else {
-        const i = this.campaign.tags.findIndex((x) => x === item.type);
-        if (i >= 0) this.campaign.tags.splice(i, 1);
+        const i = this.selected.findIndex((x) => x === item.type);
+        if (i >= 0) this.selected.splice(i, 1);
       }
     },
   },

@@ -5,29 +5,6 @@
         <p class="white--text mt-24 font-20 font-weight-medium line-h-24">
           Manage Campaigns
         </p>
-        <div class="d-flex align-center">
-          <!-- <v-btn
-            :ripple="false"
-            color="primary"
-            class="background-theme gradient width-150 height-35 letter-s-0 ma-auto border-r-2 text-capitalize font-16 line-h-19 font-weight-bold white--text mr-4"
-            depressed
-            rounded
-            x-large
-          >
-            Add Participant
-          </v-btn> -->
-          <v-btn
-            :ripple="false"
-            color="primary"
-            class="background-theme gradient width-169 height-35 letter-s-0 ma-auto border-r-2 text-capitalize font-16 line-h-19 font-weight-bold white--text"
-            depressed
-            rounded
-            x-large
-            to="/create-campaign"
-          >
-            Create Campaign
-          </v-btn>
-        </div>
       </div>
       <campaignList></campaignList>
     </div>

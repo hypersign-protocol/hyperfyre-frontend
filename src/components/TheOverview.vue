@@ -5,16 +5,6 @@
     </p>
     <campaign-stats></campaign-stats>
     <subscription-stats></subscription-stats>
-    <v-text-field
-      dark
-      class="mt-29 form-input"
-      flat
-      append-icon="mdil-magnify"
-      solo
-      outlined
-      placeholder="Search Campaigns"
-    >
-    </v-text-field>
     <p class="color-grey-100 mt-40 font-14 font-weight-bold line-h-17">
       Featured Campaign
     </p>

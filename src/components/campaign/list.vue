@@ -1,5 +1,89 @@
 <template>
   <div>
+    <v-row
+      no-gutters
+      :class="$router.currentRoute.meta.slug === 'campaigns' ? '' : 'mt-8'"
+    >
+      <v-col cols="12" md="2"> </v-col>
+      <v-col cols="12" md="10">
+        <v-row no-gutters>
+          <v-col cols="12" md="5">
+            <label class="font-14 line-h-17 font-weight-regular white--text"
+              >Search campaign by tag</label
+            >
+            <v-autocomplete
+              v-model="tagsSearch"
+              :items="tags"
+              item-text="tagName"
+              item-value="type"
+              autocomplete="off"
+              dark
+              multiple
+              small-chips
+              flat
+              solo
+              outlined
+              class="form-input mr-4"
+              placeholder="Search campaign by tags"
+              hide-details="auto"
+              @input="searchCampaignByTags"
+              :loading="loading"
+            >
+              <template v-slot:selection="data">
+                <v-chip
+                  class="height-25 font-12 px-3"
+                  v-bind="data.attrs"
+                  :input-value="data.selected"
+                >
+                  <span class="pr-2">
+                    {{ data.item.tagName }}
+                  </span>
+                  <v-icon
+                    color="white"
+                    small
+                    @click.stop="removeTags(data.item)"
+                  >
+                    mdi-close
+                  </v-icon>
+                </v-chip>
+              </template>
+              <template slot="append">
+                <v-icon>mdi-chevron-down</v-icon>
+              </template>
+            </v-autocomplete>
+          </v-col>
+          <v-col cols="12" md="5">
+            <label class="font-14 line-h-17 font-weight-regular white--text"
+              >Search campaign by name</label
+            >
+            <v-text-field
+              v-model="search"
+              prepend-inner-icon="mdil-magnify"
+              hide-details="auto"
+              dark
+              flat
+              solo
+              outlined
+              class="form-input mr-4"
+              placeholder="Search for a campaign by name…"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-btn
+              :ripple="false"
+              color="primary"
+              class="mt-28 background-theme gradient width-169 height-35 letter-s-0 border-r-2 text-capitalize font-16 line-h-19 font-weight-bold white--text"
+              depressed
+              rounded
+              x-large
+              to="/create-campaign"
+            >
+              Create Campaign
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
     <p class="color-grey-100 mt-40 font-14 font-weight-bold line-h-17">
       On Going ( {{ ongoing.length }} )
     </p>
@@ -10,10 +94,8 @@
       :items="ongoing"
       item-key="_id"
       dark
-      :items-per-page="itemsPerPage"
-      :footer-props="footerProps"
-      :server-items-length="ongoing.length"
-      :options.sync="options"
+      :search="search"
+      :loading="loading"
     >
       <template v-slot:item.projectName="{ item }">
         <v-row class="ma-0 bg-blue-100 border-r-8 result-row">
@@ -106,10 +188,8 @@
       :items="completed"
       item-key="_id"
       dark
-      :items-per-page="itemsPerPage"
-      :footer-props="footerProps"
-      :server-items-length="completed.length"
-      :options.sync="options"
+      :search="search"
+      :loading="loading"
     >
       <template v-slot:item.projectName="{ item }">
         <v-row class="ma-0 bg-blue-100 border-r-8 result-row">
@@ -195,7 +275,6 @@
 <script>
 import Vue2Filters from "vue2-filters";
 import general from "@/mixins/general";
-import _ from "lodash";
 export default {
   name: "CampaignsList",
   mixins: [Vue2Filters.mixin, general],
@@ -204,6 +283,12 @@ export default {
       authToken: localStorage.getItem("authToken"),
       user: JSON.parse(localStorage.getItem("user")),
       campaigns: [],
+      ongoing: [],
+      completed: [],
+      loading: false,
+      search: null,
+      tagsSearch: null,
+      tags: [],
       headers: [
         {
           text: "Project",
@@ -225,53 +310,61 @@ export default {
       },
     };
   },
-  watch: {
-    options: {
-      handler($event) {
-        const sortOrder = $event.sortDesc[0] ? "ASC" : "DESC";
-        if ($event.sortBy[0]) {
-          this.sortBy = $event.sortBy[0];
-          this.sortOrder = sortOrder;
-          this.paginate($event);
-        }
-      },
-      deep: true,
-    },
-    search: _.debounce(function () {
-      this.isTyping = false;
-    }, 1000),
-    isTyping: function (value) {
-      if (!value) {
-        this.getParticipants();
-      }
-    },
-  },
-
-  created() {
+  mounted() {
     this.fetchProjects();
-  },
-  computed: {
-    ongoing() {
-      if (this.campaigns && this.campaigns.length > 0) {
-        return this.campaigns.filter(
-          (campaign) => campaign.projectStatus === true
-        );
-      } else {
-        return [];
-      }
-    },
-
-    completed() {
-      if (this.campaigns && this.campaigns.length > 0) {
-        return this.campaigns.filter(
-          (campaign) => campaign.projectStatus === false
-        );
-      } else {
-        return [];
-      }
-    },
+    this.getTags();
   },
   methods: {
+    searchCampaignByTags() {
+      if (this.tagsSearch.length > 0) {
+        this.loading = true;
+
+        const _this = this;
+        _this.ongoing = _this.campaigns.filter((item) => {
+          if (item.projectStatus === true) {
+            return item.tags.some(function (el) {
+              return _this.tagsSearch.includes(el.type);
+            });
+          }
+        });
+
+        _this.completed = _this.campaigns.filter((item) => {
+          if (item.projectStatus === false) {
+            return item.tags.some(function (el) {
+              return _this.tagsSearch.includes(el.type);
+            });
+          }
+        });
+
+        this.loading = false;
+      }
+    },
+    async getTags() {
+      const url = `${this.$config.studioServer.BASE_URL}api/v1/tag`;
+      const headers = {
+        Authorization: `Bearer ${this.authToken}`,
+      };
+      const resp = await fetch(url, {
+        headers,
+        method: "GET",
+      });
+
+      if (!resp.ok) {
+        return this.notifyErr(resp.statusText);
+      } else {
+        this.tags = await resp.json();
+      }
+    },
+
+    async removeTags(item) {
+      const index = this.tagsSearch.findIndex((x) => x.type === item.type);
+      if (index >= 0) {
+        this.tagsSearch.splice(index, 1);
+      } else {
+        const i = this.tagsSearch.findIndex((x) => x === item.type);
+        if (i >= 0) this.tagsSearch.splice(i, 1);
+      }
+    },
     edit(item) {
       this.$router.push({
         name: "Edit Campaign",
@@ -303,6 +396,7 @@ export default {
     },
     async fetchProjects() {
       try {
+        this.loading = true;
         if (!this.user.id) throw new Error("No project found");
 
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project?onwer=${this.user.id}`;
@@ -323,6 +417,17 @@ export default {
 
         const json = await resp.json();
         this.campaigns = json;
+
+        this.completed = this.campaigns.filter(
+          (campaign) => campaign.projectStatus === false
+        );
+
+        this.ongoing = this.campaigns.filter(
+          (campaign) => campaign.projectStatus === true
+        );
+
+        this.loading = false;
+
         localStorage.removeItem("userProjects");
         localStorage.setItem(
           "userProjects",
@@ -343,13 +448,15 @@ export default {
             "/admin/participants?projectId=" +
             item._id;
         });
-        // this.notifySuccess(
-        //   Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_FETCHED_NO +
-        //     this.projects.length
-        // );
       } catch (e) {
-        // this.notifyErr(e.message);
+        this.loading = false;
+
+        this.$store.dispatch("snackbar/SHOW", {
+          type: "error",
+          message: e.message,
+        });
       } finally {
+        this.loading = false;
         this.isLoading = false;
       }
     },
