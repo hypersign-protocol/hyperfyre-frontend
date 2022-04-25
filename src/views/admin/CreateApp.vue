@@ -144,6 +144,7 @@
               <th>App Name</th>
               <th>App URL</th>
               <th>Public Key</th>
+              <th>    </th>
             </tr>
           </thead>
           <tbody>
@@ -154,12 +155,6 @@
               <td><p>{{row.appName}}</p></td>
               <td>
               <p style="display:inline-block;">{{row.baseUrl}}</p>
-              <i class="fas fa-pencil-alt"
-                  style="text-transform: uppercase; float:right; cursor: pointer;"
-                  title="Click to edit the app and generate new keypair"
-                  @click="editbtn(row)"
-                >
-              </i>
               </td>
               <td style="display:flex;"
               ><p
@@ -168,6 +163,14 @@
               title="Copy public key to clipboard"
               @click="copy(row.publicKey,'Public Key')"
               ></i>
+              </td>
+              <td>
+                   <i class="fas fa-pencil-alt"
+                  style="text-transform: uppercase; float:right; cursor: pointer;"
+                  title="Click to edit the app and generate new keypair"
+                  @click="editbtn(row)"
+                >
+              </i>
               </td>
             </tr>
           </tbody>
