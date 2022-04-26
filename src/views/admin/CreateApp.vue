@@ -143,7 +143,7 @@
               <th>AppID</th>
               <th>App Name</th>
               <th>App URL</th>
-              <th>Public Key</th>
+              <th>AppWallet Address</th>
               <th>    </th>
             </tr>
           </thead>
@@ -158,10 +158,10 @@
               </td>
               <td style="display:flex;"
               ><p
-              >{{truncate1(row.publicKey,15)}}</p>
+              >{{truncate1(row.AppWalletAddress,15)}}</p>
               <i class="far fa-copy"
               title="Copy public key to clipboard"
-              @click="copy(row.publicKey,'Public Key')"
+              @click="copy(row.AppWalletAddress,'AppWallet Address')"
               ></i>
               </td>
               <td>
@@ -184,7 +184,9 @@
 
 <script>
 import notificationMixins from "../../mixins/notificationMixins";
-import elliptic from "elliptic"
+import Web3 from "web3"
+import {mnemonicToSeed,generateMnemonic} from "bip39"
+import HDKey from "hdkey"
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import {
@@ -203,7 +205,7 @@ export default {
         appName: "",
         baseUrl: "",
         _id:"",
-        publicKey:"",
+        AppWalletAddress:"",
         toggle:false,
       },
       isLoading: false,
@@ -222,17 +224,11 @@ this.getApp();
         if (this.isEverythingisValid() !== true) {
           return this.notifyErr(this.isEverythingisValid());
         }
-        let privatekey;
         this.isLoading=true;
         if(this.app.toggle){
-          const ec = new elliptic.ec('secp256k1');
-          const keyPair = ec.genKeyPair();
-          const privKey = keyPair.getPrivate();
-          const pubKey = keyPair.getPublic();
-          const publickey=pubKey.encode('hex');
-          privatekey=privKey.toString('hex');
-          this.app.publicKey = publickey;
-          this.downloadCredentials(privatekey);
+           const credential= await  this.generateWallet();
+          this.app.AppWalletAddress = credential.AppWalletAddress;
+          this.downloadCredentials(credential);
         }
             const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
             let headers = {
@@ -244,7 +240,7 @@ this.getApp();
               body: JSON.stringify({
                 appName: this.app.appName,
                 baseUrl: this.app.baseUrl,
-                publicKey:this.app.publicKey,
+                AppWalletAddress:this.app.AppWalletAddress,
                 _id:this.app._id,
                 generateNewKeyPair:this.app.toggle
                 }),
@@ -307,13 +303,8 @@ this.getApp();
         }
         else{
           this.isLoading=true;
-          const ec = new elliptic.ec('secp256k1');
-          const keyPair = ec.genKeyPair();
-          const privKey = keyPair.getPrivate();
-          const pubKey = keyPair.getPublic();
-          const publickey=pubKey.encode('hex');
-          const privatekey=privKey.toString('hex');
-          this.app.publicKey = publickey;
+          const credential= await  this.generateWallet();
+          this.app.AppWalletAddress = credential.AppWalletAddress;
             const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
             let headers = {
               "Content-Type": "application/json",
@@ -324,7 +315,7 @@ this.getApp();
               body: JSON.stringify({
                 appName: this.app.appName,
                 baseUrl: this.app.baseUrl,
-                publicKey:this.app.publicKey,
+                AppWalletAddress:this.app.AppWalletAddress,
                 _id:"" || this.app._id
                 }),
               headers,
@@ -335,7 +326,7 @@ this.getApp();
                 return this.notifyErr(json);
               } else {
                 this.notifySuccess(Messages.APP.APP_GENERATED_SUCCESSFULLY);
-                this.downloadCredentials(privatekey);
+                this.downloadCredentials(credential);
                 this.clearselected();
                 this.getApp();
               }
@@ -388,7 +379,7 @@ this.getApp();
       this.app.appName="";
       this.app.baseUrl="";
       this.app._id="";
-      this.app.publicKey="";
+      this.app.AppWalletAddress="";
       this.app.toggle=false;
     },
     truncate1(str, number) {
@@ -402,12 +393,31 @@ this.getApp();
       document.body.appendChild(link);
       link.click();
     },
-    downloadCredentials(privatekey) {
+    downloadCredentials(credential) {
       this.forceFileDownload(
-        JSON.stringify(privatekey),
-        "privatekey.json"
+        JSON.stringify(credential),
+        "appCredential.json"
       );
     },
+  async generateWallet(){
+  const web3=new Web3()
+  const mneomonic = await generateMnemonic(256);
+  const seed = await mnemonicToSeed(mneomonic);
+  const masterKeyBuff = HDKey.fromMasterSeed(seed);
+  const BIP32EXTENDED = await masterKeyBuff.derive("m/44'/60'/0'/0/0");
+  const credential = {
+    AppWalletAddress: web3.eth.accounts.privateKeyToAccount(
+      BIP32EXTENDED.privateKey.toString("hex"),
+      true
+    ).address,
+    AppPrivateKey: "0x" + BIP32EXTENDED.privateKey.toString("hex"),
+    AppPublicKey: "0x" + BIP32EXTENDED.publicKey.toString("hex"),
+    RecoveryPhrase: mneomonic,
+  }
+    //console.log(credential)
+    return credential
+
+    }
   },
   mixins: [notificationMixins],
 };
