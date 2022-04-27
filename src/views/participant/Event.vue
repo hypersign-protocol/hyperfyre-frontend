@@ -114,8 +114,6 @@ export default {
         this.eventSlug = this.$route.params["slug"];
         this.token=this.$route.query["token"];
         document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
-        console.log(this.token)
-        console.log('========================')
         await this.verifyAppAuth();
         await this.fetchEventData();
         await this.fetchUserInfoOnLogin();
@@ -123,13 +121,9 @@ export default {
       }
       else if(this.$route.params["slug"]) {
         this.eventSlug = this.$route.params["slug"];
-        console.log('---------------------------------')
         document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.fetchEventData();
         await this.fetchUserInfoOnLogin();
-      }
-      else{
-        console.log('----------------------=============')
       }
     }catch(e){
       this.notifyErr(Messages.EVENT.ERROR_OCCURED+ e.message);
