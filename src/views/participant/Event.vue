@@ -109,12 +109,22 @@ export default {
       } else {
         await this.fetchUserDetails();
       }
+      if((this.$route.params["slug"])&&(this.$route.query["token"])){
+        this.token=this.$route.query["token"];
+        console.log(this.token)
+        console.log('========================')
+        await this.verifyAppAuth();
 
-      if (this.$route.params["slug"]) {
+      }
+      else if(this.$route.params["slug"]) {
         this.eventSlug = this.$route.params["slug"];
+        console.log('---------------------------------')
         document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.fetchEventData();
         await this.fetchUserInfoOnLogin();
+      }
+      else{
+        console.log('----------------------=============')
       }
     }catch(e){
       this.notifyErr(Messages.EVENT.ERROR_OCCURED+ e.message);
@@ -180,6 +190,25 @@ export default {
         this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG)
       }
       this.isLoading=false;
+    },
+    async verifyAppAuth(){
+      try{
+this.isLoading=true
+if(this.token && this.token!=""){
+   let url = `${this.$config.studioServer.BASE_URL}api/v1/app/auth/grant`;
+        let headers = {
+          "Content-Type": "application/json",
+          "appauthtoken":this.token
+        };
+        const resp = await apiClient.makeCall({ method: "POST", url: url, header: headers })
+   console.log('1')
+   console.log(resp)
+
+}
+      }
+      catch(e){
+
+      }
     },
     async fetchUserInfoOnLogin() {
       try{
