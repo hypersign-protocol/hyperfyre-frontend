@@ -47,6 +47,7 @@ export default {
       eventData: {},
       actions: [],
       authToken: "",
+      thirdParty_appUser_Id:"",
       userEventData: null,
       userAuthData: null,
       eventActionsToShow: [],
@@ -110,10 +111,14 @@ export default {
         await this.fetchUserDetails();
       }
       if((this.$route.params["slug"])&&(this.$route.query["token"])){
+        this.eventSlug = this.$route.params["slug"];
         this.token=this.$route.query["token"];
+        document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
         console.log(this.token)
         console.log('========================')
         await this.verifyAppAuth();
+        await this.fetchEventData();
+        await this.fetchUserInfoOnLogin();
 
       }
       else if(this.$route.params["slug"]) {
@@ -145,12 +150,20 @@ export default {
       }
     },
     async fetchUserDetails() {
+      let headers;
       this.isLoading= true;
       if (this.authToken) {
-        const url = `${this.$config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
-        let headers = {
+        if(this.thirdParty_appUser_Id){
+          headers = {
+            Authorization: `Bearer ${this.authToken}`,
+            thirdParty_appUser_mappingId:`${this.thirdParty_appUser_Id}`
+          }
+        }else{
+          headers = {
           Authorization: `Bearer ${this.authToken}`,
         }
+        }
+        const url = `${this.$config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
         const res = await apiClient.makeCall({
           url,
           body: {},
@@ -193,21 +206,28 @@ export default {
     },
     async verifyAppAuth(){
       try{
-this.isLoading=true
-if(this.token && this.token!=""){
-   let url = `${this.$config.studioServer.BASE_URL}api/v1/app/auth/grant`;
-        let headers = {
-          "Content-Type": "application/json",
-          "appauthtoken":this.token
-        };
-        const resp = await apiClient.makeCall({ method: "POST", url: url, header: headers })
-   console.log('1')
-   console.log(resp)
-
-}
+        this.isLoading=true
+        if(this.token && this.token!=""){
+          let url = `${this.$config.studioServer.BASE_URL}api/v1/app/grants`;
+                let headers = {
+                  "Content-Type": "application/json",
+                  "appauthtoken":this.token
+                };
+                const resp = await apiClient.makeCall({ method: "POST", url: url, body: {},header: headers })
+            this.thirdParty_appUser_Id= resp.data.thirdParty_appUser_mappingId
+          localStorage.setItem("thirdParty_appUser_mappingId", JSON.stringify(this.thirdParty_appUser_Id));
+        }
       }
       catch(e){
-
+          if(e.status===403){
+          localStorage.clear();
+          this.notifyErr(e.error)
+          this.authToken=""
+          this.$router.push(`/form/${this.eventSlug}`)
+          }
+      }
+      finally{
+        this.isLoading=false
       }
     },
     async fetchUserInfoOnLogin() {
