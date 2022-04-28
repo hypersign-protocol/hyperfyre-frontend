@@ -140,7 +140,8 @@ export default {
           true :
           false;
     }else{
-      this.showUserNav = window.location.pathname.includes("/form") ? true : false
+      this.showUserNav = window.location.pathname.includes("/form") ||
+          window.location.pathname.includes("/user")? true : false
     }
   },
   updated() {
