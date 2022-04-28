@@ -51,7 +51,7 @@
               </button>
               <b-form-input
                 type="text"
-                placeholder="https://twitter.com/<twitterHandle>/status/<tweetId>"
+                placeholder="Please provide your retweet URL here."
                 v-model="retweetUrl"
                 :disabled="data.isDone"
                 :required="data.isManadatory"

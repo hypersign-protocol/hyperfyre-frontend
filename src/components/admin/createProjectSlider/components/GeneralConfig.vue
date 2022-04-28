@@ -207,6 +207,7 @@
         </b-form-checkbox>
         <!-- <input  class="largerCheckbox" type="checkbox" v-model="project.isNotificaionEnabled" title="Check to notify all platform users about this event" id=""> -->
       </div>  
+      <p class="col-lg-3 col-md-3 text-left text-info" style="font-size:14px;">Helps to notify participants for upcoming compaign</p>  
     </div>
 
   
