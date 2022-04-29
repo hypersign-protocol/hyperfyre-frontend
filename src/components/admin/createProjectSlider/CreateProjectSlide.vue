@@ -123,7 +123,7 @@
               </b-button>
               <div class="info">
               <i class='fas fa-exclamation-circle'>
-                <p class="tooltiptext">Creates a unique referral URL for each compaign participants, set points of each referral</p>
+                <p class="tooltiptext">Creates a unique referral URL for each compaign participants and sets points of each referral</p>
                 </i>
                 </div>
             </b-card-header>
@@ -316,7 +316,7 @@
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 title="Create Smart contract configuration for your event"
-                ><i class="fas fa-file-contract"></i> Smart contract config / Verify Tokens or NFT Holding
+                ><i class="fas fa-file-contract"></i> Tokens or NFT Holding Configuration
               </b-button>
             </b-card-header>
             <b-collapse
@@ -584,8 +584,9 @@ export default {
         {text:'SUMSUB',value:'SUMSUB_KYC'}],
         prizeDetails: [
           { text: "Select Prize Type", value: null },
-          { text: "NFT/ Tokens", value: "PRIZE_CARD" },
-          { text: "Other", value: "PRIZE_CARD" }
+          { text: "NFT", value: "PRIZE_CARD" },
+          { text: "Tokens", value: "PRIZE_CARD" },
+          { text: "Others", value: "PRIZE_CARD" }
         ],
         tagDetails: [{ text: "Select Tag Type", value: null }],
       },
