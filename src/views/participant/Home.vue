@@ -313,7 +313,7 @@ export default {
     async fetchUserEventData() {
       this.isLoading=true
       if (this.eventSlug && this.eventSlug != "") {
-        let url = `${this.$config.studioServer.BASE_URL}api/v1/investor/events?limit=20&page=1`;
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/investor/events/info?limit=20&page=1`;
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
