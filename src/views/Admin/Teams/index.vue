@@ -25,16 +25,14 @@
         dark
       >
         <template v-slot:item.status="{ item }">
-          <v-btn
-            :ripple="false"
-            class="btn--outline py-2 px-4 height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--bold"
-            :class="item.status === 'active' ? 'green' : 'red'"
-            depressed
-            rounded
-            x-large
+          <v-chip
+            dark
+            outlined
+            :color="item.status === 'active' ? '#2AD798' : 'red'"
+            class="height-25 letter-s-0 text-capitalize font-14 line-h-17 font-weight--bold px-3 mr-2 mt-2"
           >
             {{ item.status | capitalize }}
-          </v-btn>
+          </v-chip>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-btn @click="deleteItem(item)" color="red" icon :ripple="false">
@@ -57,27 +55,26 @@
         dark
       >
         <template v-slot:item.login="{ item }">
-          <v-btn
-            :ripple="false"
-            class="btn--outline green py-2 px-4 height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--bold"
-            depressed
-            rounded
-            x-large
+          <v-chip
+            dark
+            outlined
+            color="#2AD798"
+            class="height-25 letter-s-0 text-capitalize font-14 line-h-17 font-weight--bold px-3 mr-2 mt-2"
             v-if="isAdmin(email)"
           >
             Active
-          </v-btn>
-          <v-btn
-            :ripple="false"
-            class="btn--outline red py-2 px-4 height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--bold"
-            depressed
-            rounded
-            x-large
+          </v-chip>
+
+          <v-chip
+            dark
             v-else
+            outlined
+            color="#2AD798"
+            class="height-25 letter-s-0 text-capitalize font-14 line-h-17 font-weight--bold px-3 mr-2 mt-2"
             @click="switchAccount(item)"
           >
             Switch
-          </v-btn>
+          </v-chip>
         </template>
       </v-data-table>
     </div>
@@ -235,6 +232,7 @@ export default {
             });
             this.invitePopup = false;
             this.loading = false;
+            this.$refs.form.reset();
             await this.getTeammates();
           }
         } else {

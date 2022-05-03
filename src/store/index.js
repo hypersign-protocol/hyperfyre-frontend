@@ -3,6 +3,7 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 import snackbar from "./modules/Snackbar";
+import rightSlider from "./modules/RightSlider";
 
 export default new Vuex.Store({
   state: {},
@@ -10,5 +11,6 @@ export default new Vuex.Store({
   actions: {},
   modules: {
     snackbar,
+    rightSlider,
   },
 });

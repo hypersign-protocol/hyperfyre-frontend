@@ -562,3 +562,29 @@
 		background: transparent !important;
 	}
 }
+
+.subscription-accordion{
+	.v-expansion-panel-header{
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
+
+	.v-expansion-panel-content{
+		.v-expansion-panel-content__wrap{
+			padding-left: 0 !important;
+		  padding-right: 0 !important;
+		}
+	}
+}
+
+
+::-webkit-scrollbar {
+  width: 2px;
+}
+::-webkit-scrollbar-track {
+  background: $secondary;
+}
+::-webkit-scrollbar-thumb {
+  background: $primary;
+  opacity: 0.3;
+}

@@ -12,7 +12,8 @@ export default new Vuetify({
       dark: {
         primary: "#6966FB",
         green: "#2AD798",
-        teel: "2D80AE",
+        teel: "#2D80AE",
+        red: "#f44336",
       },
     },
   },

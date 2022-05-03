@@ -121,7 +121,7 @@
                   </li>
                 </ul>
                 <v-expansion-panels accordion class="mb-5">
-                  <v-expansion-panel>
+                  <v-expansion-panel class="subscription-accordion">
                     <v-expansion-panel-header color="black"
                       >See all features</v-expansion-panel-header
                     >
@@ -147,6 +147,7 @@
                   depressed
                   :elavation="0"
                   class="btn-primary-outline letter-s-0 mt-19 height-54 border-r-8 px-86 white--text text-capitalize font-16 line-h-19 font-weight--regular"
+                  @click="ViewSubscription(plan)"
                   >Choose Plan</v-btn
                 >
               </v-card>
@@ -231,15 +232,14 @@
                 <div
                   class="font-14 line-h-22 font-weight-bold color-grey-300 mr-32"
                 >
-                  <v-btn
-                    :ripple="false"
-                    class="btn--outline green py-2 px-4 height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--bold"
-                    depressed
-                    rounded
-                    x-large
+                  <v-chip
+                    dark
+                    outlined
+                    color="#2AD798"
+                    class="height-25 letter-s-0 text-capitalize font-14 line-h-17 font-weight--bold px-3 mr-2 mt-2"
                   >
                     Active
-                  </v-btn>
+                  </v-chip>
                 </div>
               </div>
             </v-col>
@@ -254,9 +254,10 @@ import fetch from "node-fetch";
 import eventBus from "../../eventBus";
 import Messages from "../../utils/messages/admin/en";
 import general from "@/mixins/general";
+import slider from "@/mixins/slider";
 export default {
   name: "Subscription",
-  mixins: [general],
+  mixins: [general, slider],
   data() {
     return {
       subscriptionTypes: [{ label: "Monthly" }, { label: "Annually" }],
@@ -442,6 +443,11 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+
+    ViewSubscription(data) {
+      data.emoji = this.getEmoji(data.planName);
+      this.openDrawer("edit", "900", "subscriptions/edit", data);
     },
   },
 };

@@ -63,7 +63,8 @@ const routes = [
         },
         component: () =>
           import(
-            /* webpackChunkName: "campaigns" */ "../views/Admin/Campaigns/index.vue"
+            /* webpackChunkName: "campaigns" */
+            "../views/Admin/Campaigns/index.vue"
           ),
       },
       {
@@ -77,7 +78,8 @@ const routes = [
         },
         component: () =>
           import(
-            /* webpackChunkName: "referrals" */ "../views/Admin/Referral.vue"
+            /* webpackChunkName: "referrals" */
+            "../views/Admin/Referral.vue"
           ),
       },
       {
