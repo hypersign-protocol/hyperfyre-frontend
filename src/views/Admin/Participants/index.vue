@@ -186,6 +186,7 @@
                   depressed
                   rounded
                   x-large
+                  :loading="lotLoading"
                   @click="handleLottery"
                 >
                   Execute
@@ -210,6 +211,7 @@ export default {
       isRandom: false,
       noOfWinners: 0,
       loading: false,
+      lotLoading: false,
       lotteryPopup: false,
       search: "",
       isTyping: false,
@@ -443,6 +445,7 @@ export default {
     },
     async handleLottery() {
       if (this.$refs.campaignForm.validate()) {
+        this.lotLoading = true;
         if (
           this.noOfWinners > this.participants.length ||
           this.noOfWinners <= 0
@@ -468,13 +471,14 @@ export default {
               isFile: true,
             });
             FileDownload(res.data, `Lottery_${this.campaign_id}.csv`);
+            this.lotLoading = false;
           } catch (e) {
             this.$store.dispatch("snackbar/SHOW", {
               type: "error",
               message: e,
             });
           } finally {
-            this.isLoading = false;
+            this.lotLoading = false;
           }
         }
       }
