@@ -120,6 +120,7 @@
           >Score <span class="red--text">*</span></label
         >
         <v-text-field
+          type="number"
           v-model="form.score"
           :rules="rules.number"
           hide-details="auto"
@@ -222,7 +223,14 @@ export default {
         campaignName: "wallet",
       },
       rules: {
-        title: [(v) => !!v || "Please enter title"],
+        title: [
+          (v) =>
+            !!v || "Please enter title" /* eslint-disable no-useless-escape */,
+          (v) =>
+            !/(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/.test(
+              v
+            ) || "Please enter a valid title",
+        ],
         type: [(v) => !!v || "Please select social type"],
         value: [(v) => !!v || "Please enter this field"],
         number: [
