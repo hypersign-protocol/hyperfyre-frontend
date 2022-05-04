@@ -123,6 +123,7 @@
           >Threshold Balance <span class="red--text">*</span></label
         >
         <v-text-field
+          type="number"
           v-model="details.thresholdBalance"
           :rules="rules.number"
           placeholder="Please enter threshold balance"
@@ -188,6 +189,7 @@
           >Score <span class="red--text">*</span></label
         >
         <v-text-field
+          type="number"
           v-model="form.score"
           :rules="rules.number"
           hide-details="auto"
@@ -298,10 +300,18 @@ export default {
           (v) =>
             !!v ||
             "Please add title of your action 'Ex: Click on Metamask icon to connect wallet",
+          /* eslint-disable no-useless-escape */
+          (v) => /[A-B]{2}\-[0-9]{8}/.test(v) || "Please enter a valid title",
         ],
         type: [(v) => !!v || "Please select type"],
         value: [(v) => !!v || "Please enter this field"],
-        contractAddress: [(v) => !!v || "Please enter contract address"],
+        contractAddress: [
+          (v) => !!v || "Please enter contract address",
+          /* eslint-disable no-useless-escape */
+          (v) =>
+            /[A-B]{2}\-[0-9]{8}/.test(v) ||
+            "Please enter a valid contract address",
+        ],
         number: [
           (v) => !!v || "Please enter value",
           (v) =>
