@@ -44,9 +44,18 @@
             >
               <template slot="label">
                 <span
-                  class="white--text font-12 line-h-17 font-weight-regular"
+                  class="white--text font-12 line-h-17 font-weight-regular mr-1"
                   v-html="item.text"
                 ></span>
+                <v-btn
+                  icon
+                  :ripple="false"
+                  v-if="item.value === 'HID'"
+                  target="_blank"
+                  :href="HIDURL"
+                >
+                  <v-icon color="white" size="18">mdil-information</v-icon>
+                </v-btn>
               </template>
             </v-radio>
           </template>
@@ -178,6 +187,8 @@ export default {
   name: "edit",
   data() {
     return {
+      HIDURL:
+        "https://coinmarketcap.com/currencies/hypersign-identity/markets/",
       authToken: localStorage.getItem("authToken"),
       marketPairs: [],
       subTotal: 0,

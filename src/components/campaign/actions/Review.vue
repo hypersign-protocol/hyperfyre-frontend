@@ -40,9 +40,17 @@
         <img
           class="banner-image"
           :src="campaign.logoUrl"
+          @error="onBannerError()"
+          v-if="!brokenUrl"
           height="300"
           width="600"
         />
+        <div
+          class="letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text bg-blue-200 border-r-8"
+          v-if="brokenUrl"
+        >
+          {{ campaign.projectName }}
+        </div>
       </div>
     </div>
     <!-- eslint-disable-next-line vue/valid-v-for -->
@@ -330,6 +338,7 @@ export default {
   },
   data() {
     return {
+      brokenUrl: false,
       user: JSON.parse(localStorage.getItem("user")),
       accessUser: JSON.parse(localStorage.getItem("accessuser")),
       authToken: localStorage.getItem("authToken"),
@@ -475,6 +484,9 @@ export default {
     this.getTags();
   },
   methods: {
+    onBannerError() {
+      this.brokenUrl = true;
+    },
     editTab(tabName) {
       this.$root.$emit("setTab", tabName);
     },

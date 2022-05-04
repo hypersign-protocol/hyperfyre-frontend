@@ -183,6 +183,7 @@
 		.v-icon {
 			// color: rgba(255, 255, 255, 0.4) !important;
 			margin-right: 20px;
+			z-index: 1;
 		}
 
 		&.done {
@@ -204,7 +205,24 @@
 					opacity: 0 !important;
 				}
 			}
+		}
 
+		&:after {
+			position: absolute;
+			left: 7px;
+			top: 0;
+			content: '';
+			border-left: 1px solid #303443;
+			margin-left: 5px;
+			height: 100%;
+		}
+
+		&:first-of-type:after {
+			top: 50%;
+		}
+
+		&:last-of-type:after {
+			top: -50%;
 		}
 	}
 
@@ -556,6 +574,7 @@
 		color: $secondary !important;
 		background: transparent !important;
 	}
+
 	&.red {
 		border: 1px solid #f44336 !important;
 		color: #f44336 !important;
@@ -563,28 +582,30 @@
 	}
 }
 
-.subscription-accordion{
-	.v-expansion-panel-header{
+.subscription-accordion {
+	.v-expansion-panel-header {
 		padding-left: 0 !important;
 		padding-right: 0 !important;
 	}
 
-	.v-expansion-panel-content{
-		.v-expansion-panel-content__wrap{
+	.v-expansion-panel-content {
+		.v-expansion-panel-content__wrap {
 			padding-left: 0 !important;
-		  padding-right: 0 !important;
+			padding-right: 0 !important;
 		}
 	}
 }
 
 
 ::-webkit-scrollbar {
-  width: 2px;
+	width: 2px;
 }
+
 ::-webkit-scrollbar-track {
-  background: $secondary;
+	background: $secondary;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: $primary;
-  opacity: 0.3;
+	background: $primary;
+	opacity: 0.3;
 }

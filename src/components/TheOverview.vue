@@ -1,7 +1,7 @@
 <template>
   <div class="overview__wrap">
     <p class="white--text mt-24 font-20 font-weight-medium line-h-24">
-      {{ greeting }}, {{ user.name }},
+      {{ greeting }}, {{ user.name }}
       <span
         v-if="
           accessUser && accessUser.adminName && accessUser.adminName !== 'Self'

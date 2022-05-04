@@ -214,10 +214,11 @@ export default {
   data() {
     return {
       dateProps: {
-        "no-title": true,
+        "no-title": false,
       },
       timeProps: {
-        "no-title": true,
+        "no-title": false,
+        format: "24hr",
       },
       user: JSON.parse(localStorage.getItem("user")),
       accessUser: JSON.parse(localStorage.getItem("accessuser")),
