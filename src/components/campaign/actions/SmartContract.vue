@@ -301,7 +301,10 @@ export default {
             !!v ||
             "Please add title of your action 'Ex: Click on Metamask icon to connect wallet",
           /* eslint-disable no-useless-escape */
-          (v) => /[A-B]{2}\-[0-9]{8}/.test(v) || "Please enter a valid title",
+          (v) =>
+            !/(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/.test(
+              v
+            ) || "Please enter a valid title",
         ],
         type: [(v) => !!v || "Please select type"],
         value: [(v) => !!v || "Please enter this field"],
@@ -309,8 +312,9 @@ export default {
           (v) => !!v || "Please enter contract address",
           /* eslint-disable no-useless-escape */
           (v) =>
-            /[A-B]{2}\-[0-9]{8}/.test(v) ||
-            "Please enter a valid contract address",
+            !/(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/.test(
+              v
+            ) || "Please enter a valid contract address",
         ],
         number: [
           (v) => !!v || "Please enter value",

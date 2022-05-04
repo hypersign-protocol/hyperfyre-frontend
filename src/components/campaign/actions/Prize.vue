@@ -62,6 +62,7 @@
           >No of Winners <span class="red--text">*</span></label
         >
         <v-text-field
+          type="number"
           v-model="details.winners"
           :rules="rules.number"
           placeholder="Please enter the number of winners ex: '1000'"
@@ -186,9 +187,24 @@ export default {
         prizeValue: null,
       },
       rules: {
-        title: [(v) => !!v || "Please enter title"],
+        title: [
+          (v) =>
+            !!v || "Please enter name" /* eslint-disable no-useless-escape */,
+          (v) =>
+            !/(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/.test(
+              v
+            ) || "Please enter a valid name",
+        ],
         type: [(v) => !!v || "Please select social type"],
-        prize: [(v) => !!v || "Please enter the prize per winner"],
+        prize: [
+          (v) =>
+            !!v ||
+            "Please enter the prize per winner" /* eslint-disable no-useless-escape */,
+          (v) =>
+            !/(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/.test(
+              v
+            ) || "Please enter a valid prize per winner",
+        ],
         number: [
           (v) => !!v || "Please enter the number of winners",
           (v) =>
