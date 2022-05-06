@@ -22,6 +22,15 @@ const router = new Router({
         tabbar: false,
       }),
     },
+    // {
+    //   path: "/user/home/",
+    //   name: "Home",
+    //   component: () =>
+    //     import(
+    //       /* webpackChunkName: "investorLogin" */ "./views/participant/Home.vue"
+    //     ),
+    //   meta: () => ({ requiresAuth: true, title: 'Hyperfyre - User Home' })
+    // },
     {
       path: "/",
       redirect: "/admin/login",
@@ -152,8 +161,8 @@ router.beforeEach((to, from, next) => {
           } else {
             localStorage.setItem("user", JSON.stringify(json.message));
             Vue.prototype.$accounts = json.accounts;
-            if (json.accounts.length==0) {            
-            
+            if (json.accounts.length==0) {
+
               localStorage.removeItem("accessToken")
               localStorage.removeItem("accessuser")
             }

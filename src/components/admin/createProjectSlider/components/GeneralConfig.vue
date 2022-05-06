@@ -206,7 +206,9 @@
         <b-form-checkbox v-model="project.isNotificaionEnabled" name="check-button" switch>
         </b-form-checkbox>
         <!-- <input  class="largerCheckbox" type="checkbox" v-model="project.isNotificaionEnabled" title="Check to notify all platform users about this event" id=""> -->
+         <p class=" text-left text-info" style="font-size:14px;">Helps to notify participants for upcoming campaign</p> 
       </div>  
+    
     </div>
 
   

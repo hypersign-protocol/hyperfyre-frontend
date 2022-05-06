@@ -52,7 +52,9 @@ const EVENTS = {
         SOCIAL_HANDLE_EMPTY: "Social Handle Should not be empty",
         URL_IN_SOCIAL_HANDLE: "Do not put url in Social Handle",
         RETWEET_VALID_URL: "Plase Enter valid retweet url",
-        INVALID_INVITE_LINK: "Invalid Invite Link"
+        INVALID_INVITE_LINK: "Invalid Invite Link",
+        INVALID_TWITTER_USERNAME:"Invalid Twitter Username",
+        INVALID_TELEGRAM_USERNAME:"Invalid Telegram Username",
     },
 
     CUSTOM:{
@@ -87,7 +89,8 @@ const EVENTS = {
         KYC_SLUG:"KYC slug should not be empty",
         SLUG_NOT_URL:"Do not put url in slug",
         KYC_LENGTH:"You cannot Add more then one KYC verification",
-        DUPLICATE_KYC:"You cannot add more than one Kyc action"
+        DUPLICATE_KYC:"You cannot add more than one Kyc action",
+        KYC_TITLE_URL:"KYC Title Cannot be URL"
         
     }
 

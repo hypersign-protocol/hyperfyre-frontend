@@ -17,6 +17,42 @@
   background-color: rgba(241, 179, 25, 0.24);
   border: 0;
 }
+.fa-exclamation-circle{
+  position: relative;
+  display: inline-block;
+  cursor: help;
+}
+.fa-exclamation-circle .tooltiptext {
+  visibility: hidden;
+  width: 250px;
+  height: auto;
+  background-color: #F1B319;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+.tooltiptext{
+  font-family:  sans-serif;
+  font-size: 15px;
+  max-width: 230px;
+}
+.fa-exclamation-circle:hover .tooltiptext {
+  visibility: visible;
+}
+.info {
+  display:flex;
+  padding:03px;
+  color:#F1B319;
+  font-size:22px;
+  border-radius:50%;
+  margin-left: 200px;
+  margin-top: -30px;
+  width:20px;
+  text-align:center;
+  }
 </style>
 <template>
   <div>
@@ -83,7 +119,13 @@
                 class="bg-transparent border-0 text-left text-primary"
                 title="Create Referral configuration for your event"
                 ><i class="fa fa-user-plus"></i> Referral Configurations
+              <!-- <a class="tool" data-position="right" draggable="false" title="Creates a unique referral URL for each campaign participants, set points of each referral"><i class='fas fa-exclamation-circle'></i></a> -->
               </b-button>
+              <div class="info">
+              <i class='fas fa-exclamation-circle'>
+                <p class="tooltiptext">Creates a unique referral URL for each campaign participants and sets points of each referral</p>
+                </i>
+                </div>
             </b-card-header>
             <b-collapse
               id="accordion-2"
@@ -242,7 +284,7 @@
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 title="Create Wallet configuration for your event"
-                ><i class="fab fa-bitcoin"></i> Wallet Configurations
+                ><i class="fab fa-bitcoin"></i> Collect Wallet Configuration
               </b-button>
             </b-card-header>
             <b-collapse
@@ -274,8 +316,7 @@
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 title="Create Smart contract configuration for your event"
-                ><i class="fas fa-file-contract"></i> Smart Contract
-                Configurations
+                ><i class="fas fa-file-contract"></i> Tokens or NFT Holding Configuration
               </b-button>
             </b-card-header>
             <b-collapse
@@ -497,13 +538,13 @@ export default {
       // {"actionTypes":["INPUT_TEXT","INPUT_NUMBER","TWITTER_FOLLOW","TWITTER_RETWEET","TELEGRAM_JOIN","DISCORD_JOIN","BLOCKCHAIN_ETH","BLOCKCHAIN_TEZ","HYPERSIGN_AUTH"],"length":9}
       options: {
         customAction: [
-          { text: "Select Input type", value: null },
-          { text: "TEXT", value: "INPUT_TEXT" },
-          { text: "NUMBER", value: "INPUT_NUMBER" },
-          { text: "DATE", value: "INPUT_DATE" },
-          { text: "LINK", value: "INPUT_HYPERLINK" },
-          { text: "HYPERLINK", value: "HYPERLINK_URL" },
-          { text: "INFO", value: "INFO_TEXT" },
+          { text: "Select participants input type", value: null },
+          { text: "Participants provides Text", value: "INPUT_TEXT" },
+          { text: "Participants provides Number", value: "INPUT_NUMBER" },
+          { text: "Participants provides Date", value: "INPUT_DATE" },
+          { text: "Participants provides URL", value: "INPUT_HYPERLINK" },
+          { text: "Participants click URL", value: "HYPERLINK_URL" },
+          { text: "Event description", value: "INFO_TEXT" },
         ],
         socialAction: [
           { text: "Select Social Action type", value: null },
@@ -526,10 +567,10 @@ export default {
           { text: "Select Contract Type", value: null },
           { text: "Ethereum ERC20", value: "ETHEREUM_ERC20" },
           { text: "Ethereum ERC721", value: "ETHEREUM_ERC721" },
-          { text: "Polygon ERC20", value: "MATIC_ERC20" },
-          { text: "Polygon ERC721", value: "MATIC_ERC721" },
-          { text: "Binance ERC20", value: "BINANCE_ERC20" },
-          { text: "Binance ERC721", value: "BINANCE_ERC721" },
+          { text: "Polygon MaticERC20", value: "MATIC_ERC20" },
+          { text: "Polygon MaticERC721", value: "MATIC_ERC721" },
+          { text: "Binance BEP20", value: "BINANCE_ERC20" },
+          { text: "Binance BEP721", value: "BINANCE_ERC721" },
           { text: "Moon Beam ERC20", value: "MOONBEAM_ERC20" },
           { text: "Moon Beam ERC721", value: "MOONBEAM_ERC721" },
           { text: "Moon River ERC20", value: "MOONRIVER_ERC20" },
@@ -543,7 +584,9 @@ export default {
         {text:'SUMSUB',value:'SUMSUB_KYC'}],
         prizeDetails: [
           { text: "Select Prize Type", value: null },
-          { text: "Prize Card", value: "PRIZE_CARD" },
+          { text: "NFT", value: "PRIZE_CARD" },
+          { text: "Tokens", value: "PRIZE_CARD" },
+          { text: "Others", value: "PRIZE_CARD" }
         ],
         tagDetails: [{ text: "Select Tag Type", value: null }],
       },
