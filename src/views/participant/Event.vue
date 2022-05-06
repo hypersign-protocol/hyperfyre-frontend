@@ -214,8 +214,12 @@ export default {
                 };
                 const resp = await apiClient.makeCall({ method: "POST", url: url, body: {},header: headers })
             this.externalUserId= resp.data.data.externalUserMappingId
-          localStorage.setItem("externalUserMappingId", JSON.stringify(this.externalUserId));
-
+            this.authToken=resp.data.data.authToken
+            localStorage.setItem("externalUserMappingId", JSON.stringify(this.externalUserId));
+            if(this.authToken!==undefined){
+              localStorage.setItem('authToken',this.authToken)
+              this.fetchUserDetails()
+            }  
         }
       }
       catch(e){
