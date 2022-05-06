@@ -110,9 +110,9 @@ export default {
       } else {
         await this.fetchUserDetails();
       }
-      if((this.$route.params["slug"])&&(this.$route.query["token"])){
+      if((this.$route.params["slug"])&&(this.$route.query["redirectionToken"])){
         this.eventSlug = this.$route.params["slug"];
-        this.token=this.$route.query["token"];
+        this.redirectionToken=this.$route.query["redirectionToken"];
         document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.verifyAppAuth();
         await this.fetchEventData();
@@ -206,11 +206,11 @@ export default {
     async verifyAppAuth(){
       try{
         this.isLoading=true
-        if(this.token && this.token!=""){
+        if(this.redirectionToken && this.redirectionToken!=""){
           let url = `${this.$config.studioServer.BASE_URL}api/v1/app/grants`;
                 let headers = {
                   "Content-Type": "application/json",
-                  "externaluseraccesstoken":`Bearer ${this.token}`
+                  "externaluseraccesstoken":`Bearer ${this.redirectionToken}`
                 };
                 const resp = await apiClient.makeCall({ method: "POST", url: url, body: {},header: headers })
             this.externalUserId= resp.data.data.externalUserMappingId
