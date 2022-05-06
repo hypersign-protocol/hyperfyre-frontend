@@ -119,11 +119,11 @@
                 class="bg-transparent border-0 text-left text-primary"
                 title="Create Referral configuration for your event"
                 ><i class="fa fa-user-plus"></i> Referral Configurations
-              <!-- <a class="tool" data-position="right" draggable="false" title="Creates a unique referral URL for each compaign participants, set points of each referral"><i class='fas fa-exclamation-circle'></i></a> -->
+              <!-- <a class="tool" data-position="right" draggable="false" title="Creates a unique referral URL for each campaign participants, set points of each referral"><i class='fas fa-exclamation-circle'></i></a> -->
               </b-button>
               <div class="info">
               <i class='fas fa-exclamation-circle'>
-                <p class="tooltiptext">Creates a unique referral URL for each compaign participants and sets points of each referral</p>
+                <p class="tooltiptext">Creates a unique referral URL for each campaign participants and sets points of each referral</p>
                 </i>
                 </div>
             </b-card-header>
@@ -543,7 +543,7 @@ export default {
           { text: "Participants provides Number", value: "INPUT_NUMBER" },
           { text: "Participants provides Date", value: "INPUT_DATE" },
           { text: "Participants provides URL", value: "INPUT_HYPERLINK" },
-          { text: "Participants click Url", value: "HYPERLINK_URL" },
+          { text: "Participants click URL", value: "HYPERLINK_URL" },
           { text: "Event description", value: "INFO_TEXT" },
         ],
         socialAction: [
