@@ -1046,11 +1046,17 @@ export default {
           return Messages.EVENTS.CHECK_ALL_TYPE;
         }
         if(this.eventActionList[index].type==="SUMSUB_KYC"){
+          
      
           if(this.eventActionList[index].slug===""){
             return Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_SLUG;
           }
+
+         
         }
+         if(isValidURL (this.eventActionList[index].title)!==undefined){
+      return Messages.EVENTS.ACTIONS.TITLE_URL;
+          }
       }
       // for (let index = 0; index < this.eventActionList.length; index++) {
        
