@@ -94,7 +94,7 @@
         ></v-text-field>
       </div>
       <div class="mb-4" v-if="url">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">Url</label>
+        <label class="font-14 line-h-17 font-weight-regular mb-2">Url <span class="red--text">*</span></label>
         <v-text-field
           v-model="form.value"
           :rules="rules.value"
@@ -108,7 +108,7 @@
         ></v-text-field>
       </div>
       <div class="mb-4" v-if="info">
-        <label class="font-14 line-h-17 font-weight-regular mb-2">Info</label>
+        <label class="font-14 line-h-17 font-weight-regular mb-2">Info <span class="red--text">*</span></label>
         <v-text-field
           v-model="form.value"
           :rules="rules.value"
