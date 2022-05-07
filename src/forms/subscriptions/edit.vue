@@ -174,7 +174,7 @@
           outlined
           depressed
           :elavation="0"
-          class="btn-primary-outline text-center letter-s-0 mt-19 height-54 border-r-8 px-86 white--text text-capitalize font-16 line-h-19 font-weight--regular"
+          class="btn-primary-outline bg-primary-100 text-center letter-s-0 mt-19 height-54 border-r-8 px-86 white--text text-capitalize font-16 line-h-19 font-weight--bold"
           >Pay ${{ grandTotal }}</v-btn
         >
       </div>
@@ -227,11 +227,14 @@ export default {
   },
   computed: {
     grandTotal() {
-      return this.calculateGrandTotal();
+      return this.calculateGrandtotal();
     },
   },
+  created() {
+    this.fetchTokenPriceCMC();
+  },
   methods: {
-    calculateGrandTotal() {
+    calculateGrandtotal() {
       this.data.grandTotal = this.data.price - this.discount;
       return this.data.grandTotal;
     },
@@ -245,6 +248,8 @@ export default {
             { text: "Binance Smart Chain", value: "BSC", disabled: true },
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
           ];
+
+          console.log((this.data.price * 30) / 100);
           this.discount = (this.data.price * 30) / 100;
         } else {
           this.discount = 0;
@@ -296,6 +301,36 @@ export default {
           ];
           // this.selectedNetwork = "ETH";
         }
+      }
+    },
+    async fetchTokenPriceCMC() {
+      try {
+        this.isLoading = true;
+        const url =
+          "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs/latest?slug=hypersign-identity&start=1&limit=100&category";
+        const headers = {
+          // Authorization: `Bearer ${this.authToken}`,
+        };
+        const resp = await fetch(url, {
+          headers,
+          method: "GET",
+        });
+
+        if (!resp.ok) {
+          this.$store.dispatch("snackbar/SHOW", {
+            type: "error",
+            message: resp.statusText,
+          });
+        }
+        const json = await resp.json();
+        this.marketPairs = json["data"]["marketPairs"];
+      } catch (e) {
+        this.$store.dispatch("snackbar/SHOW", {
+          type: "error",
+          message: e.message,
+        });
+      } finally {
+        this.isLoading = false;
       }
     },
     getHidPrice() {

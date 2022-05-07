@@ -25,6 +25,7 @@
                 >
                   <template v-if="!isEdit">
                     <v-icon
+                      :elevation="2"
                       v-if="!item.filled"
                       size="25"
                       color="#313443"
