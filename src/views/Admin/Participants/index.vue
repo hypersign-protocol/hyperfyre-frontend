@@ -445,7 +445,6 @@ export default {
     },
     async handleLottery() {
       if (this.$refs.campaignForm.validate()) {
-        this.lotLoading = true;
         if (
           this.noOfWinners > this.participants.length ||
           this.noOfWinners <= 0
@@ -458,6 +457,7 @@ export default {
             message: Messages.PARTICIPANTS.LOTTERY.NO_OF_RECORDS,
           });
         } else {
+          this.lotLoading = true;
           try {
             let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.campaign_id}/lottery?token=${this.authToken}&limitRecord=${this.noOfWinners}&isRandom=${this.isRandom}`;
             const headers = {
