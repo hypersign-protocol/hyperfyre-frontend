@@ -42,7 +42,7 @@ export default {
         const usage = json["usage"];
 
         if (usage && usage.totalUsed >= usage.totalAvailable) {
-          this.$router.push("/subscription");
+          this.$router.push("/subscriptions");
           eventBus.$emit("UpdateAdminNav", false);
         }
 

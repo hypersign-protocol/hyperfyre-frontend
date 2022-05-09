@@ -213,11 +213,11 @@ router.beforeEach((to, from, next) => {
             if (
               to.meta.admin &&
               !json.message.isSubscribed &&
-              to.path != "/subscription"
+              to.path != "/subscriptions"
             ) {
               eventBus.$emit("UpdateAdminNav", false);
               next({
-                path: "/subscription",
+                path: "/subscriptions",
                 params: { nextUrl: to.fullPath },
               });
             } else {
