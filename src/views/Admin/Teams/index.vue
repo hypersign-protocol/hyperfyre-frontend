@@ -60,7 +60,7 @@
             outlined
             color="#2AD798"
             class="height-25 letter-s-0 text-capitalize font-14 line-h-17 font-weight--bold px-3 mr-2 mt-2"
-            v-if="isAdmin(email)"
+            v-if="isAdmin(item.email)"
           >
             Active
           </v-chip>
@@ -190,11 +190,12 @@ export default {
   },
   methods: {
     isAdmin(email) {
-      if (this.accessUser.adminEmail !== undefined) {
+      if (this.accessUser !== null) {
         return this.accessUser.adminEmail === email;
       } else if (this.user.email === email) {
         return true;
       }
+
       return false;
     },
     async invite() {
