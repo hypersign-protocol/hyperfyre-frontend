@@ -123,7 +123,7 @@
               </div>  
             </div>
             <div class="allButtons">
-							<button v-if="!isEdit" class="btn btn-warning button-theme" type="submit" @click.prevent="generateApp">Generate</button>
+							<button v-if="!isEdit" class="btn btn-warning button-theme" type="submit" @click.prevent="generateApp">Create</button>
               <button v-if="isEdit" class="btn btn-warning button-theme" type="submit" @click.prevent="update">Update</button>
               <button v-if="isEdit" class="btn btn-danger button-theme slight-left-margin" type="button" @click.prevent="cancel">Cancel</button>
             </div>
