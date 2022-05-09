@@ -140,11 +140,11 @@
             v-if="apps.length">
           <thead class="thead-light">
             <tr>
-              <th>AppID</th>
-              <th>App Name</th>
-              <th>App URL</th>
-              <th>AppWallet Address</th>
-              <th>    </th>
+              <th>AppId</th>
+              <th>Name</th>
+              <th>Base URL</th>
+              <th>Wallet Address</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -158,7 +158,7 @@
               </td>
               <td style="display:flex;"
               ><p
-              >{{truncate1(row.appWalletAddress,15)}}</p>
+              >{{truncate1(row.appWalletAddress, 15)}}</p>
               <i class="far fa-copy"
               title="Copy public key to clipboard"
               @click="copy(row.appWalletAddress,'AppWallet Address')"
