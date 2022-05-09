@@ -29,7 +29,7 @@ export default {
         { tab: "Participants", slug: "/participants" },
         { tab: "Teams", slug: "/teams" },
         { tab: "Subscriptions", slug: "/subscriptions" },
-        { tab: "Referrals", slug: "referrals" },
+        // { tab: "Referrals", slug: "referrals" },
       ],
       routeName: null,
     };
