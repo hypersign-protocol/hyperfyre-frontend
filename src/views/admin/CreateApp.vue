@@ -91,7 +91,7 @@
                     type="text"
                     id="name"
                     class="form-control w-100"
-                    placeholder="Enter Name for your App"
+                    placeholder="Demo Application"
                   />
                 </div>
               </div>
@@ -107,7 +107,7 @@
                     type="text"
                     id="baseUrl"
                     class="form-control w-100"
-                    placeholder="Enter base URL for your App"
+                    placeholder="http://localhost:3003/"
                   />
                 </div>
             </div>
