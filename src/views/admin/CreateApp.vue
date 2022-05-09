@@ -227,7 +227,7 @@ this.getApp();
         this.isLoading=true;
         if(this.app.toggle){
            const credential= await  this.generateWallet();
-           credential['AppId']=this.app._id;
+           credential['appId']=this.app._id;
           this.app.appWalletAddress = credential.appWalletAddress;
           this.downloadCredentials(credential);
         }
@@ -326,7 +326,7 @@ this.getApp();
               if (!resp.ok) {
                 return this.notifyErr(json);
               } else {
-                credential['AppId']= json.AppId
+                credential['appId']= json.AppId
                 this.notifySuccess(Messages.APP.APP_GENERATED_SUCCESSFULLY);
                 this.downloadCredentials(credential);
                 this.clearselected();
@@ -412,9 +412,9 @@ this.getApp();
       BIP32EXTENDED.privateKey.toString("hex"),
       true
     ).address,
-    AppPrivateKey: "0x" + BIP32EXTENDED.privateKey.toString("hex"),
-    AppPublicKey: "0x" + BIP32EXTENDED.publicKey.toString("hex"),
-    RecoveryPhrase: mneomonic,
+    appPrivateKey: "0x" + BIP32EXTENDED.privateKey.toString("hex"),
+    appPublicKey: "0x" + BIP32EXTENDED.publicKey.toString("hex"),
+    recoveryPhrase: mneomonic,
   }
     return credential
 
