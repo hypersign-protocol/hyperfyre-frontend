@@ -113,7 +113,7 @@
             </div>
             <div class="row g-3 align-items-center w-100 mt-4" v-if="isEdit">
                 <div class="col-lg-3 col-md-3 text-left">
-                 <label for="endDate" class="col-form-label">Generate new Public and Private key
+                 <label for="endDate" class="col-form-label">Generate new credentials
                 <span style="color: red">*</span>:  
                 </label>
                 </div>
@@ -158,10 +158,10 @@
               </td>
               <td style="display:flex;"
               ><p
-              >{{truncate1(row.AppWalletAddress,15)}}</p>
+              >{{truncate1(row.appWalletAddress,15)}}</p>
               <i class="far fa-copy"
               title="Copy public key to clipboard"
-              @click="copy(row.AppWalletAddress,'AppWallet Address')"
+              @click="copy(row.appWalletAddress,'AppWallet Address')"
               ></i>
               </td>
               <td>
@@ -205,7 +205,7 @@ export default {
         appName: "",
         baseUrl: "",
         _id:"",
-        AppWalletAddress:"",
+        appWalletAddress:"",
         toggle:false,
       },
       isLoading: false,
@@ -227,7 +227,8 @@ this.getApp();
         this.isLoading=true;
         if(this.app.toggle){
            const credential= await  this.generateWallet();
-          this.app.AppWalletAddress = credential.AppWalletAddress;
+           credential['AppId']=this.app._id;
+          this.app.appWalletAddress = credential.appWalletAddress;
           this.downloadCredentials(credential);
         }
             const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
@@ -240,7 +241,7 @@ this.getApp();
               body: JSON.stringify({
                 appName: this.app.appName,
                 baseUrl: this.app.baseUrl,
-                AppWalletAddress:this.app.AppWalletAddress,
+                appWalletAddress:this.app.appWalletAddress,
                 _id:this.app._id,
                 generateNewKeyPair:this.app.toggle
                 }),
@@ -304,7 +305,7 @@ this.getApp();
         else{
           this.isLoading=true;
           const credential= await  this.generateWallet();
-          this.app.AppWalletAddress = credential.AppWalletAddress;
+          this.app.appWalletAddress = credential.appWalletAddress;
             const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
             let headers = {
               "Content-Type": "application/json",
@@ -315,7 +316,7 @@ this.getApp();
               body: JSON.stringify({
                 appName: this.app.appName,
                 baseUrl: this.app.baseUrl,
-                AppWalletAddress:this.app.AppWalletAddress,
+                appWalletAddress:this.app.appWalletAddress,
                 _id:"" || this.app._id
                 }),
               headers,
@@ -325,6 +326,7 @@ this.getApp();
               if (!resp.ok) {
                 return this.notifyErr(json);
               } else {
+                credential['AppId']= json.AppId
                 this.notifySuccess(Messages.APP.APP_GENERATED_SUCCESSFULLY);
                 this.downloadCredentials(credential);
                 this.clearselected();
@@ -379,7 +381,7 @@ this.getApp();
       this.app.appName="";
       this.app.baseUrl="";
       this.app._id="";
-      this.app.AppWalletAddress="";
+      this.app.appWalletAddress="";
       this.app.toggle=false;
     },
     truncate1(str, number) {
@@ -396,7 +398,7 @@ this.getApp();
     downloadCredentials(credential) {
       this.forceFileDownload(
         JSON.stringify(credential),
-        "appCredential.json"
+        "Appcredential.json"
       );
     },
   async generateWallet(){
@@ -406,7 +408,7 @@ this.getApp();
   const masterKeyBuff = HDKey.fromMasterSeed(seed);
   const BIP32EXTENDED = await masterKeyBuff.derive("m/44'/60'/0'/0/0");
   const credential = {
-    AppWalletAddress: web3.eth.accounts.privateKeyToAccount(
+    appWalletAddress: web3.eth.accounts.privateKeyToAccount(
       BIP32EXTENDED.privateKey.toString("hex"),
       true
     ).address,
@@ -414,7 +416,6 @@ this.getApp();
     AppPublicKey: "0x" + BIP32EXTENDED.publicKey.toString("hex"),
     RecoveryPhrase: mneomonic,
   }
-    //console.log(credential)
     return credential
 
     }
