@@ -208,7 +208,6 @@
                   >
                     Subcription ID
                   </a>
-
                   <v-tooltip
                     content-class="copy-tooltip"
                     :open-on-hover="false"
@@ -285,6 +284,8 @@ export default {
           value: "subscription",
         },
       ],
+
+      plan: {},
     };
   },
   created() {
@@ -378,22 +379,36 @@ export default {
           headers,
         });
 
+        console.log(resp);
         const json = await resp.json();
         if (json) {
           if (!resp.ok) {
-            return this.notifyErr(json);
+            this.$store.dispatch("snackbar/SHOW", {
+              type: "error",
+              message: json,
+            });
           } else {
+            console.log("here");
             this.fetchSubscription();
 
-            this.notifySuccess(
-              Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED + json["newSub"]["_id"]
-            );
+            this.$store.dispatch("snackbar/SHOW", {
+              type: "error",
+              message:
+                Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED +
+                json["newSub"]["_id"],
+            });
           }
         } else {
-          throw new Error("Error while subscritption");
+          this.$store.dispatch("snackbar/SHOW", {
+            type: "error",
+            message: "Error while subscritption",
+          });
         }
       } catch (e) {
-        this.notifyErr(e.message);
+        this.$store.dispatch("snackbar/SHOW", {
+          type: "error",
+          message: e.message,
+        });
       } finally {
         this.isLoading = false;
       }
@@ -413,7 +428,10 @@ export default {
         });
 
         if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
+          this.$store.dispatch("snackbar/SHOW", {
+            type: "error",
+            message: resp.statusText,
+          });
         }
         const json = await resp.json();
         this.subscriptions = json["subscriptions"];
@@ -428,7 +446,11 @@ export default {
 
         if (usage && usage.totalUsed >= usage.totalAvailable) {
           eventBus.$emit("UpdateAdminNav", false);
-          throw new Error(Messages.SUBSCRIPTIONS.SUBSCRIPTION_EXHAUSTED);
+
+          this.$store.dispatch("snackbar/SHOW", {
+            type: "error",
+            message: Messages.SUBSCRIPTIONS.SUBSCRIPTION_EXHAUSTED,
+          });
         }
 
         if (usage && usage.totalAvailable > 0) {
