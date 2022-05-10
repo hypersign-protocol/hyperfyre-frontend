@@ -257,8 +257,12 @@ export default {
   /* height: 40px; */
   margin-top: 9px;
   margin-left: 5px;
+
 }
 
+.v-sidebar-menu.vsm_white-theme .vsm--mobile-bg{
+  background: #ffc107;
+}
 
 .subtitle {
   padding-left: 10px;
