@@ -266,7 +266,7 @@ i {
             class="mb-2"
             @error="onBannerError($event)"
           >
-            <ul style="list-style-type: none; padding-left: 0px">
+            <ul style="list-style-type: none; padding-left: 0px; font-size: x-small">
               <li data-toggle="tooltip" data-placement="bottom" title="EventId">
                 <i class="far fa-id-card"></i
                 ><span class="card-title">{{ project._id }}</span>
