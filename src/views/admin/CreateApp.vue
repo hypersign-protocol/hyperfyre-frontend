@@ -41,6 +41,8 @@
 }
 .allButtons{
   padding-top: 20px;
+  padding-right: 16px;
+  float: right;
 }
 .table{
   padding-left: 15px;
@@ -57,7 +59,7 @@
 
     <div class="text-right">
     </div>
-			<div class="col-md-8">
+			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header">
 						<h4 v-if="!isEdit">Create Your App</h4>
@@ -113,8 +115,7 @@
             </div>
             <div class="row g-3 align-items-center w-100 mt-4" v-if="isEdit">
                 <div class="col-lg-3 col-md-3 text-left">
-                 <label for="endDate" class="col-form-label">Generate new credentials
-                <span style="color: red">*</span>:  
+                 <label for="endDate" class="col-form-label">Generate new credentials:  
                 </label>
                 </div>
                <div class="col-lg-9 col-md-9 px-0"> 
@@ -122,12 +123,12 @@
                 </b-form-checkbox>
               </div>  
             </div>
-            <div class="allButtons">
+            </form>
+            <div class="allButtons" style="float:right">
 							<button v-if="!isEdit" class="btn btn-warning button-theme" type="submit" @click.prevent="generateApp">Create</button>
               <button v-if="isEdit" class="btn btn-warning button-theme" type="submit" @click.prevent="update">Update</button>
-              <button v-if="isEdit" class="btn btn-danger button-theme slight-left-margin" type="button" @click.prevent="cancel">Cancel</button>
+              <button v-if="isEdit" class="btn btn-light button-theme slight-left-margin" type="button" @click.prevent="cancel">Cancel</button>
             </div>
-            </form>
 					</div>
 				</div>
 			</div>
