@@ -75,10 +75,10 @@
           solo
           outlined
           class="form-input"
-          placeholder="Please add title of Action 'Ex: Provide Country Name'"
+          :placeholder="title"
         ></v-text-field>
       </div>
-      <div class="mb-4">
+      <div class="mb-4" v-if="placeholderInput">
         <label class="font-14 line-h-17 font-weight-regular mb-2"
           >Placeholder</label
         >
@@ -90,7 +90,7 @@
           solo
           outlined
           class="form-input"
-          placeholder="Please add placeholder for Action 'Ex: India'"
+          :placeholder="placeholder"
         ></v-text-field>
       </div>
       <div class="mb-4" v-if="url">
@@ -113,7 +113,16 @@
         <label class="font-14 line-h-17 font-weight-regular mb-2"
           >Info <span class="red--text">*</span></label
         >
-        <v-text-field
+
+        <tiptap-vuetify
+          placeholder="Please enter text here"
+          :rules="rules.value"
+          v-model="form.value"
+          :toolbar-attributes="{ color: '#f5f5f5' }"
+          :extensions="extensions"
+        />
+
+        <!--  <v-text-field
           v-model="form.value"
           :rules="rules.value"
           hide-details="auto"
@@ -122,7 +131,7 @@
           solo
           outlined
           class="form-input"
-        ></v-text-field>
+        ></v-text-field> -->
       </div>
       <div class="mb-4">
         <label class="font-14 line-h-17 font-weight-regular mb-2"
@@ -200,9 +209,28 @@
 </template>
 <script>
 import campaign from "@/mixins/campaign";
+import {
+  TiptapVuetify,
+  Heading,
+  Bold,
+  Italic,
+  Strike,
+  Underline,
+  Code,
+  Paragraph,
+  BulletList,
+  OrderedList,
+  ListItem,
+  Link,
+  Blockquote,
+  HardBreak,
+  HorizontalRule,
+  History,
+} from "tiptap-vuetify";
 export default {
   name: "Custom",
   mixins: [campaign],
+  components: { TiptapVuetify },
   props: {
     campaign: {
       type: Object,
@@ -218,6 +246,30 @@ export default {
   },
   data() {
     return {
+      extensions: [
+        History,
+        Blockquote,
+        Link,
+        Underline,
+        Strike,
+        Italic,
+        ListItem,
+        BulletList,
+        OrderedList,
+        [
+          Heading,
+          {
+            options: {
+              levels: [1, 2, 3],
+            },
+          },
+        ],
+        Bold,
+        Code,
+        HorizontalRule,
+        Paragraph,
+        HardBreak,
+      ],
       items: ["Foo", "Bar", "Fizz", "Buzz"],
 
       isEditing: false,
@@ -260,6 +312,41 @@ export default {
     info() {
       return this.form.type === "INFO_TEXT" ? true : false;
     },
+
+    placeholderInput() {
+      return this.form.type === "HYPERLINK_URL" ||
+        this.form.type === "INFO_TEXT"
+        ? false
+        : true;
+    },
+
+    title() {
+      if (this.form.type === "INPUT_NUMBER") {
+        return `Please add title of action 'Ex: Provide Phone no.'`;
+      } else if (this.form.type === "INPUT_DATE") {
+        return `Please add title of action 'Ex: Provide DOB.'`;
+      } else if (this.form.type === "INPUT_HYPERLINK") {
+        return `Please add title of action 'Ex: Provide the link to your instagram share.'`;
+      } else if (this.form.type === "HYPERLINK_URL") {
+        return `Please add title of action 'Ex: Click the link and check for 10 sec'`;
+      } else if (this.form.type === "INFO_TEXT") {
+        return `Please add title of action 'Ex: Terms & Condition for the camapign'`;
+      } else {
+        return `Please add title of Action 'Ex: Provide Country Name'`;
+      }
+    },
+
+    placeholder() {
+      if (this.form.type === "INPUT_NUMBER") {
+        return ` Please add placeholder of action 'Ex: 08867116335'`;
+      } else if (this.form.type === "INPUT_DATE") {
+        return `Please add placeholder of action 'Ex: 20-04-1992'`;
+      } else if (this.form.type === "INPUT_HYPERLINK") {
+        return `Please add placeholder of action 'Ex: https://www.instagram.com/reels/audio/175639006638933/'`;
+      } else {
+        return `Please add placeholder for Action 'Ex: India'`;
+      }
+    },
   },
   methods: {
     edit(item, index) {
@@ -275,23 +362,32 @@ export default {
 
     add() {
       if (this.$refs.form.validate()) {
-        let data = {};
-        data.id = "CUSTOM_" + this.campaign.actions.length;
-        data.value = this.form.value;
-        data.type = this.form.type;
-        data.title = this.form.title;
-        data.placeHolder = this.form.placeHolder;
-        data.isManadatory = this.form.isManadatory;
-        data.score = this.form.score;
-        data._id = this.form._id;
-        data.campaignName = this.form.campaignName;
-        this.list.push(data);
-        this.cancel();
+        if (this.info && !this.form.value) {
+          this.$store.dispatch("snackbar/SHOW", {
+            type: "error",
+            message: `Please enter info text`,
+          });
+        } else {
+          if (this.$refs.form.validate()) {
+            let data = {};
+            data.id = "CUSTOM_" + this.campaign.actions.length;
+            data.value = this.form.value;
+            data.type = this.form.type;
+            data.title = this.form.title;
+            data.placeHolder = this.form.placeHolder;
+            data.isManadatory = this.form.isManadatory;
+            data.score = this.form.score;
+            data._id = this.form._id;
+            data.campaignName = this.form.campaignName;
+            this.list.push(data);
+            this.cancel();
 
-        this.$root.$emit("updateEventActions", {
-          type: "ADD",
-          data: data,
-        });
+            this.$root.$emit("updateEventActions", {
+              type: "ADD",
+              data: data,
+            });
+          }
+        }
       }
     },
     deleteEntry() {

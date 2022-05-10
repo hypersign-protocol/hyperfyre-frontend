@@ -66,7 +66,7 @@
         >
         <v-text-field
           v-model="form.title"
-          placeholder="Name your title"
+          :placeholder="titleText"
           hide-details="auto"
           :rules="rules.title"
           dark
@@ -265,6 +265,15 @@ export default {
         return "Invalid Invite Link";
       } else {
         return true;
+      }
+    },
+    titleText() {
+      if (this.form.type === "DISCORD_JOIN") {
+        return `Please add title of action 'Ex: Join Hypersignchain on Discord'`;
+      } else if (this.form.type === "TELEGRAM_JOIN") {
+        return `Please add title of action 'Ex: Join Hypersignchain on TG.'`;
+      } else {
+        return `Please add title of action 'Ex: Click to follow Hypersignchain.'`;
       }
     },
   },

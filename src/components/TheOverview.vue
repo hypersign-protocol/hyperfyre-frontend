@@ -15,10 +15,16 @@
       Featured Campaign
     </p>
     <v-row
-      class="ma-0 pa-24 bg-blue-100 border-r-8 featured--campaign cursor-pointer"
-      @click="$router.push({ path: '/task-view' })"
+      class="mx-0 mt-0 pa-24 mb-80 bg-blue-100 border-r-8 featured--campaign cursor-pointer"
     >
-      <v-col cols="12" md="6">
+      <v-col cols="12" md="12">
+        <p
+          class="ml-4 mb-0 white--text font-32 line-h-38 font-weight-bold d-flex align-center justify-center"
+        >
+          Coming Soon
+        </p>
+      </v-col>
+      <!--    <v-col cols="12" md="6">
         <div class="bg-yellow-100 py-58 px-120 border-r-4">
           <div class="d-flex align-center justify-center">
             <img src="@/assets/images/a-icon.svg" />
@@ -45,7 +51,7 @@
             You have 0 Points
           </div>
         </div>
-      </v-col>
+      </v-col> -->
     </v-row>
     <campaignList></campaignList>
     <v-divider class="bg-blue-300 mt-70"></v-divider>

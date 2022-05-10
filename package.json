@@ -18,6 +18,7 @@
     "lodash": "^4.17.21",
     "marked": "^4.0.14",
     "node-fetch": "^2.6.7",
+    "tiptap-vuetify": "^2.24.0",
     "valid-url": "^1.0.9",
     "vue": "^2.6.11",
     "vue-masonry": "^0.14.0",

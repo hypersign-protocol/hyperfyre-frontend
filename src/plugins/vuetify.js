@@ -3,6 +3,7 @@ import Vuetify from "vuetify/lib/framework";
 import "vuetify/dist/vuetify.min.css";
 import "@mdi/light-font/css/materialdesignicons-light.css";
 import "@/assets/scss/app.scss";
+import "tiptap-vuetify/dist/main.css";
 
 Vue.use(Vuetify);
 

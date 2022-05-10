@@ -1,11 +1,13 @@
 <template>
   <v-app-bar app color="black" flat>
     <v-container class="py-0 fill-height">
-      <v-img
-        max-width="180"
-        lazy-src="@/assets/images/logo.png"
-        src="@/assets/images/logo.png"
-      ></v-img>
+      <a href="https://fyre.hypersign.id/" target="__blank"
+        ><v-img
+          max-width="180"
+          lazy-src="@/assets/images/logo.png"
+          src="@/assets/images/logo.png"
+        ></v-img
+      ></a>
       <v-spacer></v-spacer>
       <div class="d-flex align-center">
         <!--  <v-img

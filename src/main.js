@@ -30,6 +30,15 @@ Vue.filter("moment", function (value, format) {
   return moment(value).format(format);
 });
 
+import { TiptapVuetifyPlugin } from "tiptap-vuetify";
+
+Vue.use(TiptapVuetifyPlugin, {
+  // the next line is important! You need to provide the Vuetify Object to this place.
+  vuetify, // same as "vuetify: vuetify"
+  // optional, default to 'md' (default vuetify icons before v2.0.0)
+  iconsGroup: "mdi",
+});
+
 new Vue({
   vuetify,
   router,
