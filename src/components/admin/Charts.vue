@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-md-12 card chart-container" style="">
+    <div class="col-md-12 card chart-container" style="height: 98%; position: absolute;">
       <vc-donut
         background="white"
         foreground="#60c860"
