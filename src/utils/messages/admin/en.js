@@ -97,6 +97,14 @@ const EVENTS = {
     }
 }
 
+const APP={
+        APP_NAME_NOT_EMPTY:"Please provide App name",
+        APP_NAME_URL:"Please provide valid App name",
+        APP_BASE_URL_EMPTY:"Please provide Base URL for app",
+        APP_BASE_URL_NOT_VALID:"Please provide valid Base URL",
+        APP_GENERATED_SUCCESSFULLY:"App generated Successfully",
+        APP_UPDATED_SUCCESSFULLY:"App details updated Successfully"
+}
 
 const PARTICIPANTS = {
 
@@ -120,5 +128,6 @@ module.exports = {
     EVENTS,
     PARTICIPANTS,
     SUBSCRIPTIONS,
-    EVENT
+    EVENT,
+    APP
 }

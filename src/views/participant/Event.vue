@@ -41,12 +41,13 @@ export default {
     ErrorMessage,
     Loading
   },
-  
+
   data() {
     return {
       eventData: {},
       actions: [],
       authToken: "",
+      externalUserId:"",
       userEventData: null,
       userAuthData: null,
       eventActionsToShow: [],
@@ -62,7 +63,7 @@ export default {
   * Need to fix this
   *
   metaInfo () {
-    return { 
+    return {
             title: "Test Event",
             titleTemplate: 'Hyperfyre | Event | %s',
             meta: [
@@ -86,7 +87,7 @@ export default {
         ]
     }
   },*/
-    
+
   computed: {
     timeLeft: function() {
       if (this.eventData.fromDate && this.eventData.projectStatus) {
@@ -109,8 +110,16 @@ export default {
       } else {
         await this.fetchUserDetails();
       }
+      if((this.$route.params["slug"])&&(this.$route.query["userRedirectionToken"])){
+        this.eventSlug = this.$route.params["slug"];
+        this.userRedirectionToken=this.$route.query["userRedirectionToken"];
+        document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
+        await this.verifyAppAuth();
+        await this.fetchEventData();
+        await this.fetchUserInfoOnLogin();
 
-      if (this.$route.params["slug"]) {
+      }
+      else if(this.$route.params["slug"]) {
         this.eventSlug = this.$route.params["slug"];
         document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.fetchEventData();
@@ -135,12 +144,20 @@ export default {
       }
     },
     async fetchUserDetails() {
+      let headers;
       this.isLoading= true;
       if (this.authToken) {
-        const url = `${this.$config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
-        let headers = {
+        if(this.externalUserId){
+          headers = {
+            Authorization: `Bearer ${this.authToken}`,
+            externalusermappingid:`${this.externalUserId}`
+          }
+        }else{
+          headers = {
           Authorization: `Bearer ${this.authToken}`,
         }
+        }
+        const url = `${this.$config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
         const res = await apiClient.makeCall({
           url,
           body: {},
@@ -162,7 +179,7 @@ export default {
         //this.notifyErr("Authentication token missing")
       }
       this.isLoading=false;
-      
+
     },
     async fetchEventData() {
       this.isLoading=true
@@ -172,20 +189,56 @@ export default {
           "Content-Type": "application/json",
         };
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
-        
+
         this.eventData = {
           ...resp.data
-        }
+                }
+
+
+
+
+
       } else {
         this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG)
       }
       this.isLoading=false;
     },
+    async verifyAppAuth(){
+      try{
+        this.isLoading=true
+        if(this.userRedirectionToken && this.userRedirectionToken!=""){
+          let url = `${this.$config.studioServer.BASE_URL}api/v1/app/grants`;
+                let headers = {
+                  "Content-Type": "application/json",
+                  "externaluseraccesstoken":`Bearer ${this.userRedirectionToken}`
+                };
+                const resp = await apiClient.makeCall({ method: "POST", url: url, body: {},header: headers })
+            this.externalUserId= resp.data.data.externalUserMappingId
+            this.authToken=resp.data.data.authToken
+            localStorage.setItem("externalUserMappingId", JSON.stringify(this.externalUserId));
+            if(this.authToken!==undefined){
+              localStorage.setItem('authToken',this.authToken)
+              this.fetchUserDetails()
+            }  
+        }
+      }
+      catch(e){
+          if(e.status===403){
+          localStorage.clear();
+          this.notifyErr(e.error)
+          this.authToken=""
+          this.$router.push(`/form/${this.eventSlug}`)
+          }
+      }
+      finally{
+        this.isLoading=false
+      }
+    },
     async fetchUserInfoOnLogin() {
       try{
       this.isLoading= true
       if (this.authToken != "" && this.authToken && this.userAuthData.email) {
-        
+
         this.userProfileData = this.userAuthData
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?email=${this.userAuthData.email}&projectId=${this.eventData._id}`;
         let headers = {
@@ -198,12 +251,12 @@ export default {
           method: "GET",
         })
 
-       //   console.log(res);
-        if(res.data.length == 0){
-           // a user can participate in event 
+        if(res.data.length === 0){
+           // a user can participate in event
            // Participate in event
           try{
             const hypersignAuthAction  = this.eventData.actions.find(x => x.type == "HYPERSIGN_AUTH")
+
             if(hypersignAuthAction){
               eventBus.$emit('UpdateUserInfoFromEvent', { actionItem: hypersignAuthAction, value: "Authorized"});
             }
@@ -215,7 +268,7 @@ export default {
         this.userEventData = {
           ...res.data[0]
         }
-        
+
         this.prizeData=this.eventData.actions.filter((x) => {
         return x.type ==='PRIZE_CARD'
         })
@@ -244,7 +297,7 @@ export default {
         eventBus.$emit('logout')
       }finally{
         this.isLoading=false;
-      }     
+      }
     },
     async fetchLeaderBoard() {
       this.isLoading=true
@@ -255,16 +308,16 @@ export default {
           Authorization: `Bearer ${this.authToken}`,
         };
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
-        
+
         this.leaderBoardData = resp.data
         this.showLeaderBoardAlert(resp.data)
-        // console.log(this.leaderBoardData) 
+
       } else {
         this.notifyErr(Messages.EVENT.INVALID_AUTH_TOKEN)
       }
       this.isLoading=false;
     },
-    
+
     updateUserData(userEventData) {
       if (userEventData) {
         this.userEventData = {
@@ -274,7 +327,7 @@ export default {
       }
     },
     showLeaderBoardAlert(data){
-        
+
         var swal_html = `<div class="list-group list-group-flush" style="max-height:500px;overflow-y: scroll;">`;
         data.forEach((element, index) => {
           let img1 = this.getProfileIcon(element.name+index)
@@ -283,8 +336,8 @@ export default {
             <span class="b-avatar-img">
               <img src="`+img1+`" alt="avatar">
             </span><!---->
-          </span> 
-          <span class="mr-auto">`+element.name+`</span> 
+          </span>
+          <span class="mr-auto">`+element.name+`</span>
           <span class="badge badge-primary ">`+element.numberOfReferals+`</span>
         </div> `
         })
@@ -302,7 +355,7 @@ export default {
 
         })
     },
-    
+
   },
   mixins:[notificationMixins,profileIconMixins],
 };
