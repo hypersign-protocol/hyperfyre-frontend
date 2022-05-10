@@ -42,7 +42,7 @@
 .tile {
   background: white;
   border: 0;
-  border-radius: 20px;
+  border-radius: 5px;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
@@ -73,13 +73,13 @@
       <div class="col-md-6">
         <div class="card tile" >
           <div class="card-body tile-number">{{ projectCount }}</div>
-          <div class="card-header accordion-header-theme" style="font-size:13px">TOTAL EVENTS</div>
+          <div class="card-header accordion-header-theme" style="font-size:13px; border-radius: 5px;">TOTAL EVENTS</div>
         </div>
       </div>
       <div class="col-md-6" >
         <div class="card tile">
           <div class="card-body tile-number">{{ schemaCount }}</div>
-          <div class="card-header accordion-header-theme" style="font-size:13px">TOTAL PARTICIPANTS</div>
+          <div class="card-header accordion-header-theme" style="font-size:13px; border-radius: 5px;">TOTAL PARTICIPANTS</div>
         </div>
       </div>
     </div>

@@ -23,7 +23,7 @@
 
 <style scoped>
 .chart-container {
-  border-radius: 20px;
+  border-radius: 5px;
   border: 0;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   padding: 35px;
