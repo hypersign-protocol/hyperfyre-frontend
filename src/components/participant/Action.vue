@@ -182,6 +182,7 @@ export default {
         const endPoint='api/v1/investor'
 
         const signature=crypto.createHmac('sha256',config.investor_sign_key)
+
         signature.update(ts+endPoint+JSON.stringify(body))
         const sig=signature.digest('hex')
         let url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${this.RecaptchaToken}`;

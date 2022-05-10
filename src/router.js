@@ -84,6 +84,19 @@ const router = new Router({
       },
     },
     {
+      path: "/admin/createapp",
+      name: "CreateApp",
+      component: () =>
+        import(
+          /* webpackChunkName: "dashboard" */ "./views/admin/CreateApp.vue"
+        ),
+      meta: {
+        requiresAuth: true,
+        admin: true,
+        title: 'Hyperfyre - CreateApp'
+      },
+    },
+    {
       path: "/admin/participants",
       name: "Participants",
       component: () =>
