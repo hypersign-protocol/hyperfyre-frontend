@@ -55,7 +55,7 @@
   font-size: xxx-large;
 }
 .fVal {
-  font-size: smaller;
+  font-size: xx-small;
   color: gray;
   word-wrap: break-word;
 }
