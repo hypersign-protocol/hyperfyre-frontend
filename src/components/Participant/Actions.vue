@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-6 bg-blue-100 action--wrap">
+  <div class="mt-6 bg-blue-100 action--wrap" v-if="userProfile">
     <p class="color-grey-100 font-14 line-h-17 font-weight-bold">
       Your Profile & Referral
     </p>
@@ -76,7 +76,6 @@ export default {
     },
     userProfile: {
       required: true,
-      type: Object,
     },
     prizeData: {
       required: true,
@@ -118,7 +117,7 @@ export default {
       );
     },
     referralLink() {
-      if (this.user.email) {
+      if (this.user && this.user.email) {
         return `${
           window.location.protocol +
           "//" +
