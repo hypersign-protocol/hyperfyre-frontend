@@ -18,6 +18,7 @@
                   :startDate="eventData.fromDate"
                   :endDate="eventData.toDate"
                   :userEventData="userEventData"
+                  @getLeaderBoard="fetchLeaderBoard"
                 />
                 <div class="image__wrap ma-auto">
                   <v-img
@@ -59,6 +60,53 @@
             </v-col>
           </v-row>
         </div>
+        <v-dialog v-model="leaderBoardPopup" :elevation="0">
+          <v-card flat color="#26264F" width="450" class="ma-auto pa-6">
+            <v-card-title
+              class="px-0 pt-0 pb-5 white--text text-left d-flex align-center justify-space-between"
+            >
+              <h2
+                class="font-24 line-h-31 white--text text-left font-weight--medium font"
+              >
+                Leader Board
+              </h2>
+              <v-icon color="white" size="25" @click="leaderBoardPopup = false"
+                >mdi-close</v-icon
+              >
+            </v-card-title>
+            <v-card-text class="white--text px-0">
+              <template v-if="leaderBoardData">
+                <div
+                  class="border-r-4 font-13 line-h-19 white--text bg-blue-100 pa-5 mb-6"
+                >
+                  <v-list color="transparent" class="pa-0">
+                    <v-list-item
+                      v-for="(item, index) in leaderBoardData"
+                      :key="index"
+                      class="pa-0"
+                    >
+                      <v-list-item-avatar>
+                        <v-img
+                          :src="`https://avatars.dicebear.com/api/identicon/${item.name}.svg`"
+                        ></v-img>
+                      </v-list-item-avatar>
+
+                      <v-list-item-content>
+                        <v-list-item-title
+                          class="white--text"
+                          v-text="item.name"
+                        ></v-list-item-title>
+                      </v-list-item-content>
+                      <v-list-item-action class="white--text">
+                        {{ item.numberOfReferals }}
+                      </v-list-item-action>
+                    </v-list-item>
+                  </v-list>
+                </div>
+              </template>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
       </v-container>
     </v-main>
   </v-app>
@@ -83,6 +131,8 @@ export default {
   data() {
     return {
       loading: false,
+      leaderBoardPopup: false,
+      leaderBoardData: null,
       user: JSON.parse(localStorage.getItem("user")),
       authToken: localStorage.getItem("authToken"),
       accessToken: localStorage.getItem("accessToken"),
@@ -203,6 +253,29 @@ export default {
           ...userEventData,
         };
         this.fetchEventData();
+      }
+    },
+
+    async fetchLeaderBoard() {
+      if (this.eventSlug && this.eventSlug != "" && this.authToken) {
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.eventData._id}/participants/score?limit=100`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+        const resp = await apiClient.makeCall({
+          method: "GET",
+          url: url,
+          header: headers,
+        });
+        this.leaderBoardPopup = true;
+        console.log(resp.data);
+        this.leaderBoardData = resp.data;
+      } else {
+        this.$store.dispatch("snackbar/SHOW", {
+          type: "error",
+          message: Messages.EVENT.INVALID_AUTH_TOKEN,
+        });
       }
     },
 

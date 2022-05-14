@@ -58,7 +58,8 @@
       </div>
       <v-divider vertical color="white"></v-divider>
       <div
-        class="info--box pa-4 d-flex align-center justify-center flex-column"
+        class="info--box pa-4 d-flex align-center justify-center flex-column cursor-pointer"
+        @click="showLeaderBoard()"
       >
         <v-icon class="mb-2" color="white">mdil-view-dashboard</v-icon>
         <p class="font-16 line-h-19 font-weight--semibold white--text mb-0">
@@ -91,6 +92,11 @@ export default {
   },
   data() {
     return {};
+  },
+  methods: {
+    showLeaderBoard() {
+      this.$emit("getLeaderBoard");
+    },
   },
 };
 </script>
