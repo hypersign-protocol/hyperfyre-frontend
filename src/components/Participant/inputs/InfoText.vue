@@ -12,7 +12,7 @@
         {{ data.title }}
       </div>
       <template v-slot:actions>
-        <v-icon color="#fff"> mdi-chevron-down </v-icon>
+        <img src="@/assets/images/check.svg" v-if="done" />
       </template>
     </v-expansion-panel-header>
     <v-expansion-panel-content class="font-14 line-h-32 color-grey-100">

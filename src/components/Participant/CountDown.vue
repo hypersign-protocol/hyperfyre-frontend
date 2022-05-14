@@ -2,7 +2,11 @@
   <div class="d-flex align-center justify-center">
     <template v-for="(item, index) in times">
       <div :key="index">
-        <div class="d-flex flex-column px-5 py-3">
+        <span class="font-16 line-h-19 font-weight-bold white--text mb-1">
+          {{ item.time }}
+          <span class="mx-1" v-if="item.colon">:</span>
+        </span>
+        <!--  <div class="d-flex flex-column px-5 py-3">
           <span class="font-16 line-h-19 font-weight-bold white--text mb-1">
             {{ item.time }}
           </span>
@@ -10,7 +14,7 @@
             {{ item.text }}
           </span>
         </div>
-        <v-divider vertical class="task-border"></v-divider>
+        <v-divider vertical class="task-border"></v-divider> -->
       </div>
     </template>
   </div>
@@ -29,10 +33,10 @@ export default {
   data() {
     return {
       times: [
-        { id: 0, text: "Days", time: 1 },
-        { id: 1, text: "Hrs", time: 1 },
-        { id: 2, text: "Mins", time: 1 },
-        { id: 3, text: "Sec", time: 1 },
+        { id: 0, text: "Days", time: 1, colon: true },
+        { id: 1, text: "Hrs", time: 1, colon: true },
+        { id: 2, text: "Mins", time: 1, colon: true },
+        { id: 3, text: "Sec", time: 1, colon: false },
       ],
 
       progress: 100,
@@ -64,7 +68,8 @@ export default {
       if (t >= 0) {
         this.times[3].time = Math.floor((t / 1000) % 60); //seconds
         this.times[2].time = Math.floor((t / 1000 / 60) % 60); //minutes
-        this.times[1].time = Math.floor((t / (1000 * 60 * 60)) % 24); //hours
+        // this.times[1].time = Math.floor((t / (1000 * 60 * 60)) % 24); //hours
+        this.times[1].time = Math.floor((t % 86400000) / 3600000); //hours
         this.times[0].time = Math.floor(t / (1000 * 60 * 60 * 24)); //days
       } else {
         this.times[3].time =

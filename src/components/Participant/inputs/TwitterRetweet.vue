@@ -2,13 +2,7 @@
   <v-expansion-panel>
     <v-expansion-panel-header class="px-0 font-12 line-h-15 white--text">
       <div class="d-flex align-center">
-        <v-icon size="22" color="#313540" class="mr-2" v-if="!done">
-          mdi-circle</v-icon
-        >
-
-        <v-icon size="22" color="green" class="mr-2" v-if="done">
-          mdi-check-circle</v-icon
-        >
+        <v-icon size="22" color="white" class="mr-2"> mdi-twitter</v-icon>
         {{ data.title }}
       </div>
       <template v-slot:actions>
@@ -22,11 +16,11 @@
         >
           +{{ data.score }}
         </v-chip>
-        <v-icon color="#fff"> mdi-chevron-down </v-icon>
+        <img src="@/assets/images/check.svg" v-if="done" />
       </template>
     </v-expansion-panel-header>
     <v-expansion-panel-content class="font-14 line-h-32 color-grey-100">
-      <div class="d-flex flex-column align-center justify-center">
+      <div class="d-flex flex-row align-center justify-space-between">
         <v-form
           v-model="data.isManadatory"
           lazy-validation
@@ -45,37 +39,36 @@
             class="form-input mb-2"
             placeholder="https://twitter.com/<twitterHandle>/status/<tweetId>"
           ></v-text-field>
-
-          <div class="d-flex align-center justify-space-around">
-            <v-btn
-              :disabled="done"
-              @click="
-                handleTwitterLogin(
-                  'https://twitter.com/intent/tweet?text=' + data.value
-                )
-              "
-              :ripple="false"
-              class="btn-gradient-outline height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text"
-              depressed
-              rounded
-              x-large
-            >
-              Retweet
-            </v-btn>
-
-            <v-btn
-              v-if="!done"
-              @click="update"
-              :ripple="false"
-              class="btn-gradient-outline height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text"
-              depressed
-              rounded
-              x-large
-            >
-              Continue
-            </v-btn>
-          </div>
+          <v-btn
+            :disabled="done"
+            @click="
+              handleTwitterLogin(
+                'https://twitter.com/intent/tweet?text=' + data.value
+              )
+            "
+            :ripple="false"
+            class="btn-gradient-outline height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text"
+            depressed
+            rounded
+            x-large
+          >
+            Retweet
+          </v-btn>
         </v-form>
+      </div>
+      <div class="d-flex align-center justify-center">
+        <v-btn
+          v-if="!done"
+          @click="update"
+          :ripple="false"
+          text
+          class="height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text"
+          depressed
+          rounded
+          x-large
+        >
+          Continue
+        </v-btn>
       </div>
     </v-expansion-panel-content>
   </v-expansion-panel>

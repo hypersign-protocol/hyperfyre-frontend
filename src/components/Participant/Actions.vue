@@ -1,26 +1,26 @@
 <template>
-  <div class="mt-6">
+  <div class="mt-6 bg-blue-100 pa-6">
     <p class="color-grey-100 font-14 line-h-17 font-weight-bold">
       Your Profile & Referral
     </p>
     <v-row class="white--text text-left pb-8" no-gutters>
-      <v-col cols="12" md="3" class="d-flex flex-column justify-center">
-        <span class="color-grey-100 font-14 line-h-17 font-weight-bold"
-          >Username</span
-        >
-        <span> {{ userProfile.name }}</span>
+      <v-col cols="12" md="3">
+        <p class="color-grey-100 mb-1 font-12 line-h-15 font-weight-bold">
+          Username
+        </p>
+        <p class="font-14 line-h-17">{{ userProfile.name }}</p>
       </v-col>
-      <v-col cols="12" md="3" class="d-flex flex-column justify-center">
-        <span class="color-grey-100 font-14 line-h-17 font-weight-bold"
-          >Email</span
-        >
-        <span> {{ userProfile.email }}</span>
+      <v-col cols="12" md="4">
+        <p class="color-grey-100 mb-1 font-12 line-h-15 font-weight-bold">
+          Email
+        </p>
+        <p class="font-14 line-h-17">{{ userProfile.email }}</p>
       </v-col>
-      <v-col cols="12" md="6" class="d-flex flex-column justify-center">
-        <span class="color-grey-100 font-14 line-h-17 font-weight-bold"
-          >Referral Link</span
-        >
-        <span>
+      <v-col cols="12" md="5">
+        <p class="color-grey-100 mb-1 font-12 line-h-15 font-weight-bold">
+          Referral Link
+        </p>
+        <p class="font-14 line-h-17">
           {{ referralLink | truncate(25) }}
           <input
             :id="referralLink"
@@ -31,7 +31,7 @@
           <v-icon color="primary" @click="copyContent(userProfile.referalLink)"
             >mdi-content-copy</v-icon
           >
-        </span>
+        </p>
       </v-col>
     </v-row>
     <div class="d-flex align-center justify-space-between">

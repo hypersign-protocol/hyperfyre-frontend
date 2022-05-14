@@ -34,7 +34,7 @@
     </div>
     <div class="mb-4">
       <label class="font-14 line-h-17 font-weight--regular color-grey-500 mb-2"
-        >Banner URL</label
+        >Banner URL {{ brokenUrl }}</label
       >
       <div class="mt-2">
         <img
@@ -46,7 +46,7 @@
           width="600"
         />
         <div
-          class="letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text bg-blue-200 border-r-8"
+          class="letter-s-0 text-capitalize font-16 line-h-19 height-300 align-center justify-center d-flex font-weight--medium white--text bg-blue-200 border-r-8"
           v-if="brokenUrl"
         >
           {{ campaign.projectName }}

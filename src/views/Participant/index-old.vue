@@ -5,37 +5,41 @@
       <v-container class="py-0">
         <div class="overview__wrap">
           <v-row class="ma-0">
-            <v-col cols="12" md="12">
-              <v-card
-                color="black"
-                class="participant__card ma-auto pa-4"
-                flat
-                :elevation="0"
-                width="600"
-              >
-                <Metrics
-                  v-if="!loading"
-                  :startDate="eventData.fromDate"
-                  :endDate="eventData.toDate"
-                  :userEventData="userEventData"
-                />
-                <div class="image__wrap ma-auto">
-                  <v-img
-                    v-if="!brokenUrl"
-                    @error="onBannerError($event)"
-                    class="banner-image"
-                    :laz-src="eventData.logoUrl"
-                    :src="eventData.logoUrl"
-                    width="568"
-                  ></v-img>
-                  <div
-                    class="font-20 line-h-22 white--text font-weight-medium"
-                    v-if="brokenUrl"
+            <v-col cols="12" md="3" class="pa-0">
+              <Metrics
+                v-if="!loading"
+                :startDate="eventData.fromDate"
+                :endDate="eventData.toDate"
+                :userEventData="userEventData"
+              />
+            </v-col>
+            <v-divider vertical class="task-border"></v-divider>
+            <v-col cols="12" md="8" class="pa-0">
+              <div class="pt-42 pl-146">
+                <div class="d-flex align-center mb-6 cursor-pointer">
+                  <p
+                    class="ml-1 mb-0 font-14 line-h-17 font-weight-bold white--text"
                   >
                     {{ eventData.projectName }}
-                  </div>
+                  </p>
                 </div>
-
+                <v-card flat color="black" width="600" class="task-card">
+                  <div class="border-r-4">
+                    <img
+                      v-if="!brokenUrl"
+                      @error="onBannerError($event)"
+                      class="banner-image"
+                      :src="eventData.logoUrl"
+                      width="600"
+                    />
+                    <div
+                      class="font-20 line-h-22 white--text font-weight-medium"
+                      v-if="brokenUrl"
+                    >
+                      {{ eventData.projectName }}
+                    </div>
+                  </div>
+                </v-card>
                 <template v-if="authToken !== '' && authToken !== null">
                   <template v-if="!eventData.projectStatus">
                     <div
@@ -55,7 +59,7 @@
                 <template v-if="authToken === '' || authToken === null">
                   <Login @AuthTokenUpdateEvent="updateAuthentication" />
                 </template>
-              </v-card>
+              </div>
             </v-col>
           </v-row>
         </div>

@@ -2,13 +2,8 @@
   <v-expansion-panel>
     <v-expansion-panel-header class="px-0 font-12 line-h-15 white--text">
       <div class="d-flex align-center">
-        <v-icon size="22" color="#313540" class="mr-2" v-if="!done">
-          mdi-circle</v-icon
-        >
+        <v-icon size="22" color="white" class="mr-2"> mdi-discord</v-icon>
 
-        <v-icon size="22" color="green" class="mr-2" v-if="done">
-          mdi-check-circle</v-icon
-        >
         {{ data.title }}
       </div>
       <template v-slot:actions>
@@ -22,11 +17,11 @@
         >
           +{{ data.score }}
         </v-chip>
-        <v-icon color="#fff"> mdi-chevron-down </v-icon>
+        <img src="@/assets/images/check.svg" v-if="done" />
       </template>
     </v-expansion-panel-header>
     <v-expansion-panel-content class="font-14 line-h-32 color-grey-100">
-      <div class="d-flex flex-row align-center justify-space-around">
+      <div class="d-flex flex-column align-center justify-center">
         <v-btn
           :disabled="done"
           @click="handleDiscordLogin(discord.sourceScreenName)"
@@ -36,6 +31,7 @@
           rounded
           x-large
         >
+          <v-icon size="22" color="white" class="mr-2"> mdi-discord</v-icon>
           Join our Discord
         </v-btn>
 
@@ -43,7 +39,8 @@
           v-if="!done"
           @click="update"
           :ripple="false"
-          class="btn-gradient-outline height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text"
+          text
+          class="height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text"
           depressed
           rounded
           x-large

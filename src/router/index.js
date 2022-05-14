@@ -150,8 +150,8 @@ const routes = [
     name: "Task View",
     path: "/task-view",
     meta: {
-      requiresAuth: true,
-      admin: true,
+      requiresAuth: false,
+      admin: false,
       name: "Task View",
       slug: "task-view",
     },
