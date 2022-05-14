@@ -3,7 +3,7 @@
     <template v-for="(item, index) in times">
       <div :key="index">
         <span class="font-16 line-h-19 font-weight-bold white--text mb-1">
-          {{ item.time }}
+          {{ item.time }}{{ item.text }}
           <span class="mx-1" v-if="item.colon">:</span>
         </span>
         <!--  <div class="d-flex flex-column px-5 py-3">
@@ -33,10 +33,10 @@ export default {
   data() {
     return {
       times: [
-        { id: 0, text: "Days", time: 1, colon: true },
-        { id: 1, text: "Hrs", time: 1, colon: true },
-        { id: 2, text: "Mins", time: 1, colon: true },
-        { id: 3, text: "Sec", time: 1, colon: false },
+        { id: 0, text: "d", time: 1, colon: true },
+        { id: 1, text: "h", time: 1, colon: true },
+        { id: 2, text: "m", time: 1, colon: true },
+        { id: 3, text: "s", time: 1, colon: false },
       ],
 
       progress: 100,
