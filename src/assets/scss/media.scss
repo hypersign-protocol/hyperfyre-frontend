@@ -1,0 +1,83 @@
+$sm-breakpoint: 600px;
+$md-breakpoint: 960px;
+$lg-breakpoint: 1264px;
+$xl-breakpoint: 1904px;
+@mixin media-respond($media) {
+// Extra small devices: on screens that are 599px wide or less
+@if $media == xs {
+  @media only screen and (max-width: $sm-breakpoint - 1) {
+    @content;
+  }
+}
+
+// Small devices: when the width is between 600px and 959px
+@else if $media == sm {
+  @media screen and (min-width: $sm-breakpoint) and (max-width: $md-breakpoint - 1) {
+    @content;
+  }
+}
+
+// Medium devices: when the width is between 960px and 1263px
+@else if $media == md {
+  @media screen and (min-width: $md-breakpoint) and (max-width: $lg-breakpoint - 1) {
+    @content;
+  }
+}
+
+// Large devices: when the width is between 1264px and 1903px
+@else if $media == lg {
+  @media only screen and (min-width: $lg-breakpoint) and (max-width: $xl-breakpoint - 1) {
+    @content;
+  }
+}
+
+// Extra large devices: on screens that are 1904px wide or above
+@else if $media == xl {
+  @media only screen and (min-width: $xl-breakpoint) {
+    @content;
+  }
+}
+
+// On screens that are 600px wide or above
+@else if $media == 'sm-up' {
+  @media only screen and (min-width: $sm-breakpoint) {
+    @content;
+  }
+}
+
+// On screens that are 960px wide or above
+@else if $media == 'md-up' {
+  @media only screen and (min-width: $md-breakpoint) {
+    @content;
+  }
+}
+
+// On screens that are 1264px wide or above
+@else if $media == 'lg-up' { 
+  @media only screen and (min-width: $lg-breakpoint) {
+    @content;
+  }
+}
+
+// On screens that are 959px wide or below
+@else if $media == 'sm-down' { 
+  @media only screen and (max-width: $md-breakpoint - 1) {
+    @content;
+  }
+}
+
+// On screens that are 1363px wide or above
+@else if $media == 'md-down' {
+  @media only screen and (max-width: $lg-breakpoint - 1) {
+    @content;
+  }
+}
+
+// On screens that are 1903px wide or above
+@else if $media == 'lg-down' {
+  @media only screen and (max-width: $xl-breakpoint - 1) {
+    @content;
+  }
+}
+
+}

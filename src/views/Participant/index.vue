@@ -36,7 +36,7 @@
                   </div>
                 </div>
 
-                <template v-if="authToken !== '' && authToken !== null">
+                <template v-if="authToken !== '' || authToken !== null">
                   <template v-if="!eventData.projectStatus">
                     <div
                       class="font-20 line-h-24 font-weight-medium text-center py-8 bg-blue-100 mt-8 refer__wrap white--text"
@@ -94,6 +94,7 @@ export default {
       eventStartDate: null,
       eventEndDate: null,
       eventActionsToShow: [],
+      userProfileData: {},
       prizeData: [],
       brokenUrl: false,
     };
@@ -118,7 +119,7 @@ export default {
         this.authToken = authToken;
         eventBus.$emit("getAuthToken", authToken);
         await this.fetchUserDetails();
-        this.fetchUserInfoOnLogin();
+        await this.fetchUserInfoOnLogin();
       } catch (e) {
         console.log(e);
       }
@@ -158,7 +159,8 @@ export default {
           };
 
           localStorage.setItem("user", JSON.stringify(this.user));
-          this.userProfileData = JSON.parse(localStorage.getItem("user"));
+          this.user = JSON.parse(localStorage.getItem("user"));
+          eventBus.$emit("getUserData", this.user);
         } else {
           this.notifyErr(Messages.EVENT.INVALID_RESPONSE);
         }

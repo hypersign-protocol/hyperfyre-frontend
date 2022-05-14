@@ -1,8 +1,8 @@
 <template>
   <v-card flat color="black" class="text-center">
-    <v-card-text class="px-10 py-8">
+    <v-card-text class="pa-8">
       <div v-if="QRRefresh" class="QRRefresh">
-        <p class="mt-4 mb-2 black--text font-14 line-h-17">
+        <p class="mt-4 mb-2 white--text font-14 line-h-17">
           Session expired.
           <a
             @click="reloadQR"

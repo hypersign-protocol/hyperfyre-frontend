@@ -41,6 +41,7 @@
   </v-app-bar>
 </template>
 <script>
+import eventBus from "@/eventBus.js";
 export default {
   name: "TheHeader",
 
@@ -50,7 +51,17 @@ export default {
       user: JSON.parse(localStorage.getItem("user")),
     };
   },
+  mounted() {
+    eventBus.$on("getAuthToken", this.setAuth);
+    eventBus.$on("getUserData", this.setUserData);
+  },
   methods: {
+    async setAuth(data) {
+      this.authToken = data;
+    },
+    async setUserData(data) {
+      this.user = data;
+    },
     logout() {
       localStorage.clear();
       this.$router.go();

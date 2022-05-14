@@ -2,13 +2,7 @@
   <v-expansion-panel>
     <v-expansion-panel-header class="px-0 font-12 line-h-15 white--text">
       <div class="d-flex align-center">
-        <v-icon size="22" color="#313540" class="mr-2" v-if="!done">
-          mdi-circle</v-icon
-        >
-
-        <v-icon size="22" color="green" class="mr-2" v-if="done">
-          mdi-check-circle</v-icon
-        >
+        <v-icon size="22" color="white" class="mr-2"> mdil-information</v-icon>
         {{ data.title }}
       </div>
       <template v-slot:actions>

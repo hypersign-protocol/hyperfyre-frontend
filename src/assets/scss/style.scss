@@ -633,7 +633,7 @@
 		.v-input {
 			.v-input__control {
 				.v-input__slot {
-					border: 1px solid rgba(240,240, 239,0.4);
+					border: 1px solid rgba(240, 240, 239, 0.4);
 					border-radius: 50px;
 					padding: 1px 10px;
 
@@ -647,5 +647,31 @@
 				}
 			}
 		}
+	}
+}
+
+.metrics--wrap {
+	@include media-respond(xs) {
+		position: fixed;
+		bottom: 0;
+		margin: auto;
+		z-index: 2;
+		right: 0;
+		left: 0;
+	}
+}
+
+.participant__card {
+	@include media-respond(xs) {
+		padding-bottom: 150px !important;
+	}
+}
+
+.action--wrap {
+	padding: 24px;
+	@include media-respond(xs) {
+		min-height: 80vh;
+		overflow-y: auto;
+		padding-bottom: 125px !important;
 	}
 }

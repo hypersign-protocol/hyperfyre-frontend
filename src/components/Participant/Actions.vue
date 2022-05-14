@@ -1,16 +1,16 @@
 <template>
-  <div class="mt-6 bg-blue-100 pa-6">
+  <div class="mt-6 bg-blue-100 action--wrap">
     <p class="color-grey-100 font-14 line-h-17 font-weight-bold">
       Your Profile & Referral
     </p>
     <v-row class="white--text text-left pb-8" no-gutters>
-      <v-col cols="12" md="3">
+      <v-col cols="12" md="2">
         <p class="color-grey-100 mb-1 font-12 line-h-15 font-weight-bold">
           Username
         </p>
         <p class="font-14 line-h-17">{{ userProfile.name }}</p>
       </v-col>
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="5">
         <p class="color-grey-100 mb-1 font-12 line-h-15 font-weight-bold">
           Email
         </p>
@@ -103,6 +103,7 @@ export default {
       const { actionItem, value } = data;
       this.updateUserInfo(actionItem, value);
     });
+    eventBus.$on("getUserData", this.setUserData);
   },
   computed: {
     // eslint-disable-next-line vue/return-in-computed-property
@@ -130,6 +131,9 @@ export default {
     },
   },
   methods: {
+    async setUserData(data) {
+      this.user = data;
+    },
     loadComponent(item) {
       if (item.type !== "HYPERSIGN_AUTH") {
         const actionTypeName = this.titleCase(item.type);
