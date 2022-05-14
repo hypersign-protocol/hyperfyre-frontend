@@ -74,11 +74,9 @@
                 >mdi-close</v-icon
               >
             </v-card-title>
-            <v-card-text class="white--text px-0">
+            <v-card-text class="white--text pa-0">
               <template v-if="leaderBoardData">
-                <div
-                  class="border-r-4 font-13 line-h-19 white--text bg-blue-100 pa-5 mb-6"
-                >
+                <div class="border-r-4 font-13 line-h-19 white--text pa-0 mb-6">
                   <v-list color="transparent" class="pa-0">
                     <v-list-item
                       v-for="(item, index) in leaderBoardData"

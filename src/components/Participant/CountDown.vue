@@ -6,15 +6,6 @@
           {{ item.time }}{{ item.text }}
           <span class="mx-1" v-if="item.colon">:</span>
         </span>
-        <!--  <div class="d-flex flex-column px-5 py-3">
-          <span class="font-16 line-h-19 font-weight-bold white--text mb-1">
-            {{ item.time }}
-          </span>
-          <span class="font-12 line-h-15 font-weight-bold color-grey-100">
-            {{ item.text }}
-          </span>
-        </div>
-        <v-divider vertical class="task-border"></v-divider> -->
       </div>
     </template>
   </div>
