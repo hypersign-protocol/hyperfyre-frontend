@@ -2,7 +2,7 @@
   <div class="d-flex align-center justify-center">
     <template v-for="(item, index) in times">
       <div :key="index">
-        <span class="font-16 line-h-19 font-weight-bold white--text mb-1">
+        <span class="font-14 line-h-17 font-weight-bold white--text mb-1">
           {{ item.time }}{{ item.text }}
           <span class="mx-1" v-if="item.colon">:</span>
         </span>

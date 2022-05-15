@@ -23,7 +23,14 @@
                   v-on="on"
                 >
                   <v-icon>mdi-account</v-icon>
-                  <span v-if="user && user.name">{{ user.name }} </span>
+                  <span v-if="user && user.name">
+                    <span v-if="$vuetify.breakpoint.xsOnly"
+                      >{{ user.name.charAt(0) }}
+                    </span>
+                    <span v-if="!$vuetify.breakpoint.xsOnly"
+                      >{{ user.name }}
+                    </span>
+                  </span>
                   <span v-else-if="user && user.email">{{ user.email }} </span>
                   <v-icon>mdil-chevron-down</v-icon>
                 </v-btn>

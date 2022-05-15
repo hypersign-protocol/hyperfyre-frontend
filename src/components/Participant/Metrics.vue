@@ -49,7 +49,7 @@
         class="info--box pa-4 d-flex align-center justify-center flex-column"
         v-if="!$vuetify.breakpoint.xsOnly"
       >
-        <p class="mb-2 font-24 line-h-29 font-weight-bold white--text">
+        <p class="mb-2 font-14 line-h-29 font-weight-bold white--text">
           <count-down :startTime="startDate" :endTime="endDate"></count-down>
         </p>
         <p class="font-16 line-h-19 font-weight--semibold white--text mb-0">

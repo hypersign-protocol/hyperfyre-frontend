@@ -3,12 +3,20 @@
     <the-header />
     <v-main class="black pt-0">
       <v-container class="py-0">
-        <div class="overview__wrap">
+        <div
+          class="overview__wrap"
+          :class="$vuetify.breakpoint.xsOnly ? 'pt-6' : ''"
+        >
           <v-row class="ma-0">
-            <v-col cols="12" md="12">
+            <v-col
+              cols="12"
+              md="12"
+              :class="$vuetify.breakpoint.xsOnly ? 'pa-0' : ''"
+            >
               <v-card
                 color="black"
-                class="participant__card ma-auto pa-4"
+                class="participant__card ma-auto"
+                :class="$vuetify.breakpoint.xsOnly ? 'pa-0' : 'pa-4'"
                 flat
                 :elevation="0"
                 width="600"
@@ -27,7 +35,6 @@
                     class="banner-image"
                     :laz-src="eventData.logoUrl"
                     :src="eventData.logoUrl"
-                    width="568"
                   ></v-img>
                   <div
                     class="font-20 line-h-22 white--text font-weight-medium"
@@ -76,7 +83,9 @@
             </v-card-title>
             <v-card-text class="white--text pa-0">
               <template v-if="leaderBoardData">
-                <div class="border-r-4 font-13 line-h-19 white--text pa-0 mb-6">
+                <div
+                  class="border-r-4 font-13 bg-blue-100 line-h-19 white--text pa-0 mb-6"
+                >
                   <v-list color="transparent" class="pa-0">
                     <v-list-item
                       v-for="(item, index) in leaderBoardData"
@@ -210,7 +219,10 @@ export default {
           this.user = JSON.parse(localStorage.getItem("user"));
           eventBus.$emit("getUserData", this.user);
         } else {
-          this.notifyErr(Messages.EVENT.INVALID_RESPONSE);
+          this.$store.dispatch("snackbar/SHOW", {
+            type: "error",
+            message: Messages.EVENT.INVALID_RESPONSE,
+          });
         }
       } else {
         //this.notifyErr("Authentication token missing")
@@ -241,7 +253,10 @@ export default {
 
         this.loading = false;
       } else {
-        this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG);
+        this.$store.dispatch("snackbar/SHOW", {
+          type: "error",
+          message: Messages.EVENT.INVALID_PROJECT_SLUG,
+        });
       }
     },
 

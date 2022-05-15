@@ -1,8 +1,8 @@
 <template>
-  <v-card flat color="black" class="text-center">
+  <v-card flat class="bg-blue-100 text-center">
     <v-card-text class="pa-8">
       <div v-if="QRRefresh" class="QRRefresh">
-        <p class="mt-4 mb-2 white--text font-14 line-h-17">
+        <p class="mt-4 mb-2 bg-primary-100 pa-5 white--text font-14 line-h-17">
           Session expired.
           <a
             @click="reloadQR"
@@ -15,8 +15,7 @@
         <v-btn
           v-if="this.value != ''"
           :ripple="false"
-          color="primary"
-          class="background-theme gradient width-150 height-35 letter-s-0 ma-auto border-r-2 text-capitalize font-16 line-h-19 font-weight-bold white--text"
+          class="btn-primary-outline bg-primary-100 width-150 height-35 letter-s-0 ma-auto text-capitalize font-16 line-h-19 font-weight-bold white--text border-r-100"
           depressed
           rounded
           x-large
