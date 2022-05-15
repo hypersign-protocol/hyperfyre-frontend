@@ -1,8 +1,10 @@
 <template>
   <v-expansion-panel>
-    <v-expansion-panel-header class="px-0 font-12 line-h-15 white--text">
+    <v-expansion-panel-header
+      class="px-0 font-14 line-h-17 white--text font-weight--medium"
+    >
       <div class="d-flex align-center">
-        <v-icon size="22" color="white" class="mr-2"> mdi-discord</v-icon>
+        <v-icon size="22" color="#5865F2" class="mr-2"> mdi-discord</v-icon>
 
         {{ data.title }}
       </div>
@@ -26,12 +28,14 @@
           :disabled="done"
           @click="handleDiscordLogin(discord.sourceScreenName)"
           :ripple="false"
-          class="btn-gradient-outline height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text"
+          class="height-35 letter-s-0 text-capitalize border-r-3 font-16 line-h-19 font-weight--medium"
           depressed
+          color="#5865F2"
+          outlined
           rounded
           x-large
         >
-          <v-icon size="22" color="white" class="mr-2"> mdi-discord</v-icon>
+          <v-icon size="22" color="#5865F2" class="mr-2"> mdi-discord</v-icon>
           Join our Discord
         </v-btn>
 

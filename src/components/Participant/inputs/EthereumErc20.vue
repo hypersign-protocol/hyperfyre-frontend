@@ -1,6 +1,8 @@
 <template>
   <v-expansion-panel>
-    <v-expansion-panel-header class="px-0 font-12 line-h-15 white--text">
+    <v-expansion-panel-header
+      class="px-0 font-14 line-h-17 white--text font-weight--medium"
+    >
       <div class="d-flex align-center">
         <img src="@/assets/images/ethereum.svg" class="mr-2" height="25" />
         {{ data.title }}
@@ -31,7 +33,7 @@
             flat
             solo
             outlined
-            class="form-input mb-2 pr-6"
+            class="form-input mb-2"
             :disabled="true"
             :placeholder="data.placeHolder"
           ></v-text-field>
@@ -42,15 +44,18 @@
             Install Metamask browser extension
           </p>
         </template>
-
-        <img
+        <v-btn
           v-if="!done && !showerror"
           @click="invokeMetamask"
-          src="@/assets/images/metamask.svg"
-          height="25px"
-          width="25px"
-          class="cursor-pointer"
-        />
+          :ripple="false"
+          icon
+          class="height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text mr-4"
+          depressed
+          rounded
+          x-large
+        >
+          <img src="@/assets/images/metamask.svg" height="25px" width="25px" />
+        </v-btn>
       </div>
 
       <div class="d-flex align-center justify-center">

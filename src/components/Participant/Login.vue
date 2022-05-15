@@ -15,7 +15,7 @@
         <v-btn
           v-if="this.value != ''"
           :ripple="false"
-          class="btn-primary-outline bg-primary-100 width-150 height-35 letter-s-0 ma-auto text-capitalize font-16 line-h-19 font-weight-bold white--text border-r-100"
+          class="bg-gradient-variant-2 width-150 height-48 letter-s-0 ma-auto border-r-4 text-capitalize font-16 line-h-19 font-weight-bold black--text"
           depressed
           rounded
           x-large

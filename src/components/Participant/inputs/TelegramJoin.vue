@@ -1,6 +1,8 @@
 <template>
   <v-expansion-panel>
-    <v-expansion-panel-header class="px-0 font-12 line-h-15 white--text">
+    <v-expansion-panel-header
+      class="px-0 font-14 line-h-17 white--text font-weight--medium"
+    >
       <div class="d-flex align-center">
         <img src="@/assets/images/telegram.png" class="mr-2" height="22" />
         {{ data.title }}
@@ -25,11 +27,14 @@
           :disabled="done"
           @click="handleTelegramLogin(`https://telegram.me/${data.value}`)"
           :ripple="false"
-          class="btn-gradient-outline height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium white--text"
+          class="border-r-3 height-35 letter-s-0 text-capitalize font-16 line-h-19 font-weight--medium"
           depressed
+          outlined
+          color="#229ED9"
           rounded
           x-large
         >
+          <img src="@/assets/images/telegram.png" class="mr-2" height="22" />
           Join @{{ tg.sourceScreenName }}
         </v-btn>
 
@@ -160,9 +165,10 @@ export default {
           { bot_id: config.telegramBotId, request_access: true },
           (data) => {
             if (!data) {
-              return this.notifyErr(
-                Messages.EVENT_ACTIONS.TELEGRAM_JOIN.AUTH_FAILED
-              );
+              this.$store.dispatch("snackbar/SHOW", {
+                type: "error",
+                message: Messages.EVENT_ACTIONS.TELEGRAM_JOIN.AUTH_FAILED,
+              });
             }
 
             if (data.username || data.id) {
@@ -171,9 +177,11 @@ export default {
               // localStorage.setItem("telegramId", data.username || data.id)
               window.open(urlToRedirect, "_blank");
             } else {
-              return this.notifyErr(
-                Messages.EVENT_ACTIONS.TELEGRAM_JOIN.FETCH_USERNAME_FAILED
-              );
+              this.$store.dispatch("snackbar/SHOW", {
+                type: "error",
+                message:
+                  Messages.EVENT_ACTIONS.TELEGRAM_JOIN.FETCH_USERNAME_FAILED,
+              });
             }
           }
         );
@@ -182,7 +190,10 @@ export default {
         //  window.open(urlToRedirect, "_blank");
         // }
       } catch (e) {
-        this.notifyErr(Messages.EVENT_ACTIONS.ERROR + e.message);
+        this.$store.dispatch("snackbar/SHOW", {
+          type: "error",
+          message: Messages.EVENT_ACTIONS.ERROR + e.message,
+        });
       }
     },
   },

@@ -669,9 +669,23 @@
 
 .action--wrap {
 	padding: 24px;
+
 	@include media-respond(xs) {
 		min-height: 80vh;
 		overflow-y: auto;
 		padding-bottom: 125px !important;
+	}
+}
+
+.bg-gradient-variant-2 {
+	background: linear-gradient(105.23deg, #01A4FF 33.35%, #01FFC2 115.77%) !important;
+}
+
+.theme--light.v-btn.v-btn--disabled {
+	color: rgba(255, 255, 255, 0.4) !important;
+
+	.v-icon {
+		color: rgba(255, 255, 255, 0.4) !important;
+
 	}
 }

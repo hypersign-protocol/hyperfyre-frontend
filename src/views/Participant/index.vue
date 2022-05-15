@@ -124,9 +124,9 @@ import Metrics from "@/components/Participant/Metrics";
 import Actions from "@/components/Participant/Actions";
 import Login from "@/components/Participant/Login";
 import notificationMixins from "../../mixins/notificationMixins";
-import Messages from "../../utils/messages/participants/en";
-import apiClient from "../../mixins/apiClientMixin";
-import eventBus from "../../eventBus.js";
+import Messages from "@/utils/messages/admin/en";
+import apiClient from "@/mixins/apiClientMixin";
+import eventBus from "@/eventBus.js";
 export default {
   components: {
     TheHeader,

@@ -1,5 +1,7 @@
 <template>
-  <div class="border-r-4 rounded-br-0 rounded-bl-0 refer__wrap metrics--wrap">
+  <div
+    class="border-r-4 rounded-br-0 rounded-bl-0 bg-gradient-variant-2 metrics--wrap"
+  >
     <template v-if="$vuetify.breakpoint.xsOnly">
       <p
         class="d-flex align-center pa-2 justify-center flex-row font-16 line-h-19 font-weight-bold white--text mb-0"

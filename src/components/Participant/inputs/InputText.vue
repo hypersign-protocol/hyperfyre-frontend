@@ -1,6 +1,8 @@
 <template>
   <v-expansion-panel>
-    <v-expansion-panel-header class="px-0 font-12 line-h-15 white--text">
+    <v-expansion-panel-header
+      class="px-0 font-14 line-h-17 white--text font-weight--medium"
+    >
       <div class="d-flex align-center">
         <v-icon size="22" color="white" class="mr-2"> mdi-file</v-icon>
 
@@ -26,7 +28,7 @@
           ref="form"
           v-model="data.isManadatory"
           lazy-validation
-          class="text-center"
+          class="text-center w-100"
         >
           <v-text-field
             v-model="data.value"
