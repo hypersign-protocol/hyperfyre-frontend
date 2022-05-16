@@ -24,7 +24,7 @@
           }}</span>
           <span v-else>0</span>
         </p>
-        <p class="font-16 line-h-19 font-weight--semibold white--text mb-0">
+        <p class="font-12 line-h-19 font-weight--semibold white--text mb-0">
           Your Score
         </p>
       </div>
@@ -38,7 +38,7 @@
           }}</span>
           <span v-else>0</span>
         </p>
-        <p class="font-16 line-h-19 font-weight--semibold white--text mb-0">
+        <p class="font-12 line-h-19 font-weight--semibold white--text mb-0">
           Total Users
         </p>
       </div>
@@ -54,7 +54,7 @@
         <p class="mb-2 font-14 line-h-29 font-weight-bold white--text">
           <count-down :startTime="startDate" :endTime="endDate"></count-down>
         </p>
-        <p class="font-16 line-h-19 font-weight--semibold white--text mb-0">
+        <p class="font-12 line-h-19 font-weight--semibold white--text mb-0">
           Time Left
         </p>
       </div>
@@ -64,7 +64,7 @@
         @click="showLeaderBoard()"
       >
         <v-icon class="mb-2" color="white">mdil-view-dashboard</v-icon>
-        <p class="font-16 line-h-19 font-weight--semibold white--text mb-0">
+        <p class="font-12 line-h-19 font-weight--semibold white--text mb-0">
           Leader Board
         </p>
       </div>
