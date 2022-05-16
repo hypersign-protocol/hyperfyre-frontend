@@ -72,6 +72,16 @@ padding: 0.1em;
     border-color: rgb(255 255 255 / 40%) !important;
     border-left: 1px solid;
 }
+.success-wrap{
+    background: #ecf3ea;
+    padding: 35px 20px 20px;
+}
+.success-wrap .card-body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
 .login-wrap {
     background: #e3e5ee;
     padding: 35px 20px 20px;
@@ -273,7 +283,7 @@ ul.social-links li:hover {
     color: #8B8B8B;
 }
 .banner img {
-    height: 100%;
+    width: 100%;
     object-fit: cover;
 }
 .btn-score {

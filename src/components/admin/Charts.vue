@@ -31,6 +31,7 @@
   margin-left: 2%;
 }
 </style>
+
 <script>
 export default {
   data() {
@@ -85,6 +86,7 @@ export default {
         }
         const json = await resp.json();
         this.usage = json["usage"];
+       
         // localStorage.setItem("subscriptions", JSON.stringify(json));
         // this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {

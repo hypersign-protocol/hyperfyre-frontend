@@ -4,7 +4,8 @@ const DASHBOARD = {
 const EVENT={
     ERROR_OCCURED: "Error occurred: ",
     INVALID_RESPONSE: "Invalid response",
-    INVALID_PROJECT_SLUG:"Invalid Event slug"
+    INVALID_PROJECT_SLUG:"Invalid Event slug",
+    INVALID_AUTH_TOKEN:"Please! login"
 }
 const EVENTS = {
     CHECK_ALL_TYPE:"PLease Check if any type left empty",
@@ -51,7 +52,9 @@ const EVENTS = {
         SOCIAL_HANDLE_EMPTY: "Social Handle Should not be empty",
         URL_IN_SOCIAL_HANDLE: "Do not put url in Social Handle",
         RETWEET_VALID_URL: "Plase Enter valid retweet url",
-        INVALID_INVITE_LINK: "Invalid Invite Link"
+        INVALID_INVITE_LINK: "Invalid Invite Link",
+        INVALID_TWITTER_USERNAME:"Invalid Twitter Username",
+        INVALID_TELEGRAM_USERNAME:"Invalid Telegram Username",
     },
 
     CUSTOM:{
@@ -79,11 +82,29 @@ const EVENTS = {
         PRIZE_NAME_NOT_EMPTY:"Prize name should not be empty",
         EMPTY_NO_OF_WINNERS: "Number of Winners Should not be empty",
         EMPTY_PRIZE_PER_WINNER: "Prize Per Winner Should not empty"
+    },
+    KYCACCORDIN:{
+        KYC_TYPE:"Please Select KYC provider",
+        KYC_TITLE:"KYC title should not be empty",
+        KYC_SLUG:"KYC slug should not be empty",
+        SLUG_NOT_URL:"Do not put url in slug",
+        KYC_LENGTH:"You cannot Add more then one KYC verification",
+        DUPLICATE_KYC:"You cannot add more than one Kyc action",
+        KYC_TITLE_URL:"KYC Title Cannot be URL"
+        
     }
 
     }
 }
 
+const APP={
+        APP_NAME_NOT_EMPTY:"Please provide App name",
+        APP_NAME_URL:"Please provide valid App name",
+        APP_BASE_URL_EMPTY:"Please provide Base URL for app",
+        APP_BASE_URL_NOT_VALID:"Please provide valid Base URL",
+        APP_GENERATED_SUCCESSFULLY:"App generated Successfully",
+        APP_UPDATED_SUCCESSFULLY:"App details updated Successfully"
+}
 
 const PARTICIPANTS = {
 
@@ -107,5 +128,6 @@ module.exports = {
     EVENTS,
     PARTICIPANTS,
     SUBSCRIPTIONS,
-    EVENT
+    EVENT,
+    APP
 }

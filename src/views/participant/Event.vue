@@ -6,7 +6,7 @@
       :is-full-page="fullPage"
     ></loading>
     <b-card no-body class="mx-auto overflow-hidden mt-3 border-0" style="max-width: 600px;">
-      <Metrics :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0" :totalEntries="eventData && eventData.count ? eventData.count : 0" :timeLeft="timeLeft" />
+      <Metrics :authToken="authToken" @getLeaderBoard="fetchLeaderBoard" :leaderBoardData="leaderBoardData" :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0" :totalEntries="eventData && eventData.count ? eventData.count : 0" :timeLeft="timeLeft" />
       <Banner :eventName="eventData.projectName" :themeColor="eventData.themeColor" :fontColor="eventData.fontColor" :fromDate="new Date(eventData.fromDate).toLocaleString()" :toDate="new Date(eventData.toDate).toLocaleString()" :logoUrl="eventData.logoUrl" />
       <template v-if="authToken == '' || authToken == null">
         <Login :themeColor="eventData.themeColor" :fontColor="eventData.fontColor" @AuthTokenUpdateEvent="updateAuthentication" />
@@ -28,6 +28,7 @@ import Action from "../../components/participant/Action.vue";
 import Metrics from "../../components/participant/Metrics.vue";
 import notificationMixins from "../../mixins/notificationMixins";
 import apiClient from "../../mixins/apiClientMixin";
+import profileIconMixins from "../../mixins/profileIconMixins";
 import eventBus from "../../eventBus.js"
 import Messages from "../../utils/messages/admin/en"
 export default {
@@ -40,12 +41,13 @@ export default {
     ErrorMessage,
     Loading
   },
-  
+
   data() {
     return {
       eventData: {},
       actions: [],
       authToken: "",
+      externalUserId:"",
       userEventData: null,
       userAuthData: null,
       eventActionsToShow: [],
@@ -53,14 +55,15 @@ export default {
       userProfileData: {},
       isLoading: false,
       fullPage: true,
-      prizeData:[]
+      prizeData:[],
+      leaderBoardData:[]
     }
   },
   /***
   * Need to fix this
   *
   metaInfo () {
-    return { 
+    return {
             title: "Test Event",
             titleTemplate: 'Hyperfyre | Event | %s',
             meta: [
@@ -84,7 +87,7 @@ export default {
         ]
     }
   },*/
-    
+
   computed: {
     timeLeft: function() {
       if (this.eventData.fromDate && this.eventData.projectStatus) {
@@ -107,8 +110,16 @@ export default {
       } else {
         await this.fetchUserDetails();
       }
+      if((this.$route.params["slug"])&&(this.$route.query["userRedirectionToken"])){
+        this.eventSlug = this.$route.params["slug"];
+        this.userRedirectionToken=this.$route.query["userRedirectionToken"];
+        document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
+        await this.verifyAppAuth();
+        await this.fetchEventData();
+        await this.fetchUserInfoOnLogin();
 
-      if (this.$route.params["slug"]) {
+      }
+      else if(this.$route.params["slug"]) {
         this.eventSlug = this.$route.params["slug"];
         document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.fetchEventData();
@@ -133,12 +144,20 @@ export default {
       }
     },
     async fetchUserDetails() {
+      let headers;
       this.isLoading= true;
       if (this.authToken) {
-        const url = `${this.$config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
-        let headers = {
+        if(this.externalUserId){
+          headers = {
+            Authorization: `Bearer ${this.authToken}`,
+            externalusermappingid:`${this.externalUserId}`
+          }
+        }else{
+          headers = {
           Authorization: `Bearer ${this.authToken}`,
         }
+        }
+        const url = `${this.$config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
         const res = await apiClient.makeCall({
           url,
           body: {},
@@ -160,7 +179,7 @@ export default {
         //this.notifyErr("Authentication token missing")
       }
       this.isLoading=false;
-      
+
     },
     async fetchEventData() {
       this.isLoading=true
@@ -170,37 +189,74 @@ export default {
           "Content-Type": "application/json",
         };
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
-        
+
         this.eventData = {
           ...resp.data
-        }
+                }
+
+
+
+
+
       } else {
         this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG)
       }
       this.isLoading=false;
     },
+    async verifyAppAuth(){
+      try{
+        this.isLoading=true
+        if(this.userRedirectionToken && this.userRedirectionToken!=""){
+          let url = `${this.$config.studioServer.BASE_URL}api/v1/app/grants`;
+                let headers = {
+                  "Content-Type": "application/json",
+                  "externaluseraccesstoken":`Bearer ${this.userRedirectionToken}`
+                };
+                const resp = await apiClient.makeCall({ method: "POST", url: url, body: {},header: headers })
+            this.externalUserId= resp.data.data.externalUserMappingId
+            this.authToken=resp.data.data.authToken
+            localStorage.setItem("externalUserMappingId", JSON.stringify(this.externalUserId));
+            if(this.authToken!==undefined){
+              localStorage.setItem('authToken',this.authToken)
+              this.fetchUserDetails()
+            }  
+        }
+      }
+      catch(e){
+          if(e.status===403){
+          localStorage.clear();
+          this.notifyErr(e.error)
+          this.authToken=""
+          this.$router.push(`/form/${this.eventSlug}`)
+          }
+      }
+      finally{
+        this.isLoading=false
+      }
+    },
     async fetchUserInfoOnLogin() {
+      try{
       this.isLoading= true
       if (this.authToken != "" && this.authToken && this.userAuthData.email) {
-        
+
         this.userProfileData = this.userAuthData
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?email=${this.userAuthData.email}&projectId=${this.eventData._id}`;
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
         }
-
         const res = await apiClient.makeCall({
           url,
           header: headers,
           method: "GET",
         })
 
-        if(res.data.length == 0){
-           // a user can participate in event 
+        if(res.data.length === 0){
+           // a user can participate in event
            // Participate in event
           try{
             const hypersignAuthAction  = this.eventData.actions.find(x => x.type == "HYPERSIGN_AUTH")
+
             if(hypersignAuthAction){
               eventBus.$emit('UpdateUserInfoFromEvent', { actionItem: hypersignAuthAction, value: "Authorized"});
             }
@@ -212,7 +268,7 @@ export default {
         this.userEventData = {
           ...res.data[0]
         }
-        
+
         this.prizeData=this.eventData.actions.filter((x) => {
         return x.type ==='PRIZE_CARD'
         })
@@ -237,9 +293,31 @@ export default {
           this.eventActionsToShow = eventActions
         }
       }
-      
+      }catch(e){
+        eventBus.$emit('logout')
+      }finally{
+        this.isLoading=false;
+      }
+    },
+    async fetchLeaderBoard() {
+      this.isLoading=true
+      if (this.eventSlug && this.eventSlug != "" && this.authToken) {
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.eventData._id}/participants/score?limit=100`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+        const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
+
+        this.leaderBoardData = resp.data
+        this.showLeaderBoardAlert(resp.data)
+
+      } else {
+        this.notifyErr(Messages.EVENT.INVALID_AUTH_TOKEN)
+      }
       this.isLoading=false;
     },
+
     updateUserData(userEventData) {
       if (userEventData) {
         this.userEventData = {
@@ -247,13 +325,43 @@ export default {
         }
         this.fetchEventData();
       }
-    }
-    
+    },
+    showLeaderBoardAlert(data){
+
+        var swal_html = `<div class="list-group list-group-flush" style="max-height:500px;overflow-y: scroll;">`;
+        data.forEach((element, index) => {
+          let img1 = this.getProfileIcon(element.name+index)
+          swal_html=swal_html+`<div class="list-group-item d-flex align-items-center">
+          <span class="b-avatar mr-3 badge-info rounded-circle">
+            <span class="b-avatar-img">
+              <img src="`+img1+`" alt="avatar">
+            </span><!---->
+          </span>
+          <span class="mr-auto">`+element.name+`</span>
+          <span class="badge badge-primary ">`+element.numberOfReferals+`</span>
+        </div> `
+        })
+        swal_html =swal_html+ `</div>`;
+        this.$swal.fire({
+          position:'center',
+          focusConfirm: true,
+          html:swal_html,
+          toast:false,
+          title:'<h5>Leaderboard</h5>',
+          showCloseButton: true,
+          showConfirmButton:false,
+          width:'50rem',
+          background:"white"
+
+        })
+    },
+
   },
-  mixins:[notificationMixins],
+  mixins:[notificationMixins,profileIconMixins],
 };
 </script>
 <style scoped>
+
 .content {
   margin-top: 20px;
   padding: 2px;

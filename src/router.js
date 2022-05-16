@@ -22,6 +22,15 @@ const router = new Router({
         tabbar: false,
       }),
     },
+    // {
+    //   path: "/user/home/",
+    //   name: "Home",
+    //   component: () =>
+    //     import(
+    //       /* webpackChunkName: "investorLogin" */ "./views/participant/Home.vue"
+    //     ),
+    //   meta: () => ({ requiresAuth: true, title: 'Hyperfyre - User Home' })
+    // },
     {
       path: "/",
       redirect: "/admin/login",
@@ -72,6 +81,19 @@ const router = new Router({
         requiresAuth: true,
         admin: true,
         title: 'Hyperfyre - Teams'
+      },
+    },
+    {
+      path: "/admin/createapp",
+      name: "CreateApp",
+      component: () =>
+        import(
+          /* webpackChunkName: "dashboard" */ "./views/admin/CreateApp.vue"
+        ),
+      meta: {
+        requiresAuth: true,
+        admin: true,
+        title: 'Hyperfyre - CreateApp'
       },
     },
     {
@@ -139,8 +161,8 @@ router.beforeEach((to, from, next) => {
           } else {
             localStorage.setItem("user", JSON.stringify(json.message));
             Vue.prototype.$accounts = json.accounts;
-            if (json.accounts.length==0) {            
-            
+            if (json.accounts.length==0) {
+
               localStorage.removeItem("accessToken")
               localStorage.removeItem("accessuser")
             }

@@ -15,6 +15,27 @@ export function isValidURL(str) {
   return /*!!pattern.test(str) ||*/ validURL.isUri(str); //
 }
 
+//twitter username contains only 15 characters including alphabets,numbers[0-9] and underscore
+export function isValidTwitterUsername(str){
+  if(!str.match(/^[a-zA-Z0-9_]{1,15}$/)){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+//telegram username contains only numbers[0-9], alphabets and underscore 
+//for telegram there is no limit mentioned for username as mentioned in twitter username 
+export function isValidTelegramName(str){
+  if(!str.match(/^[a-zA-Z0-9_]{1,}$/)){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
 // Note: string including numbers are concidered valid text
 // for example, texts like 1231WEWEW12312, qweqw12qw, q2q2e33r3 are valid
 export function isValidText(str) {

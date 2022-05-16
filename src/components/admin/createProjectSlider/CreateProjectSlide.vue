@@ -17,6 +17,42 @@
   background-color: rgba(241, 179, 25, 0.24);
   border: 0;
 }
+.fa-exclamation-circle{
+  position: relative;
+  display: inline-block;
+  cursor: help;
+}
+.fa-exclamation-circle .tooltiptext {
+  visibility: hidden;
+  width: 250px;
+  height: auto;
+  background-color: #F1B319;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+.tooltiptext{
+  font-family:  sans-serif;
+  font-size: 15px;
+  max-width: 230px;
+}
+.fa-exclamation-circle:hover .tooltiptext {
+  visibility: visible;
+}
+.info {
+  display:flex;
+  padding:03px;
+  color:#F1B319;
+  font-size:22px;
+  border-radius:50%;
+  margin-left: 200px;
+  margin-top: -30px;
+  width:20px;
+  text-align:center;
+  }
 </style>
 <template>
   <div>
@@ -43,7 +79,7 @@
                 block
                 v-b-toggle.accordion-1
                 class="bg-transparent border-0 text-left text-primary"
-                 title="Create General configuration for your event"
+                title="Create General configuration for your event"
                 ><i class="fas fa-cog"></i> General Configurations</b-button
               >
             </b-card-header>
@@ -81,9 +117,15 @@
                 v-b-toggle.accordion-2
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                 title="Create Referral configuration for your event"
+                title="Create Referral configuration for your event"
                 ><i class="fa fa-user-plus"></i> Referral Configurations
+              <!-- <a class="tool" data-position="right" draggable="false" title="Creates a unique referral URL for each campaign participants, set points of each referral"><i class='fas fa-exclamation-circle'></i></a> -->
               </b-button>
+              <div class="info">
+              <i class='fas fa-exclamation-circle'>
+                <p class="tooltiptext">Creates a unique referral URL for each campaign participants and sets points of each referral</p>
+                </i>
+                </div>
             </b-card-header>
             <b-collapse
               id="accordion-2"
@@ -112,7 +154,7 @@
                 block
                 v-b-toggle.accordion-3
                 class="bg-transparent border-0 text-left text-primary"
-                 title="Create Prize configuration for your event"
+                title="Create Prize configuration for your event"
                 ><i class="fas fa-gift"></i> Prize Configurations
               </b-button>
             </b-card-header>
@@ -133,6 +175,41 @@
             </b-collapse>
           </b-card>
           <!--End Prize  -->
+
+          <!--KYC CONFIG-->
+          <b-card no-body class="mb-1">
+            <b-card-header
+              header-tag="header"
+              class="p-1 border-0 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-8
+                class="bg-transparent border-0 text-left text-primary"
+                title="Create Kyc configuration for your event"
+                ><i class="fas fa-id-card"></i> KYC Configurations 
+              </b-button>
+            </b-card-header>
+            <b-collapse
+              id="accordion-8"
+              visible
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body>
+                <event-action-config
+                  v-on="$listeners"
+                  :eventActionList="KycList"
+                  eventActionType="KYC"
+                  :options="options.kycConfig"
+                />
+              </b-card-body>
+            </b-collapse>
+          </b-card>
+          <!--END KYC CONFIG-->
+
+
           <b-card no-body class="mb-1">
             <b-card-header
               header-tag="header"
@@ -144,7 +221,7 @@
                 v-b-toggle.accordion-4
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                 title="Create Custom Inputs configuration for your event"
+                title="Create Custom Inputs configuration for your event"
                 ><i class="fab fa-intercom"></i> Custom Inputs Configurations
               </b-button>
             </b-card-header>
@@ -206,8 +283,8 @@
                 v-b-toggle.accordion-6
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                 title="Create Wallet configuration for your event"
-                ><i class="fab fa-bitcoin"></i> Wallet Configurations
+                title="Create Wallet configuration for your event"
+                ><i class="fab fa-bitcoin"></i> Collect Wallet Configuration
               </b-button>
             </b-card-header>
             <b-collapse
@@ -238,9 +315,8 @@
                 v-b-toggle.accordion-7
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
-                 title="Create Smart contract configuration for your event"
-                ><i class="fas fa-file-contract"></i> Smart Contract
-                Configurations
+                title="Create Smart contract configuration for your event"
+                ><i class="fas fa-file-contract"></i> Tokens or NFT Holding Configuration
               </b-button>
             </b-card-header>
             <b-collapse
@@ -356,26 +432,27 @@ export default {
     isProjectEditing: {
       type: Boolean,
     },
-    tagList:{
+    tagList: {
       type: Array,
     },
-    tagFdb:{
+    tagFdb: {
       type: Array,
-    }
+    },
   },
 
   computed: {
     // a computed getter
     getTagDb: function () {
-      if(this.tagFdb && this.tagFdb.length >0){
-        for(let index = 0; index < this.tagFdb.length; index++){
+      if (this.tagFdb && this.tagFdb.length > 0) {
+        for (let index = 0; index < this.tagFdb.length; index++) {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.options.tagDetails.push({
-            text:this.tagFdb[index].tagName, value:this.tagFdb[index].type
-          })
+            text: this.tagFdb[index].tagName,
+            value: this.tagFdb[index].type,
+          });
         }
-        return this.options.tagDetails
-      }
-      else{
+        return this.options.tagDetails;
+      } else {
         return [];
       }
     },
@@ -437,6 +514,13 @@ export default {
         return [];
       }
     },
+     KycList: function () {
+      if (this.actionList && this.actionList.length > 0) {
+        return this.actionList.filter((x) => x.type.indexOf("KYC") > -1);
+      } else {
+        return [];
+      }
+      },
     tag: function () {
       if (this.tagList && this.tagList.length > 0) {
         return this.tagList.filter((x) => x.type.indexOf("_TAG") > -1);
@@ -454,14 +538,13 @@ export default {
       // {"actionTypes":["INPUT_TEXT","INPUT_NUMBER","TWITTER_FOLLOW","TWITTER_RETWEET","TELEGRAM_JOIN","DISCORD_JOIN","BLOCKCHAIN_ETH","BLOCKCHAIN_TEZ","HYPERSIGN_AUTH"],"length":9}
       options: {
         customAction: [
-          { text: "Select Input type", value: null },
-          { text: "TEXT", value: "INPUT_TEXT" },
-          { text: "NUMBER", value: "INPUT_NUMBER" },
-          { text: "DATE", value: "INPUT_DATE" },
-          { text: "LINK", value: "INPUT_HYPERLINK" },
-          { text: "HYPERLINK", value: "HYPERLINK_URL" },
-          { text: "INFO", value: "INFO_TEXT" },
-          
+          { text: "Select participants input type", value: null },
+          { text: "Participants provides Text", value: "INPUT_TEXT" },
+          { text: "Participants provides Number", value: "INPUT_NUMBER" },
+          { text: "Participants provides Date", value: "INPUT_DATE" },
+          { text: "Participants provides URL", value: "INPUT_HYPERLINK" },
+          { text: "Participants click URL", value: "HYPERLINK_URL" },
+          { text: "Event description", value: "INFO_TEXT" },
         ],
         socialAction: [
           { text: "Select Social Action type", value: null },
@@ -483,20 +566,29 @@ export default {
         smartContractAction: [
           { text: "Select Contract Type", value: null },
           { text: "Ethereum ERC20", value: "ETHEREUM_ERC20" },
-          { text: "Polygon ERC20", value: "MATIC_ERC20" },
-          { text: "Binance ERC20", value: "BINANCE_ERC20" },
+          { text: "Ethereum ERC721", value: "ETHEREUM_ERC721" },
+          { text: "Polygon MaticERC20", value: "MATIC_ERC20" },
+          { text: "Polygon MaticERC721", value: "MATIC_ERC721" },
+          { text: "Binance BEP20", value: "BINANCE_ERC20" },
+          { text: "Binance BEP721", value: "BINANCE_ERC721" },
           { text: "Moon Beam ERC20", value: "MOONBEAM_ERC20" },
+          { text: "Moon Beam ERC721", value: "MOONBEAM_ERC721" },
           { text: "Moon River ERC20", value: "MOONRIVER_ERC20" },
+          { text: "Moon River ERC721", value: "MOONRIVER_ERC721" },
           { text: "Moon Alpha(testnet) ERC20", value: "MOON_ERC20" },
+           { text: "Moon Alpha(testnet) ERC721", value: "MOON_ERC721" },
           { text: "Reef ERC20", value: "REEF_ERC20" },
+          { text: "Reef ERC721", value: "REEF_ERC721" },
         ],
+        kycConfig:[{ text: "Select Provider", value: null},
+        {text:'SUMSUB',value:'SUMSUB_KYC'}],
         prizeDetails: [
           { text: "Select Prize Type", value: null },
-          { text: "Prize Card", value: "PRIZE_CARD" },
+          { text: "NFT", value: "PRIZE_CARD" },
+          { text: "Tokens", value: "PRIZE_CARD" },
+          { text: "Others", value: "PRIZE_CARD" }
         ],
-        tagDetails: [
-          { text: "Select Tag Type", value: null },
-        ],
+        tagDetails: [{ text: "Select Tag Type", value: null }],
       },
     };
   },

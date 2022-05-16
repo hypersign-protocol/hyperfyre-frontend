@@ -139,15 +139,15 @@ i {
 </style>
 <style>
 .multiselect__tags {
-        border-radius: 0.25rem;
-        border: 1px solid #ced4da;
-        background: #fff;
-        font-weight:400;
-  }
+  border-radius: 0.25rem;
+  border: 1px solid #ced4da;
+  background: #fff;
+  font-weight: 400;
+}
 
-  .multiselect__tag{
-    background:   #f1b319;
-  }
+.multiselect__tag {
+  background: #f1b319;
+}
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -159,7 +159,7 @@ i {
 
     <div class="row">
       <div class="col-md-3">
-        <div class="form-group" style="width:925px">
+        <div class="form-group" style="width: 925px">
           <input
             v-if="projects.length"
             @keyup="handleSearch"
@@ -254,109 +254,117 @@ i {
         v-for="project in projectsToShow"
         v-bind:key="project.projectName"
       >
-      <div>
-        <b-card
-          :title="truncate1(project.projectName,25)"
-          :img-src="project.logoUrl"
-          img-alt="Image"
-          img-top
-          img-height="150"
-          tag="article"
-          style="max-width: 20rem;margin-top:20px;"
-          class="mb-2"
-          @error="onBannerError($event)"
-        >
-          <ul style="list-style-type: none;padding-left: 0px;">
-            <li
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="EventId"
-            >
-              <i class="far fa-id-card"></i
-              ><span class="card-title">{{ project._id }}</span>
-              <span @click="copy(project._id, 'EventId')" class="copy"
-                ><i class="far fa-copy"></i
-              ></span>
-            </li>
-            <li
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Start Date"
-            >
-              <i class="fas fa-hourglass-start"></i>
-              {{ formateDate(project.fromDate)}}
-            </li>
-            <li
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="End Date"
-            >
-              <i class="fas fa-hourglass-end"></i>
-              {{ formateDate(project.toDate) }}
-            </li>
+        <div>
+          <b-card
+            :title="truncate1(project.projectName, 25)"
+            :img-src="project.logoUrl"
+            img-alt="Image"
+            img-top
+            img-height="150"
+            tag="article"
+            style="max-width: 20rem; margin-top: 20px"
+            class="mb-2"
+            @error="onBannerError($event)"
+          >
+            <ul style="list-style-type: none; padding-left: 0px">
+              <li data-toggle="tooltip" data-placement="bottom" title="EventId">
+                <i class="far fa-id-card"></i
+                ><span class="card-title">{{ project._id }}</span>
+                <span @click="copy(project._id, 'EventId')" class="copy"
+                  ><i class="far fa-copy"></i
+                ></span>
+              </li>
+              <li
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Start Date"
+              >
+                <i class="fas fa-hourglass-start"></i>
+                {{ formateDate(project.fromDate) }}
+              </li>
+              <li
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="End Date"
+              >
+                <i class="fas fa-hourglass-end"></i>
+                {{ formateDate(project.toDate) }}
+              </li>
 
-            <li
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Event Url"
-            >
-              <i class="fas fa-calendar-alt"></i>
-              <a
-                :href="project.whitelisting_link"
-                target="_blank"
-                class="card-body-custom"
+              <li
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Event Url"
               >
-                Event Url</a
-              ><span
-                @click="copy(project.whitelisting_link, 'Form Url')"
-                class="copy"
-                ><i class="far fa-copy"></i
-              ></span>
-            </li>
+                <i class="fas fa-calendar-alt"></i>
+                <a
+                  :href="project.whitelisting_link"
+                  target="_blank"
+                  class="card-body-custom"
+                >
+                  Event Url</a
+                ><span
+                  @click="copy(project.whitelisting_link, 'Form Url')"
+                  class="copy"
+                  ><i class="far fa-copy"></i
+                ></span>
+              </li>
 
-            <li
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Participants List"
-            >
-              <i class="fas fa-users"></i
-              ><a
-                class="card-body-custom"
-                :href="`/admin/participants?projectId=${project._id}`"
-                >Participants ({{ project.investorsCount }})</a
+              <li
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Participants List"
               >
-            </li>
-            <li
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Edit Event"
-            >
-              <i class="fas fa-pencil-alt" ></i>          
-              <b-link href="#" variant="primary" @click="editProject(project)">Edit Event </b-link>
-            </li>
-          </ul>
-          <footer>
-            <small >
-                <b-badge  v-for="tag in project.tags"
-                :key="tag.id"
-                pill 
-                variant="secondary">{{tag.type.split('_')[0]}}</b-badge>
-            </small>
-            <small style="float:right">
-              <span v-if="project.projectStatus == true" data-toggle="tooltip" title="Active">
-              <i class="fas fa-signal" style="color: green"></i>
-              </span>
-              <span
-              v-if="!project.projectStatus || project.projectStatus == false"
-              data-toggle="tooltip" title="Inactive"
+                <i class="fas fa-users"></i
+                ><a
+                  class="card-body-custom"
+                  :href="`/admin/participants?projectId=${project._id}`"
+                  >Participants ({{ project.investorsCount }})</a
+                >
+              </li>
+              <li
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Edit Event"
               >
-              <i class="fas fa-signal" style="color: red"></i>
-              </span>
-            </small>
-          </footer>
-        </b-card>
+                <i class="fas fa-pencil-alt"></i>
+                <b-link href="#" variant="primary" @click="editProject(project)"
+                  >Edit Event
+                </b-link>
+              </li>
+            </ul>
+            <footer>
+              <small>
+                <b-badge
+                  v-for="tag in project.tags"
+                  :key="tag.id"
+                  pill
+                  variant="secondary"
+                  >{{ tag.type.split("_")[0] }}</b-badge
+                >
+              </small>
+              <small style="float: right">
+                <span
+                  v-if="project.projectStatus == true"
+                  data-toggle="tooltip"
+                  title="Active"
+                >
+                  <i class="fas fa-signal" style="color: green"></i>
+                </span>
+                <span
+                  v-if="
+                    !project.projectStatus || project.projectStatus == false
+                  "
+                  data-toggle="tooltip"
+                  title="Inactive"
+                >
+                  <i class="fas fa-signal" style="color: red"></i>
+                </span>
+              </small>
+            </footer>
+          </b-card>
+        </div>
       </div>
-    </div>
     </div>
     <paginate
       v-if="projectsToShow.length"
@@ -387,6 +395,8 @@ import {
 } from "../../mixins/fieldValidationMixin.js";
 import CreateProjectSlide from "../../components/admin/createProjectSlider/CreateProjectSlide.vue";
 import dayjs from "dayjs";
+import eventBus from '../../eventBus';
+
 import Messages from "../../utils/messages/admin/en";
 
 export default {
@@ -395,14 +405,14 @@ export default {
 
   data() {
     return {
-      requiredColumn:2,
+      requiredColumn: 2,
       project: {
         _id: "",
         projectName: "",
         logoUrl: "",
         fromDate: "",
         toDate: "",
-        isNotificaionEnabled:false,
+        isNotificaionEnabled: false,
         ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
         investorsCount: 0,
         social: {},
@@ -510,7 +520,7 @@ export default {
   async mounted() {
     //const usrStr = localStorage.getItem("user");
     //this.user = null; JSON.parse(usrStr);
-
+    this.fetchSubscription();
     const usrStr = localStorage.getItem("user");
 
     this.user = {
@@ -527,6 +537,54 @@ export default {
   },
 
   methods: {
+    async fetchSubscription() {
+      try {
+        this.isLoading = true;
+
+        // if (!this.user.id) throw new Error("No project owner found");
+
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription?usage=true`;
+        const headers = {
+          Authorization: `Bearer ${this.authToken}`,
+          AccessToken: `Bearer ${this.accessToken}`,
+        };
+        const resp = await fetch(url, {
+          headers,
+          method: "GET",
+        });
+
+        if (!resp.ok) {
+          return this.notifyErr(resp.statusText);
+        }
+        const json = await resp.json();
+        this.subscriptions = json["subscriptions"];
+        this.activeSubscriptions = this.subscriptions.filter((x) =>
+          x.paymentData ? true : x.isActive === true
+        );
+        this.paidSubscriptions = this.subscriptions.filter((x) => {
+          return x.paymentData ? true : x.isPaid === true;
+        });
+
+        const usage = json["usage"];
+
+        if (usage && usage.totalUsed >= usage.totalAvailable) {
+          this.$router.push("/admin/subscription");
+          eventBus.$emit("UpdateAdminNav", false);
+        }
+
+        if (usage && usage.totalAvailable > 0) {
+          eventBus.$emit("UpdateAdminNav", true);
+        } else {
+          eventBus.$emit("UpdateAdminNav", false);
+        }
+        // localStorage.setItem("subscriptions", JSON.stringify(json));
+        // this.notifySuccess("No. of projects fetched " + this.projects.length);
+      } catch (e) {
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async getTags() {
       const url = `${this.$config.studioServer.BASE_URL}api/v1/tag`;
       const headers = {
@@ -553,7 +611,7 @@ export default {
       }
     },
     onBannerError(e) {
-      console.log(e.target)
+      //console.log(e.target);
       e.target.src = require("../../assets/default-banner.png");
     },
     copy(textToCopy, contentType) {
@@ -698,7 +756,7 @@ export default {
 
           if (a.length === [...selectedSet].length) {
             return true;
-          } else { 
+          } else {
             return false;
           }
         }));
@@ -794,13 +852,17 @@ export default {
       this.$router.push(`${id}`);
     },
     formateDate(d) {
-      if(d) {
+      if (d) {
         let date = new Date(d);
-        return date.toDateString() + " " + date.toLocaleString('en-US', { hour: 'numeric', hour12: true });
+        return (
+          date.toDateString() +
+          " " +
+          date.toLocaleString("en-US", { hour: "numeric", hour12: true })
+        );
       } else {
-        return new Date()
+        return new Date();
       }
-      
+
       // return new Date(d).toLocaleString();
     },
     editProject(project) {
@@ -972,6 +1034,7 @@ export default {
     },
 
     checkIfEverythingIsFilled() {
+      
       for (let index = 0; index < this.eventActionList.length; index++) {
         if (
           this.eventActionList[index].score === null ||
@@ -979,15 +1042,25 @@ export default {
         ) {
           return Messages.EVENTS.ACTIONS.SCORE_IS_NUM_ANY_LEFT;
         }
-
-      }
-      for (let index = 0; index < this.eventActionList.length; index++) {
-        if (this.eventActionList[index].type === null) {
+         if (this.eventActionList[index].type === null) {
           return Messages.EVENTS.CHECK_ALL_TYPE;
-
-       
         }
+        if(this.eventActionList[index].type==="SUMSUB_KYC"){
+          
+     
+          if(this.eventActionList[index].slug===""){
+            return Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_SLUG;
+          }
+
+         
+        }
+         if(isValidURL (this.eventActionList[index].title)!==undefined){
+      return Messages.EVENTS.ACTIONS.TITLE_URL;
+          }
       }
+      // for (let index = 0; index < this.eventActionList.length; index++) {
+       
+      // }
       const eventActionTitle = checkTitle(this.eventActionList, "title");
 
       if (eventActionTitle.includes(false)) {
@@ -1008,7 +1081,8 @@ export default {
           x.type !== "BLOCKCHAIN_REEF" &&
           x.type !== "BLOCKCHAIN_TEZ" &&
           x.type !== "PRIZE_CARD" &&
-          x.type !== "PUSH_NOTIFICATION"
+          x.type !== "PUSH_NOTIFICATION"&&
+          x.type!=="SUMSUB_KYC"
       );
       const filteredValueList = checkValue(eventActionValue, "value");
       if (filteredValueList.includes(false)) {
@@ -1060,7 +1134,6 @@ export default {
     },
 
     clear() {
-      
       this.isProjectEditing = false;
       this.project = {
         _id: "",
@@ -1071,7 +1144,7 @@ export default {
         onwerDid: "",
         twitterHandle: "",
         telegramHandle: "",
-        isNotificaionEnabled:false
+        isNotificaionEnabled: false,
       };
     },
 
@@ -1087,7 +1160,7 @@ export default {
         social: {},
         projectStatus: true,
         actions: [],
-        isNotificaionEnabled:false,
+        isNotificaionEnabled: false,
         refereePoint: 10,
         referralPoint: 5,
         tags: [],
@@ -1131,16 +1204,16 @@ export default {
     },
   },
   computed: {
-    columns () {
-      let columns = []
+    columns() {
+      let columns = [];
 
-      let mid = Math.ceil(this.projectsToShow.length / this.requiredColumn)
+      let mid = Math.ceil(this.projectsToShow.length / this.requiredColumn);
       for (let col = 0; col < this.requiredColumn; col++) {
-        console.log(this.projectsToShow.slice(col * mid, col * mid + mid))
-        columns.push(this.projectsToShow.slice(col * mid, col * mid + mid))
+        //console.log(this.projectsToShow.slice(col * mid, col * mid + mid));
+        columns.push(this.projectsToShow.slice(col * mid, col * mid + mid));
       }
-      return columns
-    }
+      return columns;
+    },
   },
   mixins: [notificationMixins],
 };
