@@ -23,7 +23,9 @@
           <!-- <p class="header-text">{{ $config.app.name }}</p> -->
           <hr class="rule" />
         </div>
-        <span slot="footer" class="text-center">{{ $config.app.version }}</span>
+        <span slot="footer" class="text-center" style="font-size:14px; padding: 7px; border: 1px solid #80808014;">
+        <a href="https://docs.fyre.hypersign.id/" target="_blank" style="text-decoration: none; background-color: transparent;color: #8B8B8B;">Docs</a></span>
+        <span slot="footer" class="text-center" style="font-size: 12px; padding: 7px;">{{ $config.app.version }}</span>
       </sidebar-menu>
       <!-- <div class="content-wrapper"> -->
        <div :class="[
@@ -50,6 +52,7 @@ export default {
   },
   data() {
     return {
+      hover: false,
       authToken: localStorage.getItem("authToken"),
       isSidebarCollapsed: true,
       authRoutes: ["register", "PKIIdLogin"],

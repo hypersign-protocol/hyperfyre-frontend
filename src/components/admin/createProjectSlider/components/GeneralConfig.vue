@@ -101,7 +101,7 @@
 
    <div class="row g-3 align-items-center w-100  mt-4">
             <div class="col-lg-3 col-md-3 text-left">
-                <label for="projectName" class="col-form-label">Event Name<span style="color: red">*</span>: </label>
+                <tool-tips infoMessage="Name of the event"></tool-tips><label for="endDate" class="col-form-label"></label><label for="projectName" class="col-form-label">Event Name<span style="color: red">*</span>: </label>
             </div>
             <div class=" col-lg-9 col-md-9 px-0">
                 <input v-model="project.projectName" type="text" placeholder="Demo Giveaway" id="projectName" class="form-control w-100" >
@@ -110,7 +110,7 @@
 
     <div v-if="isProjectEditing" class="row g-3 align-items-center w-100 mt-4">
             <div class="col-lg-3 col-md-3 text-left">
-                <label for="projectStatus" class="col-form-label">Status: </label>
+                <tool-tips infoMessage="Event status"></tool-tips><label for="projectStatus" class="col-form-label">Status: </label>
             </div>
             <div class="col-lg-9 col-md-9 px-0">
                 
@@ -123,7 +123,7 @@
 
     <div class="row g-3 align-items-center w-100 mt-4">
             <div class="col-lg-3 col-md-3 text-left">
-                <label for="logoUrl" class="col-form-label">Banner URL<span style="color: red">*</span>: </label>
+                <tool-tips infoMessage="Url of banner image"></tool-tips><label for="logoUrl" class="col-form-label">Banner URL<span style="color: red">*</span>: </label>
             </div>
             <div class="col-lg-9 col-md-9 px-0">
                 <input v-model="project.logoUrl" type="text" placeholder="of size 600x300" id="logoUrl" class="form-control w-100" >
@@ -133,7 +133,7 @@
       
     <div class="row g-3 align-items-center w-100 mt-4">
             <div class="col-lg-3 col-md-3 text-left">
-                <label for="startDate" class="col-form-label">Start Date<span style="color: red">*</span>: </label>
+                <tool-tips infoMessage="Start date time of the event"></tool-tips><label for="startDate" class="col-form-label">Start Date<span style="color: red">*</span>: </label>
             </div>
             
             <div class="col-lg-9 col-md-9 px-0 datepicker">
@@ -154,7 +154,7 @@
       
     <div class="row g-3 align-items-center w-100 mt-4">
             <div class="col-lg-3 col-md-3 text-left">
-                <label for="endDate" class="col-form-label">End Date<span style="color: red">*</span>: </label>
+                <tool-tips infoMessage="End date time of the event"></tool-tips><label for="endDate" class="col-form-label">End Date<span style="color: red">*</span>: </label>
             </div>
             <div class="col-lg-9 col-md-9 px-0">
                 <Datepicker 
@@ -187,7 +187,7 @@
      <div >
         <div class="row g-3 align-items-center w-100 mt-4">
           <div class=" text-left col-lg-3 col-md-3 text-left">
-              <label for="type" class="col-form-label">Tags<span style="color: red">*</span>: </label>
+              <tool-tips infoMessage="Select one or more tags"></tool-tips><label for="type" class="col-form-label">Tags<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-8 col-md-8 px-0" >
             <b-form-select v-model="selected.type" :options="options"></b-form-select>
@@ -200,13 +200,11 @@
 
     <div class="row g-3 align-items-center w-100 mt-4">
       <div class="col-lg-3 col-md-3 text-left">
-          <label for="endDate" class="col-form-label">Notification: </label>
+          <tool-tips infoMessage="Notify participants about your upcoming campaign"></tool-tips><label for="endDate" class="col-form-label">Notification: </label>
       </div>
       <div class="col-lg-9 col-md-9 px-0"> 
         <b-form-checkbox v-model="project.isNotificaionEnabled" name="check-button" switch>
         </b-form-checkbox>
-        <!-- <input  class="largerCheckbox" type="checkbox" v-model="project.isNotificaionEnabled" title="Check to notify all platform users about this event" id=""> -->
-         <p class=" text-left text-info" style="font-size:14px;">Helps to notify participants for upcoming campaign</p> 
       </div>  
     
     </div>
@@ -218,10 +216,11 @@
 <script>
 import Datepicker from 'vuejs-datetimepicker'
 import notificationMixins from "../../../../mixins/notificationMixins"
-import Messages from "../../../../utils/messages/admin/en"
+import Messages from "../../../../utils/messages/admin/en";
+import ToolTips from "../../../basic/toolTips.vue";
 export default {
   name: "GeneralConfig",
-  components: {Datepicker},
+  components: {Datepicker, ToolTips},
   data(){
       return{
         idx:null,
