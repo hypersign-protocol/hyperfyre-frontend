@@ -4,7 +4,7 @@
       Your Profile & Referral
     </p>
     <v-row class="white--text text-left pb-6" no-gutters>
-      <v-col cols="12" md="2">
+      <v-col cols="12" md="3">
         <p class="font-14 line-h-17" @click="copyContent(userProfile.name)">
            <v-icon  class="color-grey-100"
             >mdil-account</v-icon
@@ -18,16 +18,16 @@
            <v-icon  class="color-grey-100"
             >mdil-email-open</v-icon
           >
-          {{ userProfile.email }}
+          {{ userProfile.email | truncate(25) }}
         </p>
       </v-col>
-      <v-col cols="12" md="5">
+      <v-col cols="12" md="4">
         <p class="font-14 line-h-17" @click="copyContent(userProfile.referalLink)">
           <v-icon  class="color-grey-100"
             >mdi-link-variant</v-icon
           >
 
-          {{ referralLink | truncate(25) }}
+          {{ referralLink | truncate(15) }}
           <input
             :id="referralLink"
             :value="`${referralLink}`"
