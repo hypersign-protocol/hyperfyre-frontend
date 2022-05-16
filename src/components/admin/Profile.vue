@@ -42,7 +42,7 @@
 .tile {
   background: white;
   border: 0;
-  border-radius: 20px;
+  border-radius: 5px;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
@@ -55,7 +55,7 @@
   font-size: xxx-large;
 }
 .fVal {
-  font-size: small;
+  font-size: xx-small;
   color: gray;
   word-wrap: break-word;
 }
@@ -73,13 +73,13 @@
       <div class="col-md-6">
         <div class="card tile" >
           <div class="card-body tile-number">{{ projectCount }}</div>
-          <div class="card-header accordion-header-theme" style="font-size:13px">TOTAL EVENTS</div>
+          <div class="card-header accordion-header-theme" style="font-size:13px; border-radius: 0px 0px 0px 5px;">TOTAL EVENTS</div>
         </div>
       </div>
       <div class="col-md-6" >
         <div class="card tile">
           <div class="card-body tile-number">{{ schemaCount }}</div>
-          <div class="card-header accordion-header-theme" style="font-size:13px">TOTAL PARTICIPANTS</div>
+          <div class="card-header accordion-header-theme" style="font-size:13px; border-radius: 0px 0px 0px 5px;">TOTAL PARTICIPANTS</div>
         </div>
       </div>
     </div>
@@ -100,12 +100,11 @@
                 <p>DID</p>
                 <p class="fVal">
                    <a v-if="accessuser.adminDid" target="_blank">{{ accessuser.adminDid }}</a>
-
-                    <a v-else target="_blank">{{ user.id }}</a>
+                   <a v-else target="_blank">{{ user.id }}</a>
                 </p>
                 <p>EMAIL</p>
                 <p v-if="accessuser.adminEmail" class="fVal">{{ accessuser.adminEmail }}</p>
-                 <p v-else class="fVal">{{ user.email }}</p>
+                <p v-else class="fVal">{{ user.email }}</p>
                 <p v-if="user.phoneNumber">
                   Phone Number: {{ user.phoneNumber }}
                 </p>

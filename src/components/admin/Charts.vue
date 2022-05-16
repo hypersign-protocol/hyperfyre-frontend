@@ -1,6 +1,7 @@
 <template>
   <div class="row">
-    <div class="col-md-12 card chart-container" style="">
+    <div class="col-md-12 card chart-container" 
+    style="height: 98%; position: absolute;font-size:smaller">
       <vc-donut
         background="white"
         foreground="#60c860"
@@ -8,7 +9,7 @@
         unit="px"
         :thickness="30"
         has-legend
-        legend-placement="top"
+        legend-placement="bottom"
         :sections="sections"
         :total="totalAvailable"
         :start-angle="0"
@@ -23,7 +24,7 @@
 
 <style scoped>
 .chart-container {
-  border-radius: 20px;
+  border-radius: 5px;
   border: 0;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   padding: 35px;
@@ -42,8 +43,8 @@ export default {
       user: {},
       usage: {},
       sections: [
-        { label: "Requests consumed", value: this.totalUsed, color: "#ed5c5c" },
-        { label: "Requests left", value: this.unused, color: "#60c860" },
+        { label: "REQUESTS CONSUMED", value: this.totalUsed, color: "#ed5c5c" },
+        { label: "REQUESTS LEFT", value: this.unused, color: "#60c860" },
       ],
       authToken: localStorage.getItem("authToken"),
       accessToken:localStorage.getItem("accessToken"),

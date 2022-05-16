@@ -60,16 +60,16 @@
     <div class="text-right">
     </div>
 			<div class="col-md-12">
+        <h3 v-if="!isEdit">Create Your App</h3>
+        <h3 v-else>Edit Your App</h3>
 				<div class="card">
-					<div class="card-header">
-						<h4 v-if="!isEdit">Create Your App</h4>
-            <h4 v-else>Edit Your App</h4>
-					</div>
+					
 					<div class="card-body">
 						<form>
                <div class="row g-3 align-items-center w-100 mt-4" >
                 <div class="text-left col-lg-3 col-md-3 text-left">
-                 <label for="appId" class="col-form-label">App ID : </label>
+                 <label for="appId" class="col-form-label"> 
+                  <tool-tips infoMessage="Application ID, generated once you create an app"></tool-tips>App ID : </label>
                 </div>
                 <div class="col-lg-9 col-md-9 px-0">
                  <input
@@ -83,7 +83,7 @@
               </div>
               <div class="row g-3 align-items-center w-100 mt-4">
                 <div class="text-left col-lg-3 col-md-3 text-left">
-                 <label for="name" class="col-form-label">App Name
+                 <tool-tips infoMessage="Name of the application"></tool-tips><label for="name" class="col-form-label">App Name
                    <span style="color: red">*</span>: 
                  </label>
                 </div>
@@ -99,7 +99,7 @@
               </div>
             <div class="row g-3 align-items-center w-100 mt-4">
                 <div class="text-left col-lg-3 col-md-3 text-left">
-                 <label for="baseUrl" class="col-form-label">Base URL
+                 <tool-tips infoMessage="Enter base URL of your server. This URL will be whitelisted to access data from Hyperfyre backend. See the docs for more details."></tool-tips><label for="baseUrl" class="col-form-label">Base URL
                    <span style="color: red">*</span>: 
                  </label>
                 </div>
@@ -115,7 +115,7 @@
             </div>
             <div class="row g-3 align-items-center w-100 mt-4" v-if="isEdit">
                 <div class="col-lg-3 col-md-3 text-left">
-                 <label for="endDate" class="col-form-label">Generate new credentials:  
+                 <tool-tips infoMessage="Switch to assign new credentials to your app"></tool-tips><label for="endDate" class="col-form-label">Generate Credentials:  
                 </label>
                 </div>
                <div class="col-lg-9 col-md-9 px-0"> 
@@ -185,6 +185,7 @@
 
 <script>
 import notificationMixins from "../../mixins/notificationMixins";
+import ToolTips from "../../components/basic/toolTips";
 import Web3 from "web3"
 import {mnemonicToSeed,generateMnemonic} from "bip39"
 import HDKey from "hdkey"
@@ -198,7 +199,7 @@ import {
 import Messages from "../../utils/messages/admin/en"
 export default {
   name: "CreateApp",
-  components: {Loading},
+  components: {Loading, ToolTips},
   data() {
     return {
       isEdit:false,
