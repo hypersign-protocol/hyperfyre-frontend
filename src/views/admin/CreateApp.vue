@@ -60,11 +60,10 @@
     <div class="text-right">
     </div>
 			<div class="col-md-12">
+        <h3 v-if="!isEdit">Create Your App</h3>
+        <h3 v-else>Edit Your App</h3>
 				<div class="card">
-					<div class="card-header">
-						<h4 v-if="!isEdit">Create Your App</h4>
-            <h4 v-else>Edit Your App</h4>
-					</div>
+					
 					<div class="card-body">
 						<form>
                <div class="row g-3 align-items-center w-100 mt-4" >
