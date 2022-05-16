@@ -322,16 +322,6 @@ i {
                   >Participants ({{ project.investorsCount }})</a
                 >
               </li>
-              <li
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="Edit Event"
-              >
-                <i class="fas fa-pencil-alt"></i>
-                <b-link href="#" variant="primary" @click="editProject(project)"
-                  >Edit Event
-                </b-link>
-              </li>
             </ul>
             <footer>
               <small>
@@ -340,15 +330,21 @@ i {
                   :key="tag.id"
                   pill
                   variant="secondary"
+                  style="margin-left: 2px;"
+          
                   >{{ tag.type.split("_")[0] }}</b-badge
                 >
               </small>
               <small style="float: right">
+                <span @click="editProject(project)" title="Click to edit this event" style="cursor:pointer"> 
+                    <i class="fas fa-pencil-alt"></i>
+                </span>
                 <span
                   v-if="project.projectStatus == true"
                   data-toggle="tooltip"
-                  title="Active"
+                  title="This event is live"
                 >
+
                   <i class="fas fa-signal" style="color: green"></i>
                 </span>
                 <span

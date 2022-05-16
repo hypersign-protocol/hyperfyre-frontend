@@ -92,7 +92,7 @@ export default {
             },
             {
               href: "/admin/createapp",
-              title: "App",
+              title: "Apps",
               icon: "fa fa-plus",
               exactPath: true,
             },
