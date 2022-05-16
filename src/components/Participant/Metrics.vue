@@ -19,8 +19,8 @@
         class="info--box pa-4 d-flex align-center justify-center flex-column"
       >
         <p class="mb-2 font-24 line-h-29 font-weight-bold white--text">
-          <span v-if="userEventData && userEventData.numberOfReferals">{{
-            userEventData.numberOfReferals
+          <span v-if="userScore">{{
+            userScore
           }}</span>
           <span v-else>0</span>
         </p>
@@ -33,8 +33,8 @@
         class="info--box pa-4 d-flex align-center justify-center flex-column"
       >
         <p class="mb-2 font-24 line-h-29 font-weight-bold white--text">
-          <span v-if="userEventData && userEventData.count">{{
-            userEventData.count
+          <span v-if="totalEntries">{{
+            totalEntries
           }}</span>
           <span v-else>0</span>
         </p>
@@ -85,7 +85,16 @@ export default {
     endDate: {
       required: true,
     },
+
     userEventData: {
+      required: true,
+    },
+
+    userScore: {
+      required: true,
+    },
+
+    totalEntries: {
       required: true,
     },
   },
