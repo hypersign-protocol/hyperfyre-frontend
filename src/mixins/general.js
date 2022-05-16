@@ -1,5 +1,11 @@
 export default {
   methods: {
+    calculateInPercentage(completed,total) {
+      let res = 0
+      res = (completed/total)*100
+      return res
+    },
+
     dateFormat(val) {
       if (!val) return null;
       const [year, month, day] = val.split("-");

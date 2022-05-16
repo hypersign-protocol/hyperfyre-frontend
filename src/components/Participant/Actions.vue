@@ -36,8 +36,31 @@
     </v-row>
     <div class="d-flex align-center justify-space-between">
       <p class="color-grey-100 font-14 line-h-17 font-weight-bold">To-Dos</p>
-      <p class="color-grey-100 font-14 line-h-17 font-weight-bold">
+      <!-- <p class="color-grey-100 font-14 line-h-17 font-weight-bold">
+         <v-progress-circular
+          :value="80"
+          color="primary"
+          size="14"
+          width="3"
+          ></v-progress-circular> 
         {{ completed.length }} of {{ campaignActions.length }}
+      </p> -->
+      <p class="color-grey-100 font-14 line-h-17 font-weight-bold">
+         <v-chip
+            dark
+            outlined
+            class="color-grey-100 height-25 letter-s-0  font-14 line-h-17 font-weight--bold px-3"
+          >
+          <v-progress-circular
+            :value="calculateInPercentage(completed.length,campaignActions.length)"
+            color="primary"
+            size="14"
+            width="3"
+            :rotate="360"
+          >
+          </v-progress-circular> 
+          {{ completed.length }} of {{ campaignActions.length }}
+         </v-chip>
       </p>
     </div>
     <v-expansion-panels class="todo__wrap" flat multiple>
@@ -55,6 +78,7 @@
   </div>
 </template>
 <script>
+
 import general from "@/mixins/general";
 import PrizeCard from "@/components/Participant/inputs/PrizeCard";
 import apiClient from "@/mixins/apiClientMixin";
@@ -236,3 +260,8 @@ export default {
 };
 </script>
 <style lang="css" scoped></style>
+<style scoped>
+.v-progress-circular {
+  margin-right: 0.25rem;
+}
+</style>
