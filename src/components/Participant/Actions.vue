@@ -3,24 +3,30 @@
     <p class="color-grey-100 font-14 line-h-17 font-weight-bold">
       Your Profile & Referral
     </p>
-    <v-row class="white--text text-left pb-8" no-gutters>
+    <v-row class="white--text text-left pb-6" no-gutters>
       <v-col cols="12" md="2">
-        <p class="color-grey-100 mb-1 font-12 line-h-15 font-weight-bold">
-          Username
+        <p class="font-14 line-h-17" @click="copyContent(userProfile.name)">
+           <v-icon  class="color-grey-100"
+            >mdil-account</v-icon
+          >
+          {{ userProfile.name }}
         </p>
-        <p class="font-14 line-h-17">{{ userProfile.name }}</p>
       </v-col>
       <v-col cols="12" md="5">
-        <p class="color-grey-100 mb-1 font-12 line-h-15 font-weight-bold">
-          Email
+        
+        <p class="font-14 line-h-17" @click="copyContent(userProfile.email)">
+           <v-icon  class="color-grey-100"
+            >mdil-email-open</v-icon
+          >
+          {{ userProfile.email }}
         </p>
-        <p class="font-14 line-h-17">{{ userProfile.email }}</p>
       </v-col>
       <v-col cols="12" md="5">
-        <p class="color-grey-100 mb-1 font-12 line-h-15 font-weight-bold">
-          Referral Link
-        </p>
-        <p class="font-14 line-h-17">
+        <p class="font-14 line-h-17" @click="copyContent(userProfile.referalLink)">
+          <v-icon  class="color-grey-100"
+            >mdi-link-variant</v-icon
+          >
+
           {{ referralLink | truncate(25) }}
           <input
             :id="referralLink"
@@ -36,15 +42,6 @@
     </v-row>
     <div class="d-flex align-center justify-space-between">
       <p class="color-grey-100 font-14 line-h-17 font-weight-bold">To-Dos</p>
-      <!-- <p class="color-grey-100 font-14 line-h-17 font-weight-bold">
-         <v-progress-circular
-          :value="80"
-          color="primary"
-          size="14"
-          width="3"
-          ></v-progress-circular> 
-        {{ completed.length }} of {{ campaignActions.length }}
-      </p> -->
       <p class="color-grey-100 font-14 line-h-17 font-weight-bold">
          <v-chip
             dark
