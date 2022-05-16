@@ -25,7 +25,6 @@
                   v-if="!loading"
                   :startDate="eventData.fromDate"
                   :endDate="eventData.toDate"
-                  :userEventData="userEventData"
                   :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0" 
                   :totalEntries="eventData && eventData.count ? eventData.count : 0"
                   @getLeaderBoard="fetchLeaderBoard"

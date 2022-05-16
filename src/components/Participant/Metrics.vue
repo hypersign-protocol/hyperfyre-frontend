@@ -86,10 +86,6 @@ export default {
       required: true,
     },
 
-    userEventData: {
-      required: true,
-    },
-
     userScore: {
       required: true,
     },
