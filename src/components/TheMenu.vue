@@ -11,7 +11,7 @@
           :key="item.tab"
           :to="item.slug"
         >
-          <v-icon>{{ item.icon }}</v-icon>
+          <v-icon class="mr-1">{{ item.icon }}</v-icon>
          <span class="hidden-sm-and-down"> {{ item.tab }} </span>
         </v-btn>
       </v-toolbar-items>
