@@ -339,6 +339,12 @@ i {
                 <span @click="editProject(project)" title="Click to edit this event" style="cursor:pointer"> 
                     <i class="fas fa-pencil-alt"></i>
                 </span>
+                <span @click="cloneProject(project)" title="Click to clone this event" style="cursor:pointer"> 
+                    <i class=" fa fa-clone"></i>
+                </span>
+                 <span @click="deleteProject(project)" title="Click to delete this event" style="cursor:pointer"> 
+                    <i class=" fas fa-trash"></i>
+                </span>
                 <span
                   v-if="project.projectStatus == true"
                   data-toggle="tooltip"
@@ -490,6 +496,7 @@ export default {
       fontColorDefault: "#ffffff",
 
       isProjectEditing: false,
+      isProjectClonning: false,
 
       cols: [
         "Project Id",
@@ -865,7 +872,7 @@ export default {
       this.resetAllValues();
       this.isProjectEditing = true;
       this.project = { ...project };
-
+      console.log(project)
       this.project.fromDate = dayjs(project.fromDate).format(
         "YYYY-MM-DD hh:mm:ss"
       );
@@ -917,6 +924,65 @@ export default {
       this.$root.$emit("callClearFromProject");
     },
 
+async cloneProject(project){
+  this.resetAllValues();
+  this.isProjectClonning = true;
+  this.project = { ...project };
+  console.log(project)
+  if(this.isProjectClonning){
+   this.project._id="";
+   this.project.projectName=this.project.projectName+"_copy";
+   this.project.investorsCount=0;
+  }     
+  this.eventActionList = project.actions;
+  this.tagsTemp = project.tags;
+
+   console.log(this.project)    
+   await this.saveProject();
+},
+
+async deleteProject(project){
+  try{
+      this.isLoading = true;
+      this.project = { ...project };
+      if(!this.project._id) throw new Error("No project found");
+      const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${project._id}`
+      const headers = {
+          Authorization: `Bearer ${this.authToken}`,
+          AccessToken: `Bearer ${this.accessToken}`,
+        };
+      const resp = await fetch(url, {
+          headers,
+          method: "DELETE"
+        })
+      const json = await resp.json();
+      const index=this.projects.map((project)=>project._id).indexOf(json._id)
+      this.projects.splice(index, 1)
+      const tempProject= JSON.parse(localStorage.getItem("userProjects"))
+      localStorage.removeItem("userProjects")
+
+      tempProject.projects.splice(index, 1);
+      localStorage.setItem("userProjects",
+         JSON.stringify({
+           projects:tempProject.projects,
+           count:tempProject.projects.length
+         })
+       )
+        if(json){
+           if(!resp.ok){
+             return this.notifyErr(json);
+           } else {
+             this.notifySuccess("Event is deleted successfully");
+           }
+        }else {
+          throw new Error("Error while deleting event");
+        }
+  }catch(e){
+    this.notifyErr(e.message);
+  } finally {
+        this.isLoading = false;
+      }
+},
     async saveProject() {
       try {
         if (this.checkIfEverythingIsFilled() !== true) {
@@ -980,7 +1046,6 @@ export default {
           method,
           header: headers,
         });
-
         if (!this.isProjectEditing) {
           ////  not using this for the time being just  to test
           // this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/form/" + resp.data.slug :  "/form?projectId=" + resp.data._id )
@@ -1000,8 +1065,16 @@ export default {
         this.resetAllValues();
 
         if (this.isProjectEditing) {
+          console.log("projectEditing")
           await this.fetchProjects();
           this.$root.$emit("bv::toggle::collapse", "sidebar-right");
+          this.isProjectEditing= false
+          return;
+        }
+        if(this.isProjectClonning){
+          console.log("projectClonning")
+          await this.fetchProjects();
+          this.isProjectClonning= false;
           return;
         }
 
@@ -1009,6 +1082,7 @@ export default {
         /// Not removing but handling the condition.
         const userProjects = JSON.parse(localStorage.getItem("userProjects"));
         if (userProjects) {
+          console.log('userProjects')
           userProjects.count += 1;
           userProjects.projects.push(resp.data);
           localStorage.setItem("userProjects", JSON.stringify(userProjects));
