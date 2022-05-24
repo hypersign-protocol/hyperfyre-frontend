@@ -562,6 +562,7 @@ export default {
           { text: "Avalanche", value: "BLOCKCHAIN_AVAX" },
           { text: "Reef", value: "BLOCKCHAIN_REEF" },
           { text: "Tezos", value: "BLOCKCHAIN_TEZ" },
+          { text: "Cardano", value: "BLOCKCHAIN_CARDANO" },
         ],
         smartContractAction: [
           { text: "Select Contract Type", value: null },
