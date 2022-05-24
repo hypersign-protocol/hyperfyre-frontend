@@ -417,6 +417,7 @@ export default {
         refereePoint: 10,
         referralPoint: 5,
         tags: [],
+        slug:"",
       },
       selected: [],
       tagToSearch: [
