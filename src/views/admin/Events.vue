@@ -423,6 +423,7 @@ export default {
         refereePoint: 10,
         referralPoint: 5,
         tags: [],
+        slug:"",
       },
       selected: [],
       tagToSearch: [
@@ -1150,9 +1151,11 @@ async deleteProject(project){
           x.type !== "BLOCKCHAIN_AVAX" &&
           x.type !== "BLOCKCHAIN_REEF" &&
           x.type !== "BLOCKCHAIN_TEZ" &&
+          x.type !== "BLOCKCHAIN_CARDANO" && 
           x.type !== "PRIZE_CARD" &&
           x.type !== "PUSH_NOTIFICATION"&&
           x.type!=="SUMSUB_KYC"
+         
       );
       const filteredValueList = checkValue(eventActionValue, "value");
       if (filteredValueList.includes(false)) {

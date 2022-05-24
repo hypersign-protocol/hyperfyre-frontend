@@ -108,6 +108,16 @@
             </div>   
     </div>
 
+    <div class="row g-3 align-items-center w-100  mt-4">
+            <div class="col-lg-3 col-md-3 text-left">
+                <tool-tips infoMessage="Name of the event"></tool-tips><label for="slug" class="col-form-label"></label><label for="projectName" 
+                class="col-form-label">Slug<span style="color: red">*</span>: </label>
+            </div>
+            <div class=" col-lg-9 col-md-9 px-0">
+                <input v-model="project.slug" type="text" placeholder="Demo Giveaway" id="slug" class="form-control w-100" >
+            </div>   
+    </div>
+
     <div v-if="isProjectEditing" class="row g-3 align-items-center w-100 mt-4">
             <div class="col-lg-3 col-md-3 text-left">
                 <tool-tips infoMessage="Event status"></tool-tips><label for="projectStatus" class="col-form-label">Status: </label>
