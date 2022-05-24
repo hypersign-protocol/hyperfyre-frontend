@@ -36,6 +36,7 @@ import TelegramJoin from "./ActionInputs/TelegramJoin.vue";
 import InputText from "./ActionInputs/InputText.vue";
 import BlockchainEth from "./ActionInputs/BlockchainEth.vue";
 import BlockchainTez from "./ActionInputs/BlockchainTez.vue";
+import BlockchainCardano from "./ActionInputs/BlockchainCardano.vue";
 import BlockchainAvax from "./ActionInputs/BlockchainAvax.vue";
 import BlockchainBsc from "./ActionInputs/BlockchainBsc.vue";
 import BlockchainMatic from "./ActionInputs/BlockchainMatic.vue";
@@ -94,6 +95,7 @@ export default {
     InputText,
     BlockchainEth,
     BlockchainTez,
+    BlockchainCardano,
     BlockchainAvax,
     BlockchainBsc,
     BlockchainMatic,

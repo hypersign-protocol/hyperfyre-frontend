@@ -178,6 +178,12 @@
               v-if="eventAction.type.includes('BLOCKCHAIN_TEZ')"
               height="22px"
             />
+              <img
+              style="padding-right: 5px"
+              src="../../../../assets/cardano_128.png"
+              v-if="eventAction.type.includes('BLOCKCHAIN_CARDANO')"
+              height="22px"
+            />
             <img
               style="padding-right: 5px"
               src="../../../../assets/binance-logo.svg"
