@@ -249,11 +249,16 @@ i {
       </div>
     </div>
     <div class="row" style="margin-top: 2%">
+      
+      <draggable v-model="projectsToShow" tag="v-layout" class="row" style="margin-top: 2%" >
+          
+
       <div
         class="col-md-4"
         v-for="project in projectsToShow"
         v-bind:key="project.projectName"
       >
+
         <div>
           <b-card
             :title="truncate1(project.projectName, 25)"
@@ -361,6 +366,9 @@ i {
           </b-card>
         </div>
       </div>
+        
+
+      </draggable>
     </div>
     <paginate
       v-if="projectsToShow.length"
@@ -377,6 +385,7 @@ i {
 </template>
 
 <script>
+import draggable from "vuedraggable";
 import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
@@ -397,7 +406,7 @@ import Messages from "../../utils/messages/admin/en";
 
 export default {
   name: "Investor",
-  components: { Loading, Paginate, CreateProjectSlide },
+  components: { Loading, Paginate, CreateProjectSlide,draggable },
 
   data() {
     return {
@@ -511,6 +520,7 @@ export default {
       user: {},
       errors: [],
     };
+    
   },
 
   async mounted() {

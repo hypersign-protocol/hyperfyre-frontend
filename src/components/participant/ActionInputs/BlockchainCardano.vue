@@ -61,8 +61,7 @@
 <script>
 import eventBus from "../../../eventBus.js";
 import {
-  isValidURL,
-  isValidText,
+  isValidURL,  
   isEmpty,
 } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
