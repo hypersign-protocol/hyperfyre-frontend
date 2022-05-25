@@ -355,7 +355,7 @@
               role="tabpanel"
             >
               <b-card-body>
-                <preview-config></preview-config>
+                <preview-config  :eventData="project"/>
               </b-card-body>
             </b-collapse>
           </b-card>
