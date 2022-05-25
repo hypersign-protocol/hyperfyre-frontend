@@ -334,6 +334,31 @@
               </b-card-body>
             </b-collapse>
           </b-card>
+          <b-card no-body class="mb-1">
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-7
+                variant="info"
+                class="bg-transparent border-0 text-left text-primary"
+                title="Create Smart contract configuration for your event"
+                ><i class="fas fa-file-contract"></i> Preview
+              </b-button>
+            </b-card-header>
+            <b-collapse
+              id="accordion-7"
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body>
+                <preview-config></preview-config>
+              </b-card-body>
+            </b-collapse>
+          </b-card>
           <!--  -->
           <!-- Tags Config -->
           <!-- <b-card no-body class="mb-1">
@@ -382,6 +407,7 @@
 
 <script>
 import EventActionConfig from "./components/EventActionConfig.vue";
+import PreviewConfig from "./components/PreviewConfig.vue";
 import GeneralConfig from "./components/GeneralConfig.vue";
 import ReferralConfig from "./components/ReferralConfig.vue";
 export default {
@@ -390,6 +416,7 @@ export default {
     GeneralConfig,
     EventActionConfig,
     ReferralConfig,
+    PreviewConfig,
   },
 
   props: {
