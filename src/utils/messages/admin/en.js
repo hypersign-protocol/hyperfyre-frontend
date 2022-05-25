@@ -17,7 +17,9 @@ const EVENTS = {
     },
     VALIDATION:{
         INVALID_PROJECT_NAME: "Please provide valid Event Name",
-        INVALID_LOGO_URL: "Banner Url is not Valid"
+        INVALID_LOGO_URL: "Banner Url is not Valid",
+        INVALID_SLUG:"Please enter a valid Event Slug.",
+        EMPTY_SLUG: "Slug can not be empty"
     },
     CREATE_EDIT_EVENT: {
         PROJECT_FETCHED: "Event is fetched. Event Name ",
@@ -33,7 +35,7 @@ const EVENTS = {
         THEME_COLOR_NOT_SAME: "Theme color and font color cannot be same",
         CHOOSE_ATLEAST_ONE_TAG: "Please choose atleast one tag",
         CHOOSE_TAG:"Please choose Tag",
-        DUPLICATE_TAG:"Duplicate tags are not allowed"
+        DUPLICATE_TAG:"Duplicate tags are not allowed",
     },
     
     ACTIONS:{
