@@ -1,3 +1,4 @@
+
 <template >
   <div class="mx-auto overflow-hidden mt-3 border-0" style="max-width: 600px;">
     <div >
@@ -38,21 +39,8 @@
 
 
      </draggable>
+
+
     </div>
   </div>
 </template>
-
-<script>
-import Banner from "../../../participant/Banner.vue";
-import Metrics from "../../../participant/Metrics.vue";
-  import draggable from 'vuedraggable'
-export default {
-  name: "PreviewConfig",
-  props: {
-    eventData: {
-      type: Object,
-    },
-  },
-  components: { Banner, Metrics ,draggable},
-};
-</script>
