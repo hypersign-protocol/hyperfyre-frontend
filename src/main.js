@@ -28,6 +28,7 @@ import VueSidebarMenu from "vue-sidebar-menu";
 import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 import VueMeta from 'vue-meta';
 
+
 // Tell Vue to install the plugin.
 // Vue.use(VuejsDialog.main.default);
 const options = {
@@ -40,7 +41,6 @@ Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(Notifications);
-
 
 //// VUE EASY TABEL ////
 Vue.use(VeTable);
