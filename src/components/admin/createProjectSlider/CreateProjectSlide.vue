@@ -68,7 +68,44 @@
       backdrop-variant="dark"
     >
       <div class="px-3 py-2">
-        <div class="accordion" role="tablist">
+        <div class="accordion" role="tablist" v-if="preview">
+          <b-card no-body class="mb-1">
+            <b-card-header
+              header-tag="header"
+              class="p-1 border-0 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                v-b-toggle.accordion-1
+                variant="info"
+                class="bg-transparent border-0 text-left text-primary"
+                title="Preview"
+                ><i class="fas fa-file-contract"></i> Preview
+                
+              </b-button>
+              <b-button
+                variant="info"
+                style="float:right"
+                class="bg-transparent border-0 text-left text-primary"
+                title="Close"
+                @click="closePreview"
+                >
+                <i class="fas fa-close">Close</i>                
+              </b-button>
+            </b-card-header>
+            <b-collapse
+              visible
+              id="accordion-1"
+              accordion="my-accordion1"
+              role="tabpanel"
+            >
+              <b-card-body>
+                <preview-config></preview-config>
+              </b-card-body>
+            </b-collapse>
+          </b-card>
+        </div>
+        <div class="accordion" role="tablist" v-else>
           <b-card no-body class="mb-1">
             <b-card-header
               header-tag="header"
@@ -334,6 +371,7 @@
               </b-card-body>
             </b-collapse>
           </b-card>
+
           <b-card no-body class="mb-1">
             <b-card-header
               header-tag="header"
@@ -359,6 +397,7 @@
               </b-card-body>
             </b-collapse>
           </b-card>
+
           <!--  -->
           <!-- Tags Config -->
           <!-- <b-card no-body class="mb-1">
@@ -393,12 +432,20 @@
             </b-collapse>
           </b-card> -->
         </div>
+        
         <button
-          class="btn btn-primary mt-3 button-theme"
+          class="btn btn-primary mt-3 button-theme  mr-3"
           type="button"
           @click="saveProject"
         >
           Submit
+        </button>
+        <button
+          class="btn btn-primary mt-3 button-theme"
+          type="button"
+          @click="openPreview"
+        >
+          Preview
         </button>
       </div>
     </b-sidebar>
@@ -556,7 +603,6 @@ export default {
       }
     },
   },
-
   data() {
     return {
       /// TODO: Need to do it in a neat way
@@ -618,7 +664,16 @@ export default {
         ],
         tagDetails: [{ text: "Select Tag Type", value: null }],
       },
+      preview:false
     };
+  },
+  methods: {
+    openPreview () {
+      this.preview= true
+    },
+    closePreview () {
+      this.preview= false
+    }
   },
 };
 </script>
