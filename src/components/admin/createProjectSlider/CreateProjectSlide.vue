@@ -373,6 +373,32 @@
             </b-collapse>
           </b-card>
 
+          <!-- <b-card no-body class="mb-1">
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-9
+                variant="info"
+                class="bg-transparent border-0 text-left text-primary"
+                title="Create Smart contract configuration for your event"
+                ><i class="fas fa-file-contract"></i> Preview
+              </b-button>
+            </b-card-header>
+            <b-collapse
+              id="accordion-9"
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body>
+                <preview-config  :eventData="project"/>
+              </b-card-body>
+            </b-collapse>
+          </b-card> -->
+
           <!--  -->
           <!-- Tags Config -->
           <!-- <b-card no-body class="mb-1">
