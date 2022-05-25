@@ -342,7 +342,7 @@
             >
               <b-button
                 block
-                v-b-toggle.accordion-7
+                v-b-toggle.accordion-9
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 title="Create Smart contract configuration for your event"
@@ -350,7 +350,7 @@
               </b-button>
             </b-card-header>
             <b-collapse
-              id="accordion-7"
+              id="accordion-9"
               accordion="my-accordion"
               role="tabpanel"
             >
