@@ -1,6 +1,6 @@
-<template>
-  <div>
-    <div>
+<template >
+  <div class="mx-auto overflow-hidden mt-3 border-0" style="max-width: 600px;">
+    <div >
          <Metrics
         @getLeaderBoard="fetchLeaderBoard"
         :leaderBoardData="leaderBoardData"
@@ -13,9 +13,9 @@
         "
       />
     </div>
-    <div>
+    <div >
       
-      <Banner
+      <Banner 
         :eventName="eventData.projectName"
         :themeColor="eventData.themeColor"
         :fontColor="eventData.fontColor"
@@ -27,17 +27,17 @@
     <div>    
       <draggable v-model="eventData.actions" >
        <b-list-group 
-        class="col md-7"
+        class="col md-4"
         v-for="action in eventData.actions"
-        v-bind:Key="action._id"
+        v-bind:key="action._id"
       >
-    <b-list-group-item class="col md-7" v-if="action.type!=='HYPERSIGN_AUTH'">{{action.title}}</b-list-group-item>
+    <b-list-group-item class="col md-4" v-if="action.type!=='HYPERSIGN_AUTH'">{{action.title}}</b-list-group-item>
 
         
 </b-list-group>
 
+
      </draggable>
-{{eventActionList}}
     </div>
   </div>
 </template>

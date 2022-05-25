@@ -100,7 +100,8 @@
               role="tabpanel"
             >
               <b-card-body>
-                <preview-config></preview-config>
+               
+                 <preview-config  :eventData="project"/>
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -372,7 +373,7 @@
             </b-collapse>
           </b-card>
 
-          <b-card no-body class="mb-1">
+          <!-- <b-card no-body class="mb-1">
             <b-card-header
               header-tag="header"
               class="p-1 accordin-header accordion-header-theme"
@@ -396,7 +397,7 @@
                 <preview-config  :eventData="project"/>
               </b-card-body>
             </b-collapse>
-          </b-card>
+          </b-card> -->
 
           <!--  -->
           <!-- Tags Config -->
