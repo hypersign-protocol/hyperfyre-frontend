@@ -5,7 +5,16 @@
 .b-sidebar > .b-sidebar-header {
   border: 1px solid #000 !important;
 }
+.previewshow{
+  display: block !important;
+}
+/* .show.collapse{
+  display: block !important;
+} */
+/* .show.collapse{
+  transition: height 1s;
 
+} */
 .button-theme {
   background-color: #f1b319;
   border-collapse: #f1b319;
@@ -95,7 +104,7 @@
             </b-card-header>
             <b-collapse
               visible
-            
+              class="previewshow"
               id="accordion-1"
               accordion="my-accordion1"
               role="tabpanel"
@@ -160,11 +169,7 @@
                 ><i class="fa fa-user-plus"></i> Referral Configurations
               <!-- <a class="tool" data-position="right" draggable="false" title="Creates a unique referral URL for each campaign participants, set points of each referral"><i class='fas fa-exclamation-circle'></i></a> -->
               </b-button>
-            <!--   <div class="info">
-             <i class='fas fa-exclamation-circle'>
-                <p class="tooltiptext">Creates a unique referral URL for each campaign participants and sets points of each referral</p>
-                </i>
-                </div>-->
+
             </b-card-header>
             <b-collapse
               id="accordion-2"
@@ -199,7 +204,7 @@
             </b-card-header>
             <b-collapse
               id="accordion-3"
-              visible
+              :appear="visible"
               accordion="my-accordion"
               role="tabpanel"
             >
@@ -469,6 +474,7 @@ export default {
   },
 
   props: {
+    
     project: {
       type: Object,
     },
@@ -676,6 +682,7 @@ export default {
 this.$root.$on("openPreview",()=>{
   this.preview=true
 })
+this.$root.$on("closePreview",this.closePreview)
   }
   ,
   methods: {
