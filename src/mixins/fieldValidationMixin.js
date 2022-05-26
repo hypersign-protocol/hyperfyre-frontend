@@ -45,7 +45,13 @@ export function isValidText(str) {
     return false;
   }
 }
-
+export function isValidSlug(str){
+  if(str.match(/^([a-z0-9])*(-([a-z0-9])*)*$/)){
+    return true
+  }else{
+    return false
+  }
+}
 // Note: this will check is str is undefined, null, " ", ""
 export function isEmpty(str) {
   if (str == " ") {

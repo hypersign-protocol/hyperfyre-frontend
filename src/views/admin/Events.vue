@@ -267,7 +267,13 @@ i {
             class="mb-2"
             @error="onBannerError($event)"
           >
-            <ul style="list-style-type: none; padding-left: 0px; font-size: x-small">
+            <ul
+              style="
+                list-style-type: none;
+                padding-left: 0px;
+                font-size: x-small;
+              "
+            >
               <li data-toggle="tooltip" data-placement="bottom" title="EventId">
                 <i class="far fa-id-card"></i
                 ><span class="card-title">{{ project._id }}</span>
@@ -331,14 +337,31 @@ i {
                   :key="tag.id"
                   pill
                   variant="secondary"
-                  style="margin-left: 2px;"
-          
+                  style="margin-left: 2px"
                   >{{ tag.type.split("_")[0] }}</b-badge
                 >
               </small>
               <small style="float: right">
-                <span @click="editProject(project)" title="Click to edit this event" style="cursor:pointer"> 
-                    <i class="fas fa-pencil-alt"></i>
+                <span
+                  @click="editProject(project)"
+                  title="Click to edit this event"
+                  style="cursor: pointer"
+                >
+                  <i class="fas fa-pencil-alt"></i>
+                </span>
+                <span
+                  @click="cloneProject(project)"
+                  title="Click to clone this event"
+                  style="cursor: pointer"
+                >
+                  <i class="fa fa-clone"></i>
+                </span>
+                 <span
+                  @click="deleteProject(project)"
+                  title="Click to delete this event"
+                  style="cursor: pointer"
+                >
+                  <i class="fas fa-trash"></i>
                 </span>
                 <span
                   v-if="project.projectStatus == true"
@@ -389,10 +412,11 @@ import {
   truncate,
   checkTitle,
   checkValue,
+  isValidSlug,
 } from "../../mixins/fieldValidationMixin.js";
 import CreateProjectSlide from "../../components/admin/createProjectSlider/CreateProjectSlide.vue";
 import dayjs from "dayjs";
-import eventBus from '../../eventBus';
+import eventBus from "../../eventBus";
 
 import Messages from "../../utils/messages/admin/en";
 
@@ -418,6 +442,7 @@ export default {
         refereePoint: 10,
         referralPoint: 5,
         tags: [],
+        slug: "",
       },
       selected: [],
       tagToSearch: [
@@ -491,6 +516,7 @@ export default {
       fontColorDefault: "#ffffff",
 
       isProjectEditing: false,
+      isProjectClonning: false,
 
       cols: [
         "Project Id",
@@ -871,7 +897,6 @@ export default {
       this.resetAllValues();
       this.isProjectEditing = true;
       this.project = { ...project };
-
       this.project.fromDate = dayjs(project.fromDate).format(
         "YYYY-MM-DD hh:mm:ss"
       );
@@ -915,20 +940,148 @@ export default {
       this.fontColor =
         project.fontColor !== undefined ? project.fontColor : this.fontColor;
       this.projectStatus = project.projectStatus;
-      // console.log(project.actions)
       this.eventActionList = project.actions;
       this.tagsTemp = project.tags;
 
       this.$root.$emit("bv::toggle::collapse", "sidebar-right");
       this.$root.$emit("callClearFromProject");
     },
+
       openPreview () {
         this.project.actions=this.eventActionList
         console.log(this.project);
         this.$root.$emit("openPreview")
         
-     
+      
+      },
+
+    async cloneProject(project) {
+      this.resetAllValues();
+      this.isProjectEditing = false;
+      this.isProjectClonning = true;
+      this.project = { ...project };
+      if (this.isProjectClonning) {
+        this.project.projectName = this.project._id + "_copy";
+        this.project._id = "";
+        this.project.slug = "";
+        this.project.investorsCount = 0;
+      }
+      this.project.fromDate = dayjs(project.fromDate).format(
+        "YYYY-MM-DD hh:mm:ss"
+      );
+      this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
+
+      // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
+      this.project.social = {
+        twitter: {
+          isEnabled: true,
+          twitterHandle: this.project.twitterHandle,
+          twitterPostFormat: this.project.twitterPostFormat,
+        },
+        telegram: {
+          isEnabled: true,
+          telegramHandle: this.project.telegramHandle,
+          telegramAnnouncementChannel: this.project.telegramAnnouncementChannel,
+        },
+      };
+
+      this.socialOptions.forEach((media) => {
+        if (media.value) {
+          media.value.fields.map((field) => {
+            field.value = this.project[field.name];
+          });
+        }
+      });
+
+      this.socialOptions.map((x) => {
+        if (x.value) {
+          this.addedSocialMedias.push(x.value);
+        }
+      });
+      this.blockchainType =
+        project.blockchainType !== undefined
+          ? project.blockchainType
+          : this.blockchainType;
+      this.contractType = project.contractType;
+      this.themeColor =
+        project.themeColor !== undefined ? project.themeColor : this.themeColor;
+      this.fontColor =
+        project.fontColor !== undefined ? project.fontColor : this.fontColor;
+      this.projectStatus = project.projectStatus;
+      this.eventActionList = project.actions;
+      this.eventActionList = this.eventActionList.map(
+        ({ _id, eventId, __v, ...rest }) => {
+          return rest;
+        }
+      );
+      let index = this.eventActionList
+        .map((action) => action.title)
+        .indexOf("Hypersign Authentication");
+      this.eventActionList.splice(index, 1);
+      index = this.eventActionList
+        .map((action) => action.title)
+        .indexOf("Subscribe  Notification");
+      this.eventActionList.splice(index, 1);
+      this.tagsTemp = project.tags;
+      await this.saveProject();
     },
+ async deleteProject(project) {
+      try {
+        this.isLoading = true;
+        this.project = { ...project };
+        if (!this.project._id) throw new Error("No project found");
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${project._id}`;
+        const headers = {
+          Authorization: `Bearer ${this.authToken}`,
+          AccessToken: `Bearer ${this.accessToken}`,
+        };
+        const resp = await fetch(url, {
+          headers,
+          method: "DELETE",
+        });
+        const json = await resp.json();
+        //ToDO:- check if its a json
+      if(!json || !json.isArchived){
+        throw new Error("Could not delete the event")
+      }
+      console.log(this.projects.length)
+        const index = this.projects
+          .map((project) => project._id)
+          .indexOf(json._id);
+
+          console.log(index)
+        this.projects.splice(index, 1);
+      console.log(this.projects.length)
+        this.projectsToShow = this.projects.slice(0, this.perPage);
+
+        const tempProject = JSON.parse(localStorage.getItem("userProjects"));
+        localStorage.removeItem("userProjects");
+
+        tempProject.projects.splice(index, 1);
+        localStorage.setItem(
+          "userProjects",
+          JSON.stringify({
+            projects: tempProject.projects,
+            count: tempProject.projects.length,
+          })
+        );
+        if (json) {
+          if (!resp.ok) {
+            return this.notifyErr(json);
+          } else {
+            this.notifySuccess("Event is deleted successfully");
+          }
+        } else {
+          throw new Error("Error while deleting event");
+        }
+      } catch (e) {
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+      }
+
+    },
+
     async saveProject() {
       
       try {
@@ -939,7 +1092,9 @@ export default {
         if (this.isProjectNameValid() !== true) {
           return this.notifyErr(this.isProjectNameValid());
         }
-
+        if (this.isValidSlug() !== true) {
+          return this.notifyErr(this.isValidSlug());
+        }
         if (this.isLogoUrlValid() !== true) {
           return this.notifyErr(this.isLogoUrlValid());
         }
@@ -993,7 +1148,6 @@ export default {
           method,
           header: headers,
         });
-
         if (!this.isProjectEditing) {
           ////  not using this for the time being just  to test
           // this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/form/" + resp.data.slug :  "/form?projectId=" + resp.data._id )
@@ -1015,6 +1169,12 @@ export default {
         if (this.isProjectEditing) {
           await this.fetchProjects();
           this.$root.$emit("bv::toggle::collapse", "sidebar-right");
+          this.isProjectEditing = false;
+          return;
+        }
+        if (this.isProjectClonning) {
+          await this.fetchProjects();
+          this.isProjectClonning = false;
           return;
         }
 
@@ -1043,7 +1203,6 @@ export default {
     },
 
     checkIfEverythingIsFilled() {
-      
       for (let index = 0; index < this.eventActionList.length; index++) {
         if (
           this.eventActionList[index].score === null ||
@@ -1051,24 +1210,20 @@ export default {
         ) {
           return Messages.EVENTS.ACTIONS.SCORE_IS_NUM_ANY_LEFT;
         }
-         if (this.eventActionList[index].type === null) {
+        if (this.eventActionList[index].type === null) {
           return Messages.EVENTS.CHECK_ALL_TYPE;
         }
-        if(this.eventActionList[index].type==="SUMSUB_KYC"){
-          
-     
-          if(this.eventActionList[index].slug===""){
+        if (this.eventActionList[index].type === "SUMSUB_KYC") {
+          if (this.eventActionList[index].slug === "") {
             return Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_SLUG;
           }
-
-         
         }
-         if(isValidURL (this.eventActionList[index].title)!==undefined){
-      return Messages.EVENTS.ACTIONS.TITLE_URL;
-          }
+        if (isValidURL(this.eventActionList[index].title) !== undefined) {
+          return Messages.EVENTS.ACTIONS.TITLE_URL;
+        }
       }
       // for (let index = 0; index < this.eventActionList.length; index++) {
-       
+
       // }
       const eventActionTitle = checkTitle(this.eventActionList, "title");
 
@@ -1089,11 +1244,10 @@ export default {
           x.type !== "BLOCKCHAIN_AVAX" &&
           x.type !== "BLOCKCHAIN_REEF" &&
           x.type !== "BLOCKCHAIN_TEZ" &&
-          x.type !== "BLOCKCHAIN_CARDANO" && 
+          x.type !== "BLOCKCHAIN_CARDANO" &&
           x.type !== "PRIZE_CARD" &&
-          x.type !== "PUSH_NOTIFICATION"&&
-          x.type!=="SUMSUB_KYC"
-         
+          x.type !== "PUSH_NOTIFICATION" &&
+          x.type !== "SUMSUB_KYC"
       );
       const filteredValueList = checkValue(eventActionValue, "value");
       if (filteredValueList.includes(false)) {
@@ -1141,6 +1295,21 @@ export default {
       if (!isValidURL(this.project.logoUrl)) {
         return Messages.EVENTS.VALIDATION.INVALID_LOGO_URL;
       }
+      return true;
+    },
+    isValidSlug() {
+      console.log(this.isProjectClonning)
+      if (this.isProjectClonning && this.project.slug =="") {
+        return true;
+      } else {
+        if (!this.project.slug) {
+          return Messages.EVENTS.VALIDATION.EMPTY_SLUG;
+        }
+        if (!isValidSlug(this.project.slug)) {
+          return Messages.EVENTS.VALIDATION.INVALID_SLUG;
+        }
+      }
+
       return true;
     },
 
