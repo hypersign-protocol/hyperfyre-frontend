@@ -212,6 +212,7 @@ i {
             :contractType="contractType"
             :eventActionType="eventActionType"
             :saveProject="saveProject"
+            :openPreview="openPreview"
             :addedSocialMedias="addedSocialMedias"
             :selectedSocialMedia="selectedSocialMedia"
             :socialOptions="socialOptions"
@@ -551,6 +552,11 @@ export default {
     this.project.ownerDid = this.user.id; // : "did:hs:QWERTlkasd090123SWEE12322";
     await this.fetchProjects();
     await this.getTags();
+
+    this.$root.$on("actionReorder",(arg)=>{
+      console.log(arg);
+     this.eventActionList=arg
+    })
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
@@ -941,6 +947,14 @@ export default {
       this.$root.$emit("callClearFromProject");
     },
 
+      openPreview () {
+        this.project.actions=this.eventActionList
+        console.log(this.project);
+        this.$root.$emit("openPreview")
+        
+      
+      },
+
     async cloneProject(project) {
       this.resetAllValues();
       this.isProjectEditing = false;
@@ -1065,8 +1079,11 @@ export default {
       } finally {
         this.isLoading = false;
       }
+
     },
+
     async saveProject() {
+      
       try {
         if (this.checkIfEverythingIsFilled() !== true) {
           return this.notifyErr(this.checkIfEverythingIsFilled());
