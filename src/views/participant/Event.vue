@@ -15,11 +15,12 @@
     <template v-if="authToken != '' && authToken != null">
       <ErrorMessage v-if="!eventData.projectStatus" errorMessage="Event is over" />
       <Action v-if="eventData.projectStatus" :userProfile="userProfileData" :ActionSchema="eventActionsToShow" :prizeData="prizeData" @UserUpdateEvent="updateUserData" />
-    </template>
-     <div class="footer">
+    <div class="footer mx-auto overflow-hidden" style="max-width:600px;align-items:center;padding-top:20px" >
      <b>Disclaimer:</b>
       Anyone can create campaigns on HyperFyre, rewards are distributed by the campaign creator and HyperFyre is not responsible for reward distribution.
       </div>
+   </template>
+    
   </div>
 </template>
 <script>

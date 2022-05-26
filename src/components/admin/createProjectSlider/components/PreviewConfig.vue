@@ -8,8 +8,10 @@
           parseInt(
             (new Date(eventData.toDate).getTime() - new Date().getTime()) /
               (1000 * 3600 * 24)
-          )
-        "
+          )<0?'0':parseInt(
+            (new Date(eventData.toDate).getTime() - new Date().getTime()) /
+              (1000 * 3600 * 24)
+          ) "
       />
     </div>
     <div>
