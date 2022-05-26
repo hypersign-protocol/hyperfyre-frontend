@@ -1193,7 +1193,9 @@ export default {
 
         await this.fetchProjects();
         this.$bvModal.hide("create-project-modal");
+        
         this.$root.$emit("bv::toggle::collapse", "sidebar-right");
+         this.$root.$emit("closePreview")
       } catch (e) {
         if (e.errors) {
           this.errors = e.errors;
@@ -1204,6 +1206,7 @@ export default {
         this.isLoading = false;
         // this.clear();
       }
+   
     },
 
     checkIfEverythingIsFilled() {
