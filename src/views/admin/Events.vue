@@ -324,8 +324,9 @@ i {
               >
                 <i class="fas fa-users"></i
                 ><a
-                  class="card-body-custom"
                   :href="`/admin/participants?projectId=${project._id}`"
+                  target="_blank"
+                   class="card-body-custom"
                   >Participants ({{ project.investorsCount }})</a
                 >
               </li>
@@ -961,7 +962,7 @@ export default {
       this.isProjectClonning = true;
       this.project = { ...project };
       if (this.isProjectClonning) {
-        this.project.projectName = this.project._id + "_copy";
+        this.project.projectName = Date.now() + "_copy";
         this.project._id = "";
         this.project.slug = "";
         this.project.investorsCount = 0;
@@ -1010,8 +1011,11 @@ export default {
       this.projectStatus = project.projectStatus;
       this.eventActionList = project.actions;
       this.eventActionList = this.eventActionList.map(
-        ({ _id, eventId, __v, ...rest }) => {
-          return rest;
+        (action) => {
+          delete action["_id"]
+          delete action["eventId"]
+          delete action["__v"]
+          return action;
         }
       );
       let index = this.eventActionList
