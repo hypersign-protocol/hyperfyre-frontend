@@ -355,6 +355,13 @@ i {
                 >
                   <i class="fa fa-clone"></i>
                 </span>
+                 <span
+                  @click="deleteProject(project)"
+                  title="Click to delete this event"
+                  style="cursor: pointer"
+                >
+                  <i class="fas fa-trash"></i>
+                </span>
                 <span
                   v-if="project.projectStatus == true"
                   data-toggle="tooltip"
@@ -1003,6 +1010,61 @@ export default {
       this.eventActionList.splice(index, 1);
       this.tagsTemp = project.tags;
       await this.saveProject();
+    },
+ async deleteProject(project) {
+      try {
+        this.isLoading = true;
+        this.project = { ...project };
+        if (!this.project._id) throw new Error("No project found");
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${project._id}`;
+        const headers = {
+          Authorization: `Bearer ${this.authToken}`,
+          AccessToken: `Bearer ${this.accessToken}`,
+        };
+        const resp = await fetch(url, {
+          headers,
+          method: "DELETE",
+        });
+        const json = await resp.json();
+        //ToDO:- check if its a json
+      if(!json || !json.isArchived){
+        throw new Error("Could not delete the event")
+      }
+      console.log(this.projects.length)
+        const index = this.projects
+          .map((project) => project._id)
+          .indexOf(json._id);
+
+          console.log(index)
+        this.projects.splice(index, 1);
+      console.log(this.projects.length)
+        this.projectsToShow = this.projects.slice(0, this.perPage);
+
+        const tempProject = JSON.parse(localStorage.getItem("userProjects"));
+        localStorage.removeItem("userProjects");
+
+        tempProject.projects.splice(index, 1);
+        localStorage.setItem(
+          "userProjects",
+          JSON.stringify({
+            projects: tempProject.projects,
+            count: tempProject.projects.length,
+          })
+        );
+        if (json) {
+          if (!resp.ok) {
+            return this.notifyErr(json);
+          } else {
+            this.notifySuccess("Event is deleted successfully");
+          }
+        } else {
+          throw new Error("Error while deleting event");
+        }
+      } catch (e) {
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+      }
     },
     async saveProject() {
       try {
