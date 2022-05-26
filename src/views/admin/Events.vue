@@ -212,6 +212,7 @@ i {
             :contractType="contractType"
             :eventActionType="eventActionType"
             :saveProject="saveProject"
+            :openPreview="openPreview"
             :addedSocialMedias="addedSocialMedias"
             :selectedSocialMedia="selectedSocialMedia"
             :socialOptions="socialOptions"
@@ -354,6 +355,13 @@ i {
                   style="cursor: pointer"
                 >
                   <i class="fa fa-clone"></i>
+                </span>
+                 <span
+                  @click="deleteProject(project)"
+                  title="Click to delete this event"
+                  style="cursor: pointer"
+                >
+                  <i class="fas fa-trash"></i>
                 </span>
                 <span
                   v-if="project.projectStatus == true"
@@ -544,6 +552,11 @@ export default {
     this.project.ownerDid = this.user.id; // : "did:hs:QWERTlkasd090123SWEE12322";
     await this.fetchProjects();
     await this.getTags();
+
+    this.$root.$on("actionReorder",(arg)=>{
+      console.log(arg);
+     this.eventActionList=arg
+    })
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
@@ -934,6 +947,14 @@ export default {
       this.$root.$emit("callClearFromProject");
     },
 
+      openPreview () {
+        this.project.actions=this.eventActionList
+        console.log(this.project);
+        this.$root.$emit("openPreview")
+        
+      
+      },
+
     async cloneProject(project) {
       this.resetAllValues();
       this.isProjectEditing = false;
@@ -1004,7 +1025,65 @@ export default {
       this.tagsTemp = project.tags;
       await this.saveProject();
     },
+ async deleteProject(project) {
+      try {
+        this.isLoading = true;
+        this.project = { ...project };
+        if (!this.project._id) throw new Error("No project found");
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${project._id}`;
+        const headers = {
+          Authorization: `Bearer ${this.authToken}`,
+          AccessToken: `Bearer ${this.accessToken}`,
+        };
+        const resp = await fetch(url, {
+          headers,
+          method: "DELETE",
+        });
+        const json = await resp.json();
+        //ToDO:- check if its a json
+      if(!json || !json.isArchived){
+        throw new Error("Could not delete the event")
+      }
+      console.log(this.projects.length)
+        const index = this.projects
+          .map((project) => project._id)
+          .indexOf(json._id);
+
+          console.log(index)
+        this.projects.splice(index, 1);
+      console.log(this.projects.length)
+        this.projectsToShow = this.projects.slice(0, this.perPage);
+
+        const tempProject = JSON.parse(localStorage.getItem("userProjects"));
+        localStorage.removeItem("userProjects");
+
+        tempProject.projects.splice(index, 1);
+        localStorage.setItem(
+          "userProjects",
+          JSON.stringify({
+            projects: tempProject.projects,
+            count: tempProject.projects.length,
+          })
+        );
+        if (json) {
+          if (!resp.ok) {
+            return this.notifyErr(json);
+          } else {
+            this.notifySuccess("Event is deleted successfully");
+          }
+        } else {
+          throw new Error("Error while deleting event");
+        }
+      } catch (e) {
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+      }
+
+    },
+
     async saveProject() {
+      
       try {
         if (this.checkIfEverythingIsFilled() !== true) {
           return this.notifyErr(this.checkIfEverythingIsFilled());
