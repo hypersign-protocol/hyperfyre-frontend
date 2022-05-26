@@ -324,8 +324,9 @@ i {
               >
                 <i class="fas fa-users"></i
                 ><a
-                  class="card-body-custom"
                   :href="`/admin/participants?projectId=${project._id}`"
+                  target="_blank"
+                   class="card-body-custom"
                   >Participants ({{ project.investorsCount }})</a
                 >
               </li>
