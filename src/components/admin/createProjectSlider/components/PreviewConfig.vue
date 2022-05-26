@@ -2,14 +2,13 @@
   <div class="mx-auto overflow-hidden mt-3 border-0" style="max-width: 600px;">
     <div >
          <Metrics
-        @getLeaderBoard="fetchLeaderBoard"
-        :leaderBoardData="leaderBoardData"
+        
         :userScore="5"
         :totalEntries="eventData.investorsCount"
         :timeLeft="
-          (new Date(eventData.toDate).getTime() -
-            new Date(eventData.fromDate).getTime()) /
-          (1000 * 3600 * 24)
+          parseInt((new Date(eventData.toDate).getTime() -
+            new Date().getTime()) /
+          (1000 * 3600 * 24))
         "
       />
     </div>
@@ -25,7 +24,8 @@
       />
     </div>    
     <div>    
-      <draggable v-model="eventData.actions" >
+    
+      <draggable v-model="eventData.actions" @end="onEnd" >
        <b-list-group 
         class="col md-4"
         v-for="action in eventData.actions"
@@ -54,5 +54,12 @@ export default {
     },
   },
   components: { Banner, Metrics ,draggable},
+  methods:{
+  onEnd(){
+   this.$root.$emit("actionReorder",this.eventData.actions)
+  }
+}
 };
+
+
 </script>

@@ -95,6 +95,7 @@
             </b-card-header>
             <b-collapse
               visible
+            
               id="accordion-1"
               accordion="my-accordion1"
               role="tabpanel"
@@ -489,6 +490,9 @@ export default {
     contractType: {
       type: String,
     },
+     openPreview:{
+       type:Function
+     },
     saveProject: {
       type: Function,
     },
@@ -668,10 +672,14 @@ export default {
       preview:false
     };
   },
+  mounted(){
+this.$root.$on("openPreview",()=>{
+  this.preview=true
+})
+  }
+  ,
   methods: {
-    openPreview () {
-      this.preview= true
-    },
+  
     closePreview () {
       this.preview= false
     }
