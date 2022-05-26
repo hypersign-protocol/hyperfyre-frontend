@@ -160,11 +160,11 @@
                 ><i class="fa fa-user-plus"></i> Referral Configurations
               <!-- <a class="tool" data-position="right" draggable="false" title="Creates a unique referral URL for each campaign participants, set points of each referral"><i class='fas fa-exclamation-circle'></i></a> -->
               </b-button>
-              <div class="info">
-              <i class='fas fa-exclamation-circle'>
+            <!--   <div class="info">
+             <i class='fas fa-exclamation-circle'>
                 <p class="tooltiptext">Creates a unique referral URL for each campaign participants and sets points of each referral</p>
                 </i>
-                </div>
+                </div>-->
             </b-card-header>
             <b-collapse
               id="accordion-2"
@@ -438,16 +438,16 @@
         <button
           class="btn btn-primary mt-3 button-theme  mr-3"
           type="button"
-          @click="saveProject"
+          @click="openPreview"
         >
-          Submit
+          Preview
         </button>
         <button
           class="btn btn-primary mt-3 button-theme"
           type="button"
-          @click="openPreview"
+          @click="saveProject"
         >
-          Preview
+          Save
         </button>
       </div>
     </b-sidebar>
