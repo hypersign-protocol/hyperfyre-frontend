@@ -554,7 +554,7 @@ export default {
     await this.getTags();
 
     this.$root.$on("actionReorder",(arg)=>{
-      console.log(arg);
+      //console.log(arg);
      this.eventActionList=arg
     })
   },
