@@ -950,7 +950,7 @@ export default {
 
       openPreview () {
         this.project.actions=this.eventActionList
-        console.log(this.project);
+        // console.log(this.project);
         this.$root.$emit("openPreview")
         
       
@@ -1048,14 +1048,14 @@ export default {
       if(!json || !json.isArchived){
         throw new Error("Could not delete the event")
       }
-      console.log(this.projects.length)
+      // console.log(this.projects.length)
         const index = this.projects
           .map((project) => project._id)
           .indexOf(json._id);
 
-          console.log(index)
+          // console.log(index)
         this.projects.splice(index, 1);
-      console.log(this.projects.length)
+      // console.log(this.projects.length)
         this.projectsToShow = this.projects.slice(0, this.perPage);
 
         const tempProject = JSON.parse(localStorage.getItem("userProjects"));
@@ -1302,7 +1302,7 @@ export default {
       return true;
     },
     isValidSlug() {
-      console.log(this.isProjectClonning)
+      // console.log(this.isProjectClonning)
       if (this.isProjectClonning && this.project.slug =="") {
         return true;
       } else {

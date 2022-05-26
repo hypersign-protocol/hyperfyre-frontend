@@ -23,14 +23,37 @@
       />
     </div>
     <div  class="accordion  mx-auto">
-      
+      <b-col
+          md="14"
+          v-for="action in eventData.actions"
+          v-bind:key="action._id"
+        >
+          <b-card    v-if="action.type==='PRIZE_CARD'">
+            <b-row cols-sm="1">
+              <b-col cols="1" sm="1" md="1" >
+                <span>
+                 
+                  <i
+                    style="color: gray"
+                    v-if="action.type.includes('PRIZE_')"
+                    class="fas fa-gift"
+                  ></i>
+                 
+                </span>
+              </b-col>
+              <b-col cols="9" sm="9" class="text-left" md="9">
+                <div class="text text-capitalize">{{ action.title }}</div>
+              </b-col>              
+            </b-row>
+          </b-card>
+        </b-col>
       <draggable v-model="eventData.actions" @end="onEnd">
         <b-col
           md="14"
           v-for="action in eventData.actions"
           v-bind:key="action._id"
         >
-          <b-card    v-if="action.type !== 'HYPERSIGN_AUTH'">
+          <b-card    v-if="action.type !== 'HYPERSIGN_AUTH' && action.type !=='PRIZE_CARD'">
             <b-row cols-sm="1">
               <b-col cols="1" sm="1" md="1" >
                 <span>
