@@ -1103,7 +1103,7 @@ export default {
                   throw new Error("Error while deleting event");
                 }
               }else{
-                throw new Error("looks like you were about to delete a event by mistake");
+                throw new Error("Looks like you were about to delete a event by mistake");
               }
             }
           });
@@ -1192,9 +1192,13 @@ export default {
         setTimeout(() => {
           this.whitelistingLink = "";
         }, 10000);
+
         this.notifySuccess(
           Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_SAVED + resp.data._id
         );
+        if(resp.data.projectName.includes('copy')){
+          this.notifyWarning("Clone of '"+resp.data.projectName.split('copy')[0]+"' created");
+        }
         this.resetAllValues();
 
         if (this.isProjectEditing) {

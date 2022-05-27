@@ -29,6 +29,16 @@ export default{
               text: msg,
             });
           },
+          notifyInfo(msg) {
+            this.isLoading = false;
+            this.$notify({
+              group: "foo",
+              title: "Information",
+              type: "info",
+              text: msg,
+            });
+          },
+       
        
     }
 }
