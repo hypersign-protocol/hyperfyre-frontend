@@ -19,7 +19,7 @@ const EVENTS = {
         INVALID_PROJECT_NAME: "Please provide valid Event Name",
         INVALID_LOGO_URL: "Banner Url is not Valid",
         INVALID_SLUG:"Please enter a valid Event Slug.",
-        EMPTY_SLUG: "Slug can not be empty"
+        EMPTY_SLUG: "Event slug can't be empty"
     },
     CREATE_EDIT_EVENT: {
         PROJECT_FETCHED: "Event is fetched. Event Name ",
