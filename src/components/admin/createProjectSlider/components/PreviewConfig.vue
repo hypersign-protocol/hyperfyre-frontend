@@ -57,11 +57,12 @@
             </b-row>
           </b-card>
         </b-col>
-      <draggable v-model="eventData.actions" @end="onEnd" class="drag">
+      <draggable v-model="eventData.actions" @end="onEnd" class="drag" >
         <b-col
           md="14"
           v-for="action in eventData.actions"
           v-bind:key="action._id"
+           title="Drag to change the position of the action"
         >
           <b-card    v-if="action.type !== 'HYPERSIGN_AUTH' && action.type !=='PRIZE_CARD'">
             <b-row cols-sm="1">
@@ -274,6 +275,7 @@
 
               <b-col cols="2" sm="2" md="2">
                 <b-badge class="btn-score" >
+                  <img src="../../../../assets/plus.svg" />
                   {{ action.score }}
                 </b-badge>
               </b-col>
