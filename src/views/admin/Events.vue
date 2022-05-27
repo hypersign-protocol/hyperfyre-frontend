@@ -1030,9 +1030,8 @@ export default {
         
         await this.$swal
           .fire({
-            title: "<h5><b style='color:red'>Confirm Deletion</b></h5>",
             html: `
-            <div><b style="color:red">CAUTION :</b> <b style="color:tomato" >This action will delete this event and associated participants. Are you sure you want to proceed? <br>Please enter your event id to proceed.</b></div>
+            <div><b style="color:red">CAUTION :</b> <b style="color:tomato" >This action will delete this event and associated participants.<br>Please enter the event id to proceed.</b></div>
     <input type="name" id="name" class="swal2-input" placeholder="provide event id">`,
             confirmButtonText:
               '<span style="color:white">Confirm</span>',
