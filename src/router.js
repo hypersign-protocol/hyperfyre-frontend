@@ -22,15 +22,15 @@ const router = new Router({
         tabbar: false,
       }),
     },
-    // {
-    //   path: "/user/home/",
-    //   name: "Home",
-    //   component: () =>
-    //     import(
-    //       /* webpackChunkName: "investorLogin" */ "./views/participant/Home.vue"
-    //     ),
-    //   meta: () => ({ requiresAuth: true, title: 'Hyperfyre - User Home' })
-    // },
+    {
+      path: "/user/home/",
+      name: "Home",
+      component: () =>
+        import(
+          /* webpackChunkName: "investorLogin" */ "./views/participant/Home.vue"
+        ),
+      meta: () => ({ requiresAuth: true, title: 'Hyperfyre - User Home' })
+    },
     {
       path: "/",
       redirect: "/admin/login",
