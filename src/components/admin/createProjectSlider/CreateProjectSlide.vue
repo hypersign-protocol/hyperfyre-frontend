@@ -203,8 +203,7 @@
               </b-button>
             </b-card-header>
             <b-collapse
-              id="accordion-3"
-              :appear="visible"
+              id="accordion-3"              
               accordion="my-accordion"
               role="tabpanel"
             >
@@ -237,7 +236,7 @@
             </b-card-header>
             <b-collapse
               id="accordion-8"
-              visible
+              
               accordion="my-accordion"
               role="tabpanel"
             >

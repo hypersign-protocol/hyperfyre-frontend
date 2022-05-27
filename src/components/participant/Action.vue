@@ -10,10 +10,19 @@
       :is-full-page="fullPage"
     ></loading>
     <Profile :user="userProfile" />
+    <template v-for="(actionItem, index) in ActionSchema">
+      <component v-if="actionItem.type==='INFO_TEXT'"
+        :is="CapitaliseString(actionItem.type)"
+        :key="index"
+        :idValue="index"
+        :data="actionItem"
+        @input="updateUserInfo(actionItem, $event)"
+      ></component>
+    </template>
     <prize-card v-if="isPrizedata" :prizeData="prizeData" />
 
     <template v-for="(actionItem, index) in ActionSchema">
-      <component
+      <component v-if="actionItem.type!=='INFO_TEXT'"
         :is="CapitaliseString(actionItem.type)"
         :key="index"
         :idValue="index"

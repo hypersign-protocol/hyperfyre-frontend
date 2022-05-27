@@ -326,7 +326,7 @@ i {
                 ><a
                   :href="`/admin/participants?projectId=${project._id}`"
                   target="_blank"
-                   class="card-body-custom"
+                  class="card-body-custom"
                   >Participants ({{ project.investorsCount }})</a
                 >
               </li>
@@ -357,7 +357,7 @@ i {
                 >
                   <i class="fa fa-clone"></i>
                 </span>
-                 <span
+                <span
                   @click="deleteProject(project)"
                   title="Click to delete this event"
                   style="cursor: pointer"
@@ -369,7 +369,6 @@ i {
                   data-toggle="tooltip"
                   title="This event is live"
                 >
-
                   <i class="fas fa-signal" style="color: green"></i>
                 </span>
                 <span
@@ -554,10 +553,10 @@ export default {
     await this.fetchProjects();
     await this.getTags();
 
-    this.$root.$on("actionReorder",(arg)=>{
+    this.$root.$on("actionReorder", (arg) => {
       //console.log(arg);
-     this.eventActionList=arg
-    })
+      this.eventActionList = arg;
+    });
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
@@ -948,13 +947,11 @@ export default {
       this.$root.$emit("callClearFromProject");
     },
 
-      openPreview () {
-        this.project.actions=this.eventActionList
-        // console.log(this.project);
-        this.$root.$emit("openPreview")
-        
-      
-      },
+    openPreview() {
+      this.project.actions = this.eventActionList;
+      // console.log(this.project);
+      this.$root.$emit("openPreview");
+    },
 
     async cloneProject(project) {
       this.resetAllValues();
@@ -962,7 +959,8 @@ export default {
       this.isProjectClonning = true;
       this.project = { ...project };
       if (this.isProjectClonning) {
-        this.project.projectName = Date.now() + "_copy";
+        this.project.projectName =
+          this.project.projectName + " copy " + Date.now();
         this.project._id = "";
         this.project.slug = "";
         this.project.investorsCount = 0;
@@ -1010,14 +1008,12 @@ export default {
         project.fontColor !== undefined ? project.fontColor : this.fontColor;
       this.projectStatus = project.projectStatus;
       this.eventActionList = project.actions;
-      this.eventActionList = this.eventActionList.map(
-        (action) => {
-          delete action["_id"]
-          delete action["eventId"]
-          delete action["__v"]
-          return action;
-        }
-      );
+      this.eventActionList = this.eventActionList.map((action) => {
+        delete action["_id"];
+        delete action["eventId"];
+        delete action["__v"];
+        return action;
+      });
       let index = this.eventActionList
         .map((action) => action.title)
         .indexOf("Hypersign Authentication");
@@ -1029,65 +1025,97 @@ export default {
       this.tagsTemp = project.tags;
       await this.saveProject();
     },
- async deleteProject(project) {
+    async deleteProject(project) {
       try {
-        this.isLoading = true;
-        this.project = { ...project };
-        if (!this.project._id) throw new Error("No project found");
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${project._id}`;
-        const headers = {
-          Authorization: `Bearer ${this.authToken}`,
-          AccessToken: `Bearer ${this.accessToken}`,
-        };
-        const resp = await fetch(url, {
-          headers,
-          method: "DELETE",
-        });
-        const json = await resp.json();
-        //ToDO:- check if its a json
-      if(!json || !json.isArchived){
-        throw new Error("Could not delete the event")
-      }
-      // console.log(this.projects.length)
-        const index = this.projects
-          .map((project) => project._id)
-          .indexOf(json._id);
-
-          // console.log(index)
-        this.projects.splice(index, 1);
-      // console.log(this.projects.length)
-        this.projectsToShow = this.projects.slice(0, this.perPage);
-
-        const tempProject = JSON.parse(localStorage.getItem("userProjects"));
-        localStorage.removeItem("userProjects");
-
-        tempProject.projects.splice(index, 1);
-        localStorage.setItem(
-          "userProjects",
-          JSON.stringify({
-            projects: tempProject.projects,
-            count: tempProject.projects.length,
+        
+        await this.$swal
+          .fire({
+            title: "<h5><b>Confirm Deletion</b></h5>",
+            html: `
+            <div>Please enter the event id of the selected event to confirm deletion </div>
+    <input type="name" id="name" class="swal2-input" placeholder="provide event id">`,
+            confirmButtonText:
+              '<span style="color:black">Confirm</span>',
+            confirmButtonColor: "#f1b319",
+            icon:"warning",
+            focusConfirm: false,
+            showCloseButton: true,
+            allowOutsideClick: false,
+            preConfirm: () => {
+              const eventID = this.$swal.getPopup().querySelector("#name").value;
+              if(eventID===""){
+                this.$swal.showValidationMessage(
+                `Please enter event id`
+              );
+              }
+              return { eventId: eventID };
+            },
           })
-        );
-        if (json) {
-          if (!resp.ok) {
-            return this.notifyErr(json);
-          } else {
-            this.notifySuccess("Event is deleted successfully");
-          }
-        } else {
-          throw new Error("Error while deleting event");
-        }
+          .then(async (data) => {
+            this.isLoading = true;
+            this.project = { ...project };
+            if (data.value) {
+              if (data.value.eventId === project._id) {
+                if (!this.project._id) throw new Error("No project found");
+                const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${project._id}`;
+                const headers = {
+                  Authorization: `Bearer ${this.authToken}`,
+                  AccessToken: `Bearer ${this.accessToken}`,
+                };
+                const resp = await fetch(url, {
+                  headers,
+                  method: "DELETE",
+                });
+                const json = await resp.json();
+                //ToDO:- check if its a json
+                if (!json || !json.isArchived) {
+                  throw new Error("Could not delete the event");
+                }
+                // console.log(this.projects.length)
+                const index = this.projects
+                  .map((project) => project._id)
+                  .indexOf(json._id);
+
+                // console.log(index)
+                this.projects.splice(index, 1);
+                // console.log(this.projects.length)
+                this.projectsToShow = this.projects.slice(0, this.perPage);
+
+                const tempProject = JSON.parse(
+                  localStorage.getItem("userProjects")
+                );
+                localStorage.removeItem("userProjects");
+
+                tempProject.projects.splice(index, 1);
+                localStorage.setItem(
+                  "userProjects",
+                  JSON.stringify({
+                    projects: tempProject.projects,
+                    count: tempProject.projects.length,
+                  })
+                );
+                if (json) {
+                  if (!resp.ok) {
+                    return this.notifyErr(json);
+                  } else {
+                    this.notifySuccess("Event is deleted successfully");
+                  }
+                } else {
+                  throw new Error("Error while deleting event");
+                }
+              }else{
+                throw new Error("looks like you were about to delete a event by mistake");
+              }
+            }
+          });
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
         this.isLoading = false;
       }
-
     },
 
     async saveProject() {
-      
       try {
         if (this.checkIfEverythingIsFilled() !== true) {
           return this.notifyErr(this.checkIfEverythingIsFilled());
@@ -1193,9 +1221,9 @@ export default {
 
         await this.fetchProjects();
         this.$bvModal.hide("create-project-modal");
-        
+
         this.$root.$emit("bv::toggle::collapse", "sidebar-right");
-         this.$root.$emit("closePreview")
+        this.$root.$emit("closePreview");
       } catch (e) {
         if (e.errors) {
           this.errors = e.errors;
@@ -1206,7 +1234,6 @@ export default {
         this.isLoading = false;
         // this.clear();
       }
-   
     },
 
     checkIfEverythingIsFilled() {
@@ -1306,9 +1333,9 @@ export default {
     },
     isValidSlug() {
       // console.log(this.isProjectClonning)
-      if (this.isProjectClonning && this.project.slug =="") {
+      if (this.isProjectClonning && this.project.slug == "") {
         return true;
-      } else {
+      } else if (this.isProjectEditing) {
         if (!this.project.slug) {
           return Messages.EVENTS.VALIDATION.EMPTY_SLUG;
         }
