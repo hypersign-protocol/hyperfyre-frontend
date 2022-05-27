@@ -14,8 +14,8 @@
           parseInt(
             (new Date(eventData.toDate).getTime() - new Date().getTime()) /
               (1000 * 3600 * 24)
-          ) < 0
-            ? '0'
+          ) <=0
+            ? 0
             : parseInt(
                 (new Date(eventData.toDate).getTime() - new Date().getTime()) /
                   (1000 * 3600 * 24)
@@ -36,8 +36,8 @@
     <div class="accordion mx-auto">
       <b-col
         md="14"
-        v-for="action in eventData.actions"
-        v-bind:key="action._id"
+        v-for="(action,id) in eventData.actions"
+        :key="id"
       >
         <b-card v-if="action.type === 'INFO_TEXT' && action.isDeleted !== true">
           <b-row cols-sm="1">
@@ -59,7 +59,7 @@
       <b-col
         md="14"
         v-for="action in eventData.actions"
-        v-bind:key="action._id"
+        :key="action._id"
       >
         <b-card
           v-if="action.type === 'PRIZE_CARD' && action.isDeleted !== true"
@@ -84,8 +84,8 @@
       <draggable v-model="eventData.actions" @end="onEnd" class="drag">
         <b-col
           md="14"
-          v-for="action in eventData.actions"
-          v-bind:key="action._id"
+          v-for="(action,id) in eventData.actions"
+        :key="id"
           title="Drag to change the position of the action"
         >
           <b-card
@@ -330,7 +330,8 @@ export default {
     },
   },
   components: { Banner, Metrics, draggable },
-  methods: {
+
+methods: {
     onEnd() {
       this.$root.$emit("actionReorder", this.eventData.actions);
     },
