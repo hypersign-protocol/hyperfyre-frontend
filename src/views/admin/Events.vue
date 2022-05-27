@@ -1179,6 +1179,7 @@ export default {
           method,
           header: headers,
         });
+        this.$root.$emit("closePreview");
         if (!this.isProjectEditing) {
           ////  not using this for the time being just  to test
           // this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/form/" + resp.data.slug :  "/form?projectId=" + resp.data._id )
