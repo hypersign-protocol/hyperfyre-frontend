@@ -1,3 +1,8 @@
+<style>
+.mouse-pointer
+{
+cursor:pointer;
+}</style>
 <template>
   <b-row class="metrics-info border-bottom-0">
     <b-col cols="3" sm="3" class="border-right" md="3">
@@ -18,8 +23,8 @@
         <div class="text">Days Left</div>
       </div>
     </b-col>
-    <b-col cols="3" sm="3" md="3">
-      <div class="py-4" @click="showLeaderBoard()">
+    <b-col cols="3" sm="3" md="3" >
+      <div class="py-4 mouse-pointer" @click="showLeaderBoard()" title="Click to see Leaderboard">
         <div class="number"><i class="fas fa-table" ></i></div>
         <div class="text">Leaderboard</div>
       </div>

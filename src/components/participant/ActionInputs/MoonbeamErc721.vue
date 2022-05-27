@@ -120,7 +120,7 @@ export default {
   methods: {
     checkWeb3Injection() {
       try {
-       if (ethereum && ethereum.isMetaMask) {
+       if (window.ethereum && window.ethereum.isMetaMask) {
           this.web3 = new Web3(window.ethereum);
         }
         

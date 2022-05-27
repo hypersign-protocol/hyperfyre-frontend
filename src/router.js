@@ -58,6 +58,13 @@ const router = new Router({
 
     },
     {
+      path: "/404",
+      name: "PageNotFound",
+
+      component: () => import(/* webpackChunkName: "adminLogin" */ './views/404.vue'),
+
+    },
+    {
       path: "/admin/dashboard",
       name: "Dashboard",
       component: () =>

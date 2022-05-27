@@ -131,6 +131,9 @@ export default {
         await this.fetchUserInfoOnLogin();
       }
     }catch(e){
+      if(e && e.indexOf("No event found for id or slug =") >= 0){
+        this.$router.push("/404")
+      }
       this.notifyErr(Messages.EVENT.ERROR_OCCURED+ e.message);
     }
   },
@@ -194,15 +197,9 @@ export default {
           "Content-Type": "application/json",
         };
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
-
         this.eventData = {
           ...resp.data
                 }
-
-
-
-
-
       } else {
         this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG)
       }
@@ -255,7 +252,6 @@ export default {
           header: headers,
           method: "GET",
         })
-
         if(res.data.length === 0){
            // a user can participate in event
            // Participate in event
