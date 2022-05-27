@@ -86,6 +86,7 @@
             >
               <b-button
                 v-b-toggle.accordion-1
+                style="pointer-events:none;"
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 title="Preview"
@@ -103,6 +104,7 @@
               </b-button>
             </b-card-header>
             <b-collapse
+            
               visible
               class="previewshow"
               id="accordion-1"
