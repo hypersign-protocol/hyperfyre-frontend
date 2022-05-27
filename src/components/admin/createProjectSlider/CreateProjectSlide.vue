@@ -111,7 +111,7 @@
             >
               <b-card-body>
                
-                 <preview-config  :eventData="project"/>
+                 <preview-config  :eventData="project" />
               </b-card-body>
             </b-collapse>
           </b-card>
