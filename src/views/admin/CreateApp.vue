@@ -276,7 +276,7 @@ this.getApp();
       this.clearselected();
     },
     editbtn(row){
-      console.log(row);
+      //console.log(row);
       this.isEdit= true;
       this.app = {...row};
       this.app.toggle=false;
