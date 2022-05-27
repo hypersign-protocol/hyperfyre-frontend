@@ -91,8 +91,9 @@
 <template>
   <div>
     <div v-if="isProjectEditing" class="row g-3 align-items-center w-100 mt-4">
-        <div class=" text-left col-lg-3 col-md-3 text-left">
-            <label for="did" class="col-form-label">Event Id: </label>
+        <div class="col-lg-3 col-md-3 text-left">
+                <tool-tips infoMessage="Event Id"></tool-tips><label for="eventId" class="col-form-label">
+          </label>  <label for="did" class="col-form-label">Event Id: </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
             <input disabled  v-model="project._id" type="text"   id="did" class="form-control w-100" >
