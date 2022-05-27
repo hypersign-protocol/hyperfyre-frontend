@@ -38,7 +38,7 @@
           v-for="action in eventData.actions"
           v-bind:key="action._id"
         >
-        <b-card    v-if="action.type==='INFO_TEXT'">
+        <b-card    v-if="action.type==='INFO_TEXT' && action.isDeleted!==true">
             <b-row cols-sm="1">
               <b-col cols="1" sm="1" md="1" >
                 <span>
@@ -56,7 +56,7 @@
               </b-col>              
             </b-row>
           </b-card>
-          <b-card    v-if="action.type==='PRIZE_CARD'">
+          <b-card    v-if="action.type==='PRIZE_CARD' && action.isDeleted!==true">
             <b-row cols-sm="1">
               <b-col cols="1" sm="1" md="1" >
                 <span>
@@ -82,7 +82,7 @@
           v-bind:key="action._id"
            title="Drag to change the position of the action"
         >
-          <b-card    v-if="action.type !== 'HYPERSIGN_AUTH' && action.type !=='PRIZE_CARD' && action.type !=='INFO_TEXT'">
+          <b-card    v-if="action.type !== 'HYPERSIGN_AUTH' && action.type !=='PRIZE_CARD' && action.type !=='INFO_TEXT' && action.isDeleted!==true">
             <b-row cols-sm="1">
               <b-col cols="1" sm="1" md="1" >
                 <span>
