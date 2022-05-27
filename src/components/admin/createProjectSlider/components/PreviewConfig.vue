@@ -1,3 +1,11 @@
+<style>
+ .drag{
+   cursor: move; /* fallback if grab cursor is unsupported */
+    
+}
+
+</style>
+
 <template>
   <div class="mx-auto overflow-hidden mt-3 border-0" style="max-width: 600px">
     <div>
@@ -49,7 +57,7 @@
             </b-row>
           </b-card>
         </b-col>
-      <draggable v-model="eventData.actions" @end="onEnd">
+      <draggable v-model="eventData.actions" @end="onEnd" class="drag">
         <b-col
           md="14"
           v-for="action in eventData.actions"
