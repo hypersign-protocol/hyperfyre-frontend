@@ -962,7 +962,7 @@ export default {
       this.isProjectClonning = true;
       this.project = { ...project };
       if (this.isProjectClonning) {
-        this.project.projectName = Date.now() + "_copy";
+        this.project.projectName = this.project.projectName+ " copy "+Date.now() ;
         this.project._id = "";
         this.project.slug = "";
         this.project.investorsCount = 0;
@@ -1308,8 +1308,8 @@ export default {
       // console.log(this.isProjectClonning)
       if (this.isProjectClonning && this.project.slug =="") {
         return true;
-      } else {
-        if (!this.project.slug) {
+      } else if(this.isProjectEditing ) {
+        if ( !this.project.slug) {
           return Messages.EVENTS.VALIDATION.EMPTY_SLUG;
         }
         if (!isValidSlug(this.project.slug)) {
