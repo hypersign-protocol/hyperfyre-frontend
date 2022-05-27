@@ -1,9 +1,7 @@
 <style>
- .drag{
-   cursor: move; /* fallback if grab cursor is unsupported */
-    
+.drag {
+  cursor: move; /* fallback if grab cursor is unsupported */
 }
-
 </style>
 
 <template>
@@ -16,10 +14,13 @@
           parseInt(
             (new Date(eventData.toDate).getTime() - new Date().getTime()) /
               (1000 * 3600 * 24)
-          )<0?'0':parseInt(
-            (new Date(eventData.toDate).getTime() - new Date().getTime()) /
-              (1000 * 3600 * 24)
-          ) "
+          ) < 0
+            ? '0'
+            : parseInt(
+                (new Date(eventData.toDate).getTime() - new Date().getTime()) /
+                  (1000 * 3600 * 24)
+              )
+        "
       />
     </div>
     <div>
@@ -32,59 +33,71 @@
         :logoUrl="eventData.logoUrl"
       />
     </div>
-    <div  class="accordion  mx-auto">
+    <div class="accordion mx-auto">
       <b-col
-          md="14"
-          v-for="action in eventData.actions"
-          v-bind:key="action._id"
+        md="14"
+        v-for="action in eventData.actions"
+        v-bind:key="action._id"
+      >
+        <b-card v-if="action.type === 'INFO_TEXT' && action.isDeleted !== true">
+          <b-row cols-sm="1">
+            <b-col cols="1" sm="1" md="1">
+              <span>
+                <i
+                  style="color: gray"
+                  v-if="action.type.includes('INFO_')"
+                  class="fa fa-info-circle"
+                ></i>
+              </span>
+            </b-col>
+            <b-col cols="9" sm="9" class="text-left" md="9">
+              <div class="text text-capitalize">{{ action.title }}</div>
+            </b-col>
+          </b-row>
+        </b-card>
+      </b-col>
+      <b-col
+        md="14"
+        v-for="action in eventData.actions"
+        v-bind:key="action._id"
+      >
+        <b-card
+          v-if="action.type === 'PRIZE_CARD' && action.isDeleted !== true"
         >
-        <b-card    v-if="action.type==='INFO_TEXT' && action.isDeleted!==true">
-            <b-row cols-sm="1">
-              <b-col cols="1" sm="1" md="1" >
-                <span>
-                 
-                  <i
-                    style="color: gray"
-                    v-if="action.type.includes('INFO_')"
-                    class="fa fa-info-circle"
-                  ></i>
-                 
-                </span>
-              </b-col>
-              <b-col cols="9" sm="9" class="text-left" md="9">
-                <div class="text text-capitalize">{{ action.title }}</div>
-              </b-col>              
-            </b-row>
-          </b-card>
-          <b-card    v-if="action.type==='PRIZE_CARD' && action.isDeleted!==true">
-            <b-row cols-sm="1">
-              <b-col cols="1" sm="1" md="1" >
-                <span>
-                 
-                  <i
-                    style="color: gray"
-                    v-if="action.type.includes('PRIZE_')"
-                    class="fas fa-gift"
-                  ></i>
-                 
-                </span>
-              </b-col>
-              <b-col cols="9" sm="9" class="text-left" md="9">
-                <div class="text text-capitalize">{{ action.title }}</div>
-              </b-col>              
-            </b-row>
-          </b-card>
-        </b-col>
-      <draggable v-model="eventData.actions" @end="onEnd" class="drag" >
+          <b-row cols-sm="1">
+            <b-col cols="1" sm="1" md="1">
+              <span>
+                <i
+                  style="color: gray"
+                  v-if="action.type.includes('PRIZE_')"
+                  class="fas fa-gift"
+                ></i>
+              </span>
+            </b-col>
+            <b-col cols="9" sm="9" class="text-left" md="9">
+              <div class="text text-capitalize">{{ action.title }}</div>
+            </b-col>
+          </b-row>
+        </b-card>
+      </b-col>
+
+      <draggable v-model="eventData.actions" @end="onEnd" class="drag">
         <b-col
           md="14"
           v-for="action in eventData.actions"
           v-bind:key="action._id"
-           title="Drag to change the position of the action"
+          title="Drag to change the position of the action"
         >
-          <b-card    v-if="action.type !== 'HYPERSIGN_AUTH' && action.type !=='PRIZE_CARD' && action.type !=='INFO_TEXT' && action.isDeleted!==true">
+          <b-card
+            v-if="
+              action.type !== 'HYPERSIGN_AUTH' &&
+              action.type !== 'PRIZE_CARD' &&
+              action.type !== 'INFO_TEXT' &&
+              action.isDeleted !== true
+            "
+          >
             <b-row cols-sm="1">
-              <b-col cols="1" sm="1" md="1" >
+              <b-col cols="1" sm="1" md="1">
                 <span>
                   <i
                     style="color: gray"
@@ -292,7 +305,7 @@
               </b-col>
 
               <b-col cols="2" sm="2" md="2">
-                <b-badge class="btn-score" >
+                <b-badge class="btn-score">
                   <img src="../../../../assets/plus.svg" />
                   {{ action.score }}
                 </b-badge>
