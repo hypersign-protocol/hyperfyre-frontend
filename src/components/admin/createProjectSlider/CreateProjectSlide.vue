@@ -174,6 +174,7 @@
 
             </b-card-header>
             <b-collapse
+            
               id="accordion-2"
               accordion="my-accordion"
               role="tabpanel"
@@ -205,6 +206,7 @@
               </b-button>
             </b-card-header>
             <b-collapse
+            
               id="accordion-3"              
               accordion="my-accordion"
               role="tabpanel"
@@ -271,6 +273,7 @@
               </b-button>
             </b-card-header>
             <b-collapse
+            
               id="accordion-4"
               accordion="my-accordion"
               role="tabpanel"
@@ -302,6 +305,7 @@
               </b-button>
             </b-card-header>
             <b-collapse
+            
               id="accordion-5"
               accordion="my-accordion"
               role="tabpanel"
@@ -333,6 +337,7 @@
               </b-button>
             </b-card-header>
             <b-collapse
+            
               id="accordion-6"
               accordion="my-accordion"
               role="tabpanel"
@@ -365,6 +370,7 @@
               </b-button>
             </b-card-header>
             <b-collapse
+            
               id="accordion-7"
               accordion="my-accordion"
               role="tabpanel"
@@ -680,6 +686,7 @@ export default {
     };
   },
   mounted(){
+   
 this.$root.$on("openPreview",()=>{
   this.preview=true
 })
@@ -687,7 +694,7 @@ this.$root.$on("closePreview",this.closePreview)
   }
   ,
   methods: {
-  
+ 
     closePreview () {
       this.preview= false
     }

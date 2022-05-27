@@ -557,6 +557,11 @@ export default {
       //console.log(arg);
       this.eventActionList = arg;
     });
+    
+  this.$root.$on("bv::toggle::collapse",()=>{
+     this.$root.$emit("closePreview");
+  })
+
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
@@ -1197,9 +1202,9 @@ export default {
         this.notifySuccess(
           Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_SAVED + resp.data._id
         );
-        if(resp.data.projectName.includes('copy')){
-          this.notifyWarning("Clone of '"+resp.data.projectName.split('copy')[0]+"' created");
-        }
+        // if(resp.data.projectName.includes('copy')){
+        //   this.notifyWarning("Clone of '"+resp.data.projectName.split('copy')[0]+"' created");
+        // }
         this.resetAllValues();
 
         if (this.isProjectEditing) {
