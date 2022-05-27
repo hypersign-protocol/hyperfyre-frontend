@@ -108,7 +108,7 @@
             </div>   
     </div>
 
-    <div class="row g-3 align-items-center w-100  mt-4">
+    <div  v-if="isProjectEditing" class="row g-3 align-items-center w-100  mt-4">
             <div class="col-lg-3 col-md-3 text-left">
                 <tool-tips infoMessage="Slug of the event. It should be unique across the platform"></tool-tips><label for="slug" class="col-form-label">
                 </label><label for="slug" 
