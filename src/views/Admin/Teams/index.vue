@@ -69,7 +69,7 @@
             dark
             v-else
             outlined
-            color="#2AD798"
+            color="#B1B6D1"
             class="height-25 letter-s-0 text-capitalize font-14 line-h-17 font-weight--bold px-3 mr-2 mt-2"
             @click="switchAccount(item)"
           >
