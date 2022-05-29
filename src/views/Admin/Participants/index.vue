@@ -224,7 +224,7 @@ export default {
       accessToken: localStorage.getItem("accessToken"),
       campaigns: [],
       expanded: [],
-      singleExpand: false,
+      singleExpand: true,
       headers: [
         {
           text: "Name",
