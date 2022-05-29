@@ -307,7 +307,7 @@
           </template>
         </template>
         <template v-slot:item.contract_address="{ item }">
-          {{ JSON.parse(item.value).contractAddress }}
+          {{ JSON.parse(item.value).contractAddress | truncate(10) }}
         </template>
         <template v-slot:item.balance="{ item }">
           {{ JSON.parse(item.value).thresholdBalance }}

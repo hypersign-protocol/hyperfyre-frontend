@@ -596,6 +596,34 @@
 	}
 }
 
+.result-table {
+  @include media-respond(sm) {
+    ::-webkit-scrollbar {
+      height: 3px;
+    }
+  }
+  @include media-respond(md) {
+    ::-webkit-scrollbar {
+      height: 3px;
+    }
+  }
+  @include media-respond(lg) {
+    ::-webkit-scrollbar {
+      height: 3px;
+    }
+  }
+  @include media-respond(xl) {
+    ::-webkit-scrollbar {
+      height: 3px;
+    }
+  }
+  @include media-respond(xs) {
+    ::-webkit-scrollbar {
+      height: 3px;
+    }
+  }
+}
+
 
 ::-webkit-scrollbar {
 	width: 2px;

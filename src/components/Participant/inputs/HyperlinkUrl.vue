@@ -38,7 +38,7 @@
         >
           <v-icon size="15" class="mr-1">mdi-logout-variant</v-icon>
 
-          {{ data.value }}
+          Click Here
         </v-btn>
 
         <v-btn
