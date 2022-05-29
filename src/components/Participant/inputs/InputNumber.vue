@@ -39,6 +39,7 @@
             flat
             solo
             outlined
+            type="number"
             class="form-input mb-2"
             :placeholder="data.placeHolder"
           ></v-text-field>

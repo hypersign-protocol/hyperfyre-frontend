@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "watch": "watchify src/serviceWorker.js  -o public/service-worker.js  -v [ babelify --presets [es2015] ]",
+    "start:dev": "vue-cli-service serve --mode staging ",
+    "dev": "npm run watch & npm run start:dev",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
@@ -29,6 +32,7 @@
     "vuetify": "^2.4.0",
     "vuetify-datetime-picker": "^2.1.1",
     "vuex": "^3.4.0",
+    "watchify": "^4.0.0",
     "web3": "^1.7.3"
   },
   "devDependencies": {

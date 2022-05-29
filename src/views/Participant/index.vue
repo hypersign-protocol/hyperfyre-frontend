@@ -25,26 +25,50 @@
                   v-if="!loading"
                   :startDate="eventData.fromDate"
                   :endDate="eventData.toDate"
-                  :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0" 
-                  :totalEntries="eventData && eventData.count ? eventData.count : 0"
+                  :userScore="
+                    userEventData && userEventData.numberOfReferals
+                      ? userEventData.numberOfReferals
+                      : 0
+                  "
+                  :totalEntries="
+                    eventData && eventData.count ? eventData.count : 0
+                  "
                   @getLeaderBoard="fetchLeaderBoard"
                 />
                 <div class="image__wrap ma-auto">
-                  <v-img
-                    v-if="!brokenUrl"
-                    @error="onBannerError($event)"
-                    class="banner-image"
-                    :laz-src="eventData.logoUrl"
-                    :src="eventData.logoUrl"
-                  ></v-img>
+                  <v-card>
+                    <v-img
+                      v-if="!brokenUrl"
+                      @error="onBannerError($event)"
+                      class="banner-image"
+                      :laz-src="eventData.logoUrl"
+                      :src="eventData.logoUrl"
+                    >
+                      <template v-slot:placeholder>
+                        <v-row
+                          class="fill-height ma-0"
+                          align="center"
+                          justify="center"
+                        >
+                          <v-progress-circular
+                            indeterminate
+                            color="grey lighten-5"
+                          ></v-progress-circular>
+                        </v-row>
+                      </template>
+                      <v-card-title
+                        class="absolute-center border-r-8 pa-2 bg-black-200 white--text"
+                        v-text="eventData.projectName"
+                      ></v-card-title>
+                    </v-img>
+                  </v-card>
                   <div
-                    class="font-20 line-h-22 white--text font-weight-medium"
+                    class="letter-s-0 text-capitalize border-rfont-16 line-h-19 height-300 align-center justify-center d-flex font-weight--medium white--text bg-blue-200 border-r-8 rounded-tl-0 rounded-tr-0"
                     v-if="brokenUrl"
                   >
                     {{ eventData.projectName }}
                   </div>
                 </div>
-
                 <template v-if="authToken !== '' || authToken !== null">
                   <template v-if="!eventData.projectStatus">
                     <div
@@ -98,7 +122,6 @@
                           :src="`https://avatars.dicebear.com/api/identicon/${item.name}.svg`"
                         ></v-img>
                       </v-list-item-avatar>
-
                       <v-list-item-content>
                         <v-list-item-title
                           class="white--text"
@@ -218,6 +241,14 @@ export default {
 
           localStorage.setItem("user", JSON.stringify(this.user));
           this.user = JSON.parse(localStorage.getItem("user"));
+          if (this.user && this.user.email) {
+            this.user.referalLink = `${
+              window.location.protocol +
+              "//" +
+              window.location.host +
+              window.location.pathname
+            }?referrer=${btoa(this.user.email)}`;
+          }
           eventBus.$emit("getUserData", this.user);
         } else {
           this.$store.dispatch("snackbar/SHOW", {
@@ -251,7 +282,7 @@ export default {
         const json = await resp.json();
 
         this.eventData = json;
-
+        await this.fetchUserInfoOnLogin();
         this.loading = false;
       } else {
         this.$store.dispatch("snackbar/SHOW", {
@@ -338,7 +369,7 @@ export default {
             return x.type === "PRIZE_CARD";
           });
           const actionWithoutPrize = this.eventData.actions.filter((x) => {
-            return x.type !== "PRIZE_CARD";
+            return x.type !== "PRIZE_CARD" && x.type !== "HYPERSIGN_AUTH";
           });
           const eventActions = actionWithoutPrize;
 

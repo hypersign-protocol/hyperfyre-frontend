@@ -1,9 +1,9 @@
 export default {
   methods: {
-    calculateInPercentage(completed,total) {
-      let res = 0
-      res = (completed/total)*100
-      return res
+    calculateInPercentage(completed, total) {
+      let res = 0;
+      res = (completed / total) * 100;
+      return res;
     },
 
     dateFormat(val) {
@@ -13,6 +13,7 @@ export default {
     },
 
     copyContent(id) {
+      console.log(id);
       let cb = document.getElementById(id);
       cb.style.display = "block";
       cb.select();

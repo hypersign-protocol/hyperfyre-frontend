@@ -124,6 +124,8 @@ export default {
       try {
         if (window.ethereum && window.ethereum.isMetaMask) {
           this.web3 = new Web3(window.ethereum);
+        } else {
+          this.showerror = true;
         }
       } catch (error) {
         console.log(error);

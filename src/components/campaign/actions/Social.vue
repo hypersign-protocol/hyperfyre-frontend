@@ -6,7 +6,7 @@
         <template v-for="(item, index) in list">
           <v-chip
             :key="index"
-            class="font-12 line-h-16 height-28 event-chip mr-2"
+            class="font-12 line-h-16 height-28 event-chip mr-2 mb-2"
             dark
             @click="edit(item, index)"
           >
@@ -97,7 +97,7 @@
           >Make sure to add
           <a
             target="_blank"
-            :href="`https://telegram.me/${hfTgBotId}?startgroup=any`"
+            :href="`https://telegram.me/hyperfyre_stage_bot?startgroup=any`"
             >Hyperfyre Telegram Bot</a
           >
           in your public group, for this functionality to work properly.</span

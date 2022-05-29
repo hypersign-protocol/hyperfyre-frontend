@@ -19,9 +19,7 @@
         class="info--box pa-4 d-flex align-center justify-center flex-column"
       >
         <p class="mb-2 font-24 line-h-29 font-weight-bold white--text">
-          <span v-if="userScore">{{
-            userScore
-          }}</span>
+          <span v-if="userScore">{{ userScore }}</span>
           <span v-else>0</span>
         </p>
         <p class="font-12 line-h-19 font-weight--semibold white--text mb-0">
@@ -33,9 +31,7 @@
         class="info--box pa-4 d-flex align-center justify-center flex-column"
       >
         <p class="mb-2 font-24 line-h-29 font-weight-bold white--text">
-          <span v-if="totalEntries">{{
-            totalEntries
-          }}</span>
+          <span v-if="totalEntries">{{ totalEntries }}</span>
           <span v-else>0</span>
         </p>
         <p class="font-12 line-h-19 font-weight--semibold white--text mb-0">

@@ -123,6 +123,8 @@ export default {
       try {
         if (window.ethereum && window.ethereum.isMetaMask) {
           this.web3 = new Web3(window.ethereum);
+        } else {
+          this.showerror = true;
         }
       } catch (error) {
         console.log(error);
@@ -166,7 +168,10 @@ export default {
           }
         }
       } catch (error) {
-        return this.notifyErr(error.message);
+        this.$store.dispatch("snackbar/SHOW", {
+          type: "error",
+          message: error.message,
+        });
       }
     },
     async update() {

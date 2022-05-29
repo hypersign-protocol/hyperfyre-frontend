@@ -29,6 +29,7 @@
           depressed
           rounded
           x-large
+          :disabled="done"
           @click="getBrowserSubscription"
         >
           Subscribe
@@ -96,12 +97,13 @@ export default {
       }
     },
     async update() {
+      console.log(this.data);
       if (
         this.data.subObj !== undefined &&
         this.data.subscription !== undefined
       ) {
         this.data.value = "Notification Subscribed";
-        this.$root.$emit("input", this.data.value);
+        this.$emit("input", this.data.value);
       } else {
         this.$store.dispatch("snackbar/SHOW", {
           type: "error",
@@ -173,12 +175,16 @@ export default {
             await navigator.serviceWorker
               .register(`/service-worker.js`, { scope: "/" })
               .then(async () => {
+                console.log("first");
                 return await navigator.serviceWorker.ready;
               })
               .then(async (reg) => {
+                console.log("second", reg);
+                console.log(config.webpush_public_key);
                 const applicationServerKey = await this.urlB64ToUint8Array(
                   config.webpush_public_key
                 );
+                console.log(applicationServerKey);
                 reg.addEventListener("updatefound", () => {
                   reg.update();
                 });
@@ -186,7 +192,7 @@ export default {
                 reg.pushManager
                   .subscribe({ applicationServerKey, userVisibleOnly: true })
                   .then(async (e) => {
-                    // console.log(JSON.stringify(e));
+                    console.log(JSON.stringify(e));
 
                     this.data.subObj = e;
                     this.data.subscription = await this.saveSubscription(e);

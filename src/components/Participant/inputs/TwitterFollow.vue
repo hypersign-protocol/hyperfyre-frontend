@@ -22,7 +22,7 @@
       </template>
     </v-expansion-panel-header>
     <v-expansion-panel-content class="font-14 line-h-32 color-grey-100">
-      <div class="d-flex flex-row align-center justify-space-around">
+      <div class="d-flex flex-column align-center justify-space-around">
         <v-btn
           :disabled="done"
           color="#1DA1F2"
@@ -114,13 +114,14 @@ export default {
           type: "error",
           message: Messages.EVENT_ACTIONS.TWITTER_FOLLOW.FOLLOW_FIRST,
         });
+      } else {
+        this.$emit(
+          "input",
+          JSON.stringify({
+            ...this.twitter,
+          })
+        );
       }
-      this.$emit(
-        "input",
-        JSON.stringify({
-          ...this.twitter,
-        })
-      );
     },
     disableInput(data) {
       this.done = data;

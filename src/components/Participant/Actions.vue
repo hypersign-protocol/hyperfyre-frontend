@@ -5,28 +5,20 @@
     </p>
     <v-row class="white--text text-left pb-6" no-gutters>
       <v-col cols="12" md="3">
-        <p class="font-14 line-h-17" @click="copyContent(userProfile.name)">
-           <v-icon  class="color-grey-100"
-            >mdil-account</v-icon
-          >
+        <p class="font-14 line-h-17">
+          <v-icon class="color-grey-100">mdil-account</v-icon>
           {{ userProfile.name }}
         </p>
       </v-col>
       <v-col cols="12" md="5">
-        
-        <p class="font-14 line-h-17" @click="copyContent(userProfile.email)">
-           <v-icon  class="color-grey-100"
-            >mdil-email-open</v-icon
-          >
+        <p class="font-14 line-h-17">
+          <v-icon class="color-grey-100">mdil-email-open</v-icon>
           {{ userProfile.email | truncate(25) }}
         </p>
       </v-col>
       <v-col cols="12" md="4">
-        <p class="font-14 line-h-17" @click="copyContent(userProfile.referalLink)">
-          <v-icon  class="color-grey-100"
-            >mdi-link-variant</v-icon
-          >
-
+        <p class="font-14 line-h-17">
+          <v-icon class="color-grey-100">mdi-link-variant</v-icon>
           {{ referralLink | truncate(15) }}
           <input
             :id="referralLink"
@@ -34,30 +26,48 @@
             type="text"
             hidden
           />
-          <v-icon color="primary" @click="copyContent(userProfile.referalLink)"
-            >mdi-content-copy</v-icon
+          <v-tooltip
+            content-class="copy-tooltip"
+            :open-on-hover="false"
+            :open-on-click="true"
+            color="#000"
+            text-color="#fff"
+            top
           >
+            <template v-slot:activator="{ on }">
+              <v-icon
+                size="20"
+                color="primary"
+                v-on="on"
+                @click="copyContent(referralLink)"
+                >mdi-content-copy</v-icon
+              >
+            </template>
+            <span>Copied to clipboard</span>
+          </v-tooltip>
         </p>
       </v-col>
     </v-row>
     <div class="d-flex align-center justify-space-between">
       <p class="color-grey-100 font-14 line-h-17 font-weight-bold">To-Dos</p>
       <p class="color-grey-100 font-14 line-h-17 font-weight-bold">
-         <v-chip
-            dark
-            outlined
-            class="color-grey-100 height-25 letter-s-0  font-14 line-h-17 font-weight--bold px-3"
-          >
+        <v-chip
+          dark
+          outlined
+          class="color-grey-100 height-25 letter-s-0 font-14 line-h-17 font-weight--bold px-3"
+        >
           <v-progress-circular
-            :value="calculateInPercentage(completed.length,campaignActions.length)"
+            :value="
+              calculateInPercentage(completed.length, campaignActions.length)
+            "
             color="primary"
             size="14"
             width="3"
             :rotate="360"
           >
-          </v-progress-circular> 
+          </v-progress-circular>
           {{ completed.length }} of {{ campaignActions.length }}
-         </v-chip>
+        </v-chip>
       </p>
     </div>
     <v-expansion-panels class="todo__wrap" flat multiple>
@@ -75,7 +85,6 @@
   </div>
 </template>
 <script>
-
 import general from "@/mixins/general";
 import PrizeCard from "@/components/Participant/inputs/PrizeCard";
 import apiClient from "@/mixins/apiClientMixin";
@@ -138,13 +147,13 @@ export default {
       );
     },
     referralLink() {
-      if (this.user && this.user.email) {
+      if (this.userProfile && this.userProfile.email) {
         return `${
           window.location.protocol +
           "//" +
           window.location.host +
           window.location.pathname
-        }?referrer=${btoa(this.user.email)}`;
+        }?referrer=${btoa(this.userProfile.email)}`;
       } else {
         return null;
       }
@@ -190,7 +199,6 @@ export default {
         const endPoint = "api/v1/investor";
 
         const signature = crypto.createHmac("sha256", config.investor_sign_key);
-        console.log(signature);
         signature.update(ts + endPoint + JSON.stringify(body));
         const sig = signature.digest("hex");
         let url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${this.recaptchaToken}`;
@@ -211,7 +219,6 @@ export default {
           header: headers,
         });
 
-        console.log(resp);
         this.isLoading = false;
         const { data } = resp;
         this.actions = [];

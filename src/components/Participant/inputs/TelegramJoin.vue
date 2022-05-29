@@ -154,6 +154,7 @@ export default {
       this.done = data;
     },
     handleTelegramLogin(urlToRedirect) {
+      console.log(urlToRedirect);
       try {
         /// Commenting this condition out to make user authenticate eveything he presses on Join telegram
         /// Because of this check a user can just add any random value in the localstorage
@@ -190,6 +191,7 @@ export default {
         //  window.open(urlToRedirect, "_blank");
         // }
       } catch (e) {
+        console.log(e);
         this.$store.dispatch("snackbar/SHOW", {
           type: "error",
           message: Messages.EVENT_ACTIONS.ERROR + e.message,

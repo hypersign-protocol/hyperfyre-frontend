@@ -311,3 +311,6 @@ $categories-colors-map : (#3A0088,
 	font-family: $body-family !important;
 }
 
+.absolute-center{
+	@include absolute-center;
+}

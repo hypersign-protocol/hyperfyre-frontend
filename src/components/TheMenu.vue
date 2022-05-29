@@ -12,7 +12,7 @@
           :to="item.slug"
         >
           <v-icon class="mr-1">{{ item.icon }}</v-icon>
-         <span class="hidden-sm-and-down"> {{ item.tab }} </span>
+          <span class="hidden-sm-and-down"> {{ item.tab }} </span>
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
@@ -25,11 +25,19 @@ export default {
   data() {
     return {
       items: [
-        { tab: "Overview", slug: "/overview", icon:"mdi-home" },
-        { tab: "Campaigns", slug: "/campaigns" , icon:"mdi-calendar"},
-        { tab: "Participants", slug: "/participants" , icon:"mdi-account-group"},
-        { tab: "Teams", slug: "/teams" , icon:"mdi-account-plus"},
-        { tab: "Subscriptions", slug: "/subscriptions" , icon:"mdi-credit-card"},
+        { tab: "Overview", slug: "/overview", icon: "mdil-home" },
+        { tab: "Campaigns", slug: "/campaigns", icon: "mdil-calendar" },
+        {
+          tab: "Participants",
+          slug: "/participants",
+          icon: "mdi-account-group-outline",
+        },
+        { tab: "Teams", slug: "/teams", icon: "mdi-account-plus-outline" },
+        {
+          tab: "Subscriptions",
+          slug: "/subscriptions",
+          icon: "mdil-credit-card",
+        },
         // { tab: "Referrals", slug: "referrals" },
       ],
       routeName: null,

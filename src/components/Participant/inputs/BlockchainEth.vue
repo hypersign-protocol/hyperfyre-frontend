@@ -16,7 +16,7 @@
           @click="update"
           v-if="!done"
         >
-          {{ data.score }}
+          +{{ data.score }}
         </v-chip>
         <img src="@/assets/images/check.svg" v-if="done" />
       </template>
