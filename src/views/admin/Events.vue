@@ -504,7 +504,7 @@ export default {
 
       searchQuery: "",
       projectsToShow: [],
-      perPage: 10,
+      perPage: 12,
       projectStatus: true,
       blockchainType: "ETHEREUM",
       contractType: "ERC20",
