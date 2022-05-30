@@ -1048,7 +1048,7 @@ export default {
           .fire({
             html: `
             <div><b style="color:red">CAUTION :</b> <b style="color:tomato" >This action will delete this event and associated participants.<br>Please enter the event id to proceed.</b></div>
-    <input type="name" id="name" class="swal2-input" placeholder="provide event id">`,
+    <input type="name" id="name" class="swal2-input" placeholder="6241c8057f5e...e2eaec05d">`,
             confirmButtonText: '<span style="color:white">Confirm</span>',
             confirmButtonColor: "red",
             icon: "warning",
@@ -1071,12 +1071,13 @@ export default {
 
             if (data.value) {
               if (data.value.eventId === project._id) {
-                this.projects.forEach((x, i) => {
-                  if (x.projectName.includes(project.projectName)) {
-                    const pageNum = Math.floor((i-1) / this.perPage);
+                for(let i=0;i<this.projects.length;i++){              
+                  if (this.projects[i].projectName.includes(project.projectName)) {
+                    const pageNum = Math.floor( i==0?i:(i-1) / this.perPage);
                     this.currentPage = pageNum + 1;
+                    break
                   }
-                });
+                }
                 this.currentPage = this.currentPage ;
                 if (!this.project._id) throw new Error("No project found");
                 const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${project._id}`;
