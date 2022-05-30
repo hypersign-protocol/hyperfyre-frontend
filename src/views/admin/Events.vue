@@ -1028,7 +1028,7 @@ export default {
       this.eventActionList.splice(index, 1);
       this.tagsTemp = project.tags;
       await this.saveProject();
-      this.paginateChange(this.currentPage);
+     
 
     },
     async deleteProject(project) {
@@ -1245,6 +1245,7 @@ export default {
         this.isLoading = false;
         // this.clear();
       }
+      this.paginateChange(this.currentPage)
     },
 
     checkIfEverythingIsFilled() {
