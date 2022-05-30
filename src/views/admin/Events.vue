@@ -1027,9 +1027,7 @@ export default {
         .indexOf("Subscribe  Notification");
       this.eventActionList.splice(index, 1);
       this.tagsTemp = project.tags;
-      await this.saveProject();
-     
-
+      await this.saveProject();    
     },
     async deleteProject(project) {
       try {
