@@ -543,6 +543,7 @@ export default {
   async mounted() {
     //const usrStr = localStorage.getItem("user");
     //this.user = null; JSON.parse(usrStr);
+
     this.fetchSubscription();
     const usrStr = localStorage.getItem("user");
 
@@ -557,10 +558,9 @@ export default {
       //console.log(arg);
       this.eventActionList = arg;
     });
-  this.$root.$on("bv::toggle::collapse",()=>{
-     this.$root.$emit("closePreview");
-  })
-
+    this.$root.$on("bv::toggle::collapse", () => {
+      this.$root.$emit("closePreview");
+    });
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
@@ -1027,29 +1027,40 @@ export default {
         .indexOf("Subscribe  Notification");
       this.eventActionList.splice(index, 1);
       this.tagsTemp = project.tags;
-      await this.saveProject();    
+
+      await this.saveProject();
+    },
+    async handlePaginateByProjectName(namePaginate) {
+      this.projects.forEach((x, i) => {
+        if (x.projectName.includes(namePaginate)) {
+          const pageNum = Math.floor(i / this.perPage);
+          this.currentPage = pageNum + 1;
+          // console.log(this.currentPage);
+          return;
+        }
+      });
+
+      return this.paginateChange(this.currentPage);
     },
     async deleteProject(project) {
       try {
-
         await this.$swal
           .fire({
             html: `
             <div><b style="color:red">CAUTION :</b> <b style="color:tomato" >This action will delete this event and associated participants.<br>Please enter the event id to proceed.</b></div>
     <input type="name" id="name" class="swal2-input" placeholder="provide event id">`,
-            confirmButtonText:
-              '<span style="color:white">Confirm</span>',
+            confirmButtonText: '<span style="color:white">Confirm</span>',
             confirmButtonColor: "red",
-            icon:"warning",
+            icon: "warning",
             focusConfirm: false,
             showCloseButton: true,
             allowOutsideClick: false,
             preConfirm: () => {
-              const eventID = this.$swal.getPopup().querySelector("#name").value;
-              if(eventID===""){
-                this.$swal.showValidationMessage(
-                `Please enter event id`
-              );
+              const eventID = this.$swal
+                .getPopup()
+                .querySelector("#name").value;
+              if (eventID === "") {
+                this.$swal.showValidationMessage(`Please enter event id`);
               }
               return { eventId: eventID };
             },
@@ -1057,8 +1068,16 @@ export default {
           .then(async (data) => {
             this.isLoading = true;
             this.project = { ...project };
+
             if (data.value) {
               if (data.value.eventId === project._id) {
+                this.projects.forEach((x, i) => {
+                  if (x.projectName.includes(project.projectName)) {
+                    const pageNum = Math.floor((i-1) / this.perPage);
+                    this.currentPage = pageNum + 1;
+                  }
+                });
+                this.currentPage = this.currentPage ;
                 if (!this.project._id) throw new Error("No project found");
                 const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${project._id}`;
                 const headers = {
@@ -1106,12 +1125,14 @@ export default {
                 } else {
                   throw new Error("Error while deleting event");
                 }
-              }else{
-                throw new Error("Looks like you were about to delete a event by mistake");
+              } else {
+                throw new Error(
+                  "Looks like you were about to delete a event by mistake"
+                );
               }
             }
           });
-    this.paginateChange(this.currentPage);
+        this.paginateChange(this.currentPage);
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
@@ -1121,6 +1142,7 @@ export default {
 
     async saveProject() {
       try {
+        const namePage = this.project.projectName;
         if (this.checkIfEverythingIsFilled() !== true) {
           return this.notifyErr(this.checkIfEverythingIsFilled());
         }
@@ -1216,6 +1238,8 @@ export default {
         if (this.isProjectClonning) {
           await this.fetchProjects();
           this.isProjectClonning = false;
+          await this.handlePaginateByProjectName(namePage);
+
           return;
         }
 
@@ -1229,6 +1253,7 @@ export default {
         }
 
         await this.fetchProjects();
+        await this.handlePaginateByProjectName(namePage);
         this.$bvModal.hide("create-project-modal");
 
         this.$root.$emit("bv::toggle::collapse", "sidebar-right");
@@ -1240,10 +1265,10 @@ export default {
         }
         this.notifyErr(e || e.message || e.msg);
       } finally {
+        this.paginateChange(this.currentPage);
         this.isLoading = false;
         // this.clear();
       }
-      this.paginateChange(this.currentPage)
     },
 
     checkIfEverythingIsFilled() {
