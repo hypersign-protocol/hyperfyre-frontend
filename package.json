@@ -1,6 +1,6 @@
 {
     "name": "hyperfye-frontend",
-    "version": "v5.2.0",
+    "version": "v5.3.0",
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve --mode production",
@@ -30,6 +30,7 @@
         "hdkey": "^2.0.1",
         "js-file-download": "^0.4.12",
         "marked": "^3.0.8",
+        "multicoin-address-validator": "^0.5.10",
         "node-fetch": "^2.6.0",
         "simple-vue-validator": "^0.16.0",
         "v-markdown-editor": "^1.2.6",
@@ -47,6 +48,7 @@
         "vue-sidebar-menu": "^4.7.4",
         "vue-stepper": "^1.4.2",
         "vue-sweetalert2": "^5.0.2",
+        "vuedraggable": "^2.24.3",
         "vuejs-datepicker": "^1.6.2",
         "vuejs-datetimepicker": "^1.1.13",
         "vuejs-paginate": "^2.1.0",

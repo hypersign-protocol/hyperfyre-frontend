@@ -8,7 +8,8 @@
     >
       <b-row>
         <b-col cols="1" sm="1" md="1">
-          <img src="../../../assets/moonbeam.png" height="25px" />
+          <img src="../../../assets/binance-logo.svg" height="25px" />
+          <!-- <img src="../../../assets/metamask.svg" height="25px" /> -->
         </b-col>
         <b-col cols="9" sm="9" class="text-left" md="9">
           <div class="text text-capitalize">{{ data.title }}</div>
@@ -40,7 +41,7 @@
                 :disabled="true"
                 :required="data.isManadatory"
               ></b-form-input>
-              <button class="btn text-black" @click="invokeMetamask()" v-if="!done" >
+              <button class="btn text-black" @click="invokeMetamask()" v-if="!done">
                 <img
                   src="../../../assets/metamask.svg"
                   height="25px"
@@ -57,7 +58,7 @@
         </b-row>
         <b-row v-if="!done">
           <b-col cols="12" sm="12" md="12" >
-            <button class="btn btn-link center" @click="update()">Continue</button>
+            <button class="btn btn-link center"  @click="update()">Continue</button>
           </b-col>
         </b-row>
       </b-card-body>
@@ -71,6 +72,7 @@
 </style>
 
 <script>
+
 import eventBus from "../../../eventBus.js";
 import apiClient from "../../../mixins/apiClientMixin.js";
 import {
@@ -83,7 +85,7 @@ import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
 import Web3 from "web3";
 export default {
-  name: "MoonbeamErc20",
+  name: "BiananceErc20",
   props: {
     idValue: {
       required: true,
@@ -111,8 +113,9 @@ export default {
     };
   },
   mounted() {
+
     if(this.data.value){
-      Object.assign(this.value, {...JSON.parse(this.data.value) })
+        Object.assign(this.value, {...JSON.parse(this.data.value) })
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
     this.checkWeb3Injection();
@@ -120,14 +123,12 @@ export default {
   methods: {
     checkWeb3Injection() {
       try {
-       if (window.ethereum && window.ethereum.isMetaMask) {
+        if (ethereum && ethereum.isMetaMask) {
           this.web3 = new Web3(window.ethereum);
         }
-        
       } catch (error) {
         console.log(error);
         this.showerror = true;
-        console.log(this.showerror);
       }
     },
     async signMessage() {
@@ -136,20 +137,25 @@ export default {
       this.message_sign = message;
       return await this.web3.eth.personal.sign(
         message,
-        window.ethereum.selectedAddress
+        ethereum.selectedAddress
       );
     },
     async invokeMetamask() {
       try {
-        if (window.ethereum.isMetaMask) {
-          const wallet = await window.ethereum.request({
+        if (ethereum.isMetaMask) {
+          const wallet = await ethereum.request({
             method: "eth_requestAccounts",
           });
           this.signature  = await this.signMessage();
           
           const generatedWalletAddr = await this.web3.eth.personal.ecRecover(this.message_sign, this.signature)
           
+          let isSigVerified =  false;
           if(generatedWalletAddr === wallet[0]){
+              isSigVerified = true;
+          } 
+      
+          if (isSigVerified) {
             this.value.userWalletAddress = wallet[0];
           } else{
             return this.notifyErr(Messages.EVENT_ACTIONS.ETH.INVALID_SIG)
@@ -166,7 +172,7 @@ export default {
         try {
           let balance = await this.fetchBalance();
           if (balance !== undefined) {
-            if (balance.Users_Nft >= Number.parseFloat(this.value.thresholdBalance)) {
+            if (balance >= Number.parseFloat(this.value.thresholdBalance)) {
               this.$emit("input",  JSON.stringify({
                 ...this.value,
               }));
@@ -200,7 +206,7 @@ export default {
         signature: this.signature,
         message: this.message_sign,
       };
-      let url = `${this.$config.studioServer.BASE_URL}api/v1/action/contract/nft`;
+      let url = `${this.$config.studioServer.BASE_URL}api/v1/action/contract/call`;
 
       let headers = {
         "Content-Type": "application/json",

@@ -22,15 +22,15 @@ const router = new Router({
         tabbar: false,
       }),
     },
-    // {
-    //   path: "/user/home/",
-    //   name: "Home",
-    //   component: () =>
-    //     import(
-    //       /* webpackChunkName: "investorLogin" */ "./views/participant/Home.vue"
-    //     ),
-    //   meta: () => ({ requiresAuth: true, title: 'Hyperfyre - User Home' })
-    // },
+    {
+      path: "/user/home/",
+      name: "Home",
+      component: () =>
+        import(
+          /* webpackChunkName: "investorLogin" */ "./views/participant/Home.vue"
+        ),
+      meta: () => ({ requiresAuth: true, title: 'Hyperfyre - User Home' })
+    },
     {
       path: "/",
       redirect: "/admin/login",
@@ -55,6 +55,13 @@ const router = new Router({
 
       component: () => import(/* webpackChunkName: "adminLogin" */ './views/admin/AdminLogin.vue'),
       meta: () => ({ requiresAuth: true, title: 'Hyperfyre - Admin Login' ,tabbar: false })
+
+    },
+    {
+      path: "/404",
+      name: "PageNotFound",
+
+      component: () => import(/* webpackChunkName: "adminLogin" */ './views/404.vue'),
 
     },
     {
@@ -106,6 +113,7 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         admin: true,
+        title:'Hyperfyre - Participants',
       },
     },
     {
@@ -116,6 +124,7 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         admin: true,
+        title:'Hyperfyre - Events'
       },
     },
     {

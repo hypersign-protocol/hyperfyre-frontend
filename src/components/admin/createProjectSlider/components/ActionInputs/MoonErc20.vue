@@ -8,7 +8,7 @@
     >
       <b-row>
         <b-col cols="1" sm="1" md="1">
-          <img src="../../../assets/moonbeam.png" height="25px" />
+          <img src="../../../assets/moonbase-alpha.svg" height="25px" />
         </b-col>
         <b-col cols="9" sm="9" class="text-left" md="9">
           <div class="text text-capitalize">{{ data.title }}</div>
@@ -83,7 +83,7 @@ import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
 import Web3 from "web3";
 export default {
-  name: "MoonbeamErc20",
+  name: "MoonErc20",
   props: {
     idValue: {
       required: true,
@@ -120,14 +120,12 @@ export default {
   methods: {
     checkWeb3Injection() {
       try {
-       if (window.ethereum && window.ethereum.isMetaMask) {
-          this.web3 = new Web3(window.ethereum);
+        if (ethereum && ethereum.isMetaMask) {
+          this.web3 = new Web3(window.window.ethereum);
         }
-        
       } catch (error) {
         console.log(error);
         this.showerror = true;
-        console.log(this.showerror);
       }
     },
     async signMessage() {
@@ -166,7 +164,7 @@ export default {
         try {
           let balance = await this.fetchBalance();
           if (balance !== undefined) {
-            if (balance.Users_Nft >= Number.parseFloat(this.value.thresholdBalance)) {
+            if (balance >= Number.parseFloat(this.value.thresholdBalance)) {
               this.$emit("input",  JSON.stringify({
                 ...this.value,
               }));
@@ -200,7 +198,7 @@ export default {
         signature: this.signature,
         message: this.message_sign,
       };
-      let url = `${this.$config.studioServer.BASE_URL}api/v1/action/contract/nft`;
+      let url = `${this.$config.studioServer.BASE_URL}api/v1/action/contract/call`;
 
       let headers = {
         "Content-Type": "application/json",

@@ -10,10 +10,19 @@
       :is-full-page="fullPage"
     ></loading>
     <Profile :user="userProfile" />
+    <template v-for="(actionItem, index) in ActionSchema">
+      <component v-if="actionItem.type==='INFO_TEXT'"
+        :is="CapitaliseString(actionItem.type)"
+        :key="index"
+        :idValue="index"
+        :data="actionItem"
+        @input="updateUserInfo(actionItem, $event)"
+      ></component>
+    </template>
     <prize-card v-if="isPrizedata" :prizeData="prizeData" />
 
     <template v-for="(actionItem, index) in ActionSchema">
-      <component
+      <component v-if="actionItem.type!=='INFO_TEXT'"
         :is="CapitaliseString(actionItem.type)"
         :key="index"
         :idValue="index"
@@ -36,6 +45,7 @@ import TelegramJoin from "./ActionInputs/TelegramJoin.vue";
 import InputText from "./ActionInputs/InputText.vue";
 import BlockchainEth from "./ActionInputs/BlockchainEth.vue";
 import BlockchainTez from "./ActionInputs/BlockchainTez.vue";
+import BlockchainCardano from "./ActionInputs/BlockchainCardano.vue";
 import BlockchainAvax from "./ActionInputs/BlockchainAvax.vue";
 import BlockchainBsc from "./ActionInputs/BlockchainBsc.vue";
 import BlockchainMatic from "./ActionInputs/BlockchainMatic.vue";
@@ -94,6 +104,7 @@ export default {
     InputText,
     BlockchainEth,
     BlockchainTez,
+    BlockchainCardano,
     BlockchainAvax,
     BlockchainBsc,
     BlockchainMatic,

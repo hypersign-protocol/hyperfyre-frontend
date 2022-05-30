@@ -5,7 +5,16 @@
 .b-sidebar > .b-sidebar-header {
   border: 1px solid #000 !important;
 }
+.previewshow{
+  display: block !important;
+}
+/* .show.collapse{
+  display: block !important;
+} */
+/* .show.collapse{
+  transition: height 1s;
 
+} */
 .button-theme {
   background-color: #f1b319;
   border-collapse: #f1b319;
@@ -68,7 +77,48 @@
       backdrop-variant="dark"
     >
       <div class="px-3 py-2">
-        <div class="accordion" role="tablist">
+        <div class="accordion" role="tablist" v-if="preview">
+          <b-card no-body class="mb-1">
+            <b-card-header
+              header-tag="header"
+              class="p-1 border-0 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                v-b-toggle.accordion-1
+                style="pointer-events:none;"
+                variant="info"
+                class="bg-transparent border-0 text-left text-primary"
+                title="Preview"
+                ><i class="fas fa-file-contract"></i> Preview
+                
+              </b-button>
+              <b-button
+                variant="info"
+                style="float:right"
+                class="bg-transparent border-0 text-left text-primary"
+                title="Close"
+                @click="closePreview"
+                >
+                <i class="fas fa-close">Close</i>                
+              </b-button>
+            </b-card-header>
+            <b-collapse
+            
+              visible
+              class="previewshow"
+              id="accordion-1"
+              accordion="my-accordion1"
+              role="tabpanel"
+            >
+              <b-card-body>
+               
+                 <preview-config  :eventData="project" />
+              </b-card-body>
+            </b-collapse>
+          </b-card>
+        </div>
+        <div class="accordion" role="tablist" v-else>
           <b-card no-body class="mb-1">
             <b-card-header
               header-tag="header"
@@ -121,13 +171,10 @@
                 ><i class="fa fa-user-plus"></i> Referral Configurations
               <!-- <a class="tool" data-position="right" draggable="false" title="Creates a unique referral URL for each campaign participants, set points of each referral"><i class='fas fa-exclamation-circle'></i></a> -->
               </b-button>
-              <div class="info">
-              <i class='fas fa-exclamation-circle'>
-                <p class="tooltiptext">Creates a unique referral URL for each campaign participants and sets points of each referral</p>
-                </i>
-                </div>
+
             </b-card-header>
             <b-collapse
+            
               id="accordion-2"
               accordion="my-accordion"
               role="tabpanel"
@@ -159,8 +206,8 @@
               </b-button>
             </b-card-header>
             <b-collapse
-              id="accordion-3"
-              visible
+            
+              id="accordion-3"              
               accordion="my-accordion"
               role="tabpanel"
             >
@@ -193,7 +240,7 @@
             </b-card-header>
             <b-collapse
               id="accordion-8"
-              visible
+              
               accordion="my-accordion"
               role="tabpanel"
             >
@@ -226,6 +273,7 @@
               </b-button>
             </b-card-header>
             <b-collapse
+            
               id="accordion-4"
               accordion="my-accordion"
               role="tabpanel"
@@ -257,6 +305,7 @@
               </b-button>
             </b-card-header>
             <b-collapse
+            
               id="accordion-5"
               accordion="my-accordion"
               role="tabpanel"
@@ -288,6 +337,7 @@
               </b-button>
             </b-card-header>
             <b-collapse
+            
               id="accordion-6"
               accordion="my-accordion"
               role="tabpanel"
@@ -320,6 +370,7 @@
               </b-button>
             </b-card-header>
             <b-collapse
+            
               id="accordion-7"
               accordion="my-accordion"
               role="tabpanel"
@@ -334,6 +385,33 @@
               </b-card-body>
             </b-collapse>
           </b-card>
+
+          <!-- <b-card no-body class="mb-1">
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-9
+                variant="info"
+                class="bg-transparent border-0 text-left text-primary"
+                title="Create Smart contract configuration for your event"
+                ><i class="fas fa-file-contract"></i> Preview
+              </b-button>
+            </b-card-header>
+            <b-collapse
+              id="accordion-9"
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body>
+                <preview-config  :eventData="project"/>
+              </b-card-body>
+            </b-collapse>
+          </b-card> -->
+
           <!--  -->
           <!-- Tags Config -->
           <!-- <b-card no-body class="mb-1">
@@ -368,12 +446,20 @@
             </b-collapse>
           </b-card> -->
         </div>
+        
+        <button
+          class="btn btn-primary mt-3 button-theme  mr-3"
+          type="button"
+          @click="openPreview"
+        >
+          Preview
+        </button>
         <button
           class="btn btn-primary mt-3 button-theme"
           type="button"
           @click="saveProject"
         >
-          Submit
+          Save
         </button>
       </div>
     </b-sidebar>
@@ -382,6 +468,7 @@
 
 <script>
 import EventActionConfig from "./components/EventActionConfig.vue";
+import PreviewConfig from "./components/PreviewConfig.vue";
 import GeneralConfig from "./components/GeneralConfig.vue";
 import ReferralConfig from "./components/ReferralConfig.vue";
 export default {
@@ -390,9 +477,11 @@ export default {
     GeneralConfig,
     EventActionConfig,
     ReferralConfig,
+    PreviewConfig,
   },
 
   props: {
+    
     project: {
       type: Object,
     },
@@ -414,6 +503,9 @@ export default {
     contractType: {
       type: String,
     },
+     openPreview:{
+       type:Function
+     },
     saveProject: {
       type: Function,
     },
@@ -529,7 +621,6 @@ export default {
       }
     },
   },
-
   data() {
     return {
       /// TODO: Need to do it in a neat way
@@ -562,6 +653,7 @@ export default {
           { text: "Avalanche", value: "BLOCKCHAIN_AVAX" },
           { text: "Reef", value: "BLOCKCHAIN_REEF" },
           { text: "Tezos", value: "BLOCKCHAIN_TEZ" },
+          { text: "Cardano", value: "BLOCKCHAIN_CARDANO" },
         ],
         smartContractAction: [
           { text: "Select Contract Type", value: null },
@@ -590,7 +682,22 @@ export default {
         ],
         tagDetails: [{ text: "Select Tag Type", value: null }],
       },
+      preview:false
     };
+  },
+  mounted(){
+   
+this.$root.$on("openPreview",()=>{
+  this.preview=true
+})
+this.$root.$on("closePreview",this.closePreview)
+  }
+  ,
+  methods: {
+ 
+    closePreview () {
+      this.preview= false
+    }
   },
 };
 </script>

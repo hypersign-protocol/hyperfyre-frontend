@@ -15,7 +15,12 @@
     <template v-if="authToken != '' && authToken != null">
       <ErrorMessage v-if="!eventData.projectStatus" errorMessage="Event is over" />
       <Action v-if="eventData.projectStatus" :userProfile="userProfileData" :ActionSchema="eventActionsToShow" :prizeData="prizeData" @UserUpdateEvent="updateUserData" />
-    </template>
+    <div class="footer mx-auto overflow-hidden" style="max-width:600px;align-items:center;padding-top:20px" >
+     <b>Disclaimer:</b>
+      Anyone can create campaigns on HyperFyre, rewards are distributed by the campaign creator and HyperFyre is not responsible for reward distribution.
+      </div>
+   </template>
+    
   </div>
 </template>
 <script>
@@ -126,6 +131,9 @@ export default {
         await this.fetchUserInfoOnLogin();
       }
     }catch(e){
+      if(e && e.indexOf("No event found for id or slug =") >= 0){
+        this.$router.push("/404")
+      }
       this.notifyErr(Messages.EVENT.ERROR_OCCURED+ e.message);
     }
   },
@@ -189,15 +197,9 @@ export default {
           "Content-Type": "application/json",
         };
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
-
         this.eventData = {
           ...resp.data
                 }
-
-
-
-
-
       } else {
         this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG)
       }
@@ -250,7 +252,6 @@ export default {
           header: headers,
           method: "GET",
         })
-
         if(res.data.length === 0){
            // a user can participate in event
            // Participate in event

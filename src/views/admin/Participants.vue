@@ -400,7 +400,8 @@ export default {
       this.selectedProjectId = this.$route.query.projectId;
       this.selectedProject = this.$route.query.projectId;
       this.investor.projectId = this.$route.query.projectId;
-      this.fetchProjectData(0, this.perPage);
+     await this.fetchProjectData(0, this.perPage);
+       this.holdInvestors = this.project.investors;
     }
 
     const userProjectStr = localStorage.getItem("userProjects");
