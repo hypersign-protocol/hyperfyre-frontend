@@ -1,13 +1,16 @@
 <style>
 .drag {
-  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: move !important; /* fallback if grab cursor is unsupported */
+}
+.py-4{
+cursor:default !important
 }
 </style>
 
 <template>
   <div class="mx-auto overflow-hidden mt-3 border-0" style="max-width: 600px">
-    <div>
-      <Metrics
+    <div >
+      <Metrics 
         :userScore="5"
         :totalEntries="eventData.investorsCount"
         :timeLeft="
@@ -24,7 +27,7 @@
       />
     </div>
     <div>
-      <Banner
+      <Banner 
         :eventName="eventData.projectName"
         :themeColor="eventData.themeColor"
         :fontColor="eventData.fontColor"
