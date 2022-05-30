@@ -113,6 +113,7 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         admin: true,
+        title:'Hyperfyre - Participants',
       },
     },
     {
@@ -123,6 +124,7 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         admin: true,
+        title:'Hyperfyre - Events'
       },
     },
     {
