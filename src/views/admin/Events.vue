@@ -557,7 +557,6 @@ export default {
       //console.log(arg);
       this.eventActionList = arg;
     });
-    
   this.$root.$on("bv::toggle::collapse",()=>{
      this.$root.$emit("closePreview");
   })
@@ -1029,10 +1028,12 @@ export default {
       this.eventActionList.splice(index, 1);
       this.tagsTemp = project.tags;
       await this.saveProject();
+      this.paginateChange(this.currentPage);
+
     },
     async deleteProject(project) {
       try {
-        
+
         await this.$swal
           .fire({
             html: `
@@ -1112,6 +1113,7 @@ export default {
               }
             }
           });
+    this.paginateChange(this.currentPage);
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
