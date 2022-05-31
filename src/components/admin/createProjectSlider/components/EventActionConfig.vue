@@ -343,7 +343,6 @@
           />
         </div>
       </div>
-
       <div
         class="row g-3 align-items-center w-100 mt-4"
         v-if="eventActionType === 'SMARTCONTRACT' && selected.type === null"
@@ -408,6 +407,52 @@
         </div>
       </div>
 
+
+<div
+        class="row g-3 align-items-center w-100 mt-4"
+        v-if="eventActionType === 'CUSTOMCONTRACT'"
+      >
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="title" class="col-form-label"
+            >Contract Address<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+          <input
+            v-model="contract.contractAddress"
+            type="text"
+            id="title"
+            class="form-control w-100"
+            placeholder="Please enter compatible contract address"
+          />
+        </div>      
+      </div>
+      <div
+        class="row g-3 align-items-center w-100 mt-4"
+        v-if="eventActionType === 'CUSTOMCONTRACT'"
+      >     
+      <div class="text-left col-lg-3 col-md-3 text-left">
+            <label for="title" class="col-form-label"
+              >Contract ABI<span style="color: red">*</span>:
+            </label>
+          </div>
+        <div class="col-lg-9 col-md-9 px-0">
+            <!-- <textarea
+            rows="10" 
+              v-model="contract.contractABI"
+              type="text"
+              id="title"
+              class="form-control w-100"
+              placeholder="Please enter compatible contract ABI"
+            /> -->
+    <codemirror  ref="json-cm" class="codemirror" v-model="contract.contractABI" :options="cmOptions" 
+              
+           
+              placeholder="Please enter compatible contract ABI"></codemirror>
+            
+          </div>
+      </div>
+
       <div
         class="row g-3 align-items-center w-100 mt-4"
         v-if="eventActionType != 'PRIZE' && eventActionType !== 'TAGS'"
@@ -424,6 +469,8 @@
             id="title"
             class="form-control w-100"
           />
+          
+         
         </div>
       </div>
 
@@ -458,7 +505,7 @@
         </div>
       </div>
 
-      <div class="row g-3 align-items-center w-100 mt-4" v-if="placeH && eventActionType!=='KYC'">
+      <div class="row g-3 align-items-center w-100 mt-4" v-if="placeH && eventActionType!=='KYC' && eventActionType!=='CUSTOMCONTRACT'">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="placeHolder" class="col-form-label">Place Holder: </label>
         </div>
@@ -471,7 +518,7 @@
           />
         </div>
       </div>
-      <div class="row g-3 align-items-center w-100 mt-4" v-if="noSocialhandle && eventActionType!=='KYC'">
+      <div class="row g-3 align-items-center w-100 mt-4" v-if="noSocialhandle && eventActionType!=='KYC'  && eventActionType!=='CUSTOMCONTRACT'">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="value" class="col-form-label"
             >Social Handle<span style="color: red">*</span>:
@@ -592,6 +639,9 @@
   </div>
 </template>
 <style scoped>
+.codemirror{
+font-size: .85rem !important;
+}
 .inputInfo {
   color: #808080b5;
   font-size: smaller;
@@ -664,12 +714,24 @@ import Messages from "../../../../utils/messages/admin/en";
 import Vue from "vue";
 import Editor from "v-markdown-editor";
 
+import {codemirror} from 'vue-codemirror'
 
+// require styles
+import 'codemirror/addon/lint/lint.css'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/dracula.css'
+import 'codemirror/mode/javascript/javascript'
+import 'codemirror/addon/lint/lint'
+import 'codemirror/addon/lint/json-lint'
+import 'codemirror/keymap/sublime';
 Vue.use(Editor);
 
 export default {
   name: "EventActionCongif",
-  components: {},
+  components: {codemirror},filters:{pretty:function(value){
+          return JSON.stringify(JSON.parse(value), null, 2);
+
+  }},
   props: {
     eventActionType: {
       type: String,
@@ -773,6 +835,23 @@ export default {
   },
   data() {
     return {
+      cmOptions: {
+        // codemirror options
+        tabSize: 2,
+         keyMap: "sublime",
+        styleActiveLine: true,
+        lineNumbers: true,
+        line: true,
+        mode: 'application/json',
+        gutters: ['CodeMirror-lint-markers'],
+        lineWrapping: true,
+        theme: 'dracula',
+        lint:true,
+        collapseIdentical: true,
+        highlightDifferences: true,
+        revertButtons:true
+        // more codemirror options, 
+      },
       // selectedEventActionType: this.eventActionType,
       flash: null,
       isCreate: true,
@@ -780,6 +859,7 @@ export default {
       contract: {
         contractAddress: "",
         thresholdBalance: 0,
+        contractABI:Object
       },
       prizeDetails: {
         winners: "",
