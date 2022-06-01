@@ -623,13 +623,20 @@ export default {
       if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
           (x) =>
-            x.type.indexOf("ETHEREUM_") > -1 ||
-            x.type.indexOf("MATIC_") > -1 ||
-            x.type.indexOf("BINANCE_") > -1 ||
-            x.type.indexOf("REEF_") > -1 ||
-            x.type.indexOf("MOONBEAM_") > -1 ||
-            x.type.indexOf("MOONRIVER_") > -1 ||
-            x.type.indexOf("MOON_") > -1
+            x.type.indexOf("ETHEREUM_ERC20") > -1 ||
+            x.type.indexOf("MATIC_ERC20") > -1 ||
+            x.type.indexOf("BINANCE_ERC20") > -1 ||
+            x.type.indexOf("REEF_ERC20") > -1 ||
+            x.type.indexOf("MOONBEAM_ERC20") > -1 ||
+            x.type.indexOf("MOONRIVER_ERC20") > -1 ||
+            x.type.indexOf("MOON_ERC20") > -1 ||
+             x.type.indexOf("ETHEREUM_ERC721") > -1 ||
+            x.type.indexOf("MATIC_ERC721") > -1 ||
+            x.type.indexOf("BINANCE_ERC721") > -1 ||
+            x.type.indexOf("REEF_ERC721") > -1 ||
+            x.type.indexOf("MOONBEAM_ERC721") > -1 ||
+            x.type.indexOf("MOONRIVER_ERC721") > -1 ||
+            x.type.indexOf("MOON_ERC721") > -1 
         );
       } else {
         return [];
@@ -639,9 +646,9 @@ export default {
  if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
           (x) =>
-            x.type.indexOf("ETHEREUM_") > -1 ||
-            x.type.indexOf("MATIC_") > -1 ||
-            x.type.indexOf("BINANCE_") > -1
+            x.type.indexOf("ETHEREUM_NETWORK") > -1 ||
+            x.type.indexOf("MATIC_NETWORK") > -1 ||
+            x.type.indexOf("BINANCE_NETWORK") > -1
             
         );
       } else {
@@ -723,12 +730,9 @@ export default {
         ],
         customContractAction:[
           { text: "Select Contract Type", value: null },
-          { text: "Ethereum", value: "ETHEREUM_NETWORK" },
-         
-          { text: "Polygon", value: "MATIC_NETWORK" },
-        
-          { text: "Binance", value: "BINANCE_NETWORK" },
-         
+          { text: "Ethereum", value: "ETHEREUM_NETWORK" },         
+          { text: "Polygon", value: "MATIC_NETWORK" },        
+          { text: "Binance", value: "BINANCE_NETWORK" },       
          
           
         ]

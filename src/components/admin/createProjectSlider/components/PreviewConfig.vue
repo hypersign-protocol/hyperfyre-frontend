@@ -170,6 +170,12 @@ cursor:default !important
                     v-if="action.type.includes('ETHEREUM_ERC20')"
                     height="22px"
                   />
+                   <img
+                    style="padding-right: 5px"
+                    src="/img/ethereum.2b470564.svg"
+                    v-if="action.type.includes('ETHEREUM_')"
+                    height="22px"
+                  />
                   <img
                     style="padding-right: 5px"
                     src="/img/ethereum.2b470564.svg"

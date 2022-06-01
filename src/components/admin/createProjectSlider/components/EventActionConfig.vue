@@ -437,21 +437,33 @@
             </label>
           </div>
         <div class="col-lg-9 col-md-9 px-0">
-            <!-- <textarea
-            rows="10" 
-              v-model="contract.contractABI"
-              type="text"
-              id="title"
-              class="form-control w-100"
-              placeholder="Please enter compatible contract ABI"
-            /> -->
-    <codemirror  ref="json-cm" class="codemirror" v-model="contract.contractABI" :options="cmOptions" 
-              
-           
-              placeholder="Please enter compatible contract ABI"></codemirror>
+          
+    <codemirror   ref="json-cm" v-model="contract.contractABI" :options="cmOptions"              
+   
+      @input="onCmCodeChange"
+             ></codemirror>
             
+
+
           </div>
+        
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="type" class="col-form-label"
+            >Contract ABI Method<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+          <b-form-select
+            v-model="contract.methods"
+            :options="allMethods"
+          ></b-form-select>
+        </div>
+     
+          
+
+
       </div>
+      
 
       <div
         class="row g-3 align-items-center w-100 mt-4"
@@ -639,9 +651,7 @@
   </div>
 </template>
 <style scoped>
-.codemirror{
-font-size: .85rem !important;
-}
+
 .inputInfo {
   color: #808080b5;
   font-size: smaller;
@@ -719,13 +729,18 @@ import {codemirror} from 'vue-codemirror'
 // require styles
 import 'codemirror/addon/lint/lint.css'
 import 'codemirror/lib/codemirror.css'
-import 'codemirror/theme/dracula.css'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/addon/lint/lint'
-import 'codemirror/addon/lint/json-lint'
+import   'codemirror/addon/lint/json-lint'
 import 'codemirror/keymap/sublime';
+import jsonlint from 'jsonlint';
+import { JSHINT } from 'jshint';
+
+import Web3 from 'web3';
 Vue.use(Editor);
 
+window.JSHINT = JSHINT;
+window.jsonlint = jsonlint;
 export default {
   name: "EventActionCongif",
   components: {codemirror},filters:{pretty:function(value){
@@ -743,8 +758,14 @@ export default {
     options: {
       type: Array,
     },
+    // allMethods:{
+    //   type:Array,
+    // }
   },
   computed: {
+    codemirror() {
+      return this.$refs.cmEditor.codemirror
+    },
     noSocialhandle() {
       if (
         this.eventActionType != "CUSTOM" &&
@@ -837,29 +858,31 @@ export default {
     return {
       cmOptions: {
         // codemirror options
-        tabSize: 2,
-         keyMap: "sublime",
+        
+        
         styleActiveLine: true,
         lineNumbers: true,
         line: true,
         mode: 'application/json',
         gutters: ['CodeMirror-lint-markers'],
         lineWrapping: true,
-        theme: 'dracula',
+        theme: 'default',
         lint:true,
-        collapseIdentical: true,
-        highlightDifferences: true,
-        revertButtons:true
+        collapseIdentical: true,    
+    
+         keyMap: "sublime",
         // more codemirror options, 
       },
       // selectedEventActionType: this.eventActionType,
+      allMethods:Array,
       flash: null,
       isCreate: true,
       currentSelectedId: 0,
       contract: {
         contractAddress: "",
         thresholdBalance: 0,
-        contractABI:Object
+        contractABI:'',
+        methods:null,
       },
       prizeDetails: {
         winners: "",
@@ -874,6 +897,7 @@ export default {
         score: 10,
         id: "",
         slug:"",
+        
       },
      
       hfTgBotId: this.$config.verifierBot.TELEGRAM,
@@ -886,6 +910,20 @@ export default {
     });
   },
   methods: {
+
+    onCmCodeChange(newCode) {
+      try{
+          this.code=JSON.parse(newCode)
+          const web3 = new Web3();  
+          const newContract=new web3.eth.Contract(this.code,this.contract.contractAddress);
+         // console.log(Object.keys(newContract.methods).filter(e=>e.includes('(')&& e.includes(')')));
+          this.allMethods= Object.keys(newContract.methods).filter(e=>e.includes('(')&& e.includes(')'))
+      }catch(e){
+        console.log("Error Occured as the ABI is not getting parsed",e)
+      }
+      
+    }
+    ,
     CapitaliseString(string) {
       let res = string.split("_");
       let first = res[0][0].toUpperCase() + res[0].substring(1).toLowerCase();
@@ -914,6 +952,7 @@ export default {
       this.contract = {
         contractAddress: "",
         thresholdBalance: 0,
+        contractABI:""
       };
 
       this.selected = clearData;
@@ -1159,6 +1198,25 @@ export default {
            }
           break;
         }
+        case "CUSTOMCONTRACT":{
+            if (this.selected.type === null) {
+                  isvalid = false;
+                  this.notifyErr(
+                    Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE
+                  );
+                } else if (isEmpty(this.contract.contractAddress)) {
+                  isvalid = false;
+                  this.notifyErr(
+                    Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
+                  );
+                } else if (isEmpty(this.contract.contractABI)) {
+                  isvalid = false;
+                  this.notifyErr(
+                    Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
+                  );
+                }
+              break;
+              }
         default:
           this.notifyErr(Messages.EVENTS.ACTIONS.INVALID_EVENT_TYPE);
       }
@@ -1170,6 +1228,9 @@ export default {
       // Code to Add an Action
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {
+        if (this.eventActionType === "CUSTOMCONTRACT") {
+          this.selected.value = JSON.stringify(this.contract);
+        }
         if (this.eventActionType === "SMARTCONTRACT") {
           this.selected.value = JSON.stringify(this.contract);
         }
@@ -1201,11 +1262,15 @@ export default {
       // Code to update an Action
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {
+       
         if (this.eventActionType === "SMARTCONTRACT") {
           this.selected.value = JSON.stringify(this.contract);
         }
         if (this.eventActionType === "PRIZE") {
           this.selected.value = JSON.stringify(this.prizeDetails);
+        }
+          if (this.eventActionType === "CUSTOMCONTRACT") {
+          this.selected.value = JSON.stringify(this.contract);
         }
         this.eventActionList[this.currentSelectedId] = this.selected;
         this.$emit("updateEventActions", {
@@ -1225,6 +1290,9 @@ export default {
 
       this.selected = updateData;
       if (this.eventActionType === "SMARTCONTRACT") {
+        this.contract = { ...JSON.parse(this.selected.value) };
+      }
+      if (this.eventActionType === "CUSTOMCONTRACT") {
         this.contract = { ...JSON.parse(this.selected.value) };
       }
       if (this.eventActionType === "PRIZE") {
