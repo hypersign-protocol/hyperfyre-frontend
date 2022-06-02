@@ -94,6 +94,10 @@
                             <span class="heading">{{timeLeft(event)}} </span>
                                 <span class="description">Day Left</span>
                             </div>
+                               <div>
+                            <span class="heading">{{event.numberOfReferals}} </span>
+                                <span class="description">Score</span>
+                            </div>
                         </div>
                     </div>
                 </b-card>
@@ -295,7 +299,7 @@ export default {
     async fetchEventData() {
       this.isLoading=true
       if (this.eventSlug && this.eventSlug != "") {
-        let url = `${this.$config.studioServer.BASE_URL}api/v1/home/events?limit=20&page=1`;
+       let url = `${this.$config.studioServer.BASE_URL}api/v1/project/promoted/events?limit=20&page=1`;
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
@@ -303,7 +307,7 @@ export default {
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
         // console.log(resp.data.liveEvents,"eventList")
         this.eventList = {
-          ...resp.data.liveEvents
+          ...resp.data.eventList
         }
       } else {
         this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG)
@@ -319,7 +323,6 @@ export default {
           Authorization: `Bearer ${this.authToken}`,
         };
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
-        // console.log(resp.data,"eventList")
         this.userEventList = {
           ...resp.data
         }
