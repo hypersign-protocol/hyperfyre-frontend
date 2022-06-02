@@ -76,20 +76,23 @@
               v-for="(param, index) in value.paramsList"
               v-bind:key="index"
             >
-              <div class="text-left col-lg-3 col-md-3 text-left">
+              <div
+                class="text-left col-lg-3 col-md-3 text-left"
+                v-if="param.value != ''"
+              >
                 <label for="title" class="col-form-label"
                   >{{ param.name }}<span style="color: red">*</span>:
                 </label>
               </div>
 
-              <div class="col-lg-9 col-md-9 px-0">
+              <div class="col-lg-9 col-md-9 px-0" v-if="param.value != ''">
                 <input
                   v-model="param.value"
                   type=""
                   id="title"
                   :required="true"
                   class="form-control w-100"
-                  disabled="disableInput"
+                  :disabled="done"
                 />
               </div>
             </div>
@@ -167,14 +170,12 @@ export default {
     };
   },
   mounted() {
-
-    if (this.data.value ) {
+    if (this.data.value) {
       Object.assign(this.value, { ...JSON.parse(this.data.value) });
     }
-   
-    
+
     let s = this.value.methods;
-    console.log(this.value);
+
     s = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
     if (s !== "") {
       s = s.split(",");
@@ -182,7 +183,7 @@ export default {
         this.value.paramsList.push({ name: element, value: "" });
       });
     }
-     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
+    eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
     async update() {
@@ -238,7 +239,6 @@ export default {
               }
               case "bool": {
                 if (!!this.value.operand === !!result) {
-              
                   this.$emit(
                     "input",
                     JSON.stringify({
@@ -263,7 +263,7 @@ export default {
               case "uint256": {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
-                if (result <  this.value.operand) {
+                if (result < this.value.operand) {
                   this.notifySuccess("Success");
 
                   this.$emit(
@@ -279,13 +279,13 @@ export default {
             }
             break;
           }
-           case ">": {
+          case ">": {
             switch (this.value.returnType) {
               case "uint8":
               case "uint256": {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
-                if (result >  this.value.operand) {
+                if (result > this.value.operand) {
                   this.notifySuccess("Success");
 
                   this.$emit(
@@ -302,14 +302,13 @@ export default {
             break;
           }
 
-
-           case "<==": {
+          case "<==": {
             switch (this.value.returnType) {
               case "uint8":
               case "uint256": {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
-                if (result<=  this.value.operand ) {
+                if (result <= this.value.operand) {
                   this.notifySuccess("Success");
 
                   this.$emit(
@@ -325,13 +324,13 @@ export default {
             }
             break;
           }
-           case ">==": {
+          case ">==": {
             switch (this.value.returnType) {
               case "uint8":
               case "uint256": {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
-                if (result>=this.value.operand) {
+                if (result >= this.value.operand) {
                   this.notifySuccess("Success");
 
                   this.$emit(
@@ -340,7 +339,7 @@ export default {
                       ...this.value,
                     })
                   );
-                } else {                
+                } else {
                   throw new Error("Condition Mismatch");
                 }
               }
