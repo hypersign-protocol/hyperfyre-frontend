@@ -186,7 +186,7 @@ cursor:default !important
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/matic-logo.svg"
-                    v-if="action.type.includes('MATIC_ERC20')"
+                    v-if="action.type.includes('MATIC_')"
                     height="20px"
                   />
                   <img
@@ -199,7 +199,7 @@ cursor:default !important
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/binance-logo.svg"
-                    v-if="action.type.includes('BINANCE_ERC20')"
+                    v-if="action.type.includes('BINANCE_')"
                     height="20px"
                   />
                   <img

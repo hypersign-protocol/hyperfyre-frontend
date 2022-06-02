@@ -6,9 +6,10 @@
       :aria-controls="`collapse-${idValue}`"
       @click="visible = !visible"
     >
-      <b-row>
+     <b-row>
         <b-col cols="1" sm="1" md="1">
-          <img src="/img/ethereum.2b470564.svg" height="25px" />
+          <img src="../../../assets/binance-logo.svg" height="25px" />
+          <!-- <img src="../../../assets/metamask.svg" height="25px" /> -->
         </b-col>
         <b-col cols="9" sm="9" class="text-left" md="9">
           <div class="text text-capitalize">{{ data.title }}</div>
@@ -27,6 +28,7 @@
           />
         </b-col>
       </b-row>
+     
     </b-card-header>
     <b-collapse :id="`collapse-${idValue}`" v-model="visible">
       <b-card-body class="user-details">
@@ -133,7 +135,7 @@ import ErrorMessage from "../ErrorMessage.vue";
 
 import Web3 from "web3";
 export default {
-  name: "EthereumNetwork",
+  name: "MaticNetwork",
   props: {
     idValue: {
       required: true,

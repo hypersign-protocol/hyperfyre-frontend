@@ -65,7 +65,7 @@
               v-if="eventAction.type.includes('PRIZE_')"
               class="fas fa-gift"
             ></i>
-             <i
+            <i
               style="color: gray"
               v-if="eventAction.type.includes('SUMSUB_KYC')"
               class="fas fa-id-card"
@@ -85,7 +85,7 @@
             <img
               style="padding-right: 5px"
               src="/img/ethereum.2b470564.svg"
-              v-if="eventAction.type.includes('ETHEREUM_ERC20')"
+              v-if="eventAction.type.includes('ETHEREUM_')"
               height="22px"
             />
             <img
@@ -98,7 +98,7 @@
             <img
               style="padding-right: 5px"
               src="../../../../assets/matic-logo.svg"
-              v-if="eventAction.type.includes('MATIC_ERC20')"
+              v-if="eventAction.type.includes('MATIC_')"
               height="20px"
             />
             <img
@@ -111,7 +111,7 @@
             <img
               style="padding-right: 5px"
               src="../../../../assets/binance-logo.svg"
-              v-if="eventAction.type.includes('BINANCE_ERC20')"
+              v-if="eventAction.type.includes('BINANCE_')"
               height="20px"
             />
             <img
@@ -140,7 +140,7 @@
               v-if="eventAction.type.includes('MOON_ERC20')"
               height="22px"
             />
-             <img
+            <img
               style="padding-right: 5px"
               src="../../../../assets/moonbase-alpha.svg"
               v-if="eventAction.type.includes('MOON_ERC721')"
@@ -178,7 +178,7 @@
               v-if="eventAction.type.includes('BLOCKCHAIN_TEZ')"
               height="22px"
             />
-              <img
+            <img
               style="padding-right: 5px"
               src="../../../../assets/cardano_128.png"
               v-if="eventAction.type.includes('BLOCKCHAIN_CARDANO')"
@@ -289,24 +289,27 @@
       <!--kyc Config -->
       <!-- <div
         class="row g-3 align-items-center w-100 mt-4"
-        v-if="eventActionType === 'KYC'">     
+        v-if="eventActionType === 'KYC'">
          <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="title" class="col-form-label"
             >Kyc slug<span style="color: red">*</span>:
           </label>
         </div>
-        <div class="col-lg-9 col-md-9 px-0"> 
+        <div class="col-lg-9 col-md-9 px-0">
         <input
             v-model="selected.slug"
             type="text"
             id="slug"
             class="form-control w-100"
-            
+
           />
         </div>
       </div> -->
-     <div class="row g-3 align-items-center w-100 mt-4"  v-if="eventActionType === 'KYC'">
-        <div class="text-left col-lg-3 col-md-3 text-left" >
+      <div
+        class="row g-3 align-items-center w-100 mt-4"
+        v-if="eventActionType === 'KYC'"
+      >
+        <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="prixeValue" class="col-form-label"
             >Kyc Slug<span style="color: red">*</span>:
           </label>
@@ -318,11 +321,10 @@
             id="title"
             class="form-control w-100"
             placeholder="Enter KYC slug"
-            
           />
         </div>
       </div>
-      <!-- end kyc-->      
+      <!-- end kyc-->
       <!-- contract address -->
       <div
         class="row g-3 align-items-center w-100 mt-4"
@@ -407,8 +409,7 @@
         </div>
       </div>
 
-
-<div
+      <div
         class="row g-3 align-items-center w-100 mt-4"
         v-if="eventActionType === 'CUSTOMCONTRACT'"
       >
@@ -425,28 +426,30 @@
             class="form-control w-100"
             placeholder="Please enter compatible contract address"
           />
-        </div>      
+        </div>
       </div>
       <div
         class="row g-3 align-items-center w-100 mt-4"
         v-if="eventActionType === 'CUSTOMCONTRACT'"
-      >     
-      <div class="text-left col-lg-3 col-md-3 text-left">
-            <label for="title" class="col-form-label"
-              >Contract ABI<span style="color: red">*</span>:
-            </label>
-          </div>
+      >
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="title" class="col-form-label"
+            >Contract ABI<span style="color: red">*</span>:
+          </label>
+        </div>
         <div class="col-lg-9 col-md-9 px-0">
-          
-    <codemirror   ref="json-cm" v-model="contract.contractABI" :options="cmOptions"              
-   
-      @input="onCmCodeChange"
-             ></codemirror>
-            
-
-
-          </div>
-        
+          <codemirror
+            ref="json-cm"
+            v-model="contract.contractABI"
+            :options="cmOptions"
+            @input="onCmCodeChange"
+          ></codemirror>
+        </div>
+      </div>
+      <div
+        class="row g-3 align-items-center w-100 mt-4"
+        v-if="eventActionType === 'CUSTOMCONTRACT'"
+      >
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="type" class="col-form-label"
             >Contract ABI Method<span style="color: red">*</span>:
@@ -456,14 +459,45 @@
           <b-form-select
             v-model="contract.methods"
             :options="allMethods"
+            @change="changeReturnType"
           ></b-form-select>
         </div>
-     
-          
-
-
       </div>
-      
+      <div
+        class="row g-3 align-items-center w-100 mt-4"
+        v-if="eventActionType === 'CUSTOMCONTRACT'"
+      >
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="type" class="col-form-label"
+            >Condition<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-2 col-md-2 px-0">
+          <input
+            v-model="contract.returnType"
+            type="text"
+            id="title"
+            class="form-control w-100"
+            placeholder="return type"
+            disabled="true"
+          />
+        </div>
+        <div class="col-lg-2 col-md-2 px-0">
+          <b-form-select
+            v-model="contract.operator"
+            :options="allCondition"
+          ></b-form-select>
+        </div>
+        <div class="col-lg-5 col-md- px-0">
+          <input
+            v-model="contract.operand"
+            type="text"
+            id="title"
+            class="form-control w-100"
+            placeholder="Enter Condition Value"
+          />
+        </div>
+      </div>
 
       <div
         class="row g-3 align-items-center w-100 mt-4"
@@ -481,8 +515,6 @@
             id="title"
             class="form-control w-100"
           />
-          
-         
         </div>
       </div>
 
@@ -517,7 +549,14 @@
         </div>
       </div>
 
-      <div class="row g-3 align-items-center w-100 mt-4" v-if="placeH && eventActionType!=='KYC' && eventActionType!=='CUSTOMCONTRACT'">
+      <div
+        class="row g-3 align-items-center w-100 mt-4"
+        v-if="
+          placeH &&
+          eventActionType !== 'KYC' &&
+          eventActionType !== 'CUSTOMCONTRACT'
+        "
+      >
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="placeHolder" class="col-form-label">Place Holder: </label>
         </div>
@@ -530,7 +569,14 @@
           />
         </div>
       </div>
-      <div class="row g-3 align-items-center w-100 mt-4" v-if="noSocialhandle && eventActionType!=='KYC'  && eventActionType!=='CUSTOMCONTRACT'">
+      <div
+        class="row g-3 align-items-center w-100 mt-4"
+        v-if="
+          noSocialhandle &&
+          eventActionType !== 'KYC' &&
+          eventActionType !== 'CUSTOMCONTRACT'
+        "
+      >
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="value" class="col-form-label"
             >Social Handle<span style="color: red">*</span>:
@@ -651,7 +697,6 @@
   </div>
 </template>
 <style scoped>
-
 .inputInfo {
   color: #808080b5;
   font-size: smaller;
@@ -706,7 +751,6 @@
 }
 </style>
 <script>
-
 import notificationMixins from "../../../../mixins/notificationMixins";
 import {
   isEmpty,
@@ -717,36 +761,38 @@ import {
   isretweetUrl,
   isNum,
   isValidTwitterUsername,
-  isValidTelegramName
+  isValidTelegramName,
 } from "../../../../mixins/fieldValidationMixin";
 import "v-markdown-editor/dist/v-markdown-editor.css";
 import Messages from "../../../../utils/messages/admin/en";
 import Vue from "vue";
 import Editor from "v-markdown-editor";
 
-import {codemirror} from 'vue-codemirror'
+import { codemirror } from "vue-codemirror";
 
 // require styles
-import 'codemirror/addon/lint/lint.css'
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/mode/javascript/javascript'
-import 'codemirror/addon/lint/lint'
-import   'codemirror/addon/lint/json-lint'
-import 'codemirror/keymap/sublime';
-import jsonlint from 'jsonlint';
-import { JSHINT } from 'jshint';
+import "codemirror/addon/lint/lint.css";
+import "codemirror/lib/codemirror.css";
+import "codemirror/mode/javascript/javascript";
+import "codemirror/addon/lint/lint";
+import "codemirror/addon/lint/json-lint";
+import "codemirror/keymap/sublime";
+import jsonlint from "jsonlint";
+import { JSHINT } from "jshint";
 
-import Web3 from 'web3';
+import Web3 from "web3";
 Vue.use(Editor);
 
 window.JSHINT = JSHINT;
 window.jsonlint = jsonlint;
 export default {
   name: "EventActionCongif",
-  components: {codemirror},filters:{pretty:function(value){
-          return JSON.stringify(JSON.parse(value), null, 2);
-
-  }},
+  components: { codemirror },
+  filters: {
+    pretty: function (value) {
+      return JSON.stringify(JSON.parse(value), null, 2);
+    },
+  },
   props: {
     eventActionType: {
       type: String,
@@ -764,7 +810,7 @@ export default {
   },
   computed: {
     codemirror() {
-      return this.$refs.cmEditor.codemirror
+      return this.$refs.cmEditor.codemirror;
     },
     noSocialhandle() {
       if (
@@ -856,33 +902,43 @@ export default {
   },
   data() {
     return {
+      allCondition: [
+        { text: "None", value: null },
+        { text: "=", value: "===" },
+        { text: ">", value: ">" },
+        { text: "<", value: "<" },
+        { text: ">=", value: ">==" },
+        { text: "<=", value: "<==" },
+      ],
       cmOptions: {
         // codemirror options
-        
-        
+
         styleActiveLine: true,
         lineNumbers: true,
         line: true,
-        mode: 'application/json',
-        gutters: ['CodeMirror-lint-markers'],
+        mode: "application/json",
+        gutters: ["CodeMirror-lint-markers"],
         lineWrapping: true,
-        theme: 'default',
-        lint:true,
-        collapseIdentical: true,    
-    
-         keyMap: "sublime",
-        // more codemirror options, 
+        theme: "default",
+        lint: true,
+        collapseIdentical: true,
+
+        keyMap: "sublime",
+        // more codemirror options,
       },
       // selectedEventActionType: this.eventActionType,
-      allMethods:Array,
+      allMethods: [{ text: "None", value: null }],
       flash: null,
       isCreate: true,
       currentSelectedId: 0,
       contract: {
         contractAddress: "",
         thresholdBalance: 0,
-        contractABI:'',
-        methods:null,
+        contractABI: "",
+        methods: null,
+        operand: null,
+        operator: "",
+        returnType: "",
       },
       prizeDetails: {
         winners: "",
@@ -896,34 +952,42 @@ export default {
         value: "",
         score: 10,
         id: "",
-        slug:"",
-        
+        slug: "",
       },
-     
+
       hfTgBotId: this.$config.verifierBot.TELEGRAM,
     };
   },
   async mounted() {
-    
     this.$root.$on("callClearFromProject", () => {
       this.clearSelected();
     });
   },
   methods: {
-
-    onCmCodeChange(newCode) {
-      try{
-          this.code=JSON.parse(newCode)
-          const web3 = new Web3();  
-          const newContract=new web3.eth.Contract(this.code,this.contract.contractAddress);
-         // console.log(Object.keys(newContract.methods).filter(e=>e.includes('(')&& e.includes(')')));
-          this.allMethods= Object.keys(newContract.methods).filter(e=>e.includes('(')&& e.includes(')'))
-      }catch(e){
-        console.log("Error Occured as the ABI is not getting parsed",e)
+    async changeReturnType(method) {
+      console.log(this.contract.returnType);
+      for (let i = 0; i < this.code.length; i++) {
+        if (this.code[i].name === method.split("(")[0]) {
+          this.contract.returnType = this.code[i].outputs[0].type;
+          break;
+        }
       }
-      
-    }
-    ,
+    },
+    onCmCodeChange(newCode) {
+      try {
+        this.code = JSON.parse(newCode);
+        const web3 = new Web3();
+        const newContract = new web3.eth.Contract(
+          this.code,
+          this.contract.contractAddress
+        );
+        this.allMethods = Object.keys(newContract.methods).filter(
+          (e) => e.includes("(") && e.includes(")")
+        );
+      } catch (e) {
+        console.log("Error Occured as the ABI is not getting parsed", e);
+      }
+    },
     CapitaliseString(string) {
       let res = string.split("_");
       let first = res[0][0].toUpperCase() + res[0].substring(1).toLowerCase();
@@ -943,7 +1007,7 @@ export default {
         isManadatory: true,
         value: "",
         score: 10,
-        slug:""
+        slug: "",
       };
       this.prizeDetails = {
         winners: "",
@@ -952,7 +1016,11 @@ export default {
       this.contract = {
         contractAddress: "",
         thresholdBalance: 0,
-        contractABI:""
+        contractABI: "",
+        methods: null,
+        operand: null,
+        operator: "",
+        returnType: "",
       };
 
       this.selected = clearData;
@@ -977,8 +1045,11 @@ export default {
           } else if (isValidURL(this.selected.title)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL);
-          } else if ((this.selected.type === "TWITTER_FOLLOW" || this.selected.type === "TELEGRAM_JOIN") && 
-          isEmpty(this.selected.value)) {
+          } else if (
+            (this.selected.type === "TWITTER_FOLLOW" ||
+              this.selected.type === "TELEGRAM_JOIN") &&
+            isEmpty(this.selected.value)
+          ) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.SOCIAL_HANDLE_EMPTY);
           } else if (
@@ -986,7 +1057,9 @@ export default {
             isValidTwitterUsername(this.selected.value)
           ) {
             isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVALID_TWITTER_USERNAME);
+            this.notifyErr(
+              Messages.EVENTS.ACTIONS.SOCIAL.INVALID_TWITTER_USERNAME
+            );
           } else if (
             this.selected.type === "TWITTER_RETWEET" &&
             isEmpty(this.selected.value)
@@ -998,7 +1071,9 @@ export default {
             isValidTelegramName(this.selected.value)
           ) {
             isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVALID_TELEGRAM_USERNAME);
+            this.notifyErr(
+              Messages.EVENTS.ACTIONS.SOCIAL.INVALID_TELEGRAM_USERNAME
+            );
           } else if (
             this.selected.type === "DISCORD_JOIN" &&
             isEmpty(this.selected.value)
@@ -1169,7 +1244,7 @@ export default {
             );
           }
           break;
-          case "KYC": {
+        case "KYC": {
           if (this.selected.type === null) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_TYPE);
@@ -1179,7 +1254,7 @@ export default {
           } else if (isValidURL(this.selected.slug)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.SLUG_NOT_URL);
-           } else if (isEmpty(this.selected.title)) {
+          } else if (isEmpty(this.selected.title)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.KYC_TITLE);
           } else if (isValidURL(this.selected.title)) {
@@ -1191,32 +1266,31 @@ export default {
           } else if (parseInt(this.selected.score) < 0) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM);
+          } else if (this.eventActionList.length > 1) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.DUPLICATE_KYC);
           }
-          else if(this.eventActionList.length > 1){
-               isvalid = false   
-               this.notifyErr(Messages .EVENTS.ACTIONS.KYCACCORDIN.DUPLICATE_KYC)         
-           }
           break;
         }
-        case "CUSTOMCONTRACT":{
-            if (this.selected.type === null) {
-                  isvalid = false;
-                  this.notifyErr(
-                    Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE
-                  );
-                } else if (isEmpty(this.contract.contractAddress)) {
-                  isvalid = false;
-                  this.notifyErr(
-                    Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
-                  );
-                } else if (isEmpty(this.contract.contractABI)) {
-                  isvalid = false;
-                  this.notifyErr(
-                    Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
-                  );
-                }
-              break;
-              }
+        case "CUSTOMCONTRACT": {
+          if (this.selected.type === null) {
+            isvalid = false;
+            this.notifyErr(
+              Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE
+            );
+          } else if (isEmpty(this.contract.contractAddress)) {
+            isvalid = false;
+            this.notifyErr(
+              Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
+            );
+          } else if (isEmpty(this.contract.contractABI)) {
+            isvalid = false;
+            this.notifyErr(
+              Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
+            );
+          }
+          break;
+        }
         default:
           this.notifyErr(Messages.EVENTS.ACTIONS.INVALID_EVENT_TYPE);
       }
@@ -1262,14 +1336,13 @@ export default {
       // Code to update an Action
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {
-       
         if (this.eventActionType === "SMARTCONTRACT") {
           this.selected.value = JSON.stringify(this.contract);
         }
         if (this.eventActionType === "PRIZE") {
           this.selected.value = JSON.stringify(this.prizeDetails);
         }
-          if (this.eventActionType === "CUSTOMCONTRACT") {
+        if (this.eventActionType === "CUSTOMCONTRACT") {
           this.selected.value = JSON.stringify(this.contract);
         }
         this.eventActionList[this.currentSelectedId] = this.selected;
