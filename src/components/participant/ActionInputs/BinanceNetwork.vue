@@ -212,7 +212,7 @@ export default {
                   this.$emit(
                     "input",
                     JSON.stringify({
-                      ...this.value.operand,
+                      ...this.value,
                     })
                   );
                 } else {
@@ -226,7 +226,7 @@ export default {
                   this.$emit(
                     "input",
                     JSON.stringify({
-                      ...this.value.operand,
+                      ...this.value,
                     })
                   );
                 } else {
@@ -240,7 +240,7 @@ export default {
                   this.$emit(
                     "input",
                     JSON.stringify({
-                      ...this.value.operand,
+                      ...this.value,
                     })
                   );
                   this.notifySuccess("Success");

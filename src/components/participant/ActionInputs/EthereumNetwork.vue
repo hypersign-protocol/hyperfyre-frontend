@@ -89,6 +89,7 @@
                   id="title"
                   :required="true"
                   class="form-control w-100"
+                  disabled="disableInput"
                 />
               </div>
             </div>
@@ -166,12 +167,14 @@ export default {
     };
   },
   mounted() {
-    if (this.data.value) {
+
+    if (this.data.value ) {
       Object.assign(this.value, { ...JSON.parse(this.data.value) });
     }
-    eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
-    console.log(this.value);
+   
+    
     let s = this.value.methods;
+    console.log(this.value);
     s = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
     if (s !== "") {
       s = s.split(",");
@@ -179,6 +182,7 @@ export default {
         this.value.paramsList.push({ name: element, value: "" });
       });
     }
+     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
     async update() {
@@ -210,7 +214,7 @@ export default {
                   this.$emit(
                     "input",
                     JSON.stringify({
-                      ...this.value.operand,
+                      ...this.value,
                     })
                   );
                 } else {
@@ -224,7 +228,7 @@ export default {
                   this.$emit(
                     "input",
                     JSON.stringify({
-                      ...this.value.operand,
+                      ...this.value,
                     })
                   );
                 } else {
@@ -238,7 +242,7 @@ export default {
                   this.$emit(
                     "input",
                     JSON.stringify({
-                      ...this.value.operand,
+                      ...this.value,
                     })
                   );
                   this.notifySuccess("Success");
