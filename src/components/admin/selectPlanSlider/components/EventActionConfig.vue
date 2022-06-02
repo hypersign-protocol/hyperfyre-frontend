@@ -711,7 +711,24 @@ export default {
             this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM);
           }
           break;
-
+      case "CUSTOMCONTRACT":
+  if (this.selected.type === null) {
+            isvalid = false;
+            this.notifyErr(
+              Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE
+            );
+          } else if (isEmpty(this.contract.contractAddress)) {
+            isvalid = false;
+            this.notifyErr(
+              Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
+            );
+          } else if (isEmpty(this.contract.contractABI)) {
+            isvalid = false;
+            this.notifyErr(
+              Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
+            );
+          }
+        break;
         default:
           this.notifyErr(Messages.EVENTS.ACTIONS.INVALID_EVENT_TYPE);
       }
