@@ -94,6 +94,10 @@
                             <span class="heading">{{timeLeft(event)}} </span>
                                 <span class="description">Day Left</span>
                             </div>
+                               <div>
+                            <span class="heading">{{event.numberOfReferals}} </span>
+                                <span class="description">Score</span>
+                            </div>
                         </div>
                     </div>
                 </b-card>
@@ -319,7 +323,7 @@ export default {
           Authorization: `Bearer ${this.authToken}`,
         };
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
-        // console.log(resp.data,"eventList")
+         console.log(resp.data,"eventList")
         this.userEventList = {
           ...resp.data
         }
