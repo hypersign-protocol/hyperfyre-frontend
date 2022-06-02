@@ -80,6 +80,10 @@ import apiClient from "../../mixins/apiClientMixin";
 import notificationMixins from "../../mixins/notificationMixins";
 import config from "../../config";
 import Messsages from "../../utils/messages/participants/en";
+import EthereumNetwork from "./ActionInputs/EthereumNetwork.vue";
+import MaticNetwork from './ActionInputs/MaticNetwork.vue';
+import BinanceNetwork from './ActionInputs/BinanceNetwork.vue';
+
 export default {
   name: "Action",
   props: {
@@ -97,11 +101,14 @@ export default {
     },
   },
   components: {
+    BinanceNetwork,
+    MaticNetwork,
     Profile,
     TwitterFollow,
     TwitterRetweet,
     TelegramJoin,
     InputText,
+    EthereumNetwork,
     BlockchainEth,
     BlockchainTez,
     BlockchainCardano,
