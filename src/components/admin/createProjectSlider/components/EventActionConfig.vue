@@ -976,8 +976,9 @@ export default {
     onCmCodeChange(newCode) {
       try {
         this.code = JSON.parse(newCode);
-        const web3 = new Web3();
-        const newContract = new web3.eth.Contract(
+        const web3 = new Web3();              
+        this.code=this.code.filter(e=>(e.stateMutability==="view" && e.type==="function"))      
+       const newContract = new web3.eth.Contract(
           this.code,
           this.contract.contractAddress
         );
