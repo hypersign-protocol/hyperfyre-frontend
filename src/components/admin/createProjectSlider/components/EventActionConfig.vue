@@ -977,8 +977,8 @@ export default {
       try {
         this.code = JSON.parse(newCode);
         const web3 = new Web3();              
-        this.code=this.code.filter(e=>(e.stateMutability==="view" && e.type==="function"))      
-       const newContract = new web3.eth.Contract(
+        this.code=this.code.filter(e=>(e.stateMutability==="view" && e.type==="function" && e.outputs.length==1))      
+        const newContract = new web3.eth.Contract(
           this.code,
           this.contract.contractAddress
         );

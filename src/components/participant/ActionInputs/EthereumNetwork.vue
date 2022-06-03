@@ -78,32 +78,14 @@
             >
               <div
                 class="text-left col-lg-3 col-md-3 text-left"
-                v-if="param.value == '' && !done "
-              >
-                <label for="title" class="col-form-label"
-                  >{{ param.name }}<span style="color: red">*</span>:
-                </label>
-              </div>
-              <div class="col-lg-9 col-md-9 px-0" v-if="param.value == ''&& !done ">
-                <input
-                  v-model="param.value"
-                  type=""
-                  id="title"
-                  :required="true"
-                  class="form-control w-100"
-                  :disabled="done"
-                />
-              </div>
-               <div
-                class="text-left col-lg-3 col-md-3 text-left"
-                v-if="param.value !== '' && done "
+                
               >
                 <label for="title" class="col-form-label"
                   >{{ param.name }}<span style="color: red">*</span>:
                 </label>
               </div>
 
-              <div class="col-lg-9 col-md-9 px-0" v-if="param.value !== ''&& done ">
+              <div class="col-lg-9 col-md-9 px-0">
                 <input
                   v-model="param.value"
                   type=""
@@ -113,7 +95,6 @@
                   :disabled="done"
                 />
               </div>
-              
             </div>
           </b-col>
         </b-row>
@@ -189,22 +170,24 @@ export default {
     };
   },
   mounted() {
-    if (this.data.value) {
+   if (this.data.value) {
       Object.assign(this.value, { ...JSON.parse(this.data.value) });
-    }
-
-    let s = this.value.methods;
-
+    }    let s = this.value.methods;
     s = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
     if (s !== "") {
       s = s.split(",");
-      s.forEach((element) => {
-        this.value.paramsList.push({ name: element, value: "" });
-      });
+     
+      for (let i = 0; i < s.length; i++) {
+        if (this.value.paramsList.length !== 0) {
+          break;
+        } else {
+          this.value.paramsList.push({ name: s[i], value: "" });
+        }
+      }
+    
     }
-
-    console.log(this.value);
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
+  
   },
   methods: {
     async update() {
