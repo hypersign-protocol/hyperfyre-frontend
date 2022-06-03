@@ -53,7 +53,7 @@
               </button>
             </div> -->
             <div class="row g-3 align-items-center w-100 mt-4">
-              <div class="text-left col-lg-4 col-md-4 text-left">
+              <div class="text-left col-lg-3 col-md-3 text-left">
                 <label for="title" class="col-form-label font-weight-bold"
                   >Method Name<span style="color: red">*</span>:
                 </label>
@@ -77,7 +77,7 @@
               v-bind:key="index"
             >
               <div
-                class="text-left col-lg-3 col-md-3 text-left"
+                class="text-left col-lg-3 col-md-3 text-left "
                 
               >
                 <label for="title" class="col-form-label"
@@ -85,7 +85,24 @@
                 </label>
               </div>
 
-              <div class="col-lg-9 col-md-9 px-0">
+              <div class="col-lg-9 col-md-9 px-0 metamask" v-if="param.name==='address'">
+                <input
+                  v-model="param.value"
+                  type=""
+                  id="title"
+                  :required="true"
+                  class="form-control w-100"
+                  :disabled="true"
+                />
+                <button class="btn text-black" @click="invokeMetamask(index)" v-if="!done">
+                <img
+                  src="../../../assets/metamask.svg"
+                  height="25px"
+                  width="25px"
+                />
+              </button>
+              </div>
+              <div class="col-lg-8 col-md-8 px-0" v-else>
                 <input
                   v-model="param.value"
                   type=""
@@ -170,6 +187,7 @@ export default {
     };
   },
   mounted() {
+    this.checkWeb3Injection()
    if (this.data.value) {
       Object.assign(this.value, { ...JSON.parse(this.data.value) });
     }    let s = this.value.methods;
@@ -190,6 +208,52 @@ export default {
   
   },
   methods: {
+     checkWeb3Injection() {
+      try {
+        if (window.ethereum && window.ethereum.isMetaMask) {
+          this.web3 = new Web3(window.ethereum);
+        }
+      } catch (error) {
+        console.log(error);
+        this.showerror = true;
+      }
+    },
+    async signMessage() {
+      const message =
+        "You are Signing this message to ensure your participation in this event";
+      this.message_sign = message;
+      return await this.web3.eth.personal.sign(
+        message,
+        window.ethereum.selectedAddress
+      );
+    },
+    async invokeMetamask(e) {
+      console.log(e);
+      try {
+        if (window.ethereum.isMetaMask) {
+          const wallet = await window.ethereum.request({
+            method: "eth_requestAccounts",
+          });
+          this.signature  = await this.signMessage();
+          
+          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(this.message_sign, this.signature)
+          
+          let isSigVerified =  false;
+          if(generatedWalletAddr === wallet[0]){
+              isSigVerified = true;
+          } 
+      
+          if (isSigVerified) {
+            console.log(this.value.paramsList);
+            this.value.paramsList[e].value = wallet[0];
+          } else{
+            return this.notifyErr(Messages.EVENT_ACTIONS.ETH.INVALID_SIG)
+          }
+        } 
+      } catch (error) {
+        return this.notifyErr(error.message)
+      }
+    },
     async update() {
       try {
         let result = await this.execute();
