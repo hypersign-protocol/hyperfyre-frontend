@@ -15,6 +15,10 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.min.css";
+import Flicking from "@egjs/vue-flicking";
+import "@egjs/vue-flicking/dist/flicking.css";
+// Or, if you have to support IE9
+import "@egjs/vue-flicking/dist/flicking-inline.css";
 
 import {
   VeTable,
@@ -47,6 +51,7 @@ Vue.use(VeTable);
 Vue.use(VePagination);
 Vue.use(VeIcon);
 Vue.use(VeLoading);
+Vue.use(Flicking);
 
 Vue.prototype.$veLoading = VeLoading;
 Vue.prototype.$veLocale = VeLocale;
