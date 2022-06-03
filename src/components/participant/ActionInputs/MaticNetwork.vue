@@ -72,21 +72,20 @@
               </div>
             </div>
 
-            <div
+          <div
               class="row g-3 align-items-center w-100 mt-4"
               v-for="(param, index) in value.paramsList"
               v-bind:key="index"
             >
               <div
                 class="text-left col-lg-3 col-md-3 text-left"
-                v-if="param.value != ''"
+                v-if="param.value == '' && !done "
               >
                 <label for="title" class="col-form-label"
                   >{{ param.name }}<span style="color: red">*</span>:
                 </label>
               </div>
-
-              <div class="col-lg-9 col-md-9 px-0" v-if="param.value != ''">
+              <div class="col-lg-9 col-md-9 px-0" v-if="param.value == ''&& !done ">
                 <input
                   v-model="param.value"
                   type=""
@@ -96,6 +95,26 @@
                   :disabled="done"
                 />
               </div>
+               <div
+                class="text-left col-lg-3 col-md-3 text-left"
+                v-if="param.value !== '' && done "
+              >
+                <label for="title" class="col-form-label"
+                  >{{ param.name }}<span style="color: red">*</span>:
+                </label>
+              </div>
+
+              <div class="col-lg-9 col-md-9 px-0" v-if="param.value !== ''&& done ">
+                <input
+                  v-model="param.value"
+                  type=""
+                  id="title"
+                  :required="true"
+                  class="form-control w-100"
+                  :disabled="done"
+                />
+              </div>
+              
             </div>
           </b-col>
         </b-row>
