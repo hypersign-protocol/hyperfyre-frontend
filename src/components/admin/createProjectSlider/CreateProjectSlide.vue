@@ -333,7 +333,7 @@
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 title="Create Wallet configuration for your event"
-                ><i class="fab fa-bitcoin"></i> Collect Wallet Configuration
+                ><i class="fab fa-bitcoin"></i> Collect Wallet Configurations
               </b-button>
             </b-card-header>
             <b-collapse
@@ -366,7 +366,7 @@
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 title="Create Smart contract configuration for your event"
-                ><i class="fas fa-file-contract"></i> Tokens or NFT Holding Configuration
+                ><i class="fas fa-file-contract"></i> Tokens or NFT Holding Configurations
               </b-button>
             </b-card-header>
             <b-collapse
@@ -402,7 +402,7 @@
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 title="Create Custom Smart contract configuration for your event"
-                ><i class="fas fa-file-contract"></i> Custom Smart Contract Confuguration 
+                ><i class="fas fa-file-contract"></i> Custom Smart Contract Configurations 
               </b-button>
             </b-card-header>
             <b-collapse
