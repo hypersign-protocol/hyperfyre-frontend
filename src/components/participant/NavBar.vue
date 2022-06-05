@@ -23,8 +23,8 @@ color: white !important;
 			<template #button-content>
 				<b-icon style="color:white" icon="menu-button-wide"></b-icon>
 			</template>
-			<!-- <b-dropdown-item to="/user/home/">
-				Home</b-dropdown-item> -->
+			<b-dropdown-item to="/user/home/">
+				Home</b-dropdown-item> 
 			<b-dropdown-item @click="logout">Logout</b-dropdown-item>
 		</b-nav-item-dropdown>
 	</b-navbar>
