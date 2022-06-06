@@ -13,7 +13,7 @@
       <v-col cols="12" md="5">
         <p class="font-14 line-h-17">
           <v-icon class="color-grey-100">mdil-email-open</v-icon>
-          {{ userProfile.email | truncate(25) }}
+          {{ userProfile.email | truncate(20) }}
         </p>
       </v-col>
       <v-col cols="12" md="4">
