@@ -34,7 +34,7 @@
                 text-variant="white"
             >
                 <b-card-title style="font-size: larger;">
-                    {{ truncate1(event.projectName, 25) }}
+                    {{ truncate1(event.projectName, 20) }}
                 </b-card-title>
                 <b-card-sub-title>
                 </b-card-sub-title>
@@ -53,7 +53,7 @@
             </b-card>
             </div>
         </div>
-        <!--- List view ends --->
+        <!--- List view ends -->
         <div>
             <h2 class="llcnwK kdJiCp ">Your events</h2>
         </div>
@@ -80,7 +80,7 @@
                     text-variant="white"
                 >
                     <b-card-title style="font-size: larger;">
-                        {{ truncate1(event.projectName, 25) }}
+                        {{ truncate1(event.projectName, 20) }}
                     </b-card-title>
                     <b-card-sub-title>
                     </b-card-sub-title>
