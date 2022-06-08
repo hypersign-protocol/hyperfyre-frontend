@@ -251,8 +251,8 @@ export default {
       }
     },
     gotoUrl(path) {
-      const url= `${this.$config.form_base_url}/form/${path}`
-       window.open(url)
+     const url= `${window.location.origin}/form/${path}` 
+        window.open(url)
     },
     formateDate(d) {
       if (d) {
