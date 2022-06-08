@@ -1,7 +1,11 @@
 <template class="">
     <ul class="head cards row flex-row flex-nowrap" style="overflow-x: scroll">
         <li v-for="event in userEventList" :key="event._id">
+
             <a href="#" class="card" @click="gotoUrl(event.slug)">
+                <div class="ribbon ribbon-top-right" v-if="ifLatestEvent(event)"><span>New*</span>
+                </div>
+
                 <div class="card__img">
                     <img class="card__image" :src="event.logoUrl" alt="" />
                 </div>
@@ -33,6 +37,104 @@
     </ul>
 </template>
 <style scoped>
+
+
+
+/* common */
+.ribbon {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    position: absolute;
+}
+
+.ribbon::before,
+.ribbon::after {
+    position: absolute;
+    z-index: -1;
+    content: '';
+    display: block;
+    border: 5px solid yellow;
+}
+
+.ribbon span {
+    position: absolute;
+    display: block;
+    width: 225px;
+    padding: 12px 0;
+    background-color: yellow;
+    box-shadow: 0 5px 10px rgba(26, 20, 20, 0.31);
+    color: red;
+    font: 500 15px/1 'Lato', sans-serif;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+    text-transform: uppercase;
+    text-align: center;
+}
+
+
+/* top left*/
+.ribbon-top-right {
+    top: -20px;
+    right: -30px;
+}
+
+.ribbon-top-right::before,
+.ribbon-top-right::after {
+    border-top-color: transparent;
+    border-right-color: transparent;
+}
+
+.ribbon-top-right::before {
+    top: 0;
+    left: 0;
+}
+
+.ribbon-top-right::after {
+    bottom: 0;
+    right: 0;
+}
+
+.ribbon-top-right span {
+    left: -25px;
+    top: 30px;
+    transform: rotate(45deg);
+}
+
+
+/* 
+.ribbon {
+    position: absolute;
+    display: inline-block;
+
+
+    top: 0.3em;
+    right: 0.6em;
+
+    max-width: 5em;
+
+    color: grey;
+
+    z-index: 1;
+}
+
+.ribbon::after {
+    position: absolute;
+    top: -1.5em;
+    right: -5em;
+    content: "";
+    font-size: 0.8rem;
+    height: 5em;
+    width: 10em;
+  
+    transform: rotatez(45deg);
+
+    background-color: yellow;
+    z-index: -1;
+}
+.ribbon__text{
+    font-family: 'Noto Sans JP', sans-serif;
+    transform: rotatez(45deg);
+} */
 .head {
     --surface-color: #fff;
     --curve: 20;
@@ -185,6 +287,9 @@ export default {
             type: Object
         }
     },
+    computed: {
+        
+    },
     methods: {
         gotoUrl(path) {
             const url = `${window.location.origin}/form/${path}`
@@ -203,6 +308,19 @@ export default {
         truncate1(str, number) {
             return truncate(str, number);
         },
+        ifLatestEvent(eventData) {
+            if (eventData.fromDate && eventData.projectStatus) {
+                const fromDateParse = new Date(eventData.fromDate);
+                const toDayDate = new Date(new Date().toISOString()); // now
+
+                const diff = Math.ceil((toDayDate - fromDateParse) / (1000 * 60 * 60 * 24));
+                return diff >= 7;
+            } else {
+                return false;
+            }
+
+
+        }
     },
     
 }
