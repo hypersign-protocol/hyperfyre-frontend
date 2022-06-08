@@ -265,7 +265,8 @@ export default {
       }
     },
     gotoUrl(path) {
-      this.$router.push("/form/" + path);
+      const url= `${this.$config.form_base_url}/form/${path}`
+       window.open(url)
     },
     formateDate(d) {
       if (d) {
