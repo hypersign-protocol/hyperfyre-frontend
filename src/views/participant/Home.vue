@@ -41,14 +41,20 @@
             <b-card-sub-title> </b-card-sub-title>
             <div class="col">
               <div class="card-profile-stats d-flex justify-content-center">
-                <div>
-                  <span class="heading">{{ event.investorsCount }}</span>
-                  <span class="description">Total User</span>
-                </div>
-                <div>
-                  <span class="heading">{{ timeLeft(event) }} </span>
-                  <span class="description">Day Left</span>
-                </div>
+                 <div>
+                    <ul style="list-style: none">
+                      <li class="description">Total User</li>
+                      <li><i class="fa fa-users"></i></li>
+                      <li class="heading">{{ event.investorsCount }}</li>
+                    </ul>
+                    </div>
+                 <div>
+                    <ul style="list-style: none">
+                      <li class="description">Day Left</li>
+                      <li><i class="fa fa-trophy"></i></li>
+                      <li class="heading"> {{ timeLeft(event) }}</li>
+                    </ul>
+                  </div>
               </div>
             </div>
           </b-card>
