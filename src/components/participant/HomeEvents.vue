@@ -12,16 +12,20 @@
                             <span class="card__status">{{ timeLeft(event) }} days left</span>
                         </div>
                         <div class="card_trophy">
-                            <ul style="list-style: none;">
+                            <ul v-if="event.numberOfReferals != null" style="list-style: none;">
                                 <li class="description">Score</li>
                                 <li><i class="fa fa-trophy"></i></li>
-                                <li class="heading" v-if="event.numberOfReferals === 0">This event is over</li>
-                                <li class="heading" v-else>{{ event.numberOfReferals }}</li>
 
+                                <li class="heading">{{ event.numberOfReferals }}</li>
+
+                            </ul>
+                            <ul v-if="event.investorsCount != null" style="list-style: none;">
+                                <li class="description">Users</li>
+                                <li><i class="fa fa-users"></i></li>
+                                <li class="heading">{{ event.investorsCount }}</li>
                             </ul>
                         </div>
                     </div>
-                    <!-- <p class="card__description">{{ event.numberOfReferals }}</p> -->
                 </div>
             </a>
         </li>
@@ -38,6 +42,7 @@
 .card__img{
     min-width: 307px;
     min-height: 150px;
+    max-height: 150px;
 }
 .card_trophy{
     color: gray;        
@@ -61,7 +66,7 @@ body {
     /* display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
     gap: 2rem;
-    margin: 4rem 5vw;
+    /* margin: 4rem 5vw; */
     padding: 0;
     list-style-type: none;
 }
@@ -78,6 +83,7 @@ body {
 .card__image {
 width: 100%;
     min-height: 200px;
+    max-height: 200px;
 }
 
 .card__overlay {

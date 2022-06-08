@@ -8,40 +8,13 @@
         </h1>
       </div>
       <div>
-        <h2 class="llcnwK kdJiCp">
-          Trending events on <span class="TrendingCollections">#HyperFyre</span>
+        <h2 class="llcnwK kdJiCp" style="text-align: left">
+          <i class="fa fa-calendar"></i> Trending events on <span class="TrendingCollections">#HyperFyre</span>
         </h2>
       </div>
 
-      <div class="row flex-row flex-nowrap" style="overflow-x: scroll">
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="event in eventList" :key="event._id"
-          @click="gotoUrl(event.slug)">
-          <b-card :img-src="event.logoUrl" img-alt="Image" img-height="150" img-width="300" img-top tag="article"
-            class="text-center" bg-variant="dark" text-variant="white">
-            <b-card-title style="font-size: larger">
-              {{ truncate1(event.projectName, 20) }}
-            </b-card-title>
-            <b-card-sub-title> </b-card-sub-title>
-            <div class="col">
-              <div class="card-profile-stats d-flex justify-content-center">
-                <div>
-                  <ul style="list-style: none; width:109px">
-                    <li class="description">Total Users</li>
-                    <li><i class="fa fa-users"></i></li>
-                    <li class="heading">{{ event.investorsCount }}</li>
-                  </ul>
-                </div>
-                <div>
-                  <ul style="list-style: none; width:100px">
-                    <li class="description">Days Left</li>
-                    <li><i class="fa fa-clock"></i></li>
-                    <li class="heading"> {{ timeLeft(event) }}</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </b-card>
-        </div>
+      <div>
+        <HomeEvents :userEventList="eventList"></HomeEvents>
       </div>
       <div class="flex-row flex-nowrap kdJiCp">
         <button class="btn btn-warning" @click="prevT" style="margin-right: 2px">Previous</button>
@@ -49,7 +22,7 @@
       </div>
       <!--- List view ends -->
       <div>
-        <h2 class="llcnwK kdJiCp">Your events</h2>
+        <h2 class="llcnwK kdJiCp" style="text-align: left"><i class="fa fa-trophy"></i> Your events</h2>
       </div>
 
       <template v-if="authToken == '' || authToken == null">
@@ -60,7 +33,7 @@
 
         <div>
           <div v-if="Object.values(userEventList).length > 0">
-            <UserEvents :userEventList="userEventList"></UserEvents>
+            <HomeEvents :userEventList="userEventList"></HomeEvents>
             <div class="flex-row flex-nowrap kdJiCp">
               <button class="btn btn-warning" @click="prev" style="margin-right: 2px">Previous</button>
               <Button class="btn btn-warning" @click="next" style="margin-right: 2px">Next</Button>
@@ -84,14 +57,15 @@ import profileIconMixins from "../../mixins/profileIconMixins";
 import eventBus from "../../eventBus.js";
 import Messages from "../../utils/messages/admin/en";
 import Login from "../../components/participant/Login.vue";
-import UserEvents from "../../components/participant/UserEvents.vue";
+import HomeEvents from "../../components/participant/HomeEvents.vue";
+
 import { truncate } from "../../mixins/fieldValidationMixin.js";
 export default {
   name: "Home",
   components: {
     Loading,
     Login,
-    UserEvents
+    HomeEvents,
   },
 
   data() {
