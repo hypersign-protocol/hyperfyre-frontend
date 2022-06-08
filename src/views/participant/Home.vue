@@ -112,8 +112,8 @@
               <Button class="btn btn-warning" @click="next" style="margin-right: 2px">Next</Button>
             </div>
           </div>
-          <div v-else class="row flex-row flex-nowrap kdJiCp">
-            No event found
+          <div v-else class="row flex-row flex-nowrap kdJiCp alert alert-warning">
+            No events found
           </div>
         </div>
       </template>
