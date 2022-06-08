@@ -24,14 +24,20 @@
             <b-card-sub-title> </b-card-sub-title>
             <div class="col">
               <div class="card-profile-stats d-flex justify-content-center">
-                <div>
-                  <span class="heading">{{ event.investorsCount }}</span>
-                  <span class="description">Total User</span>
-                </div>
-                <div>
-                  <span class="heading">{{ timeLeft(event) }} </span>
-                  <span class="description">Day Left</span>
-                </div>
+                 <div>
+                    <ul style="list-style: none; width:109px">
+                      <li class="description">Total Users</li>
+                      <li><i class="fa fa-users"></i></li>
+                      <li class="heading">{{ event.investorsCount }}</li>
+                    </ul>
+                    </div>
+                 <div>
+                    <ul style="list-style: none; width:100px">
+                      <li class="description">Days Left</li>
+                      <li><i class="fa fa-clock"></i></li>
+                      <li class="heading"> {{ timeLeft(event) }}</li>
+                    </ul>
+                  </div>
               </div>
             </div>
           </b-card>
@@ -51,39 +57,54 @@
       </template>
 
       <template v-else>
-        <div class="row flex-row flex-nowrap" style="overflow-x: scroll">
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="event in userEventList" :key="event._id"
-            @click="gotoUrl(event.slug)">
-            <b-card :img-src="event.logoUrl" img-alt="Image" img-height="150" img-width="300" img-top tag="article"
-              class="text-center rounded" bg-variant="dark" text-variant="white">
-              <b-card-title style="font-size: larger">
-                {{ truncate1(event.projectName, 20) }}
-              </b-card-title>
-              <b-card-sub-title> </b-card-sub-title>
-              <div class="col">
-                <div class="card-profile-stats d-flex justify-content-center">
-                  <div>
-                    <ul style="list-style: none; width:100px">
-                      <li class="description">Days Left</li>
-                      <li><i class="fa fa-clock"></i></li>
-                      <li class="heading">{{ timeLeft(event) }}</li>
-                    </ul>
+
+       <div>
+          <div v-if="Object.values(userEventList).length > 0">
+            <div class="row flex-row flex-nowrap" style="overflow-x: scroll">
+              <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="event in userEventList" :key="event._id"
+                @click="gotoUrl(event.slug)">
+                <b-card :img-src="event.logoUrl" img-alt="Image" img-height="150" img-width="300" img-top tag="article"
+                  class="text-center rounded" bg-variant="dark" text-variant="white">
+                  <b-card-title style="font-size: larger">
+                    {{ truncate1(event.projectName, 20) }}
+                  </b-card-title>
+                  <b-card-sub-title> </b-card-sub-title>
+                  <div class="col">
+                    <div class="card-profile-stats d-flex justify-content-center">
+                      <div>
+                        <ul style="list-style: none; width:100px">
+                          <li class="description">Days Left</li>
+                          <li><i class="fa fa-clock"></i></li>
+                          <li class="heading">{{ timeLeft(event) }}</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <ul style="list-style: none;  width:100px">
+                          <li class="description">Score</li>
+                          <li><i class="fa fa-trophy"></i></li>
+                          <li class="heading">{{ event.numberOfReferals }}</li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <ul style="list-style: none;  width:100px">
-                      <li class="description">Score</li>
-                      <li><i class="fa fa-trophy"></i></li>
-                      <li class="heading">{{ event.numberOfReferals }}</li>
-                    </ul>
-                  </div>
-                </div>
+                </b-card>
+
               </div>
-            </b-card>
+            </div>
+            <div class="flex-row flex-nowrap kdJiCp">
+              <button class="btn btn-warning" @click="prev" style="margin-right: 2px">Previous</button>
+              <Button class="btn btn-warning" @click="next" style="margin-right: 2px">Next</Button>
+            </div>
           </div>
+          <div v-else class="row flex-row flex-nowrap kdJiCp">
+            No event found
+          </div>
+
         </div>
         <div class="flex-row flex-nowrap kdJiCp">
           <button class="btn btn-warning" @click="prev" style="margin-right: 2px">Previous</button>
           <Button class="btn btn-warning" @click="next" style="margin-right: 2px">Next</Button>
+
         </div>
       </template>
     </div>
@@ -220,7 +241,8 @@ export default {
       }
     },
     gotoUrl(path) {
-      this.$router.push("/form/" + path);
+     const url= `${window.location.origin}/form/${path}` 
+        window.open(url)
     },
     formateDate(d) {
       if (d) {
