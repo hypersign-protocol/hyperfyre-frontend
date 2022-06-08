@@ -54,13 +54,20 @@
           </b-card>
         </div>
       </div>
+      <div class="flex-row flex-nowrap kdJiCp">
+          <button class="btn btn-warning" @click="prevT">Previous</button>
+
+          <Button class="btn btn-warning" @click="nextT">Next</Button>
+        </div>
       <!--- List view ends -->
       <div>
         <h2 class="llcnwK kdJiCp">Your events</h2>
       </div>
+      
       <template v-if="authToken == '' || authToken == null">
         <Login @AuthTokenUpdateEvent="updateAuthentication" />
       </template>
+      
       <template v-else>
         <div class="row flex-row flex-nowrap" style="overflow-x: scroll">
           <div
@@ -91,21 +98,36 @@
                                 <span class="description">Total User</span>
                             </div> -->
                   <div>
+                    <ul style="list-style: none">
+                      <li class="description">Day Left</li>
+
+                      <li><i class="fa fa-clock"></i></li>
+
+                      <li class="heading">{{ timeLeft(event) }}</li>
+                    </ul>
+
+                    <!-- 
+                    <li><i class="fa fa-clock-o"></i></li>
                     <span class="heading">{{ timeLeft(event) }} </span>
-                    <span class="description">Day Left</span>
+                    <span class="description">Day Left</span> -->
                   </div>
                   <div>
-                    <span class="heading">{{ event.numberOfReferals }} </span>
-                    <span class="description">Score</span>
+                    <ul style="list-style: none">
+                      <li class="description">Score</li>
+
+                      <li><i class="fa fa-trophy"></i></li>
+
+                      <li class="heading">{{ event.numberOfReferals }}</li>
+                    </ul>
                   </div>
                 </div>
               </div>
             </b-card>
           </div>
         </div>
-        <div class=" flex-row flex-nowrap  kdJiCp">
+        <div class="flex-row flex-nowrap kdJiCp">
           <button class="btn btn-warning" @click="prev">Previous</button>
-          
+
           <Button class="btn btn-warning" @click="next">Next</Button>
         </div>
       </template>
@@ -132,6 +154,7 @@ export default {
 
   data() {
     return {
+      pageT: this.pageT < 1 ? 1 : 1,
       page: this.page < 1 ? 1 : 1,
       slide: 0,
       sliding: null,
@@ -212,6 +235,21 @@ export default {
   },
   async updated() {},
   methods: {
+  async prevT() {
+      this.pageT = this.pageT <= 1 ? 1 : this.pageT - 1;
+      await this.fetchEventData();
+    },
+    async nextT() {
+      ++this.pageT;
+      await this.fetchEventData();
+
+      if (this.pageT > 1 && Object.values(this.eventList).length === 0) {
+        --this.pageT;
+
+        await this.fetchEventData();
+      }
+    },
+
     async prev() {
       this.page = this.page <= 1 ? 1 : this.page - 1;
       await this.fetchUserEventData();
@@ -225,8 +263,6 @@ export default {
 
         await this.fetchUserEventData();
       }
-
-      
     },
     gotoUrl(path) {
       this.$router.push("/form/" + path);
