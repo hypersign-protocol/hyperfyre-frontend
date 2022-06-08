@@ -1,7 +1,7 @@
 <template class="">
     <ul class="head cards row flex-row flex-nowrap" style="overflow-x: scroll">
         <li v-for="event in userEventList" :key="event._id">
-            <a href="" class="card">
+            <a href="#" class="card" @click="gotoUrl(event.slug)">
                 <div class="card__img">
                     <img class="card__image" :src="event.logoUrl" alt="" />
                 </div>
