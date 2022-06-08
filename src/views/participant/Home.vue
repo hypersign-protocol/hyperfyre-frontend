@@ -1,10 +1,6 @@
 <template>
   <div>
-    <loading
-      :active.sync="isLoading"
-      :can-cancel="true"
-      :is-full-page="fullPage"
-    ></loading>
+    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
     <div class="container mx-auto overflow-hidden mt-3 border-0">
       <div>
         <h1 class="mainTitle kdJiCp">
@@ -18,23 +14,10 @@
       </div>
 
       <div class="row flex-row flex-nowrap" style="overflow-x: scroll">
-        <div
-          class="col-12 col-sm-6 col-md-4 col-lg-3"
-          v-for="event in eventList"
-          :key="event._id"
-          @click="gotoUrl(event.slug)"
-        >
-          <b-card
-            :img-src="event.logoUrl"
-            img-alt="Image"
-            img-height="150"
-            img-width="300"
-            img-top
-            tag="article"
-            class="text-center"
-            bg-variant="dark"
-            text-variant="white"
-          >
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="event in eventList" :key="event._id"
+          @click="gotoUrl(event.slug)">
+          <b-card :img-src="event.logoUrl" img-alt="Image" img-height="150" img-width="300" img-top tag="article"
+            class="text-center" bg-variant="dark" text-variant="white">
             <b-card-title style="font-size: larger">
               {{ truncate1(event.projectName, 20) }}
             </b-card-title>
@@ -61,20 +44,20 @@
         </div>
       </div>
       <div class="flex-row flex-nowrap kdJiCp">
-          <button class="btn btn-warning" @click="prevT">Previous</button>
-
-          <Button class="btn btn-warning" @click="nextT">Next</Button>
-        </div>
+        <button class="btn btn-warning" @click="prevT" style="margin-right: 2px">Previous</button>
+        <Button class="btn btn-warning" @click="nextT" style="margin-right: 2px">Next</Button>
+      </div>
       <!--- List view ends -->
       <div>
         <h2 class="llcnwK kdJiCp">Your events</h2>
       </div>
-      
+
       <template v-if="authToken == '' || authToken == null">
         <Login @AuthTokenUpdateEvent="updateAuthentication" />
       </template>
-      
+
       <template v-else>
+
        <div>
           <div v-if="Object.values(userEventList).length > 0">
             <div class="row flex-row flex-nowrap" style="overflow-x: scroll">
@@ -105,6 +88,7 @@
                     </div>
                   </div>
                 </b-card>
+
               </div>
             </div>
             <div class="flex-row flex-nowrap kdJiCp">
@@ -115,6 +99,12 @@
           <div v-else class="row flex-row flex-nowrap kdJiCp">
             No event found
           </div>
+
+        </div>
+        <div class="flex-row flex-nowrap kdJiCp">
+          <button class="btn btn-warning" @click="prev" style="margin-right: 2px">Previous</button>
+          <Button class="btn btn-warning" @click="next" style="margin-right: 2px">Next</Button>
+
         </div>
       </template>
     </div>
