@@ -265,7 +265,7 @@ export default {
     async fetchEventData() {
       this.isLoading = true;
       if (this.eventSlug && this.eventSlug != "") {
-        let url = `${this.$config.studioServer.BASE_URL}api/v1/project/promoted/events?limit=20&page=1`;
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/project/promoted/events?limit=20&page=${this.pageT}`;
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
