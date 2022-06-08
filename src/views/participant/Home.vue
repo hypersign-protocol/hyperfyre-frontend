@@ -101,11 +101,7 @@
           </div>
 
         </div>
-        <div class="flex-row flex-nowrap kdJiCp">
-          <button class="btn btn-warning" @click="prev" style="margin-right: 2px">Previous</button>
-          <Button class="btn btn-warning" @click="next" style="margin-right: 2px">Next</Button>
-
-        </div>
+       
       </template>
     </div>
   </div>
