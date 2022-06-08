@@ -314,7 +314,7 @@ export default {
                 const toDayDate = new Date(new Date().toISOString()); // now
 
                 const diff = Math.ceil((toDayDate - fromDateParse) / (1000 * 60 * 60 * 24));
-                return diff >= 7;
+                return diff <= 7;
             } else {
                 return false;
             }
