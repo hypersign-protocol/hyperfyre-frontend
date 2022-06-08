@@ -3,7 +3,7 @@
         <li v-for="event in userEventList" :key="event._id">
 
             <a href="#" class="card" @click="gotoUrl(event.slug)">
-                <div class="ribbon ribbon-top-right" v-if="ifLatestEvent(event)"><span>New*</span>
+                <div class="ribbon ribbon-top-right" v-if="ifLatestEvent(event)"><span>*New</span>
                 </div>
 
                 <div class="card__img">
