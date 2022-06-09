@@ -1297,9 +1297,12 @@ export default {
             this.notifyErr(
               Messages.EVENTS.ACTIONS.SMARTCONTRACT.ABI_NOT_EMPTY
             )
-          }else if (isValidURL(this.selected.slug)) {
+          }else if (isValidURL(this.selected.title)) {
             isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.SLUG_NOT_URL);
+            this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL);
+          }else if (isEmpty(this.selected.title)) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE);
           }
           break;
         }
