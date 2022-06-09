@@ -113,6 +113,12 @@ export default {
       ],
       unsubsSubscribedMenu: [
         {
+          href: "/admin/dashboard",
+          title: "Dashboard",
+          icon: "fas fa-tachometer-alt",
+          exactPath:true,
+        },
+        {
           href: "/admin/subscription",
           title: "Subscriptions",
           icon: "fas fa-receipt",
