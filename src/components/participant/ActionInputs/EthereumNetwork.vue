@@ -76,16 +76,16 @@
               v-for="(param, index) in value.paramsList"
               v-bind:key="index"
             >
-              <div
-                class="text-left col-lg-3 col-md-3 text-left "
-                
-              >
+              <div class="text-left col-lg-3 col-md-3 text-left">
                 <label for="title" class="col-form-label"
                   >{{ param.name }}<span style="color: red">*</span>:
                 </label>
               </div>
 
-              <div class="col-lg-9 col-md-9 px-0 metamask" v-if="param.name==='address'">
+              <div
+                class="col-lg-9 col-md-9 px-0 metamask"
+                v-if="param.name === 'address'"
+              >
                 <input
                   v-model="param.value"
                   type=""
@@ -94,13 +94,17 @@
                   class="form-control w-100"
                   :disabled="true"
                 />
-                <button class="btn text-black" @click="invokeMetamask(index)" v-if="!done">
-                <img
-                  src="../../../assets/metamask.svg"
-                  height="25px"
-                  width="25px"
-                />
-              </button>
+                <button
+                  class="btn text-black"
+                  @click="invokeMetamask(index)"
+                  v-if="!done"
+                >
+                  <img
+                    src="../../../assets/metamask.svg"
+                    height="25px"
+                    width="25px"
+                  />
+                </button>
               </div>
               <div class="col-lg-8 col-md-8 px-0" v-else>
                 <input
@@ -183,18 +187,20 @@ export default {
         operand: null,
         operator: "",
         returnType: "",
+        condition: "",
       },
     };
   },
   mounted() {
-    this.checkWeb3Injection()
-   if (this.data.value) {
+    this.checkWeb3Injection();
+    if (this.data.value) {
       Object.assign(this.value, { ...JSON.parse(this.data.value) });
-    }    let s = this.value.methods;
+    }
+    let s = this.value.methods;
     s = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
     if (s !== "") {
       s = s.split(",");
-     
+
       for (let i = 0; i < s.length; i++) {
         if (this.value.paramsList.length !== 0) {
           break;
@@ -202,13 +208,11 @@ export default {
           this.value.paramsList.push({ name: s[i], value: "" });
         }
       }
-    
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
-  
   },
   methods: {
-     checkWeb3Injection() {
+    checkWeb3Injection() {
       try {
         if (window.ethereum && window.ethereum.isMetaMask) {
           this.web3 = new Web3(window.ethereum);
@@ -234,24 +238,27 @@ export default {
           const wallet = await window.ethereum.request({
             method: "eth_requestAccounts",
           });
-          this.signature  = await this.signMessage();
-          
-          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(this.message_sign, this.signature)
-          
-          let isSigVerified =  false;
-          if(generatedWalletAddr === wallet[0]){
-              isSigVerified = true;
-          } 
-      
+          this.signature = await this.signMessage();
+
+          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(
+            this.message_sign,
+            this.signature
+          );
+
+          let isSigVerified = false;
+          if (generatedWalletAddr === wallet[0]) {
+            isSigVerified = true;
+          }
+
           if (isSigVerified) {
             console.log(this.value.paramsList);
             this.value.paramsList[e].value = wallet[0];
-          } else{
-            return this.notifyErr(Messages.EVENT_ACTIONS.ETH.INVALID_SIG)
+          } else {
+            return this.notifyErr(Messages.EVENT_ACTIONS.ETH.INVALID_SIG);
           }
-        } 
+        }
       } catch (error) {
-        return this.notifyErr(error.message)
+        return this.notifyErr(error.message);
       }
     },
     async update() {
@@ -279,7 +286,7 @@ export default {
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (this.value.operand === result) {
                   this.notifySuccess("Success");
-
+                  this.value.condition = "Condition True";
                   this.$emit(
                     "input",
                     JSON.stringify({
@@ -294,6 +301,7 @@ export default {
               case "string": {
                 if (this.value.operand === result) {
                   this.notifySuccess("Success");
+                  this.value.condition = "Condition True";
                   this.$emit(
                     "input",
                     JSON.stringify({
@@ -307,6 +315,7 @@ export default {
               }
               case "bool": {
                 if (!!this.value.operand === !!result) {
+                  this.value.condition = "Condition True";
                   this.$emit(
                     "input",
                     JSON.stringify({
@@ -333,7 +342,7 @@ export default {
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result < this.value.operand) {
                   this.notifySuccess("Success");
-
+                  this.value.condition = "Condition True";
                   this.$emit(
                     "input",
                     JSON.stringify({
@@ -355,7 +364,7 @@ export default {
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result > this.value.operand) {
                   this.notifySuccess("Success");
-
+                  this.value.condition = "Condition True";
                   this.$emit(
                     "input",
                     JSON.stringify({
@@ -378,7 +387,7 @@ export default {
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result <= this.value.operand) {
                   this.notifySuccess("Success");
-
+                  this.value.condition = "Condition True";
                   this.$emit(
                     "input",
                     JSON.stringify({
@@ -400,7 +409,7 @@ export default {
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result >= this.value.operand) {
                   this.notifySuccess("Success");
-
+                  this.value.condition = "Condition True";
                   this.$emit(
                     "input",
                     JSON.stringify({
@@ -419,7 +428,7 @@ export default {
         }
         console.log(result);
       } catch (error) {
-        this.data.value = "";
+        this.value.condition = "Condition False";
         return this.notifyErr(error);
       }
     },
