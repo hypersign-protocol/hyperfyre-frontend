@@ -1273,13 +1273,21 @@ export default {
           }
           break;
         }
-        case "CUSTOMCONTRACT": {
+        case "CUSTOMCONTRACT": {          
+          // console.log(JSON.parse(this.selected.value));
+         // const validateJSON=JSON.parse(this.selected.value)       
+
           if (this.selected.type === null) {
             isvalid = false;
             this.notifyErr(
               Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE
             );
-          } else if (isEmpty(this.contract.contractAddress)) {
+          // }else if (isEmpty(validateJSON.methods)) {
+          //   isvalid = false;
+          //   this.notifyErr(
+          //     Messages.EVENTS.ACTIONS.SMARTCONTRACT.METHODS_EMPTY
+          //   );
+          // } else if (isEmpty(this.contract.contractAddress)) {
             isvalid = false;
             this.notifyErr(
               Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
@@ -1287,8 +1295,11 @@ export default {
           } else if (isEmpty(this.contract.contractABI)) {
             isvalid = false;
             this.notifyErr(
-              Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
-            );
+              Messages.EVENTS.ACTIONS.SMARTCONTRACT.ABI_NOT_EMPTY
+            )
+          }else if (isValidURL(this.selected.slug)) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.SLUG_NOT_URL);
           }
           break;
         }

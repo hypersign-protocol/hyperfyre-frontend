@@ -253,7 +253,7 @@ import apiClientMixin from "../../mixins/apiClientMixin";
 import FileDownload from "js-file-download";
 const issuedImgLink = require("../../assets/issued-icon.png");
 import Messages from "../../utils/messages/admin/en";
-import eventBus from '../../eventBus';
+import eventBus from "../../eventBus";
 
 export default {
   name: "Investor",
@@ -395,13 +395,13 @@ export default {
   },
 
   async mounted() {
-    this.fetchSubscription()
+    this.fetchSubscription();
     if (this.$route.query.projectId) {
       this.selectedProjectId = this.$route.query.projectId;
       this.selectedProject = this.$route.query.projectId;
       this.investor.projectId = this.$route.query.projectId;
-     await this.fetchProjectData(0, this.perPage);
-       this.holdInvestors = this.project.investors;
+      await this.fetchProjectData(0, this.perPage);
+      this.holdInvestors = this.project.investors;
     }
 
     const userProjectStr = localStorage.getItem("userProjects");
@@ -496,6 +496,11 @@ export default {
         }
         case "REEF_ERC721": {
           return JSON.parse(action.value).userWalletAddress.address;
+        }
+        case "ETHEREUM_NETWORK":
+        case "BINANCE_NETWORK":
+        case "MATIC_NETWORK": {
+          return JSON.parse(action.value).condition;
         }
         default:
           return action.value;
