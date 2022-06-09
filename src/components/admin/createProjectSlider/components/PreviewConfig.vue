@@ -170,6 +170,12 @@ cursor:default !important
                     v-if="action.type.includes('ETHEREUM_ERC20')"
                     height="22px"
                   />
+                   <img
+                    style="padding-right: 5px"
+                    src="/img/ethereum.2b470564.svg"
+                    v-if="action.type.includes('ETHEREUM_')"
+                    height="22px"
+                  />
                   <img
                     style="padding-right: 5px"
                     src="/img/ethereum.2b470564.svg"
@@ -180,7 +186,7 @@ cursor:default !important
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/matic-logo.svg"
-                    v-if="action.type.includes('MATIC_ERC20')"
+                    v-if="action.type.includes('MATIC_')"
                     height="20px"
                   />
                   <img
@@ -193,7 +199,7 @@ cursor:default !important
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/binance-logo.svg"
-                    v-if="action.type.includes('BINANCE_ERC20')"
+                    v-if="action.type.includes('BINANCE_')"
                     height="20px"
                   />
                   <img

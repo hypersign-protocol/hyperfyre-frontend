@@ -333,7 +333,7 @@
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 title="Create Wallet configuration for your event"
-                ><i class="fab fa-bitcoin"></i> Collect Wallet Configuration
+                ><i class="fab fa-bitcoin"></i> Collect Wallet Configurations
               </b-button>
             </b-card-header>
             <b-collapse
@@ -366,7 +366,7 @@
                 variant="info"
                 class="bg-transparent border-0 text-left text-primary"
                 title="Create Smart contract configuration for your event"
-                ><i class="fas fa-file-contract"></i> Tokens or NFT Holding Configuration
+                ><i class="fas fa-file-contract"></i> Tokens or NFT Holding Configurations
               </b-button>
             </b-card-header>
             <b-collapse
@@ -381,6 +381,42 @@
                   :eventActionList="smartContractlist"
                   eventActionType="SMARTCONTRACT"
                   :options="options.smartContractAction"
+                />
+              </b-card-body>
+            </b-collapse>
+          </b-card>
+
+
+
+<!--Custom Smart Contract-->
+
+          <b-card no-body class="mb-1">
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-9
+                variant="info"
+                class="bg-transparent border-0 text-left text-primary"
+                title="Create Custom Smart contract configuration for your event"
+                ><i class="fas fa-file-contract"></i> Custom Smart Contract Configurations 
+              </b-button>
+            </b-card-header>
+            <b-collapse
+            
+              id="accordion-9"
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body>
+                <eventAction-config
+                  v-on="$listeners"
+                  :eventActionList="customContractlist"
+                  eventActionType="CUSTOMCONTRACT"
+                  :options="options.customContractAction"
                 />
               </b-card-body>
             </b-collapse>
@@ -587,13 +623,33 @@ export default {
       if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
           (x) =>
-            x.type.indexOf("ETHEREUM_") > -1 ||
-            x.type.indexOf("MATIC_") > -1 ||
-            x.type.indexOf("BINANCE_") > -1 ||
-            x.type.indexOf("REEF_") > -1 ||
-            x.type.indexOf("MOONBEAM_") > -1 ||
-            x.type.indexOf("MOONRIVER_") > -1 ||
-            x.type.indexOf("MOON_") > -1
+            x.type.indexOf("ETHEREUM_ERC20") > -1 ||
+            x.type.indexOf("MATIC_ERC20") > -1 ||
+            x.type.indexOf("BINANCE_ERC20") > -1 ||
+            x.type.indexOf("REEF_ERC20") > -1 ||
+            x.type.indexOf("MOONBEAM_ERC20") > -1 ||
+            x.type.indexOf("MOONRIVER_ERC20") > -1 ||
+            x.type.indexOf("MOON_ERC20") > -1 ||
+             x.type.indexOf("ETHEREUM_ERC721") > -1 ||
+            x.type.indexOf("MATIC_ERC721") > -1 ||
+            x.type.indexOf("BINANCE_ERC721") > -1 ||
+            x.type.indexOf("REEF_ERC721") > -1 ||
+            x.type.indexOf("MOONBEAM_ERC721") > -1 ||
+            x.type.indexOf("MOONRIVER_ERC721") > -1 ||
+            x.type.indexOf("MOON_ERC721") > -1 
+        );
+      } else {
+        return [];
+      }
+    },
+    customContractlist:function () {
+ if (this.actionList && this.actionList.length > 0) {
+        return this.actionList.filter(
+          (x) =>
+            x.type.indexOf("ETHEREUM_NETWORK") > -1 ||
+            x.type.indexOf("MATIC_NETWORK") > -1 ||
+            x.type.indexOf("BINANCE_NETWORK") > -1
+            
         );
       } else {
         return [];
@@ -672,6 +728,15 @@ export default {
           { text: "Reef ERC20", value: "REEF_ERC20" },
           { text: "Reef ERC721", value: "REEF_ERC721" },
         ],
+        customContractAction:[
+          { text: "Select Contract Type", value: null },
+          { text: "Ethereum", value: "ETHEREUM_NETWORK" },         
+          { text: "Polygon", value: "MATIC_NETWORK" },        
+          { text: "Binance", value: "BINANCE_NETWORK" },       
+         
+          
+        ]
+        ,
         kycConfig:[{ text: "Select Provider", value: null},
         {text:'SUMSUB',value:'SUMSUB_KYC'}],
         prizeDetails: [

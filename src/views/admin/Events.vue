@@ -965,7 +965,6 @@ export default {
       if (this.isProjectClonning) {
         this.project.projectName =
           this.project.projectName + " copy " + Date.now();
-        this.project._id = "";
         this.project.slug = "";
         this.project.investorsCount = 0;
       }

@@ -70,8 +70,11 @@ const EVENTS = {
     },
 
     SMARTCONTRACT:{
+        ABI_SYNTAX_ERROR:"Please check the syntax of abi",
         CHOOSE_CONTRACT_TYPE: "Please choose Contract Type",
+        METHODS_EMPTY:"Methods Cannot be empty.",
         ADDRESS_NOT_EMPTY: "Contract Address Should not be empty",
+        ABI_NOT_EMPTY:"Contract ABI Should not be empty",
         THBALANCE_NOT_NEGATIVE: "Enter the Threshold balance that should be a Positive Number",
         VALID_CONTRACT_ADDRESS: "Please enter valid Contract address"
     },
