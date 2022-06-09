@@ -178,7 +178,7 @@ router.beforeEach((to, from, next) => {
             if (
               to.meta.admin &&
               !json.message.isSubscribed &&
-              to.path != "/admin/subscription"
+              (to.path != "/admin/subscription" || to.path!='/admin/dashboard')
             ) {
               eventBus.$emit("UpdateAdminNav", false);
               next({
