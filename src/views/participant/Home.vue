@@ -13,13 +13,21 @@
         </h2>
       </div>
 
-      <div>
+      <div v-if="Object.values(eventList).length>0">
+        <div>
         <HomeEvents :userEventList="eventList"></HomeEvents>
       </div>
+      
       <div class="flex-row flex-nowrap kdJiCp">
         <button class="btn btn-warning" @click="prevT" style="margin-right: 2px">Previous</button>
         <Button class="btn btn-warning" @click="nextT" style="margin-right: 2px">Next</Button>
       </div>
+
+      </div>
+       <div v-else class="row flex-row flex-nowrap kdJiCp alert alert-warning">
+            No events found
+          </div>
+      
       <!--- List view ends -->
       <div>
         <h2 class="llcnwK kdJiCp" style="text-align: left"><i class="fa fa-trophy"></i> Your events</h2>
@@ -279,6 +287,7 @@ export default {
         this.eventList = {
           ...resp.data.eventList,
         };
+       
       } else {
         this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG);
       }
