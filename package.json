@@ -1,6 +1,6 @@
 {
     "name": "hyperfye-frontend",
-    "version": "v5.3.0",
+    "version": "v5.3.2",
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve --mode production",
