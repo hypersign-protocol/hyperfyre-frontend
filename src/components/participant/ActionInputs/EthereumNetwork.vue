@@ -298,7 +298,8 @@ export default {
                 }
                 break;
               }
-              case "string": {
+              case "string":
+              case "address": {
                 if (this.value.operand === result) {
                   this.notifySuccess("Success");
                   this.value.condition = "Condition True";
