@@ -1282,12 +1282,12 @@ export default {
             this.notifyErr(
               Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE
             );
-          // }else if (isEmpty(validateJSON.methods)) {
-          //   isvalid = false;
-          //   this.notifyErr(
-          //     Messages.EVENTS.ACTIONS.SMARTCONTRACT.METHODS_EMPTY
-          //   );
-          // } else if (isEmpty(this.contract.contractAddress)) {
+          }else if (this.contract.methods===null || isEmpty(this.contract.methods)) {
+            isvalid = false;
+            this.notifyErr(
+              Messages.EVENTS.ACTIONS.SMARTCONTRACT.METHODS_EMPTY
+            );
+          } else if (isEmpty(this.contract.contractAddress)) {
             isvalid = false;
             this.notifyErr(
               Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
