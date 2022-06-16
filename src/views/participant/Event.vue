@@ -287,7 +287,6 @@ export default {
         return x.type !=='PRIZE_CARD'
         })
         const eventActions = actionWithoutPrize;
-
         if (this.userEventData.actions && this.userEventData.actions.length > 0) {
           this.eventActionsToShow = eventActions.map(ea => {
             const doneAction = this.userEventData.actions.find(ua => ua._id == ea._id)
@@ -300,7 +299,9 @@ export default {
             return ea
           })
 
-        } 
+        } else {
+            this.eventActionsToShow = eventActions;
+        }
       } else { 
         this.eventActionsToShow = this.eventData.actions; 
         this.prizeData = this.eventData.actions.filter((x) => {
