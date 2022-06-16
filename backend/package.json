@@ -28,7 +28,7 @@
         "exceljs": "^4.2.1",
         "express": "^4.17.1",
         "express-validator": "^6.12.0",
-        "hs-ssi-sdk": "^5.0.1",
+        "hs-ssi-sdk": "^6.0.0",
         "https-localhost": "^4.6.5",
         "hypersign-auth-js-sdk": "^2.0.7",
         "mongoose": "^5.12.3",
