@@ -41,13 +41,17 @@
                 :disabled="true"
                 :required="data.isManadatory"
               ></b-form-input>
-              <button class="btn text-black" @click="invokeMetamask()" v-if="!done">
+              <!-- <button
+                class="btn text-black"
+                @click="invokeMetamask()"
+                v-if="!done"
+              >
                 <img
                   src="../../../assets/metamask.svg"
                   height="25px"
                   width="25px"
                 />
-              </button>
+              </button> -->
             </div>
           </b-col>
         </b-row>
@@ -57,8 +61,9 @@
           </b-col>
         </b-row>
         <b-row v-if="!done">
-          <b-col cols="12" sm="12" md="12" >
-            <button class="btn btn-link center" @click="update()">Continue</button>
+          <b-col class= "btn-group" cols="12" sm="8" md="8" style="text-align: center">
+            <button class="btn btn-link  btn-sm"   @click="invokeMetamask()">Connect Metamask</button>
+            <button class="btn btn-link btn-sm" @click="update()">Continue</button>
           </b-col>
         </b-row>
       </b-card-body>
@@ -66,8 +71,10 @@
   </b-card>
 </template>
 <style scoped>
-.center{
-  display: block; margin-left: auto;margin-right: auto
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
 
@@ -107,13 +114,13 @@ export default {
       value: {
         contractAddress: "",
         userWalletAddress: "",
-        thresholdBalance: 0
-      }
+        thresholdBalance: 0,
+      },
     };
   },
   mounted() {
-    if(this.data.value){
-      Object.assign(this.value, {...JSON.parse(this.data.value) })
+    if (this.data.value) {
+      Object.assign(this.value, { ...JSON.parse(this.data.value) });
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
     this.checkWeb3Injection();
@@ -144,23 +151,26 @@ export default {
           const wallet = await ethereum.request({
             method: "eth_requestAccounts",
           });
-          this.signature  = await this.signMessage();
-          
-          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(this.message_sign, this.signature)
-          
-          let isSigVerified =  false;
-          if(generatedWalletAddr === wallet[0]){
-              isSigVerified = true;
-          } 
-      
+          this.signature = await this.signMessage();
+
+          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(
+            this.message_sign,
+            this.signature
+          );
+
+          let isSigVerified = false;
+          if (generatedWalletAddr === wallet[0]) {
+            isSigVerified = true;
+          }
+
           if (isSigVerified) {
             this.value.userWalletAddress = wallet[0];
-          } else{
-            return this.notifyErr(Messages.EVENT_ACTIONS.ETH.INVALID_SIG)
+          } else {
+            return this.notifyErr(Messages.EVENT_ACTIONS.ETH.INVALID_SIG);
           }
-        } 
+        }
       } catch (error) {
-        return this.notifyErr(error.message)
+        return this.notifyErr(error.message);
       }
     },
     async update() {
@@ -171,15 +181,18 @@ export default {
           let balance = await this.fetchBalance();
           if (balance !== undefined) {
             if (balance >= Number.parseFloat(this.value.thresholdBalance)) {
-              this.$emit("input",  JSON.stringify({
-                ...this.value,
-              }));
+              this.$emit(
+                "input",
+                JSON.stringify({
+                  ...this.value,
+                })
+              );
             } else {
               throw new Error(Messages.EVENT_ACTIONS.ETH.INSUFFICIENT_BALANCE);
             }
           }
         } catch (error) {
-          this.data.value = ""
+          this.data.value = "";
           return this.notifyErr(error);
         }
       }
