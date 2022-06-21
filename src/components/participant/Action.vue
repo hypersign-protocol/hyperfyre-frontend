@@ -159,6 +159,7 @@ export default {
   },
   methods: {
     checkIfUserHasLoggedIn() {
+      console.log("checkIfUserHasLoggedIn")
       if (!this.userProfile) {
         console.log('User is NOT authenticated')
         document.querySelectorAll(".card-header").forEach(e => {

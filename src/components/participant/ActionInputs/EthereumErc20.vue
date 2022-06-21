@@ -41,17 +41,16 @@
                 :disabled="true"
                 :required="data.isManadatory"
               ></b-form-input>
-              <!-- <button
+               <button
                 class="btn text-black"
-                @click="invokeMetamask()"
-                v-if="!done"
+                style="pointer-events:none"
               >
                 <img
                   src="../../../assets/metamask.svg"
                   height="25px"
                   width="25px"
                 />
-              </button> -->
+              </button> 
             </div>
           </b-col>
         </b-row>
@@ -61,9 +60,9 @@
           </b-col>
         </b-row>
         <b-row v-if="!done">
-          <b-col class= "btn-group" cols="12" sm="8" md="8" style="text-align: center">
-            <button class="btn btn-link  btn-sm"   @click="invokeMetamask()">Connect Metamask</button>
-            <button class="btn btn-link btn-sm" @click="update()">Continue</button>
+          <b-col class= "btn-group" cols="12" sm="8" md="8">
+            <button class="btn btn-link" @click="invokeMetamask()">Connect Metamask</button>
+            <button class="btn btn-link" @click="update()">Continue</button>
           </b-col>
         </b-row>
       </b-card-body>
@@ -128,7 +127,7 @@ export default {
   methods: {
     checkWeb3Injection() {
       try {
-        if (ethereum && ethereum.isMetaMask) {
+        if (window.ethereum && window.ethereum.isMetaMask) {
           this.web3 = new Web3(window.ethereum);
         }
       } catch (error) {
@@ -142,13 +141,13 @@ export default {
       this.message_sign = message;
       return await this.web3.eth.personal.sign(
         message,
-        ethereum.selectedAddress
+        window.ethereum.selectedAddress
       );
     },
     async invokeMetamask() {
       try {
-        if (ethereum.isMetaMask) {
-          const wallet = await ethereum.request({
+        if (window.ethereum.isMetaMask) {
+          const wallet = await window.ethereum.request({
             method: "eth_requestAccounts",
           });
           this.signature = await this.signMessage();
