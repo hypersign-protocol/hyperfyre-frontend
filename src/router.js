@@ -144,8 +144,11 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.title) {
+  
+  if(to.matched.length < 1){
     document.title = to.meta.title;
+    next(false);
+    return router.push('/404');
   }
 
   if (to.matched.some((record) => record.meta.requiresAuth)) {
