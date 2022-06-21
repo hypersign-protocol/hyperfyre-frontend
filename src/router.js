@@ -144,80 +144,71 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if(to.matched.length < 1){
-    next(false);
-    router.push('/404');
+  if (to.meta.title) {
+    document.title = to.meta.title;
   }
- else{
-    if (to.meta.title) {
-      document.title = to.meta.title;
-    }
-  
-    if (to.matched.some((record) => record.meta.requiresAuth)) {
-      const authToken = localStorage.getItem("authToken");
-  
-      if (authToken) {
-        // console.log("Yes auth token");
-        const url = `${config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
-        fetch(url, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-          method: "POST",
-        })
-          .then((res) => res.json())
-          .then((json) => {
-            if (json.status == 403) {
-              next({
-                path: to.meta.admin ? "/admin/login" : "/login",
-                params: { nextUrl: to.fullPath },
-              });
-  
-            } else {
-              localStorage.setItem("user", JSON.stringify(json.message));
-              Vue.prototype.$accounts = json.accounts;
-              if (json.accounts.length==0) {
-  
-                localStorage.removeItem("accessToken")
-                localStorage.removeItem("accessuser")
-              }
-              if (
-                to.meta.admin &&
-                !json.message.isSubscribed &&
-                (to.path != "/admin/subscription" && to.path != "/admin/dashboard")
-              ) {
-                eventBus.$emit("UpdateAdminNav", false);
-                next({
-                  path: "/admin/subscription",
-                  params: { nextUrl: to.fullPath },
-                });
-              } else {
-                next();
-              }
-            }
-          })
-          .catch((e) => {
-            console.log(e);
+
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    const authToken = localStorage.getItem("authToken");
+
+    if (authToken) {
+      // console.log("Yes auth token");
+      const url = `${config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
+      fetch(url, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        method: "POST",
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          if (json.status == 403) {
             next({
               path: to.meta.admin ? "/admin/login" : "/login",
               params: { nextUrl: to.fullPath },
             });
-          });
-      } else {
-        next({
-          path: to.meta.admin
-            ? "/admin/login"
-            : !to.query["referrer"]
-            ? `/login/${to.params["slug"]}`
-            : `/login/${to.params["slug"]}?referrer=${to.query["referrer"]}`,
-          params: { nextUrl: to.fullPath },
-        });
-      }
-    } else {
-      next();
-    }
- 
-  }
+          } else {
+            localStorage.setItem("user", JSON.stringify(json.message));
+            Vue.prototype.$accounts = json.accounts;
+            if (json.accounts.length==0) {
 
+              localStorage.removeItem("accessToken")
+              localStorage.removeItem("accessuser")
+            }
+            if (
+              to.meta.admin &&
+              !json.message.isSubscribed &&
+              (to.path != "/admin/subscription" && to.path != "/admin/dashboard")
+            ) {
+              eventBus.$emit("UpdateAdminNav", false);
+              next({
+                path: "/admin/subscription",
+                params: { nextUrl: to.fullPath },
+              });
+            } else {
+              next();
+            }
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          next({
+            path: to.meta.admin ? "/admin/login" : "/login",
+            params: { nextUrl: to.fullPath },
+          });
+        });
+    } else {
+      next({
+        path: to.meta.admin
+          ? "/admin/login"
+          : !to.query["referrer"]
+          ? `/login/${to.params["slug"]}`
+          : `/login/${to.params["slug"]}?referrer=${to.query["referrer"]}`,
+        params: { nextUrl: to.fullPath },
+      });
+    }
+  } else {
+    next();
+  }
 });
 export default router;
