@@ -41,13 +41,7 @@
                 :disabled="true"
                 :required="data.isManadatory"
               ></b-form-input>
-              <button class="btn text-black" @click="invokeMetamask()" v-if="!done">
-                <img
-                  src="../../../assets/metamask.svg"
-                  height="25px"
-                  width="25px"
-                />
-              </button>
+             
             </div>
           </b-col>
         </b-row>
@@ -57,8 +51,9 @@
           </b-col>
         </b-row>
         <b-row v-if="!done">
-          <b-col cols="12" sm="12" md="12" >
-            <button class="btn btn-link center"  @click="update()">Continue</button>
+          <b-col class= "btn-group" cols="12" sm="8" md="8">
+            <button class="btn btn-link" @click="invokeMetamask()">Connect Metamask</button>
+            <button class="btn btn-link" @click="update()">Continue</button>
           </b-col>
         </b-row>
       </b-card-body>
