@@ -1258,10 +1258,9 @@ export default {
         if (this.isProjectEditing) {
           method = "PUT";
         }
-
+        const toDate= this.project.toDate 
         this.project.toDate = new Date(this.project.toDate).toISOString();
         this.project.fromDate = new Date(this.project.fromDate).toISOString();
-
         this.project.themeColor = this.themeColor.trim().length
           ? this.themeColor
           : this.themeColorDefault;
@@ -1274,13 +1273,13 @@ export default {
         this.project.tags = this.tagsTemp;
         this.project.refereePoint = this.project.refereePoint.toString();
         this.project.referralPoint = this.project.referralPoint.toString();
-
         const resp = await apiClientMixin.makeCall({
           url,
           body: this.project,
           method,
           header: headers,
         });
+         this.project.toDate=toDate
         return resp;
       
     },
