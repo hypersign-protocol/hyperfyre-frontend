@@ -1,34 +1,17 @@
 <template>
-  <div
-    class="accordion mt-3 mx-auto overflow-hidden"
-    role="tablist"
-    style="max-width: 600px"
-  >
-    <loading
-      :active.sync="isLoading"
-      :can-cancel="true"
-      :is-full-page="fullPage"
-    ></loading>
-    <Profile :user="userProfile" />
-    <template v-for="(actionItem, index) in ActionSchema">
-      <component v-if="actionItem.type==='INFO_TEXT'"
-        :is="CapitaliseString(actionItem.type)"
-        :key="index"
-        :idValue="index"
-        :data="actionItem"
-        @input="updateUserInfo(actionItem, $event)"
-      ></component>
-    </template>
-    <prize-card v-if="isPrizedata" :prizeData="prizeData" />
+  <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px"  @click=" checkIfUserHasLoggedIn()">
+    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
+    <Profile v-if="userProfile" :user="userProfile" />
 
-    <template v-for="(actionItem, index) in ActionSchema">
-      <component v-if="actionItem.type!=='INFO_TEXT'"
-        :is="CapitaliseString(actionItem.type)"
-        :key="index"
-        :idValue="index"
-        :data="actionItem"
-        @input="updateUserInfo(actionItem, $event)"
-      ></component>
+    <template v-for="(actionItem, index) in ActionSchema" >
+      <component v-if="actionItem.type==='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
+        :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
+    </template>
+    <prize-card v-if="isPrizedata" :prizeData="prizeData"  />
+
+    <template v-for="(actionItem, index) in ActionSchema" >
+      <component v-if="actionItem.type!=='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
+        :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
     </template>
   </div>
 </template>
@@ -175,6 +158,17 @@ export default {
     },
   },
   methods: {
+    checkIfUserHasLoggedIn() {
+      if (!this.userProfile) {
+        document.querySelectorAll(".card-header").forEach(e => {
+          const nodeVal = e.attributes['aria-controls'].nodeValue
+          document.getElementById(nodeVal).style.display = "none";
+        })
+        return this.notifyErr(Messsages.EVENT_ACTIONS.UNAUTHENTICATED);
+      } else {
+        console.log('User is authenticated')
+      }
+    },
     CapitaliseString(string) {
       let res = string.split("_");
       let first = res[0][0].toUpperCase() + res[0].substring(1).toLowerCase();
