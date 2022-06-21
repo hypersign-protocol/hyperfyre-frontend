@@ -160,12 +160,10 @@ export default {
   methods: {
     checkIfUserHasLoggedIn() {
       if (!this.userProfile) {
-        console.log('User is NOT authenticated')
         document.querySelectorAll(".card-header").forEach(e => {
           const nodeVal = e.attributes['aria-controls'].nodeValue
           document.getElementById(nodeVal).style.display = "none";
         })
-       // console.log('Before sending error since user is not autn')
         return this.notifyErr(Messsages.EVENT_ACTIONS.UNAUTHENTICATED);
       } else {
         console.log('User is authenticated')
