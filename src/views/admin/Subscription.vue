@@ -498,7 +498,9 @@ export default {
             return item;
           }
         );
-        // console.log(json);
+        // Sorting based on price
+        json.sort((a, b) => (a.price > b.price) ? 1 : -1)
+        
         this.plans = json;
         // localStorage.setItem("plans", JSON.stringify(json));
       } catch (e) {
