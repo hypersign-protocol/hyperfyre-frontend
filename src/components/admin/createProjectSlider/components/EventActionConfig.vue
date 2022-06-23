@@ -602,7 +602,7 @@
             <a
               target="_blank"
               :href="`https://telegram.me/hyperfyre_stage_bot?startgroup=any`"
-              >Hyperfyre Telegram Bot</a
+              >Fyre Telegram Bot</a
             >
             in your public group, for this functionality to work properly.</span
           >

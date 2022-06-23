@@ -128,7 +128,7 @@ export default {
       if((this.$route.params["slug"])&&(this.$route.query["userRedirectionToken"])){
         this.eventSlug = this.$route.params["slug"];
         this.userRedirectionToken=this.$route.query["userRedirectionToken"];
-        document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
+        document.title = "Fyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.verifyAppAuth();
         await this.fetchEventData();
         await this.fetchUserInfoOnLogin();
@@ -136,7 +136,7 @@ export default {
       }
       else if(this.$route.params["slug"]) {
         this.eventSlug = this.$route.params["slug"];
-        document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
+        document.title = "Fyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.fetchEventData();
         await this.fetchUserInfoOnLogin();
       }

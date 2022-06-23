@@ -246,7 +246,7 @@
             <a
               target="_blank"
               :href="`https://telegram.me/${hfTgBotId}?startgroup=any`"
-              >Hyperfyre Telegram Bot</a
+              >Fyre Telegram Bot</a
             >
             in your public group, for this functionality to work properly.</span
           >
