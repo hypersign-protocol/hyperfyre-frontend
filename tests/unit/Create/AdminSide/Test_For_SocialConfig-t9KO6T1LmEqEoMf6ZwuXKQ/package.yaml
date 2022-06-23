@@ -1384,7 +1384,7 @@ tests:
       source: System
     parameterMaps:
     - name: text
-      value: Make sure to add Hyperfyre Telegram Bot in your public group, for this functionality to work properly.
+      value: Make sure to add Fyre Telegram Bot in your public group, for this functionality to work properly.
       direction: Input
     conditions: []
     validations: []
@@ -4292,14 +4292,14 @@ elements:
     value: /html/body/div[1]/div[1]/div[2]/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div/div/div[4]/div/div/div/div[2]/div[3]/div[2]/input
     priority: 3
 - id: aov6iFp5xUqvlzFCzdGFdg
-  name: Make sure to add Hyperfyre Telegram B...
+  name: Make sure to add Fyre Telegram B...
   type:
     id: jUwODgyNjAyNzk2NTk1NjU
     name: span
     source: System
   locators:
   - name: XPATH
-    value: //span[. = 'Make sure to add Hyperfyre Telegram Bot in your public group, for this functionality to work properly.']
+    value: //span[. = 'Make sure to add Fyre Telegram Bot in your public group, for this functionality to work properly.']
     priority: 0
   - name: XPATH
     value: //div[2]/div[3]/div/span
