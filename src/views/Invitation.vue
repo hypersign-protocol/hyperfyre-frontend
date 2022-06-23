@@ -10,12 +10,13 @@
             </div> -->
         </div>
         <div class="row content">
-            <div class="col-md-12" >
-                 <img class="align-center" style="margin-bottom: 20px" width="auto" height="auto" src="../assets/Hyperfyre_BY.svg"/>
-                <div  class="typewriter"> 
-                <h4>Viral Marketing Tools For Web3</h4>
+            <div class="col-md-12">
+                <img class="align-center" style="margin-bottom: 20px" width="auto" height="auto"
+                    src="../assets/Fyre_Gold_Black.png" />
+                <div class="typewriter">
+                    <h4>Viral Marketing Tools For Web3</h4>
                 </div>
-                <button  class="btn btn-default btn-lg" style="margin-top:2%">
+                <button class="btn btn-default btn-lg" style="margin-top:2%">
                     <a href="/app" target="_blank">Click here to Login to admin dashboard</a>
                 </button>
             </div>
