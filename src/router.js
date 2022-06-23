@@ -65,7 +65,9 @@ const router = new Router({
 
             component: () =>
                 import ( /* webpackChunkName: "adminLogin" */ './views/404.vue'),
-
+            meta: {
+                title: 'Hyperfyre - 404'
+            }
         },
         {
             path: "/admin/dashboard",
