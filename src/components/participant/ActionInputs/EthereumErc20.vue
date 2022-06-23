@@ -50,10 +50,10 @@
           </b-col>
         </b-row>
         <b-row v-if="!done">
-         <b-col class= "btn-group" cols="12" sm="8" md="8">
+         <b-col class= "btn-group" cols="12" sm="12" md="12">
             <button class="btn btn-link" @click="invokeMetamask()">Connect Metamask</button>
-            <button class="btn btn-link" @click="update()">Continue</button> 
-          </b-col>    
+            <button class="btn btn-link" @click="update()">Continue</button>   
+          </b-col>  
         </b-row>
       </b-card-body>
     </b-collapse>
