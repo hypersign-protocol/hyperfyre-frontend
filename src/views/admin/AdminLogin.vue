@@ -121,44 +121,28 @@ h5 span {
 <template>
   <!-- <div class="row" style="margin-left: 35%;"> -->
   <div style="justify-content: center; padding-top:3%">
-    <img class="align-center" style="margin-bottom: 20px" height="60px" src="../../assets/Hyperfyre_BY.svg"/>
+    <img class="align-center" style="margin-bottom: 20px" height="60px" src="../../assets/Fyre_Gold_Black.png" />
     <b-card no-body class="loginContent event-card ">
-      <loading
-        :active.sync="isLoading"
-        :can-cancel="true"
-        :is-full-page="fullPage"
-      ></loading>
+      <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
       <h4>Admin Login</h4>
       <div class="row" style="margin-top:3%">
         <div v-if="QRRefresh" class="QRRefresh">
           <i @click="reloadQR" class="fas fa-redo" style="font-size: xx-large; color: gray;"></i>
           <p><label style="font-size:small; color:grey; margin-top:1%">
-            Session expired. Click to reload.
-          </label></p>
+              Session expired. Click to reload.
+            </label></p>
         </div>
         <form class="col-md-12" v-else>
           <div class="form-group">
-            <vue-qr
-              v-if="qr_data != ''"
-              margin="1"
-              :text="qr_data"
-              :size="200"
-              :logoSrc="src2"
-              logoBackgroundColor="white"
-              logoCornerRadius="2"
-            ></vue-qr>
-            <label style="font-size:small; color:grey; margin-top:1%"
-              >Scan QR code using Hypersign Mobile App</label
-            >
+            <vue-qr v-if="qr_data != ''" margin="1" :text="qr_data" :size="200" :logoSrc="src2"
+              logoBackgroundColor="white" logoCornerRadius="2"></vue-qr>
+            <label style="font-size:small; color:grey; margin-top:1%">Scan QR code using Hypersign Mobile App</label>
             <div>
               <!-- <p style="font-size:small;"> Don’t have the app yet? <a href="#">Get it now</a></p> -->
               <span style="font-size: small; color:grey; padding: 10px">
                 Get the app on
-                <a
-                  href="https://play.google.com/store/apps/details?id=com.hypersign.cordova"
-                  target="__blank"
-                  >Android</a
-                >
+                <a href="https://play.google.com/store/apps/details?id=com.hypersign.cordova"
+                  target="__blank">Android</a>
                 or
                 <a :href="$config.webWalletAddress" target="__blank">Web</a>
               </span>
@@ -167,20 +151,15 @@ h5 span {
 
           <h5><span>OR</span></h5>
 
-          <div class="mb-2 " >
-            <a
-              v-if="this.value != ''"
-              class="btn btn-hypersign  button-theme"
-              href="#"
-              @click.prevent="openWallet()"
-            >
-              <div  style="font-size: smaller; padding: 10px;">
+          <div class="mb-2 ">
+            <a v-if="this.value != ''" class="btn btn-hypersign  button-theme" href="#" @click.prevent="openWallet()">
+              <div style="font-size: smaller; padding: 10px;">
                 Click To Login
               </div>
             </a>
           </div>
         </form>
-       
+
       </div>
     </b-card>
   </div>
@@ -228,7 +207,7 @@ export default {
   },
   created() {
     localStorage.clear();
-     document.title = "Hyperfyre - Login";
+     document.title = "Fyre - Login";
     // console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
     let websocketUrl = "ws://localhost:3003";

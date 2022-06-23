@@ -18,7 +18,7 @@ const router = new Router({
                 ),
             meta: (route) => ({
                 requiresAuth: false,
-                title: "Hyperfyre - " + route.params.slug,
+                title: "Fyre - " + route.params.slug,
                 tabbar: false,
             }),
         },
@@ -30,7 +30,7 @@ const router = new Router({
                     /* webpackChunkName: "investorLogin" */
                     "./views/participant/Home.vue"
                 ),
-            meta: () => ({ requiresAuth: true, title: 'Hyperfyre - User Home' })
+            meta: () => ({ requiresAuth: true, title: 'Fyre - User Home' })
         },
         {
             path: "/",
@@ -56,7 +56,7 @@ const router = new Router({
 
             component: () =>
                 import ( /* webpackChunkName: "adminLogin" */ './views/admin/AdminLogin.vue'),
-            meta: () => ({ requiresAuth: true, title: 'Hyperfyre - Admin Login', tabbar: false })
+            meta: () => ({ requiresAuth: true, title: 'Fyre - Admin Login', tabbar: false })
 
         },
         {
@@ -65,7 +65,9 @@ const router = new Router({
 
             component: () =>
                 import ( /* webpackChunkName: "adminLogin" */ './views/404.vue'),
-
+            meta: {
+                title: 'Fyre - 404'
+            }
         },
         {
             path: "/admin/dashboard",
@@ -78,7 +80,7 @@ const router = new Router({
             meta: {
                 requiresAuth: true,
                 admin: true,
-                title: 'Hyperfyre - Admin Dashboard'
+                title: 'Fyre - Admin Dashboard'
             },
         },
         {
@@ -92,7 +94,7 @@ const router = new Router({
             meta: {
                 requiresAuth: true,
                 admin: true,
-                title: 'Hyperfyre - Teams'
+                title: 'Fyre - Teams'
             },
         },
         {
@@ -106,7 +108,7 @@ const router = new Router({
             meta: {
                 requiresAuth: true,
                 admin: true,
-                title: 'Hyperfyre - CreateApp'
+                title: 'Fyre - CreateApp'
             },
         },
         {
@@ -120,7 +122,7 @@ const router = new Router({
             meta: {
                 requiresAuth: true,
                 admin: true,
-                title: 'Hyperfyre - Participants',
+                title: 'Fyre - Participants',
             },
         },
         {
@@ -131,7 +133,7 @@ const router = new Router({
             meta: {
                 requiresAuth: true,
                 admin: true,
-                title: 'Hyperfyre - Events'
+                title: 'Fyre - Events'
             },
         },
         {
@@ -145,7 +147,7 @@ const router = new Router({
             meta: {
                 requiresAuth: true,
                 admin: true,
-                title: 'Hyperfyre - Subscription'
+                title: 'Fyre - Subscription'
             },
         },
         {
@@ -156,7 +158,7 @@ const router = new Router({
             meta: {
                 requiresAuth: false,
                 admin: false,
-                title: 'Hyperfyre - SuperAdmin Home'
+                title: 'Fyre - SuperAdmin Home'
             },
         },
     ],

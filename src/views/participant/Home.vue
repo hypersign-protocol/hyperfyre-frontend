@@ -149,7 +149,7 @@ export default {
       }
 
       //   if (this.$route.params["slug"]) {
-      document.title = "Hyperfyre - User Home";
+      document.title = "Fyre - User Home";
       await this.fetchEventData();
       // await this.fetchUserInfoOnLogin();
       //   }

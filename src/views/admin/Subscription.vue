@@ -291,7 +291,7 @@ export default {
 
   async created() {
     const usrStr = localStorage.getItem("user");
-    document.title = "Hyperfyre - Subscriptions";
+    document.title = "Fyre - Subscriptions";
 
     if (usrStr) {
       this.user = {
@@ -440,10 +440,10 @@ export default {
               
             </div>
             <div class="intro" style="color:red">
-                <strong>Please Contact Hyperfyre Team if your subscription is not activated within 10 mins of payment</strong>
+                <strong>Please Contact Fyre Team if your subscription is not activated within 10 mins of payment</strong>
             </div>
           <div class="footer" style="color:black">
-              Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong> <a style="text-decoration:node;color:black" href="http://fyre.hypersign.id/">Hyperfyre</a> </strong>
+              Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong> <a style="text-decoration:node;color:black" href="http://fyre.hypersign.id/">Fyre</a> </strong>
             </div>
           </div>
         </div>

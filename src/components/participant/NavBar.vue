@@ -14,17 +14,18 @@ color: white !important;
 <template>
 	<b-navbar class="nav-bar" toggleable="lg" v-if="show">
 		<b-navbar-brand href="https://fyre.hypersign.id/" target="blank">
-			<img src="../../assets/logo.png"  height="35px">
+			<img src="../../assets/Fyre_Small.png" height="50px">
 		</b-navbar-brand>
 		<!-- <a href="#" class="menu ml-auto text-white text-decoration-none" v-if="authToken != '' && authToken != null" @click="logout">
 			<img src="../../assets/box-arrow-right.svg" height="30px">
 		</a> -->
-		<b-nav-item-dropdown size="sm" right  class="btn-secondary m-2 menu ml-auto text-white text-decoration-none" v-if="authToken != '' && authToken != null">
+		<b-nav-item-dropdown size="sm" right class="btn-secondary m-2 menu ml-auto text-white text-decoration-none"
+			v-if="authToken != '' && authToken != null">
 			<template #button-content>
 				<b-icon style="color:white" icon="menu-button-wide"></b-icon>
 			</template>
 			<b-dropdown-item to="/user/home/">
-				Home</b-dropdown-item> 
+				Home</b-dropdown-item>
 			<b-dropdown-item @click="logout">Logout</b-dropdown-item>
 		</b-nav-item-dropdown>
 	</b-navbar>

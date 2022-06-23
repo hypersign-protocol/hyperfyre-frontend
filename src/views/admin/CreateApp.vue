@@ -99,7 +99,7 @@
               </div>
             <div class="row g-3 align-items-center w-100 mt-4">
                 <div class="text-left col-lg-3 col-md-3 text-left">
-                 <tool-tips infoMessage="Enter base URL of your server. This URL will be whitelisted to access data from Hyperfyre backend. See the docs for more details."></tool-tips><label for="baseUrl" class="col-form-label">Base URL
+                 <tool-tips infoMessage="Enter base URL of your server. This URL will be whitelisted to access data from Fyre backend. See the docs for more details."></tool-tips><label for="baseUrl" class="col-form-label">Base URL
                    <span style="color: red">*</span>: 
                  </label>
                 </div>
