@@ -1,4 +1,4 @@
-# HyperFyre
+# Fyre
 A platform to automate the IDO whitelisting process using Hypersign SSI infrastructure.
 
 https://app.fyre.hypersign.id
