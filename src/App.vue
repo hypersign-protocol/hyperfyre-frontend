@@ -157,7 +157,7 @@ export default {
           false;
     }else{
       this.showUserNav = window.location.pathname.includes("/form") ||
-          window.location.pathname.includes("/user")? true : false
+        window.location.pathname.includes("/user") || window.location.pathname.includes("/sa/home")?true : false
     }
   },
   updated() {
