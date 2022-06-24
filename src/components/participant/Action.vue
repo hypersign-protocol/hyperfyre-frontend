@@ -1,15 +1,18 @@
 <template>
-  <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px"  @click=" checkIfUserHasLoggedIn()">
+  <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px"
+    @click=" checkIfUserHasLoggedIn()">
     <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
     <Profile v-if="userProfile" :user="userProfile" />
 
-    <template v-for="(actionItem, index) in ActionSchema" >
+    <template v-for="(actionItem, index) in ActionSchema">
       <component v-if="actionItem.type==='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
         :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
     </template>
-    <prize-card v-if="isPrizedata" :prizeData="prizeData"  />
 
-    <template v-for="(actionItem, index) in ActionSchema" >
+    <prize-card v-if="isPrizedata" :prizeData="prizeData" />
+
+    <template v-for="(actionItem, index) in ActionSchema">
+      
       <component v-if="actionItem.type!=='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
         :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
     </template>
@@ -160,14 +163,13 @@ export default {
   methods: {
     checkIfUserHasLoggedIn() {
       if (!this.userProfile) {
-        document.querySelectorAll(".card-header").forEach(e => {
-          const nodeVal = e.attributes['aria-controls'].nodeValue
-          document.getElementById(nodeVal).style.display = "none";
+        // TODO:  bad way of coding.  We should only hide which is being clicked 
+        document.querySelectorAll(".action-wrap").forEach(e => {
+          // hiding second child
+          if (e.children[1]) e.children[1].style.display = 'none'
         })
         return this.notifyErr(Messsages.EVENT_ACTIONS.UNAUTHENTICATED);
-      } else {
-        console.log('User is authenticated')
-      }
+      } 
     },
     CapitaliseString(string) {
       let res = string.split("_");

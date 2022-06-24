@@ -1,11 +1,7 @@
 <template>
   <b-card no-body class="action-wrap">
-    <b-card-header
-      :class="visible ? null : 'collapsed'"
-      :aria-expanded="visible ? 'true' : 'false'"
-      :aria-controls="`collapse-${idValue}`"
-      @click="visible = !visible"
-    >
+    <b-card-header :class="visible ? null : 'collapsed'" :aria-expanded="visible ? 'true' : 'false'"
+      :aria-controls="`collapse-${idValue}`" @click="visible = !visible">
       <b-row>
         <b-col cols="1" sm="1" md="1">
           <img src="../../../assets/matic-logo.svg" height="25px" />
@@ -19,12 +15,7 @@
             <img src="../../../assets/plus.svg" />
             {{ data.score }}
           </b-badge>
-          <img
-            class="check-mark"
-            src="../../../assets/check-circle-fill.svg"
-            height="25px"
-            v-if="done"
-          />
+          <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
         </b-col>
       </b-row>
     </b-card-header>
@@ -33,13 +24,8 @@
         <b-row v-if="!showerror">
           <b-col cols="12" sm="12" md="12">
             <div class="metamask">
-              <b-form-input
-                type="text"
-                :placeholder="data.placeHolder"
-                v-model="value.userWalletAddress"
-                :disabled="true"
-                :required="data.isManadatory"
-              ></b-form-input>
+              <b-form-input type="text" :placeholder="data.placeHolder" v-model="value.userWalletAddress"
+                :disabled="true" :required="data.isManadatory"></b-form-input>
             </div>
           </b-col>
         </b-row>
@@ -48,8 +34,8 @@
             <ErrorMessage errorMessage="Install Metamask browser extension" />
           </b-col>
         </b-row>
-        <b-row v-if="!done">
-         <b-col class= "btn-group" cols="12" sm="12" md="12">
+        <b-row v-if="!done && !showerror">
+          <b-col class="btn-group" cols="12" sm="12" md="12">
             <button class="btn btn-link" @click="invokeMetamask()">Connect Metamask</button>
             <button class="btn btn-link" @click="update()">Continue</button>
           </b-col>
