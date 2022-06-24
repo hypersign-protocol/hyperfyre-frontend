@@ -301,7 +301,7 @@ export default {
 
     },
     handleEventActionDelete(){
-
+      
       // Code to delete an Action
       const actionToDelete = this.eventActionList[this.currentSelectedId];
       this.eventActionList.splice(this.currentSelectedId, 1);
@@ -359,6 +359,9 @@ export default {
     
     },
     handleEventActionClick(idx){
+      if (this.eventActionList.length == 1) {
+        return this.notifyErr(Messages.EVENTS.CREATE_EDIT_EVENT.ATLEAST_ONE_TAG)
+      }
       this.flash=idx
       let updateData = this.eventActionList[idx]
       this.currentSelectedId = idx;
