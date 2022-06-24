@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <NavBar title="HyperFyre" :show="showUserNav" />
+    <NavBar title="Fyre" :show="showUserNav" />
     <!-- <div :class="[
         showNavbar & !showUserNav
           ? isSidebarCollapsed

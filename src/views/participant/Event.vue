@@ -26,7 +26,7 @@
 
       <div class="footer mx-auto overflow-hidden mainContentWdth" style="align-items:center;padding-top:20px">
         <b>Disclaimer:</b>
-        Anyone can create campaigns on HyperFyre, rewards are distributed by the campaign creator and HyperFyre is not
+        Anyone can create campaigns on Fyre, rewards are distributed by the campaign creator and Fyre is not
         responsible for reward distribution.
       </div>
     </template>
