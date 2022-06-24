@@ -558,11 +558,18 @@ export default {
         ,
         kycConfig:[{ text: "Select Provider", value: null},
         {text:'SUMSUB',value:'SUMSUB_KYC'}],
+
+        // TODO: Completly wrong way of implementing Prize action
+        //// Prize is also an action for us, so there should be different action type liek (PRIZE_NFT, PRIZE_TOKEN, PRIZE_OTHER)
+        //// for prize type. But you guys kept `PRIZE_CARD` for all prizes.
+        //// Consenquence is that you were not storing the type hence this issues
+        //// https://github.com/hypersign-protocol/hyperfyre-frontend/issues/1348
+        //// I also can not fix is since it need to be fixed both frontend and backend. So did this hack -  storing type as well in the value field
         prizeDetails: [
           { text: "Select Prize Type", value: null },
-          { text: "NFT", value: "PRIZE_CARD" },
-          { text: "Tokens", value: "PRIZE_CARD" },
-          { text: "Others", value: "PRIZE_CARD" }
+          { text: "NFT", value: "NFT" },
+          { text: "Tokens", value: "Tokens" },
+          { text: "Others", value: "Others" }
         ],
         tagDetails: [{ text: "Select Tag Type", value: null }],
       },

@@ -232,7 +232,7 @@
         </div>
         <div class="col-lg-9 col-md-9 px-0">
           <b-form-select
-            v-model="selected.type"
+            v-model="prizeDetails.type"
             :options="options"
           ></b-form-select>
         </div>
@@ -943,6 +943,7 @@ export default {
       prizeDetails: {
         winners: "",
         prizeValue: "",
+        type: null
       },
       selected: {
         type: null,
@@ -1013,6 +1014,7 @@ export default {
       this.prizeDetails = {
         winners: "",
         prizeValue: "",
+        type: null
       };
       this.contract = {
         contractAddress: "",
@@ -1207,6 +1209,7 @@ export default {
           }
           break;
         case "PRIZE":
+          this.selected.type = "PRIZE_CARD"
           if (this.selected.type === null) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_TYPE);

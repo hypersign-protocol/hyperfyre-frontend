@@ -164,12 +164,6 @@ cursor:default !important
                     v-if="action.type.includes('BLOCKCHAIN_ETH')"
                     height="22px"
                   />
-                  <img
-                    style="padding-right: 5px"
-                    src="/img/ethereum.2b470564.svg"
-                    v-if="action.type.includes('ETHEREUM_ERC20')"
-                    height="22px"
-                  />
                    <img
                     style="padding-right: 5px"
                     src="/img/ethereum.2b470564.svg"
@@ -178,36 +172,18 @@ cursor:default !important
                   />
                   <img
                     style="padding-right: 5px"
-                    src="/img/ethereum.2b470564.svg"
-                    v-if="action.type.includes('ETHEREUM_ERC721')"
-                    height="22px"
-                  />
-
-                  <img
-                    style="padding-right: 5px"
                     src="../../../../assets/matic-logo.svg"
                     v-if="action.type.includes('MATIC_')"
                     height="20px"
                   />
-                  <img
-                    style="padding-right: 5px"
-                    src="../../../../assets/matic-logo.svg"
-                    v-if="action.type.includes('MATIC_ERC721')"
-                    height="20px"
-                  />
-
+              
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/binance-logo.svg"
                     v-if="action.type.includes('BINANCE_')"
                     height="20px"
                   />
-                  <img
-                    style="padding-right: 5px"
-                    src="../../../../assets/binance-logo.svg"
-                    v-if="action.type.includes('BINANCE_ERC721')"
-                    height="20px"
-                  />
+                  
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/ringing.png"
@@ -217,53 +193,31 @@ cursor:default !important
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/Reef.svg"
-                    v-if="action.type.includes('REEF_ERC20')"
+                    v-if="action.type.includes('REEF_')"
                     height="20px"
                   />
-                  <img
-                    style="padding-right: 5px"
-                    src="../../../../assets/Reef.svg"
-                    v-if="action.type.includes('REEF_ERC721')"
-                    height="20px"
-                  />
-
+                
+          
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/moonbase-alpha.svg"
-                    v-if="action.type.includes('MOON_ERC20')"
-                    height="22px"
-                  />
-                  <img
-                    style="padding-right: 5px"
-                    src="../../../../assets/moonbase-alpha.svg"
-                    v-if="action.type.includes('MOON_ERC721')"
+                    v-if="action.type.includes('MOON_')"
                     height="22px"
                   />
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/moon-river.png"
-                    v-if="action.type.includes('MOONRIVER_ERC20')"
+                    v-if="action.type.includes('MOONRIVER_')"
                     height="20px"
                   />
-                  <img
-                    style="padding-right: 5px"
-                    src="../../../../assets/moon-river.png"
-                    v-if="action.type.includes('MOONRIVER_ERC721')"
-                    height="20px"
-                  />
-
+                 
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/moonbeam.png"
-                    v-if="action.type.includes('MOONBEAM_ERC20')"
+                    v-if="action.type.includes('MOONBEAM_')"
                     height="20px"
                   />
-                  <img
-                    style="padding-right: 5px"
-                    src="../../../../assets/moonbeam.png"
-                    v-if="action.type.includes('MOONBEAM_ERC721')"
-                    height="20px"
-                  />
+                 
 
                   <img
                     style="padding-right: 5px"
