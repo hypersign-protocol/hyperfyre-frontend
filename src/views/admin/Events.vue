@@ -57,6 +57,11 @@
 label {
   font-weight: bold;
 }
+
+.eventCard:hover {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  cursor: pointer;
+}
 .card {
   border-radius: 10px;
 }
@@ -264,7 +269,7 @@ i {
             img-height="150"
             tag="article"
             style="max-width: 20rem; margin-top: 20px"
-            class="mb-2"
+            class="mb-2 eventCard"
             @error="onBannerError($event)"
           >
             <ul
