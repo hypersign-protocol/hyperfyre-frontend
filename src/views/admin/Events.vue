@@ -335,6 +335,10 @@ i {
                   >Participants ({{ project.investorsCount }})</a
                 >
               </li>
+              <li data-toggle="tooltip" data-placement="bottom" title="Actions which participants will perform">
+                <i class="fa fa-tasks"></i>
+                Actions ({{ project.actions.length }})
+              </li>
             </ul>
             <footer>
               <small>
