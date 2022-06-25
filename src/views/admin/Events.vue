@@ -704,9 +704,6 @@ export default {
             break;
           }
         }
-         if(this.isProjectEditing){
-        this.apiCallToSaveEvent()
-        }
       }
     },
     AddUpdateDelEventActions(event) {
@@ -1284,9 +1281,14 @@ export default {
           method,
           header: headers,
         });
-         this.project.toDate=toDate
+        this.project.toDate=toDate;
+
+        /// Refreshing the temporary list other wise duplicate actions were showing
+        // see issue #1346
+       this.eventActionList = [] 
+       this.eventActionList = resp.data ? resp.data.actions : this.eventActionList;
+       
         return resp;
-      
     },
 
     checkIfEverythingIsFilled() {
