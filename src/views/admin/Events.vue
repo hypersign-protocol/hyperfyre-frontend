@@ -749,7 +749,7 @@ export default {
           }
         }
         if(this.isProjectEditing){
-        this.apiCallToSaveEvent()
+          this.apiCallToSaveEvent()
         }
       }
     },
@@ -1288,11 +1288,15 @@ export default {
         this.project.toDate=toDate;
 
         /// Refreshing the temporary list other wise duplicate actions were showing
-        // see issue #1346
+        // see issue #1346 & #1389      
+       this.projects.map(x => {
+        if(x._id === resp.data._id){
+          return x.actions = resp.data.actions
+        }
+       })
        this.eventActionList = [] 
        this.eventActionList = resp.data ? resp.data.actions : this.eventActionList;
-       
-        return resp;
+       return resp;
     },
 
     checkIfEverythingIsFilled() {
