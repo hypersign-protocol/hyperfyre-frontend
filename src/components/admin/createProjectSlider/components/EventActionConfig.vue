@@ -224,7 +224,7 @@
     </div>
 
     <div>
-      <div class="row g-3 align-items-center w-100 mt-4" >
+      <div class="row g-3 align-items-center w-100 mt-4" v-if="!prize">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="type" class="col-form-label"
             >Type<span style="color: red">*</span>:
