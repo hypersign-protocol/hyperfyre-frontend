@@ -205,7 +205,7 @@ export default {
         }
         let headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           "sig-ts":ts,
           "x-payload-hf-sign":sig
 
