@@ -721,15 +721,32 @@ export default {
 
           case "UPDATE": {
             const { id, _id } = data;
-            this.eventActionList.map((x) => {
-              if (x._id === _id || x.id === id) {
-                return data;
+            let actionIndex = -1;
+              if (_id){
+                actionIndex = this.eventActionList.findIndex(
+                  (x) => x._id == data._id
+                );
+              } else if (id){
+                actionIndex = this.eventActionList.findIndex(
+                  (x) => x.id == data.id
+                );
               }
-            });
+            if (actionIndex > -1){
+              this.eventActionList.splice(actionIndex, 1);
+              this.eventActionList.push(data)
+            } else {
+              console.log('error in updating actionIndex = ', actionIndex)
+            }
+            
+            // this.eventActionList.map((x) => {
+            //   if (x._id == _id || x.id == id) {
+            //     return data;
+            //   }
+            // });
             break;
           }
 
-          case "DELETE": {
+          case "DELETE": {       
             if (data._id) {
               const actionIndex = this.eventActionList.findIndex(
                 (x) => x._id == data._id
