@@ -168,7 +168,7 @@
               height="20px"
             />
           </span>
-          <span>{{ truncate1(eventAction.title, 8) }}</span>
+          <span>{{ truncate1(eventAction.title, 6) }}</span>
           <span style="color: gray; padding-left: 5px"
             ><i style="" class="fas fa-minus-circle"></i
           ></span>
