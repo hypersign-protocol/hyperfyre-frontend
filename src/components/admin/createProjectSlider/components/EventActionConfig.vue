@@ -88,12 +88,6 @@
               v-if="eventAction.type.includes('ETHEREUM_')"
               height="22px"
             />
-            <img
-              style="padding-right: 5px"
-              src="/img/ethereum.2b470564.svg"
-              v-if="eventAction.type.includes('ETHEREUM_ERC721')"
-              height="22px"
-            />
 
             <img
               style="padding-right: 5px"
@@ -103,75 +97,34 @@
             />
             <img
               style="padding-right: 5px"
-              src="../../../../assets/matic-logo.svg"
-              v-if="eventAction.type.includes('MATIC_ERC721')"
-              height="20px"
-            />
-
-            <img
-              style="padding-right: 5px"
               src="../../../../assets/binance-logo.svg"
               v-if="eventAction.type.includes('BINANCE_')"
               height="20px"
             />
             <img
               style="padding-right: 5px"
-              src="../../../../assets/binance-logo.svg"
-              v-if="eventAction.type.includes('BINANCE_ERC721')"
-              height="20px"
-            />
-
-            <img
-              style="padding-right: 5px"
               src="../../../../assets/Reef.svg"
-              v-if="eventAction.type.includes('REEF_ERC20')"
+              v-if="eventAction.type.includes('REEF_')"
               height="20px"
-            />
-            <img
-              style="padding-right: 5px"
-              src="../../../../assets/Reef.svg"
-              v-if="eventAction.type.includes('REEF_ERC721')"
-              height="20px"
-            />
-
-            <img
-              style="padding-right: 5px"
-              src="../../../../assets/moonbase-alpha.svg"
-              v-if="eventAction.type.includes('MOON_ERC20')"
-              height="22px"
             />
             <img
               style="padding-right: 5px"
               src="../../../../assets/moonbase-alpha.svg"
-              v-if="eventAction.type.includes('MOON_ERC721')"
+              v-if="eventAction.type.includes('MOON_')"
               height="22px"
             />
             <img
               style="padding-right: 5px"
               src="../../../../assets/moon-river.png"
-              v-if="eventAction.type.includes('MOONRIVER_ERC20')"
-              height="20px"
-            />
-            <img
-              style="padding-right: 5px"
-              src="../../../../assets/moon-river.png"
-              v-if="eventAction.type.includes('MOONRIVER_ERC721')"
-              height="20px"
-            />
-
-            <img
-              style="padding-right: 5px"
-              src="../../../../assets/moonbeam.png"
-              v-if="eventAction.type.includes('MOONBEAM_ERC20')"
+              v-if="eventAction.type.includes('MOONRIVER_')"
               height="20px"
             />
             <img
               style="padding-right: 5px"
               src="../../../../assets/moonbeam.png"
-              v-if="eventAction.type.includes('MOONBEAM_ERC721')"
+              v-if="eventAction.type.includes('MOONBEAM_')"
               height="20px"
             />
-
             <img
               style="padding-right: 5px"
               src="../../../../assets/tezos.png"
