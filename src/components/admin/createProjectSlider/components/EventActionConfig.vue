@@ -88,12 +88,6 @@
               v-if="eventAction.type.includes('ETHEREUM_')"
               height="22px"
             />
-            <img
-              style="padding-right: 5px"
-              src="/img/ethereum.2b470564.svg"
-              v-if="eventAction.type.includes('ETHEREUM_ERC721')"
-              height="22px"
-            />
 
             <img
               style="padding-right: 5px"
@@ -103,75 +97,34 @@
             />
             <img
               style="padding-right: 5px"
-              src="../../../../assets/matic-logo.svg"
-              v-if="eventAction.type.includes('MATIC_ERC721')"
-              height="20px"
-            />
-
-            <img
-              style="padding-right: 5px"
               src="../../../../assets/binance-logo.svg"
               v-if="eventAction.type.includes('BINANCE_')"
               height="20px"
             />
             <img
               style="padding-right: 5px"
-              src="../../../../assets/binance-logo.svg"
-              v-if="eventAction.type.includes('BINANCE_ERC721')"
-              height="20px"
-            />
-
-            <img
-              style="padding-right: 5px"
               src="../../../../assets/Reef.svg"
-              v-if="eventAction.type.includes('REEF_ERC20')"
+              v-if="eventAction.type.includes('REEF_')"
               height="20px"
-            />
-            <img
-              style="padding-right: 5px"
-              src="../../../../assets/Reef.svg"
-              v-if="eventAction.type.includes('REEF_ERC721')"
-              height="20px"
-            />
-
-            <img
-              style="padding-right: 5px"
-              src="../../../../assets/moonbase-alpha.svg"
-              v-if="eventAction.type.includes('MOON_ERC20')"
-              height="22px"
             />
             <img
               style="padding-right: 5px"
               src="../../../../assets/moonbase-alpha.svg"
-              v-if="eventAction.type.includes('MOON_ERC721')"
+              v-if="eventAction.type.includes('MOON_')"
               height="22px"
             />
             <img
               style="padding-right: 5px"
               src="../../../../assets/moon-river.png"
-              v-if="eventAction.type.includes('MOONRIVER_ERC20')"
-              height="20px"
-            />
-            <img
-              style="padding-right: 5px"
-              src="../../../../assets/moon-river.png"
-              v-if="eventAction.type.includes('MOONRIVER_ERC721')"
-              height="20px"
-            />
-
-            <img
-              style="padding-right: 5px"
-              src="../../../../assets/moonbeam.png"
-              v-if="eventAction.type.includes('MOONBEAM_ERC20')"
+              v-if="eventAction.type.includes('MOONRIVER_')"
               height="20px"
             />
             <img
               style="padding-right: 5px"
               src="../../../../assets/moonbeam.png"
-              v-if="eventAction.type.includes('MOONBEAM_ERC721')"
+              v-if="eventAction.type.includes('MOONBEAM_')"
               height="20px"
             />
-
             <img
               style="padding-right: 5px"
               src="../../../../assets/tezos.png"
@@ -215,7 +168,7 @@
               height="20px"
             />
           </span>
-          <span>{{ truncate1(eventAction.title, 8) }}</span>
+          <span>{{ truncate1(eventAction.title, 6) }}</span>
           <span style="color: gray; padding-left: 5px"
             ><i style="" class="fas fa-minus-circle"></i
           ></span>
@@ -224,7 +177,7 @@
     </div>
 
     <div>
-      <div class="row g-3 align-items-center w-100 mt-4">
+      <div class="row g-3 align-items-center w-100 mt-4" v-if="!prize">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="type" class="col-form-label"
             >Type<span style="color: red">*</span>:
@@ -233,6 +186,21 @@
         <div class="col-lg-9 col-md-9 px-0">
           <b-form-select
             v-model="selected.type"
+            :options="options"
+          ></b-form-select>
+        </div>
+      </div>
+
+      <!--Prize Configuration -->
+      <div class="row g-3 align-items-center w-100 mt-4" v-if="prize">
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="type" class="col-form-label"
+            >Type<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+          <b-form-select
+            v-model="prizeDetails.type"
             :options="options"
           ></b-form-select>
         </div>
@@ -602,7 +570,7 @@
             <a
               target="_blank"
               :href="`https://telegram.me/hyperfyre_stage_bot?startgroup=any`"
-              >Hyperfyre Telegram Bot</a
+              >Fyre Telegram Bot</a
             >
             in your public group, for this functionality to work properly.</span
           >
@@ -943,6 +911,7 @@ export default {
       prizeDetails: {
         winners: "",
         prizeValue: "",
+        type: null
       },
       selected: {
         type: null,
@@ -1013,6 +982,7 @@ export default {
       this.prizeDetails = {
         winners: "",
         prizeValue: "",
+        type: null
       };
       this.contract = {
         contractAddress: "",
@@ -1207,6 +1177,7 @@ export default {
           }
           break;
         case "PRIZE":
+          this.selected.type = "PRIZE_CARD"
           if (this.selected.type === null) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_TYPE);

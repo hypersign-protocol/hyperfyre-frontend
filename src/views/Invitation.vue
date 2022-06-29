@@ -1,35 +1,22 @@
 <template>
     <div class="body">
-        <div class="row header">
-            <div class="col-md-4">
-            </div>
-            <!-- <div class="col-md-8">
-                <button class="btn btn-default btn-lg">
-                    <a href="/app" target="_blank">Try Now</a>
-                </button>
-            </div> -->
-        </div>
         <div class="row content">
-            <div class="col-md-12" >
-                 <img class="align-center" style="margin-bottom: 20px" width="auto" height="auto" src="../assets/Hyperfyre_BY.svg"/>
-                <div  class="typewriter"> 
-                <h4>Viral Marketing Tools For Web3</h4>
-                </div>
-                <button  class="btn btn-default btn-lg" style="margin-top:2%">
+            <div class="col-md-12">
+                <img class="align-center" style="margin-bottom: 20px; height: 80px" width="auto" height="auto"
+                    src="../assets/Fyre_Gold_Black.png"/>
+                <!-- <div>
+                    <h4>
+                    </h4>
+                </div> -->
+                <p>
+                    You can close this tab now and go back to the Fyre <a href="/app" target="_blank">admin
+                        dashboard</a>
+                </p>
+                <!-- <button class="btn btn-default btn-lg" style="margin-top:2%">
                     <a href="/app" target="_blank">Click here to Login to admin dashboard</a>
-                </button>
+                </button> -->
             </div>
         </div>
-        <!-- <div class="row footer">
-            <div class="col-md-4">
-                <span>Powered By</span>
-                <img
-                    :src="require(`../assets/footerLogo.png`)"
-                    style="max-width: 100px;"
-                />
-            </div>
-            <div class="col-md-8"></div>
-        </div> -->
     </div>
 </template>
 <script>
@@ -84,6 +71,11 @@ methods:{
   to { width: 40% }
 }
 
+a {
+    color: black;
+    text-decoration: underline;
+}
+
 /* The typewriter cursor effect */
 @keyframes blink-caret {
   from, to { border-color: transparent }
@@ -92,7 +84,7 @@ methods:{
 
 
     .body{
-        background: whitesmoke;
+        background: whitesmoke;;
         color: black;
         height: 100%;
         top: 0px;

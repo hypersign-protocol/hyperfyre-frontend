@@ -57,6 +57,11 @@
 label {
   font-weight: bold;
 }
+
+.eventCard:hover {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  cursor: pointer;
+}
 .card {
   border-radius: 10px;
 }
@@ -264,7 +269,7 @@ i {
             img-height="150"
             tag="article"
             style="max-width: 20rem; margin-top: 20px"
-            class="mb-2"
+            class="mb-2 eventCard"
             @error="onBannerError($event)"
           >
             <ul
@@ -329,6 +334,10 @@ i {
                   class="card-body-custom"
                   >Participants ({{ project.investorsCount }})</a
                 >
+              </li>
+              <li data-toggle="tooltip" data-placement="bottom" title="Actions which participants will perform">
+                <i class="fa fa-tasks"></i>
+                Actions ({{ project.actions.length }})
               </li>
             </ul>
             <footer>
@@ -712,15 +721,32 @@ export default {
 
           case "UPDATE": {
             const { id, _id } = data;
-            this.eventActionList.map((x) => {
-              if (x._id === _id || x.id === id) {
-                return data;
+            let actionIndex = -1;
+              if (_id){
+                actionIndex = this.eventActionList.findIndex(
+                  (x) => x._id == data._id
+                );
+              } else if (id){
+                actionIndex = this.eventActionList.findIndex(
+                  (x) => x.id == data.id
+                );
               }
-            });
+            if (actionIndex > -1){
+              this.eventActionList.splice(actionIndex, 1);
+              this.eventActionList.push(data)
+            } else {
+              console.log('error in updating actionIndex = ', actionIndex)
+            }
+            
+            // this.eventActionList.map((x) => {
+            //   if (x._id == _id || x.id == id) {
+            //     return data;
+            //   }
+            // });
             break;
           }
 
-          case "DELETE": {
+          case "DELETE": {       
             if (data._id) {
               const actionIndex = this.eventActionList.findIndex(
                 (x) => x._id == data._id
@@ -738,6 +764,9 @@ export default {
             }
             break;
           }
+        }
+        if(this.isProjectEditing){
+          this.apiCallToSaveEvent()
         }
       }
     },
@@ -1143,69 +1172,9 @@ export default {
     async saveProject() {
       try {
         const namePage = this.project.projectName;
-        if (this.checkIfEverythingIsFilled() !== true) {
-          return this.notifyErr(this.checkIfEverythingIsFilled());
-        }
-
-        if (this.isProjectNameValid() !== true) {
-          return this.notifyErr(this.isProjectNameValid());
-        }
-        if (this.isValidSlug() !== true) {
-          return this.notifyErr(this.isValidSlug());
-        }
-        if (this.isLogoUrlValid() !== true) {
-          return this.notifyErr(this.isLogoUrlValid());
-        }
-
-        if (
-          isNaN(parseInt(this.project.refereePoint)) ||
-          isNaN(parseInt(this.project.referralPoint))
-        ) {
-          return this.notifyErr(Messages.EVENTS.REF_POINT.NOT_VALID_INP);
-        }
-        if (
-          parseInt(this.project.refereePoint) < 0 ||
-          parseInt(this.project.referralPoint) < 0
-        ) {
-          return this.notifyErr(Messages.EVENTS.REF_POINT.NOT_POS_INP);
-        }
 
         this.isLoading = true;
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
-        let headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
-          AccessToken: `Bearer ${this.accessToken}`,
-        };
-
-        let method = "POST";
-
-        if (this.isProjectEditing) {
-          method = "PUT";
-        }
-
-        this.project.toDate = new Date(this.project.toDate).toISOString();
-        this.project.fromDate = new Date(this.project.fromDate).toISOString();
-
-        this.project.themeColor = this.themeColor.trim().length
-          ? this.themeColor
-          : this.themeColorDefault;
-        this.project.fontColor = this.fontColor.trim().length
-          ? this.fontColor
-          : this.fontColorDefault;
-        this.project.blockchainType = this.blockchainType;
-        this.project.contractType = this.contractType;
-        this.project.actions = this.eventActionList;
-        this.project.tags = this.tagsTemp;
-        this.project.refereePoint = this.project.refereePoint.toString();
-        this.project.referralPoint = this.project.referralPoint.toString();
-
-        const resp = await apiClientMixin.makeCall({
-          url,
-          body: this.project,
-          method,
-          header: headers,
-        });
+       const resp= await this.apiCallToSaveEvent()
         this.$root.$emit("closePreview");
         if (!this.isProjectEditing) {
           ////  not using this for the time being just  to test
@@ -1269,6 +1238,82 @@ export default {
         this.isLoading = false;
         // this.clear();
       }
+    },
+     async apiCallToSaveEvent() {
+    
+        if (this.checkIfEverythingIsFilled() !== true) {
+          return this.notifyErr(this.checkIfEverythingIsFilled());
+        }
+
+        if (this.isProjectNameValid() !== true) {
+          return this.notifyErr(this.isProjectNameValid());
+        }
+        if (this.isValidSlug() !== true) {
+          return this.notifyErr(this.isValidSlug());
+        }
+        if (this.isLogoUrlValid() !== true) {
+          return this.notifyErr(this.isLogoUrlValid());
+        }
+
+        if (
+          isNaN(parseInt(this.project.refereePoint)) ||
+          isNaN(parseInt(this.project.referralPoint))
+        ) {
+          return this.notifyErr(Messages.EVENTS.REF_POINT.NOT_VALID_INP);
+        }
+        if (
+          parseInt(this.project.refereePoint) < 0 ||
+          parseInt(this.project.referralPoint) < 0
+        ) {
+          return this.notifyErr(Messages.EVENTS.REF_POINT.NOT_POS_INP);
+        }
+
+        //this.isLoading = true;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+          AccessToken: `Bearer ${this.accessToken}`,
+        };
+
+        let method = "POST";
+
+        if (this.isProjectEditing) {
+          method = "PUT";
+        }
+        const toDate= this.project.toDate 
+        this.project.toDate = new Date(this.project.toDate).toISOString();
+        this.project.fromDate = new Date(this.project.fromDate).toISOString();
+        this.project.themeColor = this.themeColor.trim().length
+          ? this.themeColor
+          : this.themeColorDefault;
+        this.project.fontColor = this.fontColor.trim().length
+          ? this.fontColor
+          : this.fontColorDefault;
+        this.project.blockchainType = this.blockchainType;
+        this.project.contractType = this.contractType;
+        this.project.actions = this.eventActionList;
+        this.project.tags = this.tagsTemp;
+        this.project.refereePoint = this.project.refereePoint.toString();
+        this.project.referralPoint = this.project.referralPoint.toString();
+        const resp = await apiClientMixin.makeCall({
+          url,
+          body: this.project,
+          method,
+          header: headers,
+        });
+        this.project.toDate=toDate;
+
+        /// Refreshing the temporary list other wise duplicate actions were showing
+        // see issue #1346 & #1389      
+       this.projects.map(x => {
+        if(x._id === resp.data._id){
+          return x.actions = resp.data.actions
+        }
+       })
+       this.eventActionList = [] 
+       this.eventActionList = resp.data ? resp.data.actions : this.eventActionList;
+       return resp;
     },
 
     checkIfEverythingIsFilled() {

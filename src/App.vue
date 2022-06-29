@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <NavBar title="HyperFyre" :show="showUserNav" />
+    <NavBar title="Fyre" :show="showUserNav" />
     <!-- <div :class="[
         showNavbar & !showUserNav
           ? isSidebarCollapsed
@@ -9,26 +9,30 @@
           : 'hideNavbar',
       ]"> -->
     <div :class="[
-        isSidebarCollapsed 
-            ? 'container-collapsed-not hideNavbar'
-            : 'container-collapsed',
-      ]">
-      <sidebar-menu class="sidebar-wrapper" @toggle-collapse="onToggleCollapse" :collapsed="isSidebarCollapsed" @item-click="onItemClick" :theme="'white-theme'" width="220px" 
-      :menu="isSubscribed? menu : unsubsSubscribedMenu" v-if="showNavbar">
+      isSidebarCollapsed 
+          ? 'container-collapsed-not hideNavbar'
+          : 'container-collapsed',
+    ]">
+      <sidebar-menu class="sidebar-wrapper" @toggle-collapse="onToggleCollapse" :collapsed="isSidebarCollapsed"
+        @item-click="onItemClick" :theme="'white-theme'" width="220px" :menu="isSubscribed? menu : unsubsSubscribedMenu"
+        v-if="showNavbar">
         <div slot="header" style="background:#363740">
-          <div class="ml-1 mt-3 mb-2" style="padding-left:1px; text-align:center; margin-right: 2.25rem !important;" > 
-          <a  v-if="!isSidebarCollapsed" href="/admin/dashboard"><img :src="require('./assets/logo.png')" alt="logo" width="175vw" /></a>
-          <a v-if="isSidebarCollapsed" href="/admin/dashboard"><img :src="require('./assets/favicon.png')" alt="logo" width="35vw" /></a>
+          <div class="ml-1 mt-3 mb-2" style="padding-left:1px; text-align:center; margin-right: 2.25rem !important;">
+            <a v-if="!isSidebarCollapsed" href="/admin/dashboard">
+              <img :src="require('./assets/Fyre_Small.png')" alt="logo" width="130vw" /></a>
+            <a v-if="isSidebarCollapsed" href="/admin/dashboard"><img :src="require('./assets/favicon.png')" alt="logo"
+                width="35vw" /></a>
           </div>
           <!-- <p class="header-text">{{ $config.app.name }}</p> -->
           <hr class="rule" />
         </div>
         <span slot="footer" class="text-center" style="font-size:14px; padding: 7px; border: 1px solid #80808014;">
-        <a href="https://docs.fyre.hypersign.id/" target="_blank" style="text-decoration: none; background-color: transparent;color: #8B8B8B;">Docs</a></span>
+          <a href="https://docs.fyre.hypersign.id/" target="_blank"
+            style="text-decoration: none; background-color: transparent;color: #8B8B8B;">Docs</a></span>
         <span slot="footer" class="text-center" style="font-size: 12px; padding: 7px;">{{ $config.app.version }}</span>
       </sidebar-menu>
       <!-- <div class="content-wrapper"> -->
-       <div :class="[
+      <div :class="[
         showNavbar
             ? 'content-wrapper'
             : 'content-wrapper-not',
@@ -38,7 +42,7 @@
       <div class="footer">Powered By: <a href="https://hypersign.id/" target="_blank"> HyperSign</a></div>
     </div>
     <notifications group="foo" />
-    <KommunicateChat v-if="showChat"/>
+    <KommunicateChat v-if="showChat" />
   </div>
 </template>
 <script>
@@ -157,7 +161,7 @@ export default {
           false;
     }else{
       this.showUserNav = window.location.pathname.includes("/form") ||
-          window.location.pathname.includes("/user")? true : false
+        window.location.pathname.includes("/user") || window.location.pathname.includes("/sa/home")?true : false
     }
   },
   updated() {

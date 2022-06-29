@@ -9,7 +9,7 @@
       </div>
       <div>
         <h2 class="llcnwK kdJiCp" style="text-align: left">
-          <i class="fa fa-calendar"></i> Trending events on <span class="TrendingCollections">#HyperFyre</span>
+          <i class="fa fa-calendar"></i> Trending events on <span class="TrendingCollections">#Fyre</span>
         </h2>
       </div>
 
@@ -149,7 +149,7 @@ export default {
       }
 
       //   if (this.$route.params["slug"]) {
-      document.title = "Hyperfyre - User Home";
+      document.title = "Fyre - User Home";
       await this.fetchEventData();
       // await this.fetchUserInfoOnLogin();
       //   }

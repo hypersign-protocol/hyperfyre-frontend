@@ -1,26 +1,36 @@
 <template>
   <div>
-    <loading
-      :active.sync="isLoading"
-      :can-cancel="true"
-      :is-full-page="fullPage"
-    ></loading>
-    <b-card no-body class="mx-auto overflow-hidden mt-3 border-0" style="max-width: 600px;">
-      <Metrics :authToken="authToken" @getLeaderBoard="fetchLeaderBoard" :leaderBoardData="leaderBoardData" :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0" :totalEntries="eventData && eventData.count ? eventData.count : 0" :timeLeft="timeLeft" />
-      <Banner :eventName="eventData.projectName" :themeColor="eventData.themeColor" :fontColor="eventData.fontColor" :fromDate="new Date(eventData.fromDate).toLocaleString()" :toDate="new Date(eventData.toDate).toLocaleString()" :logoUrl="eventData.logoUrl" />
-      <template v-if="authToken == '' || authToken == null">
-        <Login :themeColor="eventData.themeColor" :fontColor="eventData.fontColor" @AuthTokenUpdateEvent="updateAuthentication" />
-      </template>
+    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
+    <b-card no-body class="mx-auto overflow-hidden mt-3 border-0 mainContentWdth">
+      <Metrics :authToken="authToken" @getLeaderBoard="fetchLeaderBoard" :leaderBoardData="leaderBoardData"
+        :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0"
+        :totalEntries="eventData && eventData.count ? eventData.count : 0" :timeLeft="timeLeft" />
+      <Banner :eventName="eventData.projectName" :themeColor="eventData.themeColor" :fontColor="eventData.fontColor"
+        :fromDate="new Date(eventData.fromDate).toLocaleString()" :toDate="new Date(eventData.toDate).toLocaleString()"
+        :logoUrl="eventData.logoUrl" />
     </b-card>
+
+    <template v-if="authToken == '' || authToken == null">
+      <Login class="mx-auto overflow-hidden mt-3 border-0 mainContentWdth" :themeColor="eventData.themeColor"
+        :fontColor="eventData.fontColor" @AuthTokenUpdateEvent="updateAuthentication" />
+
+      <Action v-if="eventData.projectStatus" :userProfile="null" :ActionSchema="eventActionsToShow"
+        :prizeData="prizeData" @UserUpdateEvent="updateUserData" />
+    </template>
+
+
     <template v-if="authToken != '' && authToken != null">
       <ErrorMessage v-if="!eventData.projectStatus" errorMessage="Event is over" />
-      <Action v-if="eventData.projectStatus" :userProfile="userProfileData" :ActionSchema="eventActionsToShow" :prizeData="prizeData" @UserUpdateEvent="updateUserData" />
-    <div class="footer mx-auto overflow-hidden" style="max-width:600px;align-items:center;padding-top:20px" >
-     <b>Disclaimer:</b>
-      Anyone can create campaigns on HyperFyre, rewards are distributed by the campaign creator and HyperFyre is not responsible for reward distribution.
+      <Action v-if="eventData.projectStatus" :userProfile="userProfileData" :ActionSchema="eventActionsToShow"
+        :prizeData="prizeData" @UserUpdateEvent="updateUserData" />
+
+      <div class="footer mx-auto overflow-hidden mainContentWdth" style="align-items:center;padding-top:20px">
+        <b>Disclaimer:</b>
+        Anyone can create campaigns on Fyre, rewards are distributed by the campaign creator and Fyre is not
+        responsible for reward distribution.
       </div>
-   </template>
-    
+    </template>
+
   </div>
 </template>
 <script>
@@ -118,7 +128,7 @@ export default {
       if((this.$route.params["slug"])&&(this.$route.query["userRedirectionToken"])){
         this.eventSlug = this.$route.params["slug"];
         this.userRedirectionToken=this.$route.query["userRedirectionToken"];
-        document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
+        document.title = "Fyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.verifyAppAuth();
         await this.fetchEventData();
         await this.fetchUserInfoOnLogin();
@@ -126,7 +136,7 @@ export default {
       }
       else if(this.$route.params["slug"]) {
         this.eventSlug = this.$route.params["slug"];
-        document.title = "Hyperfyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
+        document.title = "Fyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.fetchEventData();
         await this.fetchUserInfoOnLogin();
       }
@@ -240,7 +250,7 @@ export default {
       try{
       this.isLoading= true
       if (this.authToken != "" && this.authToken && this.userAuthData.email) {
-
+        
         this.userProfileData = this.userAuthData
         const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?email=${this.userAuthData.email}&projectId=${this.eventData._id}`;
         let headers = {
@@ -277,7 +287,6 @@ export default {
         return x.type !=='PRIZE_CARD'
         })
         const eventActions = actionWithoutPrize;
-
         if (this.userEventData.actions && this.userEventData.actions.length > 0) {
           this.eventActionsToShow = eventActions.map(ea => {
             const doneAction = this.userEventData.actions.find(ua => ua._id == ea._id)
@@ -291,8 +300,13 @@ export default {
           })
 
         } else {
-          this.eventActionsToShow = eventActions
+            this.eventActionsToShow = eventActions;
         }
+      } else { 
+        this.eventActionsToShow = this.eventData.actions; 
+        this.prizeData = this.eventData.actions.filter((x) => {
+          return x.type === 'PRIZE_CARD'
+        })
       }
       }catch(e){
         eventBus.$emit('logout')
@@ -363,6 +377,9 @@ export default {
 </script>
 <style scoped>
 
+.mainContentWdth{
+  max-width: 600px;
+}
 .content {
   margin-top: 20px;
   padding: 2px;

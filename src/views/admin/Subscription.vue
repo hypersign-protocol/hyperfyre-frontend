@@ -213,7 +213,7 @@ i {
               <td>{{ row.leftOverNoRequests }}</td>             
               <td>
                 {{  row.paymentData ? 
-                       (row.paymentData.status==='validated' || row.paymentData.activated === 'by HyperFyre Activation Team'?
+                       (row.paymentData.status==='validated' || row.paymentData.activated === 'by Fyre Activation Team'?
                          "Active": 
                          (row.paymentData.status==='paid'?
                            "Pending":
@@ -291,7 +291,7 @@ export default {
 
   async created() {
     const usrStr = localStorage.getItem("user");
-    document.title = "Hyperfyre - Subscriptions";
+    document.title = "Fyre - Subscriptions";
 
     if (usrStr) {
       this.user = {
@@ -440,10 +440,10 @@ export default {
               
             </div>
             <div class="intro" style="color:red">
-                <strong>Please Contact Hyperfyre Team if your subscription is not activated within 10 mins of payment</strong>
+                <strong>Please Contact Fyre Team if your subscription is not activated within 10 mins of payment</strong>
             </div>
           <div class="footer" style="color:black">
-              Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong> <a style="text-decoration:node;color:black" href="http://fyre.hypersign.id/">Hyperfyre</a> </strong>
+              Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong> <a style="text-decoration:node;color:black" href="http://fyre.hypersign.id/">Fyre</a> </strong>
             </div>
           </div>
         </div>
@@ -498,7 +498,9 @@ export default {
             return item;
           }
         );
-        // console.log(json);
+        // Sorting based on price
+        json.sort((a, b) => (a.price > b.price) ? 1 : -1)
+        
         this.plans = json;
         // localStorage.setItem("plans", JSON.stringify(json));
       } catch (e) {
