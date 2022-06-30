@@ -149,7 +149,7 @@ export default {
       }
 
       //   if (this.$route.params["slug"]) {
-      document.title = "Fyre - User Home";
+      document.title = `${config.appName} - User Home`;
       await this.fetchEventData();
       // await this.fetchUserInfoOnLogin();
       //   }

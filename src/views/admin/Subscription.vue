@@ -249,6 +249,7 @@ import SelectPlanSlide from '../../components/admin/selectPlanSlider/SelectPlanS
 import Messages from "../../utils/messages/admin/en"
 import eventBus from '../../eventBus';
 import { truncate } from '../../mixins/fieldValidationMixin';
+import config from "../../config"
 export default {
   name: "Subscription",
   components: { Loading, SelectPlanSlide},
@@ -291,7 +292,7 @@ export default {
 
   async created() {
     const usrStr = localStorage.getItem("user");
-    document.title = "Fyre - Subscriptions";
+    document.title = `${config.appName} - Subscriptions`;
 
     if (usrStr) {
       this.user = {

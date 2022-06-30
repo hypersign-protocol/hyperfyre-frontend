@@ -46,6 +46,7 @@ import apiClient from "../../mixins/apiClientMixin";
 import profileIconMixins from "../../mixins/profileIconMixins";
 import eventBus from "../../eventBus.js"
 import Messages from "../../utils/messages/admin/en"
+import config from "../../config"
 export default {
   name: "Event",
   components: {
@@ -128,7 +129,7 @@ export default {
       if((this.$route.params["slug"])&&(this.$route.query["userRedirectionToken"])){
         this.eventSlug = this.$route.params["slug"];
         this.userRedirectionToken=this.$route.query["userRedirectionToken"];
-        document.title = "Fyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
+        document.title = `${config.appName} - `+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.verifyAppAuth();
         await this.fetchEventData();
         await this.fetchUserInfoOnLogin();
@@ -136,7 +137,7 @@ export default {
       }
       else if(this.$route.params["slug"]) {
         this.eventSlug = this.$route.params["slug"];
-        document.title = "Fyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
+        document.title = `${config.appName} - `+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.fetchEventData();
         await this.fetchUserInfoOnLogin();
       }

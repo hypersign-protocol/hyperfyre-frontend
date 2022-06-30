@@ -5,9 +5,10 @@
 </template>
 
 <script>
+import config from "../config"
 export default {
      created(){
-          document.title = "Fyre - 404";
+          document.title = `${config.appName} - 404`;
      }
 }
 </script>
