@@ -9,7 +9,8 @@
       </div>
       <div>
         <h2 class="llcnwK kdJiCp" style="text-align: left">
-          <i class="fa fa-calendar"></i> Trending events on <span class="TrendingCollections">#Fyre</span>
+          <i class="fa fa-calendar"></i> Trending events on <span class="TrendingCollections">#{{appName}}</span>
+       
         </h2>
       </div>
 
@@ -66,7 +67,7 @@ import eventBus from "../../eventBus.js";
 import Messages from "../../utils/messages/admin/en";
 import Login from "../../components/participant/Login.vue";
 import HomeEvents from "../../components/participant/HomeEvents.vue";
-
+import config from "../../config"
 import { truncate } from "../../mixins/fieldValidationMixin.js";
 export default {
   name: "Home",
@@ -78,6 +79,7 @@ export default {
 
   data() {
     return {
+      appName: config.appName,
       pageT: this.pageT < 1 ? 1 : 1,
       page: this.page < 1 ? 1 : 1,
       slide: 0,
