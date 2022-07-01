@@ -256,6 +256,7 @@ export default {
 
   data() {
     return {
+      appName:config.appName,
       authToken: localStorage.getItem("authToken"),
       accessToken: localStorage.getItem("accessToken"),
       showAllFeatures: false,
@@ -441,10 +442,10 @@ export default {
               
             </div>
             <div class="intro" style="color:red">
-                <strong>Please Contact Fyre Team if your subscription is not activated within 10 mins of payment</strong>
+                <strong>Please Contact ${config.appName} Team if your subscription is not activated within 10 mins of payment</strong>
             </div>
           <div class="footer" style="color:black">
-              Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong> <a style="text-decoration:node;color:black" href="http://fyre.hypersign.id/">Fyre</a> </strong>
+              Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong> <a style="text-decoration:node;color:black" href="http://fyre.hypersign.id/">${config.appName}</a> </strong>
             </div>
           </div>
         </div>
