@@ -6,15 +6,17 @@
 
     <template v-for="(actionItem, index) in ActionSchema">
       <component v-if="actionItem.type==='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
-        :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
+        :idValue="index" :data="actionItem" :authToken="authToken" @input="updateUserInfo(actionItem, $event)">
+      </component>
     </template>
 
     <prize-card v-if="isPrizedata" :prizeData="prizeData" />
 
     <template v-for="(actionItem, index) in ActionSchema">
-      
+
       <component v-if="actionItem.type!=='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
-        :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
+        :idValue="index" :data="actionItem" :authToken="authToken" @input="updateUserInfo(actionItem, $event)">
+      </component>
     </template>
   </div>
 </template>
@@ -81,6 +83,10 @@ export default {
       required: true,
       type: Object,
     },
+    authToken: {
+      required: true,
+      type: String
+    },
     prizeData: {
       required: true,
       type: Array,
@@ -139,7 +145,6 @@ export default {
   },
   data() {
     return {
-      authToken: localStorage.getItem("authToken"),
       user: JSON.parse(localStorage.getItem("user")),
       userData: {
         projectId: "613b8476442d2d56fb0988fa",
@@ -205,7 +210,7 @@ export default {
         }
         let headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${this.authToken}`,
           "sig-ts":ts,
           "x-payload-hf-sign":sig
 

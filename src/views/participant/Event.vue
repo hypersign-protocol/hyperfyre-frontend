@@ -14,15 +14,18 @@
       <Login class="mx-auto overflow-hidden mt-3 border-0 mainContentWdth" :themeColor="eventData.themeColor"
         :fontColor="eventData.fontColor" @AuthTokenUpdateEvent="updateAuthentication" />
 
-      <Action v-if="eventData.projectStatus" :userProfile="null" :ActionSchema="eventActionsToShow"
-        :prizeData="prizeData" @UserUpdateEvent="updateUserData" />
+      <!-- <Action v-if="eventData.projectStatus" :userProfile="null" :ActionSchema="eventActionsToShow"
+        :prizeData="prizeData" @UserUpdateEvent="updateUserData" /> -->
     </template>
 
+    <template>
+      <Action v-if="eventData.projectStatus" :userProfile="Object.keys(userProfileData).length > 0 ? userProfileData : null"
+        :ActionSchema="eventActionsToShow" :authToken="authToken" :prizeData="prizeData"
+        @UserUpdateEvent="updateUserData" />
+    </template>
 
     <template v-if="authToken != '' && authToken != null">
       <ErrorMessage v-if="!eventData.projectStatus" errorMessage="Event is over" />
-      <Action v-if="eventData.projectStatus" :userProfile="userProfileData" :ActionSchema="eventActionsToShow"
-        :prizeData="prizeData" @UserUpdateEvent="updateUserData" />
 
       <div class="footer mx-auto overflow-hidden mainContentWdth" style="align-items:center;padding-top:20px">
         <b>Disclaimer:</b>

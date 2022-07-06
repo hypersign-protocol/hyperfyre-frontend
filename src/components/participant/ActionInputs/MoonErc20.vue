@@ -71,6 +71,9 @@ export default {
     data: {
       required: true,
     },
+    authToken: {
+      required: true
+    },
   },
   components: {
     ErrorMessage,
@@ -78,8 +81,7 @@ export default {
   data() {
     return {
       visible: false,
-      done: this.data.isDone,
-      authToken: localStorage.getItem("authToken"),
+      done: this.data.isDone,      
       showerror: false,
       signature: "",
       message_sign: "",

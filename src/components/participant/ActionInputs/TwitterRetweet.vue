@@ -93,10 +93,12 @@ export default {
     data: {
       required: true,
     },
+    authToken: {
+      required: true,
+    }
   },
   data() {
     return {
-      authToken: localStorage.getItem("authToken"),
       visible: false,
       done: this.data.isDone,
       retweetUrl: "",
