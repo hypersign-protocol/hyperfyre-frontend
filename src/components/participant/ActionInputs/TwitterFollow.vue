@@ -87,12 +87,14 @@ export default {
     data: {
       required: true,
     },
+    authToken: {
+      required: true,
+    }
   },
   data() {
     return {
       visible: false,
       done: this.data.isDone,
-      authToken: localStorage.getItem("authToken"),
       actions: [],
       twitter: {
         sourceScreenName: "",

@@ -76,6 +76,9 @@ export default {
     data: {
       required: true,
     },
+    authToken: {
+      required: true,
+    }
   },
   data() {
     return {
@@ -88,8 +91,6 @@ export default {
       tgdata:{
         userID:"",
       },
-      authToken: localStorage.getItem("authToken"),
-
     };
   },
   async mounted() {
