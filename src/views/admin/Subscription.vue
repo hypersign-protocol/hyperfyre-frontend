@@ -213,7 +213,7 @@ i {
               <td>{{ row.leftOverNoRequests }}</td>             
               <td>
                 {{  row.paymentData ? 
-                       (row.paymentData.status==='validated' || row.paymentData.activated === 'by Fyre Activation Team'?
+                       (row.paymentData.status==='validated' || row.paymentData.activated === `by ${appName} Activation Team`?
                          "Active": 
                          (row.paymentData.status==='paid'?
                            "Pending":
