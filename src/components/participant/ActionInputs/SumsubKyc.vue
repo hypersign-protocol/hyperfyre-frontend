@@ -90,6 +90,9 @@ export default {
     },
     authToken: {
       required: true,
+    },
+    done: {
+      required: true,
     }
   },
   components: {
@@ -99,7 +102,6 @@ export default {
   data() {
     return {
       visible: false,
-      done: this.data.isDone,
       showerror: false,
       kycData:{},     
       

@@ -74,14 +74,16 @@ export default {
     authToken: {
       required: true
     },
+    done: {
+      required: true,
+    }
   },
   components: {
     ErrorMessage,
   },
   data() {
     return {
-      visible: false,
-      done: this.data.isDone,      
+      visible: false,        
       showerror: false,
       signature: "",
       message_sign: "",
