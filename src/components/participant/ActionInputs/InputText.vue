@@ -74,11 +74,13 @@ export default {
     data: {
       required: true,
     },
+    done:{
+      required: true,
+    }
   },
   data() {
     return {
       visible: false,
-      done: this.data.isDone,
     };
   },
   mounted() {

@@ -88,6 +88,9 @@ export default {
     },
     authToken: {
       required: true,
+    },
+    done: {
+      required: true,
     }
   },
   components: {
@@ -95,8 +98,7 @@ export default {
   },
   data() {
     return {
-      visible: false,
-      done: this.data.isDone,      
+      visible: false,  
       showerror: false,
       signature: "",
       message_sign: "You are Signing this Message to confirm your Paricipation",

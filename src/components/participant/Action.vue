@@ -6,7 +6,8 @@
 
     <template v-for="(actionItem, index) in ActionSchema">
       <component v-if="actionItem.type==='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
-        :idValue="index" :data="actionItem" :authToken="authToken" @input="updateUserInfo(actionItem, $event)">
+        :idValue="index" :data="actionItem" :done="actionItem.isDone" :authToken="authToken"
+        @input="updateUserInfo(actionItem, $event)">
       </component>
     </template>
 
@@ -15,7 +16,8 @@
     <template v-for="(actionItem, index) in ActionSchema">
 
       <component v-if="actionItem.type!=='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
-        :idValue="index" :data="actionItem" :authToken="authToken" @input="updateUserInfo(actionItem, $event)">
+        :idValue="index" :data="actionItem" :authToken="authToken" :done="actionItem.isDone"
+        @input="updateUserInfo(actionItem, $event)">
       </component>
     </template>
   </div>
