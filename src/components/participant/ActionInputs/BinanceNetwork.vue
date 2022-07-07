@@ -37,7 +37,7 @@
                   <div class="col-lg-12 col-md-12" v-if="param.name === 'address'">
                 <div v-if="!showerror">
                   <input v-model="param.value" type="" id="title" :required="true" class="form-control w-100"
-                    :disabled="true" />
+                    :disabled="true" :placeholder="param.name" />
 
                   <div v-if="!done" class="btn-group w-100">
                     <button class="btn btn-link" @click="invokeMetamask(index)">Connect Metamask</button>
@@ -195,6 +195,21 @@ export default {
         return this.notifyErr(error.message);
       }
     },
+    emitToUpdate() {
+      //this.notifySuccess("Success");
+      const { contractAddress, paramsList } = this.value;
+      const valueToStore = {
+        contractAddress, paramsList
+      }
+      this.value.condition = "Condition True";
+
+      this.$emit(
+        "input",
+        JSON.stringify({
+          ...valueToStore,
+        })
+      );
+    },
     async update() {
       try {
         let result = await this.execute();
@@ -219,15 +234,7 @@ export default {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (this.value.operand === result) {
-                  this.notifySuccess("Success");
-                  this.value.condition = "Condition True";
-
-                  this.$emit(
-                    "input",
-                    JSON.stringify({
-                      ...this.value,
-                    })
-                  );
+                  this.emitToUpdate()
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -236,15 +243,7 @@ export default {
               case "string": 
                case "address":{
                 if (this.value.operand === result) {
-                  this.notifySuccess("Success");
-                  this.value.condition = "Condition True";
-
-                  this.$emit(
-                    "input",
-                    JSON.stringify({
-                      ...this.value,
-                    })
-                  );
+                  this.emitToUpdate()
                 } else {
                   this.notifyErr("Condition Mismatch");
                 }
@@ -252,15 +251,7 @@ export default {
               }
               case "bool": {
                 if (!!this.value.operand === !!result) {
-                  this.value.condition = "Condition True";
-
-                  this.$emit(
-                    "input",
-                    JSON.stringify({
-                      ...this.value,
-                    })
-                  );
-                  this.notifySuccess("Success");
+                  this.emitToUpdate()
                 } else {
                   this.notifyErr("Condition Mismatch");
                 }
@@ -279,15 +270,7 @@ export default {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result < this.value.operand) {
-                  this.notifySuccess("Success");
-                  this.value.condition = "Condition True";
-
-                  this.$emit(
-                    "input",
-                    JSON.stringify({
-                      ...this.value,
-                    })
-                  );
+                  this.emitToUpdate()
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -302,15 +285,7 @@ export default {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result > this.value.operand) {
-                  this.notifySuccess("Success");
-                  this.value.condition = "Condition True";
-
-                  this.$emit(
-                    "input",
-                    JSON.stringify({
-                      ...this.value,
-                    })
-                  );
+                  this.emitToUpdate()
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -326,15 +301,7 @@ export default {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result <= this.value.operand) {
-                  this.notifySuccess("Success");
-                  this.value.condition = "Condition True";
-
-                  this.$emit(
-                    "input",
-                    JSON.stringify({
-                      ...this.value,
-                    })
-                  );
+                  this.emitToUpdate()
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -349,15 +316,7 @@ export default {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result >= this.value.operand) {
-                  this.notifySuccess("Success");
-                  this.value.condition = "Condition True";
-
-                  this.$emit(
-                    "input",
-                    JSON.stringify({
-                      ...this.value,
-                    })
-                  );
+                  this.emitToUpdate()
                 } else {
                   throw new Error("Condition Mismatch");
                 }
