@@ -34,9 +34,13 @@
                     <button class="btn btn-link" @click="update()">Continue</button>
                   </div>
                 </div>
+
                 <div v-else>
-                  <ErrorMessage errorMessage="Install Metamask browser extension" />
+                  <ErrorMessage errorMessage="Install Metamask browser extension" v-if="!done" />
+                  <input v-model="param.value" type="" id="title" :required="true" class="form-control w-100"
+                    :disabled="true" v-else />
                 </div>
+
               </div>
               <div class="col-lg-12 col-md-12" v-else>
                 <input v-model="param.value" type="" id="title" :required="true" class="form-control w-100"
