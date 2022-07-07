@@ -9,7 +9,7 @@
                     </h4>
                 </div> -->
                 <p>
-                    You can close this tab now and go back to the Fyre <a href="/app" target="_blank">admin
+                    You can close this tab now and go back to the {{appName}} <a href="/app" target="_blank">admin
                         dashboard</a>
                 </p>
                 <!-- <button class="btn btn-default btn-lg" style="margin-top:2%">
@@ -21,8 +21,14 @@
 </template>
 <script>
 import notificationMixins from "../mixins/notificationMixins"
+import config from "../config"
 export default {
     name:"Invitation",
+ data(){
+    return {
+        appName:config.appName
+    }
+ },   
 async mounted(){
     if(await this.$route.query.auth){
         await this.invokeStatus();

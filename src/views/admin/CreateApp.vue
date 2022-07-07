@@ -99,7 +99,7 @@
               </div>
             <div class="row g-3 align-items-center w-100 mt-4">
                 <div class="text-left col-lg-3 col-md-3 text-left">
-                 <tool-tips infoMessage="Enter base URL of your server. This URL will be whitelisted to access data from Fyre backend. See the docs for more details."></tool-tips><label for="baseUrl" class="col-form-label">Base URL
+                 <tool-tips :infoMessage='`Enter base URL of your server. This URL will be whitelisted to access data from ${appName}`'></tool-tips><label for="baseUrl" class="col-form-label">Base URL
                    <span style="color: red">*</span>: 
                  </label>
                 </div>
@@ -187,6 +187,7 @@
 import notificationMixins from "../../mixins/notificationMixins";
 import ToolTips from "../../components/basic/toolTips";
 import Web3 from "web3"
+import config from "../../config"
 import {mnemonicToSeed,generateMnemonic} from "bip39"
 import HDKey from "hdkey"
 import Loading from "vue-loading-overlay";
@@ -203,6 +204,7 @@ export default {
   data() {
     return {
       isEdit:false,
+      appName: config.appName,
       app:{
         appName: "",
         baseUrl: "",
