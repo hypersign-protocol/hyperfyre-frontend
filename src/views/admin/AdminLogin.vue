@@ -173,7 +173,7 @@ import "vue-loading-overlay/dist/vue-loading.css";
 import url from "url";
 import notificationMixins from "../../mixins/notificationMixins";
 import localStorageMixin from "../../mixins/localStorageMixin";
-
+import config from "../../config"
 export default {
   name: "Login",
   components: {
@@ -207,7 +207,7 @@ export default {
   },
   created() {
     localStorage.clear();
-     document.title = "Fyre - Login";
+     document.title = `${config.appName} - Login`;
     // console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
     let websocketUrl = "ws://localhost:3003";

@@ -570,7 +570,7 @@
             <a
               target="_blank"
               :href="`https://telegram.me/hyperfyre_stage_bot?startgroup=any`"
-              >Fyre Telegram Bot</a
+              >{{appName}} Telegram Bot</a
             >
             in your public group, for this functionality to work properly.</span
           >
@@ -735,7 +735,7 @@ import "v-markdown-editor/dist/v-markdown-editor.css";
 import Messages from "../../../../utils/messages/admin/en";
 import Vue from "vue";
 import Editor from "v-markdown-editor";
-
+import config from "../../../../config"
 import { codemirror } from "vue-codemirror";
 
 // require styles
@@ -870,6 +870,7 @@ export default {
   },
   data() {
     return {
+      appName: config.appName,
       allCondition: [
         { text: "None", value: null },
         { text: "=", value: "===" },

@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <NavBar title="Fyre" :show="showUserNav" />
+   <NavBar :title="name" :show="showUserNav" /> 
+    <!-- <NavBar title="Fyre" :show="showUserNav" /> -->
+
     <!-- <div :class="[
         showNavbar & !showUserNav
           ? isSidebarCollapsed
@@ -50,12 +52,14 @@
 import NavBar from "./components/participant/NavBar.vue"
 import eventBus from "./eventBus";
 import KommunicateChat from "./components/admin/KommunicateChat.vue"
+import config from "./config"
 export default {
   components: {
     NavBar,KommunicateChat
   },
   data() {
     return {
+      name: config.appName,
       hover: false,
       authToken: localStorage.getItem("authToken"),
       isSidebarCollapsed: true,
