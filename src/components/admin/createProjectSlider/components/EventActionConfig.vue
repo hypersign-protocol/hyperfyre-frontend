@@ -955,6 +955,15 @@ export default {
         this.allMethods = Object.keys(newContract.methods).filter(
           (e) => e.includes("(") && e.includes(")")
         );
+        this.tempMethods=[]
+        this.allMethods.forEach((t) =>{
+          if((t.charAt(t.length-1)==")"&& t.charAt(t.length-2)=="(")|| t.includes(",")){
+            this.tempMethods.push(t)
+          }
+       })
+        this.allMethods= this.allMethods
+      .concat(this.tempMethods)
+      .filter((x) => ! this.allMethods.includes(x) || !this.tempMethods.includes(x))
       } catch (e) {
         console.log("Error Occured as the ABI is not getting parsed", e);
       }
