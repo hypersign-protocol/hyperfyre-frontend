@@ -569,7 +569,7 @@
             >Make sure to add
             <a
               target="_blank"
-              :href="`https://telegram.me/hyperfyre_stage_bot?startgroup=any`"
+              :href="`https://telegram.me/${hfTgBotId}?startgroup=any`"
               >{{appName}} Telegram Bot</a
             >
             in your public group, for this functionality to work properly.</span
