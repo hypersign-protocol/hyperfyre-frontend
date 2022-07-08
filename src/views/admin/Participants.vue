@@ -500,7 +500,7 @@ export default {
         case "ETHEREUM_NETWORK":
         case "BINANCE_NETWORK":
         case "MATIC_NETWORK": {
-          return JSON.parse(action.value).condition;
+          return JSON.parse(action.value).paramsList[0].value;
         }
         default:
           return action.value;
