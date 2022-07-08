@@ -108,6 +108,11 @@ export default {
       fullPage: true,
     };
   },
+  updated(){
+    if(this.data.value && this.retweetUrl != ""){
+      this.retweetUrl = this.data.value;
+    }
+  },
   mounted() {
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
