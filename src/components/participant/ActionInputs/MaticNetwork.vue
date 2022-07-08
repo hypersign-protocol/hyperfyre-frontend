@@ -159,27 +159,55 @@ export default {
       },
     };
   },
+  updated(){
+    if (this.data.value && typeof(this.data.value) === "object") {    
+      Object.assign(this.value,  {...this.data.value} )
+      this.updatedParamsList();
+    }
+  },
   mounted() {
+    this.cleanValue();
     this.checkWeb3Injection();
-    if (this.data.value) {
-      Object.assign(this.value, { ...JSON.parse(this.data.value) });
-    }
-    let s = this.value.methods;
-    s = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
-    if (s !== "") {
-      s = s.split(",");
-
-      for (let i = 0; i < s.length; i++) {
-        if (this.value.paramsList.length !== 0) {
-          break;
-        } else {
-          this.value.paramsList.push({ name: s[i], value: "" });
-        }
-      }
-    }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
+
+    if (this.data.value && typeof(this.data.value) === "object") {
+      Object.assign(this.value, { ...this.data.value });
+      this.updatedParamsList();
+    }
   },
   methods: {
+    updatedParamsList(){
+      let s = this.value.methods;
+      if(!s){
+        return
+      } 
+      s = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
+      if (s !== "") {
+        s = s.split(",");
+
+        for (let i = 0; i < s.length; i++) {
+          if (this.value.paramsList.length !== 0) {
+            break;
+          } else {
+            this.value.paramsList.push({ name: s[i], value: "" });
+          }
+        }
+      }
+    },
+    cleanValue(){
+      this.value = {
+        contractAddress: "",
+        thresholdBalance: 0,
+        contractABI: "",
+        methods: null,
+        paramsList: [],
+        operand: null,
+        operator: "",
+        returnType: "",
+        condition: "",
+      }
+    },
+
     checkWeb3Injection() {
       try {
         if (window.ethereum && window.ethereum.isMetaMask) {
