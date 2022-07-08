@@ -1,6 +1,5 @@
 <template>
-  <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px"
-    @click=" checkIfUserHasLoggedIn()">
+  <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px" @click="checkIfUserHasLoggedIn()">
     <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
     <Profile v-if="userProfile" :user="userProfile" />
 
@@ -171,9 +170,10 @@ export default {
     checkIfUserHasLoggedIn() {
       if (!this.userProfile) {
         // TODO:  bad way of coding.  We should only hide which is being clicked 
-        document.querySelectorAll(".action-wrap").forEach(e => {
-          // hiding second child
-          if (e.children[1]) e.children[1].style.display = 'none'
+        document.querySelectorAll(".card-header").forEach(elm => {
+          elm.classList.add('collapsed')
+          elm.attributes['aria-expanded'].value =  false;
+          document.getElementById(elm.attributes['aria-controls'].value).style.display = 'none';
         })
         return this.notifyErr(Messsages.EVENT_ACTIONS.UNAUTHENTICATED);
       } 
