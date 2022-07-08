@@ -248,6 +248,7 @@ export default {
         //   }
         // }
 
+        
         switch (this.value.operator) {
           case "===": {
             switch (this.value.returnType) {
@@ -272,7 +273,8 @@ export default {
                 break;
               }
               case "bool": {
-                if (!!this.value.operand === !!result) {
+                this.value.operand  = (this.value.operand  === "true");
+                if (this.value.operand === result) {
                   this.emitToUpdate()
                 } else {
                   this.notifyErr("Condition Mismatch");
@@ -349,7 +351,6 @@ export default {
           default:
             break;
         }
-        console.log(result);
       } catch (error) {
         this.value.condition = "Condition False";
         return this.notifyErr(error);
