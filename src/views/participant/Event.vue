@@ -50,6 +50,7 @@ import profileIconMixins from "../../mixins/profileIconMixins";
 import eventBus from "../../eventBus.js"
 import Messages from "../../utils/messages/admin/en"
 import config from "../../config"
+
 export default {
   name: "Event",
   components: {
@@ -300,6 +301,13 @@ export default {
               ea.value = doneAction.value
             } else {
               ea["isDone"] = false
+            }
+            if((ea.type === "ETHEREUM_NETWORK") ||
+              (ea.type === "BINANCE_NETWORK") ||
+              (ea.type === "MATIC_NETWORK")
+            ){
+                const parsedVal = JSON.parse(ea.value)
+                ea.value = parsedVal;
             }
             return ea
           })
