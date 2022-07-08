@@ -31,7 +31,14 @@
         </b-row>
         <b-row v-else>
           <b-col cols="12" sm="12" md="12">
-            <ErrorMessage errorMessage="Install Metamask browser extension" />
+            <ErrorMessage errorMessage="Install Metamask browser extension" v-if="!done"/>
+            <b-form-input
+                type="text"
+                :placeholder="data.placeHolder"
+                v-model="value.userWalletAddress"
+                :disabled="true"
+                :required="data.isManadatory"
+              v-else></b-form-input>
           </b-col>
         </b-row>
         <b-row v-if="!done && !showerror">
@@ -203,7 +210,7 @@ export default {
       return result;
     },
     disableInput(data) {
-      this.done = data;
+this.data.isDone = data;
     },
   },
   mixins: [notificationMixins],
