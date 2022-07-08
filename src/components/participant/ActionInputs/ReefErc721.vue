@@ -128,7 +128,7 @@ export default {
       Object.assign(this.value, { ...(this.data.value) });
     }
   },
-  mounted() {
+  async mounted() {
     if (this.data.value && typeof(this.data.value) === "object") {
       Object.assign(this.value, { ...(this.data.value) });
     }

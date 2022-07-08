@@ -26,7 +26,6 @@
             <div class="metamask">
               <b-form-input type="text" :placeholder="data.placeHolder" v-model="value.userWalletAddress"
                 :disabled="true" :required="data.isManadatory"></b-form-input>
-              </button>
             </div>
           </b-col>
         </b-row>
