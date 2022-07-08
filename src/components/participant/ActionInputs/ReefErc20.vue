@@ -118,8 +118,8 @@ export default {
         thresholdBalance: 0
       },
       wallet:[],
-      walletSignObj:""
-      
+      walletSignObj:"",
+      web3: null
     };
   },
   updated(){
@@ -163,7 +163,7 @@ export default {
     async invokeReef() {
       try {
        
-        if (this.web3.reef) {
+        if (this.web3 && this.web3.reef) {
            
            let sign;
          await window.injectedWeb3.reef.enable()
