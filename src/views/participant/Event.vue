@@ -304,7 +304,21 @@ export default {
             }
             if((ea.type === "ETHEREUM_NETWORK") ||
               (ea.type === "BINANCE_NETWORK") ||
-              (ea.type === "MATIC_NETWORK")
+              (ea.type === "MATIC_NETWORK") ||
+              (ea.type === "ETHEREUM_ERC20") ||
+              (ea.type === "ETHEREUM_ERC721") ||
+              (ea.type === "MATIC_ERC20") ||
+              (ea.type === "MATIC_ERC721") ||
+              (ea.type === "BINANCE_ERC20") ||
+              (ea.type === "BINANCE_ERC721") ||
+              (ea.type === "REEF_ERC20") ||
+              (ea.type === "REEF_ERC721") ||
+              (ea.type === "MOONBEAM_ERC20") ||
+              (ea.type === "MOONBEAM_ERC721") ||
+              (ea.type === "MOONRIVER_ERC20") ||
+              (ea.type === "MOONRIVER_ERC721") ||
+              (ea.type === "MOON_ERC20") ||
+              (ea.type === "MOON_ERC721")
             ){
                 const parsedVal = JSON.parse(ea.value)
                 ea.value = parsedVal;

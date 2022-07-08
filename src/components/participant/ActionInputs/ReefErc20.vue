@@ -114,15 +114,18 @@ export default {
       
     };
   },
- 
-  async mounted() {
-
-    if(this.data.value){
-        Object.assign(this.value, {...JSON.parse(this.data.value) })
+  updated(){
+    if (this.data.value && typeof(this.data.value) === "object") {
+      Object.assign(this.value, { ...(this.data.value) });
+    }
+  },
+  mounted() {
+    if (this.data.value && typeof(this.data.value) === "object") {
+      Object.assign(this.value, { ...(this.data.value) });
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
-   await this.checkWeb3Injection();
-  await  this.invokeReef()
+    this.checkWeb3Injection();
+    await this.invokeReef()
     await this.fetchAccounts()
   },
   methods: {
