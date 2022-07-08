@@ -46,10 +46,18 @@
         </b-row>
         <b-row v-else>
           <b-col cols="12" sm="12" md="12">
-            <ErrorMessage errorMessage="Install Reef browser extension" />
+            <ErrorMessage errorMessage="Install Reef browser extension"  v-if="!done" />
+            <b-form-select
+                type="text"
+                :options="options"
+                v-model="value.userWalletAddress"
+                :disabled="done"
+                :required="data.isManadatory"
+                v-else
+              ></b-form-select>
           </b-col>
         </b-row>
-        <b-row v-if="!done">
+        <b-row v-if="!done && !showerror">
           <b-col cols="12" sm="12" md="12" >
             <button class="btn btn-link center"  @click="update()">Continue</button>
           </b-col>
