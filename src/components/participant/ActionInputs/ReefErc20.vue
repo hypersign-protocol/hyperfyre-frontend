@@ -132,6 +132,8 @@ export default {
       Object.assign(this.value, { ...(this.data.value) });
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
+
+    // TODO: need to check if this works 
     await this.checkWeb3Injection();
     await this.invokeReef()
     await this.fetchAccounts()
