@@ -108,7 +108,15 @@ export default {
       fullPage: true,
     };
   },
+  updated(){
+    if(this.data.isDone && this.data.value){
+      this.retweetUrl = this.data.value;
+    }
+  },
   mounted() {
+    if(this.data.isDone && this.data.value){
+      this.retweetUrl = this.data.value;
+    }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
