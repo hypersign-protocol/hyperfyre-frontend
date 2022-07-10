@@ -1137,14 +1137,17 @@ export default {
                 );
                 localStorage.removeItem("userProjects");
 
-                tempProject.projects.splice(index, 1);
-                localStorage.setItem(
-                  "userProjects",
-                  JSON.stringify({
-                    projects: tempProject.projects,
-                    count: tempProject.projects.length,
-                  })
-                );
+                if(tempProject){
+                  tempProject.projects.splice(index, 1);
+                  localStorage.setItem(
+                    "userProjects",
+                    JSON.stringify({
+                      projects: tempProject.projects,
+                      count: tempProject.projects.length,
+                    })
+                  );
+                }
+                
                 if (json) {
                   if (!resp.ok) {
                     return this.notifyErr(json);
