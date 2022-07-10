@@ -40,26 +40,34 @@
                 v-model="value.userWalletAddress"
                 :disabled="done"
                 :required="data.isManadatory"
+                v-if="!done"
               ></b-form-select>
+              <b-form-input
+                type="text"
+                :placeholder="data.placeHolder"
+                v-model="value.userWalletAddress.address"
+                :disabled="true"
+                :required="data.isManadatory"
+              v-else></b-form-input>
             </div>
           </b-col>
         </b-row>
         <b-row v-else>
           <b-col cols="12" sm="12" md="12">
             <ErrorMessage errorMessage="Install Reef browser extension"  v-if="!done" />
-            <b-form-select
+            <b-form-input
                 type="text"
-                :options="options"
-                v-model="value.userWalletAddress"
+                :placeholder="data.placeHolder"
+                v-model="value.userWalletAddress.address"
                 :disabled="done"
                 :required="data.isManadatory"
-                v-else
-              ></b-form-select>
+              v-else></b-form-input>
           </b-col>
         </b-row>
         <b-row v-if="!done && !showerror">
-          <b-col cols="12" sm="12" md="12" >
-            <button class="btn btn-link center"  @click="update()">Continue</button>
+          <b-col class= "btn-group" cols="12" sm="12" md="12" >
+            <button class="btn btn-link" @click="invokeReef()">Connect Reef</button>
+            <button class="btn btn-link"  @click="update()">Continue</button>
           </b-col>
         </b-row>
       </b-card-body>
@@ -111,7 +119,7 @@ export default {
       signature: "",
       message_sign: "You are Signing this Message to confirm your Paricipation",
       
-      options:[{value: '', text: 'Please select your reef wallet'}],
+      options:[{value: '', text: 'Please select your Reef wallet'}],
       value: {
         contractAddress: "",
         userWalletAddress: '',
@@ -133,9 +141,7 @@ export default {
       Object.assign(this.value, { ...(this.data.value) });
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
-    this.checkWeb3Injection();
-    await this.invokeReef()
-    await this.fetchAccounts()
+    await this.checkWeb3Injection();
   },
   methods: {
    async checkWeb3Injection() {
@@ -156,10 +162,13 @@ export default {
     },
     async fetchAccounts() {
       
+      this.options = [{value: '', text: 'Please select your reef wallet'}];
       for (let i in this.wallet) {
        
              this.options.push({value:this.wallet[i],text: 'Address: '+ this.wallet[i].address.slice(0,12)+'...'+this.wallet[i].address.slice(38,48)+'  Name: '+this.wallet[i].name})
             }
+
+            this.value.userWalletAddress = this.options[1]? this.options[1].value : this.options[0].value
     },
     async invokeReef() {
       try {
@@ -171,6 +180,7 @@ export default {
           .then(async walletObj=>{
             this.wallet =  await walletObj.accounts.get();
             this.walletSignObj=walletObj
+            await this.fetchAccounts();
             
           })
 
@@ -224,6 +234,16 @@ export default {
       return true;
     },
     async fetchBalance() {
+
+       if(!this.value.contractAddress){
+          throw new Error("Missing contract address")
+        }
+
+        if(!this.value.userWalletAddress.address){
+          throw new Error("Missing userWallet address")
+        }
+
+
       
       this.signature=await this.walletSignObj.signer.signRaw(this.value.userWalletAddress)
       const body = {
