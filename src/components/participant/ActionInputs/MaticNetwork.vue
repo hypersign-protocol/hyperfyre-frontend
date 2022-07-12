@@ -84,7 +84,6 @@
                 />
                 <div
                   v-if="!done"
-                  class="btn-group w-100"
                   cols="12"
                   sm="12"
                   md="12"

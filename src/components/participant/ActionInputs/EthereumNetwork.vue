@@ -46,7 +46,7 @@
                 <input v-model="param.value" type="" id="title" :required="true" class="form-control w-100"
                   :disabled="done" />
 
-                <div v-if="!done" class="btn-group w-100" cols="12" sm="12" md="12">
+                <div v-if="!done" cols="12" sm="12" md="12">
                   <button class="btn btn-link center" @click="update()">Continue</button>
                 </div>
               </div>
