@@ -64,9 +64,9 @@ i {
 }
 
 .button-theme {
-  background-color: #F1B319;
-  border-collapse: #F1B319;
-  color: black;
+  background-color: var(--button-bg-color);
+  border-collapse:var(--button-bg-color);
+  color:var(--button-text-color);;
   border: 0;
 
 }
@@ -289,6 +289,12 @@ export default {
 
   computed: {
   // a computed 
+    buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     }
   },
 
   async created() {

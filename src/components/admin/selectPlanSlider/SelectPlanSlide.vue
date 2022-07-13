@@ -7,9 +7,9 @@
 }
 
 .button-theme {
-  background-color: #f1b319;
-  border-collapse: #f1b319;
-  color: black;
+  background-color: var(--button-bg-color);
+  border-collapse:  var(--button-bg-color);
+  color: var(--button-text-color);
   border: 0;
 }
 
@@ -174,6 +174,7 @@
 </template>
 
 <script>
+import config from "../../../config";
 import InputDate from "../../participant/ActionInputs/InputDate.vue";
 import EventActionConfig from "./components/EventActionConfig.vue";
 import GeneralConfig from "./components/GeneralConfig.vue";
@@ -216,6 +217,12 @@ export default {
 
   computed: {
     // a computed getter
+      buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     },
     grandTotal() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.plan.grandTotal = this.plan.price - this.discount;
