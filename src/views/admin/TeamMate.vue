@@ -5,7 +5,7 @@
 }
 
 .vue-logo-back {
-  background-color: black;
+  background-color: var(--button-text-color);
 }
 
 .logo {
@@ -31,12 +31,18 @@
   color: grey;
   font-size: 18px;
 }
+.button-theme{
+  background-color:  var(--button-bg-color);
+  border-collapse: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: 0;
+}
 </style>
 <template>
   <div class="home marginLeft marginRight">
     <h3 v-if="!teammates.length" class="leftAlign">No teams found, click on 'Invite' button to add team</h3>
     <div class="text-right">
-      <button @click="invite()" class="btn btn-warning button-theme">
+      <button @click="invite()" class="btn button-theme" :style="buttonThemeCss">
          Invite <i class="fas fa-plus text-black"></i>
       </button>
     </div>
@@ -83,7 +89,7 @@
               <td @click="remove(row._id)">
                 <button
                   style="text-transform: uppercase"
-                  class="btn btn-danger button-theme btn-sm"
+                  class="btn btn-danger btn-sm"
                   title="Click to remove the teammate"
                 >
                   <i class="fas fa-trash"></i>
@@ -116,7 +122,7 @@
                 <button
                   :disabled="true"
                   style="text-transform: uppercase"
-                  class="btn btn-success button-theme btn-sm"
+                  class="btn btn-success btn-sm"
                 >
                   Active
                 </button>
@@ -125,7 +131,7 @@
               <td v-else @click="switchAccount(row)">
                 <button
                   style="text-transform: uppercase"
-                  class="btn btn-danger button-theme btn-sm"
+                  class="btn btn-danger btn-sm"
                   title="Click to switch to this account"
                 >
                   Switch
@@ -140,12 +146,21 @@
 </template>
 
 <script>
+import config from "../../config";
 import notificationMixins from "../../mixins/notificationMixins";
 import SimpleVueValidation from "simple-vue-validator";
 import { isValidURL,isValidText } from '../../mixins/fieldValidationMixin';
 export default {
   name: "Teammate",
   components: {},
+  computed:{
+ buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     }
+  },
   data() {
     return {
       email: "",
@@ -237,8 +252,8 @@ export default {
           title: "Invite Form",
           html: `<input type="email" id="email" class="swal2-input" placeholder="Email">
     <input type="name" id="name" class="swal2-input" placeholder="Name">`,
-          confirmButtonText: '<span style="color:black">Send Invitation</span>',
-          confirmButtonColor: "#f1b319",
+          confirmButtonText: '<span style="{color:${config.app.buttonTextColor}"}>Send Invitation</span>',
+          confirmButtonColor: `${config.app.buttonBgColor}`,
           focusConfirm: false,
           showCloseButton: true,
           allowOutsideClick: false,
