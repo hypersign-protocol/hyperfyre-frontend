@@ -63,16 +63,16 @@ label {
   margin: 0 2px;
   border-radius: 3px;
 }
-.paginationContainer >>> li.active {
-  background-color: #f1b319;
+.paginationContainer >>> :deep(li.active) {
+  background-color: var(--button-bg-color);
   color: #fff;
 }
 .dot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  border: 1px solid #f1b319;
-  background-color: #f1b319;
+  border: 1px solid var(--button-bg-color);;
+  background-color: var(--button-bg-color);;
   margin: 1px 0;
 }
 .modal-text {
