@@ -12,7 +12,7 @@ color: white !important;
 }
 </style>
 <template>
-	<b-navbar class="nav-bar" toggleable="lg" v-if="show">
+	<b-navbar class="nav-bar" :style="themeCss" toggleable="lg" v-if="show">
 		<b-navbar-brand href="https://fyre.hypersign.id/" target="blank">
 			<img src="../../assets/Fyre_Small.png" height="50px">
 		</b-navbar-brand>
@@ -32,6 +32,7 @@ color: white !important;
 </template>
 
 <script>
+import config from "../../config.js"
 import eventBus from "../../eventBus.js"
 export default {
 	name: 'NavBar',
@@ -43,6 +44,13 @@ export default {
 		show: {
 			required: true,
 			type: Boolean
+		}
+	},
+	computed: {
+		themeCss(){
+			return{
+				'--theme-bg-color':config.app.themeBgColor
+			}
 		}
 	},
 	data: () => ({
