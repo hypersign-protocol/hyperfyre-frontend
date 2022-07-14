@@ -59,7 +59,7 @@ padding: 0.1em;
 }
 .nav-bar {
     padding: 10px 100px !important;
-    background: #363740;
+    background: var(--theme-bg-color);
 }
 .menu {
     display: flex;
