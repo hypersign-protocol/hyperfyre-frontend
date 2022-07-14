@@ -8,8 +8,8 @@ const config = {
         decription: process.env.VUE_APP_DESC,
         version: process.env.VUE_APP_VERSION,
         buttonBgColor: process.env.VUE_APP_BTN_BACKGROUND|| "#f1b319",
-        buttonTextColor: process.env.VUE_APP_BTN_TXT_COLOR || "black"
-      
+        buttonTextColor: process.env.VUE_APP_BTN_TXT_COLOR || "black",
+        themeBgColor: process.env.VUE_APP_THEME_BACKGROUND || "rgb(54, 55, 64)",
 
     },
     recaptchaSiteKey: process.env.VUE_APP_RECAPTCHA_SITE_KEY,
