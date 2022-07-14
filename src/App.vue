@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-   <NavBar :title="name" :show="showUserNav" /> 
+   <NavBar :title="name" :show="showUserNav" :themeData="themeData" /> 
     <!-- <NavBar title="Fyre" :show="showUserNav" /> -->
 
     <!-- <div :class="[
@@ -59,6 +59,10 @@ export default {
   },
   data() {
     return {
+      themeData: {
+        themeColor: "",
+        logoPath: ""
+      },
       name: config.appName,
       hover: false,
       authToken: localStorage.getItem("authToken"),
@@ -157,6 +161,11 @@ export default {
     
     eventBus.$on('UpdateAdminNav',   (isSubscribed) => {
         this.isSubscribed = isSubscribed;
+    })
+
+  
+    eventBus.$on("UpdateThemeEvent", (themeData) => {
+      Object.assign(this.themeData, { ...themeData })
     })
 
     if(this.$route.meta.admin){
