@@ -98,6 +98,20 @@ const router = new Router({
             },
         },
         {
+            path: "/admin/setting/org",
+            name: "Org",
+            component: () =>
+                import (
+                    /* webpackChunkName: "dashboard" */
+                    "./views/admin/setting/OrgSetting.vue"
+                ),
+            meta: {
+                requiresAuth: true,
+                admin: true,
+                title: `${config.appName} - Org`
+            },
+        },
+        {
             path: "/admin/createapp",
             name: "CreateApp",
             component: () =>

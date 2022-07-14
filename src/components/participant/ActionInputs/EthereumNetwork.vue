@@ -92,6 +92,9 @@ export default {
     },
     done: {
       required: true,
+    },
+    themeData: {
+      required: true,
     }
   },
   components: {
@@ -100,8 +103,8 @@ export default {
 computed:{
  buttonThemeCss() {
       return {
-        '--button-bg-color': config.app.buttonBgColor,
-        '--button-text-color':config.app.buttonTextColor
+        '--button-bg-color': this.themeData.buttonBGColor,
+        '--button-text-color': this.themeData.buttonTextColor
       }
      }
   },

@@ -39,12 +39,13 @@ export default {
   props: {
     fontColor: String,
     themeColor: String,
+    themeData: Object
   },
   computed:{
         buttonThemeCss() {
       return {
-        '--button-bg-color': config.app.buttonBgColor,
-        '--button-text-color':config.app.buttonTextColor
+        '--button-bg-color': this.themeData && this.themeData.buttonBGColor ? this.themeData.buttonBGColor : config.app.buttonBgColor,
+        '--button-text-color': this.themeData && this.themeData.buttonTextColor ? this.themeData.buttonTextColor : config.app.buttonTextColor
       }
     }
   },
