@@ -99,6 +99,12 @@ export default {
               exactPath: true,
             },
             {
+              href: "/admin/setting/org",
+              title: "Org",
+              icon: "fa fa-university",
+              exactPath: true,
+            },
+            {
               href: "/admin/createapp",
               title: "Apps",
               icon: "fa fa-plus",
@@ -160,6 +166,7 @@ export default {
           window.location.pathname.includes("/admin/dashboard") ||
           window.location.pathname.includes("/admin/subscription") ||
           window.location.pathname.includes("/admin/teams") ||
+          window.location.pathname.includes("/admin/setting/org") ||
           window.location.pathname.includes("/admin/createapp") ?
           true :
           false;
@@ -175,6 +182,7 @@ export default {
           window.location.pathname.includes("/admin/dashboard") ||
           window.location.pathname.includes("/admin/subscription") ||
           window.location.pathname.includes("/admin/teams") ||
+      window.location.pathname.includes("/admin/setting/org") ||
           window.location.pathname.includes("/admin/createapp") ?
           true :
           false;
@@ -184,6 +192,7 @@ export default {
           window.location.pathname.includes("/admin/dashboard") ||
           window.location.pathname.includes("/admin/subscription") ||
           window.location.pathname.includes("/admin/teams") ||
+      window.location.pathname.includes("/admin/setting/org") ||
           window.location.pathname.includes("/admin/createapp") ?
           true :
           false;

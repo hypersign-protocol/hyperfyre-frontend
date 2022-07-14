@@ -1,36 +1,4 @@
 <style scoped>
-.addmargin {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.vue-logo-back {
-  background-color: var(--button-text-color);
-}
-
-.logo {
-  width: 144px;
-}
-
-.fullbody {
-  width: 100%;
-}
-.floatLeft {
-  float: left;
-}
-
-.floatRight {
-  float: right;
-}
-
-.noBullet {
-  list-style-type: none;
-}
-
-.title {
-  color: grey;
-  font-size: 18px;
-}
 .button-theme{
   background-color:  var(--button-bg-color);
   border-collapse: var(--button-bg-color);
