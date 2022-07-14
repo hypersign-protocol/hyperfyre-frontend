@@ -7,8 +7,8 @@ const config = {
         name: process.env.VUE_APP_TITLE,
         decription: process.env.VUE_APP_DESC,
         version: process.env.VUE_APP_VERSION,
-        buttonBgColor: process.env.VUE_APP_BTN_BACKGROUND,
-        buttonTextColor: process.env.VUE_APP_BTN_TXT_COLOR,
+        buttonBgColor: process.env.VUE_APP_BTN_BACKGROUND|| "#f1b319",
+        buttonTextColor: process.env.VUE_APP_BTN_TXT_COLOR || "black"
       
 
     },
