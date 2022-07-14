@@ -61,7 +61,7 @@
 }
 
 .accordion-header-theme{
-  background-color: rgba(241, 179, 25, 0.24);
+  background-color: var(--header-bg-color);
   border: 0;
   border-radius: 0px 0px 20px 20px;
 }
@@ -73,13 +73,13 @@
       <div class="col-md-6">
         <div class="card tile" >
           <div class="card-body tile-number">{{ projectCount }}</div>
-          <div class="card-header accordion-header-theme" style="font-size:13px; border-radius: 0px 0px 0px 5px;">TOTAL EVENTS</div>
+          <div class="card-header accordion-header-theme" :style="headerThemeCss" style="font-size:13px; border-radius: 0px 0px 0px 5px;">TOTAL EVENTS</div>
         </div>
       </div>
       <div class="col-md-6" >
         <div class="card tile">
           <div class="card-body tile-number">{{ schemaCount }}</div>
-          <div class="card-header accordion-header-theme" style="font-size:13px; border-radius: 0px 0px 0px 5px;">TOTAL PARTICIPANTS</div>
+          <div class="card-header accordion-header-theme" :style="headerThemeCss"  style="font-size:13px; border-radius: 0px 0px 0px 5px;">TOTAL PARTICIPANTS</div>
         </div>
       </div>
     </div>
@@ -118,6 +118,7 @@
 </template>
 
 <script>
+import config from "../../config";
 import profileIconMixins from "../../mixins/profileIconMixins";
 
 export default {
@@ -125,6 +126,14 @@ export default {
   mounted() {},
   components: {},
   mixins: [profileIconMixins],
+   computed:{
+    headerThemeCss(){
+    return{
+      '--header-bg-color': config.app.headerBGColor,
+      '--header-text-color':config.app.headerTextColor
+      }
+    }
+  },
   data() {
     return {
       active: 0,
