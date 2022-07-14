@@ -637,6 +637,7 @@
           <button
             @click="handleEventActionAdd()"
             class="btn button-theme"
+            :style="buttonThemeCss" 
             type="button"
           >
             {{ eventActionList.includes(selected) ? "Update" : "Add" }}
@@ -648,6 +649,7 @@
           <button
             @click="handleEventActionUpdate()"
             class="btn button-theme slight-left-margin"
+            :style="buttonThemeCss" 
             type="button"
           >
             Update
@@ -709,9 +711,9 @@
 }
 
 .button-theme {
-  background-color: #f1b319;
-  border-collapse: #f1b319;
-  color: black;
+  background-color: var(--button-bg-color);
+  border-collapse: var(--button-bg-color);
+  color:var(--button-text-color);;
   border: 0;
 }
 .slight-left-margin {
@@ -777,6 +779,12 @@ export default {
     // }
   },
   computed: {
+      buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     },
     codemirror() {
       return this.$refs.cmEditor.codemirror;
     },
