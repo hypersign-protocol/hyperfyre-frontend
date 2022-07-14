@@ -6,6 +6,7 @@
         <div class="accordion" role="tablist" v-for="resource in resources" v-bind="resource.name">
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme"
+                :style="headerThemeCss"
                     role="tab">
                     <div class="row" style="padding-left: 5px; padding-right:5px;">
                         <div class="col-md-10">
@@ -47,6 +48,7 @@
         <div class="accordion" role="tablist">
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme"
+                :style="headerThemeCss"
                     role="tab">
                     <b-button block v-b-toggle.accordian-logs class="bg-transparent border-0 text-left text-primary">
                         <!-- <i class="fas fa-cog"></i> -->
@@ -127,7 +129,7 @@
 }
 
 .accordion-header-theme {
-    background-color: rgba(241, 179, 25, 0.24);
+    background-color:var(--header-bg-color);
     border: 0;
 }
 
@@ -189,7 +191,13 @@ export default {
         '--button-bg-color': config.app.buttonBgColor,
         '--button-text-color':config.app.buttonTextColor
       }
-     }
+     },
+      headerThemeCss(){
+    return{
+      '--header-bg-color': config.app.headerBGColor,
+      '--header-text-color':config.app.headerTextColor
+      }
+  },
     },
     mixins: [notificationMixins],
     data() {

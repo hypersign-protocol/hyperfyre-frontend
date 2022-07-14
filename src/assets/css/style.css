@@ -59,7 +59,7 @@ padding: 0.1em;
 }
 .nav-bar {
     padding: 10px 100px !important;
-    background: #363740;
+    background: var(--theme-bg-color);
 }
 .menu {
     display: flex;
@@ -147,7 +147,7 @@ ul.social-links li:hover {
     line-height: 20px;
     text-align: center;
     letter-spacing: 0.2px;
-    color: #292825;
+    color:var(--button-text-color);
     background: var(--button-bg-color);
     box-shadow: 0px 4px 12px rgba(55, 81, 255, 0.24);
     border-radius: 8px;
