@@ -7,10 +7,11 @@ const config = {
         name: process.env.VUE_APP_TITLE,
         decription: process.env.VUE_APP_DESC,
         version: process.env.VUE_APP_VERSION,
-        buttonBgColor: process.env.VUE_APP_BTN_BACKGROUND|| "#f1b319",
+        buttonBgColor: process.env.VUE_APP_BTN_BACKGROUND || "#f1b319",
         buttonTextColor: process.env.VUE_APP_BTN_TXT_COLOR || "black",
+        headerBGColor:process.env.VUE_APP_HEADER_BACKGROUND || "rgba(241, 179, 25, 0.24)",
+        headerTextColor:process.env.VUE_APP_HEADER_TEXT_COLOR || "#212529"
         themeBgColor: process.env.VUE_APP_THEME_BACKGROUND || "rgb(54, 55, 64)",
-
     },
     recaptchaSiteKey: process.env.VUE_APP_RECAPTCHA_SITE_KEY,
     webWalletAddress: urlSanitizer(process.env.VUE_APP_WEBWALLET_URL, false),

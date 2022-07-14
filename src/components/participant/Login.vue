@@ -10,7 +10,7 @@
               </div>
             </template>
             <template v-else-if="value && value != ''">
-              <b-button variant="warning" class="btn-login" @click.prevent="openWalletAfterRecaptcha()">Click To Login
+              <b-button variant="warning" class="btn-login" :style="buttonThemeCss" @click.prevent="openWalletAfterRecaptcha()">Click To Login
                 <!--<vue-recaptcha
                   ref="recaptcha"
                   size="invisible"
@@ -28,6 +28,7 @@
   </div>
 </template>
 <script>
+import config from "../../config";
 import VueRecaptcha from "vue-recaptcha";
 import Messages from "../../utils/messages/participants/en";
 import url from "url";
@@ -38,6 +39,14 @@ export default {
   props: {
     fontColor: String,
     themeColor: String,
+  },
+  computed:{
+        buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+    }
   },
   data() {
     return {

@@ -14,7 +14,7 @@
 }
 
 .accordion-header-theme {
-  background-color: rgba(241, 179, 25, 0.24);
+  background-color: var(--header-bg-color);
   border: 0;
 }
 </style>
@@ -223,6 +223,12 @@ export default {
         '--button-text-color':config.app.buttonTextColor
       }
      },
+      headerThemeCss(){
+    return{
+      '--header-bg-color': config.app.headerBGColor,
+      '--header-text-color':config.app.headerTextColor
+      }
+  },
     grandTotal() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.plan.grandTotal = this.plan.price - this.discount;

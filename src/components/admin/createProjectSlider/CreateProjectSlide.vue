@@ -23,11 +23,11 @@
 }
 
 .theme-color{
-  color:#000000a1;
+  color: var(--header-text-color);
 }
 
 .accordion-header-theme {
-  background-color: rgba(241, 179, 25, 0.24);
+  background-color:var(--header-bg-color);
   border: 0;
 }
 .fa-exclamation-circle{
@@ -74,7 +74,7 @@
       <div class="px-3 py-2">
         <div class="accordion" role="tablist" v-if="preview">
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme" role="tab">
+            <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme" :style="headerThemeCss" role="tab">
               <b-button v-b-toggle.accordion-1 style="pointer-events:none;" variant="info"
                 class="bg-transparent border-0 text-left theme-color" title="Preview"><i
                   class="fas fa-file-contract"></i> Preview
@@ -95,7 +95,7 @@
         </div>
         <div class="accordion" role="tablist" v-else>
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme" role="tab">
+            <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme" :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-1 class="bg-transparent border-0 text-left theme-color"
                 title="Create General configuration for your event"><i class="fas fa-cog"></i> General Configurations
               </b-button>
@@ -110,7 +110,7 @@
           </b-card>
 
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" role="tab">
+            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-2 variant="info"
                 class="bg-transparent border-0 text-left theme-color"
                 title="Create Referral configuration for your event"><i class="fa fa-user-plus"></i> Referral
@@ -133,7 +133,7 @@
           </b-card>
           <!--Prize  -->
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme" role="tab">
+            <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme" :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-3 class="bg-transparent border-0 text-left theme-color"
                 title="Create Prize configuration for your event"><i class="fas fa-gift"></i> Prize Configurations
               </b-button>
@@ -149,7 +149,7 @@
 
           <!--KYC CONFIG-->
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme" role="tab">
+            <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-8 class="bg-transparent border-0 text-left theme-color"
                 title="Create Kyc configuration for your event"><i class="fas fa-id-card"></i> KYC Configurations
               </b-button>
@@ -165,7 +165,7 @@
 
 
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" role="tab">
+            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-4 variant="info"
                 class="bg-transparent border-0 text-left theme-color"
                 title="Create Custom Inputs configuration for your event"><i class="fab fa-intercom"></i> Custom Inputs
@@ -181,7 +181,7 @@
           </b-card>
 
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" role="tab">
+            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-5 variant="info"
                 class="bg-transparent border-0 text-left theme-color"
                 title="Create Social configuration for your event"><i class="fas fa-share-alt"></i> Social
@@ -197,7 +197,7 @@
           </b-card>
 
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" role="tab">
+            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-6 variant="info"
                 class="bg-transparent border-0 text-left theme-color"
                 title="Create Wallet configuration for your event"><i class="fab fa-bitcoin"></i> Collect Wallet
@@ -214,7 +214,7 @@
 
           <!-- Smart Contract Config -->
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" role="tab">
+            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-7 variant="info"
                 class="bg-transparent border-0 text-left theme-color"
                 title="Create Smart contract configuration for your event"><i class="fas fa-file-contract"></i> Tokens
@@ -234,7 +234,7 @@
           <!--Custom Smart Contract-->
 
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" role="tab">
+            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-9 variant="info"
                 class="bg-transparent border-0 text-left theme-color"
                 title="Create Custom Smart contract configuration for your event"><i class="fas fa-file-contract"></i>
@@ -253,6 +253,7 @@
             <b-card-header
               header-tag="header"
               class="p-1 accordin-header accordion-header-theme"
+               :style="headerThemeCss" 
               role="tab"
             >
               <b-button
@@ -281,6 +282,7 @@
             <b-card-header
               header-tag="header"
               class="p-1 accordin-header accordion-header-theme"
+               :style="headerThemeCss" 
               role="tab"
             >
               <b-button
@@ -396,6 +398,12 @@ export default {
         '--button-text-color':config.app.buttonTextColor
       }
      },
+      headerThemeCss(){
+    return{
+      '--header-bg-color': config.app.headerBGColor,
+      '--header-text-color':config.app.headerTextColor
+      }
+  },
     getTagDb: function () {
       if (this.tagFdb && this.tagFdb.length > 0) {
         for (let index = 0; index < this.tagFdb.length; index++) {
