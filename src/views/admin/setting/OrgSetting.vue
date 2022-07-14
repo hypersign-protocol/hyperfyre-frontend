@@ -46,7 +46,7 @@
                         </div>
                         <div class="row g-3 align-items-center w-100 mt-4">
                             <div class="text-left col-lg-8 col-md-8 text-left">
-                                <tool-tips infoMessage="Enter color in HEX format"></tool-tips><label for="name"
+                                <tool-tips infoMessage="Enter logo path"></tool-tips><label for="name"
                                     class="col-form-label">Logo Path
                                     <span style="color: red">*</span>:
                                 </label>
