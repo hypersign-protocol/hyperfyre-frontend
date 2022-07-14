@@ -47,9 +47,9 @@
 }
 
 .button-theme{
-  background-color: #F1B319;
-  border-collapse: #F1B319;
-  color: black;
+  background-color: var(--button-bg-color);
+  border-collapse: var(--button-bg-color);
+  color:var(--button-text-color);
   border: 0;
   
 }
@@ -205,7 +205,7 @@
             <b-form-select v-model="selected.type" :options="options"></b-form-select>
           </div>  
           <div class="col-lg-1 col-md-1 px-0" >
-            <button @click="handleEventActionAdd()" class="btn button-theme slight-left-margin-5" type="button"> {{eventActionList.includes(selected) ? "Cancel" : "Add"}}</button>
+            <button @click="handleEventActionAdd()" class="btn button-theme slight-left-margin-5"  :style="buttonThemeCss" type="button"> {{eventActionList.includes(selected) ? "Cancel" : "Add"}}</button>
           </div>
         </div>
       </div>
@@ -226,6 +226,7 @@
 </template>
 
 <script>
+import config from "../../../../config"
 import Datepicker from 'vuejs-datetimepicker'
 import notificationMixins from "../../../../mixins/notificationMixins"
 import Messages from "../../../../utils/messages/admin/en";
@@ -233,6 +234,14 @@ import ToolTips from "../../../basic/toolTips.vue";
 export default {
   name: "GeneralConfig",
   components: {Datepicker, ToolTips},
+  computed:{
+buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     }
+  },
   data(){
       return{
         idx:null,

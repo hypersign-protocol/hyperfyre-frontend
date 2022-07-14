@@ -6,7 +6,11 @@ const config = {
     app: {
         name: process.env.VUE_APP_TITLE,
         decription: process.env.VUE_APP_DESC,
-        version: process.env.VUE_APP_VERSION
+        version: process.env.VUE_APP_VERSION,
+        buttonBgColor: process.env.VUE_APP_BTN_BACKGROUND|| "#f1b319",
+        buttonTextColor: process.env.VUE_APP_BTN_TXT_COLOR || "black"
+      
+
     },
     recaptchaSiteKey: process.env.VUE_APP_RECAPTCHA_SITE_KEY,
     webWalletAddress: urlSanitizer(process.env.VUE_APP_WEBWALLET_URL, false),

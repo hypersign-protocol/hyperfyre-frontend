@@ -35,6 +35,7 @@
                             </div>
                             <div class="col-lg-4 col-md-3 ">
                                 <button type="button" class="btn btn-outline-primary button-theme"
+                                :style="buttonThemeCss"
                                     @click="execute(resource)">Execute</button>
                             </div>
                         </div>
@@ -119,9 +120,9 @@
 
 } */
 .button-theme {
-    background-color: #f1b319;
-    border-collapse: #f1b319;
-    color: black;
+    background-color: var(--button-bg-color);
+    border-collapse:  var(--button-bg-color);
+    color: var(--button-text-color);
     border: 0;
 }
 
@@ -140,7 +141,7 @@
     visibility: hidden;
     width: 250px;
     height: auto;
-    background-color: #F1B319;
+    background-color: var(--button-bg-color);
     color: #fff;
     text-align: center;
     padding: 5px 0;
@@ -162,7 +163,7 @@
 .info {
     display: flex;
     padding: 03px;
-    color: #F1B319;
+    color: var(--button-bg-color);
     font-size: 22px;
     border-radius: 50%;
     margin-left: 200px;
@@ -173,6 +174,7 @@
 </style>
 
 <script>
+import config from "../../config";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
@@ -180,6 +182,14 @@ import notificationMixins from "../../mixins/notificationMixins";
 export default {
     components: {
         Loading
+    },
+    computed: {
+          buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     }
     },
     mixins: [notificationMixins],
     data() {

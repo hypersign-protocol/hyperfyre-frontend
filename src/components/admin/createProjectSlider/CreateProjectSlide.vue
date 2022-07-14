@@ -16,9 +16,9 @@
 
 } */
 .button-theme {
-  background-color: #f1b319;
-  border-collapse: #f1b319;
-  color: black;
+  background-color:  var(--button-bg-color);
+  border-collapse: var(--button-bg-color);
+  color: var(--button-text-color);
   border: 0;
 }
 
@@ -39,7 +39,7 @@
   visibility: hidden;
   width: 250px;
   height: auto;
-  background-color: #F1B319;
+  background-color: var(--button-bg-color);
   color: #fff;
   text-align: center;
   padding: 5px 0;
@@ -58,7 +58,7 @@
 .info {
   display:flex;
   padding:03px;
-  color:#F1B319;
+  color:var(--button-bg-color);;
   font-size:22px;
   border-radius:50%;
   margin-left: 200px;
@@ -310,10 +310,10 @@
           </b-card> -->
         </div>
 
-        <button class="btn btn-primary mt-3 button-theme  mr-3" type="button" @click="openPreview">
+        <button class="btn btn-primary mt-3 button-theme  mr-3" :style="buttonThemeCss" type="button" @click="openPreview">
           Preview
         </button>
-        <button class="btn btn-primary mt-3 button-theme" type="button" @click="saveProject">
+        <button class="btn btn-primary mt-3 button-theme" :style="buttonThemeCss" type="button" @click="saveProject">
           Save
         </button>
       </div>
@@ -322,6 +322,7 @@
 </template>
 
 <script>
+import config from "../../../config"
 import EventActionConfig from "./components/EventActionConfig.vue";
 import PreviewConfig from "./components/PreviewConfig.vue";
 import GeneralConfig from "./components/GeneralConfig.vue";
@@ -389,6 +390,12 @@ export default {
 
   computed: {
     // a computed getter
+     buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     },
     getTagDb: function () {
       if (this.tagFdb && this.tagFdb.length > 0) {
         for (let index = 0; index < this.tagFdb.length; index++) {

@@ -14,7 +14,7 @@
           <div class="text text-capitalize">{{ data.title }}</div>
         </b-col>
         <b-col cols="2" sm="2" md="2">
-          <b-badge class="btn-score" @click="update()" v-if="!done">
+          <b-badge class="btn-score" :style="buttonThemeCss" @click="update()" v-if="!done">
             <img src="../../../assets/plus.svg" />
             {{ data.score }}
           </b-badge>
@@ -58,6 +58,7 @@
 </style>
 
 <script>
+import config from "../../../config.js";
 import eventBus from "../../../eventBus.js";
 import {
   isValidURL,
@@ -77,6 +78,14 @@ export default {
     done:{
       required: true,
     }
+  },
+computed:{
+ buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     }
   },
   data() {
     return {
