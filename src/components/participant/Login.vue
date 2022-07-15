@@ -10,7 +10,7 @@
               </div>
             </template>
             <template v-else-if="value && value != ''">
-              <b-button variant="warning" class="btn-login" :style="buttonThemeCss" @click.prevent="openWalletAfterRecaptcha()">Click To Login
+              <b-button  class="btn-login button-theme" :style="buttonThemeCss" @click.prevent="openWalletAfterRecaptcha()">Click To Login
                 <!--<vue-recaptcha
                   ref="recaptcha"
                   size="invisible"
@@ -154,6 +154,12 @@ export default {
 };
 </script>
 <style scoped>
+.button-theme {
+  background-color:  var(--button-bg-color);
+  border-collapse: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: 0;
+}
 .logincontent {
   margin-top: 20px;
   padding: 2px;
