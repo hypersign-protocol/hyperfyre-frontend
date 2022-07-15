@@ -106,6 +106,7 @@ export default {
             },
             isLoading: false,
             authToken: localStorage.getItem("authToken"),
+            accessToken: localStorage.getItem('accessToken'),
             project: {
                 "isArchived": false,
                 "investorsCount": 5,
@@ -257,6 +258,7 @@ export default {
             let headers = {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${this.authToken}`,
+                AccessToken: `Bearer ${this.accessToken}`,
             };
 
             return headers;
