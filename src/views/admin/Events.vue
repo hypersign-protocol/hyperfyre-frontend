@@ -405,6 +405,7 @@ i {
       :force-page="currentPage"
       :containerClass="'paginationContainer'"
       :page-class="'paginationItem'"
+      :style="buttonThemeCss"
     >
     </paginate>
   </div>
