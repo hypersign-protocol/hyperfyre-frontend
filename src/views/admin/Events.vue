@@ -189,6 +189,7 @@ i {
             :taggable="false"
             :close-on-select="false"
             :clear-on-select="false"
+            :style="buttonThemeCss"
             @input="onInputTag"
           >
           </multiselect>
