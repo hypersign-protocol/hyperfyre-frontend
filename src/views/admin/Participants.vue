@@ -63,7 +63,7 @@ label {
   margin: 0 2px;
   border-radius: 3px;
 }
-.paginationContainer >>> :deep(li.active) {
+.paginationContainer >>> li.active {
   background-color: var(--button-bg-color);
   color: #fff;
 }
@@ -233,6 +233,7 @@ label {
         :nextText="'Next'"
         :containerClass="'paginationContainer'"
         :page-class="'paginationItem '"
+        :style="buttonThemeCss"
       >
       </paginate>
       <div class="ml-auto">
