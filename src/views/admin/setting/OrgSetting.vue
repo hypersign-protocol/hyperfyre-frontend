@@ -246,7 +246,7 @@ export default {
                 throw new Error('Theme color can not be empty')
             }
             if (!isValidURL(this.orgSetting.logoPath)){
-                throw new Error('Invalid URL')
+                throw new Error('Invalid path')
             }
 
             this.checkIfValidHex(this.orgSetting.buttonBGColor)
