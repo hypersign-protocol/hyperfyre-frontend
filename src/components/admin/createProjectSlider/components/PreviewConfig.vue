@@ -268,7 +268,7 @@ cursor:default !important
               </b-col>
 
               <b-col cols="2" sm="2" md="2">
-                <b-badge class="btn-score">
+                <b-badge class="btn-score" :style="buttonThemeCss">
                   <img src="../../../../assets/plus.svg" />
                   {{ action.score }}
                 </b-badge>
@@ -282,6 +282,7 @@ cursor:default !important
 </template>
 
 <script>
+import config from "../../../../config";
 import Banner from "../../../participant/Banner.vue";
 import Metrics from "../../../participant/Metrics.vue";
 import draggable from "vuedraggable";
@@ -293,7 +294,14 @@ export default {
     },
   },
   components: { Banner, Metrics, draggable },
-
+computed:{
+ buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     }
+  },
 methods: {
     onEnd() {
       this.$root.$emit("actionReorder", this.eventData.actions);

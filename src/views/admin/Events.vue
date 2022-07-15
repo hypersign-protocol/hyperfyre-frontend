@@ -189,6 +189,7 @@ i {
             :taggable="false"
             :close-on-select="false"
             :clear-on-select="false"
+            :style="buttonThemeCss"
             @input="onInputTag"
           >
           </multiselect>
@@ -405,6 +406,7 @@ i {
       :force-page="currentPage"
       :containerClass="'paginationContainer'"
       :page-class="'paginationItem'"
+      :style="buttonThemeCss"
     >
     </paginate>
   </div>

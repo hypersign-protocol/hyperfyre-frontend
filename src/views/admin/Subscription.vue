@@ -120,7 +120,7 @@ i {
     <b-row class="subscription-wrap">
       <template v-for="plan in plans">
         <b-col cols="12" sm="6" md="3" :key="plan._id" v-if="plan.price !== 0" class="subscription-column">
-          <b-card no-body class="pricing-card" :class="(plan.planName === 'Lambo') ? 'popular' : ''">
+          <b-card no-body class="pricing-card" :class="(plan.planName === 'Lambo') ? 'popular' : ''" :style="buttonThemeCss">
             <b-card-body>
               <h4 class="pricing-heading">
                 <span v-html="getEmoji(plan.planName)"></span>
