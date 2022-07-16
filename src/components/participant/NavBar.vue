@@ -21,7 +21,7 @@ color: white !important;
 			<template #button-content>
 				<b-icon style="color:white" icon="menu-button-wide"></b-icon>
 			</template>
-			<b-dropdown-item to="/user/home/">
+			<b-dropdown-item to="/user/home/" @click="updateIsForm">
 				Home
 			</b-dropdown-item>
 			<b-dropdown-item @click="logout" v-if="authToken != '' && authToken != null">
@@ -48,12 +48,16 @@ export default {
 		themeData: {
 			required: true,
 			type:Object 
+		},
+		isForm:{
+			required: true,
+			type: Boolean
 		}
 	},
 	computed: {
 		themeCss(){
 			return{
-				'--theme-bg-color': this.themeData.themeColor ? this.themeData.themeColor : config.app.themeBgColor
+				'--theme-bg-color': (this.themeData.themeColor && this.isForm) ? this.themeData.themeColor : config.app.themeBgColor
 			}
 		}
 	},
@@ -74,6 +78,9 @@ export default {
 		logout() {
 			localStorage.clear();
 			this.$router.go()
+		},
+		updateIsForm() {
+			this.isForm= false
 		}
 	}
 }
