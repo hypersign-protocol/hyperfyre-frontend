@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-   <NavBar :title="name" :show="showUserNav" :themeData="themeData" /> 
+   <NavBar :title="name" :show="showUserNav" :themeData="themeData" :isForm="isForm" /> 
     <!-- <NavBar title="Fyre" :show="showUserNav" /> -->
 
     <!-- <div :class="[
@@ -153,7 +153,8 @@ export default {
 
       // Nav for user's end
       showUserNav: false,
-      showChat:false
+      showChat:false,
+      isForm:false,
     };
   },
 
@@ -182,6 +183,7 @@ export default {
     }else{
       this.showUserNav = window.location.pathname.includes("/form") ||
         window.location.pathname.includes("/user") || window.location.pathname.includes("/sa/home")?true : false
+        this.isForm= window.location.pathname.includes("/form")? true:false
     }
   },
   updated() {
