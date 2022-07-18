@@ -106,6 +106,7 @@ export default {
             },
             isLoading: false,
             authToken: localStorage.getItem("authToken"),
+            accessToken: localStorage.getItem('accessToken'),
             project: {
                 "isArchived": false,
                 "investorsCount": 5,
@@ -245,10 +246,11 @@ export default {
             if (!this.orgSetting.themeColor) {
                 throw new Error('Theme color can not be empty')
             }
-            if (!isValidURL(this.orgSetting.logoPath)){
-                throw new Error('Invalid URL')
+            if(this.orgSetting.logoUrl){
+                 if (!isValidURL(this.orgSetting.logoPath)){
+                   throw new Error('Invalid URL')
             }
-
+            }
             this.checkIfValidHex(this.orgSetting.buttonBGColor)
             this.checkIfValidHex(this.orgSetting.buttonTextColor)
             this.checkIfValidHex(this.orgSetting.themeColor)
@@ -257,6 +259,7 @@ export default {
             let headers = {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${this.authToken}`,
+                AccessToken: `Bearer ${this.accessToken}`,
             };
 
             return headers;
