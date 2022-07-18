@@ -251,9 +251,10 @@ export default {
         let headers = {
           Authorization: `Bearer ${this.authToken}`,
         };
+        const body= { isParticpant: true}
         const res = await apiClient.makeCall({
           url,
-          body: {},
+          body: body,
           header: headers,
           method: "POST",
         });
