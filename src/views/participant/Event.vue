@@ -184,9 +184,10 @@ export default {
         }
         }
         const url = `${this.$config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
+        const body= {isParticipant:true}
         const res = await apiClient.makeCall({
           url,
-          body: {},
+          body,
           header: headers,
           method: "POST",
         });
@@ -260,7 +261,7 @@ export default {
                   "Content-Type": "application/json",
                   "externaluseraccesstoken":`Bearer ${this.userRedirectionToken}`
                 };
-                const resp = await apiClient.makeCall({ method: "POST", url: url, body: {},header: headers })
+                const resp = await apiClient.makeCall({ method: "POST", url: url, body:{},dxQheader: headers })
             this.externalUserId= resp.data.data.externalUserMappingId
             this.authToken=resp.data.data.authToken
             localStorage.setItem("externalUserMappingId", JSON.stringify(this.externalUserId));
