@@ -246,7 +246,7 @@ export default {
             if (!this.orgSetting.themeColor) {
                 throw new Error('Theme color can not be empty')
             }
-            if(this.orgSetting.logoUrl){
+            if(this.orgSetting.logoPath){
                  if (!isValidURL(this.orgSetting.logoPath)){
                    throw new Error('Invalid URL')
             }
