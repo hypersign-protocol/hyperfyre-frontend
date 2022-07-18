@@ -246,10 +246,11 @@ export default {
             if (!this.orgSetting.themeColor) {
                 throw new Error('Theme color can not be empty')
             }
-            if (!isValidURL(this.orgSetting.logoPath)){
-                throw new Error('Invalid URL')
+            if(this.orgSetting.logoUrl){
+                 if (!isValidURL(this.orgSetting.logoPath)){
+                   throw new Error('Invalid URL')
             }
-
+            }
             this.checkIfValidHex(this.orgSetting.buttonBGColor)
             this.checkIfValidHex(this.orgSetting.buttonTextColor)
             this.checkIfValidHex(this.orgSetting.themeColor)
