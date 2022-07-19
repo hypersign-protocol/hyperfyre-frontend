@@ -159,7 +159,7 @@ export default {
   },
 
   mounted() {
-    
+
     eventBus.$on('UpdateAdminNav',   (isSubscribed) => {
         this.isSubscribed = isSubscribed;
     })
@@ -167,8 +167,8 @@ export default {
   
     eventBus.$on("UpdateThemeEvent", (themeData) => {
       Object.assign(this.themeData, { ...themeData })
+      this.isForm = window.location.pathname.includes("/form") ? true : false
     })
-
     if(this.$route.meta.admin){
       this.showNavbar =
           window.location.pathname.includes("/admin/participants") ||

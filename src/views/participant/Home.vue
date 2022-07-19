@@ -154,6 +154,7 @@ export default {
       document.title = `${config.appName} - User Home`;
       await this.fetchEventData();
 
+      // Setting to default on homepage
       eventBus.$emit('UpdateThemeEvent', {
         logoPath: null,
         themeColor: config.app.themeColor
