@@ -153,6 +153,11 @@ export default {
       //   if (this.$route.params["slug"]) {
       document.title = `${config.appName} - User Home`;
       await this.fetchEventData();
+
+      eventBus.$emit('UpdateThemeEvent', {
+        logoPath: null,
+        themeColor: config.app.themeColor
+      })
       // await this.fetchUserInfoOnLogin();
       //   }
     } catch (e) {
