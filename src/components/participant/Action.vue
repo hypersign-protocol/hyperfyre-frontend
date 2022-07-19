@@ -6,7 +6,7 @@
     <template v-for="(actionItem, index) in ActionSchema">
       <component v-if="actionItem.type==='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
         :idValue="index" :data="actionItem" :done="actionItem.isDone" :authToken="authToken"
-        @input="updateUserInfo(actionItem, $event)">
+        @input="updateUserInfo(actionItem, $event)" :themeData="themeData">
       </component>
     </template>
 
@@ -16,7 +16,7 @@
 
       <component v-if="actionItem.type!=='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
         :idValue="index" :data="actionItem" :authToken="authToken" :done="actionItem.isDone"
-        @input="updateUserInfo(actionItem, $event)">
+        @input="updateUserInfo(actionItem, $event)"  :themeData="themeData">
       </component>
     </template>
   </div>
@@ -92,6 +92,10 @@ export default {
       required: true,
       type: Array,
     },
+    themeData:{
+      required: true,
+      type: Object,
+    }
   },
   components: {
     BinanceNetwork,

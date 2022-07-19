@@ -220,7 +220,7 @@ export default {
           title: "Invite Form",
           html: `<input type="email" id="email" class="swal2-input" placeholder="Email">
     <input type="name" id="name" class="swal2-input" placeholder="Name">`,
-          confirmButtonText: '<span style="{color:${config.app.buttonTextColor}"}>Send Invitation</span>',
+          confirmButtonText: '<span style="color:black">Send Invitation</span>',
           confirmButtonColor: `${config.app.buttonBgColor}`,
           focusConfirm: false,
           showCloseButton: true,

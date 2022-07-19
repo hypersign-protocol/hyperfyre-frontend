@@ -52,7 +52,7 @@
                                 </label>
                             </div>
                             <div class="col-lg-4 col-md-4 px-0">
-                                <input type="text" id="name" v-model="orgSetting.logoPath" class="form-control w-100" />
+                                <input type="text" placehoolder="https://app.fyre.hypersign.id/img/Fyre_Small.e094f135.png" id="name" v-model="orgSetting.logoPath" class="form-control w-100" />
                             </div>
                         </div>
                         <div class="row g-3 align-items-center w-100 mt-4" style="float:right; padding-right: 1.5%">
@@ -106,6 +106,7 @@ export default {
             },
             isLoading: false,
             authToken: localStorage.getItem("authToken"),
+            accessToken: localStorage.getItem('accessToken'),
             project: {
                 "isArchived": false,
                 "investorsCount": 5,
@@ -245,10 +246,11 @@ export default {
             if (!this.orgSetting.themeColor) {
                 throw new Error('Theme color can not be empty')
             }
-            if (!isValidURL(this.orgSetting.logoPath)){
-                throw new Error('Invalid URL')
+            if(this.orgSetting.logoPath){
+                 if (!isValidURL(this.orgSetting.logoPath)){
+                   throw new Error('Invalid URL')
             }
-
+            }
             this.checkIfValidHex(this.orgSetting.buttonBGColor)
             this.checkIfValidHex(this.orgSetting.buttonTextColor)
             this.checkIfValidHex(this.orgSetting.themeColor)
@@ -257,6 +259,7 @@ export default {
             let headers = {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${this.authToken}`,
+                AccessToken: `Bearer ${this.accessToken}`,
             };
 
             return headers;

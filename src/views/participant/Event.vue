@@ -11,17 +11,18 @@
     </b-card>
 
     <template v-if="authToken == '' || authToken == null">
-      <Login class="mx-auto overflow-hidden mt-3 border-0 mainContentWdth" :themeColor="eventData.themeColor"
-        :fontColor="eventData.fontColor" @AuthTokenUpdateEvent="updateAuthentication" />
+      <Login class="mx-auto overflow-hidden mt-3 border-0 mainContentWdth" :themeData="eventData.orgData"
+        @AuthTokenUpdateEvent="updateAuthentication" />
 
       <!-- <Action v-if="eventData.projectStatus" :userProfile="null" :ActionSchema="eventActionsToShow"
         :prizeData="prizeData" @UserUpdateEvent="updateUserData" /> -->
     </template>
 
     <template>
-      <Action v-if="eventData.projectStatus" :userProfile="Object.keys(userProfileData).length > 0 ? userProfileData : null"
+      <Action v-if="eventData.projectStatus"
+        :userProfile="Object.keys(userProfileData).length > 0 ? userProfileData : null"
         :ActionSchema="eventActionsToShow" :authToken="authToken" :prizeData="prizeData"
-        @UserUpdateEvent="updateUserData" />
+        @UserUpdateEvent="updateUserData" :themeData="eventData.orgData" />
     </template>
 
     <template v-if="authToken != '' && authToken != null">
@@ -29,7 +30,8 @@
 
       <div class="footer mx-auto overflow-hidden mainContentWdth" style="align-items:center;padding-top:20px">
         <b>Disclaimer:</b>
-        Anyone can create campaigns on {{appName}}, rewards are distributed by the campaign creator and {{appName}} is not
+        Anyone can create campaigns on {{appName}}, rewards are distributed by the campaign creator and {{appName}} is
+        not
         responsible for reward distribution.
       </div>
     </template>
@@ -182,9 +184,10 @@ export default {
         }
         }
         const url = `${this.$config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
+        const body= {isParticipant:true}
         const res = await apiClient.makeCall({
           url,
-          body: {},
+          body,
           header: headers,
           method: "POST",
         });
@@ -216,6 +219,34 @@ export default {
         this.eventData = {
           ...resp.data
                 }
+        
+        // If it is old event then just recreating this variable using default values from config
+        if (!this.eventData['orgData']){
+          this.eventData['orgData'] = {}
+          if (!this.eventData['orgData'].buttonBGColor){
+            this.eventData['orgData'].buttonBGColor = config.app.buttonBgColor
+          }
+
+          if (!this.eventData['orgData'].buttonTextColor) {
+            this.eventData['orgData'].buttonTextColor = config.app.buttonTextColor
+          }
+
+          if (!this.eventData['orgData'].themeColor) {
+            this.eventData['orgData'].themeColor = config.app.themeBgColor
+          }
+        } 
+
+        eventBus.$emit('UpdateThemeEvent', { 
+          logoPath: this.eventData['orgData'].logoPath,
+          themeColor: this.eventData['orgData'].themeColor
+        })
+
+        ///  deleting data wich is not required.
+        delete this.eventData['orgData'].logoPath
+        delete this.eventData['orgData'].themeColor
+        delete this.eventData['orgData'].adminId
+        delete this.eventData['orgData'].subDomain
+        delete this.eventData['orgData']._id
       } else {
         this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG)
       }
@@ -230,7 +261,7 @@ export default {
                   "Content-Type": "application/json",
                   "externaluseraccesstoken":`Bearer ${this.userRedirectionToken}`
                 };
-                const resp = await apiClient.makeCall({ method: "POST", url: url, body: {},header: headers })
+                const resp = await apiClient.makeCall({ method: "POST", url: url, body:{},dxQheader: headers })
             this.externalUserId= resp.data.data.externalUserMappingId
             this.authToken=resp.data.data.authToken
             localStorage.setItem("externalUserMappingId", JSON.stringify(this.externalUserId));

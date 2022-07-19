@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-   <NavBar :title="name" :show="showUserNav" /> 
+   <NavBar :title="name" :show="showUserNav" :themeData="themeData" :isForm="isForm" /> 
     <!-- <NavBar title="Fyre" :show="showUserNav" /> -->
 
     <!-- <div :class="[
@@ -59,6 +59,10 @@ export default {
   },
   data() {
     return {
+      themeData: {
+        themeColor: "",
+        logoPath: ""
+      },
       name: config.appName,
       hover: false,
       authToken: localStorage.getItem("authToken"),
@@ -149,7 +153,8 @@ export default {
 
       // Nav for user's end
       showUserNav: false,
-      showChat:false
+      showChat:false,
+      isForm:false,
     };
   },
 
@@ -157,6 +162,11 @@ export default {
     
     eventBus.$on('UpdateAdminNav',   (isSubscribed) => {
         this.isSubscribed = isSubscribed;
+    })
+
+  
+    eventBus.$on("UpdateThemeEvent", (themeData) => {
+      Object.assign(this.themeData, { ...themeData })
     })
 
     if(this.$route.meta.admin){
@@ -173,6 +183,7 @@ export default {
     }else{
       this.showUserNav = window.location.pathname.includes("/form") ||
         window.location.pathname.includes("/user") || window.location.pathname.includes("/sa/home")?true : false
+        this.isForm= window.location.pathname.includes("/form")? true:false
     }
   },
   updated() {

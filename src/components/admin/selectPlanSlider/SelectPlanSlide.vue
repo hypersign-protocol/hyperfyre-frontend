@@ -162,6 +162,7 @@
                 block
                 variant="primary"
                 class="btn-plan popular"
+                :style="buttonThemeCss"
                 @click="payment"
                 >Pay ${{ grandTotal }}</b-button
               >

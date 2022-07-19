@@ -71,7 +71,7 @@ export function isContractValid(str){
   }
 }
 export function isdiscordLink(str){
-  if(!str.includes('https://discord.gg/')){
+  if(!str.includes('https://discord.')){
     return true
   }
 }
