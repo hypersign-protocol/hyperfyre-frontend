@@ -253,7 +253,7 @@ export default {
       options: {
         currency: [
           {
-            html: "$HID ( flat 30% discount on sub total) <a target='_blank' href='https://coinmarketcap.com/currencies/hypersign-identity/markets/'> <i class='fas fa-exclamation-circle'></i></a>",
+            html: "$HID (flat 30% discount on sub total) <a target='_blank' href='https://coinmarketcap.com/currencies/hypersign-identity/markets/'> <i class='fas fa-exclamation-circle'></i></a>",
             value: "HID",
             disabled: false,
           },

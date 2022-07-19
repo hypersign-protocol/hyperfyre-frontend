@@ -47,8 +47,7 @@
                         <div class="row g-3 align-items-center w-100 mt-4">
                             <div class="text-left col-lg-8 col-md-8 text-left">
                                 <tool-tips infoMessage="Enter logo path"></tool-tips><label for="name"
-                                    class="col-form-label">Logo Path
-                                    <span style="color: red">*</span>:
+                                    class="col-form-label">Logo Path:
                                 </label>
                             </div>
                             <div class="col-lg-4 col-md-4 px-0">
@@ -246,7 +245,7 @@ export default {
             if (!this.orgSetting.themeColor) {
                 throw new Error('Theme color can not be empty')
             }
-            if(this.orgSetting.logoUrl){
+            if(this.orgSetting.logoPath){
                  if (!isValidURL(this.orgSetting.logoPath)){
                    throw new Error('Invalid URL')
             }
