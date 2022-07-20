@@ -182,6 +182,7 @@ import GeneralConfig from "./components/GeneralConfig.vue";
 import ReferralConfig from "./components/ReferralConfig.vue";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/admin/en";
+import apiClient from "../../../mixins/apiClientMixin";
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -277,8 +278,9 @@ export default {
     this.$root.$on("resetPlanSlide", () => {
       this.resetAllValues();
     });
+    this.fetchCOinData();
     this.subTotal = this.plan.price;
-    this.fetchTokenPriceCMC();
+    //this.fetchTokenPriceCMC();
   },
   methods: {
     resetAllValues() {
@@ -291,6 +293,19 @@ export default {
         {text: "Binance Smart Chain",value: "BSC",disabled: false},
         { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
       ];
+    },
+ async fetchCOinData(){
+  console.log('fetchCoinDAta')
+      const resp=  await apiClient.makeCall(
+         `${this.$config.studioServer.BASE_URL}api/v1/coinmarket`,{
+          header:{
+            Authorization:`Bearer ${this.authToken}`,
+          },
+          method:"GET",
+          body:{}
+         })  
+         const json= await resp.json();
+         console.log(json)
     },
     setDiscount(__arg) {
       if (__arg) {
@@ -365,30 +380,35 @@ export default {
     },
     async fetchTokenPriceCMC() {
       try {
+        console.log('fetchTokenPrice')
         this.isLoading = true;
 
         // if (!this.user.id) throw new Error("No project owner found");
 
         const url =
-          "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs/latest?slug=hypersign-identity&start=1&limit=100&category";
+         `${this.$config.studioServer.BASE_URL}api/v1/coinmarket`
         const headers = {
-          // Authorization: `Bearer ${this.authToken}`,
+        //  "Content-Type": "application/json",
+           Authorization: `Bearer ${this.authToken}`,
         };
-        const resp = await fetch(url, {
-          headers,
+        console.log('before resp')
+        const resp = await apiClient.makeCall({
           method: "GET",
+          url: url,
+          body: {},
+          header:headers
         });
-
-        if (!resp.ok) {
+        if(!resp){
           return this.notifyErr(resp.statusText);
         }
-        const json = await resp.json();
-        this.marketPairs = json["data"]["marketPairs"];
+        console.log(resp)
+        this.marketPairs = resp["data"]["marketPairs"];
         // const usage = json["usage"]
 
         // localStorage.setItem("subscriptions", JSON.stringify(json));
         // this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {
+        console.log(e)
         this.notifyErr(e.message);
       } finally {
         this.isLoading = false;
@@ -434,6 +454,7 @@ export default {
           headers,
         });
         const json = await resp.json();
+        console.log(json)
         if (json) {
           if (!resp.ok) {
             return this.notifyErr(json);
