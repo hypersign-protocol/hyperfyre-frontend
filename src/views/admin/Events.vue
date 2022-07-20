@@ -1181,7 +1181,8 @@ export default {
         const namePage = this.project.projectName;
 
         this.isLoading = true;
-       const resp= await this.apiCallToSaveEvent()
+       const resp= await this.apiCallToSaveEvent() 
+        if(resp){
         this.$root.$emit("closePreview");
         if (!this.isProjectEditing) {
           ////  not using this for the time being just  to test
@@ -1234,6 +1235,7 @@ export default {
 
         this.$root.$emit("bv::toggle::collapse", "sidebar-right");
         this.$root.$emit("closePreview");
+        }               
       } catch (e) {
         if (e.errors) {
           this.errors = e.errors;
