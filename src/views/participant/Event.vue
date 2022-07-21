@@ -162,7 +162,7 @@ export default {
         this.authToken = authToken;
         eventBus.$emit('getAuthToken', authToken)
         await this.fetchUserDetails();
-        this.fetchUserInfoOnLogin();
+        await this.fetchUserInfoOnLogin();
       }catch(e){
         this.notifyErr(Messages.EVENT.ERROR_OCCURED + e.message);
       }
@@ -268,12 +268,12 @@ export default {
           header: headers,
           method: "GET",
         })
-        if(res.data.length === 0){
+
+        if (res.data == "undefined" || !res.data || res.data.length === 0){
            // a user can participate in event
            // Participate in event
           try{
             const hypersignAuthAction  = this.eventData.actions.find(x => x.type == "HYPERSIGN_AUTH")
-
             if(hypersignAuthAction){
               eventBus.$emit('UpdateUserInfoFromEvent', { actionItem: hypersignAuthAction, value: "Authorized"});
             }

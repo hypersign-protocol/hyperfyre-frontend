@@ -239,7 +239,7 @@ export default {
         this.authToken = authToken;
         eventBus.$emit("getAuthToken", authToken);
         await this.fetchUserDetails();
-        this.fetchUserEventData();
+        await this.fetchUserEventData();
       } catch (e) {
         this.notifyErr(Messages.EVENT.ERROR_OCCURED + e.message);
       }
