@@ -78,7 +78,7 @@ import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
 export default {
   components: { Loading },
-  name: "TwitterRetweet",
+  name: "DiscordJoin",
   props: {
     idValue: {
       required: true,
