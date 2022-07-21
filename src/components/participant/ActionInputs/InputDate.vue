@@ -61,7 +61,10 @@ export default {
 		},
 		themeData: {
 			required: true,
-		}
+		},
+		authToken: {
+             required: true,
+	    }
 	},
 computed:{
  buttonThemeCss() {
@@ -83,8 +86,10 @@ computed:{
 	methods: {
 		update() {
 			if (!isDate(this.data.value)) {
+				if(this.authToken){
 				this.data.value = "";
 				return this.notifyErr(Messages.EVENT_ACTIONS.INPUT_DATE.INVALID_DATE_TIME);
+				}
 			} else {
 				this.$emit('input', this.data.value)
 			}

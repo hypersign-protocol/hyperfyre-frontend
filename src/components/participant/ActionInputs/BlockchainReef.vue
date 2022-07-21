@@ -82,6 +82,9 @@ export default {
     },
     themeData: {
       required: true,
+    },
+    authToken: {
+       required: true,
     }
   },
 computed:{
@@ -103,8 +106,10 @@ computed:{
   methods: {
     update() {
       if (!this.isFieldValid()) {
-        this.data.value = "";
+        if(this.authToken){
+         this.data.value = "";
         return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
+        }       
       } else {
         this.$emit("input", this.data.value);
       }

@@ -103,6 +103,9 @@ export default {
     },
     themeData: {
       required: true,
+    },
+    authToken: {
+      required: true
     }
   },
   computed: {
@@ -126,7 +129,9 @@ export default {
   methods: {
     update() {
       if (!this.hasClicked) {
+        if(this.authToken){
         return this.notifyErr(Messages.EVENT_ACTIONS.URL_NOT_VISITED);
+        }
       } else {
         this.$emit("input", this.data.value);
       }

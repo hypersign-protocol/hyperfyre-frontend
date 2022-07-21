@@ -122,9 +122,11 @@ computed:{
     async update() {
       const tgIdInStore = this.tg.targetScreenName; //localStorage.getItem("telegramId");
       if (!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) {
-        return this.notifyErr(
+        if(this.authToken){
+         return this.notifyErr(
           Messages.EVENT_ACTIONS.TELEGRAM_JOIN.TELEGRAM_AUTH
         );
+        }  
       } else {
         try {
           const body = {

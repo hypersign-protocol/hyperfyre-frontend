@@ -149,7 +149,9 @@ computed:{
         this.data.value="Notification Subscribed"
          this.$emit("input", this.data.value);
       }else{
+        if(this.authToken){
         this.notifyErr(Messages.EVENT_ACTIONS.SUBS.SUBS_NOTIFICATION)
+        }
       }
       
     },

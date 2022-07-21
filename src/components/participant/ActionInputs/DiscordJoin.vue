@@ -140,9 +140,11 @@ computed:{
       const tgIdInStore = localStorage.getItem("discordId"); 
       const discordScreenName=localStorage.getItem("discordUserName")
       if ((!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) && (!discordScreenName || discordScreenName == "undefined" || discordScreenName == null)) {
-        return this.notifyErr(
+        if(this.authToken){
+          return this.notifyErr(
           Messages.EVENT_ACTIONS.DISCORD_JOIN.DISCORD_AUTH
         );
+        }      
       } else {
         this.discord.targetScreenName = discordScreenName;
         this.$emit(

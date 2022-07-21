@@ -210,7 +210,9 @@ computed:{
     },
     async update() {
       if (!this.isFieldValid() || this.value.userWalletAddress === "") {
+        if(this.authToken){
         return this.notifyErr(Messages.EVENT_ACTIONS.REEF.CONNECT_REEF_WALLET);
+        }
       } else {
         try {
           let balance = await this.fetchBalance();

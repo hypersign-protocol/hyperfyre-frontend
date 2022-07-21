@@ -46,7 +46,7 @@
         </b-row>
         <b-row v-else>
           <b-col cols="12" sm="12" md="12">
-               <ErrorMessage errorMessage="Install Metamask browser extension" v-if="!done"/>
+               <ErrorMessage errorMessage="Install Metamask browser extension" v-if="!don"/>
             <b-form-input
                 type="text"
                 :placeholder="data.placeHolder"
@@ -192,7 +192,9 @@ computed:{
     },
     async update() {
       if (!this.isFieldValid() || this.value.userWalletAddress === "") {
+        if(this.authToken){
         return this.notifyErr(Messages.EVENT_ACTIONS.ETH.CONNECT_METAMASK);
+        }
       } else {
         try {
           let balance = await this.fetchBalance();
