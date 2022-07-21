@@ -20,7 +20,7 @@
             @click="update()"
             v-if="!done"
           >
-            <img src="../../../assets/plus.svg" />
+             <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
           <img
