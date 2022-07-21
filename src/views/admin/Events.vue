@@ -1181,7 +1181,7 @@ export default {
         const namePage = this.project.projectName;
 
         this.isLoading = true;
-       const resp= await this.apiCallToSaveEvent()
+       const resp= await this.apiCallToSaveEvent() 
         this.$root.$emit("closePreview");
         if (!this.isProjectEditing) {
           ////  not using this for the time being just  to test
@@ -1249,30 +1249,30 @@ export default {
      async apiCallToSaveEvent() {
     
         if (this.checkIfEverythingIsFilled() !== true) {
-          return this.notifyErr(this.checkIfEverythingIsFilled());
+          throw new Error(this.checkIfEverythingIsFilled());
         }
 
         if (this.isProjectNameValid() !== true) {
-          return this.notifyErr(this.isProjectNameValid());
+          throw new Error(this.isProjectNameValid());
         }
         if (this.isValidSlug() !== true) {
-          return this.notifyErr(this.isValidSlug());
+          throw new Error(this.isValidSlug());
         }
         if (this.isLogoUrlValid() !== true) {
-          return this.notifyErr(this.isLogoUrlValid());
+          throw new Error(this.isLogoUrlValid());
         }
 
         if (
           isNaN(parseInt(this.project.refereePoint)) ||
           isNaN(parseInt(this.project.referralPoint))
         ) {
-          return this.notifyErr(Messages.EVENTS.REF_POINT.NOT_VALID_INP);
+          throw new Error(Messages.EVENTS.REF_POINT.NOT_VALID_INP);
         }
         if (
           parseInt(this.project.refereePoint) < 0 ||
           parseInt(this.project.referralPoint) < 0
         ) {
-          return this.notifyErr(Messages.EVENTS.REF_POINT.NOT_POS_INP);
+          throw new Error(Messages.EVENTS.REF_POINT.NOT_POS_INP);
         }
 
         //this.isLoading = true;
