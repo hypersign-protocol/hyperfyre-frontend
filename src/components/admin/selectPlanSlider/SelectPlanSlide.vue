@@ -369,11 +369,12 @@ export default {
 
         // if (!this.user.id) throw new Error("No project owner found");
 
-        const url =
-          "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs/latest?slug=hypersign-identity&start=1&limit=100&category";
-        const headers = {
-          // Authorization: `Bearer ${this.authToken}`,
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription/price?provider=coinmarket`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
         };
+
         const resp = await fetch(url, {
           headers,
           method: "GET",
