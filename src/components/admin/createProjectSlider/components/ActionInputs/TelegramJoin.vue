@@ -68,7 +68,7 @@ import Messages from "../../../utils/messages/participants/en";
 import apiClient from "../../../mixins/apiClientMixin.js";
 
 export default {
-  name: "TwitterRetweet",
+  name: "TelegramJoin",
   props: {
     idValue: {
       required: true,
@@ -92,6 +92,17 @@ export default {
 
     };
   },
+  updated() {
+    try {
+      if (this.data.value && this.tg.sourceScreenName == "") {
+        const tg = JSON.parse(this.data.value);
+        this.tg = { ...tg };
+      }
+    } catch (e) {
+      this.tg.sourceScreenName = this.data.value;
+    }
+  },
+
   async mounted() {
     try {
       if (this.data.value) {
