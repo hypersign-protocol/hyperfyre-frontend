@@ -569,8 +569,8 @@
             >Make sure to add
             <a
               target="_blank"
-              :href="`https://telegram.me/hyperfyre_stage_bot?startgroup=any`"
-              >Fyre Telegram Bot</a
+              :href="`https://telegram.me/${hfTgBotId}?startgroup=any`"
+              >{{appName}} Telegram Bot</a
             >
             in your public group, for this functionality to work properly.</span
           >
@@ -637,6 +637,7 @@
           <button
             @click="handleEventActionAdd()"
             class="btn button-theme"
+            :style="buttonThemeCss" 
             type="button"
           >
             {{ eventActionList.includes(selected) ? "Update" : "Add" }}
@@ -648,6 +649,7 @@
           <button
             @click="handleEventActionUpdate()"
             class="btn button-theme slight-left-margin"
+            :style="buttonThemeCss" 
             type="button"
           >
             Update
@@ -709,9 +711,9 @@
 }
 
 .button-theme {
-  background-color: #f1b319;
-  border-collapse: #f1b319;
-  color: black;
+  background-color: var(--button-bg-color);
+  border-collapse: var(--button-bg-color);
+  color:var(--button-text-color);;
   border: 0;
 }
 .slight-left-margin {
@@ -735,7 +737,7 @@ import "v-markdown-editor/dist/v-markdown-editor.css";
 import Messages from "../../../../utils/messages/admin/en";
 import Vue from "vue";
 import Editor from "v-markdown-editor";
-
+import config from "../../../../config"
 import { codemirror } from "vue-codemirror";
 
 // require styles
@@ -777,6 +779,12 @@ export default {
     // }
   },
   computed: {
+      buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     },
     codemirror() {
       return this.$refs.cmEditor.codemirror;
     },
@@ -870,6 +878,7 @@ export default {
   },
   data() {
     return {
+      appName: config.appName,
       allCondition: [
         { text: "None", value: null },
         { text: "=", value: "===" },
@@ -954,6 +963,15 @@ export default {
         this.allMethods = Object.keys(newContract.methods).filter(
           (e) => e.includes("(") && e.includes(")")
         );
+         this.tempMethods=[]
+        this.allMethods.forEach((t) =>{
+          if((t.charAt(t.length-1)==")"&& t.charAt(t.length-2)=="(")|| t.includes(",")){
+            this.tempMethods.push(t)
+          }
+       })
+        this.allMethods= this.allMethods
+      .concat(this.tempMethods)
+      .filter((x) => ! this.allMethods.includes(x) || !this.tempMethods.includes(x))
       } catch (e) {
         console.log("Error Occured as the ABI is not getting parsed", e);
       }

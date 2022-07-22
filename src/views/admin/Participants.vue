@@ -64,15 +64,15 @@ label {
   border-radius: 3px;
 }
 .paginationContainer >>> li.active {
-  background-color: #f1b319;
+  background-color: var(--button-bg-color);
   color: #fff;
 }
 .dot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  border: 1px solid #f1b319;
-  background-color: #f1b319;
+  border: 1px solid var(--button-bg-color);;
+  background-color: var(--button-bg-color);;
   margin: 1px 0;
 }
 .modal-text {
@@ -99,9 +99,9 @@ label {
 }
 
 .button-theme {
-  background-color: #f1b319;
-  border-collapse: #f1b319;
-  color: black;
+  background-color:var(--button-bg-color);
+  border-collapse: var(--button-bg-color);
+  color: var(--button-text-color);
   border: 0;
 }
 </style>
@@ -156,6 +156,7 @@ label {
           @click="handleLottery"
           type="button"
           class="btn btn-primary button-theme"
+          :style="buttonThemeCss"
         >
           Execute
         </button>
@@ -188,6 +189,7 @@ label {
               @click="handleExport"
               :disabled="project.investors.length ? false : true"
               class="cta_btns btn btn-primary btn-md button-theme"
+              :style="buttonThemeCss"
             >
               Export All <i class="fas fa-file-export"></i>
             </button>
@@ -197,6 +199,7 @@ label {
               :disabled="project.investors.length ? false : true"
               v-b-modal.modal-1
               class="cta_btns btn btn-primary btn-md button-theme"
+              :style="buttonThemeCss"
             >
               Lottery <i class="fas fa-dharmachakra"></i>
             </button>
@@ -230,6 +233,7 @@ label {
         :nextText="'Next'"
         :containerClass="'paginationContainer'"
         :page-class="'paginationItem '"
+        :style="buttonThemeCss"
       >
       </paginate>
       <div class="ml-auto">
@@ -244,6 +248,7 @@ label {
 </template>
 
 <script>
+import config from "../../config";
 import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
@@ -258,7 +263,14 @@ import eventBus from "../../eventBus";
 export default {
   name: "Investor",
   components: { Loading, Paginate },
-
+computed:{
+ buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     }
+},
   data() {
     return {
       paginateValue: 1,
@@ -500,7 +512,7 @@ export default {
         case "ETHEREUM_NETWORK":
         case "BINANCE_NETWORK":
         case "MATIC_NETWORK": {
-          return JSON.parse(action.value).condition;
+          return JSON.parse(action.value).paramsList[0].value;
         }
         default:
           return action.value;

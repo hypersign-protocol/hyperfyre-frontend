@@ -12,8 +12,8 @@
         </b-col>
 
         <b-col cols="2" sm="2" md="2">
-          <b-badge class="btn-score" @click="update()" v-if="!done">
-            <img src="../../../assets/plus.svg" />
+          <b-badge class="btn-score" :style="buttonThemeCss" @click="authToken && update()" v-if="!done">
+             <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
           <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
@@ -32,7 +32,14 @@
         </b-row>
         <b-row v-else>
           <b-col cols="12" sm="12" md="12">
-            <ErrorMessage errorMessage="Install Metamask browser extension" />
+           <ErrorMessage errorMessage="Install Metamask browser extension" v-if="!done"/>
+            <b-form-input
+                type="text"
+                :placeholder="data.placeHolder"
+                v-model="value.userWalletAddress"
+                :disabled="true"
+                :required="data.isManadatory"
+              v-else></b-form-input>
           </b-col>
         </b-row>
         <b-row v-if="!done && !showerror">
@@ -52,6 +59,7 @@
 </style>
 
 <script>
+import config from "../../../config.js";
 import eventBus from "../../../eventBus.js";
 import apiClient from "../../../mixins/apiClientMixin.js";
 import {
@@ -72,15 +80,30 @@ export default {
     data: {
       required: true,
     },
+    authToken: {
+      required: true
+    },
+    done: {
+      required: true,
+    }, 
+    themeData: {
+      required: true,
+    }
   },
   components: {
     ErrorMessage,
   },
+computed:{
+ buttonThemeCss() {
+      return {
+        '--button-bg-color': this.themeData.buttonBGColor,
+        '--button-text-color': this.themeData.buttonTextColor
+      }
+     }
+  },
   data() {
     return {
       visible: false,
-      done: this.data.isDone,
-      authToken: localStorage.getItem("authToken"),
       showerror: false,
       signature: "",
       message_sign: "",
@@ -91,9 +114,14 @@ export default {
       }
     };
   },
+  updated(){
+    if (this.data.value && typeof(this.data.value) === "object") {
+      Object.assign(this.value, { ...(this.data.value) });
+    }
+  },
   mounted() {
-    if(this.data.value){
-      Object.assign(this.value, {...JSON.parse(this.data.value) })
+    if (this.data.value && typeof(this.data.value) === "object") {
+      Object.assign(this.value, { ...(this.data.value) });
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
     this.checkWeb3Injection();
@@ -203,7 +231,7 @@ export default {
       return result;
     },
     disableInput(data) {
-      this.done = data;
+      this.data.isDone = data;
     },
   },
   mixins: [notificationMixins],

@@ -246,7 +246,7 @@
             <a
               target="_blank"
               :href="`https://telegram.me/${hfTgBotId}?startgroup=any`"
-              >Fyre Telegram Bot</a
+              >{{appName}} Telegram Bot</a
             >
             in your public group, for this functionality to work properly.</span
           >
@@ -313,6 +313,7 @@
           <button
             @click="handleEventActionAdd()"
             class="btn button-theme"
+            :style="buttonThemeCss"
             type="button"
           >
             {{ eventActionList.includes(selected) ? "Update" : "Add" }}
@@ -324,6 +325,7 @@
           <button
             @click="handleEventActionUpdate()"
             class="btn button-theme slight-left-margin"
+            :style="buttonThemeCss"
             type="button"
           >
             Update
@@ -385,9 +387,9 @@
 }
 
 .button-theme {
-  background-color: #f1b319;
-  border-collapse: #f1b319;
-  color: black;
+  background-color:  var(--button-bg-color);
+  border-collapse:  var(--button-bg-color);
+  color: var(--button-text-color);
   border: 0;
 }
 .slight-left-margin {
@@ -395,6 +397,7 @@
 }
 </style>
 <script>
+import config from "../../../../config";
 import notificationMixins from "../../../../mixins/notificationMixins";
 import {
   isEmpty,
@@ -426,6 +429,12 @@ export default {
     },
   },
   computed: {
+     buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     },
     nodDisplay() {
       if (
         this.eventActionType != "CUSTOM" &&

@@ -9,8 +9,8 @@
 					<div class="text text-capitalize">{{data.title}}</div>
 				</b-col>
 				<b-col cols="2" sm="2" md="2">
-					<b-badge class="btn-score" @click="update()" v-if="!done">
-						<img src="../../../assets/plus.svg">
+					<b-badge class="btn-score" :style="buttonThemeCss" @click="authToken && update()" v-if="!done">
+						<i class="fa fa-plus" aria-hidden="true"></i>
 						{{data.score}}
 					</b-badge>
 					<img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done">
@@ -42,6 +42,7 @@
 </style>
 
 <script>
+import config from "../../../config.js";
 import eventBus from "../../../eventBus.js";
 import {  isDate } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
@@ -54,12 +55,28 @@ export default {
 		},
 		data: {
 			required: true
-		}
+		},
+		done: {
+			required: true,
+		},
+		themeData: {
+			required: true,
+		},
+		authToken: {
+			required: true
+		},
 	},
+computed:{
+ buttonThemeCss() {
+      return {
+		  '--button-bg-color': this.themeData.buttonBGColor,
+		  '--button-text-color': this.themeData.buttonTextColor
+      }
+     }
+  },
 	data() {
 		return {
 			visible: false,
-			done: this.data.isDone,
 			value: ''
 		}
 	},

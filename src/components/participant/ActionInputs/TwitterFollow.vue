@@ -19,8 +19,8 @@
           <div class="text text-capitalize">{{ data.title }}</div>
         </b-col>
         <b-col cols="2" sm="2" md="2">
-          <b-badge class="btn-score" @click="update()" v-if="!done">
-            <img src="../../../assets/plus.svg" />
+          <b-badge class="btn-score" :style="buttonThemeCss" @click="authToken && update()" v-if="!done">
+             <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
           <img
@@ -77,9 +77,10 @@ import webAuth from "../../../mixins/twitterLogin";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
+import config from "../../../config";
 export default {
   components: { Loading },
-  name: "TwitterRetweet",
+  name: "TwitterFollow",
   props: {
     idValue: {
       required: true,
@@ -87,12 +88,27 @@ export default {
     data: {
       required: true,
     },
+    authToken: {
+      required: true,
+    },
+    done: {
+      required: true,
+    },
+    themeData: {
+      required: true,
+    }
+  },
+computed:{
+ buttonThemeCss() {
+      return {
+        '--button-bg-color': this.themeData.buttonBGColor,
+        '--button-text-color': this.themeData.buttonTextColor
+      }
+     }
   },
   data() {
     return {
       visible: false,
-      done: this.data.isDone,
-      authToken: localStorage.getItem("authToken"),
       actions: [],
       twitter: {
         sourceScreenName: "",
@@ -101,6 +117,18 @@ export default {
       isLoading: false,
       fullPage: true,
     };
+  },
+  updated() {
+    try {
+      if (this.data.value ) {
+        if (this.twitter.sourceScreenName == "" || this.twitter.targetScreenName == ""){
+          const twitter = JSON.parse(this.data.value);
+          this.twitter = { ...twitter };
+        }
+      }
+    } catch (e) {
+      this.twitter.sourceScreenName = this.data.value;
+    }
   },
   mounted() {
     try {

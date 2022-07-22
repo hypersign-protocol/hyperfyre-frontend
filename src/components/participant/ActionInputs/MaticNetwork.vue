@@ -15,8 +15,8 @@
         </b-col>
 
         <b-col cols="2" sm="2" md="2">
-          <b-badge class="btn-score" @click="update()" v-if="!done">
-            <img src="../../../assets/plus.svg" />
+          <b-badge class="btn-score" :style="buttonThemeCss" @click="authToken && update()" v-if="!done">
+            <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
           <img
@@ -30,83 +30,50 @@
     </b-card-header>
     <b-collapse :id="`collapse-${idValue}`" v-model="visible">
       <b-card-body class="user-details">
-        <b-row v-if="!showerror">
+        <b-row>
           <b-col cols="12" sm="12" md="12">
-            <!-- <div class="metamask">
-              <b-form-input
-                type="text"
-                :placeholder="data.placeHolder"
-                v-model="value.userWalletAddress"
-                :disabled="true"
-                :required="data.isManadatory"
-              ></b-form-input>
-              <button
-                class="btn text-black"
-                @click="invokeMetamask()"
-                v-if="!done"
-              >
-                <img
-                  src="../../../assets/metamask.svg"
-                  height="25px"
-                  width="25px"
-                />
-              </button>
-            </div> -->
-            <div class="row g-3 align-items-center w-100 mt-4">
-              <div class="text-left col-lg-3 col-md-3 text-left">
-                <label for="title" class="col-form-label font-weight-bold"
-                  >Method Name<span style="color: red">*</span>:
-                </label>
-              </div>
-
-              <div class="col-lg-8 col-md-8 px-0">
-                <input
-                  v-model="value.methods"
-                  type=""
-                  id="title"
-                  :required="true"
-                  class="form-control w-100 font-weight-bold"
-                  :disabled="true"
-                />
-              </div>
-            </div>
-
             <div
               class="row g-3 align-items-center w-100 mt-4"
               v-for="(param, index) in value.paramsList"
               v-bind:key="index"
             >
-              <div class="text-left col-lg-3 col-md-3 text-left">
-                <label for="title" class="col-form-label"
-                  >{{ param.name }}<span style="color: red">*</span>:
-                </label>
-              </div>
-
-              <div
-                class="col-lg-9 col-md-9 px-0 metamask"
-                v-if="param.name === 'address'"
-              >
-                <input
-                  v-model="param.value"
-                  type=""
-                  id="title"
-                  :required="true"
-                  class="form-control w-100"
-                  :disabled="true"
-                />
-                <button
-                  class="btn text-black"
-                  @click="invokeMetamask(index)"
-                  v-if="!done"
-                >
-                  <img
-                    src="../../../assets/metamask.svg"
-                    height="25px"
-                    width="25px"
+              <div class="col-lg-12 col-md-12" v-if="param.name === 'address'">
+                <div v-if="!showerror">
+                  <input
+                    v-model="param.value"
+                    type=""
+                    id="title"
+                    :required="true"
+                    class="form-control w-100"
+                    :disabled="true"
+                    :placeholder="param.name"
                   />
-                </button>
+                  <div v-if="!done" class="btn-group w-100">
+                    <button class="btn btn-link" @click="invokeMetamask(index)">
+                      Connect Metamask
+                    </button>
+                    <button class="btn btn-link" @click="update()">
+                      Continue
+                    </button>
+                  </div>
+                </div>
+                <div v-else>
+                  <ErrorMessage
+                    errorMessage="Install Metamask browser extension"
+                    v-if="!done"
+                  />
+                  <input
+                    v-model="param.value"
+                    type=""
+                    id="title"
+                    :required="true"
+                    class="form-control w-100"
+                    :disabled="true"
+                    v-else
+                  />
+                </div>
               </div>
-              <div class="col-lg-8 col-md-8 px-0" v-else>
+              <div class="col-lg-12 col-md-12" v-else>
                 <input
                   v-model="param.value"
                   type=""
@@ -115,21 +82,18 @@
                   class="form-control w-100"
                   :disabled="done"
                 />
+                <div
+                  v-if="!done"
+                  cols="12"
+                  sm="12"
+                  md="12"
+                >
+                  <button class="btn btn-link center" @click="update()">
+                    Continue
+                  </button>
+                </div>
               </div>
             </div>
-          </b-col>
-        </b-row>
-        <b-row v-else>
-          <b-col cols="12" sm="12" md="12">
-            <ErrorMessage errorMessage="Install Metamask browser extension" />
-          </b-col>
-        </b-row>
-        <b-row v-if="!done">
-          <b-col cols="12" sm="12" md="12">
-            <button class="btn btn-link center" @click="update()">
-              <!-- <button class="btn btn-link center" @click="getData()"> -->
-              Continue / Execute
-            </button>
           </b-col>
         </b-row>
       </b-card-body>
@@ -155,7 +119,7 @@ import apiClient from "../../../mixins/apiClientMixin.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
-
+import config from "../../../config.js";
 import Web3 from "web3";
 export default {
   name: "MaticNetwork",
@@ -166,15 +130,30 @@ export default {
     data: {
       required: true,
     },
+    authToken: {
+      required: true,
+    },
+    done: {
+      required: true,
+    },
+    themeData: {
+      required: true,
+    }
   },
   components: {
     ErrorMessage,
   },
+computed:{
+ buttonThemeCss() {
+      return {
+        '--button-bg-color': this.themeData.buttonBGColor,
+        '--button-text-color': this.themeData.buttonTextColor
+      }
+     }
+  },
   data() {
     return {
       visible: false,
-      done: this.data.isDone,
-      authToken: localStorage.getItem("authToken"),
       showerror: false,
       signature: "",
       message_sign: "",
@@ -190,31 +169,61 @@ export default {
       },
     };
   },
+  updated(){
+    if (this.data.value && typeof(this.data.value) === "object") {    
+      Object.assign(this.value,  {...this.data.value} )
+      this.updatedParamsList();
+    }
+  },
   mounted() {
+    this.cleanValue();
     this.checkWeb3Injection();
-    if (this.data.value) {
-      Object.assign(this.value, { ...JSON.parse(this.data.value) });
-    }
-    let s = this.value.methods;
-    s = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
-    if (s !== "") {
-      s = s.split(",");
-
-      for (let i = 0; i < s.length; i++) {
-        if (this.value.paramsList.length !== 0) {
-          break;
-        } else {
-          this.value.paramsList.push({ name: s[i], value: "" });
-        }
-      }
-    }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
+
+    if (this.data.value && typeof(this.data.value) === "object") {
+      Object.assign(this.value, { ...this.data.value });
+      this.updatedParamsList();
+    }
   },
   methods: {
+    updatedParamsList(){
+      let s = this.value.methods;
+      if(!s){
+        return
+      } 
+      s = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
+      if (s !== "") {
+        s = s.split(",");
+
+        for (let i = 0; i < s.length; i++) {
+          if (this.value.paramsList.length !== 0) {
+            break;
+          } else {
+            this.value.paramsList.push({ name: s[i], value: "" });
+          }
+        }
+      }
+    },
+    cleanValue(){
+      this.value = {
+        contractAddress: "",
+        thresholdBalance: 0,
+        contractABI: "",
+        methods: null,
+        paramsList: [],
+        operand: null,
+        operator: "",
+        returnType: "",
+        condition: "",
+      }
+    },
+
     checkWeb3Injection() {
       try {
         if (window.ethereum && window.ethereum.isMetaMask) {
           this.web3 = new Web3(window.ethereum);
+        } else {
+          this.showerror = true;
         }
       } catch (error) {
         console.log(error);
@@ -260,6 +269,21 @@ export default {
         return this.notifyErr(error.message);
       }
     },
+    emitToUpdate() {
+      //this.notifySuccess("Success");
+      const { contractAddress, paramsList } = this.value;
+      const valueToStore = {
+        contractAddress, paramsList
+      }
+      this.value.condition = "Condition True";
+
+      this.$emit(
+        "input",
+        JSON.stringify({
+          ...valueToStore,
+        })
+      );
+    },
     async update() {
       try {
         let result = await this.execute();
@@ -284,48 +308,26 @@ export default {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (this.value.operand === result) {
-                  this.notifySuccess("Success");
-                  this.value.condition = "Condition True";
+                  this.emitToUpdate()
 
-                  this.$emit(
-                    "input",
-                    JSON.stringify({
-                      ...this.value,
-                    })
-                  );
                 } else {
                   throw new Error("Condition Mismatch");
                 }
                 break;
               }
               case "string":
-                case "address": {
+              case "address": {
                 if (this.value.operand === result) {
-                  this.notifySuccess("Success");
-                  this.value.condition = "Condition True";
-
-                  this.$emit(
-                    "input",
-                    JSON.stringify({
-                      ...this.value,
-                    })
-                  );
+                  this.emitToUpdate()
                 } else {
                   this.notifyErr("Condition Mismatch");
                 }
                 break;
               }
               case "bool": {
-                if (!!this.value.operand === !!result) {
-                  this.value.condition = "Condition True";
-
-                  this.$emit(
-                    "input",
-                    JSON.stringify({
-                      ...this.value,
-                    })
-                  );
-                  this.notifySuccess("Success");
+                this.value.operand  = (this.value.operand  === "true");
+                if (this.value.operand === result) {
+                  this.emitToUpdate()
                 } else {
                   this.notifyErr("Condition Mismatch");
                 }
@@ -344,15 +346,7 @@ export default {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result < this.value.operand) {
-                  this.notifySuccess("Success");
-                  this.value.condition = "Condition True";
-
-                  this.$emit(
-                    "input",
-                    JSON.stringify({
-                      ...this.value,
-                    })
-                  );
+                  this.emitToUpdate()
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -367,15 +361,7 @@ export default {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result > this.value.operand) {
-                  this.notifySuccess("Success");
-                  this.value.condition = "Condition True";
-
-                  this.$emit(
-                    "input",
-                    JSON.stringify({
-                      ...this.value,
-                    })
-                  );
+                  this.emitToUpdate()
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -391,15 +377,7 @@ export default {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result <= this.value.operand) {
-                  this.notifySuccess("Success");
-                  this.value.condition = "Condition True";
-
-                  this.$emit(
-                    "input",
-                    JSON.stringify({
-                      ...this.value,
-                    })
-                  );
+                  this.emitToUpdate()
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -414,15 +392,7 @@ export default {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result >= this.value.operand) {
-                  this.notifySuccess("Success");
-                  this.value.condition = "Condition True";
-
-                  this.$emit(
-                    "input",
-                    JSON.stringify({
-                      ...this.value,
-                    })
-                  );
+                  this.emitToUpdate()
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -433,7 +403,6 @@ export default {
           default:
             break;
         }
-        console.log(result);
       } catch (error) {
         this.data.value = "";
         return this.notifyErr(error);
@@ -479,7 +448,7 @@ export default {
       return result;
     },
     disableInput(data) {
-      this.done = data;
+      this.data.isDone = data;
     },
   },
   mixins: [notificationMixins],

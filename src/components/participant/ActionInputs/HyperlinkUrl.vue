@@ -14,8 +14,13 @@
           <div class="text text-capitalize">{{ data.title }}</div>
         </b-col>
         <b-col cols="2" sm="2" md="2">
-          <b-badge class="btn-score" @click="update()" v-if="!done">
-            <img src="../../../assets/plus.svg" />
+          <b-badge
+            class="btn-score"
+            :style="buttonThemeCss"
+            @click="authToken && update()"
+            v-if="!done"
+          >
+             <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
           <img
@@ -32,9 +37,14 @@
         <b-row>
           <b-col cols="12" sm="12" md="12">
             <div class="extlink">
-              <button class="btn text-black center"  >
-                <a :href="data.value" v-bind:class="{isDisabled : done}"  @click="isClicked()" target="_blank">
-                  {{data.value}}
+              <button class="btn text-black center">
+                <a
+                  :href="data.value"
+                  v-bind:class="{ isDisabled: done }"
+                  @click="isClicked()"
+                  target="_blank"
+                >
+                  {{ data.value }}
                   <img
                     src="../../../assets/external-link.svg"
                     height="20px"
@@ -43,16 +53,18 @@
                     target="_blank"
                   />
                 </a>
-              </button> 
+              </button>
             </div>
           </b-col>
         </b-row>
 
         <b-row v-if="!done">
-					<b-col cols="12" sm="12" md="12" >
-						<button class="btn btn-link center"  @click="update()">Continue</button>
-					</b-col>
-				</b-row>
+          <b-col cols="12" sm="12" md="12">
+            <button class="btn btn-link center" @click="update()">
+              Continue
+            </button>
+          </b-col>
+        </b-row>
       </b-card-body>
     </b-collapse>
   </b-card>
@@ -65,12 +77,14 @@
   text-decoration: none;
 }
 
-.center{
-  display: block; margin-left: auto;margin-right: auto
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
-
 </style>
 <script>
+import config from "../../../config.js";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
@@ -84,13 +98,29 @@ export default {
     data: {
       required: true,
     },
+    done: {
+      required: true,
+    },
+    themeData: {
+      required: true,
+    },
+    authToken: {
+      required: true
+    }
+  },
+  computed: {
+    buttonThemeCss() {
+      return {
+        '--button-bg-color': this.themeData.buttonBGColor,
+        '--button-text-color': this.themeData.buttonTextColor
+      };
+    },
   },
   data() {
     return {
       visible: false,
-      done: this.data.isDone,
-	    hasClicked: false,
-	    disableClass: ""
+      hasClicked: false,
+      disableClass: "",
     };
   },
   mounted() {
@@ -110,9 +140,9 @@ export default {
     disableInput(data) {
       this.done = data;
     },
-    truncate1(str, number){
-      return truncate(str, number)
-    }
+    truncate1(str, number) {
+      return truncate(str, number);
+    },
   },
   mixins: [notificationMixins],
 };

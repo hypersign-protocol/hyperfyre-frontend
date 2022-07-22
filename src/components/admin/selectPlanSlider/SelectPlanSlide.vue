@@ -7,14 +7,14 @@
 }
 
 .button-theme {
-  background-color: #f1b319;
-  border-collapse: #f1b319;
-  color: black;
+  background-color: var(--button-bg-color);
+  border-collapse:  var(--button-bg-color);
+  color: var(--button-text-color);
   border: 0;
 }
 
 .accordion-header-theme {
-  background-color: rgba(241, 179, 25, 0.24);
+  background-color: var(--header-bg-color);
   border: 0;
 }
 </style>
@@ -162,6 +162,7 @@
                 block
                 variant="primary"
                 class="btn-plan popular"
+                :style="buttonThemeCss"
                 @click="payment"
                 >Pay ${{ grandTotal }}</b-button
               >
@@ -174,6 +175,7 @@
 </template>
 
 <script>
+import config from "../../../config";
 import InputDate from "../../participant/ActionInputs/InputDate.vue";
 import EventActionConfig from "./components/EventActionConfig.vue";
 import GeneralConfig from "./components/GeneralConfig.vue";
@@ -216,6 +218,18 @@ export default {
 
   computed: {
     // a computed getter
+      buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     },
+      headerThemeCss(){
+    return{
+      '--header-bg-color': config.app.headerBGColor,
+      '--header-text-color':config.app.headerTextColor
+      }
+  },
     grandTotal() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.plan.grandTotal = this.plan.price - this.discount;
@@ -239,7 +253,7 @@ export default {
       options: {
         currency: [
           {
-            html: "$HID ( flat 30% discount on sub total) <a target='_blank' href='https://coinmarketcap.com/currencies/hypersign-identity/markets/'> <i class='fas fa-exclamation-circle'></i></a>",
+            html: "$HID (flat 30% discount on sub total) <a target='_blank' href='https://coinmarketcap.com/currencies/hypersign-identity/markets/'> <i class='fas fa-exclamation-circle'></i></a>",
             value: "HID",
             disabled: false,
           },
@@ -355,11 +369,12 @@ export default {
 
         // if (!this.user.id) throw new Error("No project owner found");
 
-        const url =
-          "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs/latest?slug=hypersign-identity&start=1&limit=100&category";
-        const headers = {
-          // Authorization: `Bearer ${this.authToken}`,
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription/price?provider=coinmarket`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
         };
+
         const resp = await fetch(url, {
           headers,
           method: "GET",

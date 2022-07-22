@@ -1,20 +1,24 @@
 <template>
   <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px"
-    @click=" checkIfUserHasLoggedIn()">
+    @click="checkIfUserHasLoggedIn()">
     <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
     <Profile v-if="userProfile" :user="userProfile" />
 
     <template v-for="(actionItem, index) in ActionSchema">
       <component v-if="actionItem.type==='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
-        :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
+        :idValue="index" :data="actionItem" :done="actionItem.isDone" :authToken="authToken"
+        @input="updateUserInfo(actionItem, $event)" :themeData="themeData">
+      </component>
     </template>
 
     <prize-card v-if="isPrizedata" :prizeData="prizeData" />
 
     <template v-for="(actionItem, index) in ActionSchema">
-      
-      <component v-if="actionItem.type!=='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
-        :idValue="index" :data="actionItem" @input="updateUserInfo(actionItem, $event)"></component>
+
+      <component v-if="(actionItem.type !== 'INFO_TEXT') && (actionItem.type !=='PRIZE_CARD') "
+        :is="CapitaliseString(actionItem.type)" :key="index" :idValue="index" :data="actionItem" :authToken="authToken"
+        :done="actionItem.isDone" @input="updateUserInfo(actionItem, $event)" :themeData="themeData">
+      </component>
     </template>
   </div>
 </template>
@@ -81,10 +85,18 @@ export default {
       required: true,
       type: Object,
     },
+    authToken: {
+      required: true,
+      type: String
+    },
     prizeData: {
       required: true,
       type: Array,
     },
+    themeData:{
+      required: true,
+      type: Object,
+    }
   },
   components: {
     BinanceNetwork,
@@ -139,7 +151,6 @@ export default {
   },
   data() {
     return {
-      authToken: localStorage.getItem("authToken"),
       user: JSON.parse(localStorage.getItem("user")),
       userData: {
         projectId: "613b8476442d2d56fb0988fa",
@@ -155,18 +166,24 @@ export default {
   computed: {
     // eslint-disable-next-line vue/return-in-computed-property
     isPrizedata() {
-      if (this.prizeData.length > 0) {
+      if (this.prizeData && this.prizeData.length > 0) {
         return true;
+      } else {
+        return false;
       }
     },
   },
   methods: {
-    checkIfUserHasLoggedIn() {
+    checkIfUserHasLoggedIn(e) {
       if (!this.userProfile) {
         // TODO:  bad way of coding.  We should only hide which is being clicked 
-        document.querySelectorAll(".action-wrap").forEach(e => {
-          // hiding second child
-          if (e.children[1]) e.children[1].style.display = 'none'
+        document.querySelectorAll(".card-header").forEach(elm => {
+          elm.classList.add('collapsed')
+          elm.attributes['aria-expanded'].value =  false;
+          const elemTohide = elm.nextSibling
+          if (elemTohide){
+            elemTohide.style.display = 'none';
+          }
         })
         return this.notifyErr(Messsages.EVENT_ACTIONS.UNAUTHENTICATED);
       } 
@@ -179,6 +196,11 @@ export default {
     },
     async updateUserInfo(actionItem, value) {
       try {
+
+        if (!this.authToken){
+          return;
+        }
+
         this.isLoading = true;
         this.actions = [];
 
@@ -194,18 +216,16 @@ export default {
         };
         const ts=Math.floor(Date.now() / 1000);
         const endPoint='api/v1/investor'
-
-        const signature=crypto.createHmac('sha256',config.investor_sign_key)
-
+        const signature= crypto.createHmac('sha256',config.investor_sign_key)
         signature.update(ts+endPoint+JSON.stringify(body))
-        const sig=signature.digest('hex')
+        const sig= signature.digest('hex')
         let url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${this.RecaptchaToken}`;
         if (this.$route.query.referrer && this.$route.query.referrer != "") {
           url += `&referrer=${this.$route.query.referrer}`;
         }
         let headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${this.authToken}`,
           "sig-ts":ts,
           "x-payload-hf-sign":sig
 

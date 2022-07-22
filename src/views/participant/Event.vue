@@ -11,22 +11,27 @@
     </b-card>
 
     <template v-if="authToken == '' || authToken == null">
-      <Login class="mx-auto overflow-hidden mt-3 border-0 mainContentWdth" :themeColor="eventData.themeColor"
-        :fontColor="eventData.fontColor" @AuthTokenUpdateEvent="updateAuthentication" />
+      <Login class="mx-auto overflow-hidden mt-3 border-0 mainContentWdth" :themeData="eventData.orgData"
+        @AuthTokenUpdateEvent="updateAuthentication" />
 
-      <Action v-if="eventData.projectStatus" :userProfile="null" :ActionSchema="eventActionsToShow"
-        :prizeData="prizeData" @UserUpdateEvent="updateUserData" />
+      <!-- <Action v-if="eventData.projectStatus" :userProfile="null" :ActionSchema="eventActionsToShow"
+        :prizeData="prizeData" @UserUpdateEvent="updateUserData" /> -->
     </template>
 
+    <template>
+      <Action v-if="eventData.projectStatus"
+        :userProfile="Object.keys(userProfileData).length > 0 ? userProfileData : null"
+        :ActionSchema="eventActionsToShow" :authToken="authToken" :prizeData="prizeData"
+        @UserUpdateEvent="updateUserData" :themeData="eventData.orgData" />
+    </template>
 
     <template v-if="authToken != '' && authToken != null">
       <ErrorMessage v-if="!eventData.projectStatus" errorMessage="Event is over" />
-      <Action v-if="eventData.projectStatus" :userProfile="userProfileData" :ActionSchema="eventActionsToShow"
-        :prizeData="prizeData" @UserUpdateEvent="updateUserData" />
 
       <div class="footer mx-auto overflow-hidden mainContentWdth" style="align-items:center;padding-top:20px">
         <b>Disclaimer:</b>
-        Anyone can create campaigns on Fyre, rewards are distributed by the campaign creator and Fyre is not
+        Anyone can create campaigns on {{appName}}, rewards are distributed by the campaign creator and {{appName}} is
+        not
         responsible for reward distribution.
       </div>
     </template>
@@ -46,6 +51,8 @@ import apiClient from "../../mixins/apiClientMixin";
 import profileIconMixins from "../../mixins/profileIconMixins";
 import eventBus from "../../eventBus.js"
 import Messages from "../../utils/messages/admin/en"
+import config from "../../config"
+
 export default {
   name: "Event",
   components: {
@@ -59,6 +66,7 @@ export default {
 
   data() {
     return {
+      appName: config.appName,
       eventData: {},
       actions: [],
       authToken: "",
@@ -128,7 +136,7 @@ export default {
       if((this.$route.params["slug"])&&(this.$route.query["userRedirectionToken"])){
         this.eventSlug = this.$route.params["slug"];
         this.userRedirectionToken=this.$route.query["userRedirectionToken"];
-        document.title = "Fyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
+        document.title = `${config.appName} - `+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.verifyAppAuth();
         await this.fetchEventData();
         await this.fetchUserInfoOnLogin();
@@ -136,7 +144,7 @@ export default {
       }
       else if(this.$route.params["slug"]) {
         this.eventSlug = this.$route.params["slug"];
-        document.title = "Fyre - "+ this.eventSlug.replace(/-/g," ").toUpperCase();
+        document.title = `${config.appName} - `+ this.eventSlug.replace(/-/g," ").toUpperCase();
         await this.fetchEventData();
         await this.fetchUserInfoOnLogin();
       }
@@ -156,7 +164,7 @@ export default {
         this.authToken = authToken;
         eventBus.$emit('getAuthToken', authToken)
         await this.fetchUserDetails();
-        this.fetchUserInfoOnLogin();
+        await this.fetchUserInfoOnLogin();
       }catch(e){
         this.notifyErr(Messages.EVENT.ERROR_OCCURED + e.message);
       }
@@ -176,9 +184,10 @@ export default {
         }
         }
         const url = `${this.$config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
+        const body= {isParticipant:true}
         const res = await apiClient.makeCall({
           url,
-          body: {},
+          body,
           header: headers,
           method: "POST",
         });
@@ -210,6 +219,34 @@ export default {
         this.eventData = {
           ...resp.data
                 }
+        
+        // If it is old event then just recreating this variable using default values from config
+        if (!this.eventData['orgData']){
+          this.eventData['orgData'] = {}
+          if (!this.eventData['orgData'].buttonBGColor){
+            this.eventData['orgData'].buttonBGColor = config.app.buttonBgColor
+          }
+
+          if (!this.eventData['orgData'].buttonTextColor) {
+            this.eventData['orgData'].buttonTextColor = config.app.buttonTextColor
+          }
+
+          if (!this.eventData['orgData'].themeColor) {
+            this.eventData['orgData'].themeColor = config.app.themeBgColor
+          }
+        } 
+
+        eventBus.$emit('UpdateThemeEvent', { 
+          logoPath: this.eventData['orgData'].logoPath,
+          themeColor: this.eventData['orgData'].themeColor
+        })
+
+        ///  deleting data wich is not required.
+        delete this.eventData['orgData'].logoPath
+        delete this.eventData['orgData'].themeColor
+        delete this.eventData['orgData'].adminId
+        delete this.eventData['orgData'].subDomain
+        delete this.eventData['orgData']._id
       } else {
         this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG)
       }
@@ -224,7 +261,7 @@ export default {
                   "Content-Type": "application/json",
                   "externaluseraccesstoken":`Bearer ${this.userRedirectionToken}`
                 };
-                const resp = await apiClient.makeCall({ method: "POST", url: url, body: {},header: headers })
+                const resp = await apiClient.makeCall({ method: "POST", url: url, body:{},dxQheader: headers })
             this.externalUserId= resp.data.data.externalUserMappingId
             this.authToken=resp.data.data.authToken
             localStorage.setItem("externalUserMappingId", JSON.stringify(this.externalUserId));
@@ -262,12 +299,12 @@ export default {
           header: headers,
           method: "GET",
         })
-        if(res.data.length === 0){
+
+        if (res.data == "undefined" || !res.data || res.data.length === 0){
            // a user can participate in event
            // Participate in event
           try{
             const hypersignAuthAction  = this.eventData.actions.find(x => x.type == "HYPERSIGN_AUTH")
-
             if(hypersignAuthAction){
               eventBus.$emit('UpdateUserInfoFromEvent', { actionItem: hypersignAuthAction, value: "Authorized"});
             }
@@ -295,6 +332,27 @@ export default {
               ea.value = doneAction.value
             } else {
               ea["isDone"] = false
+            }
+            if((ea.type === "ETHEREUM_NETWORK") ||
+              (ea.type === "BINANCE_NETWORK") ||
+              (ea.type === "MATIC_NETWORK") ||
+              (ea.type === "ETHEREUM_ERC20") ||
+              (ea.type === "ETHEREUM_ERC721") ||
+              (ea.type === "MATIC_ERC20") ||
+              (ea.type === "MATIC_ERC721") ||
+              (ea.type === "BINANCE_ERC20") ||
+              (ea.type === "BINANCE_ERC721") ||
+              (ea.type === "REEF_ERC20") ||
+              (ea.type === "REEF_ERC721") ||
+              (ea.type === "MOONBEAM_ERC20") ||
+              (ea.type === "MOONBEAM_ERC721") ||
+              (ea.type === "MOONRIVER_ERC20") ||
+              (ea.type === "MOONRIVER_ERC721") ||
+              (ea.type === "MOON_ERC20") ||
+              (ea.type === "MOON_ERC721")
+            ){
+                const parsedVal = JSON.parse(ea.value)
+                ea.value = parsedVal;
             }
             return ea
           })

@@ -16,8 +16,8 @@
         </b-col>
 
         <b-col cols="2" sm="2" md="2">
-          <b-badge class="btn-score" @click="update()" v-if="!done">
-            <img src="../../../assets/plus.svg" />
+          <b-badge class="btn-score" :style="buttonThemeCss" @click="authToken && update()" v-if="!done">
+            <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
           <img
@@ -40,18 +40,34 @@
                 v-model="value.userWalletAddress"
                 :disabled="done"
                 :required="data.isManadatory"
+                v-if="!done"
               ></b-form-select>
+              <b-form-input
+                type="text"
+                :placeholder="data.placeHolder"
+                v-model="value.userWalletAddress.address"
+                :disabled="true"
+                :required="data.isManadatory"
+              v-else></b-form-input>
             </div>
           </b-col>
         </b-row>
         <b-row v-else>
           <b-col cols="12" sm="12" md="12">
-            <ErrorMessage errorMessage="Install Reef browser extension" />
+            <ErrorMessage errorMessage="Install Reef browser extension"  v-if="!done" />
+            <b-form-input
+                type="text"
+                :placeholder="data.placeHolder"
+                v-model="value.userWalletAddress.address"
+                :disabled="done"
+                :required="data.isManadatory"
+              v-else></b-form-input>
           </b-col>
         </b-row>
-        <b-row v-if="!done">
-          <b-col cols="12" sm="12" md="12" >
-            <button class="btn btn-link center"  @click="update()">Continue</button>
+        <b-row v-if="!done && !showerror">
+          <b-col class= "btn-group" cols="12" sm="12" md="12" >
+            <button class="btn btn-link" @click="invokeReef()">Connect Reef</button>
+            <button class="btn btn-link"  @click="update()">Continue</button>
           </b-col>
         </b-row>
       </b-card-body>
@@ -76,7 +92,7 @@ import {
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
-
+import config from "../../../config.js";
 export default {
   name: "ReefErc721",
   props: {
@@ -86,40 +102,57 @@ export default {
     data: {
       required: true,
     },
+    authToken: {
+      required: true,
+    },
+    done: {
+      required: true,
+    },
+    themeData: {
+      required: true,
+    }
   },
   components: {
     ErrorMessage,
   },
+computed:{
+ buttonThemeCss() {
+    return {
+      '--button-bg-color': this.themeData.buttonBGColor,
+      '--button-text-color': this.themeData.buttonTextColor
+    }
+     }
+  },
   data() {
     return {
       visible: false,
-      done: this.data.isDone,
-      authToken: localStorage.getItem("authToken"),
       showerror: false,
       signature: "",
       message_sign: "You are Signing this Message to confirm your Paricipation",
       
-      options:[{value: '', text: 'Please select your reef wallet'}],
+      options:[{value: '', text: 'Please select your Reef wallet'}],
       value: {
         contractAddress: "",
         userWalletAddress: '',
         thresholdBalance: 0
       },
       wallet:[],
-      walletSignObj:""
-      
+      walletSignObj:"",
+      web3: null
     };
   },
  
+ updated(){
+    if (this.data.value && typeof(this.data.value) === "object") {
+      Object.assign(this.value, { ...(this.data.value) });
+    }
+  },
   async mounted() {
-
-    if(this.data.value){
-        Object.assign(this.value, {...JSON.parse(this.data.value) })
+    if (this.data.value && typeof(this.data.value) === "object") {
+      Object.assign(this.value, { ...(this.data.value) });
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
-   await this.checkWeb3Injection();
-  await  this.invokeReef()
-    await this.fetchAccounts()
+    await this.checkWeb3Injection();
   },
   methods: {
    async checkWeb3Injection() {
@@ -140,21 +173,25 @@ export default {
     },
     async fetchAccounts() {
       
+      this.options = [{value: '', text: 'Please select your reef wallet'}];
       for (let i in this.wallet) {
        
              this.options.push({value:this.wallet[i],text: 'Address: '+ this.wallet[i].address.slice(0,12)+'...'+this.wallet[i].address.slice(38,48)+'  Name: '+this.wallet[i].name})
             }
+
+            this.value.userWalletAddress = this.options[1]? this.options[1].value : this.options[0].value
     },
     async invokeReef() {
       try {
        
-        if (this.web3.reef) {
+         if (this.web3 && this.web3.reef) {
            
            let sign;
          await window.injectedWeb3.reef.enable()
           .then(async walletObj=>{
             this.wallet =  await walletObj.accounts.get();
             this.walletSignObj=walletObj
+            await this.fetchAccounts();
             
           })
 
@@ -208,6 +245,16 @@ export default {
       return true;
     },
     async fetchBalance() {
+
+       if(!this.value.contractAddress){
+          throw new Error("Missing contract address")
+        }
+
+        if(!this.value.userWalletAddress.address){
+          throw new Error("Missing userWallet address")
+        }
+
+
       
       this.signature=await this.walletSignObj.signer.signRaw(this.value.userWalletAddress)
       const body = {

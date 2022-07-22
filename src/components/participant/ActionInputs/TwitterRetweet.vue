@@ -19,8 +19,8 @@
           <div class="text text-capitalize">{{ data.title }}</div>
         </b-col>
         <b-col cols="2" sm="2" md="2">
-          <b-badge class="btn-score" @click="update()" v-if="!done">
-            <img src="../../../assets/plus.svg" />
+          <b-badge class="btn-score" :style="buttonThemeCss" @click="authToken && update()" v-if="!done">
+            <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
           <img
@@ -75,6 +75,7 @@
 }
 </style>
 <script>
+import config from "../../../config";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import apiClient from "../../../mixins/apiClientMixin";
@@ -93,18 +94,41 @@ export default {
     data: {
       required: true,
     },
+    authToken: {
+      required: true,
+    },
+    done: {
+      required: true,
+    },
+    themeData: {
+      required: true,
+    }
+  },
+computed:{
+ buttonThemeCss() {
+      return {
+        '--button-bg-color': this.themeData.buttonBGColor,
+        '--button-text-color': this.themeData.buttonTextColor
+      }
+     }
   },
   data() {
     return {
-      authToken: localStorage.getItem("authToken"),
       visible: false,
-      done: this.data.isDone,
       retweetUrl: "",
       isLoading: false,
       fullPage: true,
     };
   },
+  updated(){
+    if(this.data.isDone && this.data.value){
+      this.retweetUrl = this.data.value;
+    }
+  },
   mounted() {
+    if(this.data.isDone && this.data.value){
+      this.retweetUrl = this.data.value;
+    }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {

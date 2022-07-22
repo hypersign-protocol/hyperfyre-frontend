@@ -10,7 +10,7 @@
               </div>
             </template>
             <template v-else-if="value && value != ''">
-              <b-button variant="warning" class="btn-login" @click.prevent="openWalletAfterRecaptcha()">Click To Login
+              <b-button  class="btn-login button-theme" :style="buttonThemeCss" @click.prevent="openWalletAfterRecaptcha()">Click To Login
                 <!--<vue-recaptcha
                   ref="recaptcha"
                   size="invisible"
@@ -28,6 +28,7 @@
   </div>
 </template>
 <script>
+import config from "../../config";
 import VueRecaptcha from "vue-recaptcha";
 import Messages from "../../utils/messages/participants/en";
 import url from "url";
@@ -38,6 +39,15 @@ export default {
   props: {
     fontColor: String,
     themeColor: String,
+    themeData: Object
+  },
+  computed:{
+        buttonThemeCss() {
+      return {
+        '--button-bg-color': this.themeData && this.themeData.buttonBGColor ? this.themeData.buttonBGColor : config.app.buttonBgColor,
+        '--button-text-color': this.themeData && this.themeData.buttonTextColor ? this.themeData.buttonTextColor : config.app.buttonTextColor
+      }
+    }
   },
   data() {
     return {
@@ -144,6 +154,12 @@ export default {
 };
 </script>
 <style scoped>
+.button-theme {
+  background-color:  var(--button-bg-color);
+  border-collapse: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: 0;
+}
 .logincontent {
   margin-top: 20px;
   padding: 2px;

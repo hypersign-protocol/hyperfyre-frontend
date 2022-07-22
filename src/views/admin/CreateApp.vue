@@ -48,6 +48,12 @@
   padding-left: 15px;
   padding-top: 4%;
 }
+.button-theme{
+  background-color:  var(--button-bg-color);
+  border-collapse: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: 0;
+}
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -99,7 +105,7 @@
               </div>
             <div class="row g-3 align-items-center w-100 mt-4">
                 <div class="text-left col-lg-3 col-md-3 text-left">
-                 <tool-tips infoMessage="Enter base URL of your server. This URL will be whitelisted to access data from Fyre backend. See the docs for more details."></tool-tips><label for="baseUrl" class="col-form-label">Base URL
+                 <tool-tips :infoMessage='`Enter base URL of your server. This URL will be whitelisted to access data from ${appName}`'></tool-tips><label for="baseUrl" class="col-form-label">Base URL
                    <span style="color: red">*</span>: 
                  </label>
                 </div>
@@ -125,9 +131,9 @@
             </div>
             </form>
             <div class="allButtons" style="float:right">
-							<button v-if="!isEdit" class="btn btn-warning button-theme" type="submit" @click.prevent="generateApp">Create</button>
-              <button v-if="isEdit" class="btn btn-warning button-theme" type="submit" @click.prevent="update">Update</button>
-              <button v-if="isEdit" class="btn btn-light button-theme slight-left-margin" type="button" @click.prevent="cancel">Cancel</button>
+							<button v-if="!isEdit" class="btn button-theme " :style="buttonThemeCss" type="submit" @click.prevent="generateApp">Create</button>
+              <button v-if="isEdit" class="btn  button-theme" :style="buttonThemeCss" type="submit" @click.prevent="update">Update</button>
+              <button v-if="isEdit" class="btn btn-light slight-left-margin" type="button" @click.prevent="cancel">Cancel</button>
             </div>
 					</div>
 				</div>
@@ -187,6 +193,7 @@
 import notificationMixins from "../../mixins/notificationMixins";
 import ToolTips from "../../components/basic/toolTips";
 import Web3 from "web3"
+import config from "../../config"
 import {mnemonicToSeed,generateMnemonic} from "bip39"
 import HDKey from "hdkey"
 import Loading from "vue-loading-overlay";
@@ -200,9 +207,18 @@ import Messages from "../../utils/messages/admin/en"
 export default {
   name: "CreateApp",
   components: {Loading, ToolTips},
+  computed:{
+       buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     }
+  },
   data() {
     return {
       isEdit:false,
+      appName: config.appName,
       app:{
         appName: "",
         baseUrl: "",

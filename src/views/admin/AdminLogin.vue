@@ -98,10 +98,10 @@ h5 span {
   margin-top: 14%;
 }
 
-.button-theme{
-  background-color: #F1B319;
-  border-collapse: #F1B319;
-  color: black;
+.button-theme {
+  background-color:  var(--button-bg-color);
+  border-collapse:  var(--button-bg-color);
+  color: var(--button-text-color);
   border: 0;
 
 }
@@ -152,7 +152,7 @@ h5 span {
           <h5><span>OR</span></h5>
 
           <div class="mb-2 ">
-            <a v-if="this.value != ''" class="btn btn-hypersign  button-theme" href="#" @click.prevent="openWallet()">
+            <a v-if="this.value != ''" class="btn btn-hypersign  button-theme" :style="buttonThemeCss"  href="#" @click.prevent="openWallet()">
               <div style="font-size: smaller; padding: 10px;">
                 Click To Login
               </div>
@@ -173,12 +173,20 @@ import "vue-loading-overlay/dist/vue-loading.css";
 import url from "url";
 import notificationMixins from "../../mixins/notificationMixins";
 import localStorageMixin from "../../mixins/localStorageMixin";
-
+import config from "../../config"
 export default {
   name: "Login",
   components: {
     VueQr,
     Loading,
+  },
+  computed:{
+     buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     }
   },
   data() {
     return {
@@ -207,7 +215,7 @@ export default {
   },
   created() {
     localStorage.clear();
-     document.title = "Fyre - Login";
+     document.title = `${config.appName} - Login`;
     // console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
     let websocketUrl = "ws://localhost:3003";

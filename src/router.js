@@ -18,7 +18,7 @@ const router = new Router({
                 ),
             meta: (route) => ({
                 requiresAuth: false,
-                title: "Fyre - " + route.params.slug,
+                title: `${config.appName} - ` + route.params.slug,
                 tabbar: false,
             }),
         },
@@ -30,7 +30,7 @@ const router = new Router({
                     /* webpackChunkName: "investorLogin" */
                     "./views/participant/Home.vue"
                 ),
-            meta: () => ({ requiresAuth: true, title: 'Fyre - User Home' })
+            meta: () => ({ requiresAuth: true, title: `${config.appName} - User Home` })
         },
         {
             path: "/",
@@ -56,7 +56,7 @@ const router = new Router({
 
             component: () =>
                 import ( /* webpackChunkName: "adminLogin" */ './views/admin/AdminLogin.vue'),
-            meta: () => ({ requiresAuth: true, title: 'Fyre - Admin Login', tabbar: false })
+            meta: () => ({ requiresAuth: true, title: `${config.appName} - Admin Login`, tabbar: false })
 
         },
         {
@@ -66,7 +66,7 @@ const router = new Router({
             component: () =>
                 import ( /* webpackChunkName: "adminLogin" */ './views/404.vue'),
             meta: {
-                title: 'Fyre - 404'
+                title: `${config.appName} - 404`
             }
         },
         {
@@ -80,7 +80,7 @@ const router = new Router({
             meta: {
                 requiresAuth: true,
                 admin: true,
-                title: 'Fyre - Admin Dashboard'
+                title: `${config.appName} - Admin Dashboard`
             },
         },
         {
@@ -94,7 +94,21 @@ const router = new Router({
             meta: {
                 requiresAuth: true,
                 admin: true,
-                title: 'Fyre - Teams'
+                title: `${config.appName} - Teams`
+            },
+        },
+        {
+            path: "/admin/setting/org",
+            name: "Org",
+            component: () =>
+                import (
+                    /* webpackChunkName: "dashboard" */
+                    "./views/admin/setting/OrgSetting.vue"
+                ),
+            meta: {
+                requiresAuth: true,
+                admin: true,
+                title: `${config.appName} - Org`
             },
         },
         {
@@ -108,7 +122,7 @@ const router = new Router({
             meta: {
                 requiresAuth: true,
                 admin: true,
-                title: 'Fyre - CreateApp'
+                title: `${config.appName} - CreateApp`
             },
         },
         {
@@ -122,7 +136,7 @@ const router = new Router({
             meta: {
                 requiresAuth: true,
                 admin: true,
-                title: 'Fyre - Participants',
+                title: `${config.appName} - Participants`,
             },
         },
         {
@@ -133,7 +147,7 @@ const router = new Router({
             meta: {
                 requiresAuth: true,
                 admin: true,
-                title: 'Fyre - Events'
+                title: `${config.appName} - Events`
             },
         },
         {
@@ -147,7 +161,7 @@ const router = new Router({
             meta: {
                 requiresAuth: true,
                 admin: true,
-                title: 'Fyre - Subscription'
+                title: `${config.appName} - Subscription`
             },
         },
         {
@@ -158,7 +172,7 @@ const router = new Router({
             meta: {
                 requiresAuth: false,
                 admin: false,
-                title: 'Fyre - SuperAdmin Home'
+                title: `${config.appName} - SuperAdmin Home`
             },
         },
     ],

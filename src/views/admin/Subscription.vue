@@ -64,9 +64,9 @@ i {
 }
 
 .button-theme {
-  background-color: #F1B319;
-  border-collapse: #F1B319;
-  color: black;
+  background-color: var(--button-bg-color);
+  border-collapse:var(--button-bg-color);
+  color:var(--button-text-color);;
   border: 0;
 
 }
@@ -120,7 +120,7 @@ i {
     <b-row class="subscription-wrap">
       <template v-for="plan in plans">
         <b-col cols="12" sm="6" md="3" :key="plan._id" v-if="plan.price !== 0" class="subscription-column">
-          <b-card no-body class="pricing-card" :class="(plan.planName === 'Lambo') ? 'popular' : ''">
+          <b-card no-body class="pricing-card" :class="(plan.planName === 'Lambo') ? 'popular' : ''" :style="buttonThemeCss">
             <b-card-body>
               <h4 class="pricing-heading">
                 <span v-html="getEmoji(plan.planName)"></span>
@@ -213,7 +213,7 @@ i {
               <td>{{ row.leftOverNoRequests }}</td>             
               <td>
                 {{  row.paymentData ? 
-                       (row.paymentData.status==='validated' || row.paymentData.activated === 'by Fyre Activation Team'?
+                       (row.paymentData.status==='validated' || row.paymentData.activated === `by ${appName} Activation Team`?
                          "Active": 
                          (row.paymentData.status==='paid'?
                            "Pending":
@@ -249,12 +249,14 @@ import SelectPlanSlide from '../../components/admin/selectPlanSlider/SelectPlanS
 import Messages from "../../utils/messages/admin/en"
 import eventBus from '../../eventBus';
 import { truncate } from '../../mixins/fieldValidationMixin';
+import config from "../../config"
 export default {
   name: "Subscription",
   components: { Loading, SelectPlanSlide},
 
   data() {
     return {
+      appName:config.appName,
       authToken: localStorage.getItem("authToken"),
       accessToken: localStorage.getItem("accessToken"),
       showAllFeatures: false,
@@ -287,11 +289,17 @@ export default {
 
   computed: {
   // a computed 
+    buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     }
   },
 
   async created() {
     const usrStr = localStorage.getItem("user");
-    document.title = "Fyre - Subscriptions";
+    document.title = `${config.appName} - Subscriptions`;
 
     if (usrStr) {
       this.user = {
@@ -440,10 +448,10 @@ export default {
               
             </div>
             <div class="intro" style="color:red">
-                <strong>Please Contact Fyre Team if your subscription is not activated within 10 mins of payment</strong>
+                <strong>Please Contact ${config.appName} Team if your subscription is not activated within 10 mins of payment</strong>
             </div>
           <div class="footer" style="color:black">
-              Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong> <a style="text-decoration:node;color:black" href="http://fyre.hypersign.id/">Fyre</a> </strong>
+              Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong> <a style="text-decoration:node;color:black" href="http://fyre.hypersign.id/">${config.appName}</a> </strong>
             </div>
           </div>
         </div>

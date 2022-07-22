@@ -59,7 +59,7 @@ padding: 0.1em;
 }
 .nav-bar {
     padding: 10px 100px !important;
-    background: #363740;
+    background: var(--theme-bg-color);
 }
 .menu {
     display: flex;
@@ -147,8 +147,8 @@ ul.social-links li:hover {
     line-height: 20px;
     text-align: center;
     letter-spacing: 0.2px;
-    color: #292825;
-    background: #F1B319;
+    color:var(--button-text-color);
+    background: var(--button-bg-color);
     box-shadow: 0px 4px 12px rgba(55, 81, 255, 0.24);
     border-radius: 8px;
     width: 214px;
@@ -287,10 +287,10 @@ ul.social-links li:hover {
     object-fit: cover;
 }
 .btn-score {
-    background: #F1B319;
+    background: var(--button-bg-color);
     position: relative;
     right: 10px;
-    color: #000;
+    color:var(--button-text-color);
     float: right;
 }
 .check-mark {
@@ -335,7 +335,7 @@ ul.social-links li:hover {
     display: block;
     height: 7px;
     width: 100%;
-    background: #F1B319;
+    background: var(--button-bg-color);;
 }
 .pricing-heading {
     font-size: 28px;
@@ -378,11 +378,11 @@ ul.social-links li:hover {
     border-radius: 100px;
 }
 .btn-plan.free {
-    border-color: #F1B319;
+    border-color: var(--button-bg-color);
 }
 .btn-plan.popular {
-    background: #F1B319;
-    border-color: #F1B319;
+    background: var(--button-bg-color);
+    border-color: var(--button-bg-color);
 }
 .price {
     font-size: 50px;
