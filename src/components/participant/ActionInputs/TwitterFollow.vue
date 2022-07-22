@@ -80,7 +80,7 @@ import Messages from "../../../utils/messages/participants/en";
 import config from "../../../config";
 export default {
   components: { Loading },
-  name: "TwitterRetweet",
+  name: "TwitterFollow",
   props: {
     idValue: {
       required: true,
@@ -117,6 +117,18 @@ computed:{
       isLoading: false,
       fullPage: true,
     };
+  },
+  updated() {
+    try {
+      if (this.data.value ) {
+        if (this.twitter.sourceScreenName == "" || this.twitter.targetScreenName == ""){
+          const twitter = JSON.parse(this.data.value);
+          this.twitter = { ...twitter };
+        }
+      }
+    } catch (e) {
+      this.twitter.sourceScreenName = this.data.value;
+    }
   },
   mounted() {
     try {
