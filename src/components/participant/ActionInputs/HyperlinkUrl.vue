@@ -17,7 +17,7 @@
           <b-badge
             class="btn-score"
             :style="buttonThemeCss"
-            @click="update()"
+            @click="authToken && update()"
             v-if="!done"
           >
              <i class="fa fa-plus" aria-hidden="true"></i>
@@ -103,6 +103,9 @@ export default {
     },
     themeData: {
       required: true,
+    },
+    authToken: {
+      required: true
     }
   },
   computed: {
