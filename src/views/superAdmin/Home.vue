@@ -6,6 +6,7 @@
         <div class="accordion" role="tablist" v-for="resource in resources" v-bind="resource.name">
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme"
+                :style="headerThemeCss"
                     role="tab">
                     <div class="row" style="padding-left: 5px; padding-right:5px;">
                         <div class="col-md-10">
@@ -35,6 +36,7 @@
                             </div>
                             <div class="col-lg-4 col-md-3 ">
                                 <button type="button" class="btn btn-outline-primary button-theme"
+                                :style="buttonThemeCss"
                                     @click="execute(resource)">Execute</button>
                             </div>
                         </div>
@@ -46,6 +48,7 @@
         <div class="accordion" role="tablist">
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme"
+                :style="headerThemeCss"
                     role="tab">
                     <b-button block v-b-toggle.accordian-logs class="bg-transparent border-0 text-left text-primary">
                         <!-- <i class="fas fa-cog"></i> -->
@@ -119,14 +122,14 @@
 
 } */
 .button-theme {
-    background-color: #f1b319;
-    border-collapse: #f1b319;
-    color: black;
+    background-color: var(--button-bg-color);
+    border-collapse:  var(--button-bg-color);
+    color: var(--button-text-color);
     border: 0;
 }
 
 .accordion-header-theme {
-    background-color: rgba(241, 179, 25, 0.24);
+    background-color:var(--header-bg-color);
     border: 0;
 }
 
@@ -140,7 +143,7 @@
     visibility: hidden;
     width: 250px;
     height: auto;
-    background-color: #F1B319;
+    background-color: var(--button-bg-color);
     color: #fff;
     text-align: center;
     padding: 5px 0;
@@ -162,7 +165,7 @@
 .info {
     display: flex;
     padding: 03px;
-    color: #F1B319;
+    color: var(--button-bg-color);
     font-size: 22px;
     border-radius: 50%;
     margin-left: 200px;
@@ -173,6 +176,7 @@
 </style>
 
 <script>
+import config from "../../config";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
@@ -180,6 +184,20 @@ import notificationMixins from "../../mixins/notificationMixins";
 export default {
     components: {
         Loading
+    },
+    computed: {
+          buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     },
+      headerThemeCss(){
+    return{
+      '--header-bg-color': config.app.headerBGColor,
+      '--header-text-color':config.app.headerTextColor
+      }
+  },
     },
     mixins: [notificationMixins],
     data() {

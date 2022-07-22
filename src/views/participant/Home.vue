@@ -153,6 +153,12 @@ export default {
       //   if (this.$route.params["slug"]) {
       document.title = `${config.appName} - User Home`;
       await this.fetchEventData();
+
+      // Setting to default on homepage
+      eventBus.$emit('UpdateThemeEvent', {
+        logoPath: null,
+        themeColor: config.app.themeColor
+      })
       // await this.fetchUserInfoOnLogin();
       //   }
     } catch (e) {
@@ -251,9 +257,10 @@ export default {
         let headers = {
           Authorization: `Bearer ${this.authToken}`,
         };
+        const body= { isParticpant: true}
         const res = await apiClient.makeCall({
           url,
-          body: {},
+          body: body,
           header: headers,
           method: "POST",
         });

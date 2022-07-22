@@ -6,7 +6,12 @@ const config = {
     app: {
         name: process.env.VUE_APP_TITLE,
         decription: process.env.VUE_APP_DESC,
-        version: process.env.VUE_APP_VERSION
+        version: process.env.VUE_APP_VERSION,
+        buttonBgColor: process.env.VUE_APP_BTN_BACKGROUND || "#f1b319",
+        buttonTextColor: process.env.VUE_APP_BTN_TXT_COLOR || "black",
+        headerBGColor: process.env.VUE_APP_HEADER_BACKGROUND || "rgba(241, 179, 25, 0.24)",
+        headerTextColor: process.env.VUE_APP_HEADER_TEXT_COLOR || "#212529",
+        themeBgColor: process.env.VUE_APP_THEME_BACKGROUND || "rgb(54, 55, 64)"
     },
     recaptchaSiteKey: process.env.VUE_APP_RECAPTCHA_SITE_KEY,
     webWalletAddress: urlSanitizer(process.env.VUE_APP_WEBWALLET_URL, false),
@@ -18,7 +23,7 @@ const config = {
     kommunicateAppId: process.env.VUE_APP_KOMMINICATE_APP_ID,
     webpush_public_key: process.env.VUE_APP_WEBPUSH_VAPID_PUBLIC_KEY,
     investor_sign_key: process.env.VUE_APP_INVESTOR_API_SECRET_KEY,
-    appName: process.env.VUE_APP_TITLE,
+    appName: process.env.VUE_APP_TITLE || 'Fyre',
     eventActionType: {
         INPUT_TEXT: "INPUT_TEXT",
         INPUT_NUMBER: "INPUT_NUMBER",

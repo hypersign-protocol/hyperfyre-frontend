@@ -48,6 +48,12 @@
   padding-left: 15px;
   padding-top: 4%;
 }
+.button-theme{
+  background-color:  var(--button-bg-color);
+  border-collapse: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: 0;
+}
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -125,9 +131,9 @@
             </div>
             </form>
             <div class="allButtons" style="float:right">
-							<button v-if="!isEdit" class="btn btn-warning button-theme" type="submit" @click.prevent="generateApp">Create</button>
-              <button v-if="isEdit" class="btn btn-warning button-theme" type="submit" @click.prevent="update">Update</button>
-              <button v-if="isEdit" class="btn btn-light button-theme slight-left-margin" type="button" @click.prevent="cancel">Cancel</button>
+							<button v-if="!isEdit" class="btn button-theme " :style="buttonThemeCss" type="submit" @click.prevent="generateApp">Create</button>
+              <button v-if="isEdit" class="btn  button-theme" :style="buttonThemeCss" type="submit" @click.prevent="update">Update</button>
+              <button v-if="isEdit" class="btn btn-light slight-left-margin" type="button" @click.prevent="cancel">Cancel</button>
             </div>
 					</div>
 				</div>
@@ -201,6 +207,14 @@ import Messages from "../../utils/messages/admin/en"
 export default {
   name: "CreateApp",
   components: {Loading, ToolTips},
+  computed:{
+       buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     }
+  },
   data() {
     return {
       isEdit:false,

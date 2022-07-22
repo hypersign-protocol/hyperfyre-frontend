@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-   <NavBar :title="name" :show="showUserNav" /> 
+   <NavBar :title="name" :show="showUserNav" :themeData="themeData" :isForm="isForm" /> 
     <!-- <NavBar title="Fyre" :show="showUserNav" /> -->
 
     <!-- <div :class="[
@@ -59,6 +59,10 @@ export default {
   },
   data() {
     return {
+      themeData: {
+        themeColor: "",
+        logoPath: ""
+      },
       name: config.appName,
       hover: false,
       authToken: localStorage.getItem("authToken"),
@@ -96,6 +100,12 @@ export default {
               href: "/admin/teams",
               title: "Teams",
               icon: "fas fa-user-plus",
+              exactPath: true,
+            },
+            {
+              href: "/admin/setting/org",
+              title: "Org",
+              icon: "fa fa-university",
               exactPath: true,
             },
             {
@@ -143,16 +153,22 @@ export default {
 
       // Nav for user's end
       showUserNav: false,
-      showChat:false
+      showChat:false,
+      isForm:false,
     };
   },
 
   mounted() {
-    
+
     eventBus.$on('UpdateAdminNav',   (isSubscribed) => {
         this.isSubscribed = isSubscribed;
     })
 
+  
+    eventBus.$on("UpdateThemeEvent", (themeData) => {
+      Object.assign(this.themeData, { ...themeData })
+      this.isForm = window.location.pathname.includes("/form") ? true : false
+    })
     if(this.$route.meta.admin){
       this.showNavbar =
           window.location.pathname.includes("/admin/participants") ||
@@ -160,12 +176,14 @@ export default {
           window.location.pathname.includes("/admin/dashboard") ||
           window.location.pathname.includes("/admin/subscription") ||
           window.location.pathname.includes("/admin/teams") ||
+          window.location.pathname.includes("/admin/setting/org") ||
           window.location.pathname.includes("/admin/createapp") ?
           true :
           false;
     }else{
       this.showUserNav = window.location.pathname.includes("/form") ||
         window.location.pathname.includes("/user") || window.location.pathname.includes("/sa/home")?true : false
+        this.isForm= window.location.pathname.includes("/form")? true:false
     }
   },
   updated() {
@@ -175,6 +193,7 @@ export default {
           window.location.pathname.includes("/admin/dashboard") ||
           window.location.pathname.includes("/admin/subscription") ||
           window.location.pathname.includes("/admin/teams") ||
+      window.location.pathname.includes("/admin/setting/org") ||
           window.location.pathname.includes("/admin/createapp") ?
           true :
           false;
@@ -184,6 +203,7 @@ export default {
           window.location.pathname.includes("/admin/dashboard") ||
           window.location.pathname.includes("/admin/subscription") ||
           window.location.pathname.includes("/admin/teams") ||
+      window.location.pathname.includes("/admin/setting/org") ||
           window.location.pathname.includes("/admin/createapp") ?
           true :
           false;
