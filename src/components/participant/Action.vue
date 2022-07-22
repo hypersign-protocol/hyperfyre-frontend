@@ -193,6 +193,11 @@ export default {
     },
     async updateUserInfo(actionItem, value) {
       try {
+
+        if (!this.authToken){
+          return;
+        }
+        
         this.isLoading = true;
         this.actions = [];
 
