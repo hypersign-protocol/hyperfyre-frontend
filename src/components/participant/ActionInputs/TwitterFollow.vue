@@ -133,12 +133,16 @@ computed:{
   methods: {
     async update() {
       if (!localStorage.getItem("twitterId")){
+        if(this.authToken){
         return this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_FOLLOW.TWITTER_AUTH);
+        }
       }
       if (!(await this.hasFollowedTwitter())) {
-        return this.notifyErr(
+        if(this.authToken){
+          return this.notifyErr(
           Messages.EVENT_ACTIONS.TWITTER_FOLLOW.FOLLOW_FIRST
         );
+        }     
       }  
       this.$emit(
         "input",
@@ -164,9 +168,11 @@ computed:{
                   authRes.accessToken,
                   async (err, user) => {
                     if (err) {
-                      return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
-                    }
-
+                        if(this.authToken){
+                         return this.
+                        notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
+                        }
+                      }
                     const twitterId = user.sub.split("|")[1];
                     localStorage.setItem("twitterId", twitterId);
 
@@ -213,9 +219,11 @@ computed:{
           });
           return resp.data;
         } else {
+          if(this.authToken){
           this.notifyErr(
             Messages.EVENT_ACTIONS.TWITTER_FOLLOW.TWITTER_SCREENS_BLANK
           );
+          }
           return false;
         }
       } catch (e) {
