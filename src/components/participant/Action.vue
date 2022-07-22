@@ -174,13 +174,16 @@ export default {
     },
   },
   methods: {
-    checkIfUserHasLoggedIn() {
+    checkIfUserHasLoggedIn(e) {
       if (!this.userProfile) {
         // TODO:  bad way of coding.  We should only hide which is being clicked 
         document.querySelectorAll(".card-header").forEach(elm => {
           elm.classList.add('collapsed')
           elm.attributes['aria-expanded'].value =  false;
-          document.getElementById(elm.attributes['aria-controls'].value).style.display = 'none';
+          const elemTohide = elm.nextSibling
+          if (elemTohide){
+            elemTohide.style.display = 'none';
+          }
         })
         return this.notifyErr(Messsages.EVENT_ACTIONS.UNAUTHENTICATED);
       } 
@@ -197,7 +200,7 @@ export default {
         if (!this.authToken){
           return;
         }
-        
+
         this.isLoading = true;
         this.actions = [];
 

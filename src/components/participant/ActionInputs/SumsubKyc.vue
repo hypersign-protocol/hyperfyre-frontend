@@ -121,15 +121,11 @@ computed:{
   async mounted() {
       this.$root.$on('bv::collapse::state', (collapseId, isJustShown) => {
       if(collapseId.includes('KYC') && isJustShown){
-      this.dropDown()
+        this.dropDown()
       }
-    eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
-
-    })
-    
-        
-    },
-
+      eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
+    })    
+},
 methods:{
   async update(){
    try{
@@ -151,14 +147,15 @@ methods:{
   },
  async dropDown(){
   if(!this.done){
-  const data= await  this.getNewAccessToken() 
- 
-    this.launchWebSdk(data.token)
+    const data = await  this.getNewAccessToken() 
+    if(data){
+      this.launchWebSdk(data.token)
+    }
   }
  },
  async refreshToken(){
-    const data= await  this.getNewAccessToken() 
-    return data.token
+  const data = await  this.getNewAccessToken() 
+  return data? data.token : null
  }
 ,
  launchWebSdk(accessToken/*, applicantEmail, applicantPhone, customI18nMessages*/) {
@@ -227,6 +224,9 @@ methods:{
 },
 
  async getNewAccessToken() {
+   if (!this.authToken) {
+     return;
+   }
     let url = `${this.$config.studioServer.BASE_URL}api/v1/sumsub/kyc/accesstoken`;
     let headers = {
         "Content-Type": "application/json",
