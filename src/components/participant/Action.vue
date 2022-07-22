@@ -1,5 +1,6 @@
 <template>
-  <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px" @click="checkIfUserHasLoggedIn()">
+  <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px"
+    @click="checkIfUserHasLoggedIn()">
     <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
     <Profile v-if="userProfile" :user="userProfile" />
 
@@ -14,9 +15,9 @@
 
     <template v-for="(actionItem, index) in ActionSchema">
 
-      <component v-if="actionItem.type!=='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
-        :idValue="index" :data="actionItem" :authToken="authToken" :done="actionItem.isDone"
-        @input="updateUserInfo(actionItem, $event)"  :themeData="themeData">
+      <component v-if="(actionItem.type !== 'INFO_TEXT') && (actionItem.type !=='PRIZE_CARD') "
+        :is="CapitaliseString(actionItem.type)" :key="index" :idValue="index" :data="actionItem" :authToken="authToken"
+        :done="actionItem.isDone" @input="updateUserInfo(actionItem, $event)">
       </component>
     </template>
   </div>
@@ -165,8 +166,10 @@ export default {
   computed: {
     // eslint-disable-next-line vue/return-in-computed-property
     isPrizedata() {
-      if (this.prizeData.length > 0) {
+      if (this.prizeData && this.prizeData.length > 0) {
         return true;
+      } else {
+        return false;
       }
     },
   },
@@ -205,11 +208,9 @@ export default {
         };
         const ts=Math.floor(Date.now() / 1000);
         const endPoint='api/v1/investor'
-
-        const signature=crypto.createHmac('sha256',config.investor_sign_key)
-
+        const signature= crypto.createHmac('sha256',config.investor_sign_key)
         signature.update(ts+endPoint+JSON.stringify(body))
-        const sig=signature.digest('hex')
+        const sig= signature.digest('hex')
         let url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${this.RecaptchaToken}`;
         if (this.$route.query.referrer && this.$route.query.referrer != "") {
           url += `&referrer=${this.$route.query.referrer}`;

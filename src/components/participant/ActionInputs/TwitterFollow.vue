@@ -120,12 +120,13 @@ computed:{
   },
   updated() {
     try {
-      if (this.data.value && this.twitter.sourceScreenName == "") {
-        const twitter = JSON.parse(this.data.value);
-        this.twitter = { ...twitter };
+      if (this.data.value ) {
+        if (this.twitter.sourceScreenName == "" || this.twitter.targetScreenName == ""){
+          const twitter = JSON.parse(this.data.value);
+          this.twitter = { ...twitter };
+        }
       }
     } catch (e) {
-      console.error(e)
       this.twitter.sourceScreenName = this.data.value;
     }
   },

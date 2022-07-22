@@ -106,6 +106,19 @@ computed:{
       },
     };
   },
+  updated() {
+    try {
+      if (this.data.value) {
+        if (this.tg.sourceScreenName == "" || this.tg.targetScreenName == ""){
+          const tg = JSON.parse(this.data.value);
+          this.tg = { ...tg };
+        }
+      }
+    } catch (e) {
+      this.tg.sourceScreenName = this.data.value;
+    }
+  },
+
   async mounted() {
     try {
       if (this.data.value) {
