@@ -17,7 +17,7 @@
 
       <component v-if="(actionItem.type !== 'INFO_TEXT') && (actionItem.type !=='PRIZE_CARD') "
         :is="CapitaliseString(actionItem.type)" :key="index" :idValue="index" :data="actionItem" :authToken="authToken"
-        :done="actionItem.isDone" @input="updateUserInfo(actionItem, $event)">
+        :done="actionItem.isDone" @input="updateUserInfo(actionItem, $event)" :themeData="themeData">
       </component>
     </template>
   </div>
