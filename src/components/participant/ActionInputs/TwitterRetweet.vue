@@ -135,9 +135,12 @@ computed:{
     async update() {
       try {
         if (!(await this.hasRetweeted())) {
-          throw new Error(
-            Messages.EVENT_ACTIONS.TWITTER_RETWEET.INVALID_RETWEET
+          if(this.authToken){
+               throw new Error(
+               Messages.EVENT_ACTIONS.TWITTER_RETWEET.INVALID_RETWEET
           );
+          }
+          
         } else {
           this.$emit("input", this.retweetUrl);
         }
@@ -146,7 +149,9 @@ computed:{
         if (errors && errors.length > 0) {
           this.notifyErr(errors[0]["msg"]);
         } else {
-          this.notifyErr(e.message);
+           if(this.authToken){
+           this.notifyErr(e.message);          
+         }
         }
       }
     },
