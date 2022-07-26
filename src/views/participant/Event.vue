@@ -252,35 +252,43 @@ export default {
       }
       this.isLoading=false;
     },
-    async verifyAppAuth(){
-      try{
-        this.isLoading=true
-        if(this.userRedirectionToken && this.userRedirectionToken!=""){
+    async verifyAppAuth() {
+      try {
+        this.isLoading = true
+        if (this.userRedirectionToken && this.userRedirectionToken != "") {
           let url = `${this.$config.studioServer.BASE_URL}api/v1/app/grants`;
-                let headers = {
-                  "Content-Type": "application/json",
-                  "externaluseraccesstoken":`Bearer ${this.userRedirectionToken}`
-                };
-                const resp = await apiClient.makeCall({ method: "POST", url: url, body:{},dxQheader: headers })
-            this.externalUserId= resp.data.data.externalUserMappingId
-            this.authToken=resp.data.data.authToken
-            localStorage.setItem("externalUserMappingId", JSON.stringify(this.externalUserId));
-            if(this.authToken!==undefined){
-              localStorage.setItem('authToken',this.authToken)
-              this.fetchUserDetails()
-            }  
+          let headers = {
+            "Content-Type": "application/json",
+            "externaluseraccesstoken": `Bearer ${this.userRedirectionToken}`
+          };
+
+          const resp = await apiClient.makeCall({ method: "POST", url: url, body: {}, header: headers })
+
+          if (resp && resp.err) {
+            throw new Error(resp.err.message)
+          }
+
+          this.externalUserId = resp.data.data.externalUserMappingId
+          this.authToken = resp.data.data.authToken
+          localStorage.setItem("externalUserMappingId", JSON.stringify(this.externalUserId));
+          if (this.authToken !== undefined) {
+            localStorage.setItem('authToken', this.authToken)
+            this.fetchUserDetails()
+          }
+        }
+      }  
+      catch (e) {
+        if (e.status === 403) {
+          localStorage.clear();
+          this.notifyErr("Unauthorized. Please go back to your app and try to re-participate from")
+          this.authToken = ""
+          this.$router.push(`/form/${this.eventSlug}?userRedirectionToken=${this.userRedirectionToken}`)
+        } else {
+          this.notifyErr(e.message)
         }
       }
-      catch(e){
-          if(e.status===403){
-          localStorage.clear();
-          this.notifyErr(e.error)
-          this.authToken=""
-          this.$router.push(`/form/${this.eventSlug}`)
-          }
-      }
-      finally{
-        this.isLoading=false
+      finally {
+        this.isLoading = false
       }
     },
     async fetchUserInfoOnLogin() {
