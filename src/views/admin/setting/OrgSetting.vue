@@ -51,7 +51,7 @@
                                 </label>
                             </div>
                             <div class="col-lg-4 col-md-4 px-0">
-                                <input type="text" placehoolder="https://app.fyre.hypersign.id/img/Fyre_Small.e094f135.png" id="name" v-model="orgSetting.logoPath" class="form-control w-100" />
+                                <input type="text" placeholder="https://app.fyre.hypersign.id/img/Fyre_Small.e094f135.png" id="name" v-model="orgSetting.logoPath" class="form-control w-100" />
                             </div>
                         </div>
                         <div class="row g-3 align-items-center w-100 mt-4" style="float:right; padding-right: 1.5%">
@@ -284,7 +284,7 @@ export default {
                     if (!resp.ok) {
                         return this.notifyErr(json);
                     } else {
-                        this.notifySuccess(Messages.APP.APP_UPDATED_SUCCESSFULLY);                        
+                        this.notifySuccess(Messages.ORGDATA.ORG_UPDATED_SUCCESSFULLY);                        
                     }
                 } else {
                     throw new Error("Error while updating your setting");

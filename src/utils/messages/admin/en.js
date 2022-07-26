@@ -112,6 +112,9 @@ const APP = {
     APP_UPDATED_SUCCESSFULLY: "App details updated Successfully"
 }
 
+const ORGDATA= {
+    ORG_UPDATED_SUCCESSFULLY:"Org details updated Successfully"
+}
 const PARTICIPANTS = {
 
     EXPORT_ALL: {
@@ -135,5 +138,6 @@ module.exports = {
     PARTICIPANTS,
     SUBSCRIPTIONS,
     EVENT,
-    APP
+    APP,
+    ORGDATA
 }
