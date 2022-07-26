@@ -275,8 +275,6 @@ export default {
             localStorage.setItem('authToken', this.authToken)
             this.fetchUserDetails()
           }
-            }  
-          }
         }
       }  
       catch (e) {
