@@ -125,9 +125,7 @@ export default {
         }
         
       } catch (error) {
-        console.log(error);
         this.showerror = true;
-        console.log(this.showerror);
       }
     },
     async signMessage() {

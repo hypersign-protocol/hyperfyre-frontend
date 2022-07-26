@@ -130,7 +130,7 @@ computed:{
       signature: "",
       message_sign: "You are Signing this Message to confirm your Paricipation",
       
-      options:[{value: '', text: 'Please select your Reef wallet'}],
+      options:[{value: '', text: 'Click on Connect Reef wallet button and select your wallet'}],
       value: {
         contractAddress: "",
         userWalletAddress: '',
@@ -172,7 +172,7 @@ computed:{
     },
     async fetchAccounts() {
       
-      this.options = [{value: '', text: 'Please select your Reef wallet.'}];
+      this.options = [{value: '', text: 'Click on Connect Reef wallet button and select your wallet.'}];
       for (let i in this.wallet) {
        
              this.options.push({value:this.wallet[i],text: 'Address: '+ this.wallet[i].address.slice(0,12)+'...'+this.wallet[i].address.slice(38,48)+'  Name: '+this.wallet[i].name})

@@ -256,7 +256,6 @@ export default {
         messageData.data['provider'] = 'google';
         _this.value = JSON.stringify(messageData.data);
         _this.qr_data=`${_this.$config.webWalletAddress}/deeplink?url=${_this.value}`
-        console.log(_this.qr_data);
       } else if (messageData.op == "end") {
         _this.connection.close();
         const authorizationToken = messageData.data.token;
