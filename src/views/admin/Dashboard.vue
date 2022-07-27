@@ -94,19 +94,6 @@ export default {
     gotosubpage: id => {
       this.$router.push(`${id}`);
     },
-    logout(){
-      // console.log("Dashboard:: Logout method...")
-      // localStorage.removeItem('authToken')
-      // localStorage.removeItem('user')
-      // localStorage.removeItem("credentials")
-      // localStorage.removeItem("userData")
-      
-      // if(this.$route.params.nextUrl != null){
-      //               this.$router.push(this.$route.params.nextUrl)
-      //           }else{
-      //   this.$router.push('/login')
-      //           }
-    },
   },
   mixins: [notificationMixins]
   
