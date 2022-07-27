@@ -190,8 +190,11 @@ router.beforeEach((to, from, next) => {
         const authToken = localStorage.getItem("authToken");
 
         if (authToken) {
-            // console.log("Yes auth token");
-            const url = `${config.studioServer.BASE_URL}hs/api/v2/auth/protected`;
+            let usage = true;
+            if (to.path === "/admin/subscription") {
+                usage = false;
+            }
+            const url = `${config.studioServer.BASE_URL}hs/api/v2/auth/protected?usage=${usage}`;
             fetch(url, {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
@@ -214,15 +217,29 @@ router.beforeEach((to, from, next) => {
                             localStorage.removeItem("accessuser")
                         }
                         if (
-                            to.meta.admin &&
-                            !json.message.isSubscribed &&
-                            (to.path != "/admin/subscription" && to.path != "/admin/dashboard")
+                            to.meta.admin
                         ) {
-                            eventBus.$emit("UpdateAdminNav", false);
-                            next({
-                                path: "/admin/subscription",
-                                params: { nextUrl: to.fullPath },
-                            });
+                            if (!json.message.isSubscribed &&
+                                (to.path != "/admin/subscription" && to.path != "/admin/dashboard")) {
+                                eventBus.$emit("UpdateAdminNav", false);
+                                next({
+                                    path: "/admin/subscription",
+                                    params: { nextUrl: to.fullPath },
+                                });
+                            } else {
+                                // if he is subscired
+                                const usage = json.message.usage;
+                                if (usage && usage.totalUsed >= usage.totalAvailable) {
+                                    next({
+                                        path: "/admin/subscription",
+                                        params: { nextUrl: to.fullPath },
+                                    });
+                                    eventBus.$emit("UpdateAdminNav", false);
+                                } else {
+                                    eventBus.$emit("UpdateAdminNav", true);
+                                    next();
+                                }
+                            }
                         } else {
                             next();
                         }
