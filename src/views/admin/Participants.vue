@@ -729,7 +729,7 @@ computed:{
         });
 
         if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
+          return this.notifyErr(Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_DELETED)
         }
         const json = await resp.json();
 
