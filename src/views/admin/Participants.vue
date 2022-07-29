@@ -336,7 +336,7 @@ computed:{
           title: "Name",
           align: "left",
           sortBy: "",
-          width: 250,
+          width: 400,
         },
         {
           field: "email",
@@ -344,14 +344,14 @@ computed:{
           title: "Email",
           align: "left",
           sortBy: "asc",
-          width: 300,
+          width: 400,
         },
         {
           field: "actions",
           key: "e",
           title: "Actions",
           align: "left",
-          width: 250,
+          width: 400,
           renderBodyCell: ({ row, column }) => {
             const actions = row[column.field];
             return <span>Performed {actions.length} actions</span>;
