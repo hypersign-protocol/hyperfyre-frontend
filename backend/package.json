@@ -32,7 +32,7 @@
         "https-localhost": "^4.6.5",
         "hypersign-auth-js-sdk": "^2.0.7",
         "mongoose": "^5.12.3",
-        "node-fetch": "^2.6.1",
+        "node-fetch": "^3.2.10",
         "nodemailer": "^6.5.0",
         "simple-node-logger": "^18.12.24",
         "twit": "^2.2.11",
