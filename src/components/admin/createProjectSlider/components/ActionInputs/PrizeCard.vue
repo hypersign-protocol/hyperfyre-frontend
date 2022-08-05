@@ -1,11 +1,10 @@
 <template>
-<b-card no-body class="action-wrap">
+  <b-card no-body class="action-wrap">
     <b-card-header
       :class="visible ? null : 'collapsed'"
       :aria-expanded="visible ? 'true' : 'false'"
       aria-controls="profile"
       @click="visible = !visible"
-
     >
       <b-row>
         <b-col cols="1" sm="1" md="1">
@@ -16,7 +15,7 @@
         </b-col>
       </b-row>
     </b-card-header>
-    <b-collapse id="profile" v-model="visible"  >
+    <b-collapse id="profile" v-model="visible">
       <b-card-body class="user-details">
         <table
           v-if="prizeData.length"
@@ -24,7 +23,6 @@
           style="background: #ffff
           table-layout:fixed;
           word-wrap:break-word;"
-          
         >
           <thead class="thead-light">
             <tr>
@@ -35,14 +33,14 @@
           </thead>
           <tbody>
             <tr v-for="row in prizeData" :key="row._id">
-              <th class="wrapword" >
-                  {{row.title}}
+              <th class="wrapword">
+                {{ row.title }}
               </th>
               <td class="wrapword">
-                  {{ JSON.parse(row.value).winners }}
-                </td>
+                {{ JSON.parse(row.value).winners }}
+              </td>
               <td class="wrapword">
-                  {{ JSON.parse(row.value).prizeValue }}
+                {{ JSON.parse(row.value).prizeValue }}
               </td>
             </tr>
           </tbody>
@@ -57,24 +55,24 @@ export default {
   props: {
     prizeData: {
       required: true,
-      type: Array
+      type: Array,
     },
   },
   data() {
     return {
       visible: false,
-    };  
+    };
   },
 };
 </script>
 <style scoped>
-  .wrapword {
-    white-space: -moz-pre-wrap !important;
-    white-space: -webkit-pre-wrap;
-    white-space: -pre-wrap;
-    white-space: -o-pre-wrap;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    white-space: normal;
+.wrapword {
+  white-space: -moz-pre-wrap !important;
+  white-space: -webkit-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  white-space: normal;
 }
 </style>

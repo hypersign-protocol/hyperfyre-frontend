@@ -10,7 +10,11 @@
               </div>
             </template>
             <template v-else-if="value && value != ''">
-              <b-button  class="btn-login button-theme" :style="buttonThemeCss" @click.prevent="openWalletAfterRecaptcha()">Click To Login
+              <b-button
+                class="btn-login button-theme"
+                :style="buttonThemeCss"
+                @click.prevent="openWalletAfterRecaptcha()"
+                >Click To Login
                 <!--<vue-recaptcha
                   ref="recaptcha"
                   size="invisible"
@@ -34,20 +38,24 @@ import Messages from "../../utils/messages/participants/en";
 import url from "url";
 export default {
   components: {
-    VueRecaptcha
+    VueRecaptcha,
   },
   props: {
     fontColor: String,
     themeColor: String,
-    themeData: Object
+    themeData: Object,
   },
-  computed:{
-        buttonThemeCss() {
+  computed: {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': this.themeData && this.themeData.buttonBGColor ? this.themeData.buttonBGColor : config.app.buttonBgColor,
-        '--button-text-color': this.themeData && this.themeData.buttonTextColor ? this.themeData.buttonTextColor : config.app.buttonTextColor
-      }
-    }
+        "--button-bg-color":
+          this.themeData && this.themeData.buttonBGColor ? this.themeData.buttonBGColor : config.app.buttonBgColor,
+        "--button-text-color":
+          this.themeData && this.themeData.buttonTextColor
+            ? this.themeData.buttonTextColor
+            : config.app.buttonTextColor,
+      };
+    },
   },
   data() {
     return {
@@ -69,10 +77,7 @@ export default {
     try {
       parsedUrl = url.parse(baseUrl);
 
-      websocketUrl =
-        parsedUrl.protocol === "https:" ?
-        `wss://${parsedUrl.host}` :
-        `ws://${parsedUrl.host}`;
+      websocketUrl = parsedUrl.protocol === "https:" ? `wss://${parsedUrl.host}` : `ws://${parsedUrl.host}`;
     } catch (e) {
       websocketUrl = "ws://localhost:3003";
     }
@@ -86,7 +91,7 @@ export default {
     // take it in the env
     _this.socketMessage = Messages.EVENT.LOGIN.SOCKET_INIT;
     this.connection = new WebSocket(this.$config.websocketUrl);
-    this.connection.onopen = function() {
+    this.connection.onopen = function () {
       _this.socketMessage = Messages.EVENT.LOGIN.SOCKET_OPEN;
     };
 
@@ -94,7 +99,7 @@ export default {
       let messageData = JSON.parse(data);
       if (messageData.op == "init") {
         _this.isLoading = false;
-         messageData.data['provider'] = 'google';
+        messageData.data["provider"] = "google";
         _this.value = JSON.stringify(messageData.data);
         _this.socketMessage = null;
       } else if (messageData.op == "end") {
@@ -105,15 +110,13 @@ export default {
 
         localStorage.setItem("authToken", authorizationToken);
         this.$emit("AuthTokenUpdateEvent", authorizationToken);
-
-
       } else if (messageData.op == "reload") {
         _this.QRRefresh = true;
         _this.connection.close(4001, messageData.data.clientId);
       }
     };
 
-    this.connection.onerror = function(error) {
+    this.connection.onerror = function (error) {
       console.log(error);
       _this.error = true;
       _this.socketMessage = Messages.EVENT.LOGIN.SOCKET_ERROR;
@@ -124,9 +127,9 @@ export default {
       window.location.reload();
     },
     openWallet() {
-      this.$refs.recaptcha.execute()
+      this.$refs.recaptcha.execute();
     },
-    openWalletAfterRecaptcha(){
+    openWalletAfterRecaptcha() {
       if (this.value != "") {
         this.walletWindow = window.open(
           `${this.$config.webWalletAddress}/deeplink?url=${this.value}`,
@@ -137,11 +140,11 @@ export default {
         // console.log("this value is not")
       }
     },
-    onCaptchaExpired: function() {
+    onCaptchaExpired: function () {
       // console.log("Captcha expired");
       this.$refs.recaptcha.reset();
     },
-    onCaptchaVerified: function(recaptchaToken) {
+    onCaptchaVerified: function (recaptchaToken) {
       // console.log('Verify: ' + recaptchaToken)
       localStorage.setItem("recaptchaToken", recaptchaToken);
       const self = this;
@@ -155,7 +158,7 @@ export default {
 </script>
 <style scoped>
 .button-theme {
-  background-color:  var(--button-bg-color);
+  background-color: var(--button-bg-color);
   border-collapse: var(--button-bg-color);
   color: var(--button-text-color);
   border: 0;

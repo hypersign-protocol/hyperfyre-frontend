@@ -2,32 +2,26 @@
 .drag {
   cursor: move !important; /* fallback if grab cursor is unsupported */
 }
-.py-4{
-cursor:default !important
+.py-4 {
+  cursor: default !important;
 }
 </style>
 
 <template>
   <div class="mx-auto overflow-hidden mt-3 border-0" style="max-width: 600px">
-    <div >
-      <Metrics 
+    <div>
+      <Metrics
         :userScore="5"
         :totalEntries="eventData.investorsCount"
         :timeLeft="
-          parseInt(
-            (new Date(eventData.toDate).getTime() - new Date().getTime()) /
-              (1000 * 3600 * 24)
-          ) <=0
+          parseInt((new Date(eventData.toDate).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) <= 0
             ? 0
-            : parseInt(
-                (new Date(eventData.toDate).getTime() - new Date().getTime()) /
-                  (1000 * 3600 * 24)
-              )
+            : parseInt((new Date(eventData.toDate).getTime() - new Date().getTime()) / (1000 * 3600 * 24))
         "
       />
     </div>
     <div>
-      <Banner 
+      <Banner
         :eventName="eventData.projectName"
         :themeColor="eventData.themeColor"
         :fontColor="eventData.fontColor"
@@ -37,20 +31,12 @@ cursor:default !important
       />
     </div>
     <div class="accordion mx-auto">
-      <b-col
-        md="14"
-        v-for="(action,id) in eventData.actions"
-        :key="id"
-      >
+      <b-col md="14" v-for="(action, id) in eventData.actions" :key="id">
         <b-card v-if="action.type === 'INFO_TEXT' && action.isDeleted !== true">
           <b-row cols-sm="1">
             <b-col cols="1" sm="1" md="1">
               <span>
-                <i
-                  style="color: gray"
-                  v-if="action.type.includes('INFO_')"
-                  class="fa fa-info-circle"
-                ></i>
+                <i style="color: gray" v-if="action.type.includes('INFO_')" class="fa fa-info-circle"></i>
               </span>
             </b-col>
             <b-col cols="9" sm="9" class="text-left" md="9">
@@ -59,22 +45,12 @@ cursor:default !important
           </b-row>
         </b-card>
       </b-col>
-      <b-col
-        md="14"
-        v-for="action in eventData.actions"
-        :key="action._id"
-      >
-        <b-card
-          v-if="action.type === 'PRIZE_CARD' && action.isDeleted !== true"
-        >
+      <b-col md="14" v-for="action in eventData.actions" :key="action._id">
+        <b-card v-if="action.type === 'PRIZE_CARD' && action.isDeleted !== true">
           <b-row cols-sm="1">
             <b-col cols="1" sm="1" md="1">
               <span>
-                <i
-                  style="color: gray"
-                  v-if="action.type.includes('PRIZE_')"
-                  class="fas fa-gift"
-                ></i>
+                <i style="color: gray" v-if="action.type.includes('PRIZE_')" class="fas fa-gift"></i>
               </span>
             </b-col>
             <b-col cols="9" sm="9" class="text-left" md="9">
@@ -87,8 +63,8 @@ cursor:default !important
       <draggable v-model="eventData.actions" @end="onEnd" class="drag">
         <b-col
           md="14"
-          v-for="(action,id) in eventData.actions"
-        :key="id"
+          v-for="(action, id) in eventData.actions"
+          :key="id"
           title="Drag to change the position of the action"
         >
           <b-card
@@ -102,56 +78,16 @@ cursor:default !important
             <b-row cols-sm="1">
               <b-col cols="1" sm="1" md="1">
                 <span>
-                  <i
-                    style="color: gray"
-                    v-if="action.type.includes('TWITTER')"
-                    class="fab fa-twitter"
-                  ></i>
-                  <i
-                    style="color: gray"
-                    v-if="action.type.includes('TELEGRAM')"
-                    class="fab fa-telegram-plane"
-                  ></i>
-                  <i
-                    style="color: gray"
-                    v-if="action.type.includes('INPUT_TEXT')"
-                    class="fas fa-file-alt"
-                  ></i>
-                  <i
-                    style="color: gray"
-                    v-if="action.type.includes('NUMBER')"
-                    class="fas fa-list-ol"
-                  ></i>
-                  <i
-                    style="color: gray"
-                    v-if="action.type.includes('DATE')"
-                    class="fas fa-calendar-minus"
-                  ></i>
-                  <i
-                    style="color: gray"
-                    v-if="action.type.includes('DISCORD')"
-                    class="fab fa-discord"
-                  ></i>
-                  <i
-                    style="color: gray"
-                    v-if="action.type.includes('INPUT_HYPERLINK')"
-                    class="fa fa-link"
-                  ></i>
-                  <i
-                    style="color: gray"
-                    v-if="action.type.includes('INFO_TEXT')"
-                    class="fa fa-info-circle"
-                  ></i>
-                  <i
-                    style="color: gray"
-                    v-if="action.type.includes('PRIZE_')"
-                    class="fas fa-gift"
-                  ></i>
-                  <i
-                    style="color: gray"
-                    v-if="action.type.includes('SUMSUB_KYC')"
-                    class="fas fa-id-card"
-                  ></i>
+                  <i style="color: gray" v-if="action.type.includes('TWITTER')" class="fab fa-twitter"></i>
+                  <i style="color: gray" v-if="action.type.includes('TELEGRAM')" class="fab fa-telegram-plane"></i>
+                  <i style="color: gray" v-if="action.type.includes('INPUT_TEXT')" class="fas fa-file-alt"></i>
+                  <i style="color: gray" v-if="action.type.includes('NUMBER')" class="fas fa-list-ol"></i>
+                  <i style="color: gray" v-if="action.type.includes('DATE')" class="fas fa-calendar-minus"></i>
+                  <i style="color: gray" v-if="action.type.includes('DISCORD')" class="fab fa-discord"></i>
+                  <i style="color: gray" v-if="action.type.includes('INPUT_HYPERLINK')" class="fa fa-link"></i>
+                  <i style="color: gray" v-if="action.type.includes('INFO_TEXT')" class="fa fa-info-circle"></i>
+                  <i style="color: gray" v-if="action.type.includes('PRIZE_')" class="fas fa-gift"></i>
+                  <i style="color: gray" v-if="action.type.includes('SUMSUB_KYC')" class="fas fa-id-card"></i>
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/external-link.svg"
@@ -164,7 +100,7 @@ cursor:default !important
                     v-if="action.type.includes('BLOCKCHAIN_ETH')"
                     height="22px"
                   />
-                   <img
+                  <img
                     style="padding-right: 5px"
                     src="/img/ethereum.2b470564.svg"
                     v-if="action.type.includes('ETHEREUM_')"
@@ -176,14 +112,14 @@ cursor:default !important
                     v-if="action.type.includes('MATIC_')"
                     height="20px"
                   />
-              
+
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/binance-logo.svg"
                     v-if="action.type.includes('BINANCE_')"
                     height="20px"
                   />
-                  
+
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/ringing.png"
@@ -196,8 +132,7 @@ cursor:default !important
                     v-if="action.type.includes('REEF_')"
                     height="20px"
                   />
-                
-          
+
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/moonbase-alpha.svg"
@@ -210,14 +145,13 @@ cursor:default !important
                     v-if="action.type.includes('MOONRIVER_')"
                     height="20px"
                   />
-                 
+
                   <img
                     style="padding-right: 5px"
                     src="../../../../assets/moonbeam.png"
                     v-if="action.type.includes('MOONBEAM_')"
                     height="20px"
                   />
-                 
 
                   <img
                     style="padding-right: 5px"
@@ -294,15 +228,15 @@ export default {
     },
   },
   components: { Banner, Metrics, draggable },
-computed:{
- buttonThemeCss() {
+  computed: {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': config.app.buttonBgColor,
-        '--button-text-color':config.app.buttonTextColor
-      }
-     }
+        "--button-bg-color": config.app.buttonBgColor,
+        "--button-text-color": config.app.buttonTextColor,
+      };
+    },
   },
-methods: {
+  methods: {
     onEnd() {
       this.$root.$emit("actionReorder", this.eventData.actions);
     },

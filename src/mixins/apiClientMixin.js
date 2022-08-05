@@ -1,59 +1,43 @@
 const axios = require("axios");
 
 class APICalls {
-  handleResponse(response) { 
-
- 
-    if(response.message == "Network Error"){
-      return new Error("Please check your connection"); 
-    }
-    
-    if (
-      response.code &&
-      (response.code == "ECONNREFUSED" || response.code == "ENOTFOUND")
-    ) {
+  handleResponse(response) {
+    if (response.message == "Network Error") {
       return new Error("Please check your connection");
-      
+    }
+
+    if (response.code && (response.code == "ECONNREFUSED" || response.code == "ENOTFOUND")) {
+      return new Error("Please check your connection");
     }
 
     if (!response) {
-      return  new Error("No repsonse");
+      return new Error("No repsonse");
     }
     if (
       (response.status >= 300 && response.status < 400) ||
-      (response.response &&
-        response.response.status >= 300 &&
-        response.response.status < 400)
+      (response.response && response.response.status >= 300 && response.response.status < 400)
     ) {
-      return  new Error("REDIRECTING") ;
+      return new Error("REDIRECTING");
     }
 
     if (
       (response.status >= 400 && response.status < 500) ||
-      (response.response &&
-        response.response.status >= 400 &&
-        response.response.status < 500)
+      (response.response && response.response.status >= 400 && response.response.status < 500)
     ) {
-      
-      return response.response.data || new Error("BAD REQUEST: Please check your request") 
+      return response.response.data || new Error("BAD REQUEST: Please check your request");
     }
 
     if (
       (response.status >= 500 && response.status < 600) ||
-      (response.response &&
-        response.response.status >= 500 &&
-        response.response.status < 600)
+      (response.response && response.response.status >= 500 && response.response.status < 600)
     ) {
-      
-      return response.response.data || new Error("INTERNAL SERVER ERROR: Please try agan after some time") 
+      return response.response.data || new Error("INTERNAL SERVER ERROR: Please try agan after some time");
     }
-
 
     return response;
   }
 
   makeCall({ method, url, body, header, isFile }) {
-    
     if (validateParameters(method, url, body, header).err) {
       return validateParameters(method, url, body, header);
     }
@@ -63,7 +47,7 @@ class APICalls {
       if (method == "GET") {
         res = axios.get(url, {
           headers: header,
-           responseType: isFile ? 'blob': ""
+          responseType: isFile ? "blob" : "",
         });
       }
 
@@ -73,18 +57,14 @@ class APICalls {
         });
       }
 
-
       if (method == "PUT") {
         res = axios.put(url, body, {
           headers: header,
         });
       }
 
-
-
       res
         .then((res) => {
-  
           const handledRes = this.handleResponse(res);
           resolve(handledRes);
         })

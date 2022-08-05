@@ -18,12 +18,7 @@
             <img src="../../../assets/plus.svg" />
             {{ data.score }}
           </b-badge>
-          <img
-            class="check-mark"
-            src="../../../assets/check-circle-fill.svg"
-            height="25px"
-            v-if="done"
-          />
+          <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
         </b-col>
       </b-row>
     </b-card-header>
@@ -32,9 +27,9 @@
         <b-row>
           <b-col cols="12" sm="12" md="12">
             <div class="extlink">
-              <button class="btn text-black center"  >
-                <a :href="data.value" v-bind:class="{isDisabled : done}"  @click="isClicked()" target="_blank">
-                  {{data.value}}
+              <button class="btn text-black center">
+                <a :href="data.value" v-bind:class="{ isDisabled: done }" @click="isClicked()" target="_blank">
+                  {{ data.value }}
                   <img
                     src="../../../assets/external-link.svg"
                     height="20px"
@@ -43,16 +38,16 @@
                     target="_blank"
                   />
                 </a>
-              </button> 
+              </button>
             </div>
           </b-col>
         </b-row>
 
         <b-row v-if="!done">
-					<b-col cols="12" sm="12" md="12" >
-						<button class="btn btn-link center"  @click="update()">Continue</button>
-					</b-col>
-				</b-row>
+          <b-col cols="12" sm="12" md="12">
+            <button class="btn btn-link center" @click="update()">Continue</button>
+          </b-col>
+        </b-row>
       </b-card-body>
     </b-collapse>
   </b-card>
@@ -65,10 +60,11 @@
   text-decoration: none;
 }
 
-.center{
-  display: block; margin-left: auto;margin-right: auto
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
-
 </style>
 <script>
 import eventBus from "../../../eventBus.js";
@@ -89,8 +85,8 @@ export default {
     return {
       visible: false,
       done: this.data.isDone,
-	    hasClicked: false,
-	    disableClass: ""
+      hasClicked: false,
+      disableClass: "",
     };
   },
   mounted() {
@@ -110,9 +106,9 @@ export default {
     disableInput(data) {
       this.done = data;
     },
-    truncate1(str, number){
-      return truncate(str, number)
-    }
+    truncate1(str, number) {
+      return truncate(str, number);
+    },
   },
   mixins: [notificationMixins],
 };

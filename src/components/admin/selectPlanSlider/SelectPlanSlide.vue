@@ -8,7 +8,7 @@
 
 .button-theme {
   background-color: var(--button-bg-color);
-  border-collapse:  var(--button-bg-color);
+  border-collapse: var(--button-bg-color);
   color: var(--button-text-color);
   border: 0;
 }
@@ -110,15 +110,8 @@
         </div>
         <hr />
         <div>
-          <b-alert
-            show
-            variant="info"
-            v-if="selectedCurrency == 'HID' && selectedNetwork == 'ETH'"
-          >
-            <p>
-              You would need {{ (grandTotal / getHidPrice()).toFixed(3) }} HID
-              to make this payment
-            </p>
+          <b-alert show variant="info" v-if="selectedCurrency == 'HID' && selectedNetwork == 'ETH'">
+            <p>You would need {{ (grandTotal / getHidPrice()).toFixed(3) }} HID to make this payment</p>
             Buy {{ selectedCurrency }} on
             <b>
               <a
@@ -130,20 +123,11 @@
             </b>
             OR
             <b>
-              <a href="https://www.gate.io/trade/HID_USDT" target="_blank">
-                🧧 Gate
-              </a>
+              <a href="https://www.gate.io/trade/HID_USDT" target="_blank"> 🧧 Gate </a>
             </b>
           </b-alert>
-          <b-alert
-            show
-            variant="info"
-            v-if="selectedCurrency == 'HID' && selectedNetwork == 'MATIC'"
-          >
-            <p>
-              You would need {{ (grandTotal / getHidPrice()).toFixed(3) }} HID
-              to make this payment
-            </p>
+          <b-alert show variant="info" v-if="selectedCurrency == 'HID' && selectedNetwork == 'MATIC'">
+            <p>You would need {{ (grandTotal / getHidPrice()).toFixed(3) }} HID to make this payment</p>
             Buy {{ selectedCurrency }} on
             <b>
               <a
@@ -158,12 +142,7 @@
         <div>
           <div class="row" style="margin-top: 2%">
             <div class="col-md-12">
-              <b-button
-                block
-                variant="primary"
-                class="btn-plan popular"
-                :style="buttonThemeCss"
-                @click="payment"
+              <b-button block variant="primary" class="btn-plan popular" :style="buttonThemeCss" @click="payment"
                 >Pay ${{ grandTotal }}</b-button
               >
             </div>
@@ -218,18 +197,18 @@ export default {
 
   computed: {
     // a computed getter
-      buttonThemeCss() {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': config.app.buttonBgColor,
-        '--button-text-color':config.app.buttonTextColor
-      }
-     },
-      headerThemeCss(){
-    return{
-      '--header-bg-color': config.app.headerBGColor,
-      '--header-text-color':config.app.headerTextColor
-      }
-  },
+        "--button-bg-color": config.app.buttonBgColor,
+        "--button-text-color": config.app.buttonTextColor,
+      };
+    },
+    headerThemeCss() {
+      return {
+        "--header-bg-color": config.app.headerBGColor,
+        "--header-text-color": config.app.headerTextColor,
+      };
+    },
     grandTotal() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.plan.grandTotal = this.plan.price - this.discount;
@@ -288,18 +267,18 @@ export default {
       this.options.network = [
         { text: "Ethereum", value: "ETH", disabled: false },
         { text: "Polygon", value: "MATIC", disabled: false },
-        {text: "Binance Smart Chain",value: "BSC",disabled: false},
+        { text: "Binance Smart Chain", value: "BSC", disabled: false },
         { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
       ];
     },
     setDiscount(__arg) {
       if (__arg) {
-        if (__arg == "HID") { 
+        if (__arg == "HID") {
           this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: false },
-            {text: "Binance Smart Chain",value: "BSC",disabled: true},
+            { text: "Binance Smart Chain", value: "BSC", disabled: true },
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
           ];
           this.discount = (this.plan.price * 30) / 100;
@@ -310,7 +289,7 @@ export default {
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: true },
             { text: "Polygon", value: "MATIC", disabled: false },
-            { text: "Binance Smart Chain",value: "BSC",disabled: true,},
+            { text: "Binance Smart Chain", value: "BSC", disabled: true },
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
           ];
           this.selectedNetwork = "MATIC";
@@ -320,7 +299,7 @@ export default {
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: true },
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
-            { text: "Binance Smart Chain",value: "BSC",disabled: true,},
+            { text: "Binance Smart Chain", value: "BSC", disabled: true },
           ];
           this.selectedNetwork = "ETH";
         }
@@ -333,7 +312,7 @@ export default {
           ];
           this.selectedNetwork = "BSC";
         }
-         if (__arg == "USDT") {
+        if (__arg == "USDT") {
           this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
@@ -343,7 +322,7 @@ export default {
           ];
           //this.selectedNetwork = "ETH";
         }
-         if (__arg == "USDC") {
+        if (__arg == "USDC") {
           this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
@@ -351,7 +330,7 @@ export default {
             { text: "Binance Smart Chain ", value: "BSC", disabled: false },
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
           ];
-         // this.selectedNetwork = "ETH";
+          // this.selectedNetwork = "ETH";
         }
       }
     },

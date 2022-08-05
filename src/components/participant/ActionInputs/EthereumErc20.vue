@@ -17,15 +17,10 @@
 
         <b-col cols="2" sm="2" md="2">
           <b-badge class="btn-score" :style="buttonThemeCss" @click="authToken && update()" v-if="!done">
-             <i class="fa fa-plus" aria-hidden="true"></i>
+            <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
-          <img
-            class="check-mark"
-            src="../../../assets/check-circle-fill.svg"
-            height="25px"
-            v-if="done"
-          />
+          <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
         </b-col>
       </b-row>
     </b-card-header>
@@ -46,21 +41,22 @@
         </b-row>
         <b-row v-else>
           <b-col cols="12" sm="12" md="12">
-               <ErrorMessage errorMessage="Install Metamask browser extension" v-if="!done"/>
+            <ErrorMessage errorMessage="Install Metamask browser extension" v-if="!done" />
             <b-form-input
-                type="text"
-                :placeholder="data.placeHolder"
-                v-model="value.userWalletAddress"
-                :disabled="true"
-                :required="data.isManadatory"
-              v-else></b-form-input>
+              type="text"
+              :placeholder="data.placeHolder"
+              v-model="value.userWalletAddress"
+              :disabled="true"
+              :required="data.isManadatory"
+              v-else
+            ></b-form-input>
           </b-col>
         </b-row>
         <b-row v-if="!done && !showerror">
-         <b-col class= "btn-group" cols="12" sm="12" md="12">
+          <b-col class="btn-group" cols="12" sm="12" md="12">
             <button class="btn btn-link" @click="invokeMetamask()">Connect Metamask</button>
-            <button class="btn btn-link" @click="update()">Continue</button>   
-          </b-col>  
+            <button class="btn btn-link" @click="update()">Continue</button>
+          </b-col>
         </b-row>
       </b-card-body>
     </b-collapse>
@@ -77,11 +73,7 @@
 <script>
 import eventBus from "../../../eventBus.js";
 import apiClient from "../../../mixins/apiClientMixin.js";
-import {
-  isValidURL,
-  isValidText,
-  isEmpty,
-} from "../../../mixins/fieldValidationMixin";
+import { isValidURL, isValidText, isEmpty } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
 import config from "../../../config.js";
 import Messages from "../../../utils/messages/participants/en";
@@ -97,25 +89,25 @@ export default {
       required: true,
     },
     authToken: {
-      required: true
+      required: true,
     },
     done: {
       required: true,
     },
     themeData: {
       required: true,
-    }
+    },
   },
   components: {
     ErrorMessage,
   },
-computed:{
- buttonThemeCss() {
+  computed: {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': this.themeData.buttonBGColor,
-        '--button-text-color': this.themeData.buttonTextColor
-      }
-     }
+        "--button-bg-color": this.themeData.buttonBGColor,
+        "--button-text-color": this.themeData.buttonTextColor,
+      };
+    },
   },
   data() {
     return {
@@ -130,14 +122,14 @@ computed:{
       },
     };
   },
-  updated(){
-    if (this.data.value && typeof(this.data.value) === "object") {
-      Object.assign(this.value, { ...(this.data.value) });
+  updated() {
+    if (this.data.value && typeof this.data.value === "object") {
+      Object.assign(this.value, { ...this.data.value });
     }
   },
   mounted() {
-    if (this.data.value && typeof(this.data.value) === "object") {
-      Object.assign(this.value, { ...(this.data.value) });
+    if (this.data.value && typeof this.data.value === "object") {
+      Object.assign(this.value, { ...this.data.value });
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
     this.checkWeb3Injection();
@@ -154,13 +146,9 @@ computed:{
       }
     },
     async signMessage() {
-      const message =
-        "You are Signing this message to ensure your participation in this event";
+      const message = "You are Signing this message to ensure your participation in this event";
       this.message_sign = message;
-      return await this.web3.eth.personal.sign(
-        message,
-        ethereum.selectedAddress
-      );
+      return await this.web3.eth.personal.sign(message, ethereum.selectedAddress);
     },
     async invokeMetamask() {
       try {
@@ -170,10 +158,7 @@ computed:{
           });
           this.signature = await this.signMessage();
 
-          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(
-            this.message_sign,
-            this.signature
-          );
+          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(this.message_sign, this.signature);
 
           let isSigVerified = false;
           if (generatedWalletAddr === wallet[0]) {

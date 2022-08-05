@@ -18,12 +18,7 @@
             <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
-          <img
-            class="check-mark"
-            src="../../../assets/check-circle-fill.svg"
-            height="25px"
-            v-if="done"
-          />
+          <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
         </b-col>
       </b-row>
     </b-card-header>
@@ -34,9 +29,7 @@
             <div class="follow">
               <button
                 :disabled="done"
-                @click="
-                  handleTelegramLogin(`https://telegram.me/${data.value}`)
-                "
+                @click="handleTelegramLogin(`https://telegram.me/${data.value}`)"
                 class="btn btn-outline-telegram"
               >
                 <img src="../../../assets/telegram.svg" />
@@ -47,17 +40,19 @@
         </b-row>
 
         <b-row v-if="!done">
-					<b-col cols="12" sm="12" md="12" >
-						<button class="btn btn-link center"  @click="update()">Continue</button>
-					</b-col>
-				</b-row>
+          <b-col cols="12" sm="12" md="12">
+            <button class="btn btn-link center" @click="update()">Continue</button>
+          </b-col>
+        </b-row>
       </b-card-body>
     </b-collapse>
   </b-card>
 </template>
 <style scoped>
-.center{
-  display: block; margin-left: auto;margin-right: auto
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
 <script>
@@ -84,15 +79,15 @@ export default {
     },
     themeData: {
       required: true,
-    }
+    },
   },
-computed:{
- buttonThemeCss() {
+  computed: {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': this.themeData.buttonBGColor,
-        '--button-text-color': this.themeData.buttonTextColor
-      }
-     }
+        "--button-bg-color": this.themeData.buttonBGColor,
+        "--button-text-color": this.themeData.buttonTextColor,
+      };
+    },
   },
   data() {
     return {
@@ -101,15 +96,15 @@ computed:{
         sourceScreenName: "",
         targetScreenName: "",
       },
-      tgdata:{
-        userID:"",
+      tgdata: {
+        userID: "",
       },
     };
   },
   updated() {
     try {
       if (this.data.value) {
-        if (this.tg.sourceScreenName == "" || this.tg.targetScreenName == ""){
+        if (this.tg.sourceScreenName == "" || this.tg.targetScreenName == "") {
           const tg = JSON.parse(this.data.value);
           this.tg = { ...tg };
         }
@@ -135,43 +130,39 @@ computed:{
     async update() {
       const tgIdInStore = this.tg.targetScreenName; //localStorage.getItem("telegramId");
       if (!tgIdInStore || tgIdInStore == "undefined" || tgIdInStore == null) {
-        return this.notifyErr(
-          Messages.EVENT_ACTIONS.TELEGRAM_JOIN.TELEGRAM_AUTH
-        );
+        return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.TELEGRAM_AUTH);
       } else {
         try {
           const body = {
-                tgUserID: this.tgdata.userID,
-                tgGroupID: '@'+this.tg.sourceScreenName,                
-              };
-              let url = `${this.$config.studioServer.BASE_URL}api/v1/tg/verify`;
-              let headers = {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${this.authToken}`,
-              };
-              const res = await apiClient.makeCall({
-                method: "POST",
-                url: url,
-                body: body,
-                header: headers,
-              });
+            tgUserID: this.tgdata.userID,
+            tgGroupID: "@" + this.tg.sourceScreenName,
+          };
+          let url = `${this.$config.studioServer.BASE_URL}api/v1/tg/verify`;
+          let headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.authToken}`,
+          };
+          const res = await apiClient.makeCall({
+            method: "POST",
+            url: url,
+            body: body,
+            header: headers,
+          });
 
-              const result = res.data;
-              if(res.status===200){
-                if(result.status==='left'){
-                  return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.JOIN_TG)
-                }else{
-                  this.$emit("input",JSON.stringify({...this.tg,}))
-                }
-              }
+          const result = res.data;
+          if (res.status === 200) {
+            if (result.status === "left") {
+              return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.JOIN_TG);
+            } else {
+              this.$emit("input", JSON.stringify({ ...this.tg }));
+            }
+          }
         } catch (error) {
-           return this.notifyErr(error.split(":").at(-1))
-        }               
-              
-             
+          return this.notifyErr(error.split(":").at(-1));
+        }
 
         // this.tg.targetScreenName = tgIdInStore;
-       /* this.$emit(
+        /* this.$emit(
           "input",
           JSON.stringify({
             ...this.tg,
@@ -190,27 +181,20 @@ computed:{
 
         // if (!localStorage.getItem("telegramId")) {
         // const that =  this;
-        window.Telegram.Login.auth(
-          { bot_id: config.telegramBotId, request_access: true },
-          (data) => {
-            if (!data) {
-              return this.notifyErr(
-                Messages.EVENT_ACTIONS.TELEGRAM_JOIN.AUTH_FAILED
-              );
-            }
-
-            if (data.username || data.id) {
-              this.tg.targetScreenName = data.username || data.id;
-                this.tgdata.userID=data.id;
-              // localStorage.setItem("telegramId", data.username || data.id)
-              window.open(urlToRedirect, "_blank");
-            } else {
-              return this.notifyErr(
-                Messages.EVENT_ACTIONS.TELEGRAM_JOIN.FETCH_USERNAME_FAILED
-              );
-            }
+        window.Telegram.Login.auth({ bot_id: config.telegramBotId, request_access: true }, (data) => {
+          if (!data) {
+            return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.AUTH_FAILED);
           }
-        );
+
+          if (data.username || data.id) {
+            this.tg.targetScreenName = data.username || data.id;
+            this.tgdata.userID = data.id;
+            // localStorage.setItem("telegramId", data.username || data.id)
+            window.open(urlToRedirect, "_blank");
+          } else {
+            return this.notifyErr(Messages.EVENT_ACTIONS.TELEGRAM_JOIN.FETCH_USERNAME_FAILED);
+          }
+        });
 
         // } else {
         // 	window.open(urlToRedirect, "_blank");

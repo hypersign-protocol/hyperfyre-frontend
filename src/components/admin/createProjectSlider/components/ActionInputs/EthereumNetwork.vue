@@ -20,12 +20,7 @@
             <img src="../../../assets/plus.svg" />
             {{ data.score }}
           </b-badge>
-          <img
-            class="check-mark"
-            src="../../../assets/check-circle-fill.svg"
-            height="25px"
-            v-if="done"
-          />
+          <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
         </b-col>
       </b-row>
     </b-card-header>
@@ -78,19 +73,11 @@
               v-bind:key="index"
             >
               <div class="text-left col-lg-3 col-md-3 text-left">
-                <label for="title" class="col-form-label"
-                  >{{ param.name }}<span style="color: red">*</span>:
-                </label>
+                <label for="title" class="col-form-label">{{ param.name }}<span style="color: red">*</span>: </label>
               </div>
 
               <div class="col-lg-9 col-md-9 px-0">
-                <input
-                  v-model="param.value"
-                  type=""
-                  id="title"
-                  :required="true"
-                  class="form-control w-100"
-                />
+                <input v-model="param.value" type="" id="title" :required="true" class="form-control w-100" />
               </div>
             </div>
           </b-col>
@@ -235,7 +222,6 @@ export default {
               }
               case "bool": {
                 if (!!this.value.operand === !!result) {
-              
                   this.$emit(
                     "input",
                     JSON.stringify({
@@ -260,7 +246,7 @@ export default {
               case "uint256": {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
-                if (result <  this.value.operand) {
+                if (result < this.value.operand) {
                   this.notifySuccess("Success");
 
                   this.$emit(
@@ -276,13 +262,13 @@ export default {
             }
             break;
           }
-           case ">": {
+          case ">": {
             switch (this.value.returnType) {
               case "uint8":
               case "uint256": {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
-                if (result >  this.value.operand) {
+                if (result > this.value.operand) {
                   this.notifySuccess("Success");
 
                   this.$emit(
@@ -299,14 +285,13 @@ export default {
             break;
           }
 
-
-           case "<==": {
+          case "<==": {
             switch (this.value.returnType) {
               case "uint8":
               case "uint256": {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
-                if (result<=  this.value.operand ) {
+                if (result <= this.value.operand) {
                   this.notifySuccess("Success");
 
                   this.$emit(
@@ -322,13 +307,13 @@ export default {
             }
             break;
           }
-           case ">==": {
+          case ">==": {
             switch (this.value.returnType) {
               case "uint8":
               case "uint256": {
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
-                if (result>=this.value.operand) {
+                if (result >= this.value.operand) {
                   this.notifySuccess("Success");
 
                   this.$emit(
@@ -337,7 +322,7 @@ export default {
                       ...this.value,
                     })
                   );
-                } else {                
+                } else {
                   throw new Error("Condition Mismatch");
                 }
               }

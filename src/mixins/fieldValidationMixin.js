@@ -16,22 +16,20 @@ export function isValidURL(str) {
 }
 
 //twitter username contains only 15 characters including alphabets,numbers[0-9] and underscore
-export function isValidTwitterUsername(str){
-  if(!str.match(/^[a-zA-Z0-9_]{1,15}$/)){
+export function isValidTwitterUsername(str) {
+  if (!str.match(/^[a-zA-Z0-9_]{1,15}$/)) {
     return true;
-  }
-  else{
+  } else {
     return false;
   }
 }
 
-//telegram username contains only numbers[0-9], alphabets and underscore 
-//for telegram there is no limit mentioned for username as mentioned in twitter username 
-export function isValidTelegramName(str){
-  if(!str.match(/^[a-zA-Z0-9_]{1,}$/)){
+//telegram username contains only numbers[0-9], alphabets and underscore
+//for telegram there is no limit mentioned for username as mentioned in twitter username
+export function isValidTelegramName(str) {
+  if (!str.match(/^[a-zA-Z0-9_]{1,}$/)) {
     return true;
-  }
-  else{
+  } else {
     return false;
   }
 }
@@ -45,11 +43,11 @@ export function isValidText(str) {
     return false;
   }
 }
-export function isValidSlug(str){
-  if(str.match(/^([a-z0-9])*(-([a-z0-9])*)*$/)){
-    return true
-  }else{
-    return false
+export function isValidSlug(str) {
+  if (str.match(/^([a-z0-9])*(-([a-z0-9])*)*$/)) {
+    return true;
+  } else {
+    return false;
   }
 }
 // Note: this will check is str is undefined, null, " ", ""
@@ -62,30 +60,28 @@ export function isEmpty(str) {
   }
   return false;
 }
-export function isContractValid(str){
-  if(str.match(/^0x[a-fA-F0-9]{40}$/)){
+export function isContractValid(str) {
+  if (str.match(/^0x[a-fA-F0-9]{40}$/)) {
     return true;
-  }
-  else{
+  } else {
     return false;
   }
 }
-export function isdiscordLink(str){
-  if(!str.includes('https://discord.')){
-    return true
+export function isdiscordLink(str) {
+  if (!str.includes("https://discord.")) {
+    return true;
   }
 }
-export function isNum(str){
-  if(str.match(/^[1-9]\d*$/)){
-    return true
-  }
-  else{
-    return false
+export function isNum(str) {
+  if (str.match(/^[1-9]\d*$/)) {
+    return true;
+  } else {
+    return false;
   }
 }
-export function isretweetUrl(str){
-  if(!str.match(/https:\/\/twitter\.com\/.*\/status\/[0-9]+/)){
-    return true
+export function isretweetUrl(str) {
+  if (!str.match(/https:\/\/twitter\.com\/.*\/status\/[0-9]+/)) {
+    return true;
   }
 }
 export function isDate(date) {
@@ -97,11 +93,11 @@ export function isDate(date) {
 
 export function truncate(str, limit) {
   if (!str) {
-    return
+    return;
   }
 
   if (!limit) {
-    return
+    return;
   }
 
   // if less than limit then do nothing
@@ -116,17 +112,13 @@ export function truncate(str, limit) {
 }
 
 export function checkTitle(arr, prop) {
-
-  const actionTitle = arr.map(item => item[prop]!=="");
+  const actionTitle = arr.map((item) => item[prop] !== "");
   return actionTitle;
-
 }
 
 export function checkValue(arr, prop) {
-
-  const actionValue = arr.map(item => item[prop]!=="");
+  const actionValue = arr.map((item) => item[prop] !== "");
   return actionValue;
-
 }
 
 export function urlSanitizer(url, endsWith) {

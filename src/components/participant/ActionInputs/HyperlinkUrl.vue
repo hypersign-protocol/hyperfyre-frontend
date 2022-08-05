@@ -14,21 +14,11 @@
           <div class="text text-capitalize">{{ data.title }}</div>
         </b-col>
         <b-col cols="2" sm="2" md="2">
-          <b-badge
-            class="btn-score"
-            :style="buttonThemeCss"
-            @click="authToken && update()"
-            v-if="!done"
-          >
-             <i class="fa fa-plus" aria-hidden="true"></i>
+          <b-badge class="btn-score" :style="buttonThemeCss" @click="authToken && update()" v-if="!done">
+            <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
-          <img
-            class="check-mark"
-            src="../../../assets/check-circle-fill.svg"
-            height="25px"
-            v-if="done"
-          />
+          <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
         </b-col>
       </b-row>
     </b-card-header>
@@ -38,12 +28,7 @@
           <b-col cols="12" sm="12" md="12">
             <div class="extlink">
               <button class="btn text-black center">
-                <a
-                  :href="data.value"
-                  v-bind:class="{ isDisabled: done }"
-                  @click="isClicked()"
-                  target="_blank"
-                >
+                <a :href="data.value" v-bind:class="{ isDisabled: done }" @click="isClicked()" target="_blank">
                   {{ data.value }}
                   <img
                     src="../../../assets/external-link.svg"
@@ -60,9 +45,7 @@
 
         <b-row v-if="!done">
           <b-col cols="12" sm="12" md="12">
-            <button class="btn btn-link center" @click="update()">
-              Continue
-            </button>
+            <button class="btn btn-link center" @click="update()">Continue</button>
           </b-col>
         </b-row>
       </b-card-body>
@@ -105,14 +88,14 @@ export default {
       required: true,
     },
     authToken: {
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     buttonThemeCss() {
       return {
-        '--button-bg-color': this.themeData.buttonBGColor,
-        '--button-text-color': this.themeData.buttonTextColor
+        "--button-bg-color": this.themeData.buttonBGColor,
+        "--button-text-color": this.themeData.buttonTextColor,
       };
     },
   },

@@ -1,7 +1,11 @@
 <template>
   <b-card no-body class="action-wrap">
-    <b-card-header :class="visible ? null : 'collapsed'" :aria-expanded="visible ? 'true' : 'false'"
-      :aria-controls="`collapse-${idValue}`" @click="visible = !visible">
+    <b-card-header
+      :class="visible ? null : 'collapsed'"
+      :aria-expanded="visible ? 'true' : 'false'"
+      :aria-controls="`collapse-${idValue}`"
+      @click="visible = !visible"
+    >
       <b-row>
         <b-col cols="1" sm="1" md="1">
           <img src="/img/ethereum.2b470564.svg" height="25px" />
@@ -12,7 +16,7 @@
 
         <b-col cols="2" sm="2" md="2">
           <b-badge class="btn-score" :style="buttonThemeCss" @click="authToken && update()" v-if="!done">
-             <i class="fa fa-plus" aria-hidden="true"></i>
+            <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
           <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
@@ -26,8 +30,15 @@
             <div class="row g-3 align-items-center" v-for="(param, index) in value.paramsList" v-bind:key="index">
               <div class="col-lg-12 col-md-12" v-if="param.name === 'address'">
                 <div v-if="!showerror">
-                  <input v-model="param.value" type="" id="title" :required="true" class="form-control w-100"
-                    :disabled="true" :placeholder="param.name" />
+                  <input
+                    v-model="param.value"
+                    type=""
+                    id="title"
+                    :required="true"
+                    class="form-control w-100"
+                    :disabled="true"
+                    :placeholder="param.name"
+                  />
 
                   <div v-if="!done" class="btn-group w-100">
                     <button class="btn btn-link" @click="invokeMetamask(index)">Connect Metamask</button>
@@ -37,14 +48,26 @@
 
                 <div v-else>
                   <ErrorMessage errorMessage="Install Metamask browser extension" v-if="!done" />
-                  <input v-model="param.value" type="" id="title" :required="true" class="form-control w-100"
-                    :disabled="true" v-else />
+                  <input
+                    v-model="param.value"
+                    type=""
+                    id="title"
+                    :required="true"
+                    class="form-control w-100"
+                    :disabled="true"
+                    v-else
+                  />
                 </div>
-
               </div>
               <div class="col-lg-12 col-md-12" v-else>
-                <input v-model="param.value" type="" id="title" :required="true" class="form-control w-100"
-                  :disabled="done" />
+                <input
+                  v-model="param.value"
+                  type=""
+                  id="title"
+                  :required="true"
+                  class="form-control w-100"
+                  :disabled="done"
+                />
 
                 <div v-if="!done" cols="12" sm="12" md="12">
                   <button class="btn btn-link center" @click="update()">Continue</button>
@@ -88,25 +111,25 @@ export default {
       required: true,
     },
     authToken: {
-      required: true      
+      required: true,
     },
     done: {
       required: true,
     },
     themeData: {
       required: true,
-    }
+    },
   },
   components: {
     ErrorMessage,
   },
-computed:{
- buttonThemeCss() {
+  computed: {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': this.themeData.buttonBGColor,
-        '--button-text-color': this.themeData.buttonTextColor
-      }
-     }
+        "--button-bg-color": this.themeData.buttonBGColor,
+        "--button-text-color": this.themeData.buttonTextColor,
+      };
+    },
   },
   data() {
     return {
@@ -127,9 +150,9 @@ computed:{
       },
     };
   },
-  updated(){
-    if (this.data.value && typeof(this.data.value) === "object") {    
-      Object.assign(this.value,  {...this.data.value} )
+  updated() {
+    if (this.data.value && typeof this.data.value === "object") {
+      Object.assign(this.value, { ...this.data.value });
       this.updatedParamsList();
     }
   },
@@ -138,17 +161,17 @@ computed:{
     this.checkWeb3Injection();
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
 
-    if (this.data.value && typeof(this.data.value) === "object") {
+    if (this.data.value && typeof this.data.value === "object") {
       Object.assign(this.value, { ...this.data.value });
       this.updatedParamsList();
     }
   },
   methods: {
-    updatedParamsList(){
+    updatedParamsList() {
       let s = this.value.methods;
-      if(!s){
-        return
-      } 
+      if (!s) {
+        return;
+      }
       s = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
       if (s !== "") {
         s = s.split(",");
@@ -162,7 +185,7 @@ computed:{
         }
       }
     },
-    cleanValue(){
+    cleanValue() {
       this.value = {
         contractAddress: "",
         thresholdBalance: 0,
@@ -173,7 +196,7 @@ computed:{
         operator: "",
         returnType: "",
         condition: "",
-      }
+      };
     },
 
     checkWeb3Injection() {
@@ -189,13 +212,9 @@ computed:{
       }
     },
     async signMessage() {
-      const message =
-        "You are Signing this message to ensure your participation in this event";
+      const message = "You are Signing this message to ensure your participation in this event";
       this.message_sign = message;
-      return await this.web3.eth.personal.sign(
-        message,
-        window.ethereum.selectedAddress
-      );
+      return await this.web3.eth.personal.sign(message, window.ethereum.selectedAddress);
     },
     async invokeMetamask(e) {
       console.log(e);
@@ -206,10 +225,7 @@ computed:{
           });
           this.signature = await this.signMessage();
 
-          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(
-            this.message_sign,
-            this.signature
-          );
+          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(this.message_sign, this.signature);
 
           let isSigVerified = false;
           if (generatedWalletAddr === wallet[0]) {
@@ -227,15 +243,16 @@ computed:{
         return this.notifyErr(error.message);
       }
     },
-    
-    emitToUpdate(){
+
+    emitToUpdate() {
       //this.notifySuccess("Success");
       const { contractAddress, paramsList } = this.value;
       const valueToStore = {
-        contractAddress, paramsList
-      }
+        contractAddress,
+        paramsList,
+      };
       this.value.condition = "Condition True";
-      
+
       this.$emit(
         "input",
         JSON.stringify({
@@ -259,7 +276,6 @@ computed:{
         //   }
         // }
 
-        
         switch (this.value.operator) {
           case "===": {
             switch (this.value.returnType) {
@@ -268,7 +284,7 @@ computed:{
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (this.value.operand === result) {
-                  this.emitToUpdate()
+                  this.emitToUpdate();
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -277,16 +293,16 @@ computed:{
               case "string":
               case "address": {
                 if (this.value.operand === result) {
-                  this.emitToUpdate()
+                  this.emitToUpdate();
                 } else {
                   this.notifyErr("Condition Mismatch");
                 }
                 break;
               }
               case "bool": {
-                this.value.operand  = (this.value.operand  === "true");
+                this.value.operand = this.value.operand === "true";
                 if (this.value.operand === result) {
-                  this.emitToUpdate()
+                  this.emitToUpdate();
                 } else {
                   this.notifyErr("Condition Mismatch");
                 }
@@ -305,7 +321,7 @@ computed:{
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result < this.value.operand) {
-                  this.emitToUpdate()
+                  this.emitToUpdate();
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -320,7 +336,7 @@ computed:{
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result > this.value.operand) {
-                  this.emitToUpdate()
+                  this.emitToUpdate();
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -336,7 +352,7 @@ computed:{
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result <= this.value.operand) {
-                  this.emitToUpdate()
+                  this.emitToUpdate();
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -351,7 +367,7 @@ computed:{
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result >= this.value.operand) {
-                  this.emitToUpdate()
+                  this.emitToUpdate();
                 } else {
                   throw new Error("Condition Mismatch");
                 }

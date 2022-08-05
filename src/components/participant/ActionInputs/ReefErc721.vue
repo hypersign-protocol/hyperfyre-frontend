@@ -20,12 +20,7 @@
             <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
-          <img
-            class="check-mark"
-            src="../../../assets/check-circle-fill.svg"
-            height="25px"
-            v-if="done"
-          />
+          <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
         </b-col>
       </b-row>
     </b-card-header>
@@ -48,26 +43,28 @@
                 v-model="value.userWalletAddress.address"
                 :disabled="true"
                 :required="data.isManadatory"
-              v-else></b-form-input>
+                v-else
+              ></b-form-input>
             </div>
           </b-col>
         </b-row>
         <b-row v-else>
           <b-col cols="12" sm="12" md="12">
-            <ErrorMessage errorMessage="Install Reef browser extension"  v-if="!done" />
+            <ErrorMessage errorMessage="Install Reef browser extension" v-if="!done" />
             <b-form-input
-                type="text"
-                :placeholder="data.placeHolder"
-                v-model="value.userWalletAddress.address"
-                :disabled="done"
-                :required="data.isManadatory"
-              v-else></b-form-input>
+              type="text"
+              :placeholder="data.placeHolder"
+              v-model="value.userWalletAddress.address"
+              :disabled="done"
+              :required="data.isManadatory"
+              v-else
+            ></b-form-input>
           </b-col>
         </b-row>
         <b-row v-if="!done && !showerror">
-          <b-col class= "btn-group" cols="12" sm="12" md="12" >
+          <b-col class="btn-group" cols="12" sm="12" md="12">
             <button class="btn btn-link" @click="invokeReef()">Connect Reef</button>
-            <button class="btn btn-link"  @click="update()">Continue</button>
+            <button class="btn btn-link" @click="update()">Continue</button>
           </b-col>
         </b-row>
       </b-card-body>
@@ -75,20 +72,17 @@
   </b-card>
 </template>
 <style scoped>
-.center{
-  display: block; margin-left: auto;margin-right: auto
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
 
 <script>
-
 import eventBus from "../../../eventBus.js";
 import apiClient from "../../../mixins/apiClientMixin.js";
-import {
-  isValidURL,
-  isValidText,
-  isEmpty,
-} from "../../../mixins/fieldValidationMixin";
+import { isValidURL, isValidText, isEmpty } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
@@ -110,18 +104,18 @@ export default {
     },
     themeData: {
       required: true,
-    }
+    },
   },
   components: {
     ErrorMessage,
   },
-computed:{
- buttonThemeCss() {
-    return {
-      '--button-bg-color': this.themeData.buttonBGColor,
-      '--button-text-color': this.themeData.buttonTextColor
-    }
-     }
+  computed: {
+    buttonThemeCss() {
+      return {
+        "--button-bg-color": this.themeData.buttonBGColor,
+        "--button-text-color": this.themeData.buttonTextColor,
+      };
+    },
   },
   data() {
     return {
@@ -129,83 +123,74 @@ computed:{
       showerror: false,
       signature: "",
       message_sign: "You are Signing this Message to confirm your Paricipation",
-      
-      options:[{value: '', text: 'Click on Connect Reef wallet button and select your wallet'}],
+
+      options: [{ value: "", text: "Click on Connect Reef wallet button and select your wallet" }],
       value: {
         contractAddress: "",
-        userWalletAddress: '',
-        thresholdBalance: 0
+        userWalletAddress: "",
+        thresholdBalance: 0,
       },
-      wallet:[],
-      walletSignObj:"",
-      web3: null
+      wallet: [],
+      walletSignObj: "",
+      web3: null,
     };
   },
- 
- updated(){
-    if (this.data.value && typeof(this.data.value) === "object") {
-      Object.assign(this.value, { ...(this.data.value) });
+
+  updated() {
+    if (this.data.value && typeof this.data.value === "object") {
+      Object.assign(this.value, { ...this.data.value });
     }
   },
   async mounted() {
-    if (this.data.value && typeof(this.data.value) === "object") {
-      Object.assign(this.value, { ...(this.data.value) });
+    if (this.data.value && typeof this.data.value === "object") {
+      Object.assign(this.value, { ...this.data.value });
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
     await this.checkWeb3Injection();
   },
   methods: {
-   async checkWeb3Injection() {
+    async checkWeb3Injection() {
       try {
         if (window.injectedWeb3) {
-          this.web3 = await window.injectedWeb3
-        }
-        else{
-           this.showerror = true;
+          this.web3 = await window.injectedWeb3;
+        } else {
+          this.showerror = true;
         }
       } catch (error) {
         console.log(error);
       }
-
-
-
-
     },
     async fetchAccounts() {
-      
-      this.options = [{value: '', text: 'Click on Connect Reef wallet button and select your wallet'}];
+      this.options = [{ value: "", text: "Click on Connect Reef wallet button and select your wallet" }];
       for (let i in this.wallet) {
-       
-             this.options.push({value:this.wallet[i],text: 'Address: '+ this.wallet[i].address.slice(0,12)+'...'+this.wallet[i].address.slice(38,48)+'  Name: '+this.wallet[i].name})
-            }
+        this.options.push({
+          value: this.wallet[i],
+          text:
+            "Address: " +
+            this.wallet[i].address.slice(0, 12) +
+            "..." +
+            this.wallet[i].address.slice(38, 48) +
+            "  Name: " +
+            this.wallet[i].name,
+        });
+      }
 
-            this.value.userWalletAddress = this.options[1]? this.options[1].value : this.options[0].value
+      this.value.userWalletAddress = this.options[1] ? this.options[1].value : this.options[0].value;
     },
     async invokeReef() {
       try {
-       
-         if (this.web3 && this.web3.reef) {
-           
-           let sign;
-         await window.injectedWeb3.reef.enable()
-          .then(async walletObj=>{
-            this.wallet =  await walletObj.accounts.get();
-            this.walletSignObj=walletObj
+        if (this.web3 && this.web3.reef) {
+          let sign;
+          await window.injectedWeb3.reef.enable().then(async (walletObj) => {
+            this.wallet = await walletObj.accounts.get();
+            this.walletSignObj = walletObj;
             await this.fetchAccounts();
-            
-          })
+          });
 
-
-         
-
-         
-         // const walletAddr= await wallet.get
-          
-          
-          
-        } 
+          // const walletAddr= await wallet.get
+        }
       } catch (error) {
-        return this.notifyErr(error.message)
+        return this.notifyErr(error.message);
       }
     },
     async update() {
@@ -216,18 +201,21 @@ computed:{
           let balance = await this.fetchBalance();
           if (balance !== undefined) {
             if (balance >= Number.parseFloat(this.value.thresholdBalance)) {
-              this.value.contractAddress=this.value.contractAddress.address
+              this.value.contractAddress = this.value.contractAddress.address;
               //console.log(JSON.stringify({...this.value}));
-              this.value.userBalance=balance
-              this.$emit("input",  JSON.stringify({
-                ...this.value,
-              }));
+              this.value.userBalance = balance;
+              this.$emit(
+                "input",
+                JSON.stringify({
+                  ...this.value,
+                })
+              );
             } else {
               throw new Error(Messages.EVENT_ACTIONS.ETH.INSUFFICIENT_BALANCE);
             }
           }
         } catch (error) {
-          this.data.value = ""
+          this.data.value = "";
           return this.notifyErr(error);
         }
       }
@@ -245,18 +233,15 @@ computed:{
       return true;
     },
     async fetchBalance() {
+      if (!this.value.contractAddress) {
+        throw new Error("Missing contract address");
+      }
 
-       if(!this.value.contractAddress){
-          throw new Error("Missing contract address")
-        }
+      if (!this.value.userWalletAddress.address) {
+        throw new Error("Missing userWallet address");
+      }
 
-        if(!this.value.userWalletAddress.address){
-          throw new Error("Missing userWallet address")
-        }
-
-
-      
-      this.signature=await this.walletSignObj.signer.signRaw(this.value.userWalletAddress)
+      this.signature = await this.walletSignObj.signer.signRaw(this.value.userWalletAddress);
       const body = {
         actionType: this.data.type,
         data: this.value.userWalletAddress.address,
@@ -279,7 +264,7 @@ computed:{
       });
 
       const result = res.data.balance.hex;
-  
+
       return Number(result);
     },
     disableInput(data) {

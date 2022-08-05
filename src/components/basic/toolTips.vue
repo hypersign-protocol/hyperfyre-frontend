@@ -1,8 +1,5 @@
 <template>
-  <span
-    class="info"
-    @mouseover="renderInforMessage(true)"
-    @mouseleave="renderInforMessage(false)"
+  <span class="info" @mouseover="renderInforMessage(true)" @mouseleave="renderInforMessage(false)"
     >&#9432;
     <span v-if="hover" class="infoMsg">{{ this.infoMessage }}</span>
   </span>
@@ -15,7 +12,7 @@
 }
 
 .infoMsg {
-    max-width: 220px;
+  max-width: 220px;
   /* background-color: #928f8f; */
   background-color: rgba(245, 244, 244, 0.976);
   color: rgb(71, 71, 71);
@@ -34,17 +31,17 @@ export default {
   props: {
     infoMessage: {
       type: String,
-    }
+    },
   },
   data() {
     return {
       hover: false,
     };
   },
-  methods:{
-      renderInforMessage(isShow){
-          this.hover = isShow
-      }
-  }
+  methods: {
+    renderInforMessage(isShow) {
+      this.hover = isShow;
+    },
+  },
 };
 </script>

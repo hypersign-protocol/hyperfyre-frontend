@@ -1,23 +1,42 @@
 <template>
-  <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px"
-    @click="checkIfUserHasLoggedIn()">
+  <div
+    class="accordion mt-3 mx-auto overflow-hidden"
+    role="tablist"
+    style="max-width: 600px"
+    @click="checkIfUserHasLoggedIn()"
+  >
     <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
     <Profile v-if="userProfile" :user="userProfile" />
 
     <template v-for="(actionItem, index) in ActionSchema">
-      <component v-if="actionItem.type==='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
-        :idValue="index" :data="actionItem" :done="actionItem.isDone" :authToken="authToken"
-        @input="updateUserInfo(actionItem, $event)" :themeData="themeData">
+      <component
+        v-if="actionItem.type === 'INFO_TEXT'"
+        :is="CapitaliseString(actionItem.type)"
+        :key="index"
+        :idValue="index"
+        :data="actionItem"
+        :done="actionItem.isDone"
+        :authToken="authToken"
+        @input="updateUserInfo(actionItem, $event)"
+        :themeData="themeData"
+      >
       </component>
     </template>
 
     <prize-card v-if="isPrizedata" :prizeData="prizeData" />
 
     <template v-for="(actionItem, index) in ActionSchema">
-
-      <component v-if="(actionItem.type !== 'INFO_TEXT') && (actionItem.type !=='PRIZE_CARD') "
-        :is="CapitaliseString(actionItem.type)" :key="index" :idValue="index" :data="actionItem" :authToken="authToken"
-        :done="actionItem.isDone" @input="updateUserInfo(actionItem, $event)" :themeData="themeData">
+      <component
+        v-if="actionItem.type !== 'INFO_TEXT' && actionItem.type !== 'PRIZE_CARD'"
+        :is="CapitaliseString(actionItem.type)"
+        :key="index"
+        :idValue="index"
+        :data="actionItem"
+        :authToken="authToken"
+        :done="actionItem.isDone"
+        @input="updateUserInfo(actionItem, $event)"
+        :themeData="themeData"
+      >
       </component>
     </template>
   </div>
@@ -57,7 +76,7 @@ import BinanceErc721 from "./ActionInputs/BinanceErc721.vue";
 
 import ReefErc20 from "./ActionInputs/ReefErc20.vue";
 import ReefErc721 from "./ActionInputs/ReefErc721.vue";
- import SumsubKyc from "./ActionInputs/SumsubKyc.vue"
+import SumsubKyc from "./ActionInputs/SumsubKyc.vue";
 
 import InputDate from "./ActionInputs/InputDate.vue";
 import InputNumber from "./ActionInputs/InputNumber.vue";
@@ -65,14 +84,14 @@ import InputHyperlink from "./ActionInputs/InputHyperlink.vue";
 import PushNotification from "./ActionInputs/PushNotification.vue";
 import PrizeCard from "./ActionInputs/PrizeCard.vue";
 import eventBus from "../../eventBus.js";
-import crypto from 'crypto'
+import crypto from "crypto";
 import apiClient from "../../mixins/apiClientMixin";
 import notificationMixins from "../../mixins/notificationMixins";
 import config from "../../config";
 import Messsages from "../../utils/messages/participants/en";
 import EthereumNetwork from "./ActionInputs/EthereumNetwork.vue";
-import MaticNetwork from './ActionInputs/MaticNetwork.vue';
-import BinanceNetwork from './ActionInputs/BinanceNetwork.vue';
+import MaticNetwork from "./ActionInputs/MaticNetwork.vue";
+import BinanceNetwork from "./ActionInputs/BinanceNetwork.vue";
 
 export default {
   name: "Action",
@@ -87,16 +106,16 @@ export default {
     },
     authToken: {
       required: true,
-      type: String
+      type: String,
     },
     prizeData: {
       required: true,
       type: Array,
     },
-    themeData:{
+    themeData: {
       required: true,
       type: Object,
-    }
+    },
   },
   components: {
     BinanceNetwork,
@@ -176,17 +195,17 @@ export default {
   methods: {
     checkIfUserHasLoggedIn(e) {
       if (!this.userProfile) {
-        // TODO:  bad way of coding.  We should only hide which is being clicked 
-        document.querySelectorAll(".card-header").forEach(elm => {
-          elm.classList.add('collapsed')
-          elm.attributes['aria-expanded'].value =  false;
-          const elemTohide = elm.nextSibling
-          if (elemTohide){
-            elemTohide.style.display = 'none';
+        // TODO:  bad way of coding.  We should only hide which is being clicked
+        document.querySelectorAll(".card-header").forEach((elm) => {
+          elm.classList.add("collapsed");
+          elm.attributes["aria-expanded"].value = false;
+          const elemTohide = elm.nextSibling;
+          if (elemTohide) {
+            elemTohide.style.display = "none";
           }
-        })
+        });
         return this.notifyErr(Messsages.EVENT_ACTIONS.UNAUTHENTICATED);
-      } 
+      }
     },
     CapitaliseString(string) {
       let res = string.split("_");
@@ -196,8 +215,7 @@ export default {
     },
     async updateUserInfo(actionItem, value) {
       try {
-
-        if (!this.authToken){
+        if (!this.authToken) {
           return;
         }
 
@@ -214,11 +232,11 @@ export default {
           ...this.userData,
           actions: this.actions,
         };
-        const ts=Math.floor(Date.now() / 1000);
-        const endPoint='api/v1/investor'
-        const signature= crypto.createHmac('sha256',config.investor_sign_key)
-        signature.update(ts+endPoint+JSON.stringify(body))
-        const sig= signature.digest('hex')
+        const ts = Math.floor(Date.now() / 1000);
+        const endPoint = "api/v1/investor";
+        const signature = crypto.createHmac("sha256", config.investor_sign_key);
+        signature.update(ts + endPoint + JSON.stringify(body));
+        const sig = signature.digest("hex");
         let url = `${this.$config.studioServer.BASE_URL}api/v1/investor?rcToken=${this.RecaptchaToken}`;
         if (this.$route.query.referrer && this.$route.query.referrer != "") {
           url += `&referrer=${this.$route.query.referrer}`;
@@ -226,9 +244,8 @@ export default {
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
-          "sig-ts":ts,
-          "x-payload-hf-sign":sig
-
+          "sig-ts": ts,
+          "x-payload-hf-sign": sig,
         };
 
         const resp = await apiClient.makeCall({
@@ -247,10 +264,7 @@ export default {
             const action = actions.find((x) => x._id == actionItem._id);
             if (action != null || action != "undefined") {
               actionItem.isDone = true;
-              eventBus.$emit(
-                `disableInput${actionItem._id}`,
-                actionItem.isDone
-              );
+              eventBus.$emit(`disableInput${actionItem._id}`, actionItem.isDone);
               this.$emit("UserUpdateEvent", resp.data);
             } else {
               return this.notifyErr(Messsages.ACTIONS.UPDATE_FAILED);

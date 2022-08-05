@@ -82,13 +82,13 @@ i {
   border-radius: 3px;
 }
 .paginationContainer >>> li.active {
-  background-color:  var(--button-bg-color);;
-  color:var(--button-text-color);
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
 }
 
 .button-theme {
-  background-color:  var(--button-bg-color);
-  border-collapse:  var(--button-bg-color);
+  background-color: var(--button-bg-color);
+  border-collapse: var(--button-bg-color);
   color: var(--button-text-color);
   border: 0;
 }
@@ -151,16 +151,12 @@ i {
 }
 
 .multiselect__tag {
-  background:var(--button-bg-color)
+  background: var(--button-bg-color);
 }
 </style>
 <template>
   <div class="home marginLeft marginRight">
-    <loading
-      :active.sync="isLoading"
-      :can-cancel="true"
-      :is-full-page="fullPage"
-    ></loading>
+    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
 
     <div class="row">
       <div class="col-md-3">
@@ -197,11 +193,7 @@ i {
       </div>
       <div class="col-md-6">
         <div class="text-right">
-          <button
-            @click="openCreateSidebar"
-            class="btn btn-primary button-theme"
-            :style="buttonThemeCss"
-          >
+          <button @click="openCreateSidebar" class="btn btn-primary button-theme" :style="buttonThemeCss">
             Create <i class="fas fa-plus text-white"></i>
           </button>
         </div>
@@ -238,11 +230,9 @@ i {
         <div class="card">
           <div class="card-body">
             <h4>
-              Congratulations!!! Your event is successfully created, you can
-              give this link to your users for whitelisting.
-              <a :href="whitelistingLink" target="_blank">{{
-                whitelistingLink
-              }}</a>
+              Congratulations!!! Your event is successfully created, you can give this link to your users for
+              whitelisting.
+              <a :href="whitelistingLink" target="_blank">{{ whitelistingLink }}</a>
             </h4>
           </div>
         </div>
@@ -251,17 +241,11 @@ i {
 
     <div>
       <div v-if="!this.projectsToShow.length">
-        <h3>
-          No events found, click on "create" button to create a new event!
-        </h3>
+        <h3>No events found, click on "create" button to create a new event!</h3>
       </div>
     </div>
     <div class="row" style="margin-top: 2%">
-      <div
-        class="col-md-4"
-        v-for="project in projectsToShow"
-        v-bind:key="project.projectName"
-      >
+      <div class="col-md-4" v-for="project in projectsToShow" v-bind:key="project.projectName">
         <div>
           <b-card
             :title="truncate1(project.projectName, 25)"
@@ -274,66 +258,31 @@ i {
             class="mb-2 eventCard"
             @error="onBannerError($event)"
           >
-            <ul
-              style="
-                list-style-type: none;
-                padding-left: 0px;
-                font-size: x-small;
-              "
-            >
+            <ul style="list-style-type: none; padding-left: 0px; font-size: x-small">
               <li data-toggle="tooltip" data-placement="bottom" title="EventId">
-                <i class="far fa-id-card"></i
-                ><span class="card-title">{{ project._id }}</span>
-                <span @click="copy(project._id, 'EventId')" class="copy"
-                  ><i class="far fa-copy"></i
-                ></span>
+                <i class="far fa-id-card"></i><span class="card-title">{{ project._id }}</span>
+                <span @click="copy(project._id, 'EventId')" class="copy"><i class="far fa-copy"></i></span>
               </li>
-              <li
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="Start Date"
-              >
+              <li data-toggle="tooltip" data-placement="bottom" title="Start Date">
                 <i class="fas fa-hourglass-start"></i>
                 {{ formateDate(project.fromDate) }}
               </li>
-              <li
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="End Date"
-              >
+              <li data-toggle="tooltip" data-placement="bottom" title="End Date">
                 <i class="fas fa-hourglass-end"></i>
                 {{ formateDate(project.toDate) }}
               </li>
 
-              <li
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="Event Url"
-              >
+              <li data-toggle="tooltip" data-placement="bottom" title="Event Url">
                 <i class="fas fa-calendar-alt"></i>
-                <a
-                  :href="project.whitelisting_link"
-                  target="_blank"
-                  class="card-body-custom"
-                >
-                  Event Url</a
-                ><span
-                  @click="copy(project.whitelisting_link, 'Form Url')"
-                  class="copy"
+                <a :href="project.whitelisting_link" target="_blank" class="card-body-custom"> Event Url</a
+                ><span @click="copy(project.whitelisting_link, 'Form Url')" class="copy"
                   ><i class="far fa-copy"></i
                 ></span>
               </li>
 
-              <li
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="Participants List"
-              >
+              <li data-toggle="tooltip" data-placement="bottom" title="Participants List">
                 <i class="fas fa-users"></i
-                ><a
-                  :href="`/admin/participants?projectId=${project._id}`"
-                  target="_blank"
-                  class="card-body-custom"
+                ><a :href="`/admin/participants?projectId=${project._id}`" target="_blank" class="card-body-custom"
                   >Participants ({{ project.investorsCount }})</a
                 >
               </li>
@@ -344,48 +293,25 @@ i {
             </ul>
             <footer>
               <small>
-                <b-badge
-                  v-for="tag in project.tags"
-                  :key="tag.id"
-                  pill
-                  variant="secondary"
-                  style="margin-left: 2px"
-                  >{{ tag.type.split("_")[0] }}</b-badge
-                >
+                <b-badge v-for="tag in project.tags" :key="tag.id" pill variant="secondary" style="margin-left: 2px">{{
+                  tag.type.split("_")[0]
+                }}</b-badge>
               </small>
               <small style="float: right">
-                <span
-                  @click="editProject(project)"
-                  title="Click to edit this event"
-                  style="cursor: pointer"
-                >
+                <span @click="editProject(project)" title="Click to edit this event" style="cursor: pointer">
                   <i class="fas fa-pencil-alt"></i>
                 </span>
-                <span
-                  @click="cloneProject(project)"
-                  title="Click to clone this event"
-                  style="cursor: pointer"
-                >
+                <span @click="cloneProject(project)" title="Click to clone this event" style="cursor: pointer">
                   <i class="fa fa-clone"></i>
                 </span>
-                <span
-                  @click="deleteProject(project)"
-                  title="Click to delete this event"
-                  style="cursor: pointer"
-                >
+                <span @click="deleteProject(project)" title="Click to delete this event" style="cursor: pointer">
                   <i class="fas fa-trash"></i>
                 </span>
-                <span
-                  v-if="project.projectStatus == true"
-                  data-toggle="tooltip"
-                  title="This event is live"
-                >
+                <span v-if="project.projectStatus == true" data-toggle="tooltip" title="This event is live">
                   <i class="fas fa-signal" style="color: green"></i>
                 </span>
                 <span
-                  v-if="
-                    !project.projectStatus || project.projectStatus == false
-                  "
+                  v-if="!project.projectStatus || project.projectStatus == false"
                   data-toggle="tooltip"
                   title="Inactive"
                 >
@@ -413,20 +339,14 @@ i {
 </template>
 
 <script>
-import config from "../.././config"
+import config from "../.././config";
 import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import Paginate from "vuejs-paginate";
 import notificationMixins from "../../mixins/notificationMixins";
 import apiClientMixin from "../../mixins/apiClientMixin";
-import {
-  isValidURL,
-  truncate,
-  checkTitle,
-  checkValue,
-  isValidSlug,
-} from "../../mixins/fieldValidationMixin.js";
+import { isValidURL, truncate, checkTitle, checkValue, isValidSlug } from "../../mixins/fieldValidationMixin.js";
 import CreateProjectSlide from "../../components/admin/createProjectSlider/CreateProjectSlide.vue";
 import dayjs from "dayjs";
 import eventBus from "../../eventBus";
@@ -603,9 +523,7 @@ export default {
         }
         const json = await resp.json();
         this.subscriptions = json["subscriptions"];
-        this.activeSubscriptions = this.subscriptions.filter((x) =>
-          x.paymentData ? true : x.isActive === true
-        );
+        this.activeSubscriptions = this.subscriptions.filter((x) => (x.paymentData ? true : x.isActive === true));
         this.paidSubscriptions = this.subscriptions.filter((x) => {
           return x.paymentData ? true : x.isPaid === true;
         });
@@ -664,15 +582,10 @@ export default {
         navigator.clipboard
           .writeText(textToCopy)
           .then(() => {
-            this.notifySuccess(
-              `${contentType}, ${Messages.EVENTS.CREATE_EDIT_EVENT.COPIED_TO_CLIPBOARD}`
-            );
+            this.notifySuccess(`${contentType}, ${Messages.EVENTS.CREATE_EDIT_EVENT.COPIED_TO_CLIPBOARD}`);
           })
           .catch((err) => {
-            this.notifyErr(
-              Messages.EVENTS.CREATE_EDIT_EVENT.ERROR_WHILE_COPYING,
-              err
-            );
+            this.notifyErr(Messages.EVENTS.CREATE_EDIT_EVENT.ERROR_WHILE_COPYING, err);
           });
       }
     },
@@ -694,16 +607,12 @@ export default {
 
           case "DELETE": {
             if (data._id) {
-              const actionIndex = this.tagsTemp.findIndex(
-                (x) => x._id == data._id
-              );
+              const actionIndex = this.tagsTemp.findIndex((x) => x._id == data._id);
               if (actionIndex > -1) {
                 this.tagsTemp[actionIndex]["isDeleted"] = true;
               }
             } else {
-              const actionIndex = this.tagsTemp.findIndex(
-                (x) => x.id == data.id
-              );
+              const actionIndex = this.tagsTemp.findIndex((x) => x.id == data.id);
               if (actionIndex > -1) {
                 this.tagsTemp.splice(actionIndex, 1);
               }
@@ -726,22 +635,18 @@ export default {
           case "UPDATE": {
             const { id, _id } = data;
             let actionIndex = -1;
-              if (_id){
-                actionIndex = this.eventActionList.findIndex(
-                  (x) => x._id == data._id
-                );
-              } else if (id){
-                actionIndex = this.eventActionList.findIndex(
-                  (x) => x.id == data.id
-                );
-              }
-            if (actionIndex > -1){
-              this.eventActionList.splice(actionIndex, 1);
-              this.eventActionList.push(data)
-            } else {
-              console.log('error in updating actionIndex = ', actionIndex)
+            if (_id) {
+              actionIndex = this.eventActionList.findIndex((x) => x._id == data._id);
+            } else if (id) {
+              actionIndex = this.eventActionList.findIndex((x) => x.id == data.id);
             }
-            
+            if (actionIndex > -1) {
+              this.eventActionList.splice(actionIndex, 1);
+              this.eventActionList.push(data);
+            } else {
+              console.log("error in updating actionIndex = ", actionIndex);
+            }
+
             // this.eventActionList.map((x) => {
             //   if (x._id == _id || x.id == id) {
             //     return data;
@@ -750,18 +655,14 @@ export default {
             break;
           }
 
-          case "DELETE": {       
+          case "DELETE": {
             if (data._id) {
-              const actionIndex = this.eventActionList.findIndex(
-                (x) => x._id == data._id
-              );
+              const actionIndex = this.eventActionList.findIndex((x) => x._id == data._id);
               if (actionIndex > -1) {
                 this.eventActionList[actionIndex]["isDeleted"] = true;
               }
             } else {
-              const actionIndex = this.eventActionList.findIndex(
-                (x) => x.id === data.id
-              );
+              const actionIndex = this.eventActionList.findIndex((x) => x.id === data.id);
               if (actionIndex > -1) {
                 this.eventActionList.splice(actionIndex, 1);
               }
@@ -769,8 +670,8 @@ export default {
             break;
           }
         }
-        if(this.isProjectEditing){
-          this.apiCallToSaveEvent()
+        if (this.isProjectEditing) {
+          this.apiCallToSaveEvent();
         }
       }
     },
@@ -857,10 +758,7 @@ export default {
     },
     changeProjectStatus(event) {
       this.project.projectStatus =
-        event.target.options[event.target.options.selectedIndex].value ===
-        "false"
-          ? false
-          : true;
+        event.target.options[event.target.options.selectedIndex].value === "false" ? false : true;
     },
     async fetchProjects() {
       try {
@@ -895,17 +793,10 @@ export default {
         this.projectsToShow = this.projects.slice(0, this.perPage);
         this.projects.map((x) => {
           x["whitelisting_link"] =
-            window.location.origin +
-            (x.slug && x.slug != ""
-              ? "/form/" + x.slug
-              : "/form?projectId=" + x._id);
-          x["investors_link"] =
-            window.location.origin + "/admin/participants?projectId=" + x._id;
+            window.location.origin + (x.slug && x.slug != "" ? "/form/" + x.slug : "/form?projectId=" + x._id);
+          x["investors_link"] = window.location.origin + "/admin/participants?projectId=" + x._id;
         });
-        this.notifySuccess(
-          Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_FETCHED_NO +
-            this.projects.length
-        );
+        this.notifySuccess(Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_FETCHED_NO + this.projects.length);
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
@@ -919,11 +810,7 @@ export default {
     formateDate(d) {
       if (d) {
         let date = new Date(d);
-        return (
-          date.toDateString() +
-          " " +
-          date.toLocaleString("en-US", { hour: "numeric", hour12: true })
-        );
+        return date.toDateString() + " " + date.toLocaleString("en-US", { hour: "numeric", hour12: true });
       } else {
         return new Date();
       }
@@ -934,9 +821,7 @@ export default {
       this.resetAllValues();
       this.isProjectEditing = true;
       this.project = { ...project };
-      this.project.fromDate = dayjs(project.fromDate).format(
-        "YYYY-MM-DD hh:mm:ss"
-      );
+      this.project.fromDate = dayjs(project.fromDate).format("YYYY-MM-DD hh:mm:ss");
       this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
 
       // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
@@ -967,15 +852,10 @@ export default {
         }
       });
 
-      this.blockchainType =
-        project.blockchainType !== undefined
-          ? project.blockchainType
-          : this.blockchainType;
+      this.blockchainType = project.blockchainType !== undefined ? project.blockchainType : this.blockchainType;
       this.contractType = project.contractType;
-      this.themeColor =
-        project.themeColor !== undefined ? project.themeColor : this.themeColor;
-      this.fontColor =
-        project.fontColor !== undefined ? project.fontColor : this.fontColor;
+      this.themeColor = project.themeColor !== undefined ? project.themeColor : this.themeColor;
+      this.fontColor = project.fontColor !== undefined ? project.fontColor : this.fontColor;
       this.projectStatus = project.projectStatus;
       this.eventActionList = project.actions;
       this.tagsTemp = project.tags;
@@ -996,14 +876,11 @@ export default {
       this.isProjectClonning = true;
       this.project = { ...project };
       if (this.isProjectClonning) {
-        this.project.projectName =
-          this.project.projectName + " copy " + Date.now();
+        this.project.projectName = this.project.projectName + " copy " + Date.now();
         this.project.slug = "";
         this.project.investorsCount = 0;
       }
-      this.project.fromDate = dayjs(project.fromDate).format(
-        "YYYY-MM-DD hh:mm:ss"
-      );
+      this.project.fromDate = dayjs(project.fromDate).format("YYYY-MM-DD hh:mm:ss");
       this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
 
       // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
@@ -1033,15 +910,10 @@ export default {
           this.addedSocialMedias.push(x.value);
         }
       });
-      this.blockchainType =
-        project.blockchainType !== undefined
-          ? project.blockchainType
-          : this.blockchainType;
+      this.blockchainType = project.blockchainType !== undefined ? project.blockchainType : this.blockchainType;
       this.contractType = project.contractType;
-      this.themeColor =
-        project.themeColor !== undefined ? project.themeColor : this.themeColor;
-      this.fontColor =
-        project.fontColor !== undefined ? project.fontColor : this.fontColor;
+      this.themeColor = project.themeColor !== undefined ? project.themeColor : this.themeColor;
+      this.fontColor = project.fontColor !== undefined ? project.fontColor : this.fontColor;
       this.projectStatus = project.projectStatus;
       this.eventActionList = project.actions;
       this.eventActionList = this.eventActionList.map((action) => {
@@ -1050,13 +922,9 @@ export default {
         delete action["__v"];
         return action;
       });
-      let index = this.eventActionList
-        .map((action) => action.title)
-        .indexOf("Hypersign Authentication");
+      let index = this.eventActionList.map((action) => action.title).indexOf("Hypersign Authentication");
       this.eventActionList.splice(index, 1);
-      index = this.eventActionList
-        .map((action) => action.title)
-        .indexOf("Subscribe  Notification");
+      index = this.eventActionList.map((action) => action.title).indexOf("Subscribe  Notification");
       this.eventActionList.splice(index, 1);
       this.tagsTemp = project.tags;
 
@@ -1088,9 +956,7 @@ export default {
             showCloseButton: true,
             allowOutsideClick: false,
             preConfirm: () => {
-              const eventID = this.$swal
-                .getPopup()
-                .querySelector("#name").value;
+              const eventID = this.$swal.getPopup().querySelector("#name").value;
               if (eventID === "") {
                 this.$swal.showValidationMessage(`Please enter event id`);
               }
@@ -1103,14 +969,14 @@ export default {
 
             if (data.value) {
               if (data.value.eventId === project._id) {
-                for(let i=0;i<this.projects.length;i++){              
+                for (let i = 0; i < this.projects.length; i++) {
                   if (this.projects[i].projectName.includes(project.projectName)) {
-                    const pageNum = Math.floor( i==0?i:(i-1) / this.perPage);
+                    const pageNum = Math.floor(i == 0 ? i : (i - 1) / this.perPage);
                     this.currentPage = pageNum + 1;
-                    break
+                    break;
                   }
                 }
-                this.currentPage = this.currentPage ;
+                this.currentPage = this.currentPage;
                 if (!this.project._id) throw new Error("No project found");
                 const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${project._id}`;
                 const headers = {
@@ -1127,21 +993,17 @@ export default {
                   throw new Error("Could not delete the event");
                 }
                 // console.log(this.projects.length)
-                const index = this.projects
-                  .map((project) => project._id)
-                  .indexOf(json._id);
+                const index = this.projects.map((project) => project._id).indexOf(json._id);
 
                 // console.log(index)
                 this.projects.splice(index, 1);
                 // console.log(this.projects.length)
                 this.projectsToShow = this.projects.slice(0, this.perPage);
 
-                const tempProject = JSON.parse(
-                  localStorage.getItem("userProjects")
-                );
+                const tempProject = JSON.parse(localStorage.getItem("userProjects"));
                 localStorage.removeItem("userProjects");
 
-                if(tempProject){
+                if (tempProject) {
                   tempProject.projects.splice(index, 1);
                   localStorage.setItem(
                     "userProjects",
@@ -1151,7 +1013,7 @@ export default {
                     })
                   );
                 }
-                
+
                 if (json) {
                   if (!resp.ok) {
                     return this.notifyErr(json);
@@ -1162,9 +1024,7 @@ export default {
                   throw new Error("Error while deleting event");
                 }
               } else {
-                throw new Error(
-                  "Looks like you were about to delete a event by mistake"
-                );
+                throw new Error("Looks like you were about to delete a event by mistake");
               }
             }
           });
@@ -1181,25 +1041,21 @@ export default {
         const namePage = this.project.projectName;
 
         this.isLoading = true;
-       const resp= await this.apiCallToSaveEvent() 
+        const resp = await this.apiCallToSaveEvent();
         this.$root.$emit("closePreview");
         if (!this.isProjectEditing) {
           ////  not using this for the time being just  to test
           // this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/form/" + resp.data.slug :  "/form?projectId=" + resp.data._id )
           this.whitelistingLink =
             window.location.origin +
-            (resp.data.slug && resp.data.slug != ""
-              ? "/form/" + resp.data.slug
-              : "/form?projectId=" + resp.data._id);
+            (resp.data.slug && resp.data.slug != "" ? "/form/" + resp.data.slug : "/form?projectId=" + resp.data._id);
         }
 
         setTimeout(() => {
           this.whitelistingLink = "";
         }, 10000);
 
-        this.notifySuccess(
-          Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_SAVED + resp.data._id
-        );
+        this.notifySuccess(Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_SAVED + resp.data._id);
         // if(resp.data.projectName.includes('copy')){
         //   this.notifyWarning("Clone of '"+resp.data.projectName.split('copy')[0]+"' created");
         // }
@@ -1246,89 +1102,75 @@ export default {
         // this.clear();
       }
     },
-     async apiCallToSaveEvent() {
-    
-        if (this.checkIfEverythingIsFilled() !== true) {
-          throw new Error(this.checkIfEverythingIsFilled());
-        }
+    async apiCallToSaveEvent() {
+      if (this.checkIfEverythingIsFilled() !== true) {
+        throw new Error(this.checkIfEverythingIsFilled());
+      }
 
-        if (this.isProjectNameValid() !== true) {
-          throw new Error(this.isProjectNameValid());
-        }
-        if (this.isValidSlug() !== true) {
-          throw new Error(this.isValidSlug());
-        }
-        if (this.isLogoUrlValid() !== true) {
-          throw new Error(this.isLogoUrlValid());
-        }
+      if (this.isProjectNameValid() !== true) {
+        throw new Error(this.isProjectNameValid());
+      }
+      if (this.isValidSlug() !== true) {
+        throw new Error(this.isValidSlug());
+      }
+      if (this.isLogoUrlValid() !== true) {
+        throw new Error(this.isLogoUrlValid());
+      }
 
-        if (
-          isNaN(parseInt(this.project.refereePoint)) ||
-          isNaN(parseInt(this.project.referralPoint))
-        ) {
-          throw new Error(Messages.EVENTS.REF_POINT.NOT_VALID_INP);
-        }
-        if (
-          parseInt(this.project.refereePoint) < 0 ||
-          parseInt(this.project.referralPoint) < 0
-        ) {
-          throw new Error(Messages.EVENTS.REF_POINT.NOT_POS_INP);
-        }
+      if (isNaN(parseInt(this.project.refereePoint)) || isNaN(parseInt(this.project.referralPoint))) {
+        throw new Error(Messages.EVENTS.REF_POINT.NOT_VALID_INP);
+      }
+      if (parseInt(this.project.refereePoint) < 0 || parseInt(this.project.referralPoint) < 0) {
+        throw new Error(Messages.EVENTS.REF_POINT.NOT_POS_INP);
+      }
 
-        //this.isLoading = true;
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
-        let headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
-          AccessToken: `Bearer ${this.accessToken}`,
-        };
+      //this.isLoading = true;
+      const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
+      let headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.authToken}`,
+        AccessToken: `Bearer ${this.accessToken}`,
+      };
 
-        let method = "POST";
+      let method = "POST";
 
-        if (this.isProjectEditing) {
-          method = "PUT";
+      if (this.isProjectEditing) {
+        method = "PUT";
+      }
+      const toDate = this.project.toDate;
+      this.project.toDate = new Date(this.project.toDate).toISOString();
+      this.project.fromDate = new Date(this.project.fromDate).toISOString();
+      this.project.themeColor = this.themeColor.trim().length ? this.themeColor : this.themeColorDefault;
+      this.project.fontColor = this.fontColor.trim().length ? this.fontColor : this.fontColorDefault;
+      this.project.blockchainType = this.blockchainType;
+      this.project.contractType = this.contractType;
+      this.project.actions = this.eventActionList;
+      this.project.tags = this.tagsTemp;
+      this.project.refereePoint = this.project.refereePoint.toString();
+      this.project.referralPoint = this.project.referralPoint.toString();
+      const resp = await apiClientMixin.makeCall({
+        url,
+        body: this.project,
+        method,
+        header: headers,
+      });
+      this.project.toDate = toDate;
+
+      /// Refreshing the temporary list other wise duplicate actions were showing
+      // see issue #1346 & #1389
+      this.projects.map((x) => {
+        if (x._id === resp.data._id) {
+          return (x.actions = resp.data.actions);
         }
-        const toDate= this.project.toDate 
-        this.project.toDate = new Date(this.project.toDate).toISOString();
-        this.project.fromDate = new Date(this.project.fromDate).toISOString();
-        this.project.themeColor = this.themeColor.trim().length
-          ? this.themeColor
-          : this.themeColorDefault;
-        this.project.fontColor = this.fontColor.trim().length
-          ? this.fontColor
-          : this.fontColorDefault;
-        this.project.blockchainType = this.blockchainType;
-        this.project.contractType = this.contractType;
-        this.project.actions = this.eventActionList;
-        this.project.tags = this.tagsTemp;
-        this.project.refereePoint = this.project.refereePoint.toString();
-        this.project.referralPoint = this.project.referralPoint.toString();
-        const resp = await apiClientMixin.makeCall({
-          url,
-          body: this.project,
-          method,
-          header: headers,
-        });
-        this.project.toDate=toDate;
-
-        /// Refreshing the temporary list other wise duplicate actions were showing
-        // see issue #1346 & #1389      
-       this.projects.map(x => {
-        if(x._id === resp.data._id){
-          return x.actions = resp.data.actions
-        }
-       })
-       this.eventActionList = [] 
-       this.eventActionList = resp.data ? resp.data.actions : this.eventActionList;
-       return resp;
+      });
+      this.eventActionList = [];
+      this.eventActionList = resp.data ? resp.data.actions : this.eventActionList;
+      return resp;
     },
 
     checkIfEverythingIsFilled() {
       for (let index = 0; index < this.eventActionList.length; index++) {
-        if (
-          this.eventActionList[index].score === null ||
-          this.eventActionList[index].score === ""
-        ) {
+        if (this.eventActionList[index].score === null || this.eventActionList[index].score === "") {
           return Messages.EVENTS.ACTIONS.SCORE_IS_NUM_ANY_LEFT;
         }
         if (this.eventActionList[index].type === null) {
@@ -1396,11 +1238,7 @@ export default {
         return Messages.EVENTS.CREATE_EDIT_EVENT.THEME_NOT_WHITE;
       }
 
-      if (
-        this.themeColor == this.fontColor &&
-        this.themeColor.trim().length &&
-        this.themeColor.trim().length
-      ) {
+      if (this.themeColor == this.fontColor && this.themeColor.trim().length && this.themeColor.trim().length) {
         return Messages.EVENTS.CREATE_EDIT_EVENT.THEME_COLOR_NOT_SAME;
       }
       return true;
@@ -1505,12 +1343,12 @@ export default {
     },
   },
   computed: {
-     buttonThemeCss() {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': config.app.buttonBgColor,
-        '--button-text-color':config.app.buttonTextColor
-      }
-     },
+        "--button-bg-color": config.app.buttonBgColor,
+        "--button-text-color": config.app.buttonTextColor,
+      };
+    },
     columns() {
       let columns = [];
 

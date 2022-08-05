@@ -1,7 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-md-12 card chart-container" 
-    style="height: 98%; position: absolute;font-size:smaller">
+    <div class="col-md-12 card chart-container" style="height: 98%; position: absolute; font-size: smaller">
       <vc-donut
         background="white"
         foreground="#60c860"
@@ -47,7 +46,7 @@ export default {
         { label: "REQUESTS LEFT", value: this.unused, color: "#60c860" },
       ],
       authToken: localStorage.getItem("authToken"),
-      accessToken:localStorage.getItem("accessToken"),
+      accessToken: localStorage.getItem("accessToken"),
     };
   },
   async created() {
@@ -62,7 +61,6 @@ export default {
     this.unused = this.totalAvailable - this.totalUsed;
     this.sections[0].value = this.totalUsed;
     this.sections[1].value = this.unused;
-
   },
   methods: {
     handleSectionClick() {},
@@ -75,7 +73,7 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription?usage=true`;
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
-          AccessToken:`Bearer ${this.accessToken}`
+          AccessToken: `Bearer ${this.accessToken}`,
         };
         const resp = await fetch(url, {
           headers,
@@ -87,7 +85,7 @@ export default {
         }
         const json = await resp.json();
         this.usage = json["usage"];
-       
+
         // localStorage.setItem("subscriptions", JSON.stringify(json));
         // this.notifySuccess("No. of projects fetched " + this.projects.length);
       } catch (e) {

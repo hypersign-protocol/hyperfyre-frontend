@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body class="mx-auto overflow-hidden mt-3" style="max-width: 600px;">
+  <b-card no-body class="mx-auto overflow-hidden mt-3" style="max-width: 600px">
     <b-row class="success-wrap">
       <b-col md="12">
         <b-card-body>
@@ -16,9 +16,9 @@
 <script>
 export default {
   props: {
-    successMessage:  {
-      type: String
-    }
+    successMessage: {
+      type: String,
+    },
   },
   data() {
     return {};

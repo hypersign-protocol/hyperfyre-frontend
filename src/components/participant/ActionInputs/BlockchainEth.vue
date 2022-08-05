@@ -15,15 +15,10 @@
         </b-col>
         <b-col cols="2" sm="2" md="2">
           <b-badge class="btn-score" :style="buttonThemeCss" @click="authToken && update()" v-if="!done">
-             <i class="fa fa-plus" aria-hidden="true"></i>
+            <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
-          <img
-            class="check-mark"
-            src="../../../assets/check-circle-fill.svg"
-            height="25px"
-            v-if="done"
-          />
+          <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
         </b-col>
       </b-row>
     </b-card-header>
@@ -43,27 +38,25 @@
           </b-col>
         </b-row>
         <b-row v-if="!done">
-					<b-col cols="12" sm="12" md="12" >
-						<button class="btn btn-link center"  @click="update()">Continue</button>
-					</b-col>
-				</b-row>
+          <b-col cols="12" sm="12" md="12">
+            <button class="btn btn-link center" @click="update()">Continue</button>
+          </b-col>
+        </b-row>
       </b-card-body>
     </b-collapse>
   </b-card>
 </template>
 <style scoped>
-.center{
-  display: block; margin-left: auto;margin-right: auto
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
 
 <script>
 import eventBus from "../../../eventBus.js";
-import {
-  isValidURL,
-  isValidText,
-  isEmpty,
-} from "../../../mixins/fieldValidationMixin";
+import { isValidURL, isValidText, isEmpty } from "../../../mixins/fieldValidationMixin";
 import config from "../../../config.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
@@ -83,16 +76,16 @@ export default {
       required: true,
     },
     authToken: {
-      required: true
+      required: true,
     },
   },
-computed:{
- buttonThemeCss() {
+  computed: {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': this.themeData.buttonBGColor,
-        '--button-text-color': this.themeData.buttonTextColor
-      }
-     }
+        "--button-bg-color": this.themeData.buttonBGColor,
+        "--button-text-color": this.themeData.buttonTextColor,
+      };
+    },
   },
   data() {
     return {

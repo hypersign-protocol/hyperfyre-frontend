@@ -27,7 +27,6 @@
   list-style-type: none;
 }
 
-
 .dot {
   height: 15px;
   width: 15px;
@@ -38,7 +37,6 @@
   float: right;
 }
 
-
 .tile {
   background: white;
   border: 0;
@@ -47,10 +45,10 @@
   text-align: center;
 }
 
-.tile-profile{
+.tile-profile {
   text-align: left;
 }
-.tile-number{
+.tile-number {
   color: rgb(46, 46, 46);
   font-size: xxx-large;
 }
@@ -60,7 +58,7 @@
   word-wrap: break-word;
 }
 
-.accordion-header-theme{
+.accordion-header-theme {
   background-color: var(--header-bg-color);
   border: 0;
   border-radius: 0px 0px 20px 20px;
@@ -71,21 +69,33 @@
   <div>
     <div class="row" style="margin-top: 2%">
       <div class="col-md-6">
-        <div class="card tile" >
+        <div class="card tile">
           <div class="card-body tile-number">{{ projectCount }}</div>
-          <div class="card-header accordion-header-theme" :style="headerThemeCss" style="font-size:13px; border-radius: 0px 0px 0px 5px;">TOTAL EVENTS</div>
+          <div
+            class="card-header accordion-header-theme"
+            :style="headerThemeCss"
+            style="font-size: 13px; border-radius: 0px 0px 0px 5px"
+          >
+            TOTAL EVENTS
+          </div>
         </div>
       </div>
-      <div class="col-md-6" >
+      <div class="col-md-6">
         <div class="card tile">
           <div class="card-body tile-number">{{ schemaCount }}</div>
-          <div class="card-header accordion-header-theme" :style="headerThemeCss"  style="font-size:13px; border-radius: 0px 0px 0px 5px;">TOTAL PARTICIPANTS</div>
+          <div
+            class="card-header accordion-header-theme"
+            :style="headerThemeCss"
+            style="font-size: 13px; border-radius: 0px 0px 0px 5px"
+          >
+            TOTAL PARTICIPANTS
+          </div>
         </div>
       </div>
     </div>
     <div class="row" style="margin-top: 5%">
-      <div class="col-md-12 leftAlign ">
-        <div class="card tile tile-profile" >
+      <div class="col-md-12 leftAlign">
+        <div class="card tile tile-profile">
           <div class="card-body">
             <div class="row">
               <div class="col-md-4">
@@ -94,20 +104,24 @@
                   alt="John"
                   style="width: 100%;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);"
                 /> -->
-                <b-avatar style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);" square size="8rem" variant="info" :src="getProfileIcon(user.name) "></b-avatar>
+                <b-avatar
+                  style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)"
+                  square
+                  size="8rem"
+                  variant="info"
+                  :src="getProfileIcon(user.name)"
+                ></b-avatar>
               </div>
               <div class="col-md-8" style="flex-wrap: wrap; padding: 20px">
                 <p>DID</p>
                 <p class="fVal">
-                   <a v-if="accessuser.adminDid" target="_blank">{{ accessuser.adminDid }}</a>
-                   <a v-else target="_blank">{{ user.id }}</a>
+                  <a v-if="accessuser.adminDid" target="_blank">{{ accessuser.adminDid }}</a>
+                  <a v-else target="_blank">{{ user.id }}</a>
                 </p>
                 <p>EMAIL</p>
                 <p v-if="accessuser.adminEmail" class="fVal">{{ accessuser.adminEmail }}</p>
                 <p v-else class="fVal">{{ user.email }}</p>
-                <p v-if="user.phoneNumber">
-                  Phone Number: {{ user.phoneNumber }}
-                </p>
+                <p v-if="user.phoneNumber">Phone Number: {{ user.phoneNumber }}</p>
               </div>
             </div>
           </div>
@@ -126,13 +140,13 @@ export default {
   mounted() {},
   components: {},
   mixins: [profileIconMixins],
-   computed:{
-    headerThemeCss(){
-    return{
-      '--header-bg-color': config.app.headerBGColor,
-      '--header-text-color':config.app.headerTextColor
-      }
-    }
+  computed: {
+    headerThemeCss() {
+      return {
+        "--header-bg-color": config.app.headerBGColor,
+        "--header-text-color": config.app.headerTextColor,
+      };
+    },
   },
   data() {
     return {
@@ -142,9 +156,9 @@ export default {
       schemaCount: 0,
       projectCount: 0,
       user: {},
-      accessuser:{},
+      accessuser: {},
       authToken: localStorage.getItem("authToken"),
-      accessToken:localStorage.getItem("accessToken"),
+      accessToken: localStorage.getItem("accessToken"),
       projects: [],
     };
   },
@@ -153,13 +167,12 @@ export default {
     this.user = {
       ...JSON.parse(usrStr),
     };
-      const accessUser=localStorage.getItem('accessuser') 
-     this.accessuser={
-        ...JSON.parse(accessUser)
-     }
-    
+    const accessUser = localStorage.getItem("accessuser");
+    this.accessuser = {
+      ...JSON.parse(accessUser),
+    };
+
     await this.fetchProjects();
-   
   },
   methods: {
     async fetchProjects() {
@@ -172,7 +185,7 @@ export default {
 
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
-          AccessToken:`Bearer ${this.accessToken}`
+          AccessToken: `Bearer ${this.accessToken}`,
         };
         const resp = await fetch(url, {
           headers,
@@ -189,10 +202,8 @@ export default {
         this.projects = json;
         this.projects.map((x) => {
           investorCount += x.investorsCount;
-          x["whitelisting_link"] =
-            window.location.origin + "/form?projectId=" + x._id;
-          x["investors_link"] =
-            window.location.origin + "/admin/participants?projectId=" + x._id;
+          x["whitelisting_link"] = window.location.origin + "/form?projectId=" + x._id;
+          x["investors_link"] = window.location.origin + "/admin/participants?projectId=" + x._id;
         });
 
         this.projectCount = this.projects.length;

@@ -1,5 +1,5 @@
 <style scoped>
-  .addmargin {
+.addmargin {
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -65,12 +65,10 @@ i {
 
 .button-theme {
   background-color: var(--button-bg-color);
-  border-collapse:var(--button-bg-color);
-  color:var(--button-text-color);;
+  border-collapse: var(--button-bg-color);
+  color: var(--button-text-color);
   border: 0;
-
 }
-
 
 .tile {
   background: white;
@@ -110,17 +108,30 @@ i {
       </div>
     </div>
     <template v-for="plan in plans">
-      <button  type="button" class="btn btn-outline-dark btn-plan free" :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''" v-if="plan.price === 0" :key="plan._id" :disabled="subscriptions.find((el) => el.planId === plan._id)" @click="subscribe(plan._id)">Free Basic Plan</button>
+      <button
+        type="button"
+        class="btn btn-outline-dark btn-plan free"
+        :title="subscriptions.find((el) => el.planId === plan._id) ? 'You are already subscribed' : ''"
+        v-if="plan.price === 0"
+        :key="plan._id"
+        :disabled="subscriptions.find((el) => el.planId === plan._id)"
+        @click="subscribe(plan._id)"
+      >
+        Free Basic Plan
+      </button>
     </template>
     <div class="divider">
-      <small class="small-desc">
-        or buckle up and take our pro features...
-      </small>
+      <small class="small-desc"> or buckle up and take our pro features... </small>
     </div>
     <b-row class="subscription-wrap">
       <template v-for="plan in plans">
         <b-col cols="12" sm="6" md="3" :key="plan._id" v-if="plan.price !== 0" class="subscription-column">
-          <b-card no-body class="pricing-card" :class="(plan.planName === 'Lambo') ? 'popular' : ''" :style="buttonThemeCss">
+          <b-card
+            no-body
+            class="pricing-card"
+            :class="plan.planName === 'Lambo' ? 'popular' : ''"
+            :style="buttonThemeCss"
+          >
             <b-card-body>
               <h4 class="pricing-heading">
                 <span v-html="getEmoji(plan.planName)"></span>
@@ -130,22 +141,28 @@ i {
                 <span>$</span>
                 {{ plan.price }}
               </div>
-              <button v-if="!accessuser.adminName && !accessToken" type="button" class="btn btn-outline-dark btn-plan" :class="(plan.planName === 'Lambo') ? 'popular' : ''" @click="openSelectPlanSidebar(plan)">Select Plan</button>
+              <button
+                v-if="!accessuser.adminName && !accessToken"
+                type="button"
+                class="btn btn-outline-dark btn-plan"
+                :class="plan.planName === 'Lambo' ? 'popular' : ''"
+                @click="openSelectPlanSidebar(plan)"
+              >
+                Select Plan
+              </button>
               <div class="pro-feature">
                 <ul>
+                  <li>Unlimited Active Campaigns</li>
                   <li>
-                    Unlimited Active Campaigns
-                  </li>
-                  <li>
-                    <span class="number">{{plan.totalNoOfRequests}} </span>
+                    <span class="number">{{ plan.totalNoOfRequests }} </span>
                     Winners Selection
                   </li>
                   <li>
-                    <span class="number">{{plan.noOfWinners}}</span>
+                    <span class="number">{{ plan.noOfWinners }}</span>
                     Credits [Signup Capacity]
                   </li>
                   <li>
-                    <span class="number">{{plan.noOfRepeatitiveActions}}</span>
+                    <span class="number">{{ plan.noOfRepeatitiveActions }}</span>
                     Repeated Actions (Social/Inputs)
                   </li>
                 </ul>
@@ -153,7 +170,7 @@ i {
               <div class="block-chain-support">
                 <h4>Blockchain Support</h4>
                 <div class="image">
-                  <template v-for="(item,index) in plan.blockchainSupport">
+                  <template v-for="(item, index) in plan.blockchainSupport">
                     <span :key="index">
                       <img src="../../assets/ethereum.svg" height="25px" v-if="item === 'ETH'" />
                       <img src="../../assets/binance-logo.svg" height="25px" v-if="item === 'BSC'" />
@@ -164,23 +181,29 @@ i {
                       <img src="../../assets/moonbeam.png" height="25px" v-if="item === 'GLMR'" />
                       <img src="../../assets/moon-river.png" height="25px" v-if="item === 'MOVR'" />
                       <template v-if="item === 'Custom'">
-                        {{item}}
+                        {{ item }}
                       </template>
                     </span>
                   </template>
                 </div>
               </div>
-              <div class="show-all" :class="plan.visible ? null : 'collapsed'" :aria-expanded="plan.visible ? 'true' : 'false'" :aria-controls="`collapse-${plan._id}`" @click="plan.visible = !plan.visible">
+              <div
+                class="show-all"
+                :class="plan.visible ? null : 'collapsed'"
+                :aria-expanded="plan.visible ? 'true' : 'false'"
+                :aria-controls="`collapse-${plan._id}`"
+                @click="plan.visible = !plan.visible"
+              >
                 See all features
                 <span class="arrow mdil mdil-24px mdil-chevron-down" v-if="!plan.visible"></span>
                 <span class="arrow mdil mdil-24px mdil-chevron-up" v-if="plan.visible"></span>
               </div>
               <b-collapse :id="`collapse-${plan._id}`" v-model="plan.visible" class="feature-wrap mt-2">
                 <ul>
-                  <template v-for="(item,index) in plan.otherFeatures">
+                  <template v-for="(item, index) in plan.otherFeatures">
                     <li :key="index">
                       <span class="mdi mdi-chevron-right"></span>
-                      {{item}}
+                      {{ item }}
                     </li>
                   </template>
                 </ul>
@@ -190,9 +213,9 @@ i {
         </b-col>
       </template>
     </b-row>
-    <div class="row" style="margin-top: 2%;">
+    <div class="row" style="margin-top: 2%">
       <div class="col-md-12">
-        <table v-if="activeSubscriptions.length" class="table table-bordered" style="background:#FFFF">
+        <table v-if="activeSubscriptions.length" class="table table-bordered" style="background: #ffff">
           <thead class="thead-light">
             <tr>
               <th>Subscription Id</th>
@@ -200,7 +223,6 @@ i {
               <th>Plan Name</th>
               <th>Limit</th>
               <th>Status</th>
-             
             </tr>
           </thead>
           <tbody>
@@ -210,17 +232,21 @@ i {
               </th>
               <td>{{ new Date(row.subscriptionDate).toLocaleString() }}</td>
               <td>{{ getPlanName(row.planId) }}</td>
-              <td>{{ row.leftOverNoRequests }}</td>             
+              <td>{{ row.leftOverNoRequests }}</td>
               <td>
-                {{  row.paymentData ? 
-                       (row.paymentData.status==='validated' || row.paymentData.activated === `by ${appName} Activation Team`?
-                         "Active": 
-                         (row.paymentData.status==='paid'?
-                           "Pending":
-                            ( row.paymentData.status === 'failed'? "Cancelled" :"Inactive" )
-                         )
-                       ): 
-                      row.isActive? "Active":"Inactive" 
+                {{
+                  row.paymentData
+                    ? row.paymentData.status === "validated" ||
+                      row.paymentData.activated === `by ${appName} Activation Team`
+                      ? "Active"
+                      : row.paymentData.status === "paid"
+                      ? "Pending"
+                      : row.paymentData.status === "failed"
+                      ? "Cancelled"
+                      : "Inactive"
+                    : row.isActive
+                    ? "Active"
+                    : "Inactive"
                 }}
               </td>
             </tr>
@@ -229,14 +255,14 @@ i {
       </div>
     </div>
     <div>
-      <select-plan-slide 
+      <select-plan-slide
         :isProjectEditing="isProjectEditing"
         :themeColor="themeColor"
         :themeColorDefault="themeColorDefault"
         :fontColor="fontColor"
         :fontColorDefault="fontColorDefault"
         :plan="plan"
-        />
+      />
     </div>
   </div>
 </template>
@@ -245,18 +271,18 @@ import fetch from "node-fetch";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
-import SelectPlanSlide from '../../components/admin/selectPlanSlider/SelectPlanSlide.vue';
-import Messages from "../../utils/messages/admin/en"
-import eventBus from '../../eventBus';
-import { truncate } from '../../mixins/fieldValidationMixin';
-import config from "../../config"
+import SelectPlanSlide from "../../components/admin/selectPlanSlider/SelectPlanSlide.vue";
+import Messages from "../../utils/messages/admin/en";
+import eventBus from "../../eventBus";
+import { truncate } from "../../mixins/fieldValidationMixin";
+import config from "../../config";
 export default {
   name: "Subscription",
-  components: { Loading, SelectPlanSlide},
+  components: { Loading, SelectPlanSlide },
 
   data() {
     return {
-      appName:config.appName,
+      appName: config.appName,
       authToken: localStorage.getItem("authToken"),
       accessToken: localStorage.getItem("accessToken"),
       showAllFeatures: false,
@@ -264,18 +290,18 @@ export default {
       fullPage: true,
       plans: [],
       subscriptions: [],
-      activeSubscriptions:[],
+      activeSubscriptions: [],
       user: {},
-      accessuser:{},
+      accessuser: {},
       emojis: {
-        Lambo: '&#128665;',
-        Moon: '&#127773;',
-        Degen: '&#128176;',
-        Satoshi: '&#128373;'
+        Lambo: "&#128665;",
+        Moon: "&#127773;",
+        Degen: "&#128176;",
+        Satoshi: "&#128373;",
       },
       support: {
-        ETH: 'ethereum',
-        BSC: 'binance-logo'
+        ETH: "ethereum",
+        BSC: "binance-logo",
       },
       currentPage: 1,
       themeColor: "#494949",
@@ -283,18 +309,18 @@ export default {
       fontColor: "#ffffff",
       fontColorDefault: "#ffffff",
       isProjectEditing: false,
-      plan:{}
+      plan: {},
     };
   },
 
   computed: {
-  // a computed 
+    // a computed
     buttonThemeCss() {
       return {
-        '--button-bg-color': config.app.buttonBgColor,
-        '--button-text-color':config.app.buttonTextColor
-      }
-     }
+        "--button-bg-color": config.app.buttonBgColor,
+        "--button-text-color": config.app.buttonTextColor,
+      };
+    },
   },
 
   async created() {
@@ -306,14 +332,12 @@ export default {
         ...JSON.parse(usrStr),
       };
     }
-     const accessUser = localStorage.getItem("accessuser");
+    const accessUser = localStorage.getItem("accessuser");
     if (accessUser) {
       this.accessuser = {
         ...JSON.parse(accessUser),
       };
     }
-    
-    
 
     this.fetchPlan();
     // const plansInStorage = localStorage.getItem("plans");
@@ -321,18 +345,19 @@ export default {
     // this.plans = JSON.parse(plansInStorage);
     // }
 
-   await this.fetchSubscription();
-   if(this.$route.query.hash!==undefined && this.$route.query.code!==undefined &&this.$route.query.extra!==undefined){
-    let {extra}={...this.$route.query}
-    extra=JSON.parse(decodeURIComponent(extra))
-  
-    let subsID=extra._id;
-    
-    this.showAlert(this.$route.query,subsID)
+    await this.fetchSubscription();
+    if (
+      this.$route.query.hash !== undefined &&
+      this.$route.query.code !== undefined &&
+      this.$route.query.extra !== undefined
+    ) {
+      let { extra } = { ...this.$route.query };
+      extra = JSON.parse(decodeURIComponent(extra));
 
+      let subsID = extra._id;
 
-
-   }
+      this.showAlert(this.$route.query, subsID);
+    }
     // const subscriptionsInStorage = localStorage.getItem("subscriptions");
     // if(subscriptionsInStorage){
     //   const parsedSub = JSON.parse(subscriptionsInStorage)
@@ -343,27 +368,33 @@ export default {
   },
 
   methods: {
-   showAlert(data,subsID){
-    
-      const subsInfo= this.paidSubscriptions.find(elm=>{
-        return elm._id===subsID
-      })
+    showAlert(data, subsID) {
+      const subsInfo = this.paidSubscriptions.find((elm) => {
+        return elm._id === subsID;
+      });
 
       let paymentData;
       let truncatedHash;
       let tr;
 
-      paymentData=subsInfo.paymentData;
-      tr=paymentData.transaction;
-      truncatedHash=truncate(tr,35)
-        
-      let color= (paymentData.status==='paid')?'teal':(paymentData.status==='validated'?'green':paymentData.status==='failed'?'red':'teal')
+      paymentData = subsInfo.paymentData;
+      tr = paymentData.transaction;
+      truncatedHash = truncate(tr, 35);
+
+      let color =
+        paymentData.status === "paid"
+          ? "teal"
+          : paymentData.status === "validated"
+          ? "green"
+          : paymentData.status === "failed"
+          ? "red"
+          : "teal";
       // console.log(JSON.stringify(data));
       // console.log(JSON.parse(decodeURIComponent(data.extra)));
       this.$swal.fire({
-        position:'center',
+        position: "center",
         focusConfirm: true,
-        html:`                        
+        html: `                        
         <div class="receipt-content">
         <div class="container bootstrap snippets bootdey">
         <div class="row">
@@ -372,7 +403,9 @@ export default {
               <div class="intro">
                 Hi <strong>${this.user.name}</strong>, 
                 <br>
-                This is the receipt for a payment of <strong>${paymentData.amount.toPrecision(6)}</strong> (${paymentData.token.token}) for your Plan <strong>${this.getPlanName(subsInfo.planId)}</strong>
+                This is the receipt for a payment of <strong>${paymentData.amount.toPrecision(6)}</strong> (${
+          paymentData.token.token
+        }) for your Plan <strong>${this.getPlanName(subsInfo.planId)}</strong>
               </div>
         <br>
         <div class="payment-info">
@@ -440,18 +473,29 @@ export default {
             </div>
               <br>
               <div class="intro"    style="color:${color}">
-              Payment Status : <strong>${paymentData.status==='validated'?'Confirmed':(paymentData.status==='paid'?'Pending':'Failed')}</strong>
+              Payment Status : <strong>${
+                paymentData.status === "validated" ? "Confirmed" : paymentData.status === "paid" ? "Pending" : "Failed"
+              }</strong>
               
             </div>
               <div class="intro"    style="color:${color}">
-              Subscription Status : <strong>${subsInfo.isActive===true?'Activated':(paymentData.status==='failed'?'Cancelled':'Pending')}</strong>
+              Subscription Status : <strong>${
+                subsInfo.isActive === true ? "Activated" : paymentData.status === "failed" ? "Cancelled" : "Pending"
+              }</strong>
               
             </div>
             <div class="intro" style="color:red">
-                <strong>Please Contact ${config.appName} Team if your subscription is not activated within 10 mins of payment</strong>
+                <strong>Please Contact ${
+                  config.appName
+                } Team if your subscription is not activated within 10 mins of payment</strong>
             </div>
           <div class="footer" style="color:black">
-              Copyright © ${new Date().toLocaleDateString().split('/').at(2)}. <strong> <a style="text-decoration:node;color:black" href="http://fyre.hypersign.id/">${config.appName}</a> </strong>
+              Copyright © ${new Date()
+                .toLocaleDateString()
+                .split("/")
+                .at(2)}. <strong> <a style="text-decoration:node;color:black" href="http://fyre.hypersign.id/">${
+          config.appName
+        }</a> </strong>
             </div>
           </div>
         </div>
@@ -459,18 +503,24 @@ export default {
         </div>   
             
             `,
-        toast:false,
-        title:'<h5>Payment Information</h5>',
-        icon:paymentData.status==='validated'?'success':paymentData.status==='paid'?'info':paymentData.status==='failed'?'error':'warning',
+        toast: false,
+        title: "<h5>Payment Information</h5>",
+        icon:
+          paymentData.status === "validated"
+            ? "success"
+            : paymentData.status === "paid"
+            ? "info"
+            : paymentData.status === "failed"
+            ? "error"
+            : "warning",
         showCloseButton: true,
-        showConfirmButton:false,
-        width:'50rem',
-        background:"white"
-
-      })
+        showConfirmButton: false,
+        width: "50rem",
+        background: "white",
+      });
     },
     showFeature(plan) {
-      plan.visible = !plan.visible
+      plan.visible = !plan.visible;
     },
     getEmoji(item) {
       return this.emojis[item];
@@ -488,7 +538,7 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/plan?authToken=${this.authToken}`;
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
-          AccessToken:`Bearer ${this.accessToken}`
+          AccessToken: `Bearer ${this.accessToken}`,
         };
         const resp = await fetch(url, {
           headers,
@@ -499,16 +549,14 @@ export default {
           return this.notifyErr(resp.statusText);
         }
         let json = await resp.json();
-        json = json.map(
-          function(el) {
-            let item = Object.assign({}, el);
-            item.visible = false
-            return item;
-          }
-        );
+        json = json.map(function (el) {
+          let item = Object.assign({}, el);
+          item.visible = false;
+          return item;
+        });
         // Sorting based on price
-        json.sort((a, b) => (a.price > b.price) ? 1 : -1)
-        
+        json.sort((a, b) => (a.price > b.price ? 1 : -1));
+
         this.plans = json;
         // localStorage.setItem("plans", JSON.stringify(json));
       } catch (e) {
@@ -527,7 +575,7 @@ export default {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription?usage=true`;
         const headers = {
           Authorization: `Bearer ${this.authToken}`,
-          AccessToken:`Bearer ${this.accessToken}`
+          AccessToken: `Bearer ${this.accessToken}`,
         };
         const resp = await fetch(url, {
           headers,
@@ -539,22 +587,22 @@ export default {
         }
         const json = await resp.json();
         this.subscriptions = json["subscriptions"];
-        this.activeSubscriptions=this.subscriptions.filter((x) => (x.paymentData?true:x.isActive===true))
-        this.paidSubscriptions=this.subscriptions.filter((x) => {
-        
-          return  x.paymentData?true:(x.isPaid===true)})
-         
-        const usage = json["usage"]
-      
-        if(usage && (usage.totalUsed >= usage.totalAvailable)){
-          eventBus.$emit('UpdateAdminNav', false);
+        this.activeSubscriptions = this.subscriptions.filter((x) => (x.paymentData ? true : x.isActive === true));
+        this.paidSubscriptions = this.subscriptions.filter((x) => {
+          return x.paymentData ? true : x.isPaid === true;
+        });
+
+        const usage = json["usage"];
+
+        if (usage && usage.totalUsed >= usage.totalAvailable) {
+          eventBus.$emit("UpdateAdminNav", false);
           throw new Error(Messages.SUBSCRIPTIONS.SUBSCRIPTION_EXHAUSTED);
         }
-        
+
         if (usage && usage.totalAvailable > 0) {
-          eventBus.$emit('UpdateAdminNav', true);
+          eventBus.$emit("UpdateAdminNav", true);
         } else {
-          eventBus.$emit('UpdateAdminNav', false);
+          eventBus.$emit("UpdateAdminNav", false);
         }
         // localStorage.setItem("subscriptions", JSON.stringify(json));
         // this.notifySuccess("No. of projects fetched " + this.projects.length);
@@ -569,14 +617,14 @@ export default {
         if (!planId) {
           return;
         }
-        var planbody={}
-        this.plan.selectedCurrency='HIDD'
-        this.plan.selectedNetwork='MATICC'
-        this.plan.coupon_code='Free120'
-        this.plan.grandTotal='0'
-        this.plan.price='0'
+        var planbody = {};
+        this.plan.selectedCurrency = "HIDD";
+        this.plan.selectedNetwork = "MATICC";
+        this.plan.coupon_code = "Free120";
+        this.plan.grandTotal = "0";
+        this.plan.price = "0";
 
-        planbody=Object.assign(planbody,this.plan)
+        planbody = Object.assign(planbody, this.plan);
         // console.log(planId);
 
         this.isLoading = true;
@@ -584,7 +632,7 @@ export default {
         // Payment Type
         // Crypto or Fiat ?
         // MOOPAY  ( SOLANA, ETHE, POLYGON )
-        // PAYU    
+        // PAYU
 
         /**
          * {
@@ -600,29 +648,29 @@ export default {
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
-          AccessToken:`Bearer ${this.accessToken}`
+          AccessToken: `Bearer ${this.accessToken}`,
         };
         const resp = await fetch(url, {
           method: "POST",
           body: JSON.stringify({
-            planId,planbody
+            planId,
+            planbody,
           }),
           headers,
         });
 
         const json = await resp.json();
-        if(json){
+        if (json) {
           if (!resp.ok) {
-            return this.notifyErr(json)
-          }else{
+            return this.notifyErr(json);
+          } else {
             this.fetchSubscription();
-        
+
             this.notifySuccess(Messages.SUBSCRIPTIONS.YOU_ARE_SUBSCRIBED + json["newSub"]["_id"]);
           }
-        }else{
-          throw new Error('Error while subscritption')
+        } else {
+          throw new Error("Error while subscritption");
         }
-        
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
@@ -630,17 +678,15 @@ export default {
       }
     },
 
-    openSelectPlanSidebar(data){
-      this.isProjectEditing = false
-      data.emoji = this.getEmoji(data.planName)
-      this.plan = data
-      this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
-    
-      this.$root.$emit('resetPlanSlide');    
+    openSelectPlanSidebar(data) {
+      this.isProjectEditing = false;
+      data.emoji = this.getEmoji(data.planName);
+      this.plan = data;
+      this.$root.$emit("bv::toggle::collapse", "sidebar-right");
+
+      this.$root.$emit("resetPlanSlide");
     },
-
-
- },
+  },
 
   mixins: [notificationMixins],
 };

@@ -16,14 +16,10 @@
       </b-row>
     </b-card-header>
     <b-collapse :id="`collapse-${idValue}`" v-model="visible">
-
-        
       <b-card-body class="markdown">
-          
         <b-row>
-            
           <b-col cols="12" sm="12" md="12">
-           <div class="v-md-editor"  v-html="data.value" style="padding:10px"></div>  
+            <div class="v-md-editor" v-html="data.value" style="padding: 10px"></div>
           </b-col>
         </b-row>
       </b-card-body>
@@ -36,10 +32,10 @@
 //   isValidURL,
 //   isValidText,
 //   isEmpty,
-// } 
+// }
 // from "../../../mixins/fieldValidationMixin";
 
-import marked from 'marked';
+import marked from "marked";
 export default {
   name: "InfoText",
   props: {
@@ -53,11 +49,11 @@ export default {
   data() {
     return {
       visible: false,
-    };  
+    };
   },
   mounted() {
     // eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
-      this.data.value = marked(this.data.value)
+    this.data.value = marked(this.data.value);
   },
 };
 </script>

@@ -19,12 +19,7 @@
             <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
-          <img
-            class="check-mark"
-            src="../../../assets/check-circle-fill.svg"
-            height="25px"
-            v-if="done"
-          />
+          <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
         </b-col>
       </b-row>
     </b-card-header>
@@ -49,19 +44,12 @@
                     :placeholder="param.name"
                   />
                   <div v-if="!done" class="btn-group w-100">
-                    <button class="btn btn-link" @click="invokeMetamask(index)">
-                      Connect Metamask
-                    </button>
-                    <button class="btn btn-link" @click="update()">
-                      Continue
-                    </button>
+                    <button class="btn btn-link" @click="invokeMetamask(index)">Connect Metamask</button>
+                    <button class="btn btn-link" @click="update()">Continue</button>
                   </div>
                 </div>
                 <div v-else>
-                  <ErrorMessage
-                    errorMessage="Install Metamask browser extension"
-                    v-if="!done"
-                  />
+                  <ErrorMessage errorMessage="Install Metamask browser extension" v-if="!done" />
                   <input
                     v-model="param.value"
                     type=""
@@ -82,15 +70,8 @@
                   class="form-control w-100"
                   :disabled="done"
                 />
-                <div
-                  v-if="!done"
-                  cols="12"
-                  sm="12"
-                  md="12"
-                >
-                  <button class="btn btn-link center" @click="update()">
-                    Continue
-                  </button>
+                <div v-if="!done" cols="12" sm="12" md="12">
+                  <button class="btn btn-link center" @click="update()">Continue</button>
                 </div>
               </div>
             </div>
@@ -138,18 +119,18 @@ export default {
     },
     themeData: {
       required: true,
-    }
+    },
   },
   components: {
     ErrorMessage,
   },
-computed:{
- buttonThemeCss() {
+  computed: {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': this.themeData.buttonBGColor,
-        '--button-text-color': this.themeData.buttonTextColor
-      }
-     }
+        "--button-bg-color": this.themeData.buttonBGColor,
+        "--button-text-color": this.themeData.buttonTextColor,
+      };
+    },
   },
   data() {
     return {
@@ -169,9 +150,9 @@ computed:{
       },
     };
   },
-  updated(){
-    if (this.data.value && typeof(this.data.value) === "object") {    
-      Object.assign(this.value,  {...this.data.value} )
+  updated() {
+    if (this.data.value && typeof this.data.value === "object") {
+      Object.assign(this.value, { ...this.data.value });
       this.updatedParamsList();
     }
   },
@@ -180,17 +161,17 @@ computed:{
     this.checkWeb3Injection();
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
 
-    if (this.data.value && typeof(this.data.value) === "object") {
+    if (this.data.value && typeof this.data.value === "object") {
       Object.assign(this.value, { ...this.data.value });
       this.updatedParamsList();
     }
   },
   methods: {
-    updatedParamsList(){
+    updatedParamsList() {
       let s = this.value.methods;
-      if(!s){
-        return
-      } 
+      if (!s) {
+        return;
+      }
       s = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
       if (s !== "") {
         s = s.split(",");
@@ -204,7 +185,7 @@ computed:{
         }
       }
     },
-    cleanValue(){
+    cleanValue() {
       this.value = {
         contractAddress: "",
         thresholdBalance: 0,
@@ -215,7 +196,7 @@ computed:{
         operator: "",
         returnType: "",
         condition: "",
-      }
+      };
     },
 
     checkWeb3Injection() {
@@ -231,13 +212,9 @@ computed:{
       }
     },
     async signMessage() {
-      const message =
-        "You are Signing this message to ensure your participation in this event";
+      const message = "You are Signing this message to ensure your participation in this event";
       this.message_sign = message;
-      return await this.web3.eth.personal.sign(
-        message,
-        window.ethereum.selectedAddress
-      );
+      return await this.web3.eth.personal.sign(message, window.ethereum.selectedAddress);
     },
     async invokeMetamask(e) {
       console.log(e);
@@ -248,10 +225,7 @@ computed:{
           });
           this.signature = await this.signMessage();
 
-          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(
-            this.message_sign,
-            this.signature
-          );
+          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(this.message_sign, this.signature);
 
           let isSigVerified = false;
           if (generatedWalletAddr === wallet[0]) {
@@ -273,8 +247,9 @@ computed:{
       //this.notifySuccess("Success");
       const { contractAddress, paramsList } = this.value;
       const valueToStore = {
-        contractAddress, paramsList
-      }
+        contractAddress,
+        paramsList,
+      };
       this.value.condition = "Condition True";
 
       this.$emit(
@@ -308,8 +283,7 @@ computed:{
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (this.value.operand === result) {
-                  this.emitToUpdate()
-
+                  this.emitToUpdate();
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -318,16 +292,16 @@ computed:{
               case "string":
               case "address": {
                 if (this.value.operand === result) {
-                  this.emitToUpdate()
+                  this.emitToUpdate();
                 } else {
                   this.notifyErr("Condition Mismatch");
                 }
                 break;
               }
               case "bool": {
-                this.value.operand  = (this.value.operand  === "true");
+                this.value.operand = this.value.operand === "true";
                 if (this.value.operand === result) {
-                  this.emitToUpdate()
+                  this.emitToUpdate();
                 } else {
                   this.notifyErr("Condition Mismatch");
                 }
@@ -346,7 +320,7 @@ computed:{
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result < this.value.operand) {
-                  this.emitToUpdate()
+                  this.emitToUpdate();
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -361,7 +335,7 @@ computed:{
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result > this.value.operand) {
-                  this.emitToUpdate()
+                  this.emitToUpdate();
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -377,7 +351,7 @@ computed:{
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result <= this.value.operand) {
-                  this.emitToUpdate()
+                  this.emitToUpdate();
                 } else {
                   throw new Error("Condition Mismatch");
                 }
@@ -392,7 +366,7 @@ computed:{
                 result = Number.parseFloat(result);
                 this.value.operand = Number.parseFloat(this.value.operand);
                 if (result >= this.value.operand) {
-                  this.emitToUpdate()
+                  this.emitToUpdate();
                 } else {
                   throw new Error("Condition Mismatch");
                 }

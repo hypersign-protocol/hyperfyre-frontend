@@ -1,11 +1,6 @@
 <template>
   <b-card no-body class="action-wrap">
-    <b-card-header
-      :class="visible ? null : 'collapsed'"
-      :aria-expanded="visible='true'"
-      aria-controls="profile"
-
-    >
+    <b-card-header :class="visible ? null : 'collapsed'" :aria-expanded="(visible = 'true')" aria-controls="profile">
       <b-row>
         <b-col cols="1" sm="1" md="1">
           <img src="../../../assets/person-fill.svg" height="25px" />
@@ -29,10 +24,8 @@
           <b-col cols="12" sm="5" md="5">
             <div class="title text-left mb-1">Your Referral Link</div>
             <div class="text text-left">
-              {{ truncate1(referalLink,25) }}
-              <span @click="copy" class="copy"
-                ><i class="far fa-copy"></i
-              ></span>
+              {{ truncate1(referalLink, 25) }}
+              <span @click="copy" class="copy"><i class="far fa-copy"></i></span>
             </div>
           </b-col>
         </b-row>
@@ -52,7 +45,7 @@
 <script>
 import notificationMixin from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
-import {truncate} from "../../../mixins/fieldValidationMixin";
+import { truncate } from "../../../mixins/fieldValidationMixin";
 export default {
   name: "Profile",
   props: {
@@ -69,12 +62,9 @@ export default {
   },
   updated() {
     if (this.user.email) {
-      this.referalLink = `${window.location.protocol +
-        "//" +
-        window.location.host +
-        window.location.pathname}?referrer=${btoa(
-        this.user.email
-      )}`;
+      this.referalLink = `${
+        window.location.protocol + "//" + window.location.host + window.location.pathname
+      }?referrer=${btoa(this.user.email)}`;
     }
   },
   mixins: [notificationMixin],
@@ -91,9 +81,9 @@ export default {
           });
       }
     },
-    truncate1(str, number){
-      return truncate(str, number)
-    }
+    truncate1(str, number) {
+      return truncate(str, number);
+    },
   },
 };
 </script>

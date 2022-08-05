@@ -3,32 +3,26 @@
     <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
     <div class="container mx-auto overflow-hidden mt-3 border-0">
       <div>
-        <h1 class="mainTitle kdJiCp">
-          Discover, participate, and win extraordinary Giveaways
-        </h1>
+        <h1 class="mainTitle kdJiCp">Discover, participate, and win extraordinary Giveaways</h1>
       </div>
       <div>
         <h2 class="llcnwK kdJiCp" style="text-align: left">
-          <i class="fa fa-calendar"></i> Trending events on <span class="TrendingCollections">#{{appName}}</span>
-       
+          <i class="fa fa-calendar"></i> Trending events on <span class="TrendingCollections">#{{ appName }}</span>
         </h2>
       </div>
 
-      <div v-if="Object.values(eventList).length>0">
+      <div v-if="Object.values(eventList).length > 0">
         <div>
-        <HomeEvents :userEventList="eventList"></HomeEvents>
-      </div>
-      
-      <div class="flex-row flex-nowrap kdJiCp">
-        <button class="btn btn-warning" @click="prevT" style="margin-right: 2px">Previous</button>
-        <Button class="btn btn-warning" @click="nextT" style="margin-right: 2px">Next</Button>
-      </div>
+          <HomeEvents :userEventList="eventList"></HomeEvents>
+        </div>
 
+        <div class="flex-row flex-nowrap kdJiCp">
+          <button class="btn btn-warning" @click="prevT" style="margin-right: 2px">Previous</button>
+          <Button class="btn btn-warning" @click="nextT" style="margin-right: 2px">Next</Button>
+        </div>
       </div>
-       <div v-else class="row flex-row flex-nowrap kdJiCp alert alert-warning">
-            No events found
-          </div>
-      
+      <div v-else class="row flex-row flex-nowrap kdJiCp alert alert-warning">No events found</div>
+
       <!--- List view ends -->
       <div>
         <h2 class="llcnwK kdJiCp" style="text-align: left"><i class="fa fa-trophy"></i> Your events</h2>
@@ -39,7 +33,6 @@
       </template>
 
       <template v-else>
-
         <div>
           <div v-if="Object.values(userEventList).length > 0">
             <HomeEvents :userEventList="userEventList"></HomeEvents>
@@ -48,10 +41,7 @@
               <Button class="btn btn-warning" @click="next" style="margin-right: 2px">Next</Button>
             </div>
           </div>
-          <div v-else class="row flex-row flex-nowrap kdJiCp alert alert-warning">
-            No events found
-          </div>
-
+          <div v-else class="row flex-row flex-nowrap kdJiCp alert alert-warning">No events found</div>
         </div>
       </template>
     </div>
@@ -67,7 +57,7 @@ import eventBus from "../../eventBus.js";
 import Messages from "../../utils/messages/admin/en";
 import Login from "../../components/participant/Login.vue";
 import HomeEvents from "../../components/participant/HomeEvents.vue";
-import config from "../../config"
+import config from "../../config";
 import { truncate } from "../../mixins/fieldValidationMixin.js";
 export default {
   name: "Home",
@@ -155,10 +145,10 @@ export default {
       await this.fetchEventData();
 
       // Setting to default on homepage
-      eventBus.$emit('UpdateThemeEvent', {
+      eventBus.$emit("UpdateThemeEvent", {
         logoPath: null,
-        themeColor: config.app.themeColor
-      })
+        themeColor: config.app.themeColor,
+      });
       // await this.fetchUserInfoOnLogin();
       //   }
     } catch (e) {
@@ -167,7 +157,7 @@ export default {
   },
   async updated() {},
   methods: {
-  async prevT() {
+    async prevT() {
       this.pageT = this.pageT <= 1 ? 1 : this.pageT - 1;
       await this.fetchEventData();
     },
@@ -197,17 +187,13 @@ export default {
       }
     },
     gotoUrl(path) {
-     const url= `${window.location.origin}/form/${path}` 
-        window.open(url)
+      const url = `${window.location.origin}/form/${path}`;
+      window.open(url);
     },
     formateDate(d) {
       if (d) {
         let date = new Date(d);
-        return (
-          date.toDateString() +
-          " " +
-          date.toLocaleString("en-US", { hour: "numeric", hour12: true })
-        );
+        return date.toDateString() + " " + date.toLocaleString("en-US", { hour: "numeric", hour12: true });
       } else {
         return new Date();
       }
@@ -257,7 +243,7 @@ export default {
         let headers = {
           Authorization: `Bearer ${this.authToken}`,
         };
-        const body= { isParticpant: true}
+        const body = { isParticpant: true };
         const res = await apiClient.makeCall({
           url,
           body: body,
@@ -296,7 +282,6 @@ export default {
         this.eventList = {
           ...resp.data.eventList,
         };
-       
       } else {
         this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG);
       }
@@ -318,7 +303,6 @@ export default {
         this.userEventList = {
           ...resp.data,
         };
-        
       } else {
         this.notifyErr(Messages.EVENT.INVALID_PROJECT_SLUG);
       }

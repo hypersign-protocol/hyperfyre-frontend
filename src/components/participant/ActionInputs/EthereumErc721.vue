@@ -1,7 +1,11 @@
 <template>
   <b-card no-body class="action-wrap">
-    <b-card-header :class="visible ? null : 'collapsed'" :aria-expanded="visible ? 'true' : 'false'"
-      :aria-controls="`collapse-${idValue}`" @click="visible = !visible">
+    <b-card-header
+      :class="visible ? null : 'collapsed'"
+      :aria-expanded="visible ? 'true' : 'false'"
+      :aria-controls="`collapse-${idValue}`"
+      @click="visible = !visible"
+    >
       <b-row>
         <b-col cols="1" sm="1" md="1">
           <img src="/img/ethereum.2b470564.svg" height="25px" />
@@ -13,7 +17,7 @@
 
         <b-col cols="2" sm="2" md="2">
           <b-badge class="btn-score" :style="buttonThemeCss" @click="authToken && update()" v-if="!done">
-             <i class="fa fa-plus" aria-hidden="true"></i>
+            <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
           <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
@@ -25,21 +29,27 @@
         <b-row v-if="!showerror">
           <b-col cols="12" sm="12" md="12">
             <div class="metamask">
-              <b-form-input type="text" :placeholder="data.placeHolder" v-model="value.userWalletAddress"
-                :disabled="true" :required="data.isManadatory"></b-form-input>
-            </div>
-          </b-col>
-        </b-row>
-        <b-row v-else>
-          <b-col cols="12" sm="12" md="12">
-           <ErrorMessage errorMessage="Install Metamask browser extension" v-if="!done"/>
-            <b-form-input
+              <b-form-input
                 type="text"
                 :placeholder="data.placeHolder"
                 v-model="value.userWalletAddress"
                 :disabled="true"
                 :required="data.isManadatory"
-              v-else></b-form-input>
+              ></b-form-input>
+            </div>
+          </b-col>
+        </b-row>
+        <b-row v-else>
+          <b-col cols="12" sm="12" md="12">
+            <ErrorMessage errorMessage="Install Metamask browser extension" v-if="!done" />
+            <b-form-input
+              type="text"
+              :placeholder="data.placeHolder"
+              v-model="value.userWalletAddress"
+              :disabled="true"
+              :required="data.isManadatory"
+              v-else
+            ></b-form-input>
           </b-col>
         </b-row>
         <b-row v-if="!done && !showerror">
@@ -53,8 +63,10 @@
   </b-card>
 </template>
 <style scoped>
-.center{
-  display: block; margin-left: auto;margin-right: auto
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
 
@@ -62,11 +74,7 @@
 import config from "../../../config.js";
 import eventBus from "../../../eventBus.js";
 import apiClient from "../../../mixins/apiClientMixin.js";
-import {
-  isValidURL,
-  isValidText,
-  isEmpty,
-} from "../../../mixins/fieldValidationMixin";
+import { isValidURL, isValidText, isEmpty } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
@@ -81,25 +89,25 @@ export default {
       required: true,
     },
     authToken: {
-      required: true
+      required: true,
     },
     done: {
       required: true,
-    }, 
+    },
     themeData: {
       required: true,
-    }
+    },
   },
   components: {
     ErrorMessage,
   },
-computed:{
- buttonThemeCss() {
+  computed: {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': this.themeData.buttonBGColor,
-        '--button-text-color': this.themeData.buttonTextColor
-      }
-     }
+        "--button-bg-color": this.themeData.buttonBGColor,
+        "--button-text-color": this.themeData.buttonTextColor,
+      };
+    },
   },
   data() {
     return {
@@ -110,18 +118,18 @@ computed:{
       value: {
         contractAddress: "",
         userWalletAddress: "",
-        thresholdBalance: 0
-      }
+        thresholdBalance: 0,
+      },
     };
   },
-  updated(){
-    if (this.data.value && typeof(this.data.value) === "object") {
-      Object.assign(this.value, { ...(this.data.value) });
+  updated() {
+    if (this.data.value && typeof this.data.value === "object") {
+      Object.assign(this.value, { ...this.data.value });
     }
   },
   mounted() {
-    if (this.data.value && typeof(this.data.value) === "object") {
-      Object.assign(this.value, { ...(this.data.value) });
+    if (this.data.value && typeof this.data.value === "object") {
+      Object.assign(this.value, { ...this.data.value });
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
     this.checkWeb3Injection();
@@ -138,13 +146,9 @@ computed:{
       }
     },
     async signMessage() {
-      const message =
-        "You are Signing this message to ensure your participation in this event";
+      const message = "You are Signing this message to ensure your participation in this event";
       this.message_sign = message;
-      return await this.web3.eth.personal.sign(
-        message,
-        ethereum.selectedAddress
-      );
+      return await this.web3.eth.personal.sign(message, ethereum.selectedAddress);
     },
     async invokeMetamask() {
       try {
@@ -152,23 +156,23 @@ computed:{
           const wallet = await ethereum.request({
             method: "eth_requestAccounts",
           });
-          this.signature  = await this.signMessage();
-          
-          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(this.message_sign, this.signature)
-          
-          let isSigVerified =  false;
-          if(generatedWalletAddr === wallet[0]){
-              isSigVerified = true;
-          } 
-      
+          this.signature = await this.signMessage();
+
+          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(this.message_sign, this.signature);
+
+          let isSigVerified = false;
+          if (generatedWalletAddr === wallet[0]) {
+            isSigVerified = true;
+          }
+
           if (isSigVerified) {
             this.value.userWalletAddress = wallet[0];
-          } else{
-            return this.notifyErr(Messages.EVENT_ACTIONS.ETH.INVALID_SIG)
+          } else {
+            return this.notifyErr(Messages.EVENT_ACTIONS.ETH.INVALID_SIG);
           }
-        } 
+        }
       } catch (error) {
-        return this.notifyErr(error.message)
+        return this.notifyErr(error.message);
       }
     },
     async update() {
@@ -179,15 +183,18 @@ computed:{
           let balance = await this.fetchBalance();
           if (balance !== undefined) {
             if (balance.Users_Nft >= Number.parseFloat(this.value.thresholdBalance)) {
-              this.$emit("input",  JSON.stringify({
-                ...this.value,
-              }));
+              this.$emit(
+                "input",
+                JSON.stringify({
+                  ...this.value,
+                })
+              );
             } else {
               throw new Error(Messages.EVENT_ACTIONS.ETH.INSUFFICIENT_BALANCE);
             }
           }
         } catch (error) {
-          this.data.value = ""
+          this.data.value = "";
           return this.notifyErr(error);
         }
       }

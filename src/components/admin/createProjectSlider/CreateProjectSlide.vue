@@ -5,7 +5,7 @@
 .b-sidebar > .b-sidebar-header {
   border: 1px solid #000 !important;
 }
-.previewshow{
+.previewshow {
   display: block !important;
 }
 /* .show.collapse{
@@ -16,21 +16,21 @@
 
 } */
 .button-theme {
-  background-color:  var(--button-bg-color);
+  background-color: var(--button-bg-color);
   border-collapse: var(--button-bg-color);
   color: var(--button-text-color);
   border: 0;
 }
 
-.theme-color{
+.theme-color {
   color: var(--header-text-color);
 }
 
 .accordion-header-theme {
-  background-color:var(--header-bg-color);
+  background-color: var(--header-bg-color);
   border: 0;
 }
-.fa-exclamation-circle{
+.fa-exclamation-circle {
   position: relative;
   display: inline-block;
   cursor: help;
@@ -47,8 +47,8 @@
   position: absolute;
   z-index: 1;
 }
-.tooltiptext{
-  font-family:  sans-serif;
+.tooltiptext {
+  font-family: sans-serif;
   font-size: 15px;
   max-width: 230px;
 }
@@ -56,38 +56,59 @@
   visibility: visible;
 }
 .info {
-  display:flex;
-  padding:03px;
-  color:var(--button-bg-color);;
-  font-size:22px;
-  border-radius:50%;
+  display: flex;
+  padding: 03px;
+  color: var(--button-bg-color);
+  font-size: 22px;
+  border-radius: 50%;
   margin-left: 200px;
   margin-top: -30px;
-  width:20px;
-  text-align:center;
-  }
+  width: 20px;
+  text-align: center;
+}
 </style>
 <template>
   <div>
-    <b-sidebar backdrop width="50%" id="sidebar-right" :title="isProjectEditing ? 'Edit Event' : 'Create Event'"
-      class="sidebarContainer background-transparent" right shadow no-close-on-backdrop backdrop-variant="dark">
+    <b-sidebar
+      backdrop
+      width="50%"
+      id="sidebar-right"
+      :title="isProjectEditing ? 'Edit Event' : 'Create Event'"
+      class="sidebarContainer background-transparent"
+      right
+      shadow
+      no-close-on-backdrop
+      backdrop-variant="dark"
+    >
       <div class="px-3 py-2">
         <div class="accordion" role="tablist" v-if="preview">
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme" :style="headerThemeCss" role="tab">
-              <b-button v-b-toggle.accordion-1 style="pointer-events:none;" variant="info"
-                class="bg-transparent border-0 text-left theme-color" title="Preview"><i
-                  class="fas fa-file-contract"></i> Preview
-
+            <b-card-header
+              header-tag="header"
+              class="p-1 border-0 accordin-header accordion-header-theme"
+              :style="headerThemeCss"
+              role="tab"
+            >
+              <b-button
+                v-b-toggle.accordion-1
+                style="pointer-events: none"
+                variant="info"
+                class="bg-transparent border-0 text-left theme-color"
+                title="Preview"
+                ><i class="fas fa-file-contract"></i> Preview
               </b-button>
-              <b-button variant="info" style="float:right" class="bg-transparent border-0 text-left theme-color"
-                title="Close" @click="closePreview">
+              <b-button
+                variant="info"
+                style="float: right"
+                class="bg-transparent border-0 text-left theme-color"
+                title="Close"
+                @click="closePreview"
+              >
                 <i class="fas fa-close">Close</i>
               </b-button>
             </b-card-header>
             <b-collapse visible class="previewshow" id="accordion-1" accordion="my-accordion1" role="tabpanel">
               <b-card-body>
-
                 <preview-config :eventData="project" />
               </b-card-body>
             </b-collapse>
@@ -95,29 +116,54 @@
         </div>
         <div class="accordion" role="tablist" v-else>
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme" :style="headerThemeCss" role="tab">
-              <b-button block v-b-toggle.accordion-1 class="bg-transparent border-0 text-left theme-color"
-                title="Create General configuration for your event"><i class="fas fa-cog"></i> General Configurations
+            <b-card-header
+              header-tag="header"
+              class="p-1 border-0 accordin-header accordion-header-theme"
+              :style="headerThemeCss"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-1
+                class="bg-transparent border-0 text-left theme-color"
+                title="Create General configuration for your event"
+                ><i class="fas fa-cog"></i> General Configurations
               </b-button>
             </b-card-header>
             <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <general-config v-on="$listeners" :isProjectEditing="isProjectEditing" :themeColor="themeColor"
-                  :fontColor="fontColor" :fontColorDefault="fontColorDefault" :themeColorDefault="themeColorDefault"
-                  :project="project" :eventActionList="tag" eventActionType="TAGS" :options="getTagDb" />
+                <general-config
+                  v-on="$listeners"
+                  :isProjectEditing="isProjectEditing"
+                  :themeColor="themeColor"
+                  :fontColor="fontColor"
+                  :fontColorDefault="fontColorDefault"
+                  :themeColorDefault="themeColorDefault"
+                  :project="project"
+                  :eventActionList="tag"
+                  eventActionType="TAGS"
+                  :options="getTagDb"
+                />
               </b-card-body>
             </b-collapse>
           </b-card>
 
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" :style="headerThemeCss" role="tab">
-              <b-button block v-b-toggle.accordion-2 variant="info"
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              :style="headerThemeCss"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-2
+                variant="info"
                 class="bg-transparent border-0 text-left theme-color"
-                title="Create Referral configuration for your event"><i class="fa fa-user-plus"></i> Referral
-                Configurations
+                title="Create Referral configuration for your event"
+                ><i class="fa fa-user-plus"></i> Referral Configurations
                 <!-- <a class="tool" data-position="right" draggable="false" title="Creates a unique referral URL for each campaign participants, set points of each referral"><i class='fas fa-exclamation-circle'></i></a> -->
               </b-button>
-
             </b-card-header>
             <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
               <b-card-body>
@@ -133,15 +179,28 @@
           </b-card>
           <!--Prize  -->
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme" :style="headerThemeCss" role="tab">
-              <b-button block v-b-toggle.accordion-3 class="bg-transparent border-0 text-left theme-color"
-                title="Create Prize configuration for your event"><i class="fas fa-gift"></i> Prize Configurations
+            <b-card-header
+              header-tag="header"
+              class="p-1 border-0 accordin-header accordion-header-theme"
+              :style="headerThemeCss"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-3
+                class="bg-transparent border-0 text-left theme-color"
+                title="Create Prize configuration for your event"
+                ><i class="fas fa-gift"></i> Prize Configurations
               </b-button>
             </b-card-header>
             <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <event-action-config v-on="$listeners" :eventActionList="prizeList" eventActionType="PRIZE"
-                  :options="options.prizeDetails" />
+                <event-action-config
+                  v-on="$listeners"
+                  :eventActionList="prizeList"
+                  eventActionType="PRIZE"
+                  :options="options.prizeDetails"
+                />
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -149,102 +208,173 @@
 
           <!--KYC CONFIG-->
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
-              <b-button block v-b-toggle.accordion-8 class="bg-transparent border-0 text-left theme-color"
-                title="Create Kyc configuration for your event"><i class="fas fa-id-card"></i> KYC Configurations
+            <b-card-header
+              header-tag="header"
+              class="p-1 border-0 accordin-header accordion-header-theme"
+              :style="headerThemeCss"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-8
+                class="bg-transparent border-0 text-left theme-color"
+                title="Create Kyc configuration for your event"
+                ><i class="fas fa-id-card"></i> KYC Configurations
               </b-button>
             </b-card-header>
             <b-collapse id="accordion-8" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <event-action-config v-on="$listeners" :eventActionList="KycList" eventActionType="KYC"
-                  :options="options.kycConfig" />
+                <event-action-config
+                  v-on="$listeners"
+                  :eventActionList="KycList"
+                  eventActionType="KYC"
+                  :options="options.kycConfig"
+                />
               </b-card-body>
             </b-collapse>
           </b-card>
           <!--END KYC CONFIG-->
 
-
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
-              <b-button block v-b-toggle.accordion-4 variant="info"
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              :style="headerThemeCss"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-4
+                variant="info"
                 class="bg-transparent border-0 text-left theme-color"
-                title="Create Custom Inputs configuration for your event"><i class="fab fa-intercom"></i> Custom Inputs
-                Configurations
+                title="Create Custom Inputs configuration for your event"
+                ><i class="fab fa-intercom"></i> Custom Inputs Configurations
               </b-button>
             </b-card-header>
             <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="customList" eventActionType="CUSTOM"
-                  :options="options.customAction" />
+                <eventAction-config
+                  v-on="$listeners"
+                  :eventActionList="customList"
+                  eventActionType="CUSTOM"
+                  :options="options.customAction"
+                />
               </b-card-body>
             </b-collapse>
           </b-card>
 
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
-              <b-button block v-b-toggle.accordion-5 variant="info"
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              :style="headerThemeCss"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-5
+                variant="info"
                 class="bg-transparent border-0 text-left theme-color"
-                title="Create Social configuration for your event"><i class="fas fa-share-alt"></i> Social
-                Configurations
+                title="Create Social configuration for your event"
+                ><i class="fas fa-share-alt"></i> Social Configurations
               </b-button>
             </b-card-header>
             <b-collapse id="accordion-5" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="socialList" eventActionType="SOCIAL"
-                  :options="options.socialAction" />
+                <eventAction-config
+                  v-on="$listeners"
+                  :eventActionList="socialList"
+                  eventActionType="SOCIAL"
+                  :options="options.socialAction"
+                />
               </b-card-body>
             </b-collapse>
           </b-card>
 
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
-              <b-button block v-b-toggle.accordion-6 variant="info"
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              :style="headerThemeCss"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-6
+                variant="info"
                 class="bg-transparent border-0 text-left theme-color"
-                title="Create Wallet configuration for your event"><i class="fab fa-bitcoin"></i> Collect Wallet
-                Configurations
+                title="Create Wallet configuration for your event"
+                ><i class="fab fa-bitcoin"></i> Collect Wallet Configurations
               </b-button>
             </b-card-header>
             <b-collapse id="accordion-6" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="blockchainList" eventActionType="BLOCKCHAIN"
-                  :options="options.blockchainAction" />
+                <eventAction-config
+                  v-on="$listeners"
+                  :eventActionList="blockchainList"
+                  eventActionType="BLOCKCHAIN"
+                  :options="options.blockchainAction"
+                />
               </b-card-body>
             </b-collapse>
           </b-card>
 
           <!-- Smart Contract Config -->
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
-              <b-button block v-b-toggle.accordion-7 variant="info"
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              :style="headerThemeCss"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-7
+                variant="info"
                 class="bg-transparent border-0 text-left theme-color"
-                title="Create Smart contract configuration for your event"><i class="fas fa-file-contract"></i> Tokens
-                or NFT Holding Configurations
+                title="Create Smart contract configuration for your event"
+                ><i class="fas fa-file-contract"></i> Tokens or NFT Holding Configurations
               </b-button>
             </b-card-header>
             <b-collapse id="accordion-7" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="smartContractlist"
-                  eventActionType="SMARTCONTRACT" :options="options.smartContractAction" />
+                <eventAction-config
+                  v-on="$listeners"
+                  :eventActionList="smartContractlist"
+                  eventActionType="SMARTCONTRACT"
+                  :options="options.smartContractAction"
+                />
               </b-card-body>
             </b-collapse>
           </b-card>
 
-
-
           <!--Custom Smart Contract-->
 
           <b-card no-body class="mb-1">
-            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
-              <b-button block v-b-toggle.accordion-9 variant="info"
+            <b-card-header
+              header-tag="header"
+              class="p-1 accordin-header accordion-header-theme"
+              :style="headerThemeCss"
+              role="tab"
+            >
+              <b-button
+                block
+                v-b-toggle.accordion-9
+                variant="info"
                 class="bg-transparent border-0 text-left theme-color"
-                title="Create Custom Smart contract configuration for your event"><i class="fas fa-file-contract"></i>
+                title="Create Custom Smart contract configuration for your event"
+                ><i class="fas fa-file-contract"></i>
                 Custom Smart Contract Configurations
               </b-button>
             </b-card-header>
             <b-collapse id="accordion-9" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="customContractlist"
-                  eventActionType="CUSTOMCONTRACT" :options="options.customContractAction" />
+                <eventAction-config
+                  v-on="$listeners"
+                  :eventActionList="customContractlist"
+                  eventActionType="CUSTOMCONTRACT"
+                  :options="options.customContractAction"
+                />
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -312,7 +442,12 @@
           </b-card> -->
         </div>
 
-        <button class="btn btn-primary mt-3 button-theme  mr-3" :style="buttonThemeCss" type="button" @click="openPreview">
+        <button
+          class="btn btn-primary mt-3 button-theme mr-3"
+          :style="buttonThemeCss"
+          type="button"
+          @click="openPreview"
+        >
           Preview
         </button>
         <button class="btn btn-primary mt-3 button-theme" :style="buttonThemeCss" type="button" @click="saveProject">
@@ -324,7 +459,7 @@
 </template>
 
 <script>
-import config from "../../../config"
+import config from "../../../config";
 import EventActionConfig from "./components/EventActionConfig.vue";
 import PreviewConfig from "./components/PreviewConfig.vue";
 import GeneralConfig from "./components/GeneralConfig.vue";
@@ -339,7 +474,6 @@ export default {
   },
 
   props: {
-    
     project: {
       type: Object,
     },
@@ -361,9 +495,9 @@ export default {
     contractType: {
       type: String,
     },
-     openPreview:{
-       type:Function
-     },
+    openPreview: {
+      type: Function,
+    },
     saveProject: {
       type: Function,
     },
@@ -392,18 +526,18 @@ export default {
 
   computed: {
     // a computed getter
-     buttonThemeCss() {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': config.app.buttonBgColor,
-        '--button-text-color':config.app.buttonTextColor
-      }
-     },
-      headerThemeCss(){
-    return{
-      '--header-bg-color': config.app.headerBGColor,
-      '--header-text-color':config.app.headerTextColor
-      }
-  },
+        "--button-bg-color": config.app.buttonBgColor,
+        "--button-text-color": config.app.buttonTextColor,
+      };
+    },
+    headerThemeCss() {
+      return {
+        "--header-bg-color": config.app.headerBGColor,
+        "--header-text-color": config.app.headerTextColor,
+      };
+    },
     getTagDb: function () {
       if (this.tagFdb && this.tagFdb.length > 0) {
         for (let index = 0; index < this.tagFdb.length; index++) {
@@ -422,9 +556,7 @@ export default {
       if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
           (x) =>
-            x.type.indexOf("INPUT_") > -1 ||
-            x.type.indexOf("HYPERLINK_URL") > -1 ||
-            x.type.indexOf("INFO_TEXT") > -1
+            x.type.indexOf("INPUT_") > -1 || x.type.indexOf("HYPERLINK_URL") > -1 || x.type.indexOf("INFO_TEXT") > -1
         );
       } else {
         return [];
@@ -434,10 +566,7 @@ export default {
     socialList: function () {
       if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
-          (x) =>
-            x.type.indexOf("TWITTER_") > -1 ||
-            x.type.indexOf("TELEGRAM_") > -1 ||
-            x.type.indexOf("DISCORD_") > -1
+          (x) => x.type.indexOf("TWITTER_") > -1 || x.type.indexOf("TELEGRAM_") > -1 || x.type.indexOf("DISCORD_") > -1
         );
       } else {
         return [];
@@ -446,9 +575,7 @@ export default {
 
     blockchainList: function () {
       if (this.actionList && this.actionList.length > 0) {
-        return this.actionList.filter(
-          (x) => x.type.indexOf("BLOCKCHAIN_") > -1
-        );
+        return this.actionList.filter((x) => x.type.indexOf("BLOCKCHAIN_") > -1);
       } else {
         return [];
       }
@@ -464,26 +591,25 @@ export default {
             x.type.indexOf("MOONBEAM_ERC20") > -1 ||
             x.type.indexOf("MOONRIVER_ERC20") > -1 ||
             x.type.indexOf("MOON_ERC20") > -1 ||
-             x.type.indexOf("ETHEREUM_ERC721") > -1 ||
+            x.type.indexOf("ETHEREUM_ERC721") > -1 ||
             x.type.indexOf("MATIC_ERC721") > -1 ||
             x.type.indexOf("BINANCE_ERC721") > -1 ||
             x.type.indexOf("REEF_ERC721") > -1 ||
             x.type.indexOf("MOONBEAM_ERC721") > -1 ||
             x.type.indexOf("MOONRIVER_ERC721") > -1 ||
-            x.type.indexOf("MOON_ERC721") > -1 
+            x.type.indexOf("MOON_ERC721") > -1
         );
       } else {
         return [];
       }
     },
-    customContractlist:function () {
- if (this.actionList && this.actionList.length > 0) {
+    customContractlist: function () {
+      if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
           (x) =>
             x.type.indexOf("ETHEREUM_NETWORK") > -1 ||
             x.type.indexOf("MATIC_NETWORK") > -1 ||
             x.type.indexOf("BINANCE_NETWORK") > -1
-            
         );
       } else {
         return [];
@@ -496,13 +622,13 @@ export default {
         return [];
       }
     },
-     KycList: function () {
+    KycList: function () {
       if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter((x) => x.type.indexOf("KYC") > -1);
       } else {
         return [];
       }
-      },
+    },
     tag: function () {
       if (this.tagList && this.tagList.length > 0) {
         return this.tagList.filter((x) => x.type.indexOf("_TAG") > -1);
@@ -558,21 +684,20 @@ export default {
           { text: "Moon River ERC20", value: "MOONRIVER_ERC20" },
           { text: "Moon River ERC721", value: "MOONRIVER_ERC721" },
           { text: "Moon Alpha(testnet) ERC20", value: "MOON_ERC20" },
-           { text: "Moon Alpha(testnet) ERC721", value: "MOON_ERC721" },
+          { text: "Moon Alpha(testnet) ERC721", value: "MOON_ERC721" },
           { text: "Reef ERC20", value: "REEF_ERC20" },
           { text: "Reef ERC721", value: "REEF_ERC721" },
         ],
-        customContractAction:[
+        customContractAction: [
           { text: "Select Contract Type", value: null },
-          { text: "Ethereum", value: "ETHEREUM_NETWORK" },         
-          { text: "Polygon", value: "MATIC_NETWORK" },        
-          { text: "Binance", value: "BINANCE_NETWORK" },       
-         
-          
-        ]
-        ,
-        kycConfig:[{ text: "Select Provider", value: null},
-        {text:'SUMSUB',value:'SUMSUB_KYC'}],
+          { text: "Ethereum", value: "ETHEREUM_NETWORK" },
+          { text: "Polygon", value: "MATIC_NETWORK" },
+          { text: "Binance", value: "BINANCE_NETWORK" },
+        ],
+        kycConfig: [
+          { text: "Select Provider", value: null },
+          { text: "SUMSUB", value: "SUMSUB_KYC" },
+        ],
 
         // TODO: Completly wrong way of implementing Prize action
         //// Prize is also an action for us, so there should be different action type liek (PRIZE_NFT, PRIZE_TOKEN, PRIZE_OTHER)
@@ -584,26 +709,23 @@ export default {
           { text: "Select Prize Type", value: null },
           { text: "NFT", value: "NFT" },
           { text: "Tokens", value: "Tokens" },
-          { text: "Others", value: "Others" }
+          { text: "Others", value: "Others" },
         ],
         tagDetails: [{ text: "Select Tag Type", value: null }],
       },
-      preview:false
+      preview: false,
     };
   },
-  mounted(){
-   
-this.$root.$on("openPreview",()=>{
-  this.preview=true
-})
-this.$root.$on("closePreview",this.closePreview)
-  }
-  ,
+  mounted() {
+    this.$root.$on("openPreview", () => {
+      this.preview = true;
+    });
+    this.$root.$on("closePreview", this.closePreview);
+  },
   methods: {
- 
-    closePreview () {
-      this.preview= false
-    }
+    closePreview() {
+      this.preview = false;
+    },
   },
 };
 </script>

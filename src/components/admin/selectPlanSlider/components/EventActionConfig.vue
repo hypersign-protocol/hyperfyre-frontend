@@ -1,15 +1,7 @@
 <template>
   <div>
-    <div
-      v-if="eventActionList.length"
-      style="overflow-y: auto"
-      class="selected-media-wrapper d-flex p-2 mb-4"
-    >
-      <div
-        @click="handleEventActionClick(idx)"
-        v-for="(eventAction, idx) in eventActionList"
-        v-bind:Key="idx"
-      >
+    <div v-if="eventActionList.length" style="overflow-y: auto" class="selected-media-wrapper d-flex p-2 mb-4">
+      <div @click="handleEventActionClick(idx)" v-for="(eventAction, idx) in eventActionList" v-bind:Key="idx">
         <div
           v-if="!eventActionList[idx].isDeleted"
           :class="
@@ -20,46 +12,14 @@
           style="min-width: 120px"
         >
           <span>
-            <i
-              style="color: gray"
-              v-if="eventAction.type.includes('TWITTER')"
-              class="fab fa-twitter"
-            ></i>
-            <i
-              style="color: gray"
-              v-if="eventAction.type.includes('TELEGRAM')"
-              class="fab fa-telegram-plane"
-            ></i>
-            <i
-              style="color: gray"
-              v-if="eventAction.type.includes('INPUT_TEXT')"
-              class="fas fa-file-alt"
-            ></i>
-            <i
-              style="color: gray"
-              v-if="eventAction.type.includes('NUMBER')"
-              class="fas fa-list-ol"
-            ></i>
-            <i
-              style="color: gray"
-              v-if="eventAction.type.includes('DATE')"
-              class="fas fa-calendar-minus"
-            ></i>
-            <i
-              style="color: gray"
-              v-if="eventAction.type.includes('DISCORD')"
-              class="fab fa-discord"
-            ></i>
-            <i
-              style="color: gray"
-              v-if="eventAction.type.includes('INPUT_HYPERLINK')"
-              class="fa fa-link"
-            ></i>
-            <i
-              style="color: gray"
-              v-if="eventAction.type.includes('INFO_TEXT')"
-              class="fa fa-info-circle"
-            ></i>
+            <i style="color: gray" v-if="eventAction.type.includes('TWITTER')" class="fab fa-twitter"></i>
+            <i style="color: gray" v-if="eventAction.type.includes('TELEGRAM')" class="fab fa-telegram-plane"></i>
+            <i style="color: gray" v-if="eventAction.type.includes('INPUT_TEXT')" class="fas fa-file-alt"></i>
+            <i style="color: gray" v-if="eventAction.type.includes('NUMBER')" class="fas fa-list-ol"></i>
+            <i style="color: gray" v-if="eventAction.type.includes('DATE')" class="fas fa-calendar-minus"></i>
+            <i style="color: gray" v-if="eventAction.type.includes('DISCORD')" class="fab fa-discord"></i>
+            <i style="color: gray" v-if="eventAction.type.includes('INPUT_HYPERLINK')" class="fa fa-link"></i>
+            <i style="color: gray" v-if="eventAction.type.includes('INFO_TEXT')" class="fa fa-info-circle"></i>
             <img
               style="padding-right: 5px"
               src="../../../../assets/external-link.svg"
@@ -98,9 +58,7 @@
             />
           </span>
           <span>{{ truncate1(eventAction.title, 8) }}</span>
-          <span style="color: gray; padding-left: 5px"
-            ><i style="" class="fas fa-minus-circle"></i
-          ></span>
+          <span style="color: gray; padding-left: 5px"><i style="" class="fas fa-minus-circle"></i></span>
         </div>
       </div>
     </div>
@@ -108,26 +66,16 @@
     <div>
       <div class="row g-3 align-items-center w-100 mt-4">
         <div class="text-left col-lg-3 col-md-3 text-left">
-          <label for="type" class="col-form-label"
-            >Type<span style="color: red">*</span>:
-          </label>
+          <label for="type" class="col-form-label">Type<span style="color: red">*</span>: </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
-          <b-form-select
-            v-model="selected.type"
-            :options="options"
-          ></b-form-select>
+          <b-form-select v-model="selected.type" :options="options"></b-form-select>
         </div>
       </div>
       <!-- contract address -->
-      <div
-        class="row g-3 align-items-center w-100 mt-4"
-        v-if="eventActionType === 'SMARTCONTRACT'"
-      >
+      <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType === 'SMARTCONTRACT'">
         <div class="text-left col-lg-3 col-md-3 text-left">
-          <label for="title" class="col-form-label"
-            >Contract Address<span style="color: red">*</span>:
-          </label>
+          <label for="title" class="col-form-label">Contract Address<span style="color: red">*</span>: </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
           <input
@@ -140,14 +88,9 @@
         </div>
       </div>
 
-      <div
-        class="row g-3 align-items-center w-100 mt-4"
-        v-if="eventActionType === 'SMARTCONTRACT'"
-      >
+      <div class="row g-3 align-items-center w-100 mt-4" v-if="eventActionType === 'SMARTCONTRACT'">
         <div class="text-left col-lg-3 col-md-3 text-left">
-          <label for="title" class="col-form-label"
-            >Threshold Balance<span style="color: red">*</span>:
-          </label>
+          <label for="title" class="col-form-label">Threshold Balance<span style="color: red">*</span>: </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
           <input
@@ -162,25 +105,16 @@
 
       <div class="row g-3 align-items-center w-100 mt-4">
         <div class="text-left col-lg-3 col-md-3 text-left">
-          <label for="title" class="col-form-label"
-            >Title<span style="color: red">*</span>:
-          </label>
+          <label for="title" class="col-form-label">Title<span style="color: red">*</span>: </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
-          <input
-            v-model="selected.title"
-            type="text"
-            id="title"
-            class="form-control w-100"
-          />
+          <input v-model="selected.title" type="text" id="title" class="form-control w-100" />
         </div>
       </div>
 
       <div class="row g-3 align-items-center w-100 mt-4" v-if="info">
         <div class="text-left col-lg-3 col-md-3 text-left">
-          <label for="title" class="col-form-label"
-            >Info<span style="color: red">*</span>:
-          </label>
+          <label for="title" class="col-form-label">Info<span style="color: red">*</span>: </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
           <markdown-editor
@@ -193,17 +127,10 @@
       <!-- HyperlinkUrl -->
       <div class="row g-3 align-items-center w-100 mt-4" v-if="url">
         <div class="text-left col-lg-3 col-md-3 text-left">
-          <label for="title" class="col-form-label"
-            >URL<span style="color: red">*</span>:
-          </label>
+          <label for="title" class="col-form-label">URL<span style="color: red">*</span>: </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
-          <input
-            v-model="selected.value"
-            type="text"
-            id="title"
-            class="form-control w-100"
-          />
+          <input v-model="selected.value" type="text" id="title" class="form-control w-100" />
         </div>
       </div>
 
@@ -212,59 +139,39 @@
           <label for="placeHolder" class="col-form-label">Place Holder: </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
-          <input
-            v-model="selected.placeHolder"
-            type="text"
-            id="placeHolder"
-            class="form-control w-100"
-          />
+          <input v-model="selected.placeHolder" type="text" id="placeHolder" class="form-control w-100" />
         </div>
       </div>
       <div class="row g-3 align-items-center w-100 mt-4" v-if="nodDisplay">
         <div class="text-left col-lg-3 col-md-3 text-left">
-          <label for="value" class="col-form-label"
-            >Social Handle<span style="color: red">*</span>:
-          </label>
+          <label for="value" class="col-form-label">Social Handle<span style="color: red">*</span>: </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
           <input
             v-model="selected.value"
             type="text"
             :placeholder="
-              selected.type === null
-                ? ''
-                : 'Please Enter Your ' +
-                  [[CapitaliseString(selected.type)]] +
-                  ' ' +
-                  'handle'
+              selected.type === null ? '' : 'Please Enter Your ' + [[CapitaliseString(selected.type)]] + ' ' + 'handle'
             "
             id="value"
             class="form-control w-100"
           />
           <span class="inputInfo" v-if="selected.type === 'TELEGRAM_JOIN'"
             >Make sure to add
-            <a
-              target="_blank"
-              :href="`https://telegram.me/${hfTgBotId}?startgroup=any`"
-              >{{appName}} Telegram Bot</a
-            >
+            <a target="_blank" :href="`https://telegram.me/${hfTgBotId}?startgroup=any`">{{ appName }} Telegram Bot</a>
             in your public group, for this functionality to work properly.</span
           >
         </div>
       </div>
       <div class="row g-3 align-items-center w-100 mt-4" v-if="showRetweet">
         <div class="text-left col-lg-3 col-md-3 text-left">
-          <label for="value" class="col-form-label"
-            >Retweet Url<span style="color: red">*</span>:
-          </label>
+          <label for="value" class="col-form-label">Retweet Url<span style="color: red">*</span>: </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
           <input
             v-model="selected.value"
             type="text"
-            :placeholder="
-              selected.type === null ? '' : 'Please Enter Your Retweet Url'
-            "
+            :placeholder="selected.type === null ? '' : 'Please Enter Your Retweet Url'"
             id="value"
             class="form-control w-100"
           />
@@ -272,19 +179,13 @@
       </div>
       <div class="row g-3 align-items-center w-100 mt-4" v-if="showInvitelink">
         <div class="text-left col-lg-3 col-md-3 text-left">
-          <label for="value" class="col-form-label"
-            >Invite Link<span style="color: red">*</span>:
-          </label>
+          <label for="value" class="col-form-label">Invite Link<span style="color: red">*</span>: </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
           <input
             v-model="selected.value"
             type="text"
-            :placeholder="
-              selected.type === null
-                ? ''
-                : 'Please Enter Your Discord server invite link'
-            "
+            :placeholder="selected.type === null ? '' : 'Please Enter Your Discord server invite link'"
             id="value"
             class="form-control w-100"
           />
@@ -292,30 +193,15 @@
       </div>
       <div class="row g-3 align-items-center w-100 mt-4" v-if="!noScore">
         <div class="text-left col-lg-3 col-md-3 text-left">
-          <label for="title" class="col-form-label"
-            >Score<span style="color: red">*</span>:
-          </label>
+          <label for="title" class="col-form-label">Score<span style="color: red">*</span>: </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
-          <input
-            v-model="selected.score"
-            type="number"
-            id="title"
-            class="form-control w-100"
-          />
+          <input v-model="selected.score" type="number" id="title" class="form-control w-100" />
         </div>
       </div>
-      <div
-        class="row g-3 justify-content-md-end w-100 mt-4"
-        v-if="isCreate == true"
-      >
+      <div class="row g-3 justify-content-md-end w-100 mt-4" v-if="isCreate == true">
         <div class="col-lg-6 col-md-9 px-0">
-          <button
-            @click="handleEventActionAdd()"
-            class="btn button-theme"
-            :style="buttonThemeCss"
-            type="button"
-          >
+          <button @click="handleEventActionAdd()" class="btn button-theme" :style="buttonThemeCss" type="button">
             {{ eventActionList.includes(selected) ? "Update" : "Add" }}
           </button>
         </div>
@@ -330,11 +216,7 @@
           >
             Update
           </button>
-          <button
-            @click="handleEventActionDelete()"
-            class="btn btn-danger slight-left-margin"
-            type="button"
-          >
+          <button @click="handleEventActionDelete()" class="btn btn-danger slight-left-margin" type="button">
             Delete
           </button>
         </div>
@@ -387,8 +269,8 @@
 }
 
 .button-theme {
-  background-color:  var(--button-bg-color);
-  border-collapse:  var(--button-bg-color);
+  background-color: var(--button-bg-color);
+  border-collapse: var(--button-bg-color);
   color: var(--button-text-color);
   border: 0;
 }
@@ -429,12 +311,12 @@ export default {
     },
   },
   computed: {
-     buttonThemeCss() {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': config.app.buttonBgColor,
-        '--button-text-color':config.app.buttonTextColor
-      }
-     },
+        "--button-bg-color": config.app.buttonBgColor,
+        "--button-text-color": config.app.buttonTextColor,
+      };
+    },
     nodDisplay() {
       if (
         this.eventActionType != "CUSTOM" &&
@@ -448,10 +330,7 @@ export default {
       return false;
     },
     url() {
-      if (
-        this.eventActionType === "CUSTOM" &&
-        this.selected.type === "HYPERLINK_URL"
-      ) {
+      if (this.eventActionType === "CUSTOM" && this.selected.type === "HYPERLINK_URL") {
         return true;
       }
       return false;
@@ -468,37 +347,25 @@ export default {
       return false;
     },
     info() {
-      if (
-        this.eventActionType === "CUSTOM" &&
-        this.selected.type === "INFO_TEXT"
-      ) {
+      if (this.eventActionType === "CUSTOM" && this.selected.type === "INFO_TEXT") {
         return true;
       }
       return false;
     },
     noScore() {
-      if (
-        this.eventActionType === "CUSTOM" &&
-        this.selected.type === "INFO_TEXT"
-      ) {
+      if (this.eventActionType === "CUSTOM" && this.selected.type === "INFO_TEXT") {
         return true;
       }
       return false;
     },
     showRetweet() {
-      if (
-        this.eventActionType === "SOCIAL" &&
-        this.selected.type === "TWITTER_RETWEET"
-      ) {
+      if (this.eventActionType === "SOCIAL" && this.selected.type === "TWITTER_RETWEET") {
         return true;
       }
       return false;
     },
     showInvitelink() {
-      if (
-        this.eventActionType === "SOCIAL" &&
-        this.selected.type === "DISCORD_JOIN"
-      ) {
+      if (this.eventActionType === "SOCIAL" && this.selected.type === "DISCORD_JOIN") {
         return true;
       }
       return false;
@@ -580,16 +447,10 @@ export default {
           } else if (isValidURL(this.selected.title)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL);
-          } else if (
-            this.selected.type === "TWITTER_RETWEET" &&
-            isEmpty(this.selected.value)
-          ) {
+          } else if (this.selected.type === "TWITTER_RETWEET" && isEmpty(this.selected.value)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.RETWEET_NOT_EMPTY);
-          } else if (
-            this.selected.type === "DISCORD_JOIN" &&
-            isEmpty(this.selected.value)
-          ) {
+          } else if (this.selected.type === "DISCORD_JOIN" && isEmpty(this.selected.value)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVITE_NOT_EMPTY);
           } else if (isEmpty(this.selected.value)) {
@@ -602,16 +463,10 @@ export default {
           ) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.URL_IN_SOCIAL_HANDLE);
-          } else if (
-            this.selected.type === "TWITTER_RETWEET" &&
-            isretweetUrl(this.selected.value)
-          ) {
+          } else if (this.selected.type === "TWITTER_RETWEET" && isretweetUrl(this.selected.value)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.RETWEET_VALID_URL);
-          } else if (
-            this.selected.type === "DISCORD_JOIN" &&
-            isdiscordLink(this.selected.value)
-          ) {
+          } else if (this.selected.type === "DISCORD_JOIN" && isdiscordLink(this.selected.value)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVALID_INVITE_LINK);
           } else if (isNaN(parseInt(this.selected.score))) {
@@ -641,12 +496,7 @@ export default {
             if (isEmpty(this.selected.value)) {
               isvalid = false;
               this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOM.URL_NOT_EMPTY);
-            } else if (
-              !(
-                this.selected.type === "HYPERLINK_URL" &&
-                isValidURL(this.selected.value)
-              )
-            ) {
+            } else if (!(this.selected.type === "HYPERLINK_URL" && isValidURL(this.selected.value))) {
               isvalid = false;
               this.notifyErr(Messages.EVENTS.ACTIONS.VALID_URL);
             } else if (isNaN(parseInt(this.selected.score))) {
@@ -685,27 +535,19 @@ export default {
         case "SMARTCONTRACT":
           if (this.selected.type === null) {
             isvalid = false;
-            this.notifyErr(
-              Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE
-            );
+            this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE);
           } else if (isEmpty(this.contract.contractAddress)) {
             isvalid = false;
-            this.notifyErr(
-              Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
-            );
+            this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY);
           } else if (
             isNaN(parseFloat(this.contract.thresholdBalance)) ||
             parseFloat(this.contract.thresholdBalance) < 0
           ) {
             isvalid = false;
-            this.notifyErr(
-              Messages.EVENTS.ACTIONS.SMARTCONTRACT.THBALANCE_NOT_NEGATIVE
-            );
+            this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.THBALANCE_NOT_NEGATIVE);
           } else if (!isContractValid(this.contract.contractAddress)) {
             isvalid = false;
-            this.notifyErr(
-              Messages.EVENTS.ACTIONS.SMARTCONTRACT.VALID_CONTRACT_ADDRESS
-            );
+            this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.VALID_CONTRACT_ADDRESS);
           } else if (isEmpty(this.selected.title)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE);
@@ -720,24 +562,18 @@ export default {
             this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM);
           }
           break;
-      case "CUSTOMCONTRACT":
-  if (this.selected.type === null) {
+        case "CUSTOMCONTRACT":
+          if (this.selected.type === null) {
             isvalid = false;
-            this.notifyErr(
-              Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE
-            );
+            this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE);
           } else if (isEmpty(this.contract.contractAddress)) {
             isvalid = false;
-            this.notifyErr(
-              Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
-            );
+            this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY);
           } else if (isEmpty(this.contract.contractABI)) {
             isvalid = false;
-            this.notifyErr(
-              Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
-            );
+            this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY);
           }
-        break;
+          break;
         default:
           this.notifyErr(Messages.EVENTS.ACTIONS.INVALID_EVENT_TYPE);
       }
@@ -752,8 +588,7 @@ export default {
         if (this.eventActionType === "SMARTCONTRACT") {
           this.selected.value = JSON.stringify(this.contract);
         }
-        this.selected["id"] =
-          this.eventActionType + "_" + this.eventActionList.length;
+        this.selected["id"] = this.eventActionType + "_" + this.eventActionList.length;
         this.eventActionList.push(this.selected);
         this.$emit("updateEventActions", {
           type: "ADD",

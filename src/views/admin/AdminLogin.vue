@@ -90,29 +90,28 @@ h5 span {
   text-align: center;
 }
 
-.QRRefresh{
-  width:100%; 
-  align-content:center; 
-  height:100%; 
+.QRRefresh {
+  width: 100%;
+  align-content: center;
+  height: 100%;
   cursor: pointer;
   margin-top: 14%;
 }
 
 .button-theme {
-  background-color:  var(--button-bg-color);
-  border-collapse:  var(--button-bg-color);
+  background-color: var(--button-bg-color);
+  border-collapse: var(--button-bg-color);
   color: var(--button-text-color);
   border: 0;
-
 }
 
-.event-card{
-  border:0;
+.event-card {
+  border: 0;
   border-radius: 10px;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
-.align-center{
+.align-center {
   margin-left: auto;
   margin-right: auto;
   display: block;
@@ -120,29 +119,37 @@ h5 span {
 </style>
 <template>
   <!-- <div class="row" style="margin-left: 35%;"> -->
-  <div style="justify-content: center; padding-top:3%">
+  <div style="justify-content: center; padding-top: 3%">
     <img class="align-center" style="margin-bottom: 20px" height="60px" src="../../assets/Fyre_Gold_Black.png" />
-    <b-card no-body class="loginContent event-card ">
+    <b-card no-body class="loginContent event-card">
       <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
       <h4>Admin Login</h4>
-      <div class="row" style="margin-top:3%">
+      <div class="row" style="margin-top: 3%">
         <div v-if="QRRefresh" class="QRRefresh">
-          <i @click="reloadQR" class="fas fa-redo" style="font-size: xx-large; color: gray;"></i>
-          <p><label style="font-size:small; color:grey; margin-top:1%">
-              Session expired. Click to reload.
-            </label></p>
+          <i @click="reloadQR" class="fas fa-redo" style="font-size: xx-large; color: gray"></i>
+          <p>
+            <label style="font-size: small; color: grey; margin-top: 1%"> Session expired. Click to reload. </label>
+          </p>
         </div>
         <form class="col-md-12" v-else>
           <div class="form-group">
-            <vue-qr v-if="qr_data != ''" margin="1" :text="qr_data" :size="200" :logoSrc="src2"
-              logoBackgroundColor="white" logoCornerRadius="2"></vue-qr>
-            <label style="font-size:small; color:grey; margin-top:1%">Scan QR code using Hypersign Mobile App</label>
+            <vue-qr
+              v-if="qr_data != ''"
+              margin="1"
+              :text="qr_data"
+              :size="200"
+              :logoSrc="src2"
+              logoBackgroundColor="white"
+              logoCornerRadius="2"
+            ></vue-qr>
+            <label style="font-size: small; color: grey; margin-top: 1%">Scan QR code using Hypersign Mobile App</label>
             <div>
               <!-- <p style="font-size:small;"> Don’t have the app yet? <a href="#">Get it now</a></p> -->
-              <span style="font-size: small; color:grey; padding: 10px">
+              <span style="font-size: small; color: grey; padding: 10px">
                 Get the app on
-                <a href="https://play.google.com/store/apps/details?id=com.hypersign.cordova"
-                  target="__blank">Android</a>
+                <a href="https://play.google.com/store/apps/details?id=com.hypersign.cordova" target="__blank"
+                  >Android</a
+                >
                 or
                 <a :href="$config.webWalletAddress" target="__blank">Web</a>
               </span>
@@ -151,15 +158,18 @@ h5 span {
 
           <h5><span>OR</span></h5>
 
-          <div class="mb-2 ">
-            <a v-if="this.value != ''" class="btn btn-hypersign  button-theme" :style="buttonThemeCss"  href="#" @click.prevent="openWallet()">
-              <div style="font-size: smaller; padding: 10px;">
-                Click To Login
-              </div>
+          <div class="mb-2">
+            <a
+              v-if="this.value != ''"
+              class="btn btn-hypersign button-theme"
+              :style="buttonThemeCss"
+              href="#"
+              @click.prevent="openWallet()"
+            >
+              <div style="font-size: smaller; padding: 10px">Click To Login</div>
             </a>
           </div>
         </form>
-
       </div>
     </b-card>
   </div>
@@ -173,20 +183,20 @@ import "vue-loading-overlay/dist/vue-loading.css";
 import url from "url";
 import notificationMixins from "../../mixins/notificationMixins";
 import localStorageMixin from "../../mixins/localStorageMixin";
-import config from "../../config"
+import config from "../../config";
 export default {
   name: "Login",
   components: {
     VueQr,
     Loading,
   },
-  computed:{
-     buttonThemeCss() {
+  computed: {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': config.app.buttonBgColor,
-        '--button-text-color':config.app.buttonTextColor
-      }
-     }
+        "--button-bg-color": config.app.buttonBgColor,
+        "--button-text-color": config.app.buttonTextColor,
+      };
+    },
   },
   data() {
     return {
@@ -202,20 +212,19 @@ export default {
       credentials: {},
       userData: {},
       value: "",
-      qr_data:"",
+      qr_data: "",
       user: {},
       verifiablePresentation: "",
       fullPage: true,
       isLoading: false,
       connection: null,
-      privateKey:
-        "3isrtEJ4gt1ZHkdUYYph1WFAtzfqAL5WM6Hh1NC2hmWnDfBypXjt5oUFdAqQdiess2vqqQ3iF6x4fDVuvLw454sn",
+      privateKey: "3isrtEJ4gt1ZHkdUYYph1WFAtzfqAL5WM6Hh1NC2hmWnDfBypXjt5oUFdAqQdiess2vqqQ3iF6x4fDVuvLw454sn",
       did: "did:hs:892325a4-75c9-465c-882b-91e3ca5143c3",
     };
   },
   created() {
     localStorage.clear();
-     document.title = `${config.appName} - Login`;
+    document.title = `${config.appName} - Login`;
     // console.log("Beofer creating websoceket connection");
     let baseUrl = this.$config.studioServer.BASE_URL;
     let websocketUrl = "ws://localhost:3003";
@@ -224,10 +233,7 @@ export default {
     try {
       parsedUrl = url.parse(baseUrl);
       // console.log(parsedUrl);
-      websocketUrl =
-        parsedUrl.protocol === "https:"
-          ? `wss://${parsedUrl.host}`
-          : `ws://${parsedUrl.host}`;
+      websocketUrl = parsedUrl.protocol === "https:" ? `wss://${parsedUrl.host}` : `ws://${parsedUrl.host}`;
       // console.log(websocketUrl);
     } catch (e) {
       websocketUrl = "ws://localhost:3003";
@@ -239,23 +245,23 @@ export default {
 
     // take it in the env
     this.connection = new WebSocket(this.$config.websocketUrl);
-    this.connection.onopen = function() {
+    this.connection.onopen = function () {
       console.log("Socket connection is open");
     };
 
     this.isLoading = true;
     var _this = this;
 
-    this.connection.onmessage = function({ data }) {
+    this.connection.onmessage = function ({ data }) {
       // console.log("Websocket connection messag receieved ", data);
       let messageData = JSON.parse(data);
       // console.log(messageData);
       if (messageData.op == "init") {
         _this.isLoading = false;
         /// Sending provider from here........
-        messageData.data['provider'] = 'google';
+        messageData.data["provider"] = "google";
         _this.value = JSON.stringify(messageData.data);
-        _this.qr_data=`${_this.$config.webWalletAddress}/deeplink?url=${_this.value}`
+        _this.qr_data = `${_this.$config.webWalletAddress}/deeplink?url=${_this.value}`;
       } else if (messageData.op == "end") {
         _this.connection.close();
         const authorizationToken = messageData.data.token;
@@ -270,8 +276,7 @@ export default {
             _this.$router.push(_this.$route.params.nextUrl);
           } else {
             // console.log(_this.$router);
-            window.location.href =
-              window.location.origin + "/admin/dashboard";
+            window.location.href = window.location.origin + "/admin/dashboard";
             // _this.$router.push("dashboard");
           }
         }
@@ -281,7 +286,7 @@ export default {
         _this.connection.close(4001, messageData.data.clientId);
       }
     };
-    this.connection.onerror = function(error) {
+    this.connection.onerror = function (error) {
       console.log("Websocket connection error ", error);
     };
   },
@@ -289,8 +294,8 @@ export default {
     this.clean();
   },
   methods: {
-    reloadQR(){
-      window.location.reload()
+    reloadQR() {
+      window.location.reload();
     },
     openWallet() {
       if (this.value != "") {

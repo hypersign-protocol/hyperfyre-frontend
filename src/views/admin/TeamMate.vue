@@ -1,6 +1,6 @@
 <style scoped>
-.button-theme{
-  background-color:  var(--button-bg-color);
+.button-theme {
+  background-color: var(--button-bg-color);
   border-collapse: var(--button-bg-color);
   color: var(--button-text-color);
   border: 0;
@@ -11,17 +11,13 @@
     <h3 v-if="!teammates.length" class="leftAlign">No teams found, click on 'Invite' button to add team</h3>
     <div class="text-right">
       <button @click="invite()" class="btn button-theme" :style="buttonThemeCss">
-         Invite <i class="fas fa-plus text-black"></i>
+        Invite <i class="fas fa-plus text-black"></i>
       </button>
     </div>
     <h3 v-if="teammates.length">Your Team</h3>
     <div class="row" style="margin-top: 2%">
       <div class="col-md-12">
-        <table
-          v-if="teammates.length"
-          class="table table-bordered"
-          style="background: #ffff"
-        >
+        <table v-if="teammates.length" class="table table-bordered" style="background: #ffff">
           <thead class="thead-light">
             <tr>
               <th>Name</th>
@@ -48,10 +44,12 @@
               </td>
               <td v-else>
                 <h5>
-                  <b-badge style="text-transform: uppercase" variant="danger"
-                  title="Teammate has not yet accepted the invitation">{{
-                    row.status
-                  }}</b-badge>
+                  <b-badge
+                    style="text-transform: uppercase"
+                    variant="danger"
+                    title="Teammate has not yet accepted the invitation"
+                    >{{ row.status }}</b-badge
+                  >
                 </h5>
               </td>
               <td @click="remove(row._id)">
@@ -67,15 +65,13 @@
           </tbody>
         </table>
 
-       
         <h3 v-if="$accounts.length" class="leftAlign">Team's you are part of</h3>
-         <table  v-if="$accounts.length" class="table table-bordered" style="background:#FFFF">
-
+        <table v-if="$accounts.length" class="table table-bordered" style="background: #ffff">
           <thead class="thead-light">
             <tr>
               <th>Admin Name</th>
               <th>Admin Email</th>
-            
+
               <th>Login As</th>
             </tr>
           </thead>
@@ -87,11 +83,7 @@
               <td>{{ row.email }}</td>
 
               <td v-if="isAdmin(row.email)">
-                <button
-                  :disabled="true"
-                  style="text-transform: uppercase"
-                  class="btn btn-success btn-sm"
-                >
+                <button :disabled="true" style="text-transform: uppercase" class="btn btn-success btn-sm">
                   Active
                 </button>
               </td>
@@ -117,17 +109,17 @@
 import config from "../../config";
 import notificationMixins from "../../mixins/notificationMixins";
 import SimpleVueValidation from "simple-vue-validator";
-import { isValidURL,isValidText } from '../../mixins/fieldValidationMixin';
+import { isValidURL, isValidText } from "../../mixins/fieldValidationMixin";
 export default {
   name: "Teammate",
   components: {},
-  computed:{
- buttonThemeCss() {
+  computed: {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': config.app.buttonBgColor,
-        '--button-text-color':config.app.buttonTextColor
-      }
-     }
+        "--button-bg-color": config.app.buttonBgColor,
+        "--button-text-color": config.app.buttonTextColor,
+      };
+    },
   },
   data() {
     return {
@@ -141,7 +133,6 @@ export default {
     };
   },
   async mounted() {
-    
     await this.getTeammates();
   },
   created() {
@@ -155,15 +146,15 @@ export default {
     };
   },
   methods: {
-     isEmail(email){
+    isEmail(email) {
       const Validator = SimpleVueValidation.Validator;
-      if(Validator.value(email).required().email()._messages[0]===undefined){
+      if (Validator.value(email).required().email()._messages[0] === undefined) {
         return true;
-      }else{
-        return false
+      } else {
+        return false;
       }
     },
-    
+
     isAdmin(email) {
       if (this.accessuser.adminEmail !== undefined) {
         return this.accessuser.adminEmail === email;
@@ -172,8 +163,8 @@ export default {
       }
       return false;
     },
-  switchAccount(row) {
-    if(row.adminName ==="Self"){
+    switchAccount(row) {
+      if (row.adminName === "Self") {
         localStorage.removeItem("authToken");
         localStorage.removeItem("accessuser");
         localStorage.removeItem("accessToken");
@@ -191,8 +182,7 @@ export default {
             adminDid: row.adminDid,
           })
         );
-         this.$router.push("/admin/dashboard");
-        
+        this.$router.push("/admin/dashboard");
       }
     },
     async getTeammates() {
@@ -207,7 +197,7 @@ export default {
 
       if (!resp.ok) {
         return this.notifyErr(resp.statusText);
-      } else{
+      } else {
         this.teammates = await resp.json();
       }
     },
@@ -228,15 +218,17 @@ export default {
           preConfirm: () => {
             this.email = this.$swal.getPopup().querySelector("#email").value;
             this.name = this.$swal.getPopup().querySelector("#name").value;
-            if (!this.email || !this.isEmail(this.email)|| !this.name || isValidURL(this.name) || !isValidText(this.name)) {
-              this.$swal.showValidationMessage(
-                `Please enter valid email and name`
-              );
+            if (
+              !this.email ||
+              !this.isEmail(this.email) ||
+              !this.name ||
+              isValidURL(this.name) ||
+              !isValidText(this.name)
+            ) {
+              this.$swal.showValidationMessage(`Please enter valid email and name`);
             }
-            if(this.name.length>20){
-              this.$swal.showValidationMessage(
-                `Please enter name upto 20 character`
-              );
+            if (this.name.length > 20) {
+              this.$swal.showValidationMessage(`Please enter name upto 20 character`);
             }
             return { name: this.name, email: this.email };
           },

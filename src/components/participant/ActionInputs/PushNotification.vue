@@ -18,12 +18,7 @@
             <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
-          <img
-            class="check-mark"
-            src="../../../assets/check-circle-fill.svg"
-            height="25px"
-            v-if="done"
-          />
+          <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
         </b-col>
       </b-row>
     </b-card-header>
@@ -39,11 +34,7 @@
                 :disabled="done"
                 :required="data.isManadatory"
               ></b-form-input> -->
-              <button
-                :disabled="done"
-                class="btn btn-outline-twitter text-black"
-                @click="getBrowserSubscription()"
-              >
+              <button :disabled="done" class="btn btn-outline-twitter text-black" @click="getBrowserSubscription()">
                 Subscribe
               </button>
             </div>
@@ -51,9 +42,7 @@
         </b-row>
         <b-row v-if="!done">
           <b-col cols="12" sm="12" md="12">
-            <button class="btn btn-link center" @click="update()">
-              Continue
-            </button>
+            <button class="btn btn-link center" @click="update()">Continue</button>
           </b-col>
         </b-row>
       </b-card-body>
@@ -84,22 +73,22 @@ export default {
       required: true,
     },
     authToken: {
-      required: true
+      required: true,
     },
     done: {
       required: true,
     },
     themeData: {
       required: true,
-    }
+    },
   },
-computed:{
- buttonThemeCss() {
+  computed: {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': this.themeData.buttonBGColor,
-        '--button-text-color': this.themeData.buttonTextColor
-      }
-     }
+        "--button-bg-color": this.themeData.buttonBGColor,
+        "--button-text-color": this.themeData.buttonTextColor,
+      };
+    },
   },
   data() {
     return {
@@ -107,7 +96,6 @@ computed:{
     };
   },
   mounted() {
-    
     if (this.$route.query) {
       if (this.$route.query.subsId === localStorage.getItem("subsId")) {
         this.data.value = "Subscribed";
@@ -123,7 +111,7 @@ computed:{
         this.data.subObj = "";
         return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
       } else {
-        this.data.value="Subscribed"
+        this.data.value = "Subscribed";
         this.$emit("input", this.data.value);
       }
     },
@@ -145,13 +133,12 @@ computed:{
       //   }
       // );
       // return response.json();
-      if(this.data.subObj !==undefined && this.data.subscription!==undefined){
-        this.data.value="Notification Subscribed"
-         this.$emit("input", this.data.value);
-      }else{
-        this.notifyErr(Messages.EVENT_ACTIONS.SUBS.SUBS_NOTIFICATION)
+      if (this.data.subObj !== undefined && this.data.subscription !== undefined) {
+        this.data.value = "Notification Subscribed";
+        this.$emit("input", this.data.value);
+      } else {
+        this.notifyErr(Messages.EVENT_ACTIONS.SUBS.SUBS_NOTIFICATION);
       }
-      
     },
     isFieldValid() {
       if (isEmpty(this.data.value)) {
@@ -167,17 +154,14 @@ computed:{
     },
 
     async saveSubscription(subscription) {
-      const response = await fetch(
-        config.studioServer.BASE_URL + "api/v1/notification/push/subscribe",
-        {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.authToken}`,
-          },
-          body: JSON.stringify({ subObj: subscription }),
-        }
-      );
+      const response = await fetch(config.studioServer.BASE_URL + "api/v1/notification/push/subscribe", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        },
+        body: JSON.stringify({ subObj: subscription }),
+      });
       return response.json();
     },
     urlB64ToUint8Array(base64String) {
@@ -201,45 +185,38 @@ computed:{
           this.notifySuccess("Notification Granted");
           try {
             try {
-               const brave = await navigator.brave.isBrave();
-            if (brave) {
-              alert(
-                "Brave browser Detected User Google Service to Enable Push brave://settings/privacy"
-              );
-            }
+              const brave = await navigator.brave.isBrave();
+              if (brave) {
+                alert("Brave browser Detected User Google Service to Enable Push brave://settings/privacy");
+              }
             } catch (error) {
-             console.log("Not Brave");
+              console.log("Not Brave");
             }
-           
+
             await navigator.serviceWorker
               .register(`/service-worker.js`, { scope: "/" })
               .then(async () => {
                 return await navigator.serviceWorker.ready;
               })
               .then(async (reg) => {
-                const applicationServerKey = await this.urlB64ToUint8Array(
-                  config.webpush_public_key
-                );
+                const applicationServerKey = await this.urlB64ToUint8Array(config.webpush_public_key);
                 reg.addEventListener("updatefound", () => {
                   reg.update();
-                })
-                
+                });
 
-                reg.pushManager
-                  .subscribe({ applicationServerKey, userVisibleOnly: true })
-                  .then(async (e) => {
-                    // console.log(JSON.stringify(e));
+                reg.pushManager.subscribe({ applicationServerKey, userVisibleOnly: true }).then(async (e) => {
+                  // console.log(JSON.stringify(e));
 
-                    this.data.subObj = e;
-                    this.data.subscription = await this.saveSubscription(e);
-                   // console.log(e);
-                    localStorage.setItem("subsId", this.data.subscription._id);
-                  });
+                  this.data.subObj = e;
+                  this.data.subscription = await this.saveSubscription(e);
+                  // console.log(e);
+                  localStorage.setItem("subsId", this.data.subscription._id);
+                });
               });
 
             await this.notifySuccess("Registerd");
           } catch (error) {
-           // console.log(error);
+            // console.log(error);
             return this.notifyErr("Service Worker Registration Faild");
           }
         } else if (permission === "blocked" || permission === "denied") {

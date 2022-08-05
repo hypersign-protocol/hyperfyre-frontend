@@ -71,8 +71,8 @@ label {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  border: 1px solid var(--button-bg-color);;
-  background-color: var(--button-bg-color);;
+  border: 1px solid var(--button-bg-color);
+  background-color: var(--button-bg-color);
   margin: 1px 0;
 }
 .modal-text {
@@ -99,7 +99,7 @@ label {
 }
 
 .button-theme {
-  background-color:var(--button-bg-color);
+  background-color: var(--button-bg-color);
   border-collapse: var(--button-bg-color);
   color: var(--button-text-color);
   border: 0;
@@ -107,22 +107,13 @@ label {
 </style>
 <template>
   <div class="home marginLeft marginRight">
-    <loading
-      :active.sync="isLoading"
-      :can-cancel="true"
-      :is-full-page="fullPage"
-    ></loading>
+    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
 
     <b-modal hide-footer id="modal-1" title="Lottery">
-      <p
-        class="my-4 border rounded-lg p-2 modal-text"
-        style="background: #f0f9ff"
-      >
-        <b>Lottery</b> is the process of selecting winners of an event. Upon
-        clicking on "<b>Execute button</b>", the lottery process begins, which
-        may take sometime and screen may freeze. Once done, you will get
-        selected records in excel sheet. The winner selection is primarly based
-        on their "<b>score</b>" unless checked "<b>randomly</b>".
+      <p class="my-4 border rounded-lg p-2 modal-text" style="background: #f0f9ff">
+        <b>Lottery</b> is the process of selecting winners of an event. Upon clicking on "<b>Execute button</b>", the
+        lottery process begins, which may take sometime and screen may freeze. Once done, you will get selected records
+        in excel sheet. The winner selection is primarly based on their "<b>score</b>" unless checked "<b>randomly</b>".
       </p>
       <div class="d-flex mx-auto justify-content-between px-4">
         <div class="bold">Total Records</div>
@@ -131,33 +122,18 @@ label {
       <div class="d-flex mx-auto justify-content-between px-4 mt-4">
         <div class="bold">Number of winners to choose</div>
         <div class="bold">
-          <input
-            v-model="recordsForLottery"
-            type="number"
-            class="form-control"
-            placeholder="No. of records"
-          />
+          <input v-model="recordsForLottery" type="number" class="form-control" placeholder="No. of records" />
         </div>
       </div>
       <div class="d-flex mx-auto justify-content-between px-4 mt-4">
         <div class="bold">Check to choose randomly (optional)</div>
         <div class="bold">
-          <input
-            v-model="isRandom"
-            type="checkbox"
-            class=""
-            title="Check to choose randomly"
-          />
+          <input v-model="isRandom" type="checkbox" class="" title="Check to choose randomly" />
         </div>
       </div>
 
       <div class="mt-5 text-center">
-        <button
-          @click="handleLottery"
-          type="button"
-          class="btn btn-primary button-theme"
-          :style="buttonThemeCss"
-        >
+        <button @click="handleLottery" type="button" class="btn btn-primary button-theme" :style="buttonThemeCss">
           Execute
         </button>
       </div>
@@ -263,14 +239,14 @@ import eventBus from "../../eventBus";
 export default {
   name: "Investor",
   components: { Loading, Paginate },
-computed:{
- buttonThemeCss() {
+  computed: {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': config.app.buttonBgColor,
-        '--button-text-color':config.app.buttonTextColor
-      }
-     }
-},
+        "--button-bg-color": config.app.buttonBgColor,
+        "--button-text-color": config.app.buttonTextColor,
+      };
+    },
+  },
   data() {
     return {
       paginateValue: 1,
@@ -453,9 +429,7 @@ computed:{
         }
         const json = await resp.json();
         this.subscriptions = json["subscriptions"];
-        this.activeSubscriptions = this.subscriptions.filter((x) =>
-          x.paymentData ? true : x.isActive === true
-        );
+        this.activeSubscriptions = this.subscriptions.filter((x) => (x.paymentData ? true : x.isActive === true));
         this.paidSubscriptions = this.subscriptions.filter((x) => {
           return x.paymentData ? true : x.isPaid === true;
         });
@@ -545,10 +519,7 @@ computed:{
       }
     },
     async handleLottery() {
-      if (
-        this.recordsForLottery > this.project.count ||
-        this.recordsForLottery <= 0
-      ) {
+      if (this.recordsForLottery > this.project.count || this.recordsForLottery <= 0) {
         return this.notifyErr(Messages.PARTICIPANTS.LOTTERY.NO_OF_RECORDS);
       }
       try {
@@ -661,13 +632,9 @@ computed:{
       // console.log(label);
 
       if (label == "onlyVerified") {
-        this.project.investors = this.sourceData.investors.filter(
-          (x) => x.isVerificationComplete
-        );
+        this.project.investors = this.sourceData.investors.filter((x) => x.isVerificationComplete);
       } else if (label == "onlyNotVerified") {
-        this.project.investors = this.sourceData.investors.filter(
-          (x) => !x.isVerificationComplete
-        );
+        this.project.investors = this.sourceData.investors.filter((x) => !x.isVerificationComplete);
       } else {
         this.project = this.sourceData;
       }
@@ -677,13 +644,9 @@ computed:{
       // console.log(label);
 
       if (label == "onlyIssued") {
-        this.project.investors = this.sourceData.investors.filter(
-          (x) => x.isVerfiedByHypersign
-        );
+        this.project.investors = this.sourceData.investors.filter((x) => x.isVerfiedByHypersign);
       } else if (label == "onlyNotIssued") {
-        this.project.investors = this.sourceData.investors.filter(
-          (x) => !x.isVerfiedByHypersign
-        );
+        this.project.investors = this.sourceData.investors.filter((x) => !x.isVerfiedByHypersign);
       } else {
         this.project = this.sourceData;
       }
@@ -729,7 +692,7 @@ computed:{
         });
 
         if (!resp.ok) {
-          return this.notifyErr(Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_DELETED)
+          return this.notifyErr(Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_DELETED);
         }
         const json = await resp.json();
 
@@ -739,14 +702,9 @@ computed:{
         this.project.toDate = this.formateDate(this.project.toDate);
         this.projectFetched = true;
 
-        this.pageSelectDropdown = Array.from(
-          { length: Math.ceil(this.project.count / this.perPage) },
-          (_, i) => i + 1
-        );
+        this.pageSelectDropdown = Array.from({ length: Math.ceil(this.project.count / this.perPage) }, (_, i) => i + 1);
 
-        this.notifySuccess(
-          Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_FETCHED + json.projectName
-        );
+        this.notifySuccess(Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_FETCHED + json.projectName);
       } catch (e) {
         this.notifyErr(e.message);
       } finally {

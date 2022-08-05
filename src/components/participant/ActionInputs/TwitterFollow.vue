@@ -1,10 +1,6 @@
 <template>
   <b-card no-body class="action-wrap">
-    <loading
-      :active.sync="isLoading"
-      :can-cancel="true"
-      :is-full-page="fullPage"
-    ></loading>
+    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
     <b-card-header
       :class="visible ? null : 'collapsed'"
       :aria-expanded="visible ? 'true' : 'false'"
@@ -20,15 +16,10 @@
         </b-col>
         <b-col cols="2" sm="2" md="2">
           <b-badge class="btn-score" :style="buttonThemeCss" @click="authToken && update()" v-if="!done">
-             <i class="fa fa-plus" aria-hidden="true"></i>
+            <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
-          <img
-            class="check-mark"
-            src="../../../assets/check-circle-fill.svg"
-            height="25px"
-            v-if="done"
-          />
+          <img class="check-mark" src="../../../assets/check-circle-fill.svg" height="25px" v-if="done" />
         </b-col>
       </b-row>
     </b-card-header>
@@ -39,13 +30,7 @@
             <div class="follow">
               <button
                 :disabled="done"
-                @click="
-                  handleTwitterLogin(
-                    'https://twitter.com/' +
-                      twitter.sourceScreenName +
-                      '?ref_src=twsrc%5Etfw'
-                  )
-                "
+                @click="handleTwitterLogin('https://twitter.com/' + twitter.sourceScreenName + '?ref_src=twsrc%5Etfw')"
                 class="btn btn-outline-twitter text-black"
               >
                 <img src="../../../assets/twitter.svg" />
@@ -56,17 +41,19 @@
         </b-row>
 
         <b-row v-if="!done">
-					<b-col cols="12" sm="12" md="12" >
-						<button class="btn btn-link center"  @click="update()">Continue</button>
-					</b-col>
-				</b-row>
+          <b-col cols="12" sm="12" md="12">
+            <button class="btn btn-link center" @click="update()">Continue</button>
+          </b-col>
+        </b-row>
       </b-card-body>
     </b-collapse>
   </b-card>
 </template>
 <style scoped>
-.center{
-  display: block; margin-left: auto;margin-right: auto
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
 <script>
@@ -96,15 +83,15 @@ export default {
     },
     themeData: {
       required: true,
-    }
+    },
   },
-computed:{
- buttonThemeCss() {
+  computed: {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': this.themeData.buttonBGColor,
-        '--button-text-color': this.themeData.buttonTextColor
-      }
-     }
+        "--button-bg-color": this.themeData.buttonBGColor,
+        "--button-text-color": this.themeData.buttonTextColor,
+      };
+    },
   },
   data() {
     return {
@@ -120,8 +107,8 @@ computed:{
   },
   updated() {
     try {
-      if (this.data.value ) {
-        if (this.twitter.sourceScreenName == "" || this.twitter.targetScreenName == ""){
+      if (this.data.value) {
+        if (this.twitter.sourceScreenName == "" || this.twitter.targetScreenName == "") {
           const twitter = JSON.parse(this.data.value);
           this.twitter = { ...twitter };
         }
@@ -144,17 +131,15 @@ computed:{
   },
   methods: {
     async update() {
-      if (!localStorage.getItem("twitterId")){
+      if (!localStorage.getItem("twitterId")) {
         return this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_FOLLOW.TWITTER_AUTH);
       }
       if (!(await this.hasFollowedTwitter())) {
-        return this.notifyErr(
-          Messages.EVENT_ACTIONS.TWITTER_FOLLOW.FOLLOW_FIRST
-        );
-      }  
+        return this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_FOLLOW.FOLLOW_FIRST);
+      }
       this.$emit(
         "input",
-         JSON.stringify({
+        JSON.stringify({
           ...this.twitter,
         })
       );
@@ -172,19 +157,16 @@ computed:{
             },
             (err, authRes) => {
               if (!err) {
-                webAuth.client.userInfo(
-                  authRes.accessToken,
-                  async (err, user) => {
-                    if (err) {
-                      return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
-                    }
-
-                    const twitterId = user.sub.split("|")[1];
-                    localStorage.setItem("twitterId", twitterId);
-
-                    window.open(urlToRedirect, "_blank");
+                webAuth.client.userInfo(authRes.accessToken, async (err, user) => {
+                  if (err) {
+                    return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
                   }
-                );
+
+                  const twitterId = user.sub.split("|")[1];
+                  localStorage.setItem("twitterId", twitterId);
+
+                  window.open(urlToRedirect, "_blank");
+                });
               }
             }
           );
@@ -201,9 +183,7 @@ computed:{
         this.isLoading = true;
         const twitterId = localStorage.getItem("twitterId");
 
-        this.twitter.targetScreenName = await this.getTwitterScreenName(
-          twitterId
-        );
+        this.twitter.targetScreenName = await this.getTwitterScreenName(twitterId);
 
         if (
           this.twitter.sourceScreenName &&
@@ -225,9 +205,7 @@ computed:{
           });
           return resp.data;
         } else {
-          this.notifyErr(
-            Messages.EVENT_ACTIONS.TWITTER_FOLLOW.TWITTER_SCREENS_BLANK
-          );
+          this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_FOLLOW.TWITTER_SCREENS_BLANK);
           return false;
         }
       } catch (e) {
