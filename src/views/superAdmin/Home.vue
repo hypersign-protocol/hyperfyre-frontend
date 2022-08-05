@@ -206,7 +206,8 @@ export default {
             fullPage: true,
             origin: "",
             masterKey: "StageKey1",
-            response: null,    
+            response: null,   
+            authToken: localStorage.getItem("authToken"), 
             resources: [{
                     id: 1,
                     name: "Promote An Event",
@@ -308,7 +309,8 @@ export default {
                 const Url = new URL(this.$config.studioServer.BASE_URL)
                 const headers = {
                     Orign: Url.origin,
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${this.authToken}`,
                 };
 
                 const resp = await fetch(url, {
