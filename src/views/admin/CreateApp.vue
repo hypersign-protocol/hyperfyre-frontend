@@ -243,11 +243,11 @@ this.getApp();
           return this.notifyErr(this.isEverythingisValid());
         }
         this.isLoading=true;
+        let credential;
         if(this.app.toggle){
-           const credential= await  this.generateWallet();
+           credential= await  this.generateWallet();
            credential['appId']=this.app._id;
           this.app.appWalletAddress = credential.appWalletAddress;
-          this.downloadCredentials(credential);
         }
             const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
             let headers = {
@@ -270,6 +270,9 @@ this.getApp();
               if (!resp.ok) {
                 return this.notifyErr(json);
               } else {
+                if(this.app.toggle){
+                  this.downloadCredentials(credential);
+                }
                 this.notifySuccess(Messages.APP.APP_UPDATED_SUCCESSFULLY);
                 this.clearselected();
                 this.getApp();

@@ -178,7 +178,7 @@ i {
       </div>
 
       <div class="col-md-3">
-        <div>
+        <div v-if="projects.length">
           <multiselect
             v-model="selected"
             placeholder="Search events by tags"
