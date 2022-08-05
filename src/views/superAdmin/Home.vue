@@ -320,12 +320,8 @@ export default {
                 if(resp && resp.status === (403 || 401)){
                     throw new Error("Incorrect master key")
                 }
-                if (resp && resp.status == 400){
-                    throw new Error("Invalid parameter")
-                }
                 const json = await resp.json();
-
-                if(resp.status == 500){
+                if(resp.status != 200){
                     throw new Error(json)
                 }
 
