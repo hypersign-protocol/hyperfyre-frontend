@@ -48,7 +48,6 @@
 </style>
 
 <script>
-import config from "../../../config.js";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en"
@@ -77,8 +76,8 @@ export default {
 computed:{
  buttonThemeCss() {
       return {
-		  '--button-bg-color': this.themeData.buttonBGColor,
-		  '--button-text-color': this.themeData.buttonTextColor
+          '--button-bg-color': this.themeData.buttonBGColor,
+          '--button-text-color': this.themeData.buttonTextColor
       }
      }
   },

@@ -60,7 +60,6 @@
 
 <script>
 import eventBus from "../../../eventBus.js";
-import config from "../../../config.js";
 import {
   isValidURL,
   isValidText,

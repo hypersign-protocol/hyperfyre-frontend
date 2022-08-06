@@ -42,7 +42,6 @@
 </style>
 
 <script>
-import config from "../../../config.js";
 import eventBus from "../../../eventBus.js";
 import {  isDate } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
@@ -69,8 +68,8 @@ export default {
 computed:{
  buttonThemeCss() {
       return {
-		  '--button-bg-color': this.themeData.buttonBGColor,
-		  '--button-text-color': this.themeData.buttonTextColor
+          '--button-bg-color': this.themeData.buttonBGColor,
+          '--button-text-color': this.themeData.buttonTextColor
       }
      }
   },

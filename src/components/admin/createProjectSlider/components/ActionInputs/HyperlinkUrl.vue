@@ -89,8 +89,8 @@ export default {
     return {
       visible: false,
       done: this.data.isDone,
-	    hasClicked: false,
-	    disableClass: ""
+      hasClicked: false,
+      disableClass: ""
     };
   },
   mounted() {

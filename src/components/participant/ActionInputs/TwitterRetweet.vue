@@ -75,7 +75,6 @@
 }
 </style>
 <script>
-import config from "../../../config";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import apiClient from "../../../mixins/apiClientMixin";

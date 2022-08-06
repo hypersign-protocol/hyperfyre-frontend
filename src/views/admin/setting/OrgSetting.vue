@@ -217,7 +217,7 @@ export default {
                 Object.assign(this.orgSetting, {...result})
             }
         }catch(e){
-
+          console.log(e)
         }
     },
     methods: {

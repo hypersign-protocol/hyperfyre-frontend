@@ -67,7 +67,6 @@ import {
 } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
-import config from "../../../config.js";
 export default {
   name: "BlockchainAvax",
   props: {

@@ -67,7 +67,6 @@ import {
   isValidText,
   isEmpty,
 } from "../../../mixins/fieldValidationMixin";
-import config from "../../../config.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";

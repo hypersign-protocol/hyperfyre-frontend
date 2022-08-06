@@ -77,7 +77,6 @@ import webAuth from "../../../mixins/twitterLogin";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
-import config from "../../../config";
 export default {
   components: { Loading },
   name: "TwitterFollow",

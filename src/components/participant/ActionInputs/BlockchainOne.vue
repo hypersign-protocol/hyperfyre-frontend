@@ -59,7 +59,6 @@
 </style>
 
 <script>
-import config from "../../../config.js";
 import eventBus from "../../../eventBus.js";
 import {
   isValidURL,

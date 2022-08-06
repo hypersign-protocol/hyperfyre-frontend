@@ -68,7 +68,6 @@ import {
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
-import config from "../../../config.js";
 import Web3 from "web3";
 export default {
   name: "MoonErc20",

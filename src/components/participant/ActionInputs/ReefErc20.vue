@@ -92,7 +92,6 @@ import {
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
-import config from "../../../config.js";
 export default {
   name: "ReefErc20",
   props: {
@@ -185,7 +184,6 @@ computed:{
        
          if (this.web3 && this.web3.reef) {
            
-           let sign;
          await window.injectedWeb3.reef.enable()
           .then(async walletObj=>{
             this.wallet =  await walletObj.accounts.get();

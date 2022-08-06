@@ -149,8 +149,7 @@ export default {
       try {
        
         if (this.web3.reef) {
-           
-           let sign;
+
          await window.injectedWeb3.reef.enable()
           .then(async walletObj=>{
             this.wallet =  await walletObj.accounts.get();

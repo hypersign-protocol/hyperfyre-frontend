@@ -129,10 +129,8 @@ import apiClient from "../../../mixins/apiClientMixin.js";
 //   isEmpty,
 // } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
-import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
 
-import Web3 from "web3";
 export default {
   name: "EthereumNetwork",
   props: {

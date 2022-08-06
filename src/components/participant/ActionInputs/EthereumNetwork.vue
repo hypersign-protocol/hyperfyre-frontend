@@ -66,7 +66,6 @@
 </style>
 
 <script>
-import config from "../../../config.js";
 import eventBus from "../../../eventBus.js";
 import apiClient from "../../../mixins/apiClientMixin.js";
 // import {

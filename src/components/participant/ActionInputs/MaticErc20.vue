@@ -69,7 +69,6 @@ import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
 import Web3 from "web3";
-import config from "../../../config.js";
 export default {
   name: "MaticErc20",
   props: {

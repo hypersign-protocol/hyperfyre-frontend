@@ -59,7 +59,6 @@
 
 <script>
 import eventBus from "../../../eventBus.js";
-import config from "../../../config.js";
 import apiClient from "../../../mixins/apiClientMixin.js";
 import {
   isValidURL,

@@ -84,7 +84,6 @@
 }
 </style>
 <script>
-import config from "../../../config.js";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
