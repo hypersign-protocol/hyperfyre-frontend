@@ -213,7 +213,6 @@ export default {
                 return this.notifyErr(resp.statusText);
             } else {
                 const result = await resp.json();
-                console.log(result)
                 Object.assign(this.orgSetting, {...result})
             }
         }catch(e){
