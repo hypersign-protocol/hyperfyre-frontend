@@ -3,11 +3,12 @@
         <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
         <h1>Super Admin Portal</h1>
         <hr />
-        <div class="accordion" role="tablist" v-for="resource in resources" v-bind="resource.name">
+        <div class="accordion" role="tablist" v-for="resource in resources" v-bind="resource.name" >
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme"
                 :style="headerThemeCss"
-                    role="tab">
+                    role="tab" 
+                    >
                     <div class="row" style="padding-left: 5px; padding-right:5px;">
                         <div class="col-md-10">
                             <b-button block v-b-toggle="'accordion-' + resource.id"
@@ -34,11 +35,42 @@
                                 <input type="text" class="form-control w-100" :placeholder="resource.inputPlaceholder"
                                     v-model="resource.value">
                             </div>
-                            <div class="col-lg-4 col-md-3 ">
+                            <div class="col-lg-3 col-md-3 ">
                                 <button type="button" class="btn btn-outline-primary button-theme"
                                 :style="buttonThemeCss"
                                     @click="execute(resource)">Execute</button>
                             </div>
+                            <div class="col-lg-1 col-md-3 " v-if="resource.id === 4">
+                                <label class="col-form-label" @click="getAllSchedules()"><a href="#" class="btn btn-link" role="button" >Refresh</a></label>
+                            </div>
+                        </div>
+                        <div class="row g-3 w-100" v-if="resource.id == 4 && schedules.length > 0" style="padding:10px;max-height: 300px;overflow-y: auto;">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <!-- <th scope="col">Schedule Id</th> -->
+                                        <th scope="col">Mail Schedular</th>
+                                        <th scope="col">Time (UTC)</th>
+                                        <th scope="col">Event Id</th>
+                                        <th scope="col">Total Mails</th>
+                                        <th scope="col">Passed Mails</th>
+                                        <th scope="col">Failed Mails</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="schedule in schedules">
+                                        <!-- <td>{{schedule._id}}</td> -->
+                                        <td>{{schedule.userId}}</td>
+                                        <td>{{new Date(schedule.scheduledAt).toLocaleString()}}</td>
+                                        <td>{{schedule.eventId}}</td>
+                                        <td>{{schedule.totalEmailsToSend}}</td>
+                                        <td>{{schedule.totalPassedEmails}}</td>
+                                        <td>{{schedule.totalFailedEmails}}</td>
+                                        <td>{{schedule.status}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </b-card-body>
                 </b-collapse>
@@ -58,36 +90,6 @@
                 </b-card-header>
                 <b-collapse id="accordian-logs" visible accordion="my-accordion" role="tabpanel">
                     <b-card-body>
-                        //To be implemented
-                        <!-- <table class="table ">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Action</th>
-                                    <th scope="col">Time</th>
-                                    <th scope="col">Actor DID</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>Larry</td>
-                                    <td>the Bird</td>
-                                    <td>@twitter</td>
-                                </tr>
-                            </tbody>
-                        </table> -->
                     </b-card-body>
                 </b-collapse>
             </b-card>
@@ -206,7 +208,9 @@ export default {
             fullPage: true,
             origin: "",
             masterKey: "StageKey1",
-            response: null,    
+            response: null,   
+            authToken: localStorage.getItem("authToken"), 
+            schedules: [],
             resources: [{
                     id: 1,
                     name: "Promote An Event",
@@ -250,6 +254,10 @@ export default {
             ]
         }
     },
+    created(){
+        /// TODO: Temporary fix
+        this.getAllSchedules();
+    },
     methods: {
         clearAll(){
             this.isLoading = false;
@@ -257,6 +265,35 @@ export default {
             this.resources.map(x => x.value = "");
             this.masterKey = ""
 
+        },
+        async getAllSchedules(){
+            try{
+                this.isLoading = true;
+                let url = `${this.$config.studioServer.BASE_URL}api/v1/notification/email/schedules`;
+                const Url = new URL(this.$config.studioServer.BASE_URL)
+                const headers = {
+                    Orign: Url.origin,
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${this.authToken}`,
+                };
+
+                const resp =  await fetch(url, {
+                    headers
+                });
+
+                if(resp && resp.status === (403 || 401)){
+                    throw new Error("Incorrect master key")
+                }
+                const json = await resp.json();
+                if(resp.status != 200){
+                    throw new Error(json)
+                }
+                this.schedules = json;    
+            }catch(e){
+                this.notifyErr(e.message);
+            } finally {
+                this.isLoading = false;
+            }
         },
         async execute(resource){
             try {
@@ -308,7 +345,8 @@ export default {
                 const Url = new URL(this.$config.studioServer.BASE_URL)
                 const headers = {
                     Orign: Url.origin,
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${this.authToken}`,
                 };
 
                 const resp = await fetch(url, {
@@ -320,20 +358,20 @@ export default {
                 if(resp && resp.status === (403 || 401)){
                     throw new Error("Incorrect master key")
                 }
-                if (resp && resp.status == 400){
-                    throw new Error("Invalid parameter")
-                }
                 const json = await resp.json();
-
-                if(resp.status == 500){
+                if(resp.status != 200){
                     throw new Error(json)
                 }
 
-                const { message } = json;
+                const { message, schedule } = json;
                 if(message){
                     this.notifySuccess(message);
                 } else {
                     this.notifySuccess(json);
+                }
+
+                if(schedule){
+                    this.schedules.unshift(schedule);
                 }
                 
             } catch (e) {
