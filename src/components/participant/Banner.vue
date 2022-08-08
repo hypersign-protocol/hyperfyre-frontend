@@ -4,13 +4,15 @@
       <b-card no-body class="banner rounded-0">
         <img :src="logoUrl" @error="onBannerError($event)" v-if="!brokenUrl">
         <div class="no-banner" v-if="brokenUrl">
-          {{eventName}}
+          <!-- {{eventName}} -->
+         {{ truncate1(eventName,30) }}
         </div>
       </b-card>
     </b-col>
   </b-row>
 </template>
 <script>
+import {truncate} from '../../mixins/fieldValidationMixin'
 export default {
   props: {
     eventName: String,
@@ -22,10 +24,13 @@ export default {
   },
   data() {
     return {
-      brokenUrl: false
+      brokenUrl: false,
     }
   },
   methods: {
+      truncate1(str, number) {
+      return truncate(str, number);
+    },
     onBannerError(e) {
       console.error(e);
       this.brokenUrl = true

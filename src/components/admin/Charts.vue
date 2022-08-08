@@ -40,8 +40,7 @@ export default {
       totalAvailable: 0,
       totalUsed: 0,
       unused: 0,
-      user: {},
-      usage: {},
+      user: {}, 
       sections: [
         { label: "REQUESTS CONSUMED", value: this.totalUsed, color: "#ed5c5c" },
         { label: "REQUESTS LEFT", value: this.unused, color: "#60c860" },
@@ -55,47 +54,14 @@ export default {
     this.user = {
       ...JSON.parse(usrStr),
     };
-    await this.fetchSubscription();
-
-    this.totalAvailable = this.usage["totalAvailable"];
-    this.totalUsed = this.usage["totalUsed"];
+    this.totalAvailable = this.user.usage["totalAvailable"];
+    this.totalUsed = this.user.usage["totalUsed"];
     this.unused = this.totalAvailable - this.totalUsed;
     this.sections[0].value = this.totalUsed;
     this.sections[1].value = this.unused;
-
   },
   methods: {
     handleSectionClick() {},
-    async fetchSubscription() {
-      try {
-        this.isLoading = true;
-
-        // if (!this.user.id) throw new Error("No project owner found");
-
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription?usage=true`;
-        const headers = {
-          Authorization: `Bearer ${this.authToken}`,
-          AccessToken:`Bearer ${this.accessToken}`
-        };
-        const resp = await fetch(url, {
-          headers,
-          method: "GET",
-        });
-
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
-        }
-        const json = await resp.json();
-        this.usage = json["usage"];
-       
-        // localStorage.setItem("subscriptions", JSON.stringify(json));
-        // this.notifySuccess("No. of projects fetched " + this.projects.length);
-      } catch (e) {
-        this.notifyErr(e.message);
-      } finally {
-        this.isLoading = false;
-      }
-    },
   },
 };
 </script>
