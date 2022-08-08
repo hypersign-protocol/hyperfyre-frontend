@@ -35,19 +35,22 @@
                                 <input type="text" class="form-control w-100" :placeholder="resource.inputPlaceholder"
                                     v-model="resource.value">
                             </div>
-                            <div class="col-lg-4 col-md-3 ">
+                            <div class="col-lg-3 col-md-3 ">
                                 <button type="button" class="btn btn-outline-primary button-theme"
                                 :style="buttonThemeCss"
                                     @click="execute(resource)">Execute</button>
+                            </div>
+                            <div class="col-lg-1 col-md-3 " v-if="resource.id === 4">
+                                <label class="col-form-label" @click="getAllSchedules()"><a href="#" class="btn btn-link" role="button" >Refresh</a></label>
                             </div>
                         </div>
                         <div class="row g-3 w-100" v-if="resource.id == 4 && schedules.length > 0" style="padding:10px;max-height: 300px;overflow-y: auto;">
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Schedule Id</th>
+                                        <!-- <th scope="col">Schedule Id</th> -->
+                                        <th scope="col">Mail Schedular</th>
                                         <th scope="col">Time (UTC)</th>
-                                        <!-- <th scope="col">EmailId</th> -->
                                         <th scope="col">Event Id</th>
                                         <th scope="col">Total Mails</th>
                                         <th scope="col">Passed Mails</th>
@@ -57,9 +60,9 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="schedule in schedules">
-                                        <td>{{schedule._id}}</td>
+                                        <!-- <td>{{schedule._id}}</td> -->
+                                        <td>{{schedule.userId}}</td>
                                         <td>{{new Date(schedule.scheduledAt).toLocaleString()}}</td>
-                                        <!-- <td>{{schedule.userId}}</td> -->
                                         <td>{{schedule.eventId}}</td>
                                         <td>{{schedule.totalEmailsToSend}}</td>
                                         <td>{{schedule.totalPassedEmails}}</td>
