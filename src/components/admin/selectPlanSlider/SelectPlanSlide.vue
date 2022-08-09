@@ -20,6 +20,7 @@
 </style>
 <template>
   <div>
+    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
     <b-sidebar
       backdrop
       width="50%"
@@ -109,6 +110,10 @@
             <div class="col-md-6"><b>Discount</b></div>
             <div class="col-md-6">$ {{ discount }}</div>
           </div>
+          <div class="row" style="margin-top: 2%" v-if="couponDiscount">
+            <div class="col-md-6"><b>Coupon Discount</b></div>
+            <div class="col-md-6">$ {{ couponDiscount }}</div>
+          </div>
           <!-- <div class="row" style="margin-top: 2%;">
               <div class="col-md-6"><b>Subtotal</b></div>
               <div class="col-md-6"></div>
@@ -196,6 +201,8 @@ import GeneralConfig from "./components/GeneralConfig.vue";
 import ReferralConfig from "./components/ReferralConfig.vue";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/admin/en";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -203,6 +210,7 @@ export default {
     EventActionConfig,
     ReferralConfig,
     InputDate,
+    Loading
   },
 
   props: {
@@ -246,7 +254,7 @@ export default {
   },
     grandTotal() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.plan.grandTotal = this.plan.price - this.discount;
+      this.plan.grandTotal = this.plan.price - (this.discount+this.couponDiscount);
       return this.plan.grandTotal;
     },
   },
@@ -260,10 +268,12 @@ export default {
       authToken: localStorage.getItem("authToken"),
       subTotal: 0,
       discount: 0,
+      couponDiscount: 0,
       selectedCurrency: "",
       selectedNetwork: "",
       marketPairs: [],
       coupon:"",
+      isLoading:false,
       options: {
         currency: [
           {
@@ -296,6 +306,8 @@ export default {
   },
   methods: {
    async applyCoupon(){
+     try{
+     this.isLoading = true;
       console.log(this.coupon)
       const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription/coupon/verify`;
         let headers = {
@@ -315,14 +327,23 @@ export default {
           if (!resp.ok) {
             return this.notifyErr(json);
           } else {
+            this.couponDiscount = (this.plan.price * json) / 100;
             return this.notifySuccess("Coupon Applied")
           }
         } else {
           throw new Error("Error while applying coupon code");
         }
+     }catch(e){
+       return this.notifyErr(e.message)
+     }
+     finally{
+       this.isLoading = false
+     }
     },
     resetAllValues() {
       this.discount = 0;
+      this.couponDiscount = 0;
+      this.coupon = ""
       this.selectedCurrency = "";
       this.selectedNetwork = "";
       this.options.network = [
