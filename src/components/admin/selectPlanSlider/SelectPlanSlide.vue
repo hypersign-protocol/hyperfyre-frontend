@@ -86,6 +86,20 @@
           </div>
         </div>
         <hr />
+        <div style="display:flex">
+        <div class="col-lg-6 col-md-9 px-0">
+            <input type="text" class="form-control w-100"
+            placeholder="Enter Coupon Code"
+            v-model="coupon">
+        </div>
+          <div class="col-lg-4 col-md-3 " style="display:block">
+            <button type="button" class="btn btn-outline-primary button-theme"
+              :style="buttonThemeCss"
+              @click="applyCoupon"
+              >Apply</button>
+          </div>
+          </div>
+        <hr />
         <div>
           <div class="row" style="margin-top: 2%">
             <div class="col-md-6"><b>Subtotal</b></div>
@@ -249,7 +263,7 @@ export default {
       selectedCurrency: "",
       selectedNetwork: "",
       marketPairs: [],
-
+      coupon:"",
       options: {
         currency: [
           {
@@ -281,6 +295,30 @@ export default {
     this.fetchTokenPriceCMC();
   },
   methods: {
+   async applyCoupon(){
+      console.log(this.coupon)
+      const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription/coupon/verify`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+
+        const resp = await fetch(url, {
+          method: "POST",
+          body:this.coupon,
+          headers
+        });
+        const json = await resp.json();
+        if (json) {
+          if (!resp.ok) {
+            return this.notifyErr(json);
+          } else {
+            return this.notifySuccess("Coupon Applied")
+          }
+        } else {
+          throw new Error("Error while applying coupon code");
+        }
+    },
     resetAllValues() {
       this.discount = 0;
       this.selectedCurrency = "";
