@@ -302,10 +302,12 @@ export default {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
         };
-
+        let body={
+          coupon:this.coupon
+        }
         const resp = await fetch(url, {
           method: "POST",
-          body:this.coupon,
+          body:JSON.stringify(body),
           headers
         });
         const json = await resp.json();
