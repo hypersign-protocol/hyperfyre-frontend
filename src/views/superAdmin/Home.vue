@@ -59,8 +59,7 @@
 
                                      <datepicker 
                                         v-model="resource.value.expiredAt"
-                                        format="YYYY-MM-DD h:i:s"
-                                        
+                                        format="YYYY-MM-DD h:i:s"                         
                                     />
                                    
                             </div>
@@ -389,7 +388,7 @@ export default {
                     value:{
                     name:"",
                     discount:"",
-                    expiredAt:"",
+                    expiredAt:null,
                     maxClaimCount:""
                     }
                     
@@ -409,11 +408,7 @@ export default {
         },
         update(coupon){
         this.isEdit =  true;
-        const temp = this.resources.find(element => {return element.id === 5})
-        console.log(temp);
-        temp.value = {...coupon}
-        
-        // console.log(coupon)
+        this.resources[4].value = {...coupon}
         },
        async remove(id){
         try{
@@ -462,7 +457,7 @@ export default {
                     return x.value = {
                     name:"",
                     discount:"",
-                    expiredAt:"",
+                    expiredAt:null,
                     maxClaimCount:""
                     }
                 }
@@ -509,11 +504,9 @@ export default {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${this.authToken}`,
                 };
-
                 const resp =  await fetch(url, {
                     headers
                 });
-
                 if(resp && resp.status === (403 || 401)){
                     throw new Error("Incorrect master key")
                 }
@@ -533,64 +526,7 @@ export default {
                 if(this.checkEveryThingisOk(resource)!==true){
                     throw new Error(this.checkEveryThingisOk(resource));
                 }
-                // if(resource.id != 5){
-                // if(!resource.value){
-                //     throw new Error("Please enter " + resource.inputLabel)
-                // }
-                // if (resource.value.indexOf(' ') >= 0){
-                //     throw new Error("There should not be space(s) in " + resource.inputLabel)
-                // }
-                // }
-                // if(resource.id === 5){
-                //     if(!resource.value.name){
-                //         throw new Error("Enter coupon name")
-                //     }
-                //     if(!isOnlyAlphaNumeric(resource.value.name)){
-                //         throw new Error("Enter valid coupon code")
-                //     }
-                //     if(!resource.value.expiredAt){
-                //         throw new Error("Enter expiry date time")
-                //     }
-                //     if(!resource.value.maxClaimCount){
-                //         throw new Error("Enter max limit")
-                //     }
-                //     if(!resource.value.discount){
-                //         throw new Error("Enter discount in percentage")
-                //     }
-                   
-                //     const ToDate = new Date();
-                //     if(new Date(resource.value.expiredAt).getTime() <= ToDate.getTime()){
-                //         throw new Error("Expiry time should be gretter than current data & time")
-                //     }
-                //     if(!isNum(resource.value.maxClaimCount))  {
-                //         throw new Error("Enter Valid number for max limit")
-                //     }
-                //     if(!resource.value.discount < 0){
-                //         throw new Error("Enter valid percentage value")
-                //     }               
-                // }
-                const res = await this.masterPop()
-                console.log(res)
-    //         const res = await this.$swal
-    //             .fire({
-    //                 html: `
-    //         <div><b style="color:red">Enter Master Key To Execute</div>
-    // <input type="password" id="name" class="swal2-input" placeholder="***************">`,
-    //                 confirmButtonText: '<span style="color:white">Confirm</span>',
-    //                 confirmButtonColor: "red",
-    //                 icon: "warning",
-    //                 focusConfirm: false,
-    //                 showCloseButton: true,
-    //                 allowOutsideClick: false,
-    //                 preConfirm: () => {
-    //                     let masterKey = this.$swal.getPopup().querySelector("#name").value;
-    //                     if (masterKey === "") {
-    //                         this.$swal.showValidationMessage(`Please enter the master key to proceed`);
-    //                     }
-    //                     return { masterKey };
-    //                 },
-    //             })
-
+                const res = await this.masterPop();               
                 const  masterKey  = res;
                 if (!masterKey){
                     throw new Error("Master Key must be passed")
@@ -603,6 +539,7 @@ export default {
                 }
                 if(resource.id === 5){
                     body = resource.value;
+                    body.expiredAt = new Date(resource.value.expiredAt).toISOString();                    
                 }
                 let url;
                 
@@ -620,6 +557,12 @@ export default {
                     Authorization: `Bearer ${this.authToken}`,
                 };
                 this.isLoading = true;
+                if(this.isEdit===true){
+                   resource.method = "PUT" 
+                }
+                else{
+                    resource.method = "POST";
+                }
                 const resp = await fetch(url, {
                     headers,
                     method: resource.method,
@@ -650,62 +593,52 @@ export default {
                     console.log(json);
                     this.couponTable.unshift(json)
                     console.log(this.couponTable)
+                    this.isEdit =  false;
                 }
                 
                 this.clearAll()
             } catch (e) {
                 this.notifyErr(e.message);
             } finally {
-                this.Loading = false
-                // this.clearAll();
+                this.Loading = false;
                 this.getAllCoupon();
             }
         },
         checkEveryThingisOk(resource){
                  if(resource.id != 5){
                 if(!resource.value){
-                    // throw new Error("Please enter " + resource.inputLabel)
                     return ("Please enter " + resource.inputLabel)
                 }
-                if (resource.value.indexOf(' ') >= 0){
-                    // throw new Error("There should not be space(s) in " + resource.inputLabel)
+                if (resource.value.indexOf(' ') >= 0){      
                     return ("There should not be space(s) in " + resource.inputLabel)
                 }
                 }
                 if(resource.id === 5){
                     if(!resource.value.name){
-                        // throw new Error("Enter coupon name")
                         return ("Enter coupon name");
                     }
-                    if(!isOnlyAlphaNumeric(resource.value.name)){
-                        // throw new Error("Enter valid coupon code")
+                    if(!isOnlyAlphaNumeric(resource.value.name)){                        
                         return ("Enter valid coupon code");
                     }
-                    if(!resource.value.expiredAt){
-                        // throw new Error("Enter expiry date time")
+                    if(!resource.value.expiredAt){                       
                         return ("Enter expiry date time")
                     }
-                    if(!resource.value.maxClaimCount){
-                        // throw new Error("Enter max limit"
+                    if(!resource.value.maxClaimCount){                        
                         return ("Enter max limit");
                     }
-                    if(!isNum(resource.value.maxClaimCount))  {
-                        // throw new Error("Enter Valid number for max limit")
-                        return ("Enter Valid number for max limit")
-                    }
-                    if(!resource.value.discount){
-                        // throw new Error("Enter discount in percentage")
+                    // if(!isNum(resource.value.maxClaimCount))  {                      
+                    //     return ("Enter Valid number for max limit")
+                    // }
+                    if(!resource.value.discount){                        
                         return ("Enter discount in percentage");
                     }
                    
                     const ToDate = new Date();
-                    if(new Date(resource.value.expiredAt).getTime() <= ToDate.getTime()){
-                        // throw new Error("Expiry time should be gretter than current data & time")
+                    if(new Date(resource.value.expiredAt).getTime() <= ToDate.getTime()){                        
                         return ("Expiry time should be gretter than current data & time")
                     }
                     
-                    if(!resource.value.discount < 0){
-                        // throw new Error("Enter valid percentage value")
+                    if(!resource.value.discount < 0){                        
                             return ("Enter valid percentage value")
                     }               
                 }   
