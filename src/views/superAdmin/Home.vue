@@ -76,7 +76,7 @@
                                 <label class="col-form-label">{{ resource.inputLabel.valueField }}: </label>
                             </div> 
                             <div class="col-lg-6 col-md-9 px-0 py-1">
-                                <input type="text" class="form-control w-100" :placeholder="resource.inputPlaceholder.valuePlaceholder"
+                                <input type="number" class="form-control w-100" :placeholder="resource.inputPlaceholder.valuePlaceholder"
                                     v-model="resource.value.discount">
                             </div>
                             <div class="col-lg-4 col-md-3 px-0 py-1">
@@ -627,10 +627,10 @@ export default {
                     if(!resource.value.expiredAt){                       
                         return ("Enter expiry date time")
                     }
-                    if(!resource.value.maxClaimCount){                        
-                        return ("Enter max limit");
-                    }
-                    if(resource.value.maxClaimCount <= 0)  {                      
+                    // if(!isNaN(resource.value.maxClaimCount)){                        
+                    //     return ("Enter max limit");
+                    // }
+                    if(resource.value.maxClaimCount <= 0 || !isNaN(parseInt(resource.value.maxClaimCount)))  {                      
                         return ("Enter Valid number for max limit")
                     }
                     if(!resource.value.discount){                        
@@ -642,7 +642,7 @@ export default {
                         return ("Expiry time should be gretter than current data & time")
                     }
                     
-                    if(!resource.value.discount < 0){                        
+                    if(resource.value.discount <= 0){                        
                             return ("Enter valid percentage value")
                     }               
                 }   
