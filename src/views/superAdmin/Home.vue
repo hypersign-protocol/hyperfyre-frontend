@@ -107,7 +107,7 @@
               </div>
               <div class="col-lg-6 col-md-9 px-0 py-1 datepicker">
                 <datepicker
-                  v-model="resource.value.expiredAt"
+                  v-model='resource.value.expiredAt'
                   format="YYYY-MM-DD h:i:s"
                 />
               </div>
@@ -229,7 +229,7 @@
                         class="fas fa-pencil-alt"
                         style="padding:2px; cursor: pointer;"
                         title="Click to edit the coupon"
-                        @click="update(coupon)"
+                        @click="update(resource.id,coupon)"
                       > </i> 
                       
                       </span>
@@ -438,12 +438,15 @@ export default {
     this.getAllCoupon();
   },
   methods: {
-    update(coupon) {
+    update(id, coupon) {
       this.isEdit = true;
-      this.resources[4].value = { ...coupon };
-      this.resources[4].value.expiredAt = dayjs(coupon.expiredAt).format(
-        "YYYY-MM-DD hh:mm:ss"
-      );
+      this.resources.map(x => {
+        if(x.id === id){
+            Object.assign(x.value, { ...coupon })
+            if(id === 5) x.value.expiredAt = dayjs(x.value.expiredAt).format("YYYY-MM-DD hh:mm:ss");
+            return x
+        }
+      })
     },
     copy(textToCopy, contentType) {
         if (textToCopy) {
@@ -468,44 +471,6 @@ export default {
 
         Object.assign(resource.value,{ ...res })
         return this.execute(resource);
-    },
-    async removeCoupon(id) {
-      try {
-        if (id) {
-          const res = await this.masterPop();
-          if (!res) {
-            throw new Error("Master Key must be passed");
-          }
-          this.Loading = true;
-          const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription/coupon?notificationKey=${res}`;
-          let headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.authToken}`,
-          };
-          const resp = await fetch(url, {
-            method: "DELETE",
-            body: JSON.stringify({
-              _id: id,
-            }),
-            headers,
-          });
-          const json = await resp.json();
-          if (json) {
-            if (!resp.ok) {
-              return this.notifyErr(json);
-            } else {
-              this.notifySuccess(json.message);
-            }
-          } else {
-            throw new Error("Error while Removing");
-          }
-        }
-      } catch (e) {
-        this.notifyErr(e.message);
-      } finally {
-        this.Loading = false;
-        this.getAllCoupon();
-      }
     },
     clearAll() {
       this.isLoading = false;
@@ -692,8 +657,11 @@ export default {
           throw new Error("Enter Valid number for max limit");
         }
 
-        if (!resource.value.discount) {
-          throw new Error("Enter discount in percentage");
+        if (
+            !resource.value.discount || (resource.value.discount <= 0 && resource.value.discount >= 70) ||
+            isNaN(parseInt(resource.value.discount))
+        ) {
+            throw new Error("Enter valid coupon discount ");
         }
 
         const ToDate = new Date();
@@ -701,9 +669,6 @@ export default {
           throw new Error("Expiry time should be gretter than current data & time");
         }
 
-        if (resource.value.discount <= 0) {
-          throw new Error("Enter valid percentage value");
-        }
       }
     },
   },
