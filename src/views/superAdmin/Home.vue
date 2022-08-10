@@ -572,6 +572,7 @@ export default {
           url = url.replace("<PARAM>", resource.value.trim());
         }
         url = url.replace("<SECRET_KEY>", masterKey);
+        console.log(url);
         const Url = new URL(this.$config.studioServer.BASE_URL);
         const headers = {
           Orign: Url.origin,
@@ -657,7 +658,7 @@ export default {
         }
 
         if (
-            !resource.value.discount || (resource.value.discount <= 0 || resource.value.discount >= 70) ||
+            !resource.value.discount || (resource.value.discount <= 0 && resource.value.discount >= 70) ||
             isNaN(parseInt(resource.value.discount))
         ) {
             throw new Error("Enter valid coupon discount ");
