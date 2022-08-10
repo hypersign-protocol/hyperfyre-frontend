@@ -267,7 +267,6 @@ export default {
       }
       else{
 
-        total = this.plan.price;
         this.plan.grandTotal = total;
         
       }
