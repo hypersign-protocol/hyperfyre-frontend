@@ -96,7 +96,7 @@
                                     <tr>
                                         <th scope="col">Schedule Id</th>
                                         <th scope="col">Time (UTC)</th>
-                                        <!-- <th scope="col">EmailId</th> -->
+                                        <th scope="col">EmailId</th>
                                         <th scope="col">Event Id</th>
                                         <th scope="col">Total Mails</th>
                                         <th scope="col">Passed Mails</th>
