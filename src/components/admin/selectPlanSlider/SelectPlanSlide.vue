@@ -86,8 +86,8 @@
             </div>
           </div>
         </div>
-        <hr />
-        <div style="display:flex">
+        <hr v-if="showCoupon===true"/>
+      <div style="display:flex" v-if="showCoupon===true">
         <div class="col-lg-6 col-md-9 px-0">
             <input type="text" class="form-control w-100"
             placeholder="Enter Coupon Code"
@@ -110,7 +110,7 @@
             <div class="col-md-6"><b>Discount</b></div>
             <div class="col-md-6">$ {{ discount }}</div>
           </div>
-          <div class="row" style="margin-top: 2%" v-if="couponDiscount">
+          <div class="row" style="margin-top: 2%" v-if="showCoupon===true">
             <div class="col-md-6"><b>Coupon Discount</b></div>
             <div class="col-md-6">$ {{ couponDiscount }}</div>
           </div>
@@ -252,10 +252,26 @@ export default {
       '--header-text-color':config.app.headerTextColor
       }
   },
+  couponDiscount(){
+  return  this.couponDiscount = (this.plan.price * this.fetchedCouponDiscount)/100
+    // this.discount = (this.plan.price * 30) / 100;
+  },
     grandTotal() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.plan.grandTotal = this.plan.price - (this.discount+this.couponDiscount);
-      return this.plan.grandTotal;
+      
+      let total = this.plan.price - this.discount;
+      if(this.selectedCurrency !=="" && this.selectedNetwork !==""){
+        this.showCoupon = true;
+        this.plan.grandTotal = total - this.couponDiscount;
+       
+      }
+      else{
+
+        total = this.plan.price;
+        this.plan.grandTotal = total;
+        
+      }
+      return this.plan.grandTotal
     },
   },
 
@@ -266,9 +282,12 @@ export default {
       // it returns:
       // {"actionTypes":["INPUT_TEXT","INPUT_NUMBER","TWITTER_FOLLOW","TWITTER_RETWEET","TELEGRAM_JOIN","DISCORD_JOIN","BLOCKCHAIN_ETH","BLOCKCHAIN_TEZ","HYPERSIGN_AUTH"],"length":9}
       authToken: localStorage.getItem("authToken"),
+      showCoupon:false,
+      couponCount:0,
       subTotal: 0,
       discount: 0,
       couponDiscount: 0,
+      fetchedCouponDiscount:0,
       selectedCurrency: "",
       selectedNetwork: "",
       marketPairs: [],
@@ -306,7 +325,12 @@ export default {
   },
   methods: {
    async applyCoupon(){
+     
      try{
+       if(this.selectedCurrency !== "" && this.selectedNetwork !== "")
+       {
+         if(!this.couponCount>0){
+         
      this.isLoading = true;
       console.log(this.coupon)
       const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription/coupon/verify`;
@@ -323,16 +347,23 @@ export default {
           headers
         });
         const json = await resp.json();
-        if (json) {
+        this.fetchedCouponDiscount = json;
+        if (this.fetchedCouponDiscount) {
           if (!resp.ok) {
             return this.notifyErr(json);
           } else {
-            this.couponDiscount = (this.plan.price * json) / 100;
-            return this.notifySuccess("Coupon Applied")
+            this.couponCount = 1;
+            this.couponDiscount = (this.plan.grandTotal * this.fetchedCouponDiscount) / 100;
+            return this.notifySuccess("Coupon Applied");
           }
         } else {
           throw new Error("Error while applying coupon code");
         }
+       }
+       else{
+         return this.notifyErr("Coupon applied already")
+       }
+       }
      }catch(e){
        return this.notifyErr(e.message)
      }
@@ -341,6 +372,8 @@ export default {
      }
     },
     resetAllValues() {
+      this.couponCount = 0;
+      this.showCoupon = false;
       this.discount = 0;
       this.couponDiscount = 0;
       this.coupon = ""
@@ -353,9 +386,17 @@ export default {
         { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
       ];
     },
+    resetAllPayment(){
+      this.coupon = "";
+      this.showCoupon = false;
+      this.discount = 0;
+      this.couponDiscount = 0;
+      this.couponCount = 0;
+    },
     setDiscount(__arg) {
       if (__arg) {
         if (__arg == "HID") { 
+          this.resetAllPayment();
           this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
@@ -363,11 +404,15 @@ export default {
             {text: "Binance Smart Chain",value: "BSC",disabled: true},
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
           ];
+          this.plan.grandTotal = 0;
           this.discount = (this.plan.price * 30) / 100;
         } else {
           this.discount = 0;
         }
         if (__arg == "MATIC") {
+          this.resetAllPayment();
+          this.grandTotal;
+          // this.couponDiscount = (this.plan.price * this.fetchedCouponDiscount) / 100;
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: true },
             { text: "Polygon", value: "MATIC", disabled: false },
@@ -375,8 +420,11 @@ export default {
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
           ];
           this.selectedNetwork = "MATIC";
+          
         }
         if (__arg == "ETH") {
+          this.resetAllPayment();
+          this.grandTotal;
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: true },
@@ -386,6 +434,8 @@ export default {
           this.selectedNetwork = "ETH";
         }
         if (__arg == "BNB") {
+          this.resetAllPayment();
+          this.grandTotal;
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: true },
             { text: "Polygon", value: "MATIC", disabled: true },
@@ -395,6 +445,8 @@ export default {
           this.selectedNetwork = "BSC";
         }
          if (__arg == "USDT") {
+          this.resetAllPayment();
+          this.grandTotal;
           this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
@@ -405,6 +457,8 @@ export default {
           //this.selectedNetwork = "ETH";
         }
          if (__arg == "USDC") {
+          this.resetAllPayment();
+          this.grandTotal;
           this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
