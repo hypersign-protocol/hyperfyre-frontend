@@ -560,7 +560,7 @@ export default {
                 if(this.isEdit===true){
                    resource.method = "PUT" 
                 }
-                else{
+                else if(resource.id === 1 ||resource.id === 5){
                     resource.method = "POST";
                 }
                 const resp = await fetch(url, {
