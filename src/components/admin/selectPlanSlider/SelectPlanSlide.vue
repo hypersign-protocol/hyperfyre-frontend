@@ -332,7 +332,6 @@ export default {
          if(!this.couponCount>0){
          
      this.isLoading = true;
-      console.log(this.coupon)
       const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription/coupon/verify`;
         let headers = {
           "Content-Type": "application/json",
@@ -411,7 +410,6 @@ export default {
         }
         if (__arg == "MATIC") {
           this.resetAllPayment();
-          this.grandTotal;
           // this.couponDiscount = (this.plan.price * this.fetchedCouponDiscount) / 100;
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: true },
@@ -424,7 +422,6 @@ export default {
         }
         if (__arg == "ETH") {
           this.resetAllPayment();
-          this.grandTotal;
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: true },
@@ -435,7 +432,6 @@ export default {
         }
         if (__arg == "BNB") {
           this.resetAllPayment();
-          this.grandTotal;
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: true },
             { text: "Polygon", value: "MATIC", disabled: true },
@@ -446,7 +442,6 @@ export default {
         }
          if (__arg == "USDT") {
           this.resetAllPayment();
-          this.grandTotal;
           this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
@@ -458,7 +453,6 @@ export default {
         }
          if (__arg == "USDC") {
           this.resetAllPayment();
-          this.grandTotal;
           this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
@@ -468,6 +462,7 @@ export default {
           ];
          // this.selectedNetwork = "ETH";
         }
+        this.grandTotal;
       }
     },
     getHidPrice() {
@@ -541,7 +536,6 @@ export default {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
         };
-        console.log(planbody)
         const resp = await fetch(url, {
           method: "POST",
           body: JSON.stringify({
