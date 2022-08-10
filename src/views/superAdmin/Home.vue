@@ -239,7 +239,7 @@
                         class="fas fa-trash"
                         style="padding:2px; cursor: pointer;"
                         title="Click to delete the coupon"
-                        @click="remove(coupon)"
+                        @click="remove(resource.id,coupon)"
                       >
                       </i>
                       </span>
@@ -355,7 +355,7 @@ export default {
       isLoading: false,
       fullPage: true,
       origin: "",
-      masterKey: "",
+      masterKey: "StageKey1",
       response: null,
       authToken: localStorage.getItem("authToken"),
       schedules: [],
@@ -418,13 +418,15 @@ export default {
             couponNamePlaceholder: "FYRE-10",
             valuePlaceholder: "Enter discount in percentage",
             expiryTimePlaceholder: "Enter expiry Time",
-            maxLimitPlaceholder: "10",
+            maxLimitPlaceholder: "Enter max limit",
           },
           value: {
+            _id: "",
             name: "",
-            discount: "",
+            discount: 0,
             expiredAt: null,
-            maxClaimCount: "",
+            maxClaimCount: 0,
+            usageCount: 0,
           },
         },
       ],
@@ -460,8 +462,11 @@ export default {
                 });
         }
     },
-    remove(resource){
-        this.delete = true;
+    remove(id, res){
+        this.isDelete = true;
+        const resource = this.resources.find(x => x.id == id)
+
+        Object.assign(resource.value,{ ...res })
         return this.execute(resource);
     },
     async removeCoupon(id) {
@@ -578,9 +583,8 @@ export default {
     },
     async execute(resource) {
       try {
-        if (this.checkEveryThingisOk(resource) !== true) {
-          throw new Error(this.checkEveryThingisOk(resource));
-        }
+        this.checkEveryThingisOk(resource)
+        
         const res = await this.masterPop();
         const masterKey = res;
         if (!masterKey) {
@@ -611,16 +615,18 @@ export default {
           Authorization: `Bearer ${this.authToken}`,
         }
 
+        let method = resource.method ;
+
         this.isLoading = true;
-        if (this.isEdit) {
-          resource.method = "PUT";
-        } else if (this.isDelete){
-          resource.method = "DELETE"
+        if (this.isEdit === true) {
+          method  = "PUT";
+        } else if (this.isDelete === true){
+          method = "DELETE"
         }
         
         const resp = await fetch(url, {
           headers,
-          method: resource.method,
+          method,
           body: body ? JSON.stringify(body) : null,
         });
 
@@ -653,52 +659,52 @@ export default {
         this.notifyErr(e.message);
       } finally {
         this.Loading = false;
+        this.clearAll();
         this.getAllCoupon();
       }
     },
     checkEveryThingisOk(resource) {
       if (resource.id != 5) {
         if (!resource.value) {
-          return "Please enter " + resource.inputLabel;
+          throw new Error("Please enter " + resource.inputLabel);
         }
         if (resource.value.indexOf(" ") >= 0) {
-          return "There should not be space(s) in " + resource.inputLabel;
+          throw new Error("There should not be space(s) in " + resource.inputLabel);
         }
       }
       if (resource.id === 5) {
         if (!resource.value.name) {
-          return "Enter coupon code";
+          throw new Error("Enter coupon code");
         }
         
-        if (isValidSlug(resource.value.name)) {
-          return "Enter valid coupon code";
-        }
+        // if (isValidSlug(resource.value.name)) {
+        //   throw new Error("Enter valid coupon code");
+        // }
         
         if (!resource.value.expiredAt) {
-          return "Enter expiry date time";
+          throw new Error("Enter expiry date time");
         }
 
         if (
           resource.value.maxClaimCount <= 0 ||
           isNaN(parseInt(resource.value.maxClaimCount))
         ) {
-          return "Enter Valid number for max limit";
+          throw new Error("Enter Valid number for max limit");
         }
 
         if (!resource.value.discount) {
-          return "Enter discount in percentage";
+          throw new Error("Enter discount in percentage");
         }
 
         const ToDate = new Date();
         if (new Date(resource.value.expiredAt).getTime() <= ToDate.getTime()) {
-          return "Expiry time should be gretter than current data & time";
+          throw new Error("Expiry time should be gretter than current data & time");
         }
 
         if (resource.value.discount <= 0) {
-          return "Enter valid percentage value";
+          throw new Error("Enter valid percentage value");
         }
       }
-      return true;
     },
   },
 };
