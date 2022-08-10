@@ -45,6 +45,13 @@ export function isValidText(str) {
     return false;
   }
 }
+export function isOnlyAlphaNumeric(str){
+  if(str.match(/^[a-zA-Z0-9]*$/)){
+    return true;
+  }else{
+    return false
+  }
+}
 export function isValidSlug(str){
   if(str.match(/^([a-z0-9])*(-([a-z0-9])*)*$/)){
     return true
