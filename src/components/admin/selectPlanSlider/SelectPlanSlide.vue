@@ -515,6 +515,7 @@ export default {
         var planbody = {};
         this.plan.selectedCurrency = this.selectedCurrency;
         this.plan.selectedNetwork = this.selectedNetwork;
+        this.plan.coupon_name =  this.coupon;
         this.plan.coupon_code = "Dummy30";
         planbody = Object.assign(planbody, this.plan);
 
@@ -540,7 +541,7 @@ export default {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
         };
-
+        console.log(planbody)
         const resp = await fetch(url, {
           method: "POST",
           body: JSON.stringify({
