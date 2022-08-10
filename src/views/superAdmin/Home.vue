@@ -658,7 +658,7 @@ export default {
         }
 
         if (
-            !resource.value.discount || (resource.value.discount <= 0 && resource.value.discount >= 70) ||
+            !resource.value.discount || (resource.value.discount <= 0 || resource.value.discount >= 70) ||
             isNaN(parseInt(resource.value.discount))
         ) {
             throw new Error("Enter valid coupon discount ");
