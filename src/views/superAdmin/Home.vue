@@ -345,7 +345,7 @@ export default {
                     method: "GET",
                     icon: "fa fa-credit-card",
                     inputLabel: "Subscrption Id",
-                    inputPlaceholder: "Enter subpription id",
+                    inputPlaceholder: "62f37b7fa6b75d2018c14e84",
                     value: ""
                 },
                 {
@@ -355,7 +355,7 @@ export default {
                     method: "GET",
                     icon: "fa fa-bell",
                     inputLabel: "Event Id",
-                    inputPlaceholder: "Enter event id",
+                    inputPlaceholder: "62f37b7fa6b75d2018c14e84",
                     value: ""
                 },
                 {
@@ -365,7 +365,7 @@ export default {
                     method: "GET",
                     icon:"fa fa-envelope",
                     inputLabel: "Event Id",
-                    inputPlaceholder: "enter event id",
+                    inputPlaceholder: "62f37b7fa6b75d2018c14e84",
                     value: ""
                 },
                 {
@@ -384,7 +384,7 @@ export default {
                        couponNamePlaceholder:"Enter Coupon name",
                        valuePlaceholder:"Enter discount in percentage",
                        expiryTimePlaceholder:"Enter expiry Time",
-                       maxLimitPlaceholder:"Enter maximum limit"
+                       maxLimitPlaceholder:"62f37b7fa6b75d2018c14e84"
                     },
                     value:{
                     name:"",
