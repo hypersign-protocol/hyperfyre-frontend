@@ -575,6 +575,7 @@ export default {
         this.plan.coupon_code='Free120'
         this.plan.grandTotal='0'
         this.plan.price='0'
+        this.plan.coupon_name="Coupon"
 
         planbody=Object.assign(planbody,this.plan)
         // console.log(planId);
