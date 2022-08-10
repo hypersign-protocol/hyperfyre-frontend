@@ -170,7 +170,7 @@
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th scope="col">Schedule Id</th>
+                    <!-- <th scope="col">Schedule Id</th> -->
                     <th scope="col">Time (UTC)</th>
                     <th scope="col">EmailId</th>
                     <th scope="col">Event Id</th>
@@ -182,7 +182,7 @@
                 </thead>
                 <tbody>
                   <tr v-for="schedule in schedules" v-bind:key="schedule._id">
-                    <td>{{ schedule._id }}</td>
+                    <!-- <td>{{ schedule._id }}</td> -->
                     <td>
                       {{ new Date(schedule.scheduledAt).toLocaleString() }}
                     </td>
