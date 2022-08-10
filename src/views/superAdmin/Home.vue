@@ -68,7 +68,7 @@
                                 <label class="col-form-label">{{ resource.inputLabel.maxLimit }}: </label>
                             </div> 
                             <div class="col-lg-6 col-md-9 px-0 py-1">
-                                <input type="text" class="form-control w-100" :placeholder="resource.inputPlaceholder.maxLimitPlaceholder"
+                                <input type="number" class="form-control w-100" :placeholder="resource.inputPlaceholder.maxLimitPlaceholder"
                                     v-model="resource.value.maxClaimCount">
                             </div>
 
@@ -295,8 +295,9 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
 import Datepicker from 'vuejs-datetimepicker'
-import {isNum,isOnlyAlphaNumeric} from "../../mixins/fieldValidationMixin"
+import {isOnlyAlphaNumeric} from "../../mixins/fieldValidationMixin"
 import masterKeyPopupMixin from "../../mixins/masterKeyPopupMixin.js"
+import dayjs from "dayjs";
 export default {
     components: {
         Loading,Datepicker
@@ -409,6 +410,9 @@ export default {
         update(coupon){
         this.isEdit =  true;
         this.resources[4].value = {...coupon}
+        this.resources[4].value.expiredAt = dayjs(coupon.expiredAt).format(
+        "YYYY-MM-DD hh:mm:ss"
+      );
         },
        async remove(id){
         try{
@@ -626,9 +630,9 @@ export default {
                     if(!resource.value.maxClaimCount){                        
                         return ("Enter max limit");
                     }
-                    // if(!isNum(resource.value.maxClaimCount))  {                      
-                    //     return ("Enter Valid number for max limit")
-                    // }
+                    if(resource.value.maxClaimCount <= 0)  {                      
+                        return ("Enter Valid number for max limit")
+                    }
                     if(!resource.value.discount){                        
                         return ("Enter discount in percentage");
                     }
