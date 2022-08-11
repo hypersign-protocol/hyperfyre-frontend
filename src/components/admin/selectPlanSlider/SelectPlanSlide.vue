@@ -325,14 +325,17 @@ export default {
   },
   methods: {
    async applyCoupon(){
-     
+  
      try{
        if(this.selectedCurrency !== "" && this.selectedNetwork !== "")
        {
+           if(!this.coupon){
+      throw new Error('Enter Coupon and Apply')
+     }
          if(!this.couponCount>0){
-         
      this.isLoading = true;
       const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription/coupon/verify`;
+      console.log(this.coupon)
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
