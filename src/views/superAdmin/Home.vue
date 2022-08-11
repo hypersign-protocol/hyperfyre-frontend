@@ -167,34 +167,11 @@
               v-if="resource.id == 4 && schedules.length > 0"
               style="padding: 10px; max-height: 300px; overflow-y: auto"
             >
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <!-- <th scope="col">Schedule Id</th> -->
-                    <th scope="col">Time (UTC)</th>
-                    <th scope="col">Schedular</th>
-                    <th scope="col">Event Id</th>
-                    <th scope="col">Total Mails</th>
-                    <th scope="col">Passed Mails</th>
-                    <th scope="col">Failed Mails</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="schedule in schedules" v-bind:key="schedule._id">
-                    <!-- <td>{{ schedule._id }}</td> -->
-                    <td>
-                      {{ new Date(schedule.scheduledAt).toLocaleString() }}
-                    </td>
-                    <td>{{ schedule.userId }}</td>
-                    <td>{{ schedule.eventId }}</td>
-                    <td>{{ schedule.totalEmailsToSend }}</td>
-                    <td>{{ schedule.totalPassedEmails }}</td>
-                    <td>{{ schedule.totalFailedEmails }}</td>
-                    <td>{{ schedule.status }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <hf-table
+              
+              :headers="emailNotificationHeader"
+              :tableBody="schedules"
+              />
             </div>
 
             <!-- Coupon Table -->
@@ -203,51 +180,16 @@
               v-if="resource.id == 5 && couponTable.length > 0"
               style="padding: 10px; max-height: 300px; overflow-y: auto"
             >
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">Coupon Code</th>
-                    <th scope="col">Discount (%)</th>
-                    <th scope="col">Expires At</th>
-                    <th scope="col">Limit</th>
-                    <th scope="col">Usage</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="coupon in couponTable" v-bind:key="coupon._id">
-                    <td>{{ coupon.name }} 
-                        <span @click="copy(coupon.name, 'Coupon Code')" class="copy"><i class="far fa-copy"></i></span>
-                    </td>
-                    <td>{{ coupon.discount }}</td>
-                    <td>{{ new Date(coupon.expiredAt).toLocaleString() }}</td>
-                    <td>{{ coupon.maxClaimCount }}</td>
-                    <td>{{ coupon.usageCount }}</td>
-                    <td>
-                      <span>
-                        <i
-                        class="fas fa-pencil-alt"
-                        style="padding:2px; cursor: pointer;"
-                        title="Click to edit the coupon"
-                        @click="update(resource.id,coupon)"
-                      > </i> 
-                      
-                      </span>
-                      
-                      <span>
-                        <i
-                        class="fas fa-trash"
-                        style="padding:2px; cursor: pointer;"
-                        title="Click to delete the coupon"
-                        @click="remove(resource.id,coupon)"
-                      >
-                      </i>
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <hf-table
+              :tableBody="couponTable"
+              :headers="couponHeader"
+              @updateCoupon="coupon => update(resource.id,coupon)"
+              @removeCoupon="coupon => remove(resource.id,coupon)"
+              />
             </div>
+            
+              
+            
           </b-card-body>
         </b-collapse>
       </b-card>
@@ -328,10 +270,12 @@ import Datepicker from "vuejs-datetimepicker";
 import { isValidSlug } from "../../mixins/fieldValidationMixin";
 import masterKeyPopupMixin from "../../mixins/masterKeyPopupMixin.js";
 import dayjs from "dayjs";
+import HfTable from '../../components/element/HfTable.vue';
 export default {
   components: {
     Loading,
     Datepicker,
+    HfTable,
   },
   computed: {
     buttonThemeCss() {
@@ -360,6 +304,11 @@ export default {
       authToken: localStorage.getItem("authToken"),
       schedules: [],
       couponTable: [],
+      couponHeader:[
+      "Coupon Code","Discount (%)",
+      "Expires At","Limit","Usage","Action"
+      ],
+      emailNotificationHeader:["Schedular","Event Id","Total Mails","Passed Mails","Failed Mails","Status"],
       resources: [
         {
           id: 1,
