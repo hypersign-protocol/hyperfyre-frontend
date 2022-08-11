@@ -282,7 +282,6 @@ export default {
       // {"actionTypes":["INPUT_TEXT","INPUT_NUMBER","TWITTER_FOLLOW","TWITTER_RETWEET","TELEGRAM_JOIN","DISCORD_JOIN","BLOCKCHAIN_ETH","BLOCKCHAIN_TEZ","HYPERSIGN_AUTH"],"length":9}
       authToken: localStorage.getItem("authToken"),
       showCoupon:false,
-      couponCount:0,
       subTotal: 0,
       discount: 0,
       couponDiscount: 0,
@@ -328,6 +327,7 @@ export default {
     handleInput(e){
       if (e.key === "Backspace" || e.key === "Delete") {
         this.couponDiscount=0;
+        this.coupons = []
       }
       },
    async applyCoupon(){
@@ -340,11 +340,8 @@ export default {
         }   
        if(!this.coupons.includes(this.coupon)){
          this.grandTotal
-        
-       if(!this.couponCount>0){
      this.isLoading = true;
       const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription/coupon/verify`;
-     // console.log(this.coupon)
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
@@ -363,7 +360,6 @@ export default {
           if (!resp.ok) {
             return this.notifyErr(json);
           } else {
-            this.couponCount = 1;
             this.coupons.push(this.coupon)
             this.couponDiscount = (this.plan.grandTotal * this.fetchedCouponDiscount) / 100;
             return this.notifySuccess("Coupon Applied");
@@ -376,6 +372,8 @@ export default {
          return this.notifyErr("coupon code already applied")
        }
        }
+       else{
+         return this.notifyErr(Messages.SUBSCRIPTIONS.SELECT_CURRENCY_AND_NETWORK)
        }
      }catch(e){
        return this.notifyErr(e.message)
@@ -386,7 +384,6 @@ export default {
     },
     resetAllValues() {
       this.coupons = [];
-      this.couponCount = 0;
       this.showCoupon = false;
       this.discount = 0;
       this.couponDiscount = 0;
@@ -402,17 +399,17 @@ export default {
     },
     resetAllPayment(){
       this.coupon = "";
-      this.showCoupon = false;
       this.discount = 0;
       this.couponDiscount = 0;
-      this.couponCount = 0;
       this.coupons = []
     },
     setDiscount(__arg) {
       if (__arg) {
         if (__arg == "HID") { 
           this.resetAllPayment();
+          if(this.selectedNetwork==="BSC"){
           this.selectedNetwork = "";
+          }
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: false },
@@ -458,7 +455,6 @@ export default {
         }
          if (__arg == "USDT") {
           this.resetAllPayment();
-          this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: false },
@@ -469,7 +465,6 @@ export default {
         }
          if (__arg == "USDC") {
           this.resetAllPayment();
-          this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: false },
