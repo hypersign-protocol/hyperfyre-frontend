@@ -325,7 +325,7 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
 import Datepicker from "vuejs-datetimepicker";
-import { isValidSlug } from "../../mixins/fieldValidationMixin";
+import { isValidURL } from "../../mixins/fieldValidationMixin";
 import masterKeyPopupMixin from "../../mixins/masterKeyPopupMixin.js";
 import dayjs from "dayjs";
 export default {
@@ -572,7 +572,6 @@ export default {
           url = url.replace("<PARAM>", resource.value.trim());
         }
         url = url.replace("<SECRET_KEY>", masterKey);
-        console.log(url);
         const Url = new URL(this.$config.studioServer.BASE_URL);
         const headers = {
           Orign: Url.origin,
@@ -641,10 +640,12 @@ export default {
         if (!resource.value.name) {
           throw new Error("Enter coupon code");
         }
-        
-        // if (isValidSlug(resource.value.name)) {
-        //   throw new Error("Enter valid coupon code");
-        // }
+        if(isValidURL(resource.value.name)){
+          throw new Error("Coupon should not be a url")
+        }
+        if(resource.value.name.trim().includes(' ')){
+          throw new Error('There should not be space in coupon')
+        }
         
         if (!resource.value.expiredAt) {
           throw new Error("Enter expiry date time");
@@ -654,14 +655,14 @@ export default {
           resource.value.maxClaimCount <= 0 ||
           isNaN(parseInt(resource.value.maxClaimCount))
         ) {
-          throw new Error("Enter Valid number for max limit");
+          throw new Error("Limit should be a number greater than 0");
         }
 
         if (
-            !resource.value.discount || (resource.value.discount <= 0 || resource.value.discount >= 70) ||
+           !resource.value.discount || (resource.value.discount <= 0 || resource.value.discount >= 70) ||
             isNaN(parseInt(resource.value.discount))
         ) {
-            throw new Error("Enter valid coupon discount ");
+            throw new Error("Discount value should be a number greater than 0");
         }
 
         const ToDate = new Date();
