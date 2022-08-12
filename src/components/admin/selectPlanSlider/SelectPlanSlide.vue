@@ -361,6 +361,7 @@ export default {
         this.fetchedCouponDiscount = json;
         if (this.fetchedCouponDiscount) {
           if (!resp.ok) {
+            this.applied = false;
             return this.notifyErr(json);
           } else {
             this.coupons.push(this.coupon)
