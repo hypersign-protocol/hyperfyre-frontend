@@ -479,9 +479,9 @@ export default {
         if (x.id === 5) {
           return (x.value = {
             name: "",
-            discount: "",
+            discount: 0,
             expiredAt: null,
-            maxClaimCount: "",
+            maxClaimCount: 0,
           });
         }
         return (x.value = "");
@@ -614,6 +614,7 @@ export default {
             this.schedules.unshift(schedule);
           }
         } else if (json.discount) {
+          this.notifySuccess("Coupon"+" "+ json.name + " "+ "successfully created");
           this.couponTable.unshift(json);
           this.isEdit = false;
         }
