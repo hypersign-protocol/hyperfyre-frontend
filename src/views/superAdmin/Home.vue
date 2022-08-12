@@ -620,7 +620,9 @@ export default {
           if (schedule) {
             this.schedules.unshift(schedule);
           }
-        } else if (json.discount) {
+        }else if(json.updatedSubs){
+          this.notifySuccess("Subscription id: "+json.updatedSubs._id + " " + "is activated " + json.updatedSubs.paymentData.activated)
+        }else if (json.discount) {
           this.notifySuccess("Coupon"+" "+ json.name + " "+ "successfully created");
           this.couponTable.unshift(json);
           this.isEdit = false;
