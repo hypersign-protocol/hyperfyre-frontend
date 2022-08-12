@@ -325,7 +325,7 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
 import Datepicker from "vuejs-datetimepicker";
-import { isValidURL } from "../../mixins/fieldValidationMixin";
+import { isValidURL,isFloat } from "../../mixins/fieldValidationMixin";
 import masterKeyPopupMixin from "../../mixins/masterKeyPopupMixin.js";
 import dayjs from "dayjs";
 export default {
@@ -624,7 +624,6 @@ export default {
         this.notifyErr(e.message);
       } finally {
         this.Loading = false;
-        this.clearAll();
         this.getAllCoupon();
       }
     },
@@ -653,17 +652,16 @@ export default {
         }
 
         if (
-          resource.value.maxClaimCount <= 0 ||
-          isNaN(parseInt(resource.value.maxClaimCount))
+          resource.value.maxClaimCount <= 0 || isFloat(resource.value.maxClaimCount)
         ) {
           throw new Error("Limit should be a number greater than 0");
         }
 
         if (
-           !resource.value.discount || (resource.value.discount <= 0 || resource.value.discount >= 70) ||
+           !resource.value.discount || (resource.value.discount <= 0 || resource.value.discount > 70) ||
             isNaN(parseInt(resource.value.discount))
         ) {
-            throw new Error("Discount value should be a number greater than 0");
+            throw new Error("Discount value should be a number greater than 0 and less than 70");
         }
 
         const ToDate = new Date();

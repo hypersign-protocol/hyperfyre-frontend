@@ -125,7 +125,13 @@ export function checkValue(arr, prop) {
     return actionValue;
 
 }
-
+export function isFloat(n) {
+    if(n === n && n % 1 !== 0){
+        return true;
+    }else{
+        return false;
+    }
+    }
 export function urlSanitizer(url, endsWith) {
     switch (endsWith) {
         case true:
