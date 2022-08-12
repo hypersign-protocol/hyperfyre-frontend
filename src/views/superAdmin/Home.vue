@@ -608,17 +608,16 @@ export default {
         if (resp.status != 200) {
           throw new Error(json);
         }
-        if (json.message) {
-          const { message, schedule } = json;
+        if (json.message || json.schedule || json.updatedSubs) {
+          const { message, schedule, updatedSubs } = json;
 
           if (message) {
             this.notifySuccess(message);
-          } else {
-            this.notifySuccess(json);
-          }
-
-          if (schedule) {
+          } else if(schedule){
             this.schedules.unshift(schedule);
+          }
+          else if(updatedSubs) {            
+            this.notifySuccess("Subscription id: "+updatedSubs._id + " " + "is activated" + updatedSubs.paymentData.activated)
           }
         } else if (json.discount) {
           this.notifySuccess("Coupon"+" "+ json.name + " "+ "successfully created");
