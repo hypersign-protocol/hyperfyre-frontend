@@ -79,6 +79,13 @@
                 >
                   Execute
                 </button>
+                <div
+                  v-if="resource.id === 4"
+                  class="btn"
+                  style="float:right"
+                  @click="getAllSchedules(resource)"
+                ><a href="#">Refresh</a>
+                </div>
               </div>
             </div>
 
