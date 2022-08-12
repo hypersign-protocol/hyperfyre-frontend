@@ -22,7 +22,6 @@ export default{
                     },
                     
                 })
-                console.log(masterKey);
                 return masterKey;
         }
     }
