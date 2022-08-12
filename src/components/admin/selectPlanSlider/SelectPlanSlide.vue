@@ -291,6 +291,7 @@ export default {
       marketPairs: [],
       coupon:"",
       coupons:[],
+      applied:false,
       isLoading:false,
       fullPage: true,
       options: {
@@ -326,6 +327,7 @@ export default {
   methods: {
     handleInput(e){
       if (e.key === "Backspace" || e.key === "Delete") {
+        this.applied = false;
         this.couponDiscount=0;
         this.coupons = []
       }
@@ -335,6 +337,7 @@ export default {
      try{
        if(this.selectedCurrency !== "" && this.selectedNetwork !== "")
        {
+         this.applied = true;
       if(!this.coupon){
           throw new Error('Enter Coupon and Apply')
         }   
@@ -520,7 +523,9 @@ export default {
         var planbody = {};
         this.plan.selectedCurrency = this.selectedCurrency;
         this.plan.selectedNetwork = this.selectedNetwork;
-        this.plan.coupon_name =  this.coupon;
+        if(this.applied===true){
+          this.plan.coupon_name =  this.coupon;
+        }
         this.plan.coupon_code = "Dummy30";
         planbody = Object.assign(planbody, this.plan);
 
