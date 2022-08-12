@@ -91,6 +91,7 @@
         <div class="col-lg-6 col-md-9 px-0">
             <input type="text" class="form-control w-100"
             placeholder="Enter Coupon Code"
+            @keydown="handleInput($event)"
             v-model="coupon">
         </div>
           <div class="col-lg-4 col-md-3 " style="display:block">
@@ -267,14 +268,12 @@ export default {
       }
       else{
 
-        total = this.plan.price;
         this.plan.grandTotal = total;
         
       }
       return this.plan.grandTotal
     },
   },
-
   data() {
     return {
       /// TODO: Need to do it in a neat way
@@ -283,7 +282,6 @@ export default {
       // {"actionTypes":["INPUT_TEXT","INPUT_NUMBER","TWITTER_FOLLOW","TWITTER_RETWEET","TELEGRAM_JOIN","DISCORD_JOIN","BLOCKCHAIN_ETH","BLOCKCHAIN_TEZ","HYPERSIGN_AUTH"],"length":9}
       authToken: localStorage.getItem("authToken"),
       showCoupon:false,
-      couponCount:0,
       subTotal: 0,
       discount: 0,
       couponDiscount: 0,
@@ -292,7 +290,10 @@ export default {
       selectedNetwork: "",
       marketPairs: [],
       coupon:"",
+      coupons:[],
+      applied:false,
       isLoading:false,
+      fullPage: true,
       options: {
         currency: [
           {
@@ -324,13 +325,24 @@ export default {
     this.fetchTokenPriceCMC();
   },
   methods: {
+    handleInput(e){
+      if (e.key === "Backspace" || e.key === "Delete") {
+        this.applied = false;
+        this.couponDiscount=0;
+        this.coupons = []
+      }
+      },
    async applyCoupon(){
-     
+  
      try{
        if(this.selectedCurrency !== "" && this.selectedNetwork !== "")
        {
-         if(!this.couponCount>0){
-         
+         this.applied = true;
+      if(!this.coupon){
+          throw new Error('Enter Coupon and Apply')
+        }   
+       if(!this.coupons.includes(this.coupon)){
+         this.grandTotal
      this.isLoading = true;
       const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription/coupon/verify`;
         let headers = {
@@ -351,7 +363,7 @@ export default {
           if (!resp.ok) {
             return this.notifyErr(json);
           } else {
-            this.couponCount = 1;
+            this.coupons.push(this.coupon)
             this.couponDiscount = (this.plan.grandTotal * this.fetchedCouponDiscount) / 100;
             return this.notifySuccess("Coupon Applied");
           }
@@ -360,8 +372,11 @@ export default {
         }
        }
        else{
-         return this.notifyErr("Coupon applied already")
+         return this.notifyErr("coupon code already applied")
        }
+       }
+       else{
+         return this.notifyErr(Messages.SUBSCRIPTIONS.SELECT_CURRENCY_AND_NETWORK)
        }
      }catch(e){
        return this.notifyErr(e.message)
@@ -371,7 +386,7 @@ export default {
      }
     },
     resetAllValues() {
-      this.couponCount = 0;
+      this.coupons = [];
       this.showCoupon = false;
       this.discount = 0;
       this.couponDiscount = 0;
@@ -387,16 +402,17 @@ export default {
     },
     resetAllPayment(){
       this.coupon = "";
-      this.showCoupon = false;
       this.discount = 0;
       this.couponDiscount = 0;
-      this.couponCount = 0;
+      this.coupons = []
     },
     setDiscount(__arg) {
       if (__arg) {
         if (__arg == "HID") { 
           this.resetAllPayment();
+          if(this.selectedNetwork==="BSC"){
           this.selectedNetwork = "";
+          }
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: false },
@@ -442,7 +458,6 @@ export default {
         }
          if (__arg == "USDT") {
           this.resetAllPayment();
-          this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: false },
@@ -453,7 +468,6 @@ export default {
         }
          if (__arg == "USDC") {
           this.resetAllPayment();
-          this.selectedNetwork = "";
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: false },
@@ -462,7 +476,6 @@ export default {
           ];
          // this.selectedNetwork = "ETH";
         }
-        this.grandTotal;
       }
     },
     getHidPrice() {
@@ -510,7 +523,9 @@ export default {
         var planbody = {};
         this.plan.selectedCurrency = this.selectedCurrency;
         this.plan.selectedNetwork = this.selectedNetwork;
-        this.plan.coupon_name =  this.coupon;
+        if(this.applied===true){
+          this.plan.coupon_name =  this.coupon;
+        }
         this.plan.coupon_code = "Dummy30";
         planbody = Object.assign(planbody, this.plan);
 

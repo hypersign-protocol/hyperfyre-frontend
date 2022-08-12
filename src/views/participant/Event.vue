@@ -238,7 +238,8 @@ export default {
 
         eventBus.$emit('UpdateThemeEvent', { 
           logoPath: this.eventData['orgData'].logoPath,
-          themeColor: this.eventData['orgData'].themeColor
+          themeColor: this.eventData['orgData'].themeColor,
+          buttonTextColor: this.eventData['orgData'].buttonTextColor
         })
 
         ///  deleting data wich is not required.
