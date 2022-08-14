@@ -20,6 +20,7 @@
 </style>
 <template>
   <div>
+    <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
     <b-sidebar
       backdrop
       width="50%"
@@ -85,6 +86,21 @@
             </div>
           </div>
         </div>
+        <hr v-if="showCoupon===true"/>
+      <div style="display:flex" v-if="showCoupon===true">
+        <div class="col-lg-6 col-md-9 px-0">
+            <input type="text" class="form-control w-100"
+            placeholder="Enter Coupon Code"
+            @keydown="handleInput($event)"
+            v-model="coupon">
+        </div>
+          <div class="col-lg-4 col-md-3 " style="display:block">
+            <button type="button" class="btn btn-outline-primary button-theme"
+              :style="buttonThemeCss"
+              @click="applyCoupon"
+              >Apply</button>
+          </div>
+          </div>
         <hr />
         <div>
           <div class="row" style="margin-top: 2%">
@@ -94,6 +110,10 @@
           <div class="row" style="margin-top: 2%">
             <div class="col-md-6"><b>Discount</b></div>
             <div class="col-md-6">$ {{ discount }}</div>
+          </div>
+          <div class="row" style="margin-top: 2%" v-if="showCoupon===true">
+            <div class="col-md-6"><b>Coupon Discount</b></div>
+            <div class="col-md-6">$ {{ couponDiscount }}</div>
           </div>
           <!-- <div class="row" style="margin-top: 2%;">
               <div class="col-md-6"><b>Subtotal</b></div>
@@ -182,6 +202,8 @@ import GeneralConfig from "./components/GeneralConfig.vue";
 import ReferralConfig from "./components/ReferralConfig.vue";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/admin/en";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -189,6 +211,7 @@ export default {
     EventActionConfig,
     ReferralConfig,
     InputDate,
+    Loading
   },
 
   props: {
@@ -230,13 +253,27 @@ export default {
       '--header-text-color':config.app.headerTextColor
       }
   },
+  couponDiscount(){
+  return  this.couponDiscount = (this.plan.price * this.fetchedCouponDiscount)/100
+    // this.discount = (this.plan.price * 30) / 100;
+  },
     grandTotal() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.plan.grandTotal = this.plan.price - this.discount;
-      return this.plan.grandTotal;
+      
+      let total = this.plan.price - this.discount;
+      if(this.selectedCurrency !=="" && this.selectedNetwork !==""){
+        this.showCoupon = true;
+        this.plan.grandTotal = total - this.couponDiscount;
+       
+      }
+      else{
+
+        this.plan.grandTotal = total;
+        
+      }
+      return this.plan.grandTotal
     },
   },
-
   data() {
     return {
       /// TODO: Need to do it in a neat way
@@ -244,12 +281,19 @@ export default {
       // it returns:
       // {"actionTypes":["INPUT_TEXT","INPUT_NUMBER","TWITTER_FOLLOW","TWITTER_RETWEET","TELEGRAM_JOIN","DISCORD_JOIN","BLOCKCHAIN_ETH","BLOCKCHAIN_TEZ","HYPERSIGN_AUTH"],"length":9}
       authToken: localStorage.getItem("authToken"),
+      showCoupon:false,
       subTotal: 0,
       discount: 0,
+      couponDiscount: 0,
+      fetchedCouponDiscount:0,
       selectedCurrency: "",
       selectedNetwork: "",
       marketPairs: [],
-
+      coupon:"",
+      coupons:[],
+      applied:false,
+      isLoading:false,
+      fullPage: true,
       options: {
         currency: [
           {
@@ -281,8 +325,73 @@ export default {
     this.fetchTokenPriceCMC();
   },
   methods: {
+    handleInput(e){
+      if (e.key === "Backspace" || e.key === "Delete") {
+        this.applied = false;
+        this.couponDiscount=0;
+        this.coupons = []
+      }
+      },
+   async applyCoupon(){
+  
+     try{
+       if(this.selectedCurrency !== "" && this.selectedNetwork !== "")
+       {
+         this.applied = true;
+      if(!this.coupon){
+          throw new Error('Enter Coupon and Apply')
+        }   
+       if(!this.coupons.includes(this.coupon)){
+         this.grandTotal
+     this.isLoading = true;
+      const url = `${this.$config.studioServer.BASE_URL}api/v1/subscription/coupon/verify`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+        let body={
+          coupon:this.coupon
+        }
+        const resp = await fetch(url, {
+          method: "POST",
+          body:JSON.stringify(body),
+          headers
+        });
+        const json = await resp.json();
+        this.fetchedCouponDiscount = json;
+        if (this.fetchedCouponDiscount) {
+          if (!resp.ok) {
+            this.applied = false;
+            return this.notifyErr(json);
+          } else {
+            this.coupons.push(this.coupon)
+            this.couponDiscount = (this.plan.grandTotal * this.fetchedCouponDiscount) / 100;
+            return this.notifySuccess("Coupon Applied");
+          }
+        } else {
+          throw new Error("Error while applying coupon code");
+        }
+       }
+       else{
+         return this.notifyErr("coupon code already applied")
+       }
+       }
+       else{
+         return this.notifyErr(Messages.SUBSCRIPTIONS.SELECT_CURRENCY_AND_NETWORK)
+       }
+     }catch(e){
+       return this.notifyErr(e.message)
+     }
+     finally{
+       this.isLoading = false
+     }
+    },
     resetAllValues() {
+      this.coupons = [];
+      this.showCoupon = false;
       this.discount = 0;
+      this.couponDiscount = 0;
+      this.coupon = ""
       this.selectedCurrency = "";
       this.selectedNetwork = "";
       this.options.network = [
@@ -292,21 +401,33 @@ export default {
         { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
       ];
     },
+    resetAllPayment(){
+      this.coupon = "";
+      this.discount = 0;
+      this.couponDiscount = 0;
+      this.coupons = []
+    },
     setDiscount(__arg) {
       if (__arg) {
         if (__arg == "HID") { 
+          this.resetAllPayment();
+          if(this.selectedNetwork==="BSC"){
           this.selectedNetwork = "";
+          }
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: false },
             {text: "Binance Smart Chain",value: "BSC",disabled: true},
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
           ];
+          this.plan.grandTotal = 0;
           this.discount = (this.plan.price * 30) / 100;
         } else {
           this.discount = 0;
         }
         if (__arg == "MATIC") {
+          this.resetAllPayment();
+          // this.couponDiscount = (this.plan.price * this.fetchedCouponDiscount) / 100;
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: true },
             { text: "Polygon", value: "MATIC", disabled: false },
@@ -314,8 +435,10 @@ export default {
             { text: "Harmony (Coming Soon..)", value: "ONE", disabled: true },
           ];
           this.selectedNetwork = "MATIC";
+          
         }
         if (__arg == "ETH") {
+          this.resetAllPayment();
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: true },
@@ -325,6 +448,7 @@ export default {
           this.selectedNetwork = "ETH";
         }
         if (__arg == "BNB") {
+          this.resetAllPayment();
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: true },
             { text: "Polygon", value: "MATIC", disabled: true },
@@ -334,7 +458,7 @@ export default {
           this.selectedNetwork = "BSC";
         }
          if (__arg == "USDT") {
-          this.selectedNetwork = "";
+          this.resetAllPayment();
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: false },
@@ -344,7 +468,7 @@ export default {
           //this.selectedNetwork = "ETH";
         }
          if (__arg == "USDC") {
-          this.selectedNetwork = "";
+          this.resetAllPayment();
           this.options.network = [
             { text: "Ethereum", value: "ETH", disabled: false },
             { text: "Polygon", value: "MATIC", disabled: false },
@@ -400,6 +524,9 @@ export default {
         var planbody = {};
         this.plan.selectedCurrency = this.selectedCurrency;
         this.plan.selectedNetwork = this.selectedNetwork;
+        if(this.applied===true){
+          this.plan.coupon_name =  this.coupon;
+        }
         this.plan.coupon_code = "Dummy30";
         planbody = Object.assign(planbody, this.plan);
 
@@ -425,7 +552,6 @@ export default {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
         };
-
         const resp = await fetch(url, {
           method: "POST",
           body: JSON.stringify({

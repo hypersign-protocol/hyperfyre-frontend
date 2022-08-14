@@ -19,7 +19,7 @@ color: white !important;
 		</b-navbar-brand>
 		<b-nav-item-dropdown size="sm" right class=" m-2 menu ml-auto text-white text-decoration-none">
 			<template #button-content>
-				<b-icon style="color:white" icon="menu-button-wide"></b-icon>
+				<b-icon style="color:var(--theme-text-color)" icon="menu-button-wide"></b-icon>
 			</template>
 			<b-dropdown-item to="/user/home/" @click="updateIsForm">
 				Home
@@ -57,7 +57,8 @@ export default {
 	computed: {
 		themeCss(){
 			return{
-				'--theme-bg-color': (this.themeData.themeColor && this.isForm) ? this.themeData.themeColor : config.app.themeBgColor
+				'--theme-bg-color': (this.themeData.themeColor && this.isForm) ? this.themeData.themeColor : config.app.themeBgColor,
+				'--theme-text-color': (this.themeData.buttonTextColor && this.isForm) ? this.themeData.buttonTextColor : 'white'
 			}
 		}
 	},

@@ -37,6 +37,7 @@ const EVENTS = {
         ATLEAST_ONE_TAG: "Must have atleast one tag configured",
         CHOOSE_TAG: "Please choose Tag",
         DUPLICATE_TAG: "Duplicate tags are not allowed",
+        PROJECT_DELETED: "Event not found"
     },
 
     ACTIONS: {
