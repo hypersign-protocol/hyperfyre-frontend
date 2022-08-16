@@ -75,9 +75,6 @@ label {
   background-color: var(--button-bg-color);;
   margin: 1px 0;
 }
-.modal-text {
-  font-size: 12px;
-}
 .projectSelector {
   min-width: 220px;
   max-width: 220px;
@@ -114,16 +111,7 @@ label {
     ></loading>
 
     <b-modal hide-footer id="modal-1" title="Lottery">
-      <p
-        class="my-4 border rounded-lg p-2 modal-text"
-        style="background: #f0f9ff"
-      >
-        <b>Lottery</b> is the process of selecting winners of an event. Upon
-        clicking on "<b>Execute button</b>", the lottery process begins, which
-        may take sometime and screen may freeze. Once done, you will get
-        selected records in excel sheet. The winner selection is primarly based
-        on their "<b>score</b>" unless checked "<b>randomly</b>".
-      </p>
+      <hf-notes :notes="notes"></hf-notes>
       <div class="d-flex mx-auto justify-content-between px-4">
         <div class="bold">Total Records</div>
         <div class="bold">{{ project.count }}</div>
@@ -259,10 +247,11 @@ import FileDownload from "js-file-download";
 const issuedImgLink = require("../../assets/issued-icon.png");
 import Messages from "../../utils/messages/admin/en";
 import eventBus from "../../eventBus";
-
+import HfNotes from '../../components/elements/HfNotes.vue';
+const {LOTTERY_NOTES} = require("../../utils/messages/admin/Notes");
 export default {
   name: "Investor",
-  components: { Loading, Paginate },
+  components: { Loading, Paginate, HfNotes },
 computed:{
  buttonThemeCss() {
       return {
@@ -403,6 +392,7 @@ computed:{
       accessToken: localStorage.getItem("accessToken"),
       isLoading: false,
       fullPage: true,
+      notes:LOTTERY_NOTES
     };
   },
 
