@@ -13,7 +13,7 @@
          Invite <i class="fas fa-plus text-black"></i>
       </button>
     </div>
-    <hf-page-message v-if="!this.teammates.length" message="No teams found, click on 'Invite' button to add team"
+    <hf-page-message v-if="!this.teammates.length" :message="msg"
     >
     </hf-page-message>
     <h3 v-if="teammates.length">Your Team</h3>
@@ -121,6 +121,7 @@ import notificationMixins from "../../mixins/notificationMixins";
 import SimpleVueValidation from "simple-vue-validator";
 import { isValidURL,isValidText } from '../../mixins/fieldValidationMixin';
 import HfPageMessage from "../../components/elements/HfPageMessage.vue"
+import Messages from "../../utils/messages/admin/en"
 export default {
   name: "Teammate",
   components: {HfPageMessage},
@@ -141,6 +142,7 @@ export default {
       accessuser: {},
       appName: "",
       authToken: localStorage.getItem("authToken"),
+      msg:Messages.TEAMMATES.NO_TEAMS_FOUND
     };
   },
   async mounted() {

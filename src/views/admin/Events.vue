@@ -249,7 +249,7 @@ i {
       </div>
     </div>
     <hf-page-message v-if="!this.projectsToShow.length" 
-    message="No events found, click on create button to create a new event!"
+    :message="msg"
     >
     </hf-page-message>
     <div class="row" style="margin-top: 2%">
@@ -547,6 +547,7 @@ export default {
       fullPage: true,
       user: {},
       errors: [],
+      msg:Messages.EVENTS.NO_EVENT_FOUND
     };
   },
 
