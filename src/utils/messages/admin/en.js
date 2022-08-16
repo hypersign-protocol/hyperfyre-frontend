@@ -1,6 +1,9 @@
 const DASHBOARD = {
 
 }
+const TEAMMATES = {
+    NO_TEAMS_FOUND:"No teams found, click on 'Invite' button to add team"
+}
 const EVENT = {
     ERROR_OCCURED: "Error occurred: ",
     INVALID_RESPONSE: "Invalid response",
@@ -8,6 +11,7 @@ const EVENT = {
     INVALID_AUTH_TOKEN: "Please! login"
 }
 const EVENTS = {
+    NO_EVENT_FOUND:"No events found, click on create button to create a new event!",
     CHECK_ALL_TYPE: "PLease Check if any type left empty",
     CHECK_ALL_TITLE_EMPTY: "Check if any Title field you left empty",
     CHECK_ALL_VALUE_EMPTY: "Check if any Value field you left empty",
@@ -140,5 +144,6 @@ module.exports = {
     SUBSCRIPTIONS,
     EVENT,
     APP,
-    ORGDATA
+    ORGDATA,
+    TEAMMATES
 }
