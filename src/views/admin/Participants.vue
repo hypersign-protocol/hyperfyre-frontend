@@ -185,14 +185,19 @@ label {
             ></b-form-input>
           </div>
           <div class="mx-3">
-            <button
+            <!-- <button
               @click="handleExport"
               :disabled="project.investors.length ? false : true"
               class="cta_btns btn btn-primary btn-md button-theme"
               :style="buttonThemeCss"
             >
               Export All <i class="fas fa-file-export"></i>
-            </button>
+            </button> -->
+            <hf-buttons
+            :disabled="project.investors.length ? false : true"
+            name="Export"
+            @exportAll="handleExport"
+            ></hf-buttons>
           </div>
           <div>
             <button
@@ -259,12 +264,13 @@ import FileDownload from "js-file-download";
 const issuedImgLink = require("../../assets/issued-icon.png");
 import Messages from "../../utils/messages/admin/en";
 import eventBus from "../../eventBus";
+import HfButtons from '../../components/elements/HfButtons.vue';
 
 export default {
   name: "Investor",
-  components: { Loading, Paginate },
+  components: { Loading, Paginate,HfButtons },
 computed:{
- buttonThemeCss() {
+    HfButtonsuttonThemeCss() {
       return {
         '--button-bg-color': config.app.buttonBgColor,
         '--button-text-color':config.app.buttonTextColor

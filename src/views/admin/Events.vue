@@ -197,13 +197,17 @@ i {
       </div>
       <div class="col-md-6">
         <div class="text-right">
-          <button
+          <!-- <button
             @click="openCreateSidebar"
             class="btn btn-primary button-theme"
             :style="buttonThemeCss"
           >
             Create <i class="fas fa-plus text-white"></i>
-          </button>
+          </button> -->
+          <hf-buttons
+          @openCreateSidebar="openCreateSidebar"
+          name=Create>
+          </hf-buttons>
         </div>
 
         <div>
@@ -432,10 +436,11 @@ import dayjs from "dayjs";
 import eventBus from "../../eventBus";
 
 import Messages from "../../utils/messages/admin/en";
+import HfButtons from '../../components/elements/HfButtons.vue';
 
 export default {
   name: "Investor",
-  components: { Loading, Paginate, CreateProjectSlide },
+  components: { Loading, Paginate, CreateProjectSlide, HfButtons },
 
   data() {
     return {
