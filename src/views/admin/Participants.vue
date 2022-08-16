@@ -248,10 +248,10 @@ const issuedImgLink = require("../../assets/issued-icon.png");
 import Messages from "../../utils/messages/admin/en";
 import eventBus from "../../eventBus";
 import HfNotes from '../../components/elements/HfNotes.vue';
-const Notes = require("../../utils/messages/admin/Notes");
+const {LOTTERY_NOTES} = require("../../utils/messages/admin/Notes");
 export default {
   name: "Investor",
-  components: { Loading, Paginate, HfNotes,Notes },
+  components: { Loading, Paginate, HfNotes },
 computed:{
  buttonThemeCss() {
       return {
@@ -392,7 +392,7 @@ computed:{
       accessToken: localStorage.getItem("accessToken"),
       isLoading: false,
       fullPage: true,
-      notes:Notes.LOTTERY_NOTES
+      notes:LOTTERY_NOTES
     };
   },
 
