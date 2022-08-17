@@ -3,7 +3,7 @@
   @click="clickBtn"
   >
   {{name}}</button> -->
-  <div class="btn btn-primary button-theme" :style="buttonThemeCss"
+  <div :class="styleClass ? `${styleClass}` : 'btn btn-primary button-theme'" :style="buttonThemeCss"
   @click="emitExecuteAction()"
   >
   {{name}} <span v-if="iconClass"><i :class="iconClass"></i></span></div>
@@ -17,6 +17,10 @@ export default {
       iconClass: {
         type: String,
         require: false
+      }, 
+      styleClass:{
+        type:String,
+        require:false
       } 
     },
     computed:{

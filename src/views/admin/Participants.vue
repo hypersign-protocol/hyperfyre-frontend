@@ -111,7 +111,7 @@ label {
     ></loading>
 
 
-    <b-modal hide-footer id="modal-1" title="Lottery">
+    <b-modal hide-footer ref="modal-1" title="Lottery">
       <hf-notes :notes="notes"></hf-notes>
       <div class="d-flex mx-auto justify-content-between px-4">
         <div class="bold">Total Records</div>
@@ -174,9 +174,8 @@ label {
             ></b-form-input>
           </div>
           <div class="mx-3"
-          :aria-disabled="project.investors.length ? false : true"
           >
-            <!-- <button
+          <!-- <button
               @click="handleExport"
               :disabled="project.investors.length ? false : true"
               class="cta_btns btn btn-primary btn-md button-theme"
@@ -207,7 +206,8 @@ label {
             :disabled="project.investors.length ? false : true"
             name="Lottery"
             @executeAction="openModal()"
-            >Lottery</hf-buttons>
+            iconClass="fas fa-dharmachakra"
+            ></hf-buttons>
           </div>
         </div>
       </div>
@@ -266,9 +266,10 @@ import Messages from "../../utils/messages/admin/en";
 import eventBus from "../../eventBus";
 import HfNotes from '../../components/elements/HfNotes.vue';
 const {LOTTERY_NOTES} = require("../../utils/messages/admin/Notes");
+import HfButtons from "../../components/elements/HfButtons.vue"
 export default {
   name: "Investor",
-  components: { Loading, Paginate, HfNotes },
+  components: { Loading, Paginate, HfNotes,HfButtons },
 computed:{
  buttonThemeCss() {
       return {
@@ -439,6 +440,10 @@ computed:{
 
   methods: {
     openModal(){
+      if(!this.selectedProject)
+      {
+       return this.notifyErr(Messages.PARTICIPANTS.SELECT_EVENT)
+      }
       this.$refs['modal-1'].toggle('.openBtn')
     },
     parseActionValue(action) {
@@ -488,7 +493,9 @@ computed:{
           Authorization: `Bearer ${this.authToken}`,
           AccessToken: `Bearer ${this.accessToken}`,
         };
-
+        if(!this.selectedProject){
+          throw Error(Messages.PARTICIPANTS.SELECT_EVENT)
+        }
         const res = await apiClientMixin.makeCall({
           method: "GET",
           url,
@@ -500,7 +507,7 @@ computed:{
         this.isLoading = false;
       } catch (e) {
         this.isLoading = false;
-        this.notifyErr(e);
+        this.notifyErr(e.message);
       } finally {
         this.isLoading = false;
       }
