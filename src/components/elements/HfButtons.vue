@@ -1,8 +1,10 @@
 <template>
-  <div :class="customClass ? `${customClass}` : 'btn btn-primary button-theme'" :style="buttonThemeCss"
+  <button :class="customClass ? `${customClass}` : 'btn btn-primary button-theme'" :style="buttonThemeCss"
   @click="emitExecuteAction()"
   >
-  {{name}} <span v-if="iconClass"><i :class="iconClass"></i></span></div>
+    {{name}} 
+    <span v-if="iconClass"><i :class="iconClass"></i></span>
+  </button>
 </template>
 
 <script>
@@ -17,7 +19,7 @@ export default {
       customClass:{
         type:String,
         require:false
-      } 
+      }
     },
     computed:{
       buttonThemeCss() {
@@ -27,10 +29,6 @@ export default {
       }
      },
     },
-    created(){
-      console.log(this.name)
-    },
-    
     methods:{
       emitExecuteAction(){
         this.$emit("executeAction")          

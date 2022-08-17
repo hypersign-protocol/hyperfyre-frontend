@@ -440,11 +440,9 @@ computed:{
 
   methods: {
     openModal(){
-      if(!this.selectedProject)
-      {
-       return this.notifyErr(Messages.PARTICIPANTS.SELECT_EVENT)
+      if(this.$refs['modal-1']){
+        this.$refs['modal-1'].toggle('.openBtn')
       }
-      this.$refs['modal-1'].toggle('.openBtn')
     },
     parseActionValue(action) {
       switch (action.type) {
