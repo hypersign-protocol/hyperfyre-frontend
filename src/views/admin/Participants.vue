@@ -110,6 +110,7 @@ label {
       :is-full-page="fullPage"
     ></loading>
 
+
     <b-modal hide-footer id="modal-1" title="Lottery">
       <hf-notes :notes="notes"></hf-notes>
       <div class="d-flex mx-auto justify-content-between px-4">
@@ -172,25 +173,41 @@ label {
               type="search"
             ></b-form-input>
           </div>
-          <div class="mx-3">
-            <button
+          <div class="mx-3"
+          :aria-disabled="project.investors.length ? false : true"
+          >
+            <!-- <button
               @click="handleExport"
               :disabled="project.investors.length ? false : true"
               class="cta_btns btn btn-primary btn-md button-theme"
               :style="buttonThemeCss"
             >
               Export All <i class="fas fa-file-export"></i>
-            </button>
+
+            </button> -->
+            
+            <hf-buttons
+            :disabled="project.investors.length ? false : true"
+            name="Export All"
+            @executeAction="handleExport"
+            iconClass="fas fa-file-export"
+            ></hf-buttons>
           </div>
           <div>
-            <button
+            <!-- <button
               :disabled="project.investors.length ? false : true"
               v-b-modal.modal-1
               class="cta_btns btn btn-primary btn-md button-theme"
               :style="buttonThemeCss"
             >
               Lottery <i class="fas fa-dharmachakra"></i>
-            </button>
+            </button> -->
+            <hf-buttons
+            class="openBtn"
+            :disabled="project.investors.length ? false : true"
+            name="Lottery"
+            @executeAction="openModal()"
+            >Lottery</hf-buttons>
           </div>
         </div>
       </div>
@@ -421,6 +438,9 @@ computed:{
   },
 
   methods: {
+    openModal(){
+      this.$refs['modal-1'].toggle('.openBtn')
+    },
     parseActionValue(action) {
       switch (action.type) {
         case "DISCORD_JOIN":
