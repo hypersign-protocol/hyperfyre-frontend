@@ -1,9 +1,5 @@
 <template>
-  <!-- <button class="btn btn-primary button-theme" :style="buttonThemeCss"
-  @click="clickBtn"
-  >
-  {{name}}</button> -->
-  <div :class="styleClass ? `${styleClass}` : 'btn btn-primary button-theme'" :style="buttonThemeCss"
+  <div :class="customClass ? `${customClass}` : 'btn btn-primary button-theme'" :style="buttonThemeCss"
   @click="emitExecuteAction()"
   >
   {{name}} <span v-if="iconClass"><i :class="iconClass"></i></span></div>
@@ -18,7 +14,7 @@ export default {
         type: String,
         require: false
       }, 
-      styleClass:{
+      customClass:{
         type:String,
         require:false
       } 
@@ -48,12 +44,6 @@ export default {
   background-color:  var(--button-bg-color);
   border-collapse:  var(--button-bg-color);
   color: var(--button-text-color);
-  border: 0;
-}
-.theme {
-  background-color: #363740;
-  border-collapse: #363740;
-  color: whitesmoke;
   border: 0;
 }
 </style>
