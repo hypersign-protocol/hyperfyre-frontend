@@ -8,12 +8,14 @@
 </style>
 <template>
   <div class="home marginLeft marginRight">
-    <h3 v-if="!teammates.length" class="leftAlign">No teams found, click on 'Invite' button to add team</h3>
     <div class="text-right">
       <button @click="invite()" class="btn button-theme" :style="buttonThemeCss">
          Invite <i class="fas fa-plus text-black"></i>
       </button>
     </div>
+    <hf-page-message v-if="!this.teammates.length" :message="msg"
+    >
+    </hf-page-message>
     <h3 v-if="teammates.length">Your Team</h3>
     <div class="row" style="margin-top: 2%">
       <div class="col-md-12">
@@ -118,9 +120,11 @@ import config from "../../config";
 import notificationMixins from "../../mixins/notificationMixins";
 import SimpleVueValidation from "simple-vue-validator";
 import { isValidURL,isValidText } from '../../mixins/fieldValidationMixin';
+import HfPageMessage from "../../components/elements/HfPageMessage.vue"
+import Messages from "../../utils/messages/admin/en"
 export default {
   name: "Teammate",
-  components: {},
+  components: {HfPageMessage},
   computed:{
  buttonThemeCss() {
       return {
@@ -138,6 +142,7 @@ export default {
       accessuser: {},
       appName: "",
       authToken: localStorage.getItem("authToken"),
+      msg:Messages.TEAMMATES.NO_TEAMS_FOUND
     };
   },
   async mounted() {

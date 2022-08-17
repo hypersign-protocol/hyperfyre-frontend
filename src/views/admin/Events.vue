@@ -248,14 +248,10 @@ i {
         </div>
       </div>
     </div>
-
-    <div>
-      <div v-if="!this.projectsToShow.length">
-        <h3>
-          No events found, click on "create" button to create a new event!
-        </h3>
-      </div>
-    </div>
+    <hf-page-message v-if="!this.projectsToShow.length" 
+    :message="msg"
+    >
+    </hf-page-message>
     <div class="row" style="margin-top: 2%">
       <div
         class="col-md-4"
@@ -432,10 +428,11 @@ import dayjs from "dayjs";
 import eventBus from "../../eventBus";
 
 import Messages from "../../utils/messages/admin/en";
+import HfPageMessage from '../../components/elements/HfPageMessage.vue';
 
 export default {
   name: "Investor",
-  components: { Loading, Paginate, CreateProjectSlide },
+  components: { Loading, Paginate, CreateProjectSlide, HfPageMessage },
 
   data() {
     return {
@@ -550,6 +547,7 @@ export default {
       fullPage: true,
       user: {},
       errors: [],
+      msg:Messages.EVENTS.NO_EVENT_FOUND
     };
   },
 
