@@ -9,9 +9,14 @@
 <template>
   <div class="home marginLeft marginRight">
     <div class="text-right">
-      <button @click="invite()" class="btn button-theme" :style="buttonThemeCss">
+      <!-- <button @click="invite()" class="btn button-theme" :style="buttonThemeCss">
          Invite <i class="fas fa-plus text-black"></i>
-      </button>
+      </button> -->
+      <hf-buttons
+      name="Invite"
+      @executeAction="invite()"
+      iconClass="fas fa-plus text-black"
+      ></hf-buttons>
     </div>
     <hf-page-message v-if="!this.teammates.length" :message="msg"
     >
@@ -56,14 +61,18 @@
                   }}</b-badge>
                 </h5>
               </td>
-              <td @click="remove(row._id)">
-                <button
+              <td>
+                <!-- <button
                   style="text-transform: uppercase"
                   class="btn btn-danger btn-sm"
                   title="Click to remove the teammate"
                 >
                   <i class="fas fa-trash"></i>
-                </button>
+                </button> -->
+              <span @click="remove(row._id)"
+              title="Click to remove the teammate"
+              style="cursor:pointer"
+              ><i class="fas fa-trash"></i></span>
               </td>
             </tr>
           </tbody>
@@ -89,23 +98,28 @@
               <td>{{ row.email }}</td>
 
               <td v-if="isAdmin(row.email)">
-                <button
-                  :disabled="true"
-                  style="text-transform: uppercase"
-                  class="btn btn-success btn-sm"
-                >
-                  Active
-                </button>
+                <h5>
+                <b-badge
+                class="badge bg-success">
+                  ACTIVE
+                </b-badge>
+                </h5>
               </td>
 
-              <td v-else @click="switchAccount(row)">
-                <button
+              <td v-else>
+                <!-- <button
                   style="text-transform: uppercase"
                   class="btn btn-danger btn-sm"
                   title="Click to switch to this account"
-                >
-                  Switch
-                </button>
+                >Switch
+                </button> -->               
+                <span
+                title="Click to switch to this account"
+                style="cursor:pointer"
+                @click="switchAccount(row)"
+                ><i class="fas fa-sync" aria-hidden="true"></i>
+                </span>
+              
               </td>
             </tr>
           </tbody>
@@ -122,9 +136,10 @@ import SimpleVueValidation from "simple-vue-validator";
 import { isValidURL,isValidText } from '../../mixins/fieldValidationMixin';
 import HfPageMessage from "../../components/elements/HfPageMessage.vue"
 import Messages from "../../utils/messages/admin/en"
+import HfButtons from "../../components/elements/HfButtons.vue"
 export default {
   name: "Teammate",
-  components: {HfPageMessage},
+  components: {HfPageMessage, HfButtons},
   computed:{
  buttonThemeCss() {
       return {

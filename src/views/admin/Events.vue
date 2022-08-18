@@ -213,6 +213,7 @@ i {
             name="Create"
             @executeAction="openCreateSidebar()"
             iconClass="fas fa-plus text-black"
+            title="Create Event"
           >
           </hf-buttons>
         </div>

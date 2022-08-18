@@ -634,33 +634,47 @@
         v-if="isCreate == true"
       >
         <div class="col-lg-6 col-md-9 px-0">
-          <button
+          <!-- <button
             @click="handleEventActionAdd()"
             class="btn button-theme"
             :style="buttonThemeCss" 
             type="button"
           >
             {{ eventActionList.includes(selected) ? "Update" : "Add" }}
-          </button>
+          </button> -->
+          <hf-buttons
+          name="Add"
+          @executeAction="handleEventActionAdd()"
+          ></hf-buttons>
         </div>
       </div>
       <div class="row g-3 justify-content-md-end w-100 mt-4" v-else>
         <div class="col-lg-6 col-md-9 px-0">
-          <button
+          <!-- <button
             @click="handleEventActionUpdate()"
             class="btn button-theme slight-left-margin"
             :style="buttonThemeCss" 
             type="button"
           >
             Update
-          </button>
-          <button
+          </button> -->
+          <hf-buttons
+          name="Update"
+          @executeAction="handleEventActionUpdate()"
+          customClass="btn button-theme slight-left-margin"
+          ></hf-buttons>
+          <!-- <button
             @click="handleEventActionDelete()"
             class="btn btn-danger slight-left-margin"
             type="button"
           >
             Delete
-          </button>
+          </button> -->
+          <hf-buttons
+          name="Delete"
+          @executeAction="handleEventActionDelete()"
+          customClass="btn btn-danger slight-left-margin"
+          ></hf-buttons>
         </div>
       </div>
     </div>
@@ -749,7 +763,7 @@ import "codemirror/addon/lint/json-lint";
 import "codemirror/keymap/sublime";
 import jsonlint from "jsonlint";
 import { JSHINT } from "jshint";
-
+import HfButtons from "../../../elements/HfButtons.vue"
 import Web3 from "web3";
 Vue.use(Editor);
 
@@ -757,7 +771,7 @@ window.JSHINT = JSHINT;
 window.jsonlint = jsonlint;
 export default {
   name: "EventActionCongif",
-  components: { codemirror },
+  components: { codemirror, HfButtons },
   filters: {
     pretty: function (value) {
       return JSON.stringify(JSON.parse(value), null, 2);
