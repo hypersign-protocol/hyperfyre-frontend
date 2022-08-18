@@ -121,7 +121,7 @@ const ORGDATA= {
     ORG_UPDATED_SUCCESSFULLY:"Org details updated Successfully"
 }
 const PARTICIPANTS = {
-
+    SELECT_EVENT:"Plase select an event",
     EXPORT_ALL: {
 
     },

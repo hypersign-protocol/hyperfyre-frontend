@@ -197,13 +197,20 @@ i {
       </div>
       <div class="col-md-6">
         <div class="text-right">
-          <button
+          <!-- <button
             @click="openCreateSidebar"
             class="btn btn-primary button-theme"
             :style="buttonThemeCss"
           >
             Create <i class="fas fa-plus text-white"></i>
-          </button>
+          </button> -->
+          <hf-buttons
+            name="Create"
+            @executeAction="openCreateSidebar()"
+            iconClass="fas fa-plus text-black"
+            title="Create Event"
+          >
+          </hf-buttons>
         </div>
 
         <div>
@@ -426,13 +433,13 @@ import {
 import CreateProjectSlide from "../../components/admin/createProjectSlider/CreateProjectSlide.vue";
 import dayjs from "dayjs";
 import eventBus from "../../eventBus";
-
+import HfButtons from "../../components/elements/HfButtons.vue"
 import Messages from "../../utils/messages/admin/en";
 import HfPageMessage from '../../components/elements/HfPageMessage.vue';
 
 export default {
   name: "Investor",
-  components: { Loading, Paginate, CreateProjectSlide, HfPageMessage },
+  components: { Loading, Paginate, CreateProjectSlide, HfPageMessage, HfButtons},
 
   data() {
     return {

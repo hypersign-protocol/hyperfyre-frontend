@@ -131,9 +131,25 @@
             </div>
             </form>
             <div class="allButtons" style="float:right">
-							<button v-if="!isEdit" class="btn button-theme " :style="buttonThemeCss" type="submit" @click.prevent="generateApp">Create</button>
-              <button v-if="isEdit" class="btn  button-theme" :style="buttonThemeCss" type="submit" @click.prevent="update">Update</button>
-              <button v-if="isEdit" class="btn btn-light slight-left-margin" type="button" @click.prevent="cancel">Cancel</button>
+							<!-- <button v-if="!isEdit" class="btn button-theme " :style="buttonThemeCss" type="submit" @click.prevent="generateApp">Create</button> -->
+              <hf-buttons
+              v-if="!isEdit"
+              name="Create"
+              @executeAction="generateApp()"
+              ></hf-buttons>
+              <!-- <button v-if="isEdit" class="btn  button-theme" :style="buttonThemeCss" type="submit" @click.prevent="update">Update</button> -->
+              <hf-buttons
+              v-if="isEdit"
+              name="Update"
+              @executeAction="update()"
+              ></hf-buttons>
+              <!-- <button v-if="isEdit" class="btn btn-danger slight-left-margin" type="button" @click.prevent="cancel">Cancel</button> -->
+              <hf-buttons
+              v-if="isEdit"
+              name="Cancel"
+              customClass="btn btn-danger slight-left-margin"
+              @executeAction="cancel()"
+              ></hf-buttons>
             </div>
 					</div>
 				</div>
@@ -204,9 +220,10 @@ import {
   truncate
 } from "../../mixins/fieldValidationMixin"
 import Messages from "../../utils/messages/admin/en"
+import HfButtons from "../../components/elements/HfButtons.vue"
 export default {
   name: "CreateApp",
-  components: {Loading, ToolTips},
+  components: {Loading, ToolTips, HfButtons},
   computed:{
        buttonThemeCss() {
       return {

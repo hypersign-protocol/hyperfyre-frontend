@@ -95,10 +95,15 @@
             v-model="coupon">
         </div>
           <div class="col-lg-4 col-md-3 " style="display:block">
-            <button type="button" class="btn btn-outline-primary button-theme"
+            <!-- <button type="button" class="btn btn-outline-primary button-theme"
               :style="buttonThemeCss"
               @click="applyCoupon"
-              >Apply</button>
+              >Apply</button> -->
+              <hf-buttons
+              name="Apply"
+              customClass="btn btn-outline-primary button-theme"
+              @executeAction="applyCoupon()"
+              ></hf-buttons>
           </div>
           </div>
         <hr />
@@ -178,14 +183,19 @@
         <div>
           <div class="row" style="margin-top: 2%">
             <div class="col-md-12">
-              <b-button
+              <!-- <b-button
                 block
                 variant="primary"
                 class="btn-plan popular"
                 :style="buttonThemeCss"
                 @click="payment"
                 >Pay ${{ grandTotal }}</b-button
-              >
+              > -->
+              <hf-buttons
+              :name="`Pay $`+ grandTotal"               
+              customClass="btn btn-outline-dark btn-plan popular"
+              @executeAction="payment()"
+              ></hf-buttons>
             </div>
           </div>
         </div>
@@ -204,6 +214,7 @@ import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/admin/en";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
+import HfButtons from "../../../components/elements/HfButtons.vue"
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -211,7 +222,8 @@ export default {
     EventActionConfig,
     ReferralConfig,
     InputDate,
-    Loading
+    Loading,
+    HfButtons
   },
 
   props: {
