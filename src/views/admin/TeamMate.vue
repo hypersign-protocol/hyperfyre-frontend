@@ -69,13 +69,10 @@
                 >
                   <i class="fas fa-trash"></i>
                 </button> -->
-                <hf-buttons
-                name=""
-                @executeAction="remove(row._id)"
-                customClass="btn btn-danger btn-sm"
-                iconClass="fas fa-trash"
-                title="Click to remove the teammate"
-                ></hf-buttons>
+              <span @click="remove(row._id)"
+              title="Click to remove the teammate"
+              style="cursor:pointer"
+              ><i class="fas fa-trash"></i></span>
               </td>
             </tr>
           </tbody>
@@ -101,12 +98,12 @@
               <td>{{ row.email }}</td>
 
               <td v-if="isAdmin(row.email)">
-                <button
-                  :disabled="true"
-                  class="btn btn-success btn-sm"
-                >
+                <h5>
+                <b-badge
+                class="badge bg-success">
                   ACTIVE
-                </button>
+                </b-badge>
+                </h5>
               </td>
 
               <td v-else>
@@ -115,13 +112,14 @@
                   class="btn btn-danger btn-sm"
                   title="Click to switch to this account"
                 >Switch
-                </button> -->
-                <hf-buttons
-                name="SWITCH"
-                customClass="btn btn-danger btn-sm"
+                </button> -->               
+                <span
                 title="Click to switch to this account"
-                @executeAction="switchAccount(row)"
-                ></hf-buttons>
+                style="cursor:pointer"
+                @click="switchAccount(row)"
+                ><i class="fas fa-sync" aria-hidden="true"></i>
+                </span>
+              
               </td>
             </tr>
           </tbody>
