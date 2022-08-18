@@ -1,5 +1,6 @@
 <template>
-  <button :class="customClass ? `${customClass}` : 'btn btn-primary button-theme'" :style="buttonThemeCss"
+  <button :class="customClass ? `${customClass}` : 'btn button-theme'" :style="buttonThemeCss"
+  :title="title"
   @click="emitExecuteAction()"
   >
     {{name}} 
@@ -11,12 +12,19 @@
 import config from "../../config"
 export default {
     props:{
-      name:String,
+      name:{
+        type: String,
+        require:true
+      },
       iconClass: {
         type: String,
         require: false
       }, 
       customClass:{
+        type:String,
+        require:false
+      },
+      title:{
         type:String,
         require:false
       }

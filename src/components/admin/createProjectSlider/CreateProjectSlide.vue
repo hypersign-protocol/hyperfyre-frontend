@@ -312,12 +312,22 @@
           </b-card> -->
         </div>
 
-        <button class="btn btn-primary mt-3 button-theme  mr-3" :style="buttonThemeCss" type="button" @click="openPreview">
+        <!-- <button class="btn btn-primary mt-3 button-theme  mr-3" :style="buttonThemeCss" type="button" @click="openPreview">
           Preview
-        </button>
-        <button class="btn btn-primary mt-3 button-theme" :style="buttonThemeCss" type="button" @click="saveProject">
+        </button> -->
+        <hf-buttons
+        name="Preview"
+        @executeAction="openPreview()"
+        customClass="btn btn-primary mt-3 button-theme  mr-3"
+        ></hf-buttons>
+        <!-- <button class="btn btn-primary mt-3 button-theme" :style="buttonThemeCss" type="button" @click="saveProject">
           Save
-        </button>
+        </button> -->
+        <hf-buttons
+        name="Save"
+        @executeAction="saveProject"
+        customClass="btn btn-primary mt-3 button-theme"
+        ></hf-buttons>
       </div>
     </b-sidebar>
   </div>
@@ -329,6 +339,7 @@ import EventActionConfig from "./components/EventActionConfig.vue";
 import PreviewConfig from "./components/PreviewConfig.vue";
 import GeneralConfig from "./components/GeneralConfig.vue";
 import ReferralConfig from "./components/ReferralConfig.vue";
+import HfButtons from "../../elements/HfButtons.vue"
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -336,6 +347,7 @@ export default {
     EventActionConfig,
     ReferralConfig,
     PreviewConfig,
+    HfButtons
   },
 
   props: {
