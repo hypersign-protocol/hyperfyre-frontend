@@ -14,10 +14,6 @@ export default {
       type: String,
       require: false,
     },
-    // customStyle:{
-    //     type:String,
-    //     require:false
-    // }
   },
   methods: {
     emitSearch(e) {
