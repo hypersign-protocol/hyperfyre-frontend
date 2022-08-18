@@ -174,6 +174,7 @@ label {
             ></b-form-input> -->
             <hf-search-box
             @executeSearch="handleTableSearch"
+            v-model="tableSearch"
             placeholder="Search participants"            
             ></hf-search-box>
           
