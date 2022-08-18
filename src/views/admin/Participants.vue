@@ -165,14 +165,18 @@ label {
           ></b-form-select>
         </div>
         <div class="d-flex ml-auto align-items-center">
-          <div>
-            <b-form-input
+          
+            <!-- <b-form-input
               @input.native="handleTableSearch"
               v-model="tableSearch"
               placeholder="Search participants"
               type="search"
-            ></b-form-input>
-          </div>
+            ></b-form-input> -->
+            <hf-search-box
+            @executeSearch="handleTableSearch"
+            placeholder="Search participants"            
+            ></hf-search-box>
+          
           <div class="mx-3"
           >
           <!-- <button
@@ -267,9 +271,10 @@ import eventBus from "../../eventBus";
 import HfNotes from '../../components/elements/HfNotes.vue';
 const {LOTTERY_NOTES} = require("../../utils/messages/admin/Notes");
 import HfButtons from "../../components/elements/HfButtons.vue"
+import HfSearchBox from "../../components/elements/HfSearchBox.vue"
 export default {
   name: "Investor",
-  components: { Loading, Paginate, HfNotes,HfButtons },
+  components: { Loading, Paginate, HfNotes,HfButtons, HfSearchBox },
 computed:{
  buttonThemeCss() {
       return {

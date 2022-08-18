@@ -165,7 +165,7 @@ i {
     <div class="row">
       <div class="col-md-3">
         <div class="form-group" style="width: 925px">
-          <input
+          <!-- <input
             v-if="projects.length"
             @keyup="handleSearch"
             type="text"
@@ -173,7 +173,12 @@ i {
             id="exampleInputEmail1"
             aria-describedby="emailHelp"
             placeholder="Search events by name"
-          />
+          /> -->
+          <hf-search-box
+          v-if="projects.length"
+          placeholder="Search events by name"
+          @executeSearch="handleSearch"
+          ></hf-search-box>
         </div>
       </div>
 
@@ -435,10 +440,10 @@ import eventBus from "../../eventBus";
 import HfButtons from "../../components/elements/HfButtons.vue"
 import Messages from "../../utils/messages/admin/en";
 import HfPageMessage from '../../components/elements/HfPageMessage.vue';
-
+import HfSearchBox from "../../components/elements/HfSearchBox.vue"
 export default {
   name: "Investor",
-  components: { Loading, Paginate, CreateProjectSlide, HfPageMessage, HfButtons},
+  components: { Loading, Paginate, CreateProjectSlide, HfPageMessage, HfButtons, HfSearchBox},
 
   data() {
     return {
@@ -730,6 +735,7 @@ export default {
       }
     },
     handleSearch(e) {
+      
       if (e.target.value.length) {
         this.searchQuery = e.target.value.trim();
         return (this.projectsToShow = this.projects.filter((x) =>
