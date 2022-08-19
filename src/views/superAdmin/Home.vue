@@ -726,7 +726,11 @@ export default {
 
         this.clearAll();
       } catch (e) {
+        if(e.message.includes('Cast to ObjectId failed for value')){
+          this.notifyErr('Invalid eventId')
+        }else{
         this.notifyErr(e.message);
+        }
       } finally {
         this.Loading = false;
         this.getAllCoupon();
