@@ -71,21 +71,27 @@
                 />
               </div>
               <div class="col-lg-4 col-md-3 slight-align">
-                <button
+                <!-- <button
                   type="button"
                   class="btn btn-outline-primary button-theme"
                   :style="buttonThemeCss"
                   @click="execute(resource)"
                 >
                   Execute
-                </button>
+                </button> -->
+                <hf-buttons
+                name="Execute"
+                @executeAction="execute(resource)"
+                ></hf-buttons>
                 <div
                   v-if="resource.id === 4"
                   class="btn"
                   style="float:right"
-                  @click="getAllSchedules(resource)"
-                ><a href="#">Refresh</a>
+                  @click="getAllSchedules()"
+                  title="Click to refresh"
+                ><i class="fas fa-sync" aria-hidden="true"></i>
                 </div>
+              
               </div>
             </div>
 
@@ -149,23 +155,39 @@
               
               <div class="col-lg-4 col-md-9 px-0"></div>
               <div class="col-lg-6 col-md-3 px-0 py-1">
-                <button
+                <!-- <button
                   type="button"
                   class="btn btn-outline-primary button-theme"
                   :style="buttonThemeCss"
                   @click="execute(resource)"
                 >
                   Execute
-                </button>
+                </button> -->
+                <hf-buttons
+                name="Execute"
+                @executeAction="execute(resource)"
+                ></hf-buttons>
         
-                <button
+                <!-- <button
                   type="button"
                   class="btn btn-outline-primary button-theme"
                   :style="buttonThemeCss"
                   @click="clearAll()"
                 >
                   Cancel
-                </button>
+                </button> -->
+                <hf-buttons
+                name="Cancel"
+                @executeAction="clearAll()"
+                ></hf-buttons>
+                <div
+                  v-if="resource.id === 5"
+                  class="btn"
+                  style="float:right"
+                  @click="getAllCoupon()"
+                  title="Click to refresh"
+                ><i class="fas fa-sync" aria-hidden="true"></i>
+                </div>
               </div>
             </div>
 
@@ -335,10 +357,12 @@ import Datepicker from "vuejs-datetimepicker";
 import { isValidURL,isFloat } from "../../mixins/fieldValidationMixin";
 import masterKeyPopupMixin from "../../mixins/masterKeyPopupMixin.js";
 import dayjs from "dayjs";
+import HfButtons from "../../components/elements/HfButtons.vue"
 export default {
   components: {
     Loading,
     Datepicker,
+    HfButtons
   },
   computed: {
     buttonThemeCss() {
