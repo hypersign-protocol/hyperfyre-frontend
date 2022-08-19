@@ -1,5 +1,10 @@
 <template>
   <b-card no-body class="action-wrap">
+    <loading
+      :active.sync="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    ></loading>
     <b-card-header
       :class="visible ? null : 'collapsed'"
       :aria-expanded="visible ? 'true' : 'false'"
@@ -73,9 +78,12 @@ import eventBus from "../../../eventBus.js";
 import { isValidURL, isEmpty } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 import config from "../../../config";
 export default {
   name: "PushNotification",
+  components:{ Loading },
   props: {
     idValue: {
       required: true,
@@ -104,6 +112,8 @@ computed:{
   data() {
     return {
       visible: false,
+      isLoading: false,
+      fullPage: true,
     };
   },
   mounted() {
@@ -195,6 +205,7 @@ computed:{
     },
 
     async getBrowserSubscription() {
+      this.isLoading = true;
       if ("Notification" in window && navigator.serviceWorker) {
         const permission = await Notification.requestPermission();
         if (permission === "granted") {
@@ -208,6 +219,7 @@ computed:{
               );
             }
             } catch (error) {
+              this.isLoading = false;
              console.log("Not Brave");
             }
            
@@ -234,20 +246,25 @@ computed:{
                     this.data.subscription = await this.saveSubscription(e);
                    // console.log(e);
                     localStorage.setItem("subsId", this.data.subscription._id);
-                  });
+                  }).catch((e) => {
+                    this.isLoading = false;
+                  })
               });
 
             await this.notifySuccess("Registerd");
           } catch (error) {
-           // console.log(error);
+            this.isLoading = false;
             return this.notifyErr("Service Worker Registration Faild");
           }
         } else if (permission === "blocked" || permission === "denied") {
+          this.isLoading = false;
           return this.notifyErr("Notification Blocked");
         }
       } else {
+        this.isLoading = false;
         return this.notifyErr("Notification Not Supported");
       }
+      this.isLoading = false;
     },
   },
   mixins: [notificationMixins],
