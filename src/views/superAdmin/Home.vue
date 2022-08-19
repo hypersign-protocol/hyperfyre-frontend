@@ -91,7 +91,14 @@
                   title="Click to refresh"
                 ><i class="fas fa-sync" aria-hidden="true"></i>
                 </div>
-              
+                <div
+                  v-if="resource.id === 3"
+                  class="btn"
+                  style="float:right"
+                  @click="getAllPushNotificationScheduled()"
+                  title="Click to refresh"
+                ><i class="fas fa-sync" aria-hidden="true"></i>
+                </div>
               </div>
             </div>
 
@@ -190,7 +197,37 @@
                 </div>
               </div>
             </div>
-
+          <!-- Push Notification Table -->
+            <div
+              class="row g-3 w-100"
+              v-if="resource.id == 3 && pushNotificationSchedule.length > 0"
+              style="padding: 10px; max-height: 300px; overflow-y: auto"
+            >
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <!-- <th scope="col">Schedule Id</th> -->
+                    <th scope="col">Time (UTC)</th>
+                    <th scope="col">Event Id</th>
+                    <th scope="col">Total Notifications</th>
+                    <th scope="col">Passed Notifications</th>
+                    <th scope="col">Failed Notifications</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="notification in pushNotificationSchedule" v-bind:key="notification._id">
+                    <td>{{ new Date(notification.scheduledAt).toLocaleString() }}</td>
+                    <td>{{ notification.eventId }}</td>
+                    <td>{{ notification.totalWebPushToSend }}</td>
+                    <td>{{ notification.totalPassedWebPush }}</td>
+                    <td>{{ notification.totalFailedWebPush }}</td>
+                    <td>{{ notification.status }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          <!--  -->
             <div
               class="row g-3 w-100"
               v-if="resource.id == 4 && schedules.length > 0"
@@ -391,6 +428,7 @@ export default {
       authToken: localStorage.getItem("authToken"),
       schedules: [],
       couponTable: [],
+      pushNotificationSchedule:[],
       resources: [
         {
           id: 1,
@@ -467,6 +505,7 @@ export default {
     /// TODO: Temporary fix
     this.getAllSchedules();
     this.getAllCoupon();
+    this.getAllPushNotificationScheduled();
   },
   methods: {
     update(id, coupon) {
@@ -577,6 +616,34 @@ export default {
         this.isLoading = false;
       }
     },
+    async getAllPushNotificationScheduled(){
+      try {
+        this.isLoading = true;
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/notification/push/schedules`;
+        const Url = new URL(this.$config.studioServer.BASE_URL);
+        const headers = {
+          Orign: Url.origin,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+        const resp = await fetch(url, {
+          headers,
+        });
+        if (resp && resp.status === (403 || 401)) {
+          throw new Error("Something went wrong");
+        }
+        const json = await resp.json();
+        if (resp.status != 200) {
+          throw new Error(json);
+        }
+        this.pushNotificationSchedule = json;
+        console.log(this.pushNotificationSchedule)
+      } catch (e) {
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async execute(resource) {
       try {
         this.checkEveryThingisOk(resource)
@@ -632,7 +699,7 @@ export default {
         if (resp.status != 200) {
           throw new Error(json);
         }
-        if (json.message) {
+        if (json.message && json.schedule) {
           const { message, schedule } = json;
 
           if (message) {
@@ -650,6 +717,11 @@ export default {
           this.notifySuccess("Coupon"+" "+ json.name + " "+ "successfully created");
           this.couponTable.unshift(json);
           this.isEdit = false;
+        }
+        else if(json.message && json.newWebPushSchedule){
+          let {message, newWebPushSchedule} = json;
+          this.notifySuccess(message)
+          this.pushNotificationSchedule.unshift(newWebPushSchedule);
         }
 
         this.clearAll();
