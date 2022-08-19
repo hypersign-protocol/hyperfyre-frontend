@@ -207,7 +207,7 @@
                 <thead>
                   <tr>
                     <!-- <th scope="col">Schedule Id</th> -->
-                    <th scope="col">Time</th>
+                    <th scope="col">Time (UTC)</th>
                     <th scope="col">Event Id</th>
                     <th scope="col">Total Notifications</th>
                     <th scope="col">Passed Notifications</th>
@@ -237,7 +237,7 @@
                 <thead>
                   <tr>
                     <!-- <th scope="col">Schedule Id</th> -->
-                    <th scope="col">Time</th>
+                    <th scope="col">Time (UTC)</th>
                     <th scope="col">Schedular</th>
                     <th scope="col">Event Id</th>
                     <th scope="col">Total Mails</th>
