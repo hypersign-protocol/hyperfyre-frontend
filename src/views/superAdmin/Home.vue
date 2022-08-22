@@ -637,7 +637,6 @@ export default {
           throw new Error(json);
         }
         this.pushNotificationSchedule = json;
-        console.log(this.pushNotificationSchedule)
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
@@ -646,7 +645,9 @@ export default {
     },
     async execute(resource) {
       try {
-        this.checkEveryThingisOk(resource)
+        if(!this.isDelete){
+          this.checkEveryThingisOk(resource)
+        }
         
         const res = await this.masterPop();
         const masterKey = res;
@@ -711,7 +712,10 @@ export default {
           if (schedule) {
             this.schedules.unshift(schedule);
           }
-        }else if(json.updatedSubs){
+        }else if(json.message){
+          this.notifySuccess(json.message)
+        }
+        else if(json.updatedSubs){
           this.notifySuccess("Subscription id: "+json.updatedSubs._id + " " + "is activated " + json.updatedSubs.paymentData.activated)
         }else if (json.discount) {
           this.notifySuccess("Coupon"+" "+ json.name + " "+ "successfully created");
@@ -729,7 +733,6 @@ export default {
         this.notifyErr(e.message);
       } finally {
         this.Loading = false;
-        this.getAllCoupon();
       }
     },
     checkEveryThingisOk(resource) {

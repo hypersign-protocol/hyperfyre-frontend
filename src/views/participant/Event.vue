@@ -298,7 +298,7 @@ export default {
       if (this.authToken != "" && this.authToken && this.userAuthData.email) {
         
         this.userProfileData = this.userAuthData
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?email=${this.userAuthData.email}&projectId=${this.eventData._id}`;
+        const url = `${this.$config.studioServer.BASE_URL}api/v1/investor?projectId=${this.eventData._id}`;
         let headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
