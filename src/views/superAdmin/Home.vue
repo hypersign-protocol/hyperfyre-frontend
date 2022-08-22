@@ -712,7 +712,7 @@ export default {
           if (schedule) {
             this.schedules.unshift(schedule);
           }
-        }else if(json.message){
+        }else if(json.message && !json.newWebPushSchedule){
           this.notifySuccess(json.message)
         }
         else if(json.updatedSubs){
