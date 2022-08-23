@@ -93,6 +93,7 @@
             placeholder="Enter Coupon Code"
             @keydown="handleInput($event)"
             @paste="resetGrandTotal()"
+            @keypress="resetGrandTotal()"
             v-model="coupon">
         </div>
           <div class="col-lg-4 col-md-3 " style="display:block">
