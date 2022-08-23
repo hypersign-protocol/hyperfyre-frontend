@@ -92,6 +92,7 @@
             <input type="text" class="form-control w-100"
             placeholder="Enter Coupon Code"
             @keydown="handleInput($event)"
+            @paste="resetGrandTotal()"
             v-model="coupon">
         </div>
           <div class="col-lg-4 col-md-3 " style="display:block">
@@ -337,11 +338,14 @@ export default {
     this.fetchTokenPriceCMC();
   },
   methods: {
-    handleInput(e){
-      if (e.key === "Backspace" || e.key === "Delete") {
+    resetGrandTotal(){
         this.applied = false;
         this.couponDiscount=0;
         this.coupons = []
+    },
+    handleInput(e){
+      if (e.key === "Backspace" || e.key === "Delete" || e.ctrlKey) {
+       this.resetGrandTotal();
       }
       },
    async applyCoupon(){
