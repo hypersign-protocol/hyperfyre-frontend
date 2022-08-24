@@ -113,14 +113,15 @@ computed:{
       }
     };
   },
-  updated(){
-    if (this.data.value && typeof(this.data.value) === "object") {
-      Object.assign(this.value, { ...(this.data.value) });
-    }
-  },
+  // updated(){
+  //   if (this.data.value && typeof(this.data.value) === "object") {
+  //     Object.assign(this.value, { ...(this.data.value) });
+  //   }
+  // },
   mounted() {
-    if (this.data.value && typeof(this.data.value) === "object") {
-      Object.assign(this.value, { ...(this.data.value) });
+    if (this.data.value) {
+      Object.assign(this.value, { ...JSON.parse(this.data.value) });
+      console.log(this.value)
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
     this.checkWeb3Injection();
