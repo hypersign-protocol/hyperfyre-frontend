@@ -214,7 +214,8 @@ import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/admin/en";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import HfButtons from "../../../components/elements/HfButtons.vue"
+import HfButtons from "../../../components/elements/HfButtons.vue";
+import apiClient from "../../../mixins/apiClientMixin";
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -577,8 +578,16 @@ export default {
           if (!resp.ok) {
             return this.notifyErr(json);
           } else {
-            //window.open(json.payment.quick_Pay)
-            window.location.replace(json.payment.quick_Pay);
+            //console.log(json)
+            const {sign, timeStamp,paymentDetail, requestPath } = json.payment
+           const orderDetail = await this.createOrder(sign,timeStamp, paymentDetail,requestPath)
+           console.log(orderDetail)
+          //  window.open(json.payment.quick_Pay)
+          //   const orderId=  orderDetail.orderId
+          //  const paymentUrl= `${this.$config.moopay.payment_url}${orderId}`
+          //  console.log(paymentUrl)
+          //   window.location.replace(paymentUrl)
+           // window.location.replace(json.payment.quick_Pay);
           }
         } else {
           throw new Error("Error while subscritption");
@@ -591,6 +600,22 @@ export default {
         this.notifyErr(Messages.SUBSCRIPTIONS.SELECT_CURRENCY_AND_NETWORK);
       }
     },
+    async createOrder(signature, ts, paymentDetail,requestPath){
+       const url = `${this.$config.moopay.BASE_URL}${requestPath}`
+       const key= `${this.$config.moopay.key}`
+       let headers = {
+         "Content-Type": "application/json",
+         "ZOKSH-TS": ts,
+         "ZOKSH-KEY":key,
+         "ZOKSH-SIGN":signature,
+       }; 
+       const result = await fetch(url, {
+        method: "POST",       
+        body: JSON.stringify( paymentDetail),
+        headers: headers,
+       })
+    return result
+   }
   },
   mixins: [notificationMixins],
 };
