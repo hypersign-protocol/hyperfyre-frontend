@@ -400,7 +400,7 @@ i {
                   <i class="fa fa-clone"></i>
                 </span>
                 <span
-                  @click="deleteProject(project)"
+                  @click="deleteProject(project._id)"
                   title="Click to delete this event"
                   style="cursor: pointer"
                 >
@@ -496,7 +496,7 @@ export default {
         slug: "",
       },
       DeleteId:"",
-      projectToDelete:{},
+      projectToDelete:"",
       selected: [],
       tagToSearch: [
         // {text: 'Select Tag To filter events', value: null,},
@@ -1075,20 +1075,19 @@ export default {
             this.notifyErr("Please enter event id")
           }
             this.isLoading = true;
-            this.project = { ...this.projectToDelete };
 
             if (this.DeleteId) {
-              if (this.DeleteId === this.projectToDelete._id) {
+              if (this.DeleteId === this.projectToDelete) {
                 for(let i=0;i<this.projects.length;i++){              
-                  if (this.projects[i].projectName.includes(this.projectToDelete.projectName)) {
+                  if (this.projects[i]._id.includes(this.projectToDelete)) {
                     const pageNum = Math.floor( i==0?i:(i-1) / this.perPage);
                     this.currentPage = pageNum + 1;
                     break
                   }
                 }
                 this.currentPage = this.currentPage ;
-                if (!this.project._id) throw new Error("No project found");
-                const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.projectToDelete._id}`;
+                if (!this.projectToDelete) throw new Error("No project found");
+                const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.projectToDelete}`;
                 const headers = {
                   Authorization: `Bearer ${this.authToken}`,
                   AccessToken: `Bearer ${this.accessToken}`,
@@ -1102,14 +1101,10 @@ export default {
                 if (!json || !json.isArchived) {
                   throw new Error("Could not delete the event");
                 }
-                // console.log(this.projects.length)
                 const index = this.projects
                   .map((project) => project._id)
                   .indexOf(json._id);
-
-                // console.log(index)
                 this.projects.splice(index, 1);
-                // console.log(this.projects.length)
                 this.projectsToShow = this.projects.slice(0, this.perPage);
 
                 const tempProject = JSON.parse(
@@ -1154,111 +1149,10 @@ export default {
 
 
     },
-    async deleteProject(project) {
+    deleteProject(projectId) {
       this.resetAllValues();
-      this.projectToDelete = project;
+      this.projectToDelete = projectId;
       this.$root.$emit('modal-show');
-      // this.deleteEvent()
-    //   try {
-    //     await this.$swal
-    //       .fire({
-    //         html: `
-    //         <div><b style="color:red">CAUTION :</b> <b style="color:tomato" >This action will delete this event and associated participants.<br>Please enter the event id to proceed.</b></div>
-    // <input type="name" id="name" class="swal2-input" placeholder="6241c8057f5e...e2eaec05d">`,
-    //         confirmButtonText: '<span style="color:white">Confirm</span>',
-    //         confirmButtonColor: "red",
-    //         icon: "warning",
-    //         focusConfirm: false,
-    //         showCloseButton: true,
-    //         allowOutsideClick: false,
-    //         preConfirm: () => {
-    //           const eventID = this.$swal
-    //             .getPopup()
-    //             .querySelector("#name").value;
-    //           if (eventID === "") {
-    //             this.$swal.showValidationMessage(`Please enter event id`);
-    //           }
-    //           return { eventId: eventID };
-    //         },
-    //       })
-    //       .then(async (data) => {
-    //         this.isLoading = true;
-    //         this.project = { ...project };
-
-    //         if (data.value) {
-    //           if (data.value.eventId === project._id) {
-    //             for(let i=0;i<this.projects.length;i++){              
-    //               if (this.projects[i].projectName.includes(project.projectName)) {
-    //                 const pageNum = Math.floor( i==0?i:(i-1) / this.perPage);
-    //                 this.currentPage = pageNum + 1;
-    //                 break
-    //               }
-    //             }
-    //             this.currentPage = this.currentPage ;
-    //             if (!this.project._id) throw new Error("No project found");
-    //             const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${project._id}`;
-    //             const headers = {
-    //               Authorization: `Bearer ${this.authToken}`,
-    //               AccessToken: `Bearer ${this.accessToken}`,
-    //             };
-    //             const resp = await fetch(url, {
-    //               headers,
-    //               method: "DELETE",
-    //             });
-    //             const json = await resp.json();
-    //             //ToDO:- check if its a json
-    //             if (!json || !json.isArchived) {
-    //               throw new Error("Could not delete the event");
-    //             }
-    //             // console.log(this.projects.length)
-    //             const index = this.projects
-    //               .map((project) => project._id)
-    //               .indexOf(json._id);
-
-    //             // console.log(index)
-    //             this.projects.splice(index, 1);
-    //             // console.log(this.projects.length)
-    //             this.projectsToShow = this.projects.slice(0, this.perPage);
-
-    //             const tempProject = JSON.parse(
-    //               localStorage.getItem("userProjects")
-    //             );
-    //             localStorage.removeItem("userProjects");
-
-    //             if(tempProject){
-    //               tempProject.projects.splice(index, 1);
-    //               localStorage.setItem(
-    //                 "userProjects",
-    //                 JSON.stringify({
-    //                   projects: tempProject.projects,
-    //                   count: tempProject.projects.length,
-    //                 })
-    //               );
-    //             }
-                
-    //             if (json) {
-    //               if (!resp.ok) {
-    //                 return this.notifyErr(json);
-    //               } else {
-    //                 this.notifySuccess("Event is deleted successfully");
-    //               }
-    //             } else {
-    //               throw new Error("Error while deleting event");
-    //             }
-    //           } else {
-    //             throw new Error(
-    //               "Looks like you were about to delete a event by mistake"
-    //             );
-    //           }
-    //         }
-    //       });
-    //     this.paginateChange(this.currentPage);
-    //   } catch (e) {
-    //     this.notifyErr(e.message);
-    //   } finally {
-    //     this.isLoading = false;
-    //   }
-    
     },
 
     async saveProject() {
@@ -1552,7 +1446,7 @@ export default {
         tags: [],
       }),
       this.DeleteId="",
-      this.projectToDelete={};
+      this.projectToDelete="";
         (this.eventActionList = []),
         (this.tagsTemp = []),
         (this.selectedSocialMedia = null),
