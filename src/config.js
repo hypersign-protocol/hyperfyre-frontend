@@ -40,7 +40,6 @@ const config = {
     },
     moopay:{
         payment_url:process.env.VUE_APP_MOOPAY_PAYMENT_URL,
-        key: process.env.VUE_APP_MOOPAY_KEY
     }
 }
 
