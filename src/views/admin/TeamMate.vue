@@ -14,13 +14,42 @@
       </button> -->
       <hf-buttons
       name="Invite"
-      @executeAction="invite()"
+      @executeAction="openInvite()"
       iconClass="fas fa-plus text-black"
       ></hf-buttons>
     </div>
     <hf-page-message v-if="!this.teammates.length" :message="msg"
     >
     </hf-page-message>
+    <hf-pop-up
+    Header="Invite Form"
+    >
+     <div class="row g-3 align-items-center w-100  mt-4">
+            <div class="col-lg-3 col-md-3 text-left">
+                <label for="email" class="col-form-label">Email Id :</label>
+            </div>
+            <div class=" col-lg-9 col-md-9 px-0">
+                <input v-model="email" type="text" placeholder="john@gmail.com" id="email" class="form-control w-100" >
+            </div>   
+    </div>
+    <div class="row g-3 align-items-center w-100  mt-4">
+            <div class="col-lg-3 col-md-3 text-left">
+                <label for="email" class="col-form-label">Name :</label>
+            </div>
+            <div class=" col-lg-9 col-md-9 px-0">
+                <input v-model="name" type="text" placeholder="john" id="name" class="form-control w-100" >
+            </div>   
+    </div>
+
+
+    <div class="mt-4 text-center">
+    <hf-buttons
+    name="Send Invitation"
+    title="Send Invitation"
+    @executeAction="invite()"
+    ></hf-buttons>
+    </div>
+    </hf-pop-up>
     <h3 v-if="teammates.length">Your Team</h3>
     <div class="row" style="margin-top: 2%">
       <div class="col-md-12">
@@ -137,9 +166,10 @@ import { isValidURL,isValidText } from '../../mixins/fieldValidationMixin';
 import HfPageMessage from "../../components/elements/HfPageMessage.vue"
 import Messages from "../../utils/messages/admin/en"
 import HfButtons from "../../components/elements/HfButtons.vue"
+import HfPopUp from "../../components/elements/HfPopUp.vue"
 export default {
   name: "Teammate",
-  components: {HfPageMessage, HfButtons},
+  components: {HfPageMessage, HfButtons, HfPopUp},
   computed:{
  buttonThemeCss() {
       return {
@@ -234,36 +264,20 @@ export default {
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
     },
-    async invite() {
-      await this.$swal
-        .fire({
-          title: "Invite Form",
-          html: `<input type="email" id="email" class="swal2-input" placeholder="Email">
-    <input type="name" id="name" class="swal2-input" placeholder="Name">`,
-          confirmButtonText: '<span style="color:black">Send Invitation</span>',
-          confirmButtonColor: `${config.app.buttonBgColor}`,
-          focusConfirm: false,
-          showCloseButton: true,
-          allowOutsideClick: false,
-          preConfirm: () => {
-            this.email = this.$swal.getPopup().querySelector("#email").value;
-            this.name = this.$swal.getPopup().querySelector("#name").value;
-            if (!this.email || !this.isEmail(this.email)|| !this.name || isValidURL(this.name) || !isValidText(this.name)) {
-              this.$swal.showValidationMessage(
-                `Please enter valid email and name`
-              );
-            }
-            if(this.name.length>20){
-              this.$swal.showValidationMessage(
-                `Please enter name upto 20 character`
-              );
-            }
-            return { name: this.name, email: this.email };
-          },
-        })
-        .then(async (data) => {
-          if (data.value) {
-            const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/add`;
+     openInvite() {
+    this.clearAll();
+    this.$root.$emit('modal-show')
+    },
+    async invite(){
+      try{
+        if (!this.email || !this.isEmail(this.email)|| !this.name || isValidURL(this.name) || !isValidText(this.name)){
+          return this.notifyErr("Please enter valid email and name")
+        }
+        if(this.name.length>20){
+         return this.notifyErr("Please enter name upto 20 character")
+        }
+        this.isLoading = true
+         const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/add`;
             let headers = {
               "Content-Type": "application/json",
               Authorization: `Bearer ${this.authToken}`,
@@ -271,8 +285,8 @@ export default {
             const resp = await fetch(url, {
               method: "POST",
               body: JSON.stringify({
-                name: data.value.name,
-                email: data.value.email,
+                name: this.name,
+                email: this.email,
               }),
               headers,
             });
@@ -281,15 +295,22 @@ export default {
               if (!resp.ok) {
                 return this.notifyErr(json);
               } else {
+                this.$root.$emit('modal-close');
                 this.notifySuccess("Invitation Sent");
                 await this.getTeammates();
               }
             } else {
               throw new Error("Error while Invitation sending");
             }
-          }
-        });
+
+      }catch(e){
+        this.notifyErr(e)
+      }
+      finally{
+        this.isLoading = false 
+      }
     },
+
     async remove(id) {
       if (id) {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/delete`;
@@ -317,6 +338,10 @@ export default {
         }
       }
     },
+    clearAll(){
+      this.email = "",
+      this.name = ""
+    }
   },
   mixins: [notificationMixins],
 };
