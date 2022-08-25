@@ -1,6 +1,6 @@
 <template>
   <p
-    class="my-4 border rounded-lg p-2 modal-text"
+    class="border rounded-lg p-2 modal-text"
     v-html="notes"
     :style="backroundThemeCss"
   >

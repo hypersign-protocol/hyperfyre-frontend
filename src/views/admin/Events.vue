@@ -264,6 +264,29 @@ i {
     :message="msg"
     >
     </hf-page-message>
+    <hf-pop-up
+    Header="Delete Event"
+    >
+    <hf-notes
+    :notes="deleteNote"
+    ></hf-notes>
+    <div class="row g-3 align-items-center w-100  mt-4">
+        <div class="col-lg-3 col-md-3 text-left">
+          <label for="DeleteId" class="col-form-label">Event Id :</label>
+        </div>
+        <div class=" col-lg-9 col-md-9 px-0">
+          <input v-model="DeleteId" type="text" placeholder="6241c8057f5e...e2eaec05d" id="DeleteId" class="form-control w-100" >
+        </div>   
+    </div>
+      <div class="mt-5 text-center">
+      <hf-buttons
+      name="Delete"
+      @executeAction="deleteEvent()"
+      title="Delete an event"
+      customClass="btn btn-danger"
+      ></hf-buttons>
+      </div>
+    </hf-pop-up>
     <div class="row" style="margin-top: 2%">
       <div
         class="col-md-4"
@@ -377,7 +400,7 @@ i {
                   <i class="fa fa-clone"></i>
                 </span>
                 <span
-                  @click="deleteProject(project)"
+                  @click="deleteProject(project._id)"
                   title="Click to delete this event"
                   style="cursor: pointer"
                 >
@@ -442,9 +465,15 @@ import HfButtons from "../../components/elements/HfButtons.vue"
 import Messages from "../../utils/messages/admin/en";
 import HfPageMessage from '../../components/elements/HfPageMessage.vue';
 import HfSearchBox from "../../components/elements/HfSearchBox.vue"
+import HfPopUp from "../../components/elements/HfPopUp.vue"
+import HfNotes from '../../components/elements/HfNotes.vue';
+const {DELETE_EVENT_NOTE} = require("../../utils/messages/admin/Notes")
 export default {
   name: "Investor",
-  components: { Loading, Paginate, CreateProjectSlide, HfPageMessage, HfButtons, HfSearchBox},
+  components: { Loading, Paginate, CreateProjectSlide,
+  HfPageMessage, HfButtons, HfSearchBox, HfPopUp,
+    HfNotes
+  },
 
   data() {
     return {
@@ -466,6 +495,8 @@ export default {
         tags: [],
         slug: "",
       },
+      DeleteId:"",
+      projectToDelete:"",
       selected: [],
       tagToSearch: [
         // {text: 'Select Tag To filter events', value: null,},
@@ -559,7 +590,8 @@ export default {
       fullPage: true,
       user: {},
       errors: [],
-      msg:Messages.EVENTS.NO_EVENT_FOUND
+      msg:Messages.EVENTS.NO_EVENT_FOUND,
+      deleteNote:DELETE_EVENT_NOTE
     };
   },
 
@@ -901,6 +933,7 @@ export default {
       );
       this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
 
+      eventBus.$emit("sendProject", this.project);
       // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
       this.project.social = {
         twitter: {
@@ -1036,45 +1069,26 @@ export default {
 
       return this.paginateChange(this.currentPage);
     },
-    async deleteProject(project) {
-      try {
-        await this.$swal
-          .fire({
-            html: `
-            <div><b style="color:red">CAUTION :</b> <b style="color:tomato" >This action will delete this event and associated participants.<br>Please enter the event id to proceed.</b></div>
-    <input type="name" id="name" class="swal2-input" placeholder="6241c8057f5e...e2eaec05d">`,
-            confirmButtonText: '<span style="color:white">Confirm</span>',
-            confirmButtonColor: "red",
-            icon: "warning",
-            focusConfirm: false,
-            showCloseButton: true,
-            allowOutsideClick: false,
-            preConfirm: () => {
-              const eventID = this.$swal
-                .getPopup()
-                .querySelector("#name").value;
-              if (eventID === "") {
-                this.$swal.showValidationMessage(`Please enter event id`);
-              }
-              return { eventId: eventID };
-            },
-          })
-          .then(async (data) => {
-            this.isLoading = true;
-            this.project = { ...project };
+   async deleteEvent(){
 
-            if (data.value) {
-              if (data.value.eventId === project._id) {
+      try {
+          if(this.DeleteId===""){
+            this.notifyErr("Please enter event id")
+          }
+            this.isLoading = true;
+
+            if (this.DeleteId) {
+              if (this.DeleteId === this.projectToDelete) {
                 for(let i=0;i<this.projects.length;i++){              
-                  if (this.projects[i].projectName.includes(project.projectName)) {
+                  if (this.projects[i]._id.includes(this.projectToDelete)) {
                     const pageNum = Math.floor( i==0?i:(i-1) / this.perPage);
                     this.currentPage = pageNum + 1;
                     break
                   }
                 }
                 this.currentPage = this.currentPage ;
-                if (!this.project._id) throw new Error("No project found");
-                const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${project._id}`;
+                if (!this.projectToDelete) throw new Error("No project found");
+                const url = `${this.$config.studioServer.BASE_URL}api/v1/project/${this.projectToDelete}`;
                 const headers = {
                   Authorization: `Bearer ${this.authToken}`,
                   AccessToken: `Bearer ${this.accessToken}`,
@@ -1088,14 +1102,10 @@ export default {
                 if (!json || !json.isArchived) {
                   throw new Error("Could not delete the event");
                 }
-                // console.log(this.projects.length)
                 const index = this.projects
                   .map((project) => project._id)
                   .indexOf(json._id);
-
-                // console.log(index)
                 this.projects.splice(index, 1);
-                // console.log(this.projects.length)
                 this.projectsToShow = this.projects.slice(0, this.perPage);
 
                 const tempProject = JSON.parse(
@@ -1118,6 +1128,7 @@ export default {
                   if (!resp.ok) {
                     return this.notifyErr(json);
                   } else {
+                    this.$root.$emit('modal-close');
                     this.notifySuccess("Event is deleted successfully");
                   }
                 } else {
@@ -1129,13 +1140,20 @@ export default {
                 );
               }
             }
-          });
+            
         this.paginateChange(this.currentPage);
       } catch (e) {
         this.notifyErr(e.message);
       } finally {
         this.isLoading = false;
       }
+
+
+    },
+    deleteProject(projectId) {
+      this.resetAllValues();
+      this.projectToDelete = projectId;
+      this.$root.$emit('modal-show');
     },
 
     async saveProject() {
@@ -1428,6 +1446,8 @@ export default {
         referralPoint: 5,
         tags: [],
       }),
+      this.DeleteId="",
+      this.projectToDelete="";
         (this.eventActionList = []),
         (this.tagsTemp = []),
         (this.selectedSocialMedia = null),

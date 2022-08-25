@@ -111,7 +111,7 @@ label {
     ></loading>
 
 
-    <b-modal hide-footer ref="modal-1" title="Lottery">
+    <!-- <b-modal hide-footer ref="modal-1" title="Lottery">
       <hf-notes :notes="notes"></hf-notes>
       <div class="d-flex mx-auto justify-content-between px-4">
         <div class="bold">Total Records</div>
@@ -150,8 +150,45 @@ label {
           Execute
         </button>
       </div>
-    </b-modal>
+    </b-modal> -->
 
+  <hf-pop-up
+    Header="Lottery"
+    >
+    <hf-notes :notes="notes"></hf-notes>
+      <div class="d-flex mx-auto justify-content-between px-4">
+        <div class="bold">Total Records</div>
+        <div class="bold">{{ project.count }}</div>
+      </div>
+      <div class="d-flex mx-auto justify-content-between px-4 mt-4">
+        <div class="bold">Number of winners to choose</div>
+        <div class="bold">
+          <input
+            v-model="recordsForLottery"
+            type="number"
+            class="form-control"
+            placeholder="No. of records"
+          />
+        </div>
+      </div>
+      <div class="d-flex mx-auto justify-content-between px-4 mt-4">
+        <div class="bold">Check to choose randomly (optional)</div>
+        <div class="bold">
+          <input
+            v-model="isRandom"
+            type="checkbox"
+            class=""
+            title="Check to choose randomly"
+          />
+        </div>
+      </div>
+      <div class="mt-5 text-center">
+    <hf-buttons
+    name="Execute"
+    @executeAction="handleLottery"
+    />
+      </div>
+  </hf-pop-up>
     <div class="row" style="margin-top: 2%">
       <div class="d-flex justify-content-between col-md-12">
         <div class="projectSelector">
@@ -273,9 +310,10 @@ import HfNotes from '../../components/elements/HfNotes.vue';
 const {LOTTERY_NOTES} = require("../../utils/messages/admin/Notes");
 import HfButtons from "../../components/elements/HfButtons.vue"
 import HfSearchBox from "../../components/elements/HfSearchBox.vue"
+import HfPopUp from "../../components/elements/HfPopUp.vue"
 export default {
   name: "Investor",
-  components: { Loading, Paginate, HfNotes,HfButtons, HfSearchBox },
+  components: { Loading, Paginate, HfNotes,HfButtons, HfSearchBox, HfPopUp },
 computed:{
  buttonThemeCss() {
       return {
@@ -446,9 +484,7 @@ computed:{
 
   methods: {
     openModal(){
-      if(this.$refs['modal-1']){
-        this.$refs['modal-1'].toggle('.openBtn')
-      }
+      this.$root.$emit('modal-show')
     },
     parseActionValue(action) {
       switch (action.type) {
@@ -540,11 +576,13 @@ computed:{
         });
         FileDownload(res.data, `Lottery_${this.project._id}.csv`);
         this.isLoading = false;
+        this.clear();
       } catch (e) {
         this.isLoading = false;
         this.notifyErr(e);
       } finally {
         this.isLoading = false;
+        this.$root.$emit('modal-close');
       }
     },
     sortChange(params) {
@@ -738,6 +776,8 @@ computed:{
         hasJoinedTGgroup: false,
         projectId: "606742855244b589bc100083",
       };
+      this.recordsForLottery = 0;
+      this.isRandom = false;
     },
   },
 
