@@ -484,9 +484,6 @@ computed:{
 
   methods: {
     openModal(){
-      // if(this.$refs['modal-1']){
-      //   this.$refs['modal-1'].toggle('.openBtn')
-      // }
       this.$root.$emit('modal-show')
     },
     parseActionValue(action) {
