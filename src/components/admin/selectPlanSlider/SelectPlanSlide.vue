@@ -215,7 +215,6 @@ import Messages from "../../../utils/messages/admin/en";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import HfButtons from "../../../components/elements/HfButtons.vue";
-import apiClient from "../../../mixins/apiClientMixin";
 export default {
   name: "CreateProjectSlide",
   components: {
