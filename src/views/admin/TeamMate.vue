@@ -265,65 +265,8 @@ export default {
       this.$router.push(`${id}`);
     },
      openInvite() {
-    //   await this.$swal
-    //     .fire({
-    //       title: "Invite Form",
-    //       html: `<input type="email" id="email" class="swal2-input" placeholder="Email">
-    // <input type="name" id="name" class="swal2-input" placeholder="Name">`,
-    //       confirmButtonText: '<span style="color:black">Send Invitation</span>',
-    //       confirmButtonColor: `${config.app.buttonBgColor}`,
-    //       focusConfirm: false,
-    //       showCloseButton: true,
-    //       allowOutsideClick: false,
-    //       preConfirm: () => {
-    //         this.email = this.$swal.getPopup().querySelector("#email").value;
-    //         this.name = this.$swal.getPopup().querySelector("#name").value;
-    //         if (!this.email || !this.isEmail(this.email)|| !this.name || isValidURL(this.name) || !isValidText(this.name)) {
-    //           this.$swal.showValidationMessage(
-    //             `Please enter valid email and name`
-    //           );
-    //         }
-    //         if(this.name.length>20){
-    //           this.$swal.showValidationMessage(
-    //             `Please enter name upto 20 character`
-    //           );
-    //         }
-    //         return { name: this.name, email: this.email };
-    //       },
-    //     })
-    //     .then(async (data) => {
-    //       if (data.value) {
-    //         const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/add`;
-    //         let headers = {
-    //           "Content-Type": "application/json",
-    //           Authorization: `Bearer ${this.authToken}`,
-    //         };
-    //         const resp = await fetch(url, {
-    //           method: "POST",
-    //           body: JSON.stringify({
-    //             name: data.value.name,
-    //             email: data.value.email,
-    //           }),
-    //           headers,
-    //         });
-    //         const json = await resp.json();
-    //         if (json) {
-    //           if (!resp.ok) {
-    //             return this.notifyErr(json);
-    //           } else {
-    //             this.notifySuccess("Invitation Sent");
-    //             await this.getTeammates();
-    //           }
-    //         } else {
-    //           throw new Error("Error while Invitation sending");
-    //         }
-    //       }
-    //     });
     this.clearAll();
     this.$root.$emit('modal-show')
-    },
-    validate(){
-
     },
     async invite(){
       try{
