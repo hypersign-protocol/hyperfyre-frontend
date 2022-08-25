@@ -578,44 +578,19 @@ export default {
           if (!resp.ok) {
             return this.notifyErr(json);
           } else {
-            //console.log(json)
-            const {sign, timeStamp,paymentDetail, requestPath } = json.payment
-           const orderDetail = await this.createOrder(sign,timeStamp, paymentDetail,requestPath)
-           console.log(orderDetail)
-          //  window.open(json.payment.quick_Pay)
-          //   const orderId=  orderDetail.orderId
-          //  const paymentUrl= `${this.$config.moopay.payment_url}${orderId}`
-          //  console.log(paymentUrl)
-          //   window.location.replace(paymentUrl)
-           // window.location.replace(json.payment.quick_Pay);
+            const path=json.payment.orderId
+            const paymentUrl=`${this.$config.moopay.payment_url}${path}`
+            window.location.replace(paymentUrl)
           }
         } else {
           throw new Error("Error while subscritption");
         }
 
-        // console.log(this.selectedCurrency);
-        // console.log(this.selectedNetwork);
         //this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
       } else {
         this.notifyErr(Messages.SUBSCRIPTIONS.SELECT_CURRENCY_AND_NETWORK);
       }
     },
-    async createOrder(signature, ts, paymentDetail,requestPath){
-       const url = `${this.$config.moopay.BASE_URL}${requestPath}`
-       const key= `${this.$config.moopay.key}`
-       let headers = {
-         "Content-Type": "application/json",
-         "ZOKSH-TS": ts,
-         "ZOKSH-KEY":key,
-         "ZOKSH-SIGN":signature,
-       }; 
-       const result = await fetch(url, {
-        method: "POST",       
-        body: JSON.stringify( paymentDetail),
-        headers: headers,
-       })
-    return result
-   }
   },
   mixins: [notificationMixins],
 };
