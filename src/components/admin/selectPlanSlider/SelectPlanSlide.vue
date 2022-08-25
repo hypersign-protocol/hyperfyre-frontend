@@ -214,7 +214,7 @@ import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/admin/en";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import HfButtons from "../../../components/elements/HfButtons.vue"
+import HfButtons from "../../../components/elements/HfButtons.vue";
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -577,15 +577,14 @@ export default {
           if (!resp.ok) {
             return this.notifyErr(json);
           } else {
-            //window.open(json.payment.quick_Pay)
-            window.location.replace(json.payment.quick_Pay);
+            const path=json.payment.orderId
+            const paymentUrl=`${this.$config.moopay.payment_url}${path}`
+            window.location.replace(paymentUrl)
           }
         } else {
           throw new Error("Error while subscritption");
         }
 
-        // console.log(this.selectedCurrency);
-        // console.log(this.selectedNetwork);
         //this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
       } else {
         this.notifyErr(Messages.SUBSCRIPTIONS.SELECT_CURRENCY_AND_NETWORK);
