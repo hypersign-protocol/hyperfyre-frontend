@@ -765,6 +765,7 @@ import jsonlint from "jsonlint";
 import { JSHINT } from "jshint";
 import HfButtons from "../../../elements/HfButtons.vue"
 import Web3 from "web3";
+import EventBus from '../../../../eventBus';
 Vue.use(Editor);
 
 window.JSHINT = JSHINT;
@@ -946,13 +947,16 @@ export default {
         id: "",
         slug: "",
       },
-
+      project:{},
       hfTgBotId: this.$config.verifierBot.TELEGRAM,
     };
   },
   async mounted() {
     this.$root.$on("callClearFromProject", () => {
       this.clearSelected();
+    });
+     EventBus.$on("sendProject", (project) => {
+      this.project = {...project}
     });
   },
   methods: {
@@ -1037,6 +1041,10 @@ export default {
       //// You should return or break the moment first error occured
       //// But here you are checking all validation every time - waste of time!
       ////////////
+        if(this.project.projectStatus ==false){
+          isvalid = false;
+          return this.notifyErr(Messages.EVENTS.EVENT_CLOSED)
+        }
       switch (this.eventActionType) {
         case "SOCIAL":
           if (this.selected.type === null) {
