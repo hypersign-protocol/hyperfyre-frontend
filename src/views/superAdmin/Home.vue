@@ -203,29 +203,10 @@
               v-if="resource.id == 3 && pushNotificationSchedule.length > 0"
               style="padding: 10px; max-height: 300px; overflow-y: auto"
             >
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <!-- <th scope="col">Schedule Id</th> -->
-                    <th scope="col">Time (UTC)</th>
-                    <th scope="col">Event Id</th>
-                    <th scope="col">Total Notifications</th>
-                    <th scope="col">Passed Notifications</th>
-                    <th scope="col">Failed Notifications</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="notification in pushNotificationSchedule" v-bind:key="notification._id">
-                    <td>{{ new Date(notification.scheduledAt).toLocaleString() }}</td>
-                    <td>{{ notification.eventId }}</td>
-                    <td>{{ notification.totalWebPushToSend }}</td>
-                    <td>{{ notification.totalPassedWebPush }}</td>
-                    <td>{{ notification.totalFailedWebPush }}</td>
-                    <td>{{ notification.status }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <hf-table
+              :items="pushNotificationSchedule"
+              :fields="pushNotificationHeader"
+              ></hf-table>
             </div>
           <!--  -->
             <div
@@ -233,34 +214,10 @@
               v-if="resource.id == 4 && schedules.length > 0"
               style="padding: 10px; max-height: 300px; overflow-y: auto"
             >
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <!-- <th scope="col">Schedule Id</th> -->
-                    <th scope="col">Time (UTC)</th>
-                    <th scope="col">Schedular</th>
-                    <th scope="col">Event Id</th>
-                    <th scope="col">Total Mails</th>
-                    <th scope="col">Passed Mails</th>
-                    <th scope="col">Failed Mails</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="schedule in schedules" v-bind:key="schedule._id">
-                    <!-- <td>{{ schedule._id }}</td> -->
-                    <td>
-                      {{ new Date(schedule.scheduledAt).toLocaleString() }}
-                    </td>
-                    <td>{{ schedule.userId }}</td>
-                    <td>{{ schedule.eventId }}</td>
-                    <td>{{ schedule.totalEmailsToSend }}</td>
-                    <td>{{ schedule.totalPassedEmails }}</td>
-                    <td>{{ schedule.totalFailedEmails }}</td>
-                    <td>{{ schedule.status }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <hf-table
+              :items="schedules"
+              :fields="emailNotificationHeader"
+              ></hf-table>
             </div>
 
             <!-- Coupon Table -->
@@ -269,50 +226,12 @@
               v-if="resource.id == 5 && couponTable.length > 0"
               style="padding: 10px; max-height: 300px; overflow-y: auto"
             >
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">Coupon Code</th>
-                    <th scope="col">Discount (%)</th>
-                    <th scope="col">Expires At</th>
-                    <th scope="col">Limit</th>
-                    <th scope="col">Usage</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="coupon in couponTable" v-bind:key="coupon._id">
-                    <td>{{ coupon.name }} 
-                        <span @click="copy(coupon.name, 'Coupon Code')" class="copy"><i class="far fa-copy"></i></span>
-                    </td>
-                    <td>{{ coupon.discount }}</td>
-                    <td>{{ new Date(coupon.expiredAt).toLocaleString() }}</td>
-                    <td>{{ coupon.maxClaimCount }}</td>
-                    <td>{{ coupon.usageCount }}</td>
-                    <td>
-                      <span>
-                        <i
-                        class="fas fa-pencil-alt"
-                        style="padding:2px; cursor: pointer;"
-                        title="Click to edit the coupon"
-                        @click="update(resource.id,coupon)"
-                      > </i> 
-                      
-                      </span>
-                      
-                      <span>
-                        <i
-                        class="fas fa-trash"
-                        style="padding:2px; cursor: pointer;"
-                        title="Click to delete the coupon"
-                        @click="remove(resource.id,coupon)"
-                      >
-                      </i>
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <hf-table
+              :items="couponTable"
+              :fields="couponHeader"
+              @updateRecord="row => update(resource.id,row)"
+              @deleteRecord="res => remove(resource.id,res)"
+              ></hf-table>
             </div>
           </b-card-body>
         </b-collapse>
@@ -371,12 +290,6 @@
 </template>
 
 <style scoped>
-.copy {
-    padding: 3px;
-    font-size: medium;
-    cursor: pointer;
-    color: grey;
-}
 @media only screen and (max-width: 599px) {
   .slight-align {
     padding-left: 0px;
@@ -415,12 +328,14 @@ import { isValidURL,isFloat } from "../../mixins/fieldValidationMixin";
 import dayjs from "dayjs";
 import HfButtons from "../../components/elements/HfButtons.vue"
 import HfPopUp from "../../components/elements/HfPopUp.vue"
+import HfTable from "../../components/elements/HfTable.vue"
 export default {
   components: {
     Loading,
     Datepicker,
     HfButtons,
-    HfPopUp
+    HfPopUp,
+    HfTable
   },
   computed: {
     buttonThemeCss() {
@@ -449,6 +364,31 @@ export default {
       authToken: localStorage.getItem("authToken"),
       schedules: [],
       couponTable: [],
+      couponHeader:[
+        {key:"name",label:"Coupon Code",type:"text",isCopy:"true"},
+        {key:"discount",label:"Discount (%)",type:"number"},
+        {key:"expiredAt",label:"Expires At",type:"date"},
+        {key:"maxClaimCount",label:"Limit",type:"number"},
+        {key:"usageCount",label:"Usage",type:"number"},
+        {key:"action", label:"Action",type:"action" },
+      ],
+      emailNotificationHeader:[
+        {key:"scheduledAt",label:"Time (UTC)", type:"date"},
+        {key:"userId",label:"Schedular", type:"text"},
+        {key:"eventId",label:"Event Id", type:"text"},
+        {key:"totalEmailsToSend",label:"Total Mails", type:"email"},
+        {key:"totalPassedEmails",label:"Passed Mails", type:"number"},
+        {key:"totalFailedEmails",label:"Failed Mails", type:"number"},
+        {key:"status",label:"Status", type:"text"},
+      ],
+      pushNotificationHeader:[
+        {key:"scheduledAt",label:"Time (UTC)", type:"date"},
+        {key:"eventId",label:"Event Id", type:"text"},
+        {key:"totalWebPushToSend",label:"Total Notifications", type:"email"},
+        {key:"totalPassedWebPush",label:"Passed Notifications", type:"number"},
+        {key:"totalFailedWebPush",label:"Failed Notifications", type:"number"},
+        {key:"status",label:"Status", type:"text"},
+      ],
       pushNotificationSchedule:[],
       tempResources:{},
       resources: [
@@ -539,23 +479,6 @@ export default {
             return x
         }
       })
-    },
-    copy(textToCopy, contentType) {
-        if (textToCopy) {
-            navigator.clipboard
-                .writeText(textToCopy)
-                .then(() => {
-                    this.notifySuccess(
-                        `${contentType} copied!`
-                    );
-                })
-                .catch((err) => {
-                    this.notifyErr(
-                        'Error while copying',
-                        err
-                    );
-                });
-        }
     },
     remove(id, res){
         this.isDelete = true;
