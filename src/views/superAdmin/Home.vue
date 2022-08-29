@@ -365,12 +365,12 @@ export default {
       schedules: [],
       couponTable: [],
       couponHeader:[
-        {key:"name",label:"Coupon Code",type:"text",isCopy:"true"},
+        {key:"name",label:"Coupon Code",type:"text",isCopy:true},
         {key:"discount",label:"Discount (%)",type:"number"},
         {key:"expiredAt",label:"Expires At",type:"date"},
         {key:"maxClaimCount",label:"Limit",type:"number"},
         {key:"usageCount",label:"Usage",type:"number"},
-        {key:"action", label:"Action",type:"action" },
+        {key:"action", label:"Action",type:"action",editOnly:true, isDelete:true },
       ],
       emailNotificationHeader:[
         {key:"scheduledAt",label:"Time (UTC)", type:"date"},
