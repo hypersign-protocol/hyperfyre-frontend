@@ -339,23 +339,8 @@ export default {
     // }
 
    await this.fetchSubscription();
-  //  if(this.$route.query.hash!==undefined && this.$route.query.code!==undefined &&this.$route.query.extra!==undefined){
-  //   let {extra}={...this.$route.query}
-  //   extra=JSON.parse(decodeURIComponent(extra))
-  
-  //   let subsID=extra._id;
-    
-  //   this.showAlert(this.$route.query,subsID)
-
-
-
-  //  }
-
- if(this.$route.query.transaction!==undefined && this.$route.query.merchantOrderId!==undefined){
+   if(this.$route.query.transaction!==undefined && this.$route.query.merchantOrderId!==undefined){
     let {merchantOrderId}={...this.$route.query}
-    // merchantOrderId=JSON.parse(decodeURIComponent(merchantOrderId))
-  console.log(this.$route.query)
-  console.log(merchantOrderId)
     let subsID=merchantOrderId;
     
     this.showAlert(this.$route.query,subsID)
