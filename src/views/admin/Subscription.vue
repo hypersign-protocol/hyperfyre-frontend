@@ -339,11 +339,9 @@ export default {
     // }
 
    await this.fetchSubscription();
-   if(this.$route.query.hash!==undefined && this.$route.query.code!==undefined &&this.$route.query.extra!==undefined){
-    let {extra}={...this.$route.query}
-    extra=JSON.parse(decodeURIComponent(extra))
-  
-    let subsID=extra._id;
+   if(this.$route.query.transaction!==undefined && this.$route.query.merchantOrderId!==undefined){
+    let {merchantOrderId}={...this.$route.query}
+    let subsID=merchantOrderId;
     
     this.showAlert(this.$route.query,subsID)
 
