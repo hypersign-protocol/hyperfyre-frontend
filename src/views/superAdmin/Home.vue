@@ -665,14 +665,25 @@ export default {
           if (schedule) {
             this.schedules.unshift(schedule);
           }
-        }else if(json.message && !json.newWebPushSchedule){
+        }
+        else if(json.message && !json.newWebPushSchedule && this.isDelete == true){
+          this.notifySuccess(json.message)
+          this.getAllCoupon();
+        }
+        else if(json.message && !json.newWebPushSchedule){
           this.notifySuccess(json.message)
         }
         else if(json.updatedSubs){
           this.notifySuccess("Subscription id: "+json.updatedSubs._id + " " + "is activated " + json.updatedSubs.paymentData.activated)
         }else if (json.discount) {
-          this.notifySuccess("Coupon"+" "+ json.name + " "+ "successfully created");
+          if(this.isEdit!=true){
           this.couponTable.unshift(json);
+          this.notifySuccess("Coupon"+" "+ json.name + " "+ "successfully created");
+          }
+          else{
+          this.notifySuccess("Coupon"+" "+ json.name + " "+ "successfully updated");
+          this.getAllCoupon();
+          }
           this.isEdit = false;
         }
         else if(json.message && json.newWebPushSchedule){
