@@ -1,41 +1,41 @@
 <template>
-  <b-table striped :items="items" :fields="fields">
+  <b-table striped :class="customStyle" :items="items" :fields="fields">
     <template v-for="(field, index) in fields" #[`cell(${field.key})`]="data">
       <span v-if="field.type === 'date'" :key="index" :type="field.type">{{
         new Date(items[data.index][field.key]).toLocaleString()
       }}</span>
-      <span :key="index" v-else>{{ data.value }}</span>
-      <span :key="index" v-if="field.isCopy == 'true'" 
+      <span :key="index" v-else>{{ field.isCopy ? truncate1(data.value,15) : data.value }}</span>
+      <span :key="index" v-if="field.isCopy == true" 
       :isCopy="field.isCopy" @click="copy(data.value,field.label)"
       class="copy"
       ><i class="far fa-copy"></i></span>
-      <div :key="index" v-if="field.key === 'action'">
-        <span>
+        <span  :key="index" v-if="field.editOnly==true">
           <i
             class="fas fa-pencil-alt"
             style="padding: 2px; cursor: pointer"
-            title="Click to edit the coupon"
+            title="Click to update"
             @click="updateRecord(data.item)"
           >
           </i>
         </span>
 
-        <span>
+        <span :key="index" v-if="field.isDelete==true">
           <i
             class="fas fa-trash"
             style="padding: 2px; cursor: pointer"
-            title="Click to delete the coupon"
+            title="Click to delete"
             @click="deleteRecord(data.item)"
           >
           </i>
         </span>
-      </div>
+      <!-- </div> -->
     </template>
   </b-table>
 </template>
 
 <script>
 import notificationMixins from "../../mixins/notificationMixins"
+import {truncate} from "../../mixins/fieldValidationMixin"
 export default {
   name: "HfTable",
   components: {},
@@ -43,6 +43,7 @@ export default {
   props: {
     items: Array,
     fields: Array,
+    customStyle:String
   },
   data() {
     return {};
@@ -71,6 +72,9 @@ export default {
                     );
                 });
         }
+    },
+    truncate1(str, number) {
+      return truncate(str, number);
     },
   },
 };
