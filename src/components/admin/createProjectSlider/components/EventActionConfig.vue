@@ -184,10 +184,10 @@
           </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
-          <b-form-select
-            v-model="selected.type"
-            :options="options"
-          ></b-form-select>
+          <hf-select-drop-down
+          :options="options"
+          @selected="e =>(selected.type=e)"
+          ></hf-select-drop-down>
         </div>
       </div>
 
@@ -199,10 +199,10 @@
           </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
-          <b-form-select
-            v-model="prizeDetails.type"
-            :options="options"
-          ></b-form-select>
+          <hf-select-drop-down
+          :options="options"
+          @selected=" e =>(prizeDetails.type = e)"
+          ></hf-select-drop-down>
         </div>
       </div>
       <div class="row g-3 align-items-center w-100 mt-4" v-if="prize">
@@ -451,10 +451,10 @@
           />
         </div>
         <div class="col-lg-2 col-md-2 px-0">
-          <b-form-select
-            v-model="contract.operator"
-            :options="allCondition"
-          ></b-form-select>
+          <hf-select-drop-down
+          :options="allCondition"
+          @selected=" e =>(contract.operator=e)"
+          ></hf-select-drop-down>
         </div>
         <div class="col-lg-5 col-md- px-0">
           <input
@@ -766,13 +766,14 @@ import { JSHINT } from "jshint";
 import HfButtons from "../../../elements/HfButtons.vue"
 import Web3 from "web3";
 import EventBus from '../../../../eventBus';
+import HfSelectDropDown from "../../../elements/HfSelectDropDown.vue"
 Vue.use(Editor);
 
 window.JSHINT = JSHINT;
 window.jsonlint = jsonlint;
 export default {
   name: "EventActionCongif",
-  components: { codemirror, HfButtons },
+  components: { codemirror, HfButtons, HfSelectDropDown},
   filters: {
     pretty: function (value) {
       return JSON.stringify(JSON.parse(value), null, 2);
@@ -1344,6 +1345,7 @@ export default {
           type: "ADD",
           data: this.selected,
         });
+        EventBus.$emit("resetOption");
         this.clearSelected();
       }
     },
@@ -1355,6 +1357,7 @@ export default {
         type: "DELETE",
         data: actionToDelete,
       });
+      EventBus.$emit("resetOption");
       this.clearSelected();
       this.isCreate = true;
     },
@@ -1376,6 +1379,7 @@ export default {
           type: "UPDATE",
           data: this.selected,
         });
+        EventBus.$emit("resetOption");
         this.clearSelected();
         this.isCreate = true;
       }
@@ -1388,6 +1392,13 @@ export default {
       this.currentSelectedId = idx;
 
       this.selected = updateData;
+      if(this.selected.type === "PRIZE_CARD"){
+        let ob = JSON.parse(this.selected.value)
+        EventBus.$emit("setOption",ob.type);
+      }
+      else{
+        EventBus.$emit("setOption",this.selected.type);
+      }
       if (this.eventActionType === "SMARTCONTRACT") {
         this.contract = { ...JSON.parse(this.selected.value) };
       }

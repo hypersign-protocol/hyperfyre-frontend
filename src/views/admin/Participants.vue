@@ -192,14 +192,14 @@ label {
     <div class="row" style="margin-top: 2%">
       <div class="d-flex justify-content-between col-md-12">
         <div class="projectSelector">
-          <b-form-select
-            v-model="selectedProject"
-            @change="fetchProjectInvestors"
-            placeholder="Select an event"
-            value-field="_id"
-            text-field="projectName"
-            :options="projects"
-          ></b-form-select>
+       <hf-select-drop-down
+       placeholder="Select an Event"
+       :options="projects"
+       textField="projectName"
+       valueField="_id"
+       @selected=" e => fetchProjectInvestors(e)"
+       ></hf-select-drop-down>
+
         </div>
         <div class="d-flex ml-auto align-items-center">
           
@@ -311,9 +311,12 @@ const {LOTTERY_NOTES} = require("../../utils/messages/admin/Notes");
 import HfButtons from "../../components/elements/HfButtons.vue"
 import HfSearchBox from "../../components/elements/HfSearchBox.vue"
 import HfPopUp from "../../components/elements/HfPopUp.vue"
+import HfSelectDropDown from "../../components/elements/HfSelectDropDown.vue"
 export default {
   name: "Investor",
-  components: { Loading, Paginate, HfNotes,HfButtons, HfSearchBox, HfPopUp },
+  components: { 
+  Loading, Paginate, HfNotes,HfButtons, 
+  HfSearchBox, HfPopUp,HfSelectDropDown },
 computed:{
  buttonThemeCss() {
       return {
@@ -658,6 +661,7 @@ computed:{
     },
     async fetchProjectInvestors(e) {
       if (e) {
+        this.selectedProject = e
         this.tableSearch = "";
         this.investor.projectId = e;
         await this.fetchProjectData(0, this.perPage);
