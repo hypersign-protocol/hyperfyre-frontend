@@ -109,28 +109,23 @@
             </b-collapse>
           </b-card>
 
-          <b-card no-body class="mb-1">
+          <!-- <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-2 variant="info"
                 class="bg-transparent border-0 text-left theme-color"
                 title="Create Referral configuration for your event"><i class="fa fa-user-plus"></i> Referral
                 Configurations
-                <!-- <a class="tool" data-position="right" draggable="false" title="Creates a unique referral URL for each campaign participants, set points of each referral"><i class='fas fa-exclamation-circle'></i></a> -->
+                
               </b-button>
 
-            </b-card-header>
-            <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
+            </b-card-header> -->
+            <!-- <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
               <b-card-body>
                 <referral-config v-on="$listeners" :project="project" />
-                <!-- <eventAction-congif
-                  v-on="$listeners"
-                  :eventActionList="smartContractlist"
-                  eventActionType="SMARTCONTRACT"
-                  :options="options.smartContractAction"
-                /> -->
+            
               </b-card-body>
             </b-collapse>
-          </b-card>
+          </b-card> -->
           <!--Prize  -->
           <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme" :style="headerThemeCss" role="tab">
@@ -140,8 +135,14 @@
             </b-card-header>
             <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <event-action-config v-on="$listeners" :eventActionList="prizeList" eventActionType="PRIZE"
-                  :options="options.prizeDetails" />
+                <!-- <event-action-config v-on="$listeners" :eventActionList="prizeList" eventActionType="PRIZE"
+                  :options="options.prizeDetails" /> -->
+                <prize-event-action-config
+                v-on="$listeners"
+                :eventActionList="prizeList"
+                eventActionType="PRIZE"
+                :options="options.prizeDetails"
+                ></prize-event-action-config>
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -156,8 +157,14 @@
             </b-card-header>
             <b-collapse id="accordion-8" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <event-action-config v-on="$listeners" :eventActionList="KycList" eventActionType="KYC"
-                  :options="options.kycConfig" />
+                <!-- <event-action-config v-on="$listeners" :eventActionList="KycList" eventActionType="KYC"
+                  :options="options.kycConfig" /> -->
+                <kyc-event-action-config
+                v-on="$listeners"
+                :eventActionList="KycList"
+                eventActionType="KYC"
+                :options="options.kycConfig"
+                ></kyc-event-action-config>
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -174,8 +181,14 @@
             </b-card-header>
             <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="customList" eventActionType="CUSTOM"
-                  :options="options.customAction" />
+                <!-- <eventAction-config v-on="$listeners" :eventActionList="customList" eventActionType="CUSTOM"
+                  :options="options.customAction" /> -->
+                <custom-event-action-config
+                v-on="$listeners"
+                :eventActionList="customList"
+                eventActionType="CUSTOM"
+                :options="options.customAction"
+                ></custom-event-action-config>
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -190,8 +203,14 @@
             </b-card-header>
             <b-collapse id="accordion-5" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="socialList" eventActionType="SOCIAL"
-                  :options="options.socialAction" />
+                <!-- <eventAction-config v-on="$listeners" :eventActionList="socialList" eventActionType="SOCIAL"
+                  :options="options.socialAction" /> -->
+                <social-event-action-config
+                v-on="$listeners"
+                :eventActionList="socialList"
+                eventActionType="SOCIAL"
+                :options="options.socialAction"
+                ></social-event-action-config>
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -206,14 +225,20 @@
             </b-card-header>
             <b-collapse id="accordion-6" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="blockchainList" eventActionType="BLOCKCHAIN"
-                  :options="options.blockchainAction" />
+                <!-- <eventAction-config v-on="$listeners" :eventActionList="blockchainList" eventActionType="BLOCKCHAIN"
+                  :options="options.blockchainAction" /> -->
+              <wallet-event-action-config
+              v-on="$listeners" 
+              :eventActionList="blockchainList" 
+              eventActionType="BLOCKCHAIN"
+              :options="options.blockchainAction"
+              ></wallet-event-action-config>
               </b-card-body>
             </b-collapse>
           </b-card>
 
           <!-- Smart Contract Config -->
-          <b-card no-body class="mb-1">
+          <!-- <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-7 variant="info"
                 class="bg-transparent border-0 text-left theme-color"
@@ -227,13 +252,13 @@
                   eventActionType="SMARTCONTRACT" :options="options.smartContractAction" />
               </b-card-body>
             </b-collapse>
-          </b-card>
+          </b-card> -->
 
 
 
           <!--Custom Smart Contract-->
 
-          <b-card no-body class="mb-1">
+          <!-- <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-9 variant="info"
                 class="bg-transparent border-0 text-left theme-color"
@@ -247,7 +272,7 @@
                   eventActionType="CUSTOMCONTRACT" :options="options.customContractAction" />
               </b-card-body>
             </b-collapse>
-          </b-card>
+          </b-card> -->
 
           <!-- <b-card no-body class="mb-1">
             <b-card-header
@@ -340,6 +365,11 @@ import PreviewConfig from "./components/PreviewConfig.vue";
 import GeneralConfig from "./components/GeneralConfig.vue";
 import ReferralConfig from "./components/ReferralConfig.vue";
 import HfButtons from "../../elements/HfButtons.vue"
+import CustomEventActionConfig from "../createProjectSlider/components/CustomEventActionConfig.vue"
+import SocialEventActionConfig from "../createProjectSlider/components/SocialEventActionConfig.vue"
+import WalletEventActionConfig from "../createProjectSlider/components/WalletEventActionConfig.vue"
+import KycEventActionConfig from "../createProjectSlider/components/KycEventActionConfig.vue"
+import PrizeEventActionConfig from "../createProjectSlider/components/PrizeEventActionConfig.vue"
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -347,7 +377,12 @@ export default {
     EventActionConfig,
     ReferralConfig,
     PreviewConfig,
-    HfButtons
+    HfButtons,
+    CustomEventActionConfig,
+    SocialEventActionConfig,
+    WalletEventActionConfig,
+    KycEventActionConfig,
+    PrizeEventActionConfig
   },
 
   props: {

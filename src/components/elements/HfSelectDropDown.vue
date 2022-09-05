@@ -40,11 +40,27 @@ export default {
     },
   },
   mounted(){
-    EventBus.$on("resetOption",()=>{
-      this.selected = null
+    EventBus.$on("resetOption",(type)=>{
+      for(let i=1;i<this.options.length;i++){
+        if(this.options[i].value === type){
+          return this.selected = this.options[0].value
+        }
+      }
     });
     EventBus.$on("setOption",(type)=>{
-      this.selected = type
+      const elm = this.options.find(x => {
+        if(x && x.value === type){
+          return x;
+        }
+      })
+      
+      // console.log(elm)
+      this.selected = elm.value;
+      // for(let i=1;i<this.options.length;i++){
+      //   if(this.options[i].value === type){
+      //     return this.selected = type
+      //   }
+      // }
     });
   },
   methods: {
