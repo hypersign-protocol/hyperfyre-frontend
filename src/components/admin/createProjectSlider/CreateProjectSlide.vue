@@ -109,23 +109,20 @@
             </b-collapse>
           </b-card>
 
-          <!-- <b-card no-body class="mb-1">
+          <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme" :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-2 variant="info"
                 class="bg-transparent border-0 text-left theme-color"
                 title="Create Referral configuration for your event"><i class="fa fa-user-plus"></i> Referral
                 Configurations
-                
               </b-button>
-
-            </b-card-header> -->
-            <!-- <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
+            </b-card-header>
+            <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
               <b-card-body>
                 <referral-config v-on="$listeners" :project="project" />
-            
               </b-card-body>
             </b-collapse>
-          </b-card> -->
+          </b-card>
           <!--Prize  -->
           <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1 border-0 accordin-header accordion-header-theme" :style="headerThemeCss" role="tab">
@@ -238,7 +235,7 @@
           </b-card>
 
           <!-- Smart Contract Config -->
-          <!-- <b-card no-body class="mb-1">
+          <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-7 variant="info"
                 class="bg-transparent border-0 text-left theme-color"
@@ -248,17 +245,23 @@
             </b-card-header>
             <b-collapse id="accordion-7" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="smartContractlist"
-                  eventActionType="SMARTCONTRACT" :options="options.smartContractAction" />
+                <!-- <eventAction-config v-on="$listeners" :eventActionList="smartContractlist"
+                  eventActionType="SMARTCONTRACT" :options="options.smartContractAction" /> -->
+                <smart-contract-event-action-config
+                v-on="$listeners"
+                :eventActionList="smartContractlist"
+                eventActionType="SMARTCONTRACT"
+                :options="options.smartContractAction"
+                ></smart-contract-event-action-config>
               </b-card-body>
             </b-collapse>
-          </b-card> -->
+          </b-card>
 
 
 
           <!--Custom Smart Contract-->
 
-          <!-- <b-card no-body class="mb-1">
+          <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-9 variant="info"
                 class="bg-transparent border-0 text-left theme-color"
@@ -268,11 +271,17 @@
             </b-card-header>
             <b-collapse id="accordion-9" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="customContractlist"
-                  eventActionType="CUSTOMCONTRACT" :options="options.customContractAction" />
+                <!-- <eventAction-config v-on="$listeners" :eventActionList="customContractlist"
+                  eventActionType="CUSTOMCONTRACT" :options="options.customContractAction" /> -->
+                <custom-contract-event-action-config
+                v-on="$listeners"
+                :eventActionList="customContractlist"
+                eventActionType="CUSTOMCONTRACT"
+                :options="options.customContractAction"
+                ></custom-contract-event-action-config>
               </b-card-body>
             </b-collapse>
-          </b-card> -->
+          </b-card>
 
           <!-- <b-card no-body class="mb-1">
             <b-card-header
@@ -360,7 +369,7 @@
 
 <script>
 import config from "../../../config"
-import EventActionConfig from "./components/EventActionConfig.vue";
+// import EventActionConfig from "./components/EventActionConfig.vue";
 import PreviewConfig from "./components/PreviewConfig.vue";
 import GeneralConfig from "./components/GeneralConfig.vue";
 import ReferralConfig from "./components/ReferralConfig.vue";
@@ -370,11 +379,13 @@ import SocialEventActionConfig from "../createProjectSlider/components/SocialEve
 import WalletEventActionConfig from "../createProjectSlider/components/WalletEventActionConfig.vue"
 import KycEventActionConfig from "../createProjectSlider/components/KycEventActionConfig.vue"
 import PrizeEventActionConfig from "../createProjectSlider/components/PrizeEventActionConfig.vue"
+import SmartContractEventActionConfig from "../createProjectSlider/components/SmartContractEventActionConfig.vue"
+import CustomContractEventActionConfig from "../createProjectSlider/components/CustomContractEventActionConfig.vue"
 export default {
   name: "CreateProjectSlide",
   components: {
     GeneralConfig,
-    EventActionConfig,
+    // EventActionConfig,
     ReferralConfig,
     PreviewConfig,
     HfButtons,
@@ -382,7 +393,9 @@ export default {
     SocialEventActionConfig,
     WalletEventActionConfig,
     KycEventActionConfig,
-    PrizeEventActionConfig
+    PrizeEventActionConfig,
+    SmartContractEventActionConfig,
+    CustomContractEventActionConfig
   },
 
   props: {

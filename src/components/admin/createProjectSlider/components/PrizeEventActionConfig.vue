@@ -22,7 +22,7 @@
           <span>
             <i
               style="color: gray"
-              v-if="eventAction.type === 'PRIZE'"
+              v-if="eventAction.type.includes('PRIZE_CARD')"
               class="fas fa-gift"
             ></i>
           </span>
@@ -190,34 +190,13 @@ import {
   isNum,
 } from "../../../../mixins/fieldValidationMixin";
 import Messages from "../../../../utils/messages/admin/en";
-
 import config from "../../../../config"
-import { codemirror } from "vue-codemirror";
-
-// require styles
-import "codemirror/addon/lint/lint.css";
-import "codemirror/lib/codemirror.css";
-import "codemirror/mode/javascript/javascript";
-import "codemirror/addon/lint/lint";
-import "codemirror/addon/lint/json-lint";
-import "codemirror/keymap/sublime";
-import jsonlint from "jsonlint";
-import { JSHINT } from "jshint";
 import HfButtons from "../../../elements/HfButtons.vue"
-import Web3 from "web3";
 import EventBus from '../../../../eventBus';
 import HfSelectDropDown from "../../../elements/HfSelectDropDown.vue"
-
-window.JSHINT = JSHINT;
-window.jsonlint = jsonlint;
 export default {
   name: "PrizeEventActionConfig",
-  components: { codemirror, HfButtons, HfSelectDropDown},
-  filters: {
-    pretty: function (value) {
-      return JSON.stringify(JSON.parse(value), null, 2);
-    },
-  },
+  components: { HfButtons, HfSelectDropDown},
   props: {
     eventActionType: {
       type: String,
@@ -237,30 +216,10 @@ export default {
         '--button-text-color':config.app.buttonTextColor
       }
      },
-    codemirror() {
-      return this.$refs.cmEditor.codemirror;
-    },
   },
   data() {
     return {
       appName: config.appName,
-      cmOptions: {
-        // codemirror options
-
-        styleActiveLine: true,
-        lineNumbers: true,
-        line: true,
-        mode: "application/json",
-        gutters: ["CodeMirror-lint-markers"],
-        lineWrapping: true,
-        theme: "default",
-        lint: true,
-        collapseIdentical: true,
-
-        keyMap: "sublime",
-        // more codemirror options,
-      },
-      // selectedEventActionType: this.eventActionType,
       flash: null,
       isCreate: true,
       currentSelectedId: 0,
@@ -371,7 +330,6 @@ export default {
       // Code to Add an Action
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {
-        console.log(this.selected)
         this.selected.value = JSON.stringify(this.prizeDetails);
         this.selected["id"] =
           this.eventActionType + "_" + this.eventActionList.length;

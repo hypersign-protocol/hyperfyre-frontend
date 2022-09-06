@@ -20,54 +20,48 @@
           style="min-width: 120px"
         >
           <span>
-           
             <img
               style="padding-right: 5px"
               src="/img/ethereum.2b470564.svg"
-              v-if="eventAction.type === 'BLOCKCHAIN_ETH'"
+              v-if="eventAction.type.includes('ETHEREUM_')"
               height="22px"
             />
+
             <img
               style="padding-right: 5px"
               src="../../../../assets/matic-logo.svg"
-              v-if="eventAction.type === 'BLOCKCHAIN_MATIC'"
+              v-if="eventAction.type.includes('MATIC_')"
               height="20px"
             />
             <img
               style="padding-right: 5px"
               src="../../../../assets/binance-logo.svg"
-              v-if="eventAction.type === 'BLOCKCHAIN_BSC'"
+              v-if="eventAction.type.includes('BINANCE_')"
               height="20px"
             />
             <img
               style="padding-right: 5px"
-              src="../../../../assets/harmony.png"
-              v-if="eventAction.type ==='BLOCKCHAIN_ONE'"
+              src="../../../../assets/moonbeam.png"
+              v-if="eventAction.type.includes('MOONBEAM_')"
               height="20px"
             />
             <img
               style="padding-right: 5px"
-              src="../../../../assets/avalanche.png"
-              v-if="eventAction.type === 'BLOCKCHAIN_AVAX'"
+              src="../../../../assets/moon-river.png"
+              v-if="eventAction.type.includes('MOONRIVER_')"
               height="20px"
+            />
+            <img
+              style="padding-right: 5px"
+              src="../../../../assets/moonbase-alpha.svg"
+              v-if="eventAction.type.includes('MOON_')"
+              height="22px"
             />
             <img
               style="padding-right: 5px"
               src="../../../../assets/Reef.svg"
-              v-if="eventAction.type === 'BLOCKCHAIN_REEF'"
+              v-if="eventAction.type.includes('REEF_')"
               height="20px"
-            />
-            <img
-              style="padding-right: 5px"
-              src="../../../../assets/tezos.png"
-              v-if="eventAction.type === 'BLOCKCHAIN_TEZ'"
-              height="22px"
-            />
-            <img
-              style="padding-right: 5px"
-              src="../../../../assets/cardano_128.png"
-              v-if="eventAction.type === 'BLOCKCHAIN_CARDANO'"
-              height="22px"
             />
           </span>
           <span>{{ truncate1(eventAction.title, 6) }}</span>
@@ -87,16 +81,93 @@
         </div>
         <div class="col-lg-9 col-md-9 px-0">
           <hf-select-drop-down
-          :options="options"
-          @selected="e =>(selected.type=e)"
+            :options="options"
+            @selected="(e) => (selected.type = e)"
           ></hf-select-drop-down>
         </div>
       </div>
 
+      <div class="row g-3 align-items-center w-100 mt-4">
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="title" class="col-form-label"
+            >Contract Address<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+          <input
+            v-model="contract.contractAddress"
+            type="text"
+            id="title"
+            class="form-control w-100"
+            :placeholder="
+              selected.type === null
+                ? 'Please enter ERC20 or compatible contract address'
+                : selected.type.includes('ERC20')
+                ? 'Please enter ERC20 or compatible contract address'
+                : 'Please enter ERC721 or compatible contract address'"
+          />
+        </div>
+      </div>
+      <div
+        class="row g-3 align-items-center w-100 mt-4"
+        v-if="selected.type === null"
+      >
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="title" class="col-form-label"
+            >Threshold Balance<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+          <input
+            v-model="contract.thresholdBalance"
+            type="number"
+            id="title"
+            class="form-control w-100"
+            placeholder="Enter minimum balance a user should have"
+          />
+        </div>
+      </div>
+      <div
+        class="row g-3 align-items-center w-100 mt-4"
+        v-else-if="selected.type.includes('ERC20')"
+      >
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="title" class="col-form-label"
+            >Threshold Balance<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+          <input
+            v-model="contract.thresholdBalance"
+            type="number"
+            id="title"
+            class="form-control w-100"
+            placeholder="Enter minimum balance a user should have"
+          />
+        </div>
+      </div>
 
       <div
         class="row g-3 align-items-center w-100 mt-4"
+        v-else-if="selected.type.includes('ERC721')"
       >
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="title" class="col-form-label"
+            >Threshold NFT Count<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+          <input
+            v-model="contract.thresholdBalance"
+            type="number"
+            id="title"
+            class="form-control w-100"
+            placeholder="Enter minimum balance a user should have"
+          />
+        </div>
+      </div>
+
+      <div class="row g-3 align-items-center w-100 mt-4">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="title" class="col-form-label"
             >Title<span style="color: red">*</span>:
@@ -112,9 +183,7 @@
         </div>
       </div>
 
-      <div
-        class="row g-3 align-items-center w-100 mt-4"
-      >
+      <div class="row g-3 align-items-center w-100 mt-4" v-if="placeH">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="placeHolder" class="col-form-label">Place Holder: </label>
         </div>
@@ -149,22 +218,22 @@
       >
         <div class="col-lg-6 col-md-9 px-0">
           <hf-buttons
-          name="Add"
-          @executeAction="handleEventActionAdd()"
+            name="Add"
+            @executeAction="handleEventActionAdd()"
           ></hf-buttons>
         </div>
       </div>
       <div class="row g-3 justify-content-md-end w-100 mt-4" v-else>
         <div class="col-lg-6 col-md-9 px-0">
           <hf-buttons
-          name="Update"
-          @executeAction="handleEventActionUpdate()"
-          customClass="btn button-theme slight-left-margin"
+            name="Update"
+            @executeAction="handleEventActionUpdate()"
+            customClass="btn button-theme slight-left-margin"
           ></hf-buttons>
           <hf-buttons
-          name="Delete"
-          @executeAction="handleEventActionDelete()"
-          customClass="btn btn-danger slight-left-margin"
+            name="Delete"
+            @executeAction="handleEventActionDelete()"
+            customClass="btn btn-danger slight-left-margin"
           ></hf-buttons>
         </div>
       </div>
@@ -218,7 +287,7 @@
 .button-theme {
   background-color: var(--button-bg-color);
   border-collapse: var(--button-bg-color);
-  color:var(--button-text-color);;
+  color: var(--button-text-color);
   border: 0;
 }
 .slight-left-margin {
@@ -230,16 +299,18 @@ import notificationMixins from "../../../../mixins/notificationMixins";
 import {
   isEmpty,
   isValidURL,
-  truncate
+  truncate,
+  isContractValid,
 } from "../../../../mixins/fieldValidationMixin";
 import Messages from "../../../../utils/messages/admin/en";
-import config from "../../../../config"
-import HfButtons from "../../../elements/HfButtons.vue"
-import EventBus from '../../../../eventBus';
-import HfSelectDropDown from "../../../elements/HfSelectDropDown.vue"
+import config from "../../../../config";
+import HfButtons from "../../../elements/HfButtons.vue";
+import EventBus from "../../../../eventBus";
+import HfSelectDropDown from "../../../elements/HfSelectDropDown.vue";
+
 export default {
-  name: "WalletEventActionConfig",
-  components: { HfButtons, HfSelectDropDown},
+  name: "SmartContractEventActionConfig",
+  components: { HfButtons, HfSelectDropDown },
   props: {
     eventActionType: {
       type: String,
@@ -253,12 +324,25 @@ export default {
     },
   },
   computed: {
-      buttonThemeCss() {
+    buttonThemeCss() {
       return {
-        '--button-bg-color': config.app.buttonBgColor,
-        '--button-text-color':config.app.buttonTextColor
+        "--button-bg-color": config.app.buttonBgColor,
+        "--button-text-color": config.app.buttonTextColor,
+      };
+    },
+    codemirror() {
+      return this.$refs.cmEditor.codemirror;
+    },
+    placeH() {
+      if (
+        this.selected.type != "REEF_ERC20" &&
+        this.selected.type != "REEF_ERC721"
+      ) {
+        return true;
+      } else {
+        return false;
       }
-     },
+    },
   },
   data() {
     return {
@@ -266,6 +350,10 @@ export default {
       flash: null,
       isCreate: true,
       currentSelectedId: 0,
+      contract: {
+        contractAddress: "",
+        thresholdBalance: 0,
+      },
       selected: {
         type: null,
         title: "",
@@ -276,7 +364,7 @@ export default {
         id: "",
         slug: "",
       },
-      project:{},
+      project: {},
       hfTgBotId: this.$config.verifierBot.TELEGRAM,
     };
   },
@@ -284,8 +372,8 @@ export default {
     this.$root.$on("callClearFromProject", () => {
       this.clearSelected();
     });
-     EventBus.$on("sendProject", (project) => {
-      this.project = {...project}
+    EventBus.$on("sendProject", (project) => {
+      this.project = { ...project };
     });
   },
   methods: {
@@ -301,6 +389,11 @@ export default {
         score: 10,
         slug: "",
       };
+      this.contract = {
+        contractAddress: "",
+        thresholdBalance: 0,
+      };
+
       this.selected = clearData;
       this.currentSelectedId = null;
     },
@@ -312,33 +405,52 @@ export default {
       //// You should return or break the moment first error occured
       //// But here you are checking all validation every time - waste of time!
       ////////////
-        if(this.project.projectStatus ==false){
-          isvalid = false;
-          return this.notifyErr(Messages.EVENTS.EVENT_CLOSED)
-        }
-          if (this.selected.type === null) {
-            isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.BLOCKCHAIN.CHOOSE_TYPE);
-          } else if (isEmpty(this.selected.title)) {
-            isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE);
-          } else if (isValidURL(this.selected.title)) {
-            isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL);
-          } else if (isNaN(parseInt(this.selected.score))) {
-            isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM);
-          } else if (parseInt(this.selected.score) < 0) {
-            isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM);
-          }
-        return isvalid;
+      if (this.project.projectStatus == false) {
+        isvalid = false;
+        return this.notifyErr(Messages.EVENTS.EVENT_CLOSED);
+      }
+      if (this.selected.type === null) {
+        isvalid = false;
+        this.notifyErr(
+          Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE
+        );
+      } else if (isEmpty(this.contract.contractAddress)) {
+        isvalid = false;
+        this.notifyErr(Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY);
+      } else if (
+        isNaN(parseFloat(this.contract.thresholdBalance)) ||
+        parseFloat(this.contract.thresholdBalance) < 0
+      ) {
+        isvalid = false;
+        this.notifyErr(
+          Messages.EVENTS.ACTIONS.SMARTCONTRACT.THBALANCE_NOT_NEGATIVE
+        );
+      } else if (!isContractValid(this.contract.contractAddress)) {
+        isvalid = false;
+        this.notifyErr(
+          Messages.EVENTS.ACTIONS.SMARTCONTRACT.VALID_CONTRACT_ADDRESS
+        );
+      } else if (isEmpty(this.selected.title)) {
+        isvalid = false;
+        this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE);
+      } else if (isValidURL(this.selected.title)) {
+        isvalid = false;
+        this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL);
+      } else if (isNaN(parseInt(this.selected.score))) {
+        isvalid = false;
+        this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM);
+      } else if (parseInt(this.selected.score) < 0) {
+        isvalid = false;
+        this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM);
+      }
+      return isvalid;
     },
 
     handleEventActionAdd() {
       // Code to Add an Action
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {
+        this.selected.value = JSON.stringify(this.contract);
         this.selected["id"] =
           this.eventActionType + "_" + this.eventActionList.length;
         this.eventActionList.push(this.selected);
@@ -346,7 +458,7 @@ export default {
           type: "ADD",
           data: this.selected,
         });
-        EventBus.$emit("resetOption",this.selected.type);
+        EventBus.$emit("resetOption", this.selected.type);
         this.clearSelected();
       }
     },
@@ -358,7 +470,7 @@ export default {
         type: "DELETE",
         data: actionToDelete,
       });
-      EventBus.$emit("resetOption",this.selected.type);
+      EventBus.$emit("resetOption", this.selected.type);
       this.clearSelected();
       this.isCreate = true;
     },
@@ -366,12 +478,13 @@ export default {
       // Code to update an Action
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {
+        this.selected.value = JSON.stringify(this.contract);
         this.eventActionList[this.currentSelectedId] = this.selected;
         this.$emit("updateEventActions", {
           type: "UPDATE",
           data: this.selected,
         });
-        EventBus.$emit("resetOption",this.selected.type);
+        EventBus.$emit("resetOption", this.selected.type);
         this.clearSelected();
         this.isCreate = true;
       }
@@ -384,7 +497,8 @@ export default {
       this.currentSelectedId = idx;
 
       this.selected = updateData;
-      EventBus.$emit("setOption",this.selected.type);
+      EventBus.$emit("setOption", this.selected.type);
+      this.contract = { ...JSON.parse(this.selected.value) };
       this.isCreate = false;
     },
 

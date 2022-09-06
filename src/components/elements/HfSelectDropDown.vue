@@ -40,6 +40,9 @@ export default {
     },
   },
   mounted(){
+    EventBus.$on("resetForFresh",()=>{
+      this.selected = null
+    })
     EventBus.$on("resetOption",(type)=>{
       for(let i=1;i<this.options.length;i++){
         if(this.options[i].value === type){

@@ -674,6 +674,7 @@ export default {
       this.$root.$emit("bv::toggle::collapse", "sidebar-right");
 
       this.resetAllValues();
+      eventBus.$emit("resetForFresh")
       this.$root.$emit("callClearFromProject");
     },
     AddUpdateDelTagActions(event) {
@@ -925,6 +926,7 @@ export default {
       // return new Date(d).toLocaleString();
     },
     editProject(project) {
+      eventBus.$emit("resetForFresh")
       this.resetAllValues();
       this.isProjectEditing = true;
       this.project = { ...project };
