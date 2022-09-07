@@ -465,6 +465,7 @@ computed:{
     if (this.$route.query.projectId) {
       this.selectedProjectId = this.$route.query.projectId;
       this.selectedProject = this.$route.query.projectId;
+      eventBus.$emit("setOption",this.selectedProject);
       this.investor.projectId = this.$route.query.projectId;
       await this.fetchProjectData(0, this.perPage);
       this.holdInvestors = this.project.investors;
