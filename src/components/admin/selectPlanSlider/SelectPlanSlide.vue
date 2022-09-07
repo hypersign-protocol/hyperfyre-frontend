@@ -540,6 +540,7 @@ export default {
     async payment() {
       if (!(this.selectedCurrency == "" || this.selectedNetwork == "")) {
         var planbody = {};
+        this.plan.coupon_name = ""
         this.plan.selectedCurrency = this.selectedCurrency;
         this.plan.selectedNetwork = this.selectedNetwork;
         if(this.applied===true){
@@ -581,6 +582,10 @@ export default {
         const json = await resp.json();
         if (json) {
           if (!resp.ok) {
+            this.coupon="";
+            planId=""
+            planbody={}
+            this.resetGrandTotal()
             return this.notifyErr(json);
           } else {
             const path=json.payment.orderId
