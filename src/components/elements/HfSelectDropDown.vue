@@ -65,6 +65,9 @@ export default {
       //   }
       // }
     });
+    EventBus.$on("setForParticipant",(type)=>{
+      this.selected = type;
+    })
   },
   methods: {
     selectOption(e) {
