@@ -196,6 +196,7 @@
               <hf-buttons
               :name="`Pay $`+ grandTotal"               
               customClass="btn btn-outline-dark btn-plan popular"
+              style="width:auto"
               @executeAction="payment()"
               ></hf-buttons>
             </div>
