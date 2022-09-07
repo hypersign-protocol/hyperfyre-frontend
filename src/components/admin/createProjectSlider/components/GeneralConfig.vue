@@ -317,7 +317,7 @@ buttonThemeCss() {
           type: "ADD",
           data: this.selected
         });
-        EventBus.$emit("resetOption");
+        EventBus.$emit("resetOption",this.selected.type);
         this.clearSelected()
       }
 
