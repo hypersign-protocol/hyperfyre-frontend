@@ -1131,15 +1131,13 @@ export default {
                     return this.notifyErr(json);
                   } else {
                     this.$root.$emit('modal-close');
-                    this.notifySuccess("Event is deleted successfully");
+                    this.notifySuccess(Messages.EVENTS.EVENT_DELETED);
                   }
                 } else {
                   throw new Error("Error while deleting event");
                 }
               } else {
-                throw new Error(
-                  "Looks like you were about to delete a event by mistake"
-                );
+                throw new Error(Messages.EVENTS.WRONG_EVENT_ID);
               }
             }
             

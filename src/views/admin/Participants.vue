@@ -557,6 +557,9 @@ computed:{
       }
     },
     async handleLottery() {
+      if(!this.recordsForLottery){
+        return this.notifyErr(Messages.PARTICIPANTS.LOTTERY.ENTER_NUMBER_OF_WINNERS)
+      }
       if (
         this.recordsForLottery > this.project.count ||
         this.recordsForLottery <= 0
