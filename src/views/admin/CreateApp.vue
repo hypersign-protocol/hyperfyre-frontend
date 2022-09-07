@@ -154,7 +154,7 @@
 					</div>
 				</div>
 			</div>
-      <div class="table">
+      <div class="table" v-if="apps.length">
       <h3 v-if="apps.length">Your Apps</h3>
       <!-- <div class="row" > -->
       <!-- <div class="col-md-12"> -->
