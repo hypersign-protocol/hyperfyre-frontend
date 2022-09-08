@@ -11,6 +11,8 @@ const EVENT = {
     INVALID_AUTH_TOKEN: "Please! login"
 }
 const EVENTS = {
+    EVENT_DELETED:"Event is deleted successfully",
+    WRONG_EVENT_ID:"Please enter valid event Id",
     EVENT_CLOSED:"Cannot edit CLOSED event! OPEN it to edit",
     NO_EVENT_FOUND:"No events found, click on create button to create a new event!",
     CHECK_ALL_TYPE: "PLease Check if any type left empty",
@@ -127,7 +129,8 @@ const PARTICIPANTS = {
 
     },
     LOTTERY: {
-        NO_OF_RECORDS: "No of records must be less or equal to total"
+        NO_OF_RECORDS: "Number of records must be less or equal to the total",
+        ENTER_NUMBER_OF_WINNERS: "Please enter Number of winners to choose"
     }
 }
 
