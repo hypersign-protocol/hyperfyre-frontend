@@ -154,11 +154,11 @@
 					</div>
 				</div>
 			</div>
-      <div class="table">
+      <div class="table" v-if="apps.length">
       <h3 v-if="apps.length">Your Apps</h3>
-      <div class="row" >
-      <div class="col-md-12">
-            <table class="table table-bordered" 
+      <!-- <div class="row" > -->
+      <!-- <div class="col-md-12"> -->
+            <!-- <table class="table table-bordered" 
             style="background:#FFFF"
             v-if="apps.length">
           <thead class="thead-light">
@@ -197,9 +197,15 @@
               </td>
             </tr>
           </tbody>
-        </table>
-        </div>
-      </div>
+        </table> -->
+        <hf-table
+        :items="apps"
+        :fields="appHeader"
+        @updateRecord="row => editbtn(row)"
+        customStyle="table-bordered"
+        ></hf-table>
+        <!-- </div> -->
+      <!-- </div> -->
         </div>
 		</div>
     
@@ -217,13 +223,13 @@ import "vue-loading-overlay/dist/vue-loading.css";
 import {
   isValidURL,
   isValidText,
-  truncate
 } from "../../mixins/fieldValidationMixin"
 import Messages from "../../utils/messages/admin/en"
 import HfButtons from "../../components/elements/HfButtons.vue"
+import HfTable from "../../components/elements/HfTable.vue"
 export default {
   name: "CreateApp",
-  components: {Loading, ToolTips, HfButtons},
+  components: {Loading, ToolTips, HfButtons, HfTable},
   computed:{
        buttonThemeCss() {
       return {
@@ -248,6 +254,13 @@ export default {
       errors: [],
       apps: [],
       authToken: localStorage.getItem("authToken"),
+      appHeader:[
+        {key:"_id",label:"AppID",type:"text"},
+        {key:"appName",label:"Name",type:"text"},
+        {key:"baseUrl",label:"Base URL",type:"text"},
+        {key:"appWalletAddress",label:"Wallet Address",type:"text",isCopy:true},
+        {key:"action", label:"Action",type:"action", editOnly:true },
+      ]
     };
   },
   async mounted() {
@@ -398,32 +411,12 @@ this.getApp();
      }
       return true
     },
-    copy(textToCopy, contentType) {
-      if (textToCopy) {
-        navigator.clipboard
-          .writeText(textToCopy)
-          .then(() => {
-            this.notifySuccess(
-              `${contentType}, ${Messages.EVENTS.CREATE_EDIT_EVENT.COPIED_TO_CLIPBOARD}`
-            );
-          })
-          .catch((err) => {
-            this.notifyErr(
-              Messages.EVENTS.CREATE_EDIT_EVENT.ERROR_WHILE_COPYING,
-              err
-            );
-          });
-      }
-    },
     clearselected(){
       this.app.appName="";
       this.app.baseUrl="";
       this.app._id="";
       this.app.appWalletAddress="";
       this.app.toggle=false;
-    },
-    truncate1(str, number) {
-      return truncate(str, number);
     },
      forceFileDownload(data, fileName) {
       const url = window.URL.createObjectURL(new Blob([data]));

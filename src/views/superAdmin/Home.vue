@@ -365,12 +365,12 @@ export default {
       schedules: [],
       couponTable: [],
       couponHeader:[
-        {key:"name",label:"Coupon Code",type:"text",isCopy:"true"},
+        {key:"name",label:"Coupon Code",type:"text",isCopy:true},
         {key:"discount",label:"Discount (%)",type:"number"},
         {key:"expiredAt",label:"Expires At",type:"date"},
         {key:"maxClaimCount",label:"Limit",type:"number"},
         {key:"usageCount",label:"Usage",type:"number"},
-        {key:"action", label:"Action",type:"action" },
+        {key:"action", label:"Action",type:"action",editOnly:true, isDelete:true },
       ],
       emailNotificationHeader:[
         {key:"scheduledAt",label:"Time (UTC)", type:"date"},
@@ -665,14 +665,25 @@ export default {
           if (schedule) {
             this.schedules.unshift(schedule);
           }
-        }else if(json.message && !json.newWebPushSchedule){
+        }
+        else if(json.message && !json.newWebPushSchedule && this.isDelete == true){
+          this.notifySuccess(json.message)
+          this.getAllCoupon();
+        }
+        else if(json.message && !json.newWebPushSchedule){
           this.notifySuccess(json.message)
         }
         else if(json.updatedSubs){
           this.notifySuccess("Subscription id: "+json.updatedSubs._id + " " + "is activated " + json.updatedSubs.paymentData.activated)
         }else if (json.discount) {
-          this.notifySuccess("Coupon"+" "+ json.name + " "+ "successfully created");
+          if(this.isEdit!=true){
           this.couponTable.unshift(json);
+          this.notifySuccess("Coupon"+" "+ json.name + " "+ "successfully created");
+          }
+          else{
+          this.notifySuccess("Coupon"+" "+ json.name + " "+ "successfully updated");
+          this.getAllCoupon();
+          }
           this.isEdit = false;
         }
         else if(json.message && json.newWebPushSchedule){
