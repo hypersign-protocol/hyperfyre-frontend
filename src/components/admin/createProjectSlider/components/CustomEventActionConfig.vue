@@ -139,7 +139,7 @@
           />
         </div>
       </div>
-      <div class="row g-3 align-items-center w-100 mt-4">
+      <div class="row g-3 align-items-center w-100 mt-4" v-if="!noScore">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="title" class="col-form-label"
             >Score<span style="color: red">*</span>:
@@ -283,6 +283,16 @@ export default {
       ) {
         return true;
       } else {
+        return false;
+      }
+    },
+    noScore(){
+      if (
+        (this.eventActionType === "CUSTOM" &&
+          this.selected.type === "INFO_TEXT")
+      ){
+        return true;
+      } else{
         return false;
       }
     },
