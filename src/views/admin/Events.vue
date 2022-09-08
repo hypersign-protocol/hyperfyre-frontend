@@ -235,7 +235,7 @@ i {
             :addedSocialMedias="addedSocialMedias"
             :selectedSocialMedia="selectedSocialMedia"
             :socialOptions="socialOptions"
-            :actionList="project.actions"
+            :actionList="eventActionList"
             :tagList="project.tags"
             :tagFdb="tagFdb"
             @updateEventActions="AddUpdateDelEventActions"
@@ -687,26 +687,19 @@ export default {
           }
 
           case "DELETE": {
-            if (data._id) {
+            if (data.id) {
               const actionIndex = this.tagsTemp.findIndex(
-                (x) => x._id == data._id
-              );
-              if (actionIndex > -1) {
-                this.tagsTemp[actionIndex]["isDeleted"] = true;
-              }
-            } else {
-              const actionIndex = this.tagsTemp.findIndex(
-                (x) => x.id == data.id
+                (x) => x.type == data.type
               );
               if (actionIndex > -1) {
                 this.tagsTemp.splice(actionIndex, 1);
               }
-            }
 
             break;
           }
         }
       }
+    }
     },
     AddUpdateDelEventActions(event) {
       const { type, data } = event;
