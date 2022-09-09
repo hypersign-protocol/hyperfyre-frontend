@@ -218,6 +218,7 @@ import Messages from "../../../utils/messages/admin/en";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import HfButtons from "../../../components/elements/HfButtons.vue";
+import {isFloat} from "../../../mixins/fieldValidationMixin"
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -279,7 +280,9 @@ export default {
       if(this.selectedCurrency !=="" && this.selectedNetwork !==""){
         this.showCoupon = true;
         this.plan.grandTotal = total - this.couponDiscount;
-       
+        if(isFloat(this.plan.grandTotal)){
+           this.plan.grandTotal = this.plan.grandTotal.toFixed(4)
+        }
       }
       else{
 
