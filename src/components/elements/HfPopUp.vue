@@ -1,5 +1,6 @@
 <template>
-  <b-modal v-model="show" hide-footer ref="modal-1" :title="Header" centered>
+  <b-modal v-model="show" hide-header-close id="modal" :size="size" :title="Header" header="test" 
+  header-class="justify-content-center" hide-footer  close-on-backdrop centered>
     <slot />
   </b-modal>
 </template>
@@ -15,6 +16,10 @@ export default {
     Header: {
       type: String,
       require: true,
+    },
+    size:{
+      type:String,
+      require:false
     },
   },
   created() {
