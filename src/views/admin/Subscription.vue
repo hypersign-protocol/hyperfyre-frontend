@@ -387,7 +387,7 @@ export default {
               <div class="intro">
                 Hi <strong>${this.user.name}</strong>, 
                 <br>
-                This is the receipt for a payment of <strong>${paymentData.amount.toPrecision(6)}</strong> (${paymentData.token.token}) for your Plan <strong>${this.getPlanName(subsInfo.planId)}</strong>
+                This is the receipt for a payment of <strong>${paymentData.amount}</strong> (${paymentData.token.token}) for your Plan <strong>${this.getPlanName(subsInfo.planId)}</strong>
               </div>
         <br>
         <div class="payment-info">
