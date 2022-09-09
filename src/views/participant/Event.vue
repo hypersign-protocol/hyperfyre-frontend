@@ -5,23 +5,6 @@
       <Metrics :authToken="authToken" @getLeaderBoard="fetchLeaderBoard" :leaderBoardData="leaderBoardData"
         :userScore="userEventData && userEventData.numberOfReferals? userEventData.numberOfReferals : 0"
         :totalEntries="eventData && eventData.count ? eventData.count : 0" :timeLeft="timeLeft" />
-        <hf-pop-up
-        Header="Leaderboard"
-        size="lg"
-        >
-        <div :class="{applyScroll:leaderBoardData.length>5}">
-        <div v-for="(leader,index) in leaderBoardData" :key="index">
-          <span class="b-avatar mr-3 badge-info rounded-circle">
-             <span class="b-avatar-img">
-               <img :src="getIcon(leader,index)" alt="avatar">
-             </span>
-          </span>
-        <span class="mr-auto">{{leader.name}}</span>
-        <span class="badge badge-primary mr-3 mt-2" style="float:right">{{leader.numberOfReferals}}</span>
-        <hr>
-        </div>
-        </div>
-        </hf-pop-up>
       <Banner :eventName="eventData.projectName" :themeColor="eventData.themeColor" :fontColor="eventData.fontColor"
         :fromDate="new Date(eventData.fromDate).toLocaleString()" :toDate="new Date(eventData.toDate).toLocaleString()"
         :logoUrl="eventData.logoUrl" />
@@ -69,7 +52,7 @@ import profileIconMixins from "../../mixins/profileIconMixins";
 import eventBus from "../../eventBus.js"
 import Messages from "../../utils/messages/admin/en"
 import config from "../../config"
-import HfPopUp from "../../components/elements/HfPopUp.vue"
+
 export default {
   name: "Event",
   components: {
@@ -78,8 +61,7 @@ export default {
     Action,
     Metrics,
     ErrorMessage,
-    Loading,
-    HfPopUp
+    Loading
   },
 
   data() {
@@ -177,10 +159,6 @@ export default {
 
   },
   methods: {
-    getIcon(leader){
-     return this.getProfileIcon(leader.name + leader.index)
-    },
-    
     async updateAuthentication(authToken) {
       try{
         this.authToken = authToken;
@@ -414,8 +392,7 @@ export default {
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
 
         this.leaderBoardData = resp.data
-        // this.showLeaderBoardAlert(resp.data)
-        this.$root.$emit('modal-show')
+        this.showLeaderBoardAlert(resp.data)
 
       } else {
         this.notifyErr(Messages.EVENT.INVALID_AUTH_TOKEN)
@@ -431,46 +408,40 @@ export default {
         this.fetchEventData();
       }
     },
-    // showLeaderBoardAlert(data){
+    showLeaderBoardAlert(data){
 
-    //     var swal_html = `<div class="list-group list-group-flush" style="max-height:500px;overflow-y: scroll;">`;
-    //     data.forEach((element, index) => {
-    //       let img1 = this.getProfileIcon(element.name+index)
-    //       swal_html=swal_html+`<div class="list-group-item d-flex align-items-center">
-    //       <span class="b-avatar mr-3 badge-info rounded-circle">
-    //         <span class="b-avatar-img">
-    //           <img src="`+img1+`" alt="avatar">
-    //         </span><!---->
-    //       </span>
-    //       <span class="mr-auto">`+element.name+`</span>
-    //       <span class="badge badge-primary ">`+element.numberOfReferals+`</span>
-    //     </div> `
-    //     })
-    //     swal_html =swal_html+ `</div>`;
-    //     this.$swal.fire({
-    //       position:'center',
-    //       focusConfirm: true,
-    //       html:swal_html,
-    //       toast:false,
-    //       title:'<h5>Leaderboard</h5>',
-    //       showCloseButton: true,
-    //       showConfirmButton:false,
-    //       width:'50rem',
-    //       background:"white"
+        var swal_html = `<div class="list-group list-group-flush" style="max-height:500px;overflow-y: scroll;">`;
+        data.forEach((element, index) => {
+          let img1 = this.getProfileIcon(element.name+index)
+          swal_html=swal_html+`<div class="list-group-item d-flex align-items-center">
+          <span class="b-avatar mr-3 badge-info rounded-circle">
+            <span class="b-avatar-img">
+              <img src="`+img1+`" alt="avatar">
+            </span><!---->
+          </span>
+          <span class="mr-auto">`+element.name+`</span>
+          <span class="badge badge-primary ">`+element.numberOfReferals+`</span>
+        </div> `
+        })
+        swal_html =swal_html+ `</div>`;
+        this.$swal.fire({
+          position:'center',
+          focusConfirm: true,
+          html:swal_html,
+          toast:false,
+          title:'<h5>Leaderboard</h5>',
+          showCloseButton: true,
+          showConfirmButton:false,
+          width:'50rem',
+          background:"white"
 
-    //     })
-    // },
+        })
+    },
 
   },
   mixins:[notificationMixins,profileIconMixins],
 };
 </script>
-<style>
-.applyScroll{
-    height: 50vh;
-    overflow-y: scroll;
-}
-</style>
 <style scoped>
 
 .mainContentWdth{
