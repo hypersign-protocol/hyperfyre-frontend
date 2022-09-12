@@ -129,13 +129,7 @@ computed:{
 methods:{
   async update(){
    try{
-    console.log('try')
-    if(this.kycData.reviewResult.reviewAnswer==="GREEN" && this.kycData.reviewStatus==="completed"){
-      console.log('hi')
-      console.log(this.kycData)
-
-    console.log(this.kycData.reviewResult)
-     
+    if(this.kycData.reviewResult.reviewAnswer==="GREEN" && this.kycData.reviewStatus==="completed"){     
     this.$emit("input", "Verified");
     this.done=true
     }else if(this.kycData.reviewResult.reviewAnswer==="RED"){
@@ -246,7 +240,6 @@ methods:{
     return Promise.resolve(res.data)// get a new token from your backend
   }
 }, disableInput(data) {
-  console.log(data)
       this.done = data;
     },
  mixins: [notificationMixins],
