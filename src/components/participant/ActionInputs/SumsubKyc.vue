@@ -130,7 +130,9 @@ methods:{
   async update(){
    try{
     if(this.kycData.reviewResult.reviewAnswer==="GREEN" && this.kycData.reviewStatus==="completed"){
-     
+      console.log(this.kycData)
+
+    console.log(this.kycData.reviewResult)
      
     this.$emit("input", "Verified");
     this.done=true
