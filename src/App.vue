@@ -164,7 +164,9 @@ export default {
         this.isSubscribed = isSubscribed;
     })
 
-  
+    if(this.authToken){
+      this.$store.dispatch('getApps');
+    }
     eventBus.$on("UpdateThemeEvent", (themeData) => {
       Object.assign(this.themeData, { ...themeData })
       this.isForm = window.location.pathname.includes("/form") ? true : false

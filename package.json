@@ -57,6 +57,7 @@
         "vuejs-datepicker": "^1.6.2",
         "vuejs-datetimepicker": "^1.1.13",
         "vuejs-paginate": "^2.1.0",
+        "vuex": "^3.0.0",
         "watchify": "^4.0.0",
         "web3": "^1.6.0"
     },
