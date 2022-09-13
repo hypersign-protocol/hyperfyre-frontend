@@ -2,10 +2,12 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import config from "../config"
 Vue.use(Vuex)
-import { notificationMixins } from '../mixins/notificationMixins';
+import  notificationMixins  from "../mixins/notificationMixins.js"
 export default new Vuex.Store({
+    mixins:[notificationMixins],
     state:{
-        apps:[]
+        apps:[],
+        teammates:[]
     },
     getters:{
         
@@ -30,11 +32,28 @@ export default new Vuex.Store({
         updateApp(state, payload){
             const index = state.apps.findIndex(x => x._id === payload._id);
             Object.assign(state.apps[index], {...payload});
+        },
+        // initialise temmates to the store
+        setTeammates(state,payload){
+            state.teammates = payload
+        },
+        // add teammates to store
+        addTeammate(state,payload){
+            state.teammates.push(payload)
+        },
+        //remove teammates from store
+        removeTeammate(state,payload){
+            const index = state.teammates.findIndex(x => x._id === payload);
+            if(index > -1){
+            state.teammates.splice(index,1)
+            }
+            else{
+            notificationMixins.methods.notifyErr("not found teammate")
+            }
         }
     },
     actions:{
-        getApps({commit}){
-                let authToken = localStorage.getItem("authToken");
+        getApps({commit},authToken){
                 if(authToken){
                 const url = `${config.studioServer.BASE_URL}api/v1/app`;
                 const headers = {
@@ -45,8 +64,7 @@ export default new Vuex.Store({
                   method: "GET",
                 }).then((resp)=>{
                     if (!resp.ok) {
-                        console.log(resp.statusText);
-                        this.notifyErr(resp.statusText)
+                        notificationMixins.methods.notifyErr(resp.statusText)
                       } else{
                         resp.json().then((res)=>{
                             commit('setApps', res);
@@ -54,15 +72,42 @@ export default new Vuex.Store({
                         
                       }
                 }).catch(e=>{
-                    this.notifyErr(e)
+                    notificationMixins.methods.notifyErr(e)
                 })
 
             }else{
-                this.notifyErr("Please login")
+                notificationMixins.methods.notifyErr("Please login")
+            }
+                
+        },
+
+        getTeammates({commit},authToken) {
+            if(authToken){
+                const url = `${config.studioServer.BASE_URL}api/v1/admin/team`;
+                const headers = {
+                  Authorization: `Bearer ${authToken}`,
+                };
+                fetch(url, {
+                  headers,
+                  method: "GET",
+                }).then((res) => {
+                    if (!res.ok) {
+                        notificationMixins.methods.notifyErr(res.statusText);
+                      } else{
+                        res.json().then((res)=>{
+                        commit('setTeammates',res);
+                        })
+                      }
+
+                }).catch(e=>{
+                    notificationMixins.methods.notifyErr(e)
+                })
+
+            }else{
+                notificationMixins.methods.notifyErr("Plase login")
             }
                 
         },
     },
 
-    mixins: [notificationMixins],
 })

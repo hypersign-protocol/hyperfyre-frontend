@@ -165,7 +165,8 @@ export default {
     })
 
     if(this.authToken){
-      this.$store.dispatch('getApps');
+      this.$store.dispatch('getApps',this.authToken);
+      this.$store.dispatch('getTeammates',this.authToken);
     }
     eventBus.$on("UpdateThemeEvent", (themeData) => {
       Object.assign(this.themeData, { ...themeData })
