@@ -236,7 +236,10 @@ export default {
         '--button-bg-color': config.app.buttonBgColor,
         '--button-text-color':config.app.buttonTextColor
       }
-     }
+     },
+     apps(){
+       return this.$store.state.apps;
+     },
   },
   data() {
     return {
@@ -252,7 +255,6 @@ export default {
       isLoading: false,
       fullPage: true,
       errors: [],
-      apps: [],
       authToken: localStorage.getItem("authToken"),
       appHeader:[
         {key:"_id",label:"AppID",type:"text"},
@@ -262,9 +264,6 @@ export default {
         {key:"action", label:"Action",type:"action", editOnly:true },
       ]
     };
-  },
-  async mounted() {
-this.getApp();
   },
   methods: {
    async update(){
@@ -305,7 +304,7 @@ this.getApp();
                 }
                 this.notifySuccess(Messages.APP.APP_UPDATED_SUCCESSFULLY);
                 this.clearselected();
-                this.getApp();
+                this.$store.commit('updateApp',json)
                 this.isEdit=false;
               }
             } else {
@@ -329,24 +328,6 @@ this.getApp();
       this.isEdit= true;
       this.app = {...row};
       this.app.toggle=false;
-    },
-    async getApp() {
-      this.isLoading=true;
-      const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
-      const headers = {
-        Authorization: `Bearer ${this.authToken}`,
-      };
-      const resp = await fetch(url, {
-        headers,
-        method: "GET",
-      });
-
-      if (!resp.ok) {
-        return this.notifyErr(resp.statusText);
-      } else{
-        this.apps = await resp.json();
-        this.isLoading=false;
-      }
     },
     async generateApp() {
         try{
@@ -377,11 +358,11 @@ this.getApp();
               if (!resp.ok) {
                 return this.notifyErr(json);
               } else {
-                credential['appId']= json.AppId
+                credential['appId']= json._id
                 this.notifySuccess(Messages.APP.APP_GENERATED_SUCCESSFULLY);
                 this.downloadCredentials(credential);
                 this.clearselected();
-                this.getApp();
+                this.$store.commit('addApp', json)
               }
             } else {
               throw new Error("Error while generating App");

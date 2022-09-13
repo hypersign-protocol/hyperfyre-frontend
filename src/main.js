@@ -15,7 +15,7 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.min.css";
-
+import store from "./store/store";
 import {
   VeTable,
   VePagination,
@@ -63,6 +63,7 @@ Vue.component("multiselect", Multiselect);
 Vue.use(VueMeta)
 new Vue({
   router,
+  store,
   render: (h) => h(App),
 }).$mount("#app");
 
