@@ -42,10 +42,10 @@
                 @click="
                   handleGithubLogin()
                 "
-                class="btn btn-outline-twitter text-black mb-2"
+                class="btn btn githubbtn mb-2"
               >
-                <img src="../../../assets/github.svg" height="25px"/>
-                Verify
+                <img src="../../../assets/github.svg" height="30px"/>
+                Authorize Github
               </button>
               <b-form-input
                 type="text"
@@ -70,6 +70,11 @@
 <style scoped>
 .center{
   display: block; margin-left: auto;margin-right: auto
+}
+.githubbtn{
+  border-color: #2e3440;
+  color: #2e3440;
+  
 }
 </style>
 <script>
@@ -122,12 +127,21 @@ computed:{
   },
   updated(){
     if(this.data.isDone && this.data.value){
-      this.social.url = this.data.value;
+      if(this.social.url === ""){
+        this.social.url = (this.data.value.url)
+      } else {
+        this.social.url = (this.social.url)
+      }
+      
     }
   },
   mounted() {
     if(this.data.isDone && this.data.value){
-      this.social.url = this.data.value;
+      if(this.social.url === ""){
+        this.social.url = (this.data.value.url)
+      } else {
+        this.social.url = (this.social.url)
+      }
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },

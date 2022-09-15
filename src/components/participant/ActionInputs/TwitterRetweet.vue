@@ -122,12 +122,21 @@ computed:{
   },
   updated(){
     if(this.data.isDone && this.data.value){
-      this.retweetUrl = this.data.value;
+      if(this.retweetUrl===""){
+        this.retweetUrl = this.data.value;
+      } else {
+        this.retweetUrl = this.retweetUrl;
+      }
+      
     }
   },
   mounted() {
     if(this.data.isDone && this.data.value){
-      this.retweetUrl = this.data.value;
+      if(this.retweetUrl===""){
+        this.retweetUrl = this.data.value;
+      } else {
+        this.retweetUrl = this.retweetUrl;
+      }
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
