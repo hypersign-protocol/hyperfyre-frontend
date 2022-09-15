@@ -147,7 +147,7 @@
             v-model="selected.value"
             type="text"
             :placeholder="
-              selected.type === null ? '' : 'Please Enter Your Github Repo Name'"
+              selected.type === null ? '' : 'Please Enter Your Github Repo URL'"
             id="value"
             class="form-control w-100"
           />
