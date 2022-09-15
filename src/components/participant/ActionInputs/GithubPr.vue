@@ -115,7 +115,6 @@ computed:{
   },
   data() {
     return {
-      isToken:false,
       social:{
       url:'',
       socialAccessToken:'',
@@ -147,7 +146,7 @@ computed:{
   },
   methods: {
     update() {
-        if (!this.isToken) {
+        if (!localStorage.getItem("githubAccessToken")) {
             this.notifyErr(
             Messages.EVENT_ACTIONS.GITHUB_PR.GITHUB_AUTH
           );
@@ -158,6 +157,7 @@ computed:{
           this.notifyErr(Messages.EVENT_ACTIONS.GITHUB_PR.INVALID_GITHUB_PR_URL)
         }
         else {
+          this.social.socialAccessToken = localStorage.getItem("githubAccessToken")
           this.$emit("input", JSON.stringify({
             ...this.social
           }));
@@ -168,23 +168,22 @@ computed:{
     },
     handleGithubLogin() {
       try {
+        if(!localStorage.getItem("githubAccessToken")){
           webAuth.popup.authorize(
             {
               connection: "github",
               owp: true,
             },
             (err, authRes) => {
-              console.log(authRes)
               if(!err && authRes.accessToken){
                 this.social.socialAccessToken = authRes.accessToken;
-                localStorage.setItem("socialAccessToken",this.socialAccessToken)
-                this.isToken = true;
-              }
-              else{
-                this.isToken = false;
+                localStorage.setItem("githubAccessToken",this.social.socialAccessToken)
               }
             }
           );
+        } else {
+          this.notifyErr(Messages.EVENT_ACTIONS.ALREADY_AUTHERIZED)
+        }
       } catch (e) {
         this.notifyErr(e);
       }
