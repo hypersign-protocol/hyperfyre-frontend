@@ -139,7 +139,7 @@
       <div class="row g-3 align-items-center w-100 mt-4" v-if="showGithubRepoName">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="value" class="col-form-label"
-            >Github Repository Name<span style="color: red">*</span>:
+            >Github Repository Url<span style="color: red">*</span>:
           </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
@@ -281,6 +281,7 @@ import {
   isretweetUrl,
   isValidTwitterUsername,
   isValidTelegramName,
+  isGithubUrl
 } from "../../../../mixins/fieldValidationMixin";
 import Messages from "../../../../utils/messages/admin/en";
 import config from "../../../../config"
@@ -489,10 +490,10 @@ export default {
             this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.GITHUB_REPONAME_EMPTY);
           } else if(
             this.selected.type === "GITHUB_PR" &&
-            isValidURL(this.selected.value)
+            isGithubUrl(this.selected.value)
           ){
             isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVALID_GITHUB_REPONAME);
+            this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVALID_GITHUB_URL);
           } else if (isNaN(parseInt(this.selected.score))) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM);

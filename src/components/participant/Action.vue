@@ -32,6 +32,7 @@ import TwitterFollow from "./ActionInputs/TwitterFollow.vue";
 import TwitterRetweet from "./ActionInputs/TwitterRetweet.vue";
 import DiscordJoin from "./ActionInputs/DiscordJoin.vue";
 import TelegramJoin from "./ActionInputs/TelegramJoin.vue";
+import GithubPr from "./ActionInputs/GithubPr.vue"
 import InputText from "./ActionInputs/InputText.vue";
 import BlockchainEth from "./ActionInputs/BlockchainEth.vue";
 import BlockchainTez from "./ActionInputs/BlockchainTez.vue";
@@ -105,6 +106,7 @@ export default {
     TwitterFollow,
     TwitterRetweet,
     TelegramJoin,
+    GithubPr,
     InputText,
     EthereumNetwork,
     BlockchainEth,
@@ -203,7 +205,17 @@ export default {
 
         this.isLoading = true;
         this.actions = [];
+        let socialAccessToken;
 
+        let parsedValue;
+        if(actionItem.type.includes("GITHUB_PR")){
+        parsedValue = JSON.parse(value)
+        if(parsedValue.socialAccessToken){
+        socialAccessToken = parsedValue.socialAccessToken
+        delete parsedValue.socialAccessToken
+        value = parsedValue
+        }
+        }
         this.actions.push({
           actionId: actionItem._id,
           value: value,
@@ -223,13 +235,17 @@ export default {
         if (this.$route.query.referrer && this.$route.query.referrer != "") {
           url += `&referrer=${this.$route.query.referrer}`;
         }
-        let headers = {
+        let headers;
+        headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
           "sig-ts":ts,
           "x-payload-hf-sign":sig
 
         };
+        if(socialAccessToken){
+          headers['x-hf-social-accessToken']= socialAccessToken
+        }
 
         const resp = await apiClient.makeCall({
           method: "POST",

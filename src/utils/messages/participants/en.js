@@ -50,6 +50,11 @@ const EVENT_ACTIONS = {
     TWITTER_RETWEET: {
         INVALID_RETWEET: "Error: Invalid retweet"
     },
+    GITHUB_PR:{
+        GITHUB_AUTH:"Error: Please authorize and give PR url",
+        GITHUB_PR_EMPTY:"Error: Please Enter your Github PR Url",
+        INVALID_GITHUB_PR_URL:"Error: Invalid Github PR Url"
+    },
     ETH: {
         INVALIDWEB3: "Web3 provider not found. Please install Metamask wallet",
         INVALID_SIG: "Invalid signature",
