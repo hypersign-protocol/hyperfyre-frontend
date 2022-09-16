@@ -497,7 +497,8 @@ export default {
           (x) =>
             x.type.indexOf("TWITTER_") > -1 ||
             x.type.indexOf("TELEGRAM_") > -1 ||
-            x.type.indexOf("DISCORD_") > -1
+            x.type.indexOf("DISCORD_") > -1 ||
+            x.type.indexOf("GITHUB") > -1
         );
       } else {
         return [];
@@ -593,6 +594,7 @@ export default {
           { text: "Twitter Retweet", value: "TWITTER_RETWEET" },
           { text: "Telegram Join", value: "TELEGRAM_JOIN" },
           { text: "Discord Join", value: "DISCORD_JOIN" },
+          { text: "Github PR", value: "GITHUB_PR" },
         ],
         blockchainAction: [
           { text: "Select Blockchain type", value: null },

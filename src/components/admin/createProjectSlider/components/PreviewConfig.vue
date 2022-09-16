@@ -134,6 +134,11 @@ cursor:default !important
                   ></i>
                   <i
                     style="color: gray"
+                    v-if="action.type.includes('GITHUB_PR')"
+                    class="fab fa-github"
+                  ></i>
+                  <i
+                    style="color: gray"
                     v-if="action.type.includes('INPUT_HYPERLINK')"
                     class="fa fa-link"
                   ></i>

@@ -66,6 +66,8 @@ const EVENTS = {
             INVALID_INVITE_LINK: "Invalid Invite Link",
             INVALID_TWITTER_USERNAME: "Invalid Twitter Username",
             INVALID_TELEGRAM_USERNAME: "Invalid Telegram Username",
+            GITHUB_REPONAME_EMPTY: "Github reponame should not be empty",
+            INVALID_GITHUB_URL: "Invalid github repo Url"
         },
 
         CUSTOM: {
