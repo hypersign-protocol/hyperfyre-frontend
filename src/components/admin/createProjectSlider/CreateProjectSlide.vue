@@ -606,6 +606,7 @@ export default {
           { text: "Reef", value: "BLOCKCHAIN_REEF" },
           { text: "Tezos", value: "BLOCKCHAIN_TEZ" },
           { text: "Cardano", value: "BLOCKCHAIN_CARDANO" },
+          { text: "Cosmos Blockchains", value: "BLOCKCHAIN_COSMOS" },
         ],
         smartContractAction: [
           { text: "Select Contract Type", value: null },

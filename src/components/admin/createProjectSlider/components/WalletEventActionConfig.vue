@@ -69,6 +69,12 @@
               v-if="eventAction.type === 'BLOCKCHAIN_CARDANO'"
               height="22px"
             />
+            <img
+              style="padding-right: 5px"
+              src="../../../../assets/cosmos-2.svg"
+              v-if="eventAction.type === 'BLOCKCHAIN_COSMOS'"
+              height="22px"
+            />
           </span>
           <span>{{ truncate1(eventAction.title, 6) }}</span>
           <span style="color: gray; padding-left: 5px"
@@ -105,6 +111,25 @@
         <div class="col-lg-9 col-md-9 px-0">
           <input
             v-model="selected.title"
+            type="text"
+            id="title"
+            class="form-control w-100"
+          />
+        </div>
+      </div>
+
+      <div
+        class="row g-3 align-items-center w-100 mt-4"
+        v-if="selected.type === 'BLOCKCHAIN_COSMOS'"
+      >
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="title" class="col-form-label"
+            >Chain Id<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+          <input
+            v-model="selected.value"
             type="text"
             id="title"
             class="form-control w-100"
@@ -325,6 +350,9 @@ export default {
           } else if (isValidURL(this.selected.title)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL);
+          } else if (this.selected.type === "BLOCKCHAIN_COSMOS" && !this.selected.value){
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.BLOCKCHAIN.COSMOS_CHAIN_ID);
           } else if (isNaN(parseInt(this.selected.score))) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM);
