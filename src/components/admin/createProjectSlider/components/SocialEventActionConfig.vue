@@ -139,7 +139,7 @@
       <div class="row g-3 align-items-center w-100 mt-4" v-if="showGithubRepoName">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="value" class="col-form-label"
-            >Github Repository Url<span style="color: red">*</span>:
+            >Github Repo URL<span style="color: red">*</span>:
           </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
