@@ -85,7 +85,7 @@ import { SigningCosmosClient } from "@cosmjs/launchpad";
 import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
 export default {
-  name: "EthereumErc20",
+  name: "BlockchainCosmos",
   props: {
     idValue: {
       required: true,
@@ -122,13 +122,21 @@ computed:{
     };
   },
   updated(){
-    if (this.data.value) {
+    if(this.data.isDone && this.data.value){
+      if (this.userWalletAddress === "") {
       this.userWalletAddress = this.data.value
+    } else {
+      this.userWalletAddress = this.userWalletAddress;
+    }
     }
   },
   mounted() {
-    if (this.data.value) {
+   if(this.data.isDone && this.data.value){
+      if (this.userWalletAddress === "") {
       this.userWalletAddress = this.data.value
+    } else {
+      this.userWalletAddress = this.userWalletAddress;
+    }
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
     this.checkWalletInjection();
@@ -161,7 +169,7 @@ computed:{
 },
     async update() {
       if (!this.isFieldValid() || this.userWalletAddress === "") {
-        return this.notifyErr(Messages.EVENT_ACTIONS.ETH.CONNECT_METAMASK);
+        return this.notifyErr(Messages.EVENT_ACTIONS.COSMOS.CONNECT_KEPLR_WALLET);
       } else {
         this.$emit("input",this.userWalletAddress)
       }
