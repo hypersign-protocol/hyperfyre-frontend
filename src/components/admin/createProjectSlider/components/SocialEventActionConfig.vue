@@ -35,6 +35,11 @@
               v-if="eventAction.type.includes('DISCORD')"
               class="fab fa-discord"
             ></i>
+            <i
+              style="color: gray"
+              v-if="eventAction.type.includes('GITHUB')"
+              class="fab fa-github"
+            ></i>
             
           </span>
           <span>{{ truncate1(eventAction.title, 6) }}</span>
@@ -79,7 +84,7 @@
 
       <div
         class="row g-3 align-items-center w-100 mt-4"
-        v-if="noSocialhandle"
+        v-if="noSocialhandle && !showGithubRepoName"
       >
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="value" class="col-form-label"
@@ -130,6 +135,25 @@
           />
         </div>
       </div>
+
+      <div class="row g-3 align-items-center w-100 mt-4" v-if="showGithubRepoName">
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="value" class="col-form-label"
+            >Github Repository Url<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+          <input
+            v-model="selected.value"
+            type="text"
+            :placeholder="
+              selected.type === null ? '' : 'Please Enter Your Github Repo URL'"
+            id="value"
+            class="form-control w-100"
+          />
+        </div>
+      </div>
+
       <div class="row g-3 align-items-center w-100 mt-4" v-if="showInvitelink">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="value" class="col-form-label"
@@ -257,6 +281,7 @@ import {
   isretweetUrl,
   isValidTwitterUsername,
   isValidTelegramName,
+  isGithubUrl
 } from "../../../../mixins/fieldValidationMixin";
 import Messages from "../../../../utils/messages/admin/en";
 import config from "../../../../config"
@@ -320,6 +345,16 @@ export default {
         return false;
       }
     },
+    showGithubRepoName(){
+      if(
+        this.eventActionType === "SOCIAL" &&
+        this.selected.type === "GITHUB_PR"
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   },
   data() {
     return {
@@ -430,6 +465,7 @@ export default {
           } else if (
             this.selected.type != "DISCORD_JOIN" &&
             this.selected.type != "TWITTER_RETWEET" &&
+            this.selected.type !="GITHUB_PR" &&
             isValidURL(this.selected.value)
           ) {
             isvalid = false;
@@ -446,6 +482,18 @@ export default {
           ) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVALID_INVITE_LINK);
+          } else if (
+            this.selected.type === "GITHUB_PR" &&
+            isEmpty(this.selected.value)
+          ) {
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.GITHUB_REPONAME_EMPTY);
+          } else if(
+            this.selected.type === "GITHUB_PR" &&
+            isGithubUrl(this.selected.value)
+          ){
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.SOCIAL.INVALID_GITHUB_URL);
           } else if (isNaN(parseInt(this.selected.score))) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM);

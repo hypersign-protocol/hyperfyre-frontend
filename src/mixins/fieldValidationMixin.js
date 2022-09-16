@@ -85,6 +85,13 @@ export function isretweetUrl(str) {
         return true
     }
 }
+export function isGithubUrl(str){
+    if(!str.includes('https://github.com/')){
+        return true;
+    } else {
+        return false;
+    }
+}
 export function isDate(date) {
     if (!date) {
         return false;
