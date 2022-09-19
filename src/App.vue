@@ -111,7 +111,7 @@ export default {
             {
               href: "/admin/createapp",
               title: "Apps",
-              icon: "fa fa-plus",
+              icon: "fa fa-code",
               exactPath: true,
             },
             {

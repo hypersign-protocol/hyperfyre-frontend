@@ -6,7 +6,7 @@
       :is-full-page="fullPage"
     ></loading>
     <div class="col-md-12 card event-card" 
-    style="height: 100%; position: absolute;font-size:smaller; padding: 35px;">
+    style="height: 100%; position: absolute;font-size:smaller; padding: 35px; margin-left: 3%;">
       <vc-donut
         background="white"
         foreground="#60c860"

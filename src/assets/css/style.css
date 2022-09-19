@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 body {
     overflow-y: auto;
-    font-family: 'Lato', sans-serif;
+    font-family: Montserrat,Helvetica,Arial,serif;
     background: #F7F8FC;
     height: 100vh;
     color: #636363;
@@ -364,7 +364,7 @@ ul.social-links li:hover {
 .btn-plan {
     min-height: 48px;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 20px;
     text-align: center;
     letter-spacing: 0.2px;
