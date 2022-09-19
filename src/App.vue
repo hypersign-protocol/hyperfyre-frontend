@@ -119,15 +119,15 @@ export default {
               title: "Subscriptions",
               icon: "fas fa-receipt",
               exactPath: true,
-            },
-            {
-              href: "/admin/login",
-              title: "Logout",
-              icon: "fas fa-sign-out-alt",
-              exactPath: true,
-            },
+            }
           ]
-        }
+        },
+        {
+          href: "/admin/login",
+          title: "Logout",
+          icon: "fas fa-sign-out-alt",
+          exactPath: true,
+        },
       ],
       unsubsSubscribedMenu: [
         {
