@@ -108,7 +108,7 @@ export default new Vuex.Store({
                 })
 
             }else{
-                notificationMixins.methods.notifyErr("Plase login")
+                notificationMixins.methods.notifyErr("Please login")
             }
                 
         },
