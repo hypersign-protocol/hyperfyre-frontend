@@ -1,44 +1,7 @@
 <style scoped>
-.addmargin {
-  margin-top: 10px;
-  margin-bottom: 10px;
+.avatar{
+  position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); 
 }
-
-.vue-logo-back {
-  background-color: black;
-}
-
-.logo {
-  width: 144px;
-}
-
-.fullbody {
-  width: 100%;
-}
-.floatLeft {
-  float: left;
-}
-
-.floatRight {
-  float: right;
-}
-
-.noBullet {
-  list-style-type: none;
-}
-
-
-.dot {
-  height: 15px;
-  width: 15px;
-  background-color: green;
-  border-radius: 50%;
-  display: inline-block;
-  margin-top: 5px;
-  float: right;
-}
-
-
 .tile-profile{
   text-align: left;
 }
@@ -51,7 +14,6 @@
   color: gray;
   word-wrap: break-word;
 }
-
 .accordion-header-theme{
   background-color: var(--header-bg-color);
   border: 0;
@@ -86,12 +48,7 @@
           <div class="card-body">
             <div class="row">
               <div class="col-md-4">
-                <!-- <img
-                  src="../../assets/avatar.png"
-                  alt="John"
-                  style="width: 100%;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);"
-                /> -->
-                <b-avatar style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);" square size="8rem" variant="info" :src="getProfileIcon(user.name) "></b-avatar>
+                <b-avatar class="avatar" icon="person-fill" size="8rem"></b-avatar>
               </div>
               <div class="col-md-8" style="flex-wrap: wrap; padding: 20px">
                 <p>DID</p>
