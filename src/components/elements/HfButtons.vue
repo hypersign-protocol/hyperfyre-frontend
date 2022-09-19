@@ -3,8 +3,8 @@
   :title="title"
   @click="emitExecuteAction()"
   >
-    {{name}} 
-    <span v-if="iconClass"><i :class="iconClass"></i></span>
+  <span v-if="iconClass"><i :class="iconClass"></i></span>  
+  {{name}} 
   </button>
 </template>
 
@@ -51,5 +51,10 @@ export default {
   border-collapse:  var(--button-bg-color);
   color: var(--button-text-color);
   border: 0;
+  
+}
+
+.button-theme:hover{
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 </style>

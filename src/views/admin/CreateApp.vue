@@ -44,16 +44,6 @@
   padding-right: 16px;
   float: right;
 }
-.table{
-  padding-left: 15px;
-  padding-top: 4%;
-}
-.button-theme{
-  background-color:  var(--button-bg-color);
-  border-collapse: var(--button-bg-color);
-  color: var(--button-text-color);
-  border: 0;
-}
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -62,13 +52,11 @@
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-
-    <div class="text-right">
-    </div>
+      <div class="row">
 			<div class="col-md-12">
         <h3 v-if="!isEdit">Create Your App</h3>
         <h3 v-else>Edit Your App</h3>
-				<div class="card">
+				<div class="card event-card">
 					
 					<div class="card-body">
 						<form>
@@ -154,59 +142,19 @@
 					</div>
 				</div>
 			</div>
-      <div class="table" v-if="apps.length">
-      <h3 v-if="apps.length">Your Apps</h3>
-      <!-- <div class="row" > -->
-      <!-- <div class="col-md-12"> -->
-            <!-- <table class="table table-bordered" 
-            style="background:#FFFF"
-            v-if="apps.length">
-          <thead class="thead-light">
-            <tr>
-              <th>AppId</th>
-              <th>Name</th>
-              <th>Base URL</th>
-              <th>Wallet Address</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in apps" :key="row._id">
-              <th>
-                <p>{{row._id}}</p>
-              </th>
-              <td><p>{{row.appName}}</p></td>
-              <td>
-              <p style="display:inline-block;">{{row.baseUrl}}</p>
-              </td>
-              <td style="display:flex;"
-              ><p
-              >{{truncate1(row.appWalletAddress, 15)}}</p>
-              <i class="far fa-copy"
-              title="Copy public key to clipboard"
-              @click="copy(row.appWalletAddress,'AppWallet Address')"
-              ></i>
-              </td>
-              <td>
-                   <i class="fas fa-pencil-alt"
-                  style="text-transform: uppercase; float:right; cursor: pointer;"
-                  title="Click to edit the app and generate new keypair"
-                  @click="editbtn(row)"
-                >
-              </i>
-              </td>
-            </tr>
-          </tbody>
-        </table> -->
-        <hf-table
-        :items="apps"
-        :fields="appHeader"
-        @updateRecord="row => editbtn(row)"
-        customStyle="table-bordered"
-        ></hf-table>
-        <!-- </div> -->
-      <!-- </div> -->
+    </div>
+
+      <div class="row" v-if="apps.length" style="margin-top: 2%;">
+        <div class="col-md-12">
+          <h4 v-if="apps.length">Your Apps</h4>
+          <hf-table
+          :items="apps"
+          :fields="appHeader"
+          @updateRecord="row => editbtn(row)"
+          ></hf-table>
         </div>
+        
+      </div>
 		</div>
     
 </template>
@@ -255,7 +203,8 @@ export default {
       isLoading: false,
       fullPage: true,
       errors: [],
-      authToken: localStorage.getItem("authToken"),
+      authToken:null,
+      accessToken:null,
       appHeader:[
         {key:"_id",label:"AppID",type:"text"},
         {key:"appName",label:"Name",type:"text"},
@@ -264,6 +213,14 @@ export default {
         {key:"action", label:"Action",type:"action", editOnly:true },
       ]
     };
+  },
+  mounted(){
+    if(localStorage.getItem("authToken")){
+      this.authToken = localStorage.getItem("authToken");
+    }
+    if(localStorage.getItem("accessToken")){
+      this.accessToken = localStorage.getItem("accessToken");
+    }
   },
   methods: {
    async update(){
@@ -279,10 +236,6 @@ export default {
           this.app.appWalletAddress = credential.appWalletAddress;
         }
             const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
-            let headers = {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${this.authToken}`,
-            };
             const resp = await fetch(url, {
               method: "PUT",
               body: JSON.stringify({
@@ -292,7 +245,7 @@ export default {
                 _id:this.app._id,
                 generateNewKeyPair:this.app.toggle
                 }),
-              headers,
+              headers:this.getHeaders()
             });
             const json = await resp.json();
             if (json) {
@@ -319,6 +272,15 @@ export default {
         this.isLoading = false;
       }
     },
+    getHeaders(){
+            let headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${this.authToken}`,
+                AccessToken: `Bearer ${this.accessToken}`,
+            };
+
+            return headers;
+        },
     cancel(){
       this.isEdit=false;
       this.clearselected();
@@ -339,10 +301,6 @@ export default {
           const credential= await  this.generateWallet();
           this.app.appWalletAddress = credential.appWalletAddress;
             const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
-            let headers = {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${this.authToken}`,
-            };
             const resp = await fetch(url, {
               method: "POST",
               body: JSON.stringify({
@@ -351,7 +309,7 @@ export default {
                 appWalletAddress:this.app.appWalletAddress,
                 _id:"" || this.app._id
                 }),
-              headers,
+              headers:this.getHeaders()
             });
             const json = await resp.json();
             if (json) {
