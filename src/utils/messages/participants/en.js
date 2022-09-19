@@ -69,7 +69,7 @@ const EVENT_ACTIONS = {
         CONNECT_KEPLR_WALLET: "Connect your Keplr Wallet"
     },
     SUBS: {
-        SUBS_NOTIFICATION: "Click On Subscribe Notificaion"
+        SUBS_NOTIFICATION: "Click On Subscribe Notification"
     }
 }
 
