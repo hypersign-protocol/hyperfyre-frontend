@@ -133,6 +133,7 @@
             type="text"
             id="title"
             class="form-control w-100"
+            placeholder="cosmos-hub1"
           />
         </div>
       </div>
@@ -149,6 +150,8 @@
             type="text"
             id="placeHolder"
             class="form-control w-100"
+            :placeholder="
+            selected.type === 'BLOCKCHAIN_COSMOS' ? 'cosmos1yya5gl4v6sj3qn0l06ngz0uuxg995mm9rrfkte' : ''"
           />
         </div>
       </div>
@@ -353,6 +356,9 @@ export default {
           } else if (this.selected.type === "BLOCKCHAIN_COSMOS" && !this.selected.value){
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.BLOCKCHAIN.COSMOS_CHAIN_ID);
+          } else if(this.selected.type === "BLOCKCHAIN_COSMOS" && isValidURL(this.selected.value)){
+            isvalid = false;
+            this.notifyErr(Messages.EVENTS.ACTIONS.BLOCKCHAIN.INVALID_CHAIN_ID)
           } else if (isNaN(parseInt(this.selected.score))) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM);
@@ -394,6 +400,9 @@ export default {
       // Code to update an Action
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {
+        if(this.selected.type !== "BLOCKCHAIN_COSMOS"){
+          this.selected.value = ""
+        }
         this.eventActionList[this.currentSelectedId] = this.selected;
         this.$emit("updateEventActions", {
           type: "UPDATE",
