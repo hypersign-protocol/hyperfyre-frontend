@@ -65,7 +65,7 @@ export default {
       },
       name: config.appName,
       hover: false,
-      authToken: localStorage.getItem("authToken"),
+      authToken:null,
       isSidebarCollapsed: true,
       authRoutes: ["register", "PKIIdLogin"],
       showNavbar: false,
@@ -160,11 +160,14 @@ export default {
 
   mounted() {
 
+    if(localStorage.getItem("authToken")){
+      this.authToken = localStorage.getItem("authToken")
+    }
     eventBus.$on('UpdateAdminNav',   (isSubscribed) => {
         this.isSubscribed = isSubscribed;
     })
 
-    if(this.authToken){
+    if(this.authToken && !window.location.pathname.includes("/form")){
       this.$store.dispatch('getApps',this.authToken);
       this.$store.dispatch('getTeammates',this.authToken);
     }
