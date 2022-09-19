@@ -266,6 +266,12 @@ cursor:default !important
                     v-if="action.type.includes('BLOCKCHAIN_REEF')"
                     height="20px"
                   />
+                  <img
+                    style="padding-right: 5px"
+                    src="../../../../assets/cosmos-2.svg"
+                    v-if="action.type.includes('BLOCKCHAIN_COSMOS')"
+                    height="20px"
+                  />
                 </span>
               </b-col>
               <b-col cols="9" sm="9" class="text-left" md="9">
