@@ -237,6 +237,7 @@ export default {
         localStorage.setItem("authToken", row.authToken);
 
         this.$router.push("/admin/dashboard");
+        this.$store.dispatch('getApps',row.authToken);
       } else {
         localStorage.setItem("accessToken", row.authToken);
         //console.log(row);
@@ -249,6 +250,7 @@ export default {
           })
         );
          this.$router.push("/admin/dashboard");
+         this.$store.dispatch('getApps',this.authToken);
         
       }
     },

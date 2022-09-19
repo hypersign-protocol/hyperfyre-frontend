@@ -54,11 +54,20 @@ export default new Vuex.Store({
     },
     actions:{
         getApps({commit},authToken){
-                if(authToken){
-                const url = `${config.studioServer.BASE_URL}api/v1/app`;
-                const headers = {
-                  Authorization: `Bearer ${authToken}`,
-                };
+            let headers;
+            let accessToken;
+            if(localStorage.getItem("accessToken")){
+                accessToken = localStorage.getItem("accessToken")
+                headers = {
+                    Authorization: `Bearer ${authToken}`,
+                    AccessToken: `Bearer ${accessToken}`
+                  };
+            } else {
+                headers = {
+                    Authorization: `Bearer ${authToken}`,
+                  };
+            }
+            const url = `${config.studioServer.BASE_URL}api/v1/app`;
                 fetch(url, {
                   headers,
                   method: "GET",
@@ -74,11 +83,6 @@ export default new Vuex.Store({
                 }).catch(e=>{
                     notificationMixins.methods.notifyErr(e)
                 })
-
-            }else{
-                notificationMixins.methods.notifyErr("Please login")
-            }
-                
         },
 
         getTeammates({commit},authToken) {
