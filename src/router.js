@@ -229,9 +229,7 @@ router.beforeEach((to, from, next) => {
                             } else {
                                 // if he is subscired
                                 const usage = json.message.usage;
-                                localStorage.removeItem("user")
-                                localStorage.setItem("user", JSON.stringify(json.message));
-                                if (usage && usage.totalUsed >= usage.totalAvailable && usage.isSubscribed== true) {
+                                if (usage && usage.totalUsed >= usage.totalAvailable) {
                                     next({
                                         path: "/admin/subscription",
                                         params: { nextUrl: to.fullPath },

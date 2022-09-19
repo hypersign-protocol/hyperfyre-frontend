@@ -61,6 +61,11 @@
 
 <template>
   <div>
+    <loading
+      :active.sync="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    ></loading>
     <div class="row">
       <div class="col-md-6">
         <div class="card tile event-card" >
@@ -112,12 +117,14 @@
 <script>
 import config from "../../config";
 import profileIconMixins from "../../mixins/profileIconMixins";
-
+import notificationMixins from "../../mixins/notificationMixins"
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 export default {
   name: "Profile",
   mounted() {},
-  components: {},
-  mixins: [profileIconMixins],
+  components: {Loading},
+  mixins: [profileIconMixins,notificationMixins],
    computed:{
     headerThemeCss(){
     return{
@@ -138,6 +145,8 @@ export default {
       authToken: localStorage.getItem("authToken"),
       accessToken:localStorage.getItem("accessToken"),
       projects: [],
+      fullPage:true,
+      isLoading:false
     };
   },
   async created() {

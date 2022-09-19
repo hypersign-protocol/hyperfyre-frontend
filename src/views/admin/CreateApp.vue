@@ -203,7 +203,8 @@ export default {
       isLoading: false,
       fullPage: true,
       errors: [],
-      authToken: localStorage.getItem("authToken"),
+      authToken:null,
+      accessToken:null,
       appHeader:[
         {key:"_id",label:"AppID",type:"text"},
         {key:"appName",label:"Name",type:"text"},
@@ -212,6 +213,14 @@ export default {
         {key:"action", label:"Action",type:"action", editOnly:true },
       ]
     };
+  },
+  mounted(){
+    if(localStorage.getItem("authToken")){
+      this.authToken = localStorage.getItem("authToken");
+    }
+    if(localStorage.getItem("accessToken")){
+      this.accessToken = localStorage.getItem("accessToken");
+    }
   },
   methods: {
    async update(){
@@ -227,10 +236,6 @@ export default {
           this.app.appWalletAddress = credential.appWalletAddress;
         }
             const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
-            let headers = {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${this.authToken}`,
-            };
             const resp = await fetch(url, {
               method: "PUT",
               body: JSON.stringify({
@@ -240,7 +245,7 @@ export default {
                 _id:this.app._id,
                 generateNewKeyPair:this.app.toggle
                 }),
-              headers,
+              headers:this.getHeaders()
             });
             const json = await resp.json();
             if (json) {
@@ -267,6 +272,15 @@ export default {
         this.isLoading = false;
       }
     },
+    getHeaders(){
+            let headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${this.authToken}`,
+                AccessToken: `Bearer ${this.accessToken}`,
+            };
+
+            return headers;
+        },
     cancel(){
       this.isEdit=false;
       this.clearselected();
@@ -287,10 +301,6 @@ export default {
           const credential= await  this.generateWallet();
           this.app.appWalletAddress = credential.appWalletAddress;
             const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
-            let headers = {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${this.authToken}`,
-            };
             const resp = await fetch(url, {
               method: "POST",
               body: JSON.stringify({
@@ -299,7 +309,7 @@ export default {
                 appWalletAddress:this.app.appWalletAddress,
                 _id:"" || this.app._id
                 }),
-              headers,
+              headers:this.getHeaders()
             });
             const json = await resp.json();
             if (json) {
