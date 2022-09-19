@@ -62,7 +62,7 @@ const EVENTS = {
             INVITE_NOT_EMPTY: "Invite Link Should not be empty",
             SOCIAL_HANDLE_EMPTY: "Social Handle Should not be empty",
             URL_IN_SOCIAL_HANDLE: "Do not put url in Social Handle",
-            RETWEET_VALID_URL: "Plase Enter valid retweet url",
+            RETWEET_VALID_URL: "Please Enter valid retweet url",
             INVALID_INVITE_LINK: "Invalid Invite Link",
             INVALID_TWITTER_USERNAME: "Invalid Twitter Username",
             INVALID_TELEGRAM_USERNAME: "Invalid Telegram Username",
@@ -128,7 +128,7 @@ const ORGDATA= {
     ORG_UPDATED_SUCCESSFULLY:"Org details updated Successfully"
 }
 const PARTICIPANTS = {
-    SELECT_EVENT:"Plase select an event",
+    SELECT_EVENT:"Please select an event",
     EXPORT_ALL: {
 
     },
