@@ -42,6 +42,7 @@ import BlockchainBsc from "./ActionInputs/BlockchainBsc.vue";
 import BlockchainMatic from "./ActionInputs/BlockchainMatic.vue";
 import BlockchainOne from "./ActionInputs/BlockchainOne.vue";
 import BlockchainReef from "./ActionInputs/BlockchainReef.vue";
+import BlockchainCosmos from "./ActionInputs/BlockchainCosmos.vue"
 import EthereumErc20 from "./ActionInputs/EthereumErc20.vue";
 import EthereumErc721 from "./ActionInputs/EthereumErc721.vue";
 import MaticErc20 from "./ActionInputs/MaticErc20.vue";
@@ -117,6 +118,7 @@ export default {
     BlockchainMatic,
     BlockchainOne,
     BlockchainReef,
+    BlockchainCosmos,
     EthereumErc20,
     EthereumErc721,
     MaticErc20,

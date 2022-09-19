@@ -66,8 +66,8 @@ const EVENTS = {
             INVALID_INVITE_LINK: "Invalid Invite Link",
             INVALID_TWITTER_USERNAME: "Invalid Twitter Username",
             INVALID_TELEGRAM_USERNAME: "Invalid Telegram Username",
-            GITHUB_REPONAME_EMPTY: "Github reponame should not be empty",
-            INVALID_GITHUB_URL: "Invalid github repo Url"
+            GITHUB_REPONAME_EMPTY: "GitHub Repo URL should not be empty",
+            INVALID_GITHUB_URL: "Invalid GitHub repo URL"
         },
 
         CUSTOM: {
@@ -77,7 +77,8 @@ const EVENTS = {
         },
 
         BLOCKCHAIN: {
-            CHOOSE_TYPE: "Please choose Blockchain Type"
+            CHOOSE_TYPE: "Please choose Blockchain Type",
+            COSMOS_CHAIN_ID: "Please enter Chain Id"
         },
 
         SMARTCONTRACT: {

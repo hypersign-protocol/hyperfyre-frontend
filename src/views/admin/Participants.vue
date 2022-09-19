@@ -491,11 +491,15 @@ computed:{
       this.$root.$emit('modal-show')
     },
     parseActionValue(action) {
+      console.log(action)
       switch (action.type) {
         case "DISCORD_JOIN":
         case "TELEGRAM_JOIN":
         case "TWITTER_FOLLOW": {
           return JSON.parse(action.value).targetScreenName;
+        }
+         case "GITHUB_PR":{
+          return action.value.url
         }
         case "ETHEREUM_ERC20":
         case "MATIC_ERC20":
