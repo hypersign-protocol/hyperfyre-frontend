@@ -53,8 +53,8 @@ const EVENT_ACTIONS = {
     },
     GITHUB_PR:{
         GITHUB_AUTH:"Error: Please authorize and give GitHub PR URL",
-        GITHUB_PR_EMPTY:"Error: Please Enter your GitHUb PR URL",
-        INVALID_GITHUB_PR_URL:"Error: Invalid GitHUb PR URL"
+        GITHUB_PR_EMPTY:"Error: Please Enter your GitHub PR URL",
+        INVALID_GITHUB_PR_URL:"Error: Invalid GitHub PR URL"
     },
     ETH: {
         INVALIDWEB3: "Web3 provider not found. Please install Metamask wallet",
