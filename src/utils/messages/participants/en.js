@@ -65,6 +65,9 @@ const EVENT_ACTIONS = {
     REEF: {
         CONNECT_REEF_WALLET: "Connect your reef wallet by selcting address options"
     },
+    COSMOS:{
+        CONNECT_KEPLR_WALLET: "Connect your Keplr Wallet"
+    },
     SUBS: {
         SUBS_NOTIFICATION: "Click On Subscribe Notificaion"
     }

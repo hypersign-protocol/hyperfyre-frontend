@@ -77,7 +77,8 @@ const EVENTS = {
         },
 
         BLOCKCHAIN: {
-            CHOOSE_TYPE: "Please choose Blockchain Type"
+            CHOOSE_TYPE: "Please choose Blockchain Type",
+            COSMOS_CHAIN_ID: "Please enter Chain Id"
         },
 
         SMARTCONTRACT: {
