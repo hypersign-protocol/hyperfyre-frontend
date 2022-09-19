@@ -3,8 +3,8 @@
   :title="title"
   @click="emitExecuteAction()"
   >
-    {{name}} 
-    <span v-if="iconClass"><i :class="iconClass"></i></span>
+  <span v-if="iconClass"><i :class="iconClass"></i></span>  
+  {{name}} 
   </button>
 </template>
 
