@@ -63,12 +63,10 @@
       :is-full-page="fullPage"
     ></loading>
 
-    <div class="text-right">
-    </div>
 			<div class="col-md-12">
         <h3 v-if="!isEdit">Create Your App</h3>
         <h3 v-else>Edit Your App</h3>
-				<div class="card">
+				<div class="card event-card">
 					
 					<div class="card-body">
 						<form>

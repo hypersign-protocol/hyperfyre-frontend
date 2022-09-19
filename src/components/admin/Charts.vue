@@ -1,7 +1,7 @@
 <template>
   <div class="row">
-    <div class="col-md-12 card chart-container" 
-    style="height: 98%; position: absolute;font-size:smaller">
+    <div class="col-md-12 card event-card" 
+    style="height: 100%; position: absolute;font-size:smaller; padding: 35px;">
       <vc-donut
         background="white"
         foreground="#60c860"
@@ -22,16 +22,6 @@
   </div>
 </template>
 
-<style scoped>
-.chart-container {
-  border-radius: 5px;
-  border: 0;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-  padding: 35px;
-  margin-top: 10px;
-  margin-left: 2%;
-}
-</style>
 
 <script>
 export default {
