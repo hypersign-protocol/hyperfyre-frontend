@@ -305,7 +305,9 @@ i {
             class="mb-2 eventCard"
             @error="onBannerError($event)"
           >
-            <ul
+            <div class="row">
+              <div class="col-md-9">
+                <ul
               style="
                 list-style-type: none;
                 padding-left: 0px;
@@ -319,22 +321,15 @@ i {
                   ><i class="far fa-copy"></i
                 ></span>
               </li>
+              
               <li
                 data-toggle="tooltip"
-                data-placement="bottom"
-                title="Start Date"
+                data-placement="bottom" 
+                title="Expiry Day"
               >
-                <i class="fas fa-hourglass-start"></i>
-                {{ formateDate(project.fromDate) }}
-              </li>
-              <li
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="End Date"
-              >
-                <i class="fas fa-hourglass-end"></i>
-                {{ formateDate(project.toDate) }}
-              </li>
+              <i class="fa fa-hourglass-end"></i>
+              Expires in {{ getDateDiff(project.toDate, new Date()) }} day (s)
+            </li>
 
               <li
                 data-toggle="tooltip"
@@ -368,11 +363,14 @@ i {
                   >Participants ({{ project.investorsCount }})</a
                 >
               </li>
-              <li data-toggle="tooltip" data-placement="bottom" title="Actions which participants will perform">
+              <!-- <li data-toggle="tooltip" data-placement="bottom" title="Actions which participants will perform">
                 <i class="fa fa-tasks"></i>
                 Actions ({{ project.actions.length }})
-              </li>
+              </li> -->
             </ul>
+              </div>
+            </div>
+            
             <footer>
               <small>
                 <b-badge
@@ -623,6 +621,12 @@ export default {
   },
 
   methods: {
+    getDateDiff(d1, d2){
+      const date1 = new Date(d1);
+      const date2 = new Date(d2);
+      const diffTime = Math.abs(date2 - date1);
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    },
     async getTags() {
       const url = `${this.$config.studioServer.BASE_URL}api/v1/tag`;
       const headers = {
