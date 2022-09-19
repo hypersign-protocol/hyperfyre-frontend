@@ -28,7 +28,7 @@ const EVENT_ACTIONS = {
     URL_NOT_VISITED: "Error: Please visit the link",
     WENT_WRONG: "Error: Something Went Wrong",
     ERROR: "Error occurred: ",
-    ALREADY_AUTHERIZED:"You are already authorized Please proceed to perform action",
+    ALREADY_AUTHERIZED:"You are already authorized. Please proceed to perform action.",
     INPUT_DATE: {
         INVALID_DATE_TIME: "Error: Invalid date time"
     },
@@ -52,9 +52,9 @@ const EVENT_ACTIONS = {
         INVALID_RETWEET: "Error: Invalid retweet"
     },
     GITHUB_PR:{
-        GITHUB_AUTH:"Error: Please authorize and give PR url",
-        GITHUB_PR_EMPTY:"Error: Please Enter your Github PR Url",
-        INVALID_GITHUB_PR_URL:"Error: Invalid Github PR Url"
+        GITHUB_AUTH:"Error: Please authorize and give GitHub PR URL",
+        GITHUB_PR_EMPTY:"Error: Please Enter your GitHub PR URL",
+        INVALID_GITHUB_PR_URL:"Error: Invalid GitHub PR URL"
     },
     ETH: {
         INVALIDWEB3: "Web3 provider not found. Please install Metamask wallet",
