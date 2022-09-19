@@ -6,6 +6,7 @@ body {
     font-family: 'Lato', sans-serif;
     background: #F7F8FC;
     height: 100vh;
+    color: #636363;
 }
 .markdown{
 padding: 0.1em;
@@ -594,3 +595,11 @@ ul.social-links li:hover {
         max-width: 25%;
     }
 }
+
+.event-card{
+    border: 0;
+    border-radius: 10px;
+    -webkit-box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);   
+    width:100%
+  }

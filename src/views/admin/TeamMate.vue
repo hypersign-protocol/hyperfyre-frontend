@@ -60,7 +60,7 @@
       <div class="col-md-12">
         <table
           v-if="teammates.length"
-          class="table table-bordered"
+          class="table event-card"
           style="background: #ffff"
         >
           <thead class="thead-light">
@@ -114,7 +114,7 @@
 
        
         <h3 v-if="$accounts.length" class="leftAlign">Team's you are part of</h3>
-         <table  v-if="$accounts.length" class="table table-bordered" style="background:#FFFF">
+         <table  v-if="$accounts.length" class="table event-card" style="background:#FFFF">
 
           <thead class="thead-light">
             <tr>

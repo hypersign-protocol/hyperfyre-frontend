@@ -327,6 +327,10 @@ export default {
   margin-left: auto;
 }
 
+.sidebar-wrapper{
+  box-shadow: 0 0 15px 0 rgba(34,41,47,.05);
+}
+
 .showNavbar.collapsed .sidebar-wrapper {
   overflow: hidden;
 }
