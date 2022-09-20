@@ -1,5 +1,5 @@
 <template>
-  <div class="card event-card tableCard">
+  <div class="card event-card">
   <b-table thead-class="thead-light" :class="customStyle" :items="items" :fields="fields">
     <template v-for="(field, index) in fields" #[`cell(${field.key})`]="data">
       <span v-if="field.type === 'date'" :key="index" :type="field.type">{{
@@ -83,7 +83,7 @@ export default {
 </script>
 
 <style scoped>
-.tableCard {
+.thead-light {
   word-wrap: break-word; white-space: nowrap;  box-sizing: border-box;
 }
 .copy {
