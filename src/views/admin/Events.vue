@@ -188,7 +188,7 @@ i {
             v-if="projects.length"
             placeholder="Search events by name"
             @executeSearch="handleSearch"
-            style="width: 300px"
+            style="width: 400px"
             ></hf-search-box>
         </div>
 

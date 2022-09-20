@@ -164,7 +164,7 @@ label {
               @executeSearch="handleTableSearch"
               v-model="tableSearch"
               placeholder="Search participants"            
-              style="width: 300px"
+              style="width: 400px"
               ></hf-search-box>
         </div>
         
