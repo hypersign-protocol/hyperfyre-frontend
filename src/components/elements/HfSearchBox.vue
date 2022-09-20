@@ -1,10 +1,10 @@
 <template>
-
-  <input @keyup="emitSearch" type="text" 
-  style="width:auto"
-  class="form-control"
-  :placeholder="placeholder" />
-
+  <div class="input-group">
+      <div class="input-group-prepend">
+        <div class="input-group-text" style="background-color: #fcedc8;"><i class="fas fa-search"></i></div>
+      </div>
+      <input @keyup="emitSearch" type="text" style="width:auto" class="form-control" :placeholder="placeholder" />
+    </div>
 </template>
 
 <script>

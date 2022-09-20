@@ -603,3 +603,7 @@ ul.social-links li:hover {
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);   
     width:100%
   }
+
+.page-nav{
+    margin-top: 2%; padding: 10px;
+}

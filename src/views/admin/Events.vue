@@ -162,88 +162,74 @@ i {
       :is-full-page="fullPage"
     ></loading>
 
-    <div class="row">
-      <div class="col-md-3">
-        <div class="form-group" style="width: 925px">
-          <!-- <input
-            v-if="projects.length"
-            @keyup="handleSearch"
-            type="text"
-            class="form-control w-25"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            placeholder="Search events by name"
-          /> -->
+    <div class="">
+      <div class="form-row">
+        <div class="col-md-3">
+          <div v-if="projects.length">
+            <multiselect
+              v-model="selected"
+              placeholder="Search events by tags"
+              label="text"
+              track-by="value"
+              :options="this.tagToSearch"
+              :multiple="true"
+              :taggable="false"
+              :close-on-select="false"
+              :clear-on-select="false"
+              :style="buttonThemeCss"
+              @input="onInputTag"
+            >
+            </multiselect>
+          </div>
+        </div>
+
+        <div class="col-md-6">
           <hf-search-box
-          v-if="projects.length"
-          placeholder="Search events by name"
-          @executeSearch="handleSearch"
-          ></hf-search-box>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div v-if="projects.length">
-          <multiselect
-            v-model="selected"
-            placeholder="Search events by tags"
-            label="text"
-            track-by="value"
-            :options="this.tagToSearch"
-            :multiple="true"
-            :taggable="false"
-            :close-on-select="false"
-            :clear-on-select="false"
-            :style="buttonThemeCss"
-            @input="onInputTag"
-          >
-          </multiselect>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="text-right">
-          <!-- <button
-            @click="openCreateSidebar"
-            class="btn btn-primary button-theme"
-            :style="buttonThemeCss"
-          >
-            Create <i class="fas fa-plus text-white"></i>
-          </button> -->
-          <hf-buttons
-            name="Create"
-            @executeAction="openCreateSidebar()"
-            iconClass="fas fa-plus text-black"
-            title="Create Event"
-          >
-          </hf-buttons>
+            v-if="projects.length"
+            placeholder="Search events by name"
+            @executeSearch="handleSearch"
+            style="width: 300px"
+            ></hf-search-box>
         </div>
 
-        <div>
-          <create-project-slide
-            :isProjectEditing="isProjectEditing"
-            :project="project"
-            @UpdateColors="UpdateColors"
-            :themeColor="themeColor"
-            :themeColorDefault="themeColorDefault"
-            :fontColor="fontColor"
-            :fontColorDefault="fontColorDefault"
-            :blockChainType="blockchainType"
-            :contractType="contractType"
-            :eventActionType="eventActionType"
-            :saveProject="saveProject"
-            :openPreview="openPreview"
-            :addedSocialMedias="addedSocialMedias"
-            :selectedSocialMedia="selectedSocialMedia"
-            :socialOptions="socialOptions"
-            :actionList="eventActionList"
-            :tagList="project.tags"
-            :tagFdb="tagFdb"
-            @updateEventActions="AddUpdateDelEventActions"
-            @updateTagActions="AddUpdateDelTagActions"
-          />
+        <div class="col-md-3">
+          <div class="text-right">
+            <hf-buttons
+              name="Create"
+              @executeAction="openCreateSidebar()"
+              iconClass="fas fa-plus text-black"
+              title="Create Event"
+            >
+            </hf-buttons>
+          </div>
         </div>
       </div>
     </div>
+
+    <div>
+            <create-project-slide
+              :isProjectEditing="isProjectEditing"
+              :project="project"
+              @UpdateColors="UpdateColors"
+              :themeColor="themeColor"
+              :themeColorDefault="themeColorDefault"
+              :fontColor="fontColor"
+              :fontColorDefault="fontColorDefault"
+              :blockChainType="blockchainType"
+              :contractType="contractType"
+              :eventActionType="eventActionType"
+              :saveProject="saveProject"
+              :openPreview="openPreview"
+              :addedSocialMedias="addedSocialMedias"
+              :selectedSocialMedia="selectedSocialMedia"
+              :socialOptions="socialOptions"
+              :actionList="eventActionList"
+              :tagList="project.tags"
+              :tagFdb="tagFdb"
+              @updateEventActions="AddUpdateDelEventActions"
+              @updateTagActions="AddUpdateDelTagActions"
+            />
+          </div>
 
     <div class="row" v-if="whitelistingLink != ''" style="margin-top: 2%">
       <div class="col-md-12" style="text-align: left">
@@ -260,10 +246,15 @@ i {
         </div>
       </div>
     </div>
-    <hf-page-message v-if="!this.projectsToShow.length" 
+
+    <div class="row">
+      <hf-page-message v-if="!this.projectsToShow.length" 
     :message="msg"
     >
     </hf-page-message>
+    </div>
+
+    
     <hf-pop-up
     Header="Delete Event"
     >
