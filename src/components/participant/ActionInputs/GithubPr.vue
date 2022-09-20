@@ -49,7 +49,7 @@
               </button>
               <b-form-input
                 type="text"
-                placeholder="Please provide Pull Request url here."
+                placeholder="Please provide Pull Request URL here."
                 v-model="social.url"
                 :disabled="data.isDone"
                 :required="data.isManadatory"
