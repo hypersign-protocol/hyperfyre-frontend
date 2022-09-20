@@ -92,13 +92,20 @@
             <input type="text" class="form-control w-100"
             placeholder="Enter Coupon Code"
             @keydown="handleInput($event)"
+            @paste="resetGrandTotal()"
+            @keypress="resetGrandTotal()"
             v-model="coupon">
         </div>
           <div class="col-lg-4 col-md-3 " style="display:block">
-            <button type="button" class="btn btn-outline-primary button-theme"
+            <!-- <button type="button" class="btn btn-outline-primary button-theme"
               :style="buttonThemeCss"
               @click="applyCoupon"
-              >Apply</button>
+              >Apply</button> -->
+              <hf-buttons
+              name="Apply"
+              customClass="btn btn-outline-primary button-theme"
+              @executeAction="applyCoupon()"
+              ></hf-buttons>
           </div>
           </div>
         <hr />
@@ -178,14 +185,20 @@
         <div>
           <div class="row" style="margin-top: 2%">
             <div class="col-md-12">
-              <b-button
+              <!-- <b-button
                 block
                 variant="primary"
                 class="btn-plan popular"
                 :style="buttonThemeCss"
                 @click="payment"
                 >Pay ${{ grandTotal }}</b-button
-              >
+              > -->
+              <hf-buttons
+              :name="`Pay $`+ grandTotal"               
+              customClass="btn btn-outline-dark btn-plan popular"
+              style="width:auto"
+              @executeAction="payment()"
+              ></hf-buttons>
             </div>
           </div>
         </div>
@@ -204,6 +217,7 @@ import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/admin/en";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
+import HfButtons from "../../../components/elements/HfButtons.vue";
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -211,7 +225,8 @@ export default {
     EventActionConfig,
     ReferralConfig,
     InputDate,
-    Loading
+    Loading,
+    HfButtons
   },
 
   props: {
@@ -325,11 +340,14 @@ export default {
     this.fetchTokenPriceCMC();
   },
   methods: {
-    handleInput(e){
-      if (e.key === "Backspace" || e.key === "Delete") {
+    resetGrandTotal(){
         this.applied = false;
         this.couponDiscount=0;
         this.coupons = []
+    },
+    handleInput(e){
+      if (e.key === "Backspace" || e.key === "Delete" || e.ctrlKey) {
+       this.resetGrandTotal();
       }
       },
    async applyCoupon(){
@@ -522,6 +540,7 @@ export default {
     async payment() {
       if (!(this.selectedCurrency == "" || this.selectedNetwork == "")) {
         var planbody = {};
+        this.plan.coupon_name = ""
         this.plan.selectedCurrency = this.selectedCurrency;
         this.plan.selectedNetwork = this.selectedNetwork;
         if(this.applied===true){
@@ -563,17 +582,20 @@ export default {
         const json = await resp.json();
         if (json) {
           if (!resp.ok) {
+            this.coupon="";
+            planId=""
+            planbody={}
+            this.resetGrandTotal()
             return this.notifyErr(json);
           } else {
-            //window.open(json.payment.quick_Pay)
-            window.location.replace(json.payment.quick_Pay);
+            const path=json.payment.orderId
+            const paymentUrl=`${this.$config.moopay.payment_url}${path}`
+            window.location.replace(paymentUrl)
           }
         } else {
           throw new Error("Error while subscritption");
         }
 
-        // console.log(this.selectedCurrency);
-        // console.log(this.selectedNetwork);
         //this.$root.$emit('bv::toggle::collapse', 'sidebar-right')
       } else {
         this.notifyErr(Messages.SUBSCRIPTIONS.SELECT_CURRENCY_AND_NETWORK);

@@ -184,10 +184,10 @@
           </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
-          <b-form-select
-            v-model="selected.type"
-            :options="options"
-          ></b-form-select>
+          <hf-select-drop-down
+          :options="options"
+          @selected="e =>(selected.type=e)"
+          ></hf-select-drop-down>
         </div>
       </div>
 
@@ -199,10 +199,10 @@
           </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
-          <b-form-select
-            v-model="prizeDetails.type"
-            :options="options"
-          ></b-form-select>
+          <hf-select-drop-down
+          :options="options"
+          @selected=" e =>(prizeDetails.type = e)"
+          ></hf-select-drop-down>
         </div>
       </div>
       <div class="row g-3 align-items-center w-100 mt-4" v-if="prize">
@@ -451,10 +451,10 @@
           />
         </div>
         <div class="col-lg-2 col-md-2 px-0">
-          <b-form-select
-            v-model="contract.operator"
-            :options="allCondition"
-          ></b-form-select>
+          <hf-select-drop-down
+          :options="allCondition"
+          @selected=" e =>(contract.operator=e)"
+          ></hf-select-drop-down>
         </div>
         <div class="col-lg-5 col-md- px-0">
           <input
@@ -634,33 +634,47 @@
         v-if="isCreate == true"
       >
         <div class="col-lg-6 col-md-9 px-0">
-          <button
+          <!-- <button
             @click="handleEventActionAdd()"
             class="btn button-theme"
             :style="buttonThemeCss" 
             type="button"
           >
             {{ eventActionList.includes(selected) ? "Update" : "Add" }}
-          </button>
+          </button> -->
+          <hf-buttons
+          name="Add"
+          @executeAction="handleEventActionAdd()"
+          ></hf-buttons>
         </div>
       </div>
       <div class="row g-3 justify-content-md-end w-100 mt-4" v-else>
         <div class="col-lg-6 col-md-9 px-0">
-          <button
+          <!-- <button
             @click="handleEventActionUpdate()"
             class="btn button-theme slight-left-margin"
             :style="buttonThemeCss" 
             type="button"
           >
             Update
-          </button>
-          <button
+          </button> -->
+          <hf-buttons
+          name="Update"
+          @executeAction="handleEventActionUpdate()"
+          customClass="btn button-theme slight-left-margin"
+          ></hf-buttons>
+          <!-- <button
             @click="handleEventActionDelete()"
             class="btn btn-danger slight-left-margin"
             type="button"
           >
             Delete
-          </button>
+          </button> -->
+          <hf-buttons
+          name="Delete"
+          @executeAction="handleEventActionDelete()"
+          customClass="btn btn-danger slight-left-margin"
+          ></hf-buttons>
         </div>
       </div>
     </div>
@@ -749,15 +763,17 @@ import "codemirror/addon/lint/json-lint";
 import "codemirror/keymap/sublime";
 import jsonlint from "jsonlint";
 import { JSHINT } from "jshint";
-
+import HfButtons from "../../../elements/HfButtons.vue"
 import Web3 from "web3";
+import EventBus from '../../../../eventBus';
+import HfSelectDropDown from "../../../elements/HfSelectDropDown.vue"
 Vue.use(Editor);
 
 window.JSHINT = JSHINT;
 window.jsonlint = jsonlint;
 export default {
   name: "EventActionCongif",
-  components: { codemirror },
+  components: { codemirror, HfButtons, HfSelectDropDown},
   filters: {
     pretty: function (value) {
       return JSON.stringify(JSON.parse(value), null, 2);
@@ -932,13 +948,16 @@ export default {
         id: "",
         slug: "",
       },
-
+      project:{},
       hfTgBotId: this.$config.verifierBot.TELEGRAM,
     };
   },
   async mounted() {
     this.$root.$on("callClearFromProject", () => {
       this.clearSelected();
+    });
+     EventBus.$on("sendProject", (project) => {
+      this.project = {...project}
     });
   },
   methods: {
@@ -1023,6 +1042,10 @@ export default {
       //// You should return or break the moment first error occured
       //// But here you are checking all validation every time - waste of time!
       ////////////
+        if(this.project.projectStatus ==false){
+          isvalid = false;
+          return this.notifyErr(Messages.EVENTS.EVENT_CLOSED)
+        }
       switch (this.eventActionType) {
         case "SOCIAL":
           if (this.selected.type === null) {
@@ -1322,6 +1345,7 @@ export default {
           type: "ADD",
           data: this.selected,
         });
+        EventBus.$emit("resetOption");
         this.clearSelected();
       }
     },
@@ -1333,6 +1357,7 @@ export default {
         type: "DELETE",
         data: actionToDelete,
       });
+      EventBus.$emit("resetOption");
       this.clearSelected();
       this.isCreate = true;
     },
@@ -1354,6 +1379,7 @@ export default {
           type: "UPDATE",
           data: this.selected,
         });
+        EventBus.$emit("resetOption");
         this.clearSelected();
         this.isCreate = true;
       }
@@ -1366,6 +1392,13 @@ export default {
       this.currentSelectedId = idx;
 
       this.selected = updateData;
+      if(this.selected.type === "PRIZE_CARD"){
+        let ob = JSON.parse(this.selected.value)
+        EventBus.$emit("setOption",ob.type);
+      }
+      else{
+        EventBus.$emit("setOption",this.selected.type);
+      }
       if (this.eventActionType === "SMARTCONTRACT") {
         this.contract = { ...JSON.parse(this.selected.value) };
       }

@@ -8,7 +8,7 @@
     >
       <b-row>
         <b-col cols="1" sm="1" md="1">
-          <img src="https://sumsub.com/wp-content/uploads/2019/02/SS-logo-big-floating-1024x747.png.pagespeed.ce.z-fgtDC2mQ.png" height="20px" />
+          <img src="../../../assets/sumsub.png" height="20px" />
         </b-col>
         <b-col cols="9" sm="9" class="text-left" md="9">
           <div class="text text-capitalize">{{ data.title }}</div>
@@ -129,9 +129,7 @@ computed:{
 methods:{
   async update(){
    try{
-    if(this.kycData.reviewResult.reviewAnswer==="GREEN" && this.kycData.reviewStatus==="completed"){
-     
-     
+    if(this.kycData.reviewResult.reviewAnswer==="GREEN" && this.kycData.reviewStatus==="completed"){     
     this.$emit("input", "Verified");
     this.done=true
     }else if(this.kycData.reviewResult.reviewAnswer==="RED"){

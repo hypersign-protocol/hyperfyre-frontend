@@ -115,19 +115,11 @@
                 class="bg-transparent border-0 text-left theme-color"
                 title="Create Referral configuration for your event"><i class="fa fa-user-plus"></i> Referral
                 Configurations
-                <!-- <a class="tool" data-position="right" draggable="false" title="Creates a unique referral URL for each campaign participants, set points of each referral"><i class='fas fa-exclamation-circle'></i></a> -->
               </b-button>
-
             </b-card-header>
             <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
               <b-card-body>
                 <referral-config v-on="$listeners" :project="project" />
-                <!-- <eventAction-congif
-                  v-on="$listeners"
-                  :eventActionList="smartContractlist"
-                  eventActionType="SMARTCONTRACT"
-                  :options="options.smartContractAction"
-                /> -->
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -140,8 +132,14 @@
             </b-card-header>
             <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <event-action-config v-on="$listeners" :eventActionList="prizeList" eventActionType="PRIZE"
-                  :options="options.prizeDetails" />
+                <!-- <event-action-config v-on="$listeners" :eventActionList="prizeList" eventActionType="PRIZE"
+                  :options="options.prizeDetails" /> -->
+                <prize-event-action-config
+                v-on="$listeners"
+                :eventActionList="prizeList"
+                eventActionType="PRIZE"
+                :options="options.prizeDetails"
+                ></prize-event-action-config>
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -156,8 +154,14 @@
             </b-card-header>
             <b-collapse id="accordion-8" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <event-action-config v-on="$listeners" :eventActionList="KycList" eventActionType="KYC"
-                  :options="options.kycConfig" />
+                <!-- <event-action-config v-on="$listeners" :eventActionList="KycList" eventActionType="KYC"
+                  :options="options.kycConfig" /> -->
+                <kyc-event-action-config
+                v-on="$listeners"
+                :eventActionList="KycList"
+                eventActionType="KYC"
+                :options="options.kycConfig"
+                ></kyc-event-action-config>
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -174,8 +178,14 @@
             </b-card-header>
             <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="customList" eventActionType="CUSTOM"
-                  :options="options.customAction" />
+                <!-- <eventAction-config v-on="$listeners" :eventActionList="customList" eventActionType="CUSTOM"
+                  :options="options.customAction" /> -->
+                <custom-event-action-config
+                v-on="$listeners"
+                :eventActionList="customList"
+                eventActionType="CUSTOM"
+                :options="options.customAction"
+                ></custom-event-action-config>
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -190,8 +200,14 @@
             </b-card-header>
             <b-collapse id="accordion-5" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="socialList" eventActionType="SOCIAL"
-                  :options="options.socialAction" />
+                <!-- <eventAction-config v-on="$listeners" :eventActionList="socialList" eventActionType="SOCIAL"
+                  :options="options.socialAction" /> -->
+                <social-event-action-config
+                v-on="$listeners"
+                :eventActionList="socialList"
+                eventActionType="SOCIAL"
+                :options="options.socialAction"
+                ></social-event-action-config>
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -206,8 +222,14 @@
             </b-card-header>
             <b-collapse id="accordion-6" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="blockchainList" eventActionType="BLOCKCHAIN"
-                  :options="options.blockchainAction" />
+                <!-- <eventAction-config v-on="$listeners" :eventActionList="blockchainList" eventActionType="BLOCKCHAIN"
+                  :options="options.blockchainAction" /> -->
+              <wallet-event-action-config
+              v-on="$listeners" 
+              :eventActionList="blockchainList" 
+              eventActionType="BLOCKCHAIN"
+              :options="options.blockchainAction"
+              ></wallet-event-action-config>
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -223,8 +245,14 @@
             </b-card-header>
             <b-collapse id="accordion-7" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="smartContractlist"
-                  eventActionType="SMARTCONTRACT" :options="options.smartContractAction" />
+                <!-- <eventAction-config v-on="$listeners" :eventActionList="smartContractlist"
+                  eventActionType="SMARTCONTRACT" :options="options.smartContractAction" /> -->
+                <smart-contract-event-action-config
+                v-on="$listeners"
+                :eventActionList="smartContractlist"
+                eventActionType="SMARTCONTRACT"
+                :options="options.smartContractAction"
+                ></smart-contract-event-action-config>
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -243,8 +271,14 @@
             </b-card-header>
             <b-collapse id="accordion-9" accordion="my-accordion" role="tabpanel">
               <b-card-body>
-                <eventAction-config v-on="$listeners" :eventActionList="customContractlist"
-                  eventActionType="CUSTOMCONTRACT" :options="options.customContractAction" />
+                <!-- <eventAction-config v-on="$listeners" :eventActionList="customContractlist"
+                  eventActionType="CUSTOMCONTRACT" :options="options.customContractAction" /> -->
+                <custom-contract-event-action-config
+                v-on="$listeners"
+                :eventActionList="customContractlist"
+                eventActionType="CUSTOMCONTRACT"
+                :options="options.customContractAction"
+                ></custom-contract-event-action-config>
               </b-card-body>
             </b-collapse>
           </b-card>
@@ -312,12 +346,22 @@
           </b-card> -->
         </div>
 
-        <button class="btn btn-primary mt-3 button-theme  mr-3" :style="buttonThemeCss" type="button" @click="openPreview">
+        <!-- <button class="btn btn-primary mt-3 button-theme  mr-3" :style="buttonThemeCss" type="button" @click="openPreview">
           Preview
-        </button>
-        <button class="btn btn-primary mt-3 button-theme" :style="buttonThemeCss" type="button" @click="saveProject">
+        </button> -->
+        <hf-buttons
+        name="Preview"
+        @executeAction="openPreview()"
+        customClass="btn btn-primary mt-3 button-theme  mr-3"
+        ></hf-buttons>
+        <!-- <button class="btn btn-primary mt-3 button-theme" :style="buttonThemeCss" type="button" @click="saveProject">
           Save
-        </button>
+        </button> -->
+        <hf-buttons
+        name="Save"
+        @executeAction="saveProject"
+        customClass="btn btn-primary mt-3 button-theme"
+        ></hf-buttons>
       </div>
     </b-sidebar>
   </div>
@@ -325,17 +369,33 @@
 
 <script>
 import config from "../../../config"
-import EventActionConfig from "./components/EventActionConfig.vue";
+// import EventActionConfig from "./components/EventActionConfig.vue";
 import PreviewConfig from "./components/PreviewConfig.vue";
 import GeneralConfig from "./components/GeneralConfig.vue";
 import ReferralConfig from "./components/ReferralConfig.vue";
+import HfButtons from "../../elements/HfButtons.vue"
+import CustomEventActionConfig from "../createProjectSlider/components/CustomEventActionConfig.vue"
+import SocialEventActionConfig from "../createProjectSlider/components/SocialEventActionConfig.vue"
+import WalletEventActionConfig from "../createProjectSlider/components/WalletEventActionConfig.vue"
+import KycEventActionConfig from "../createProjectSlider/components/KycEventActionConfig.vue"
+import PrizeEventActionConfig from "../createProjectSlider/components/PrizeEventActionConfig.vue"
+import SmartContractEventActionConfig from "../createProjectSlider/components/SmartContractEventActionConfig.vue"
+import CustomContractEventActionConfig from "../createProjectSlider/components/CustomContractEventActionConfig.vue"
 export default {
   name: "CreateProjectSlide",
   components: {
     GeneralConfig,
-    EventActionConfig,
+    // EventActionConfig,
     ReferralConfig,
     PreviewConfig,
+    HfButtons,
+    CustomEventActionConfig,
+    SocialEventActionConfig,
+    WalletEventActionConfig,
+    KycEventActionConfig,
+    PrizeEventActionConfig,
+    SmartContractEventActionConfig,
+    CustomContractEventActionConfig
   },
 
   props: {
@@ -437,7 +497,8 @@ export default {
           (x) =>
             x.type.indexOf("TWITTER_") > -1 ||
             x.type.indexOf("TELEGRAM_") > -1 ||
-            x.type.indexOf("DISCORD_") > -1
+            x.type.indexOf("DISCORD_") > -1 ||
+            x.type.indexOf("GITHUB") > -1
         );
       } else {
         return [];
@@ -533,6 +594,7 @@ export default {
           { text: "Twitter Retweet", value: "TWITTER_RETWEET" },
           { text: "Telegram Join", value: "TELEGRAM_JOIN" },
           { text: "Discord Join", value: "DISCORD_JOIN" },
+          { text: "Github PR", value: "GITHUB_PR" },
         ],
         blockchainAction: [
           { text: "Select Blockchain type", value: null },
@@ -544,6 +606,7 @@ export default {
           { text: "Reef", value: "BLOCKCHAIN_REEF" },
           { text: "Tezos", value: "BLOCKCHAIN_TEZ" },
           { text: "Cardano", value: "BLOCKCHAIN_CARDANO" },
+          { text: "Cosmos Blockchains", value: "BLOCKCHAIN_COSMOS" },
         ],
         smartContractAction: [
           { text: "Select Contract Type", value: null },

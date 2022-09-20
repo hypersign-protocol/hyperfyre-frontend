@@ -3,9 +3,9 @@
         <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="true"></loading>
         <h3>Org Setting</h3>
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-12">
 
-                <div class="card">
+                <div class="card event-card">
                     <div class="card-body">
 
                         <div class="row g-3 align-items-center w-100 mt-4">
@@ -60,8 +60,12 @@
                             </div>
 
                             <div class="text-left col-lg-6 col-md-6 text-right">
-                                <button class="btn  button-theme" :style="buttonThemeCss" type="submit"
-                                    @click="update">Update</button>
+                                <!-- <button class="btn  button-theme" :style="buttonThemeCss" type="submit"
+                                    @click="update">Update</button> -->
+                                    <hf-buttons
+                                    name="Update"
+                                    @executeAction="update()"
+                                    ></hf-buttons>
                             </div>
                         </div>
 
@@ -80,12 +84,13 @@ import "vue-loading-overlay/dist/vue-loading.css";
 import Messages from "../../../utils/messages/admin/en"
 import PreviewConfig from "../../../components/admin/createProjectSlider/components/PreviewConfig.vue";
 import notificationMixins from "../../../mixins/notificationMixins";
+import HfButtons from "../../../components/elements/HfButtons.vue"
 import {
     isValidURL
 } from "../../../mixins/fieldValidationMixin";
 export default {
     name: "OrgSetting",
-    components: { Loading, ToolTips, PreviewConfig },
+    components: { Loading, ToolTips, PreviewConfig, HfButtons },
     computed: {
         buttonThemeCss() {
             return {

@@ -37,6 +37,9 @@ const config = {
     },
     verifierBot: {
         TELEGRAM: process.env.VUE_APP_TELEGRAM_VERIFIER_BOT
+    },
+    moopay:{
+        payment_url:process.env.VUE_APP_MOOPAY_PAYMENT_URL,
     }
 }
 

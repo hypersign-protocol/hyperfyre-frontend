@@ -71,20 +71,33 @@
                 />
               </div>
               <div class="col-lg-4 col-md-3 slight-align">
-                <button
+                <!-- <button
                   type="button"
                   class="btn btn-outline-primary button-theme"
                   :style="buttonThemeCss"
                   @click="execute(resource)"
                 >
                   Execute
-                </button>
+                </button> -->
+                <hf-buttons
+                name="Execute"
+                @executeAction="execute(resource)"
+                ></hf-buttons>
                 <div
                   v-if="resource.id === 4"
                   class="btn"
                   style="float:right"
-                  @click="getAllSchedules(resource)"
-                ><a href="#">Refresh</a>
+                  @click="getAllSchedules()"
+                  title="Click to refresh"
+                ><i class="fas fa-sync" aria-hidden="true"></i>
+                </div>
+                <div
+                  v-if="resource.id === 3"
+                  class="btn"
+                  style="float:right"
+                  @click="getAllPushNotificationScheduled()"
+                  title="Click to refresh"
+                ><i class="fas fa-sync" aria-hidden="true"></i>
                 </div>
               </div>
             </div>
@@ -149,59 +162,62 @@
               
               <div class="col-lg-4 col-md-9 px-0"></div>
               <div class="col-lg-6 col-md-3 px-0 py-1">
-                <button
+                <!-- <button
                   type="button"
                   class="btn btn-outline-primary button-theme"
                   :style="buttonThemeCss"
                   @click="execute(resource)"
                 >
                   Execute
-                </button>
+                </button> -->
+                <hf-buttons
+                name="Execute"
+                @executeAction="execute(resource)"
+                ></hf-buttons>
         
-                <button
+                <!-- <button
                   type="button"
                   class="btn btn-outline-primary button-theme"
                   :style="buttonThemeCss"
                   @click="clearAll()"
                 >
                   Cancel
-                </button>
+                </button> -->
+                <hf-buttons
+                name="Cancel"
+                @executeAction="clearAll()"
+                ></hf-buttons>
+                <div
+                  v-if="resource.id === 5"
+                  class="btn"
+                  style="float:right"
+                  @click="getAllCoupon()"
+                  title="Click to refresh"
+                ><i class="fas fa-sync" aria-hidden="true"></i>
+                </div>
               </div>
             </div>
-
+          <!-- Push Notification Table -->
+            <div
+              class="row g-3 w-100"
+              v-if="resource.id == 3 && pushNotificationSchedule.length > 0"
+              style="padding: 10px; max-height: 300px; overflow-y: auto"
+            >
+              <hf-table
+              :items="pushNotificationSchedule"
+              :fields="pushNotificationHeader"
+              ></hf-table>
+            </div>
+          <!--  -->
             <div
               class="row g-3 w-100"
               v-if="resource.id == 4 && schedules.length > 0"
               style="padding: 10px; max-height: 300px; overflow-y: auto"
             >
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <!-- <th scope="col">Schedule Id</th> -->
-                    <th scope="col">Time (UTC)</th>
-                    <th scope="col">Schedular</th>
-                    <th scope="col">Event Id</th>
-                    <th scope="col">Total Mails</th>
-                    <th scope="col">Passed Mails</th>
-                    <th scope="col">Failed Mails</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="schedule in schedules" v-bind:key="schedule._id">
-                    <!-- <td>{{ schedule._id }}</td> -->
-                    <td>
-                      {{ new Date(schedule.scheduledAt).toLocaleString() }}
-                    </td>
-                    <td>{{ schedule.userId }}</td>
-                    <td>{{ schedule.eventId }}</td>
-                    <td>{{ schedule.totalEmailsToSend }}</td>
-                    <td>{{ schedule.totalPassedEmails }}</td>
-                    <td>{{ schedule.totalFailedEmails }}</td>
-                    <td>{{ schedule.status }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <hf-table
+              :items="schedules"
+              :fields="emailNotificationHeader"
+              ></hf-table>
             </div>
 
             <!-- Coupon Table -->
@@ -210,50 +226,12 @@
               v-if="resource.id == 5 && couponTable.length > 0"
               style="padding: 10px; max-height: 300px; overflow-y: auto"
             >
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">Coupon Code</th>
-                    <th scope="col">Discount (%)</th>
-                    <th scope="col">Expires At</th>
-                    <th scope="col">Limit</th>
-                    <th scope="col">Usage</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="coupon in couponTable" v-bind:key="coupon._id">
-                    <td>{{ coupon.name }} 
-                        <span @click="copy(coupon.name, 'Coupon Code')" class="copy"><i class="far fa-copy"></i></span>
-                    </td>
-                    <td>{{ coupon.discount }}</td>
-                    <td>{{ new Date(coupon.expiredAt).toLocaleString() }}</td>
-                    <td>{{ coupon.maxClaimCount }}</td>
-                    <td>{{ coupon.usageCount }}</td>
-                    <td>
-                      <span>
-                        <i
-                        class="fas fa-pencil-alt"
-                        style="padding:2px; cursor: pointer;"
-                        title="Click to edit the coupon"
-                        @click="update(resource.id,coupon)"
-                      > </i> 
-                      
-                      </span>
-                      
-                      <span>
-                        <i
-                        class="fas fa-trash"
-                        style="padding:2px; cursor: pointer;"
-                        title="Click to delete the coupon"
-                        @click="remove(resource.id,coupon)"
-                      >
-                      </i>
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <hf-table
+              :items="couponTable"
+              :fields="couponHeader"
+              @updateRecord="row => update(resource.id,row)"
+              @deleteRecord="res => remove(resource.id,res)"
+              ></hf-table>
             </div>
           </b-card-body>
         </b-collapse>
@@ -288,16 +266,30 @@
         </b-collapse>
       </b-card>
     </div>
+    <hf-pop-up
+    Header="Super Admin Confirmation"
+    >
+     <div class="row g-3 align-items-center w-100  mt-4">
+        <div class="col-lg-3 col-md-3 text-left">
+          <label for="masterKey" class="col-form-label">Master Key :</label>
+        </div>
+        <div class=" col-lg-9 col-md-9 px-0">
+          <input v-model="masterKey" type="password" 
+          placeholder="****************************************" 
+          id="masterKey" class="form-control w-100" >
+        </div>   
+    </div>
+    <div class="mt-5 text-center">
+    <hf-buttons
+    name="Confirm"
+    @executeAction="confirm()"
+    ></hf-buttons>
+    </div>
+    </hf-pop-up>
   </div>
 </template>
 
 <style scoped>
-.copy {
-    padding: 3px;
-    font-size: medium;
-    cursor: pointer;
-    color: grey;
-}
 @media only screen and (max-width: 599px) {
   .slight-align {
     padding-left: 0px;
@@ -333,12 +325,17 @@ import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
 import Datepicker from "vuejs-datetimepicker";
 import { isValidURL,isFloat } from "../../mixins/fieldValidationMixin";
-import masterKeyPopupMixin from "../../mixins/masterKeyPopupMixin.js";
 import dayjs from "dayjs";
+import HfButtons from "../../components/elements/HfButtons.vue"
+import HfPopUp from "../../components/elements/HfPopUp.vue"
+import HfTable from "../../components/elements/HfTable.vue"
 export default {
   components: {
     Loading,
     Datepicker,
+    HfButtons,
+    HfPopUp,
+    HfTable
   },
   computed: {
     buttonThemeCss() {
@@ -354,7 +351,7 @@ export default {
       };
     },
   },
-  mixins: [notificationMixins, masterKeyPopupMixin],
+  mixins: [notificationMixins],
   data() {
     return {
       isEdit: false,
@@ -362,11 +359,38 @@ export default {
       isLoading: false,
       fullPage: true,
       origin: "",
-      masterKey: "StageKey1",
+      masterKey: "",
       response: null,
       authToken: localStorage.getItem("authToken"),
       schedules: [],
       couponTable: [],
+      couponHeader:[
+        {key:"name",label:"Coupon Code",type:"text",isCopy:true},
+        {key:"discount",label:"Discount (%)",type:"number"},
+        {key:"expiredAt",label:"Expires At",type:"date"},
+        {key:"maxClaimCount",label:"Limit",type:"number"},
+        {key:"usageCount",label:"Usage",type:"number"},
+        {key:"action", label:"Action",type:"action",editOnly:true, isDelete:true },
+      ],
+      emailNotificationHeader:[
+        {key:"scheduledAt",label:"Time (UTC)", type:"date"},
+        {key:"userId",label:"Schedular", type:"text"},
+        {key:"eventId",label:"Event Id", type:"text"},
+        {key:"totalEmailsToSend",label:"Total", type:"email"},
+        {key:"totalPassedEmails",label:"Passed", type:"number"},
+        {key:"totalFailedEmails",label:"Failed", type:"number"},
+        {key:"status",label:"Status", type:"text"},
+      ],
+      pushNotificationHeader:[
+        {key:"scheduledAt",label:"Time (UTC)", type:"date"},
+        {key:"eventId",label:"Event Id", type:"text"},
+        {key:"totalWebPushToSend",label:"Total", type:"email"},
+        {key:"totalPassedWebPush",label:"Passed", type:"number"},
+        {key:"totalFailedWebPush",label:"Failed", type:"number"},
+        {key:"status",label:"Status", type:"text"},
+      ],
+      pushNotificationSchedule:[],
+      tempResources:{},
       resources: [
         {
           id: 1,
@@ -443,6 +467,7 @@ export default {
     /// TODO: Temporary fix
     this.getAllSchedules();
     this.getAllCoupon();
+    this.getAllPushNotificationScheduled();
   },
   methods: {
     update(id, coupon) {
@@ -454,23 +479,6 @@ export default {
             return x
         }
       })
-    },
-    copy(textToCopy, contentType) {
-        if (textToCopy) {
-            navigator.clipboard
-                .writeText(textToCopy)
-                .then(() => {
-                    this.notifySuccess(
-                        `${contentType} copied!`
-                    );
-                })
-                .catch((err) => {
-                    this.notifyErr(
-                        'Error while copying',
-                        err
-                    );
-                });
-        }
     },
     remove(id, res){
         this.isDelete = true;
@@ -496,6 +504,7 @@ export default {
       this.masterKey = "";
       this.isEdit = false;
       this.isDelete =  false;
+      this.tempResources = {}
     },
     async getAllCoupon() {
       try {
@@ -553,13 +562,49 @@ export default {
         this.isLoading = false;
       }
     },
-    async execute(resource) {
+    async getAllPushNotificationScheduled(){
       try {
-        this.checkEveryThingisOk(resource)
+        this.isLoading = true;
+        let url = `${this.$config.studioServer.BASE_URL}api/v1/notification/push/schedules`;
+        const Url = new URL(this.$config.studioServer.BASE_URL);
+        const headers = {
+          Orign: Url.origin,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+        };
+        const resp = await fetch(url, {
+          headers,
+        });
+        if (resp && resp.status === (403 || 401)) {
+          throw new Error("Something went wrong");
+        }
+        const json = await resp.json();
+        if (resp.status != 200) {
+          throw new Error(json);
+        }
+        this.pushNotificationSchedule = json;
+      } catch (e) {
+        this.notifyErr(e.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    execute(resource){
+      let ab = true
+      this.tempResources = resource;
+      console.log(this.tempResources)
+      if(this.isDelete!=true){
+       ab = this.checkEveryThingisOk(resource)
+    }
+      if(ab == true){
+        this.$root.$emit("modal-show")
+      }
+    },
+    async confirm() {
+      let resource = this.tempResources
+      try {
         
-        const res = await this.masterPop();
-        const masterKey = res;
-        if (!masterKey) {
+        if (!this.masterKey) {
           throw new Error("Master Key must be passed");
         }
         let body = null;
@@ -578,7 +623,7 @@ export default {
         if (resource.id != 5) {
           url = url.replace("<PARAM>", resource.value.trim());
         }
-        url = url.replace("<SECRET_KEY>", masterKey);
+        url = url.replace("<SECRET_KEY>", this.masterKey);
         const Url = new URL(this.$config.studioServer.BASE_URL);
         const headers = {
           Orign: Url.origin,
@@ -608,7 +653,7 @@ export default {
         if (resp.status != 200) {
           throw new Error(json);
         }
-        if (json.message) {
+        if (json.message && json.schedule) {
           const { message, schedule } = json;
 
           if (message) {
@@ -620,12 +665,31 @@ export default {
           if (schedule) {
             this.schedules.unshift(schedule);
           }
-        }else if(json.updatedSubs){
+        }
+        else if(json.message && !json.newWebPushSchedule && this.isDelete == true){
+          this.notifySuccess(json.message)
+          this.getAllCoupon();
+        }
+        else if(json.message && !json.newWebPushSchedule){
+          this.notifySuccess(json.message)
+        }
+        else if(json.updatedSubs){
           this.notifySuccess("Subscription id: "+json.updatedSubs._id + " " + "is activated " + json.updatedSubs.paymentData.activated)
         }else if (json.discount) {
-          this.notifySuccess("Coupon"+" "+ json.name + " "+ "successfully created");
+          if(this.isEdit!=true){
           this.couponTable.unshift(json);
+          this.notifySuccess("Coupon"+" "+ json.name + " "+ "successfully created");
+          }
+          else{
+          this.notifySuccess("Coupon"+" "+ json.name + " "+ "successfully updated");
+          this.getAllCoupon();
+          }
           this.isEdit = false;
+        }
+        else if(json.message && json.newWebPushSchedule){
+          let {message, newWebPushSchedule} = json;
+          this.notifySuccess(message)
+          this.pushNotificationSchedule.unshift(newWebPushSchedule);
         }
 
         this.clearAll();
@@ -633,52 +697,63 @@ export default {
         this.notifyErr(e.message);
       } finally {
         this.Loading = false;
-        this.getAllCoupon();
+        this.$root.$emit("modal-close")
       }
     },
     checkEveryThingisOk(resource) {
+      let isValid = true
+      const ToDate = new Date();
       if (resource.id != 5) {
         if (!resource.value) {
-          throw new Error("Please enter " + resource.inputLabel);
+          isValid = false
+          this.notifyErr("Please enter " + resource.inputLabel);
         }
         if (resource.value.indexOf(" ") >= 0) {
-          throw new Error("There should not be space(s) in " + resource.inputLabel);
+          isValid = false
+          this.notifyErr("There should not be space(s) in " + resource.inputLabel);
         }
       }
       if (resource.id === 5) {
         if (!resource.value.name) {
-          throw new Error("Enter coupon code");
+          isValid = false
+          this.notifyErr("Enter coupon code");
         }
-        if(isValidURL(resource.value.name)){
-          throw new Error("Coupon should not be a url")
+        else if(isValidURL(resource.value.name)){
+          isValid = false
+          this.notifyErr("Coupon should not be a url")
         }
-        if(resource.value.name.trim().includes(' ')){
-          throw new Error('There should not be space in coupon')
+        else if(resource.value.name.trim().includes(' ')){
+          isValid = false
+          this.notifyErr('There should not be space in coupon')
         }
         
-        if (!resource.value.expiredAt) {
-          throw new Error("Enter expiry date time");
+        else if (!resource.value.expiredAt) {
+          isValid = false
+          this.notifyErr("Enter expiry date time");
         }
 
-        if (
+        else if (new Date(resource.value.expiredAt).getTime() <= ToDate.getTime()) {
+          isValid = false
+          this.notifyErr("Expiry time should be gretter than current data & time");
+        }
+
+        else if (
           resource.value.maxClaimCount <= 0 || isFloat(resource.value.maxClaimCount)
         ) {
-          throw new Error("Limit should be a number greater than 0");
+          isValid = false
+          this.notifyErr("Limit should be a number greater than 0");
         }
 
-        if (
+        else if (
            !resource.value.discount || (resource.value.discount <= 0 || resource.value.discount > 70) ||
             isNaN(parseInt(resource.value.discount))
         ) {
-            throw new Error("Discount value should be a number greater than 0 and less than 70");
-        }
-
-        const ToDate = new Date();
-        if (new Date(resource.value.expiredAt).getTime() <= ToDate.getTime()) {
-          throw new Error("Expiry time should be gretter than current data & time");
+          isValid = false
+            this.notifyErr("Discount value should be a number greater than 0 and less than 70");
         }
 
       }
+      return isValid;
     },
   },
 };

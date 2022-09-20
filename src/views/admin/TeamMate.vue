@@ -8,18 +8,59 @@
 </style>
 <template>
   <div class="home marginLeft marginRight">
-    <h3 v-if="!teammates.length" class="leftAlign">No teams found, click on 'Invite' button to add team</h3>
+    <loading
+      :active.sync="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    ></loading>
     <div class="text-right">
-      <button @click="invite()" class="btn button-theme" :style="buttonThemeCss">
+      <!-- <button @click="invite()" class="btn button-theme" :style="buttonThemeCss">
          Invite <i class="fas fa-plus text-black"></i>
-      </button>
+      </button> -->
+      <hf-buttons
+      name="Invite"
+      @executeAction="openInvite()"
+      iconClass="fas fa-plus text-black"
+      ></hf-buttons>
     </div>
+    <hf-page-message v-if="!this.teammates.length" :message="msg"
+    >
+    </hf-page-message>
+    <hf-pop-up
+    Header="Invite Form"
+    >
+     <div class="row g-3 align-items-center w-100  mt-4">
+            <div class="col-lg-3 col-md-3 text-left">
+                <label for="email" class="col-form-label">Email Id :</label>
+            </div>
+            <div class=" col-lg-9 col-md-9 px-0">
+                <input v-model="email" type="text" placeholder="john@gmail.com" id="email" class="form-control w-100" >
+            </div>   
+    </div>
+    <div class="row g-3 align-items-center w-100  mt-4">
+            <div class="col-lg-3 col-md-3 text-left">
+                <label for="email" class="col-form-label">Name :</label>
+            </div>
+            <div class=" col-lg-9 col-md-9 px-0">
+                <input v-model="name" type="text" placeholder="john" id="name" class="form-control w-100" >
+            </div>   
+    </div>
+
+
+    <div class="mt-4 text-center">
+    <hf-buttons
+    name="Send Invitation"
+    title="Send Invitation"
+    @executeAction="invite()"
+    ></hf-buttons>
+    </div>
+    </hf-pop-up>
     <h3 v-if="teammates.length">Your Team</h3>
     <div class="row" style="margin-top: 2%">
       <div class="col-md-12">
         <table
           v-if="teammates.length"
-          class="table table-bordered"
+          class="table event-card"
           style="background: #ffff"
         >
           <thead class="thead-light">
@@ -54,14 +95,18 @@
                   }}</b-badge>
                 </h5>
               </td>
-              <td @click="remove(row._id)">
-                <button
+              <td>
+                <!-- <button
                   style="text-transform: uppercase"
                   class="btn btn-danger btn-sm"
                   title="Click to remove the teammate"
                 >
                   <i class="fas fa-trash"></i>
-                </button>
+                </button> -->
+              <span @click="remove(row._id)"
+              title="Click to remove the teammate"
+              style="cursor:pointer"
+              ><i class="fas fa-trash"></i></span>
               </td>
             </tr>
           </tbody>
@@ -69,7 +114,7 @@
 
        
         <h3 v-if="$accounts.length" class="leftAlign">Team's you are part of</h3>
-         <table  v-if="$accounts.length" class="table table-bordered" style="background:#FFFF">
+         <table  v-if="$accounts.length" class="table event-card" style="background:#FFFF">
 
           <thead class="thead-light">
             <tr>
@@ -87,23 +132,28 @@
               <td>{{ row.email }}</td>
 
               <td v-if="isAdmin(row.email)">
-                <button
-                  :disabled="true"
-                  style="text-transform: uppercase"
-                  class="btn btn-success btn-sm"
-                >
-                  Active
-                </button>
+                <h5>
+                <b-badge
+                class="badge bg-success">
+                  ACTIVE
+                </b-badge>
+                </h5>
               </td>
 
-              <td v-else @click="switchAccount(row)">
-                <button
+              <td v-else>
+                <!-- <button
                   style="text-transform: uppercase"
                   class="btn btn-danger btn-sm"
                   title="Click to switch to this account"
-                >
-                  Switch
-                </button>
+                >Switch
+                </button> -->               
+                <span
+                title="Click to switch to this account"
+                style="cursor:pointer"
+                @click="switchAccount(row)"
+                ><i class="fas fa-sync" aria-hidden="true"></i>
+                </span>
+              
               </td>
             </tr>
           </tbody>
@@ -118,31 +168,38 @@ import config from "../../config";
 import notificationMixins from "../../mixins/notificationMixins";
 import SimpleVueValidation from "simple-vue-validator";
 import { isValidURL,isValidText } from '../../mixins/fieldValidationMixin';
+import HfPageMessage from "../../components/elements/HfPageMessage.vue"
+import Messages from "../../utils/messages/admin/en"
+import HfButtons from "../../components/elements/HfButtons.vue"
+import HfPopUp from "../../components/elements/HfPopUp.vue"
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 export default {
   name: "Teammate",
-  components: {},
+  components: {HfPageMessage, HfButtons, HfPopUp, Loading},
   computed:{
  buttonThemeCss() {
       return {
         '--button-bg-color': config.app.buttonBgColor,
         '--button-text-color':config.app.buttonTextColor
       }
-     }
+     },
+     teammates(){
+      return this.$store.state.teammates
+    }
   },
   data() {
     return {
       email: "",
       name: "",
-      teammates: [],
       user: {},
       accessuser: {},
       appName: "",
       authToken: localStorage.getItem("authToken"),
+      msg:Messages.TEAMMATES.NO_TEAMS_FOUND,
+      isLoading:false,
+      fullPage:true
     };
-  },
-  async mounted() {
-    
-    await this.getTeammates();
   },
   created() {
     const usrStr = localStorage.getItem("user");
@@ -180,6 +237,7 @@ export default {
         localStorage.setItem("authToken", row.authToken);
 
         this.$router.push("/admin/dashboard");
+        this.$store.dispatch('getApps',row.authToken);
       } else {
         localStorage.setItem("accessToken", row.authToken);
         //console.log(row);
@@ -192,58 +250,27 @@ export default {
           })
         );
          this.$router.push("/admin/dashboard");
+         this.$store.dispatch('getApps',this.authToken);
         
-      }
-    },
-    async getTeammates() {
-      const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team`;
-      const headers = {
-        Authorization: `Bearer ${this.authToken}`,
-      };
-      const resp = await fetch(url, {
-        headers,
-        method: "GET",
-      });
-
-      if (!resp.ok) {
-        return this.notifyErr(resp.statusText);
-      } else{
-        this.teammates = await resp.json();
       }
     },
     gotosubpage: (id) => {
       this.$router.push(`${id}`);
     },
-    async invite() {
-      await this.$swal
-        .fire({
-          title: "Invite Form",
-          html: `<input type="email" id="email" class="swal2-input" placeholder="Email">
-    <input type="name" id="name" class="swal2-input" placeholder="Name">`,
-          confirmButtonText: '<span style="color:black">Send Invitation</span>',
-          confirmButtonColor: `${config.app.buttonBgColor}`,
-          focusConfirm: false,
-          showCloseButton: true,
-          allowOutsideClick: false,
-          preConfirm: () => {
-            this.email = this.$swal.getPopup().querySelector("#email").value;
-            this.name = this.$swal.getPopup().querySelector("#name").value;
-            if (!this.email || !this.isEmail(this.email)|| !this.name || isValidURL(this.name) || !isValidText(this.name)) {
-              this.$swal.showValidationMessage(
-                `Please enter valid email and name`
-              );
-            }
-            if(this.name.length>20){
-              this.$swal.showValidationMessage(
-                `Please enter name upto 20 character`
-              );
-            }
-            return { name: this.name, email: this.email };
-          },
-        })
-        .then(async (data) => {
-          if (data.value) {
-            const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/add`;
+     openInvite() {
+    this.clearAll();
+    this.$root.$emit('modal-show')
+    },
+    async invite(){
+      try{
+        if (!this.email || !this.isEmail(this.email)|| !this.name || isValidURL(this.name) || !isValidText(this.name)){
+          return this.notifyErr("Please enter valid email and name")
+        }
+        if(this.name.length>20){
+         return this.notifyErr("Please enter name upto 20 character")
+        }
+        this.isLoading = true
+         const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/add`;
             let headers = {
               "Content-Type": "application/json",
               Authorization: `Bearer ${this.authToken}`,
@@ -251,8 +278,8 @@ export default {
             const resp = await fetch(url, {
               method: "POST",
               body: JSON.stringify({
-                name: data.value.name,
-                email: data.value.email,
+                name: this.name,
+                email: this.email,
               }),
               headers,
             });
@@ -261,16 +288,25 @@ export default {
               if (!resp.ok) {
                 return this.notifyErr(json);
               } else {
+                this.$root.$emit('modal-close');
                 this.notifySuccess("Invitation Sent");
-                await this.getTeammates();
+                this.$store.commit('addTeammate',json)
               }
             } else {
               throw new Error("Error while Invitation sending");
             }
-          }
-        });
+
+      }catch(e){
+        this.notifyErr(e)
+      }
+      finally{
+        this.isLoading = false 
+      }
     },
+
     async remove(id) {
+      try{
+      this.isLoading = true
       if (id) {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/delete`;
         let headers = {
@@ -290,13 +326,23 @@ export default {
             return this.notifyErr(json);
           } else {
             this.notifySuccess("Removed teammate Successfully");
-            await this.getTeammates();
+            this.$store.commit('removeTeammate',json._id)
           }
         } else {
           throw new Error("Error while Removing");
         }
       }
+      }catch(e){
+        this.notifyErr(e)
+      }
+      finally{
+        this.isLoading = false
+      }
     },
+    clearAll(){
+      this.email = "",
+      this.name = ""
+    }
   },
   mixins: [notificationMixins],
 };

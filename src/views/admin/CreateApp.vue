@@ -44,16 +44,6 @@
   padding-right: 16px;
   float: right;
 }
-.table{
-  padding-left: 15px;
-  padding-top: 4%;
-}
-.button-theme{
-  background-color:  var(--button-bg-color);
-  border-collapse: var(--button-bg-color);
-  color: var(--button-text-color);
-  border: 0;
-}
 </style>
 <template>
   <div class="home marginLeft marginRight">
@@ -62,13 +52,11 @@
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-
-    <div class="text-right">
-    </div>
+      <div class="row">
 			<div class="col-md-12">
         <h3 v-if="!isEdit">Create Your App</h3>
         <h3 v-else>Edit Your App</h3>
-				<div class="card">
+				<div class="card event-card">
 					
 					<div class="card-body">
 						<form>
@@ -131,60 +119,42 @@
             </div>
             </form>
             <div class="allButtons" style="float:right">
-							<button v-if="!isEdit" class="btn button-theme " :style="buttonThemeCss" type="submit" @click.prevent="generateApp">Create</button>
-              <button v-if="isEdit" class="btn  button-theme" :style="buttonThemeCss" type="submit" @click.prevent="update">Update</button>
-              <button v-if="isEdit" class="btn btn-light slight-left-margin" type="button" @click.prevent="cancel">Cancel</button>
+							<!-- <button v-if="!isEdit" class="btn button-theme " :style="buttonThemeCss" type="submit" @click.prevent="generateApp">Create</button> -->
+              <hf-buttons
+              v-if="!isEdit"
+              name="Create"
+              @executeAction="generateApp()"
+              ></hf-buttons>
+              <!-- <button v-if="isEdit" class="btn  button-theme" :style="buttonThemeCss" type="submit" @click.prevent="update">Update</button> -->
+              <hf-buttons
+              v-if="isEdit"
+              name="Update"
+              @executeAction="update()"
+              ></hf-buttons>
+              <!-- <button v-if="isEdit" class="btn btn-danger slight-left-margin" type="button" @click.prevent="cancel">Cancel</button> -->
+              <hf-buttons
+              v-if="isEdit"
+              name="Cancel"
+              customClass="btn btn-danger slight-left-margin"
+              @executeAction="cancel()"
+              ></hf-buttons>
             </div>
 					</div>
 				</div>
 			</div>
-      <div class="table">
-      <h3 v-if="apps.length">Your Apps</h3>
-      <div class="row" >
-      <div class="col-md-12">
-            <table class="table table-bordered" 
-            style="background:#FFFF"
-            v-if="apps.length">
-          <thead class="thead-light">
-            <tr>
-              <th>AppId</th>
-              <th>Name</th>
-              <th>Base URL</th>
-              <th>Wallet Address</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in apps" :key="row._id">
-              <th>
-                <p>{{row._id}}</p>
-              </th>
-              <td><p>{{row.appName}}</p></td>
-              <td>
-              <p style="display:inline-block;">{{row.baseUrl}}</p>
-              </td>
-              <td style="display:flex;"
-              ><p
-              >{{truncate1(row.appWalletAddress, 15)}}</p>
-              <i class="far fa-copy"
-              title="Copy public key to clipboard"
-              @click="copy(row.appWalletAddress,'AppWallet Address')"
-              ></i>
-              </td>
-              <td>
-                   <i class="fas fa-pencil-alt"
-                  style="text-transform: uppercase; float:right; cursor: pointer;"
-                  title="Click to edit the app and generate new keypair"
-                  @click="editbtn(row)"
-                >
-              </i>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    </div>
+
+      <div class="row" v-if="apps.length" style="margin-top: 2%;">
+        <div class="col-md-12">
+          <h4 v-if="apps.length">Your Apps</h4>
+          <hf-table
+          :items="apps"
+          :fields="appHeader"
+          @updateRecord="row => editbtn(row)"
+          ></hf-table>
         </div>
+        
       </div>
-        </div>
 		</div>
     
 </template>
@@ -201,19 +171,23 @@ import "vue-loading-overlay/dist/vue-loading.css";
 import {
   isValidURL,
   isValidText,
-  truncate
 } from "../../mixins/fieldValidationMixin"
 import Messages from "../../utils/messages/admin/en"
+import HfButtons from "../../components/elements/HfButtons.vue"
+import HfTable from "../../components/elements/HfTable.vue"
 export default {
   name: "CreateApp",
-  components: {Loading, ToolTips},
+  components: {Loading, ToolTips, HfButtons, HfTable},
   computed:{
        buttonThemeCss() {
       return {
         '--button-bg-color': config.app.buttonBgColor,
         '--button-text-color':config.app.buttonTextColor
       }
-     }
+     },
+     apps(){
+       return this.$store.state.apps;
+     },
   },
   data() {
     return {
@@ -229,12 +203,24 @@ export default {
       isLoading: false,
       fullPage: true,
       errors: [],
-      apps: [],
-      authToken: localStorage.getItem("authToken"),
+      authToken:null,
+      accessToken:null,
+      appHeader:[
+        {key:"_id",label:"AppID",type:"text"},
+        {key:"appName",label:"Name",type:"text"},
+        {key:"baseUrl",label:"Base URL",type:"text"},
+        {key:"appWalletAddress",label:"Wallet Address",type:"text",isCopy:true},
+        {key:"action", label:"Action",type:"action", editOnly:true },
+      ]
     };
   },
-  async mounted() {
-this.getApp();
+  mounted(){
+    if(localStorage.getItem("authToken")){
+      this.authToken = localStorage.getItem("authToken");
+    }
+    if(localStorage.getItem("accessToken")){
+      this.accessToken = localStorage.getItem("accessToken");
+    }
   },
   methods: {
    async update(){
@@ -250,10 +236,6 @@ this.getApp();
           this.app.appWalletAddress = credential.appWalletAddress;
         }
             const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
-            let headers = {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${this.authToken}`,
-            };
             const resp = await fetch(url, {
               method: "PUT",
               body: JSON.stringify({
@@ -263,7 +245,7 @@ this.getApp();
                 _id:this.app._id,
                 generateNewKeyPair:this.app.toggle
                 }),
-              headers,
+              headers:this.getHeaders()
             });
             const json = await resp.json();
             if (json) {
@@ -275,7 +257,7 @@ this.getApp();
                 }
                 this.notifySuccess(Messages.APP.APP_UPDATED_SUCCESSFULLY);
                 this.clearselected();
-                this.getApp();
+                this.$store.commit('updateApp',json)
                 this.isEdit=false;
               }
             } else {
@@ -290,6 +272,15 @@ this.getApp();
         this.isLoading = false;
       }
     },
+    getHeaders(){
+            let headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${this.authToken}`,
+                AccessToken: `Bearer ${this.accessToken}`,
+            };
+
+            return headers;
+        },
     cancel(){
       this.isEdit=false;
       this.clearselected();
@@ -299,24 +290,6 @@ this.getApp();
       this.isEdit= true;
       this.app = {...row};
       this.app.toggle=false;
-    },
-    async getApp() {
-      this.isLoading=true;
-      const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
-      const headers = {
-        Authorization: `Bearer ${this.authToken}`,
-      };
-      const resp = await fetch(url, {
-        headers,
-        method: "GET",
-      });
-
-      if (!resp.ok) {
-        return this.notifyErr(resp.statusText);
-      } else{
-        this.apps = await resp.json();
-        this.isLoading=false;
-      }
     },
     async generateApp() {
         try{
@@ -328,10 +301,6 @@ this.getApp();
           const credential= await  this.generateWallet();
           this.app.appWalletAddress = credential.appWalletAddress;
             const url = `${this.$config.studioServer.BASE_URL}api/v1/app`;
-            let headers = {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${this.authToken}`,
-            };
             const resp = await fetch(url, {
               method: "POST",
               body: JSON.stringify({
@@ -340,18 +309,18 @@ this.getApp();
                 appWalletAddress:this.app.appWalletAddress,
                 _id:"" || this.app._id
                 }),
-              headers,
+              headers:this.getHeaders()
             });
             const json = await resp.json();
             if (json) {
               if (!resp.ok) {
                 return this.notifyErr(json);
               } else {
-                credential['appId']= json.AppId
+                credential['appId']= json._id
                 this.notifySuccess(Messages.APP.APP_GENERATED_SUCCESSFULLY);
                 this.downloadCredentials(credential);
                 this.clearselected();
-                this.getApp();
+                this.$store.commit('addApp', json)
               }
             } else {
               throw new Error("Error while generating App");
@@ -381,32 +350,12 @@ this.getApp();
      }
       return true
     },
-    copy(textToCopy, contentType) {
-      if (textToCopy) {
-        navigator.clipboard
-          .writeText(textToCopy)
-          .then(() => {
-            this.notifySuccess(
-              `${contentType}, ${Messages.EVENTS.CREATE_EDIT_EVENT.COPIED_TO_CLIPBOARD}`
-            );
-          })
-          .catch((err) => {
-            this.notifyErr(
-              Messages.EVENTS.CREATE_EDIT_EVENT.ERROR_WHILE_COPYING,
-              err
-            );
-          });
-      }
-    },
     clearselected(){
       this.app.appName="";
       this.app.baseUrl="";
       this.app._id="";
       this.app.appWalletAddress="";
       this.app.toggle=false;
-    },
-    truncate1(str, number) {
-      return truncate(str, number);
     },
      forceFileDownload(data, fileName) {
       const url = window.URL.createObjectURL(new Blob([data]));

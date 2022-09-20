@@ -202,10 +202,19 @@
               <tool-tips infoMessage="Select one or more tags"></tool-tips><label for="type" class="col-form-label">Tags<span style="color: red">*</span>: </label>
           </div>
           <div class="col-lg-8 col-md-8 px-0" >
-            <b-form-select v-model="selected.type" :options="options"></b-form-select>
+            <hf-select-drop-down
+            v-model="selected.type"
+            :options="options"
+            @selected="e=>(selected.type = e)"
+            ></hf-select-drop-down>
           </div>  
           <div class="col-lg-1 col-md-1 px-0" >
-            <button @click="handleEventActionAdd()" class="btn button-theme slight-left-margin-5"  :style="buttonThemeCss" type="button"> {{eventActionList.includes(selected) ? "Cancel" : "Add"}}</button>
+            <!-- <button @click="handleEventActionAdd()" class="btn button-theme slight-left-margin-5"  :style="buttonThemeCss" type="button"> {{eventActionList.includes(selected) ? "Cancel" : "Add"}}</button> -->
+            <hf-buttons
+            name="Add"
+            @executeAction="handleEventActionAdd()"
+            customClass="btn button-theme slight-left-margin-5"
+            ></hf-buttons>
           </div>
         </div>
       </div>
@@ -231,9 +240,12 @@ import Datepicker from 'vuejs-datetimepicker'
 import notificationMixins from "../../../../mixins/notificationMixins"
 import Messages from "../../../../utils/messages/admin/en";
 import ToolTips from "../../../basic/toolTips.vue";
+import HfButtons from "../../../elements/HfButtons.vue"
+import HfSelectDropDown from "../../../elements/HfSelectDropDown.vue"
+import EventBus from "../../../../eventBus"
 export default {
   name: "GeneralConfig",
-  components: {Datepicker, ToolTips},
+  components: {Datepicker, ToolTips, HfButtons, HfSelectDropDown},
   computed:{
 buttonThemeCss() {
       return {
@@ -305,6 +317,7 @@ buttonThemeCss() {
           type: "ADD",
           data: this.selected
         });
+        EventBus.$emit("resetOption",this.selected.type);
         this.clearSelected()
       }
 

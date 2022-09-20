@@ -1,8 +1,9 @@
+import Vue from "vue"
 export default{
     methods: {
         notifySuccess(msg) {
             this.isLoading = false;
-            this.$notify({
+            Vue.notify({
               group: "foo",
               title: "Information",
               type: "success",
@@ -12,7 +13,7 @@ export default{
       
           notifyErr(msg) {
             this.isLoading = false;
-            this.$notify({
+            Vue.notify({
               group: "foo",
               title: "Error",
               type: "error",
@@ -22,7 +23,7 @@ export default{
           },
           notifyWarning(msg) {
             this.isLoading = false;
-            this.$notify({
+            Vue.notify({
               group: "foo",
               title: "Warning",
               type: "warn",
@@ -31,7 +32,7 @@ export default{
           },
           notifyInfo(msg) {
             this.isLoading = false;
-            this.$notify({
+            Vue.notify({
               group: "foo",
               title: "Information",
               type: "info",

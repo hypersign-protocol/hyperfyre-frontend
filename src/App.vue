@@ -65,7 +65,7 @@ export default {
       },
       name: config.appName,
       hover: false,
-      authToken: localStorage.getItem("authToken"),
+      authToken:null,
       isSidebarCollapsed: true,
       authRoutes: ["register", "PKIIdLogin"],
       showNavbar: false,
@@ -111,7 +111,7 @@ export default {
             {
               href: "/admin/createapp",
               title: "Apps",
-              icon: "fa fa-plus",
+              icon: "fa fa-code",
               exactPath: true,
             },
             {
@@ -119,15 +119,15 @@ export default {
               title: "Subscriptions",
               icon: "fas fa-receipt",
               exactPath: true,
-            },
-            {
-              href: "/admin/login",
-              title: "Logout",
-              icon: "fas fa-sign-out-alt",
-              exactPath: true,
-            },
+            }
           ]
-        }
+        },
+        {
+          href: "/admin/login",
+          title: "Logout",
+          icon: "fas fa-sign-out-alt",
+          exactPath: true,
+        },
       ],
       unsubsSubscribedMenu: [
         {
@@ -160,11 +160,17 @@ export default {
 
   mounted() {
 
+    if(localStorage.getItem("authToken")){
+      this.authToken = localStorage.getItem("authToken")
+    }
     eventBus.$on('UpdateAdminNav',   (isSubscribed) => {
         this.isSubscribed = isSubscribed;
     })
 
-  
+    if(this.authToken && !window.location.pathname.includes("/form")){
+      this.$store.dispatch('getApps',this.authToken);
+      this.$store.dispatch('getTeammates',this.authToken);
+    }
     eventBus.$on("UpdateThemeEvent", (themeData) => {
       Object.assign(this.themeData, { ...themeData })
       this.isForm = window.location.pathname.includes("/form") ? true : false
@@ -319,6 +325,10 @@ export default {
 .showNavbar.notCollapsed>.content-wrapper {
   width: calc(100vw - 200px);
   margin-left: auto;
+}
+
+.sidebar-wrapper{
+  box-shadow: 0 0 15px 0 rgba(34,41,47,.05);
 }
 
 .showNavbar.collapsed .sidebar-wrapper {

@@ -110,7 +110,15 @@ i {
       </div>
     </div>
     <template v-for="plan in plans">
-      <button  type="button" class="btn btn-outline-dark btn-plan free" :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''" v-if="plan.price === 0" :key="plan._id" :disabled="subscriptions.find((el) => el.planId === plan._id)" @click="subscribe(plan._id)">Free Basic Plan</button>
+ <!-- <button  type="button" class="btn btn-outline-dark btn-plan free" :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''" v-if="plan.price === 0" :key="plan._id" :disabled="subscriptions.find((el) => el.planId === plan._id)" @click="subscribe(plan._id)">Free Basic Plan</button> -->
+      <hf-buttons
+      name="Free Basic Plan"
+      customClass="btn btn-outline-dark btn-plan free"
+      :title="(subscriptions.find((el) => el.planId === plan._id)) ? 'You are already subscribed' : ''"
+      v-if="plan.price ===0" :key="plan._id"
+      :disabled="subscriptions.find((el) => el.planId === plan._id)"
+      @executeAction="subscribe(plan._id)"
+      ></hf-buttons>
     </template>
     <div class="divider">
       <small class="small-desc">
@@ -130,7 +138,15 @@ i {
                 <span>$</span>
                 {{ plan.price }}
               </div>
-              <button v-if="!accessuser.adminName && !accessToken" type="button" class="btn btn-outline-dark btn-plan" :class="(plan.planName === 'Lambo') ? 'popular' : ''" @click="openSelectPlanSidebar(plan)">Select Plan</button>
+              <!-- <button v-if="!accessuser.adminName && !accessToken" type="button" class="btn btn-outline-dark btn-plan" 
+              :class="(plan.planName === 'Lambo') ? 'popular' : ''" @click="openSelectPlanSidebar(plan)">Select Plan</button> -->
+              <hf-buttons
+              v-if="!accessuser.adminName && !accessToken"
+              name="Select Plan"
+              @executeAction="openSelectPlanSidebar(plan)"
+              :class="(plan.planName === 'Lambo') ? 'popular' : ''"
+              customClass="btn btn-outline-dark btn-plan"
+              ></hf-buttons>
               <div class="pro-feature">
                 <ul>
                   <li>
@@ -192,7 +208,7 @@ i {
     </b-row>
     <div class="row" style="margin-top: 2%;">
       <div class="col-md-12">
-        <table v-if="activeSubscriptions.length" class="table table-bordered" style="background:#FFFF">
+        <table v-if="activeSubscriptions.length" class="table  event-card" style="background:#FFFF">
           <thead class="thead-light">
             <tr>
               <th>Subscription Id</th>
@@ -250,9 +266,10 @@ import Messages from "../../utils/messages/admin/en"
 import eventBus from '../../eventBus';
 import { truncate } from '../../mixins/fieldValidationMixin';
 import config from "../../config"
+import HfButtons from "../../components/elements/HfButtons.vue"
 export default {
   name: "Subscription",
-  components: { Loading, SelectPlanSlide},
+  components: { Loading, SelectPlanSlide, HfButtons},
 
   data() {
     return {
@@ -322,11 +339,9 @@ export default {
     // }
 
    await this.fetchSubscription();
-   if(this.$route.query.hash!==undefined && this.$route.query.code!==undefined &&this.$route.query.extra!==undefined){
-    let {extra}={...this.$route.query}
-    extra=JSON.parse(decodeURIComponent(extra))
-  
-    let subsID=extra._id;
+   if(this.$route.query.transaction!==undefined && this.$route.query.merchantOrderId!==undefined){
+    let {merchantOrderId}={...this.$route.query}
+    let subsID=merchantOrderId;
     
     this.showAlert(this.$route.query,subsID)
 
