@@ -75,7 +75,7 @@
     <div class="row g-3 align-items-center w-100  mt-4">
       <div class="col-lg-5 col-md-5 text-left">
         <tool-tips infoMessage="% of tasks a user must do in order to receieve referral points."></tool-tips><label for="referralPoint" class="col-form-label"
-          >Difficulty Level (%)<span style="color: red">*</span>:
+          >Difficulty Level (%) :
         </label>
       </div>
       <div class=" col-lg-7 col-md-7 px-0">

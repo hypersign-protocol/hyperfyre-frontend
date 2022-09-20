@@ -622,6 +622,7 @@ computed:{
         await this.fetchProjectData(0, this.perPage);
         this.holdInvestors = this.project.investors;
       } else {
+        this.holdInvestors = []
         this.project.investors = [];
       }
     },

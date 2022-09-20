@@ -483,6 +483,7 @@ export default {
         referralPoint: 5,
         tags: [],
         slug: "",
+        referralDifficulty:30,
       },
       DeleteId:"",
       projectToDelete:"",
@@ -1433,6 +1434,7 @@ export default {
         refereePoint: 10,
         referralPoint: 5,
         tags: [],
+        referralDifficulty:30,
       }),
       this.DeleteId="",
       this.projectToDelete="";
