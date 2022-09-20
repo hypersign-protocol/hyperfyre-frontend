@@ -208,7 +208,7 @@ i {
     </b-row>
     <div class="row" style="margin-top: 2%;">
       <div class="col-md-12">
-        <table v-if="activeSubscriptions.length" class="table table-bordered" style="background:#FFFF">
+        <table v-if="activeSubscriptions.length" class="table  event-card" style="background:#FFFF">
           <thead class="thead-light">
             <tr>
               <th>Subscription Id</th>
