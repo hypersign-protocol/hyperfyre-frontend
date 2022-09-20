@@ -109,82 +109,87 @@ label {
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-  <hf-pop-up
-    Header="Lottery"
-    >
-    <hf-notes :notes="notes"></hf-notes>
-      <div class="d-flex mx-auto justify-content-between px-4">
-        <div class="bold">Total Records</div>
-        <div class="bold">{{ project.count }}</div>
-      </div>
-      <div class="d-flex mx-auto justify-content-between px-4 mt-4">
-        <div class="bold">Number of winners to choose</div>
-        <div class="bold">
-          <input
-            v-model="recordsForLottery"
-            type="number"
-            class="form-control"
-            placeholder="No. of records"
-          />
+    <hf-pop-up
+      Header="Lottery"
+      >
+      <hf-notes :notes="notes"></hf-notes>
+        <div class="d-flex mx-auto justify-content-between px-4">
+          <div class="bold">Total Records</div>
+          <div class="bold">{{ project.count }}</div>
         </div>
-      </div>
-      <div class="d-flex mx-auto justify-content-between px-4 mt-4">
-        <div class="bold">Check to choose randomly (optional)</div>
-        <div class="bold">
-          <input
-            v-model="isRandom"
-            type="checkbox"
-            class=""
-            title="Check to choose randomly"
-          />
+        <div class="d-flex mx-auto justify-content-between px-4 mt-4">
+          <div class="bold">Number of winners to choose</div>
+          <div class="bold">
+            <input
+              v-model="recordsForLottery"
+              type="number"
+              class="form-control"
+              placeholder="No. of records"
+            />
+          </div>
         </div>
-      </div>
-      <div class="mt-5 text-center">
-    <hf-buttons
-    name="Execute"
-    @executeAction="handleLottery"
-    />
-      </div>
-  </hf-pop-up>
-    <div class="row" style="margin-top: 2%">
-      <div class="d-flex justify-content-between col-md-12  ">
-        <div class="projectSelector">
+        <div class="d-flex mx-auto justify-content-between px-4 mt-4">
+          <div class="bold">Check to choose randomly (optional)</div>
+          <div class="bold">
+            <input
+              v-model="isRandom"
+              type="checkbox"
+              class=""
+              title="Check to choose randomly"
+            />
+          </div>
+        </div>
+        <div class="mt-5 text-center">
+      <hf-buttons
+      name="Execute"
+      @executeAction="handleLottery"
+      />
+        </div>
+    </hf-pop-up>
+    
+    <div class="row card event-card page-nav">
+      <div class="form-row ">
+        <div class="col-sm-3 ">
           <hf-select-drop-down
-          placeholder="Select an Event"
-          :options="projects"
-          textField="projectName"
-          valueField="_id"
-          @selected=" e => fetchProjectInvestors(e)"
+            placeholder="Select an Event"
+            :options="projects"
+            textField="projectName"
+            valueField="_id"
+            @selected=" e => fetchProjectInvestors(e)"
           ></hf-select-drop-down>
         </div>
-        <div class="d-flex ml-auto align-items-center">
-            <hf-search-box
-            @executeSearch="handleTableSearch"
-            v-model="tableSearch"
-            placeholder="Search participants"            
-            ></hf-search-box>
-          <div class="mx-3">  
+
+        <div class="col-sm-6 ">
+          <hf-search-box
+              @executeSearch="handleTableSearch"
+              v-model="tableSearch"
+              placeholder="Search participants"            
+              style="width: 300px"
+              ></hf-search-box>
+        </div>
+        
+        <div class="col-sm-3">  
+          <div style="float:right">
             <hf-buttons
             :disabled="project.investors.length ? false : true"
             name="Export All"
             @executeAction="handleExport"
             iconClass="fas fa-file-export"
-            ></hf-buttons>
-          </div>
-          <div>
-            <hf-buttons
+          ></hf-buttons>
+          <hf-buttons
             class="openBtn"
             :disabled="project.investors.length ? false : true"
             name="Lottery"
             @executeAction="openModal()"
             iconClass="fas fa-dharmachakra"
-            ></hf-buttons>
+            style="margin-left: 5px"
+          ></hf-buttons>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card event-card" style="margin-top: 2%; padding: 10px">
+    <div class="row card event-card page-nav">
       <div v-if="project.investors.length > 0">
 
       
