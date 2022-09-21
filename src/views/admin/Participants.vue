@@ -443,11 +443,9 @@ computed:{
       console.log(action)
       switch (action.type) {
         case "DISCORD_JOIN":
-        case "TELEGRAM_JOIN":{
+        case "TELEGRAM_JOIN":
+        case "TWITTER_FOLLOW":{
           return JSON.parse(action.value).targetScreenName;
-        }
-        case "TWITTER_FOLLOW": {
-          return action.value.targetScreenName;
         }
         case "GITHUB_PR":
         case "TWITTER_RETWEET": {

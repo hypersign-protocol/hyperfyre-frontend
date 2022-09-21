@@ -110,6 +110,7 @@ computed:{
       actions: [],
       twitter: {
         sourceScreenName: "",
+        targetScreenName: "",
       },
       social:{
       socialAccessToken:''
@@ -118,26 +119,13 @@ computed:{
       fullPage: true,
     };
   },
-  updated() {
-    try {
-      if (this.data.value ) {
-        if (this.twitter.sourceScreenName == ""){
-        this.twitter.sourceScreenName = this.data.value.sourceScreenName
-        }
-      }
-    } catch (e) {
-      this.twitter.sourceScreenName = this.data.value.sourceScreenName;
-    }
-  },
   mounted() {
-    try {
-      if (this.data.value) {
-       this.twitter.sourceScreenName = this.data.value.sourceScreenName
+      if (this.data.isDone && this.data.value) {
+        const twitter = JSON.parse(this.data.value);
+        this.twitter = { ...twitter };
+      } else {
+        this.twitter.sourceScreenName = this.data.value;
       }
-    } catch (e) {
-      this.twitter.sourceScreenName = this.data.value.sourceScreenName;
-    }
-
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
