@@ -75,14 +75,12 @@
 }
 </style>
 <script>
-// import config from "../../../config";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-// import apiClient from "../../../mixins/apiClientMixin";
 import webAuth from "../../../mixins/twitterLogin";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
-// import Messages from "../../../utils/messages/participants/en";
+import Messages from "../../../utils/messages/participants/en";
 import { isEmpty, isretweetUrl } from '../../../mixins/fieldValidationMixin';
 export default {
   components: { Loading },
@@ -115,7 +113,6 @@ computed:{
   data() {
     return {
       visible: false,
-      // retweetUrl: "",
       social:{
       url:'',
       socialAccessToken:'',
@@ -145,33 +142,16 @@ computed:{
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
-    async update() {
-      // try {
-      //   if (!(await this.hasRetweeted())) {
-      //     throw new Error(
-      //       Messages.EVENT_ACTIONS.TWITTER_RETWEET.INVALID_RETWEET
-      //     );
-      //   } else {
-      //     this.$emit("input", JSON.stringify({
-      //       ...this.social
-      //     }));
-      //   }
-      // } catch (e) {
-      //   const { errors } = e;
-      //   if (errors && errors.length > 0) {
-      //     this.notifyErr(errors[0]["msg"]);
-      //   } else {
-      //     this.notifyErr(e.message);
-      //   }
-      // }
+    update() {
       if(!localStorage.getItem("twitterAccessToken")){
-        this.notifyErr("Please autherize first");
+        this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_RETWEET.TWITTER_RETWEET_AUTH);
       } else if(!this.social.url || isEmpty(this.social.url)){
-        this.notifyErr("Please enter Retweet URL");
+        this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_RETWEET.ENTER_RETWEET_URL);
       } else if(isretweetUrl(this.social.url)){
         this.social.url = "";
-        this.notifyErr("Please enter valid Retweet URL")
+        this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_RETWEET.INVALID_RETWEET)
       } else {
+        this.social.socialAccessToken = localStorage.getItem("twitterAccessToken")
         this.$emit("input", JSON.stringify({
             ...this.social
           }));
@@ -190,19 +170,6 @@ computed:{
             },
             (err, authRes) => {
               if (!err && authRes.accessToken) {
-                // webAuth.client.userInfo(
-                //   authRes.accessToken,
-                //   async (err, user) => {
-                //     if (err) {
-                //       return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
-                //     }
-
-                //     const twitterId = user.sub.split("|")[1];
-                //     localStorage.setItem("twitterId", twitterId);
-
-                //     window.open(urlToRedirect, "_blank");
-                //   }
-                // );
               this.social.socialAccessToken = authRes.accessToken;
               localStorage.setItem("twitterAccessToken",this.social.socialAccessToken)
               window.open(urlToRedirect,"_blank")
@@ -217,47 +184,6 @@ computed:{
         this.notifyErr(e);
       }
     },
-    // async hasRetweeted() {
-    //   if (!this.retweetUrl) {
-    //     throw new Error("Retweet url cannot be empty");
-    //   }
-    //   if(isretweetUrl(this.retweetUrl)){
-    //     this.retweetUrl='';
-    //     return false;
-    //   }
-    //   this.isLoading = true;
-    //   const twitterId = localStorage.getItem("twitterId");
-    //   if (twitterId) {
-    //     let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
-    //     let headers = {
-    //       "Content-Type": "application/json",
-    //       Authorization: `Bearer ${this.authToken}`,
-    //     };
-
-    //     const body = {
-    //       tweetUrl: this.retweetUrl,
-    //       userId: twitterId,
-    //       tweetText: this.data.value,
-    //       needUserDetails: false,
-    //       checkIfFollowed: false,
-    //       sourceScreenName: "",
-    //     };
-
-    //     const resp = await apiClient.makeCall({
-    //       method: "POST",
-    //       url: url,
-    //       body,
-    //       header: headers,
-    //     });
-    //     this.isLoading = false;
-    //     if (resp.data.hasTweetUrlVerified) {
-    //       return true;
-    //     } else {
-    //       this.notifyErr(resp.data.error);
-    //       return false;
-    //     }
-    //   }
-    // },
   },
   mixins: [notificationMixins],
 };
