@@ -210,6 +210,7 @@ computed:{
             }
           );
         } else {
+          this.social.socialAccessToken = localStorage.getItem("twitterAccessToken")
           window.open(urlToRedirect, "_blank");
         }
       } catch (e) {
