@@ -210,7 +210,7 @@ export default {
         let socialAccessToken;
 
         let parsedValue;
-        if(actionItem.type.includes("GITHUB_PR")){
+        if(actionItem.type.includes("GITHUB_PR") || actionItem.type.includes("TWITTER_RETWEET")){
         parsedValue = JSON.parse(value)
         if(parsedValue.socialAccessToken){
         socialAccessToken = parsedValue.socialAccessToken
