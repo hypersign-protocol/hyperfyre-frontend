@@ -110,7 +110,6 @@ computed:{
       actions: [],
       twitter: {
         sourceScreenName: "",
-        targetScreenName: "",
       },
       social:{
       socialAccessToken:''
@@ -122,23 +121,21 @@ computed:{
   updated() {
     try {
       if (this.data.value ) {
-        if (this.twitter.sourceScreenName == "" || this.twitter.targetScreenName == ""){
-          const twitter = JSON.parse(this.data.value);
-          this.twitter = { ...twitter };
+        if (this.twitter.sourceScreenName == ""){
+        this.twitter.sourceScreenName = this.data.value.sourceScreenName
         }
       }
     } catch (e) {
-      this.twitter.sourceScreenName = this.data.value;
+      this.twitter.sourceScreenName = this.data.value.sourceScreenName;
     }
   },
   mounted() {
     try {
       if (this.data.value) {
-        const twitter = JSON.parse(this.data.value);
-        this.twitter = { ...twitter };
+       this.twitter.sourceScreenName = this.data.value.sourceScreenName
       }
     } catch (e) {
-      this.twitter.sourceScreenName = this.data.value;
+      this.twitter.sourceScreenName = this.data.value.sourceScreenName;
     }
 
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
