@@ -127,7 +127,7 @@ computed:{
   updated(){
     if(this.data.isDone && this.data.value){
       if(this.social.url===""){
-        this.social.url = this.data.value;
+        this.social.url = this.data.value.url;
       } else {
         this.social.url = this.social.url;
       }
@@ -137,7 +137,7 @@ computed:{
   mounted() {
     if(this.data.isDone && this.data.value){
       if(this.social.url===""){
-        this.social.url = this.data.value;
+        this.social.url = this.data.value.url;
       } else {
         this.social.url = this.social.url;
       }
