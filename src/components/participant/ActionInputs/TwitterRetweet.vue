@@ -52,7 +52,7 @@
               <b-form-input
                 type="text"
                 placeholder="Please provide your retweet URL here."
-                v-model="retweetUrl"
+                v-model="social.url"
                 :disabled="data.isDone"
                 :required="data.isManadatory"
               ></b-form-input>
@@ -75,15 +75,13 @@
 }
 </style>
 <script>
-import config from "../../../config";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import apiClient from "../../../mixins/apiClientMixin";
 import webAuth from "../../../mixins/twitterLogin";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
-import { isretweetUrl } from '../../../mixins/fieldValidationMixin';
+import { isEmpty, isretweetUrl } from '../../../mixins/fieldValidationMixin';
 export default {
   components: { Loading },
   name: "TwitterRetweet",
@@ -115,48 +113,48 @@ computed:{
   data() {
     return {
       visible: false,
-      retweetUrl: "",
+      social:{
+      url:'',
+      socialAccessToken:'',
+      },
       isLoading: false,
       fullPage: true,
     };
   },
   updated(){
     if(this.data.isDone && this.data.value){
-      if(this.retweetUrl===""){
-        this.retweetUrl = this.data.value;
+      if(this.social.url===""){
+        this.social.url = this.data.value.url;
       } else {
-        this.retweetUrl = this.retweetUrl;
+        this.social.url = this.social.url;
       }
       
     }
   },
   mounted() {
     if(this.data.isDone && this.data.value){
-      if(this.retweetUrl===""){
-        this.retweetUrl = this.data.value;
+      if(this.social.url===""){
+        this.social.url = this.data.value.url;
       } else {
-        this.retweetUrl = this.retweetUrl;
+        this.social.url = this.social.url;
       }
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
-    async update() {
-      try {
-        if (!(await this.hasRetweeted())) {
-          throw new Error(
-            Messages.EVENT_ACTIONS.TWITTER_RETWEET.INVALID_RETWEET
-          );
-        } else {
-          this.$emit("input", this.retweetUrl);
-        }
-      } catch (e) {
-        const { errors } = e;
-        if (errors && errors.length > 0) {
-          this.notifyErr(errors[0]["msg"]);
-        } else {
-          this.notifyErr(e.message);
-        }
+    update() {
+      if(!localStorage.getItem("twitterAccessToken")){
+        this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_RETWEET.TWITTER_RETWEET_AUTH);
+      } else if(!this.social.url || isEmpty(this.social.url)){
+        this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_RETWEET.ENTER_RETWEET_URL);
+      } else if(isretweetUrl(this.social.url)){
+        this.social.url = "";
+        this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_RETWEET.INVALID_RETWEET)
+      } else {
+        this.social.socialAccessToken = localStorage.getItem("twitterAccessToken")
+        this.$emit("input", JSON.stringify({
+            ...this.social
+          }));
       }
     },
     disableInput(data) {
@@ -164,77 +162,26 @@ computed:{
     },
     handleTwitterLogin(urlToRedirect) {
       try {
-        if (!localStorage.getItem("twitterId")) {
+        if (!localStorage.getItem("twitterAccessToken")) {
           webAuth.popup.authorize(
             {
               connection: "twitter",
               owp: true,
             },
             (err, authRes) => {
-              if (!err) {
-                webAuth.client.userInfo(
-                  authRes.accessToken,
-                  async (err, user) => {
-                    if (err) {
-                      return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
-                    }
-
-                    const twitterId = user.sub.split("|")[1];
-                    localStorage.setItem("twitterId", twitterId);
-
-                    window.open(urlToRedirect, "_blank");
-                  }
-                );
+              if (!err && authRes.accessToken) {
+              this.social.socialAccessToken = authRes.accessToken;
+              localStorage.setItem("twitterAccessToken",this.social.socialAccessToken)
+              window.open(urlToRedirect,"_blank")
               }
             }
           );
         } else {
+          this.social.socialAccessToken = localStorage.getItem("twitterAccessToken")
           window.open(urlToRedirect, "_blank");
-          // this.twitter.targetScreenName = localStorage.getItem("twitterHandle")
         }
       } catch (e) {
         this.notifyErr(e);
-      }
-    },
-    async hasRetweeted() {
-      if (!this.retweetUrl) {
-        throw new Error("Retweet url cannot be empty");
-      }
-      if(isretweetUrl(this.retweetUrl)){
-        this.retweetUrl='';
-        return false;
-      }
-      this.isLoading = true;
-      const twitterId = localStorage.getItem("twitterId");
-      if (twitterId) {
-        let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/verify`;
-        let headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
-        };
-
-        const body = {
-          tweetUrl: this.retweetUrl,
-          userId: twitterId,
-          tweetText: this.data.value,
-          needUserDetails: false,
-          checkIfFollowed: false,
-          sourceScreenName: "",
-        };
-
-        const resp = await apiClient.makeCall({
-          method: "POST",
-          url: url,
-          body,
-          header: headers,
-        });
-        this.isLoading = false;
-        if (resp.data.hasTweetUrlVerified) {
-          return true;
-        } else {
-          this.notifyErr(resp.data.error);
-          return false;
-        }
       }
     },
   },
