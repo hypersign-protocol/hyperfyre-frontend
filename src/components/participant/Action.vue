@@ -210,7 +210,9 @@ export default {
         let socialAccessToken;
 
         let parsedValue;
-        if(actionItem.type.includes("GITHUB_PR")){
+        if(actionItem.type.includes("GITHUB_PR") ||
+        actionItem.type.includes("TWITTER_RETWEET") ||
+        actionItem.type.includes("TWITTER_FOLLOW")){
         parsedValue = JSON.parse(value)
         if(parsedValue.socialAccessToken){
         socialAccessToken = parsedValue.socialAccessToken
@@ -280,7 +282,7 @@ export default {
           return this.notifyErr(Messsages.ACTIONS.SOME_ERROR);
         }
       } catch (e) {
-        this.notifyErr(Messsages.EVENT_ACTIONS.ERROR + e.message);
+        this.notifyErr(e.message);
         // console.log(e);
       }
     },

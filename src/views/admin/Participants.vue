@@ -444,10 +444,11 @@ computed:{
       switch (action.type) {
         case "DISCORD_JOIN":
         case "TELEGRAM_JOIN":
-        case "TWITTER_FOLLOW": {
+        case "TWITTER_FOLLOW":{
           return JSON.parse(action.value).targetScreenName;
         }
-         case "GITHUB_PR":{
+        case "GITHUB_PR":
+        case "TWITTER_RETWEET": {
           return action.value.url
         }
         case "ETHEREUM_ERC20":

@@ -72,12 +72,10 @@
 <script>
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import apiClient from "../../../mixins/apiClientMixin";
 import webAuth from "../../../mixins/twitterLogin";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
-import config from "../../../config";
 export default {
   components: { Loading },
   name: "TwitterFollow",
@@ -114,157 +112,62 @@ computed:{
         sourceScreenName: "",
         targetScreenName: "",
       },
+      social:{
+      socialAccessToken:''
+      },
       isLoading: false,
       fullPage: true,
     };
   },
-  updated() {
-    try {
-      if (this.data.value ) {
-        if (this.twitter.sourceScreenName == "" || this.twitter.targetScreenName == ""){
-          const twitter = JSON.parse(this.data.value);
-          this.twitter = { ...twitter };
-        }
-      }
-    } catch (e) {
-      this.twitter.sourceScreenName = this.data.value;
-    }
-  },
   mounted() {
-    try {
-      if (this.data.value) {
+      if (this.data.isDone && this.data.value) {
         const twitter = JSON.parse(this.data.value);
         this.twitter = { ...twitter };
+      } else {
+        this.twitter.sourceScreenName = this.data.value;
       }
-    } catch (e) {
-      this.twitter.sourceScreenName = this.data.value;
-    }
-
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
     async update() {
-      if (!localStorage.getItem("twitterId")){
+      if (!localStorage.getItem("twitterAccessToken")){
         return this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_FOLLOW.TWITTER_AUTH);
-      }
-      if (!(await this.hasFollowedTwitter())) {
-        return this.notifyErr(
-          Messages.EVENT_ACTIONS.TWITTER_FOLLOW.FOLLOW_FIRST
-        );
-      }  
-      this.$emit(
+      } else {
+        this.social.socialAccessToken = localStorage.getItem("twitterAccessToken")
+        this.$emit(
         "input",
          JSON.stringify({
-          ...this.twitter,
+          ...this.social,
         })
       );
-    },
+    }
+  },
     disableInput(data) {
       this.done = data;
     },
     handleTwitterLogin(urlToRedirect) {
       try {
-        if (!localStorage.getItem("twitterId")) {
+        if (!localStorage.getItem("twitterAccessToken")) {
           webAuth.popup.authorize(
             {
               connection: "twitter",
               owp: true,
             },
             (err, authRes) => {
-              if (!err) {
-                webAuth.client.userInfo(
-                  authRes.accessToken,
-                  async (err, user) => {
-                    if (err) {
-                      return this.notifyErr(Messages.EVENT_ACTIONS.WENT_WRONG);
-                    }
-
-                    const twitterId = user.sub.split("|")[1];
-                    localStorage.setItem("twitterId", twitterId);
-
-                    window.open(urlToRedirect, "_blank");
-                  }
-                );
+              if (!err && authRes.accessToken) {
+                this.social.socialAccessToken = authRes.accessToken;
+                localStorage.setItem("twitterAccessToken",this.social.socialAccessToken);
+                window.open(urlToRedirect, "_blank");
+                
               }
             }
           );
         } else {
+          this.social.socialAccessToken = localStorage.getItem("twitterAccessToken")
           window.open(urlToRedirect, "_blank");
-          // this.twitter.targetScreenName = localStorage.getItem("twitterHandle")
         }
       } catch (e) {
         return this.notifyErr(e.message ? e.message : JSON.stringify(e));
-      }
-    },
-    async hasFollowedTwitter() {
-      try {
-        this.isLoading = true;
-        const twitterId = localStorage.getItem("twitterId");
-
-        this.twitter.targetScreenName = await this.getTwitterScreenName(
-          twitterId
-        );
-
-        if (
-          this.twitter.sourceScreenName &&
-          this.twitter.targetScreenName &&
-          this.twitter.sourceScreenName != "" &&
-          this.twitter.targetScreenName != ""
-        ) {
-          let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/follower`;
-          let headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.authToken}`,
-          };
-
-          const resp = await apiClient.makeCall({
-            method: "POST",
-            url: url,
-            body: this.twitter,
-            header: headers,
-          });
-          return resp.data;
-        } else {
-          this.notifyErr(
-            Messages.EVENT_ACTIONS.TWITTER_FOLLOW.TWITTER_SCREENS_BLANK
-          );
-          return false;
-        }
-      } catch (e) {
-        this.notifyErr(e);
-        return false;
-      } finally {
-        this.isLoading = false;
-      }
-    },
-    async getTwitterScreenName(twitterId) {
-      try {
-        this.isLoading = true;
-        if (twitterId) {
-          let url = `${this.$config.studioServer.BASE_URL}api/v1/twitter/user/${twitterId}`;
-          let headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.authToken}`,
-          };
-
-          const resp = await apiClient.makeCall({
-            method: "GET",
-            url: url,
-            body: {},
-            header: headers,
-          });
-
-          const { screen_name } = resp.data;
-          // localStorage.setItem("twitterHandle", screen_name);
-
-          return screen_name;
-        } else {
-          return null;
-        }
-      } catch (e) {
-        this.notifyErr(e);
-      } finally {
-        this.isLoading = false;
       }
     },
   },
