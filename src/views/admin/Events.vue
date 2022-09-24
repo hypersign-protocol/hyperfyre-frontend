@@ -215,14 +215,8 @@ i {
               :themeColorDefault="themeColorDefault"
               :fontColor="fontColor"
               :fontColorDefault="fontColorDefault"
-              :blockChainType="blockchainType"
-              :contractType="contractType"
-              :eventActionType="eventActionType"
               :saveProject="saveProject"
               :openPreview="openPreview"
-              :addedSocialMedias="addedSocialMedias"
-              :selectedSocialMedia="selectedSocialMedia"
-              :socialOptions="socialOptions"
               :actionList="eventActionList"
               :tagList="project.tags"
               :tagFdb="tagFdb"
@@ -464,6 +458,32 @@ export default {
     HfNotes
   },
 
+  computed: {
+     buttonThemeCss() {
+      return {
+        '--button-bg-color': config.app.buttonBgColor,
+        '--button-text-color':config.app.buttonTextColor
+      }
+     },
+     projects(){
+       return this.$store.state.projects;
+     },
+     projectsToShow(){
+       return this.$store.state.projects.slice(0,this.perPage)
+     },
+     
+    columns() {
+      let columns = [];
+
+      let mid = Math.ceil(this.projectsToShow.length / this.requiredColumn);
+      for (let col = 0; col < this.requiredColumn; col++) {
+        //console.log(this.projectsToShow.slice(col * mid, col * mid + mid));
+        columns.push(this.projectsToShow.slice(col * mid, col * mid + mid));
+      }
+      return columns;
+    },
+  },
+
   data() {
     return {
       requiredColumn: 2,
@@ -492,66 +512,15 @@ export default {
         // {text: 'Select Tag To filter events', value: null,},
       ],
       tagFdb: [],
-      projects: [],
+      // projects: [],
       tagsTemp: [],
       selectedSocialMedia: null,
       addedSocialMedias: [],
       eventActionList: [],
-      socialOptions: [
-        { value: null, label: "Select a Social Profile" },
-        {
-          label: "Twitter",
-
-          value: {
-            media: "twitter",
-            icon: "fab fa-twitter",
-            fields: [
-              {
-                name: "twitterHandle",
-                type: "text",
-                placeholder: "Twitter Handle",
-                value: "",
-              },
-              {
-                name: "twitterPostFormat",
-                type: "text",
-                placeholder: "Twitter Post Format",
-                value: "",
-              },
-            ],
-          },
-        },
-        {
-          label: "Telegram",
-          value: {
-            media: "telegram",
-            icon: "fab fa-telegram-plane",
-            fields: [
-              {
-                name: "telegramHandle",
-                type: "text",
-                placeholder: "Telegram Handle",
-                value: "",
-              },
-              {
-                name: "telegramAnnouncementChannel",
-                type: "text",
-                placeholder: "Telegram Announcement Channel",
-                value: "",
-                optional: true,
-              },
-            ],
-          },
-        },
-      ],
-
       searchQuery: "",
-      projectsToShow: [],
+      // projectsToShow: [],
       perPage: 12,
       projectStatus: true,
-      blockchainType: "ETHEREUM",
-      contractType: "ERC20",
-      eventActionType: "ETHEREUM",
       currentPage: 1,
       themeColor: "#494949",
       themeColorDefault: "#494949",
@@ -595,7 +564,7 @@ export default {
       ...JSON.parse(usrStr),
     };
     this.project.ownerDid = this.user.id; // : "did:hs:QWERTlkasd090123SWEE12322";
-    await this.fetchProjects();
+    // await this.fetchProjects();
     await this.getTags();
 
     this.$root.$on("actionReorder", (arg) => {
@@ -758,10 +727,11 @@ export default {
       }
     },
     handleSearch(e) {
-      
+      let projects = {...this.projects}
+      console.log(projects)
       if (e.target.value.length) {
         this.searchQuery = e.target.value.trim();
-        return (this.projectsToShow = this.projects.filter((x) =>
+        return (this.projectsToShow = projects.filter((x) =>
           x.projectName.toLowerCase().includes(e.target.value.toLowerCase())
         ));
       } else {
@@ -769,30 +739,15 @@ export default {
         this.paginateChange(this.currentPage);
       }
     },
-    // handleSearchByTag(){
-    //    if(this.selected){
-    //  return this.projectsToShow =
-    //      this.projectsToShow.filter((x) =>{
-    //       return x.tags.find((y)=>{
-    //       if(y.type==this.selected){
-    //         return x
-    //       }
-    //       })
-    //     })
-    //   }else{
-    //       this.searchQuery = ""
-    //       this.paginateChange(this.currentPage)
-    //   }
-    // },
     onInputTag() {
       let temp = this.selected.map((k) => {
         return k.value;
       });
 
       let selectedSet = new Set(temp);
-
+      let projects = {...this.projects}
       if (this.selected.length) {
-        return (this.projectsToShow = this.projects.filter((x) => {
+        return (this.projectsToShow = projects.filter((x) => {
           const temp1 = x.tags.map((l) => {
             return l.type;
           });
@@ -821,30 +776,9 @@ export default {
     paginateChange(e) {
       this.currentPage = e;
       const skip = this.perPage * (e - 1);
-
-      this.projectsToShow = this.projects.slice(skip, this.perPage + skip);
-    },
-
-    handleThemeChange(e) {
-      this.themeColor = e.target.value;
-    },
-    openCreateModal() {
-      this.isProjectEditing = false;
-      this.project = {};
-      this.eventActionList = this.eventActionList;
-      this.blockchainType = "ETHEREUM";
-      this.contractType = "ERC20";
-      this.fontColor = this.fontColorDefault;
-      this.themeColor = this.themeColorDefault;
-      this.projectStatus = true;
-      this.$bvModal.show("create-project-modal");
-    },
-    changeProjectStatus(event) {
-      this.project.projectStatus =
-        event.target.options[event.target.options.selectedIndex].value ===
-        "false"
-          ? false
-          : true;
+      console.log(skip)
+      let projects = {...this.projects}
+      this.projectsToShow = projects.slice(skip, this.perPage + skip);
     },
     async fetchProjects() {
       try {
@@ -925,39 +859,7 @@ export default {
       this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
 
       eventBus.$emit("sendProject", this.project);
-      // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
-      this.project.social = {
-        twitter: {
-          isEnabled: true,
-          twitterHandle: this.project.twitterHandle,
-          twitterPostFormat: this.project.twitterPostFormat,
-        },
-        telegram: {
-          isEnabled: true,
-          telegramHandle: this.project.telegramHandle,
-          telegramAnnouncementChannel: this.project.telegramAnnouncementChannel,
-        },
-      };
 
-      this.socialOptions.forEach((media) => {
-        if (media.value) {
-          media.value.fields.map((field) => {
-            field.value = this.project[field.name];
-          });
-        }
-      });
-
-      this.socialOptions.map((x) => {
-        if (x.value) {
-          this.addedSocialMedias.push(x.value);
-        }
-      });
-
-      this.blockchainType =
-        project.blockchainType !== undefined
-          ? project.blockchainType
-          : this.blockchainType;
-      this.contractType = project.contractType;
       this.themeColor =
         project.themeColor !== undefined ? project.themeColor : this.themeColor;
       this.fontColor =
@@ -991,39 +893,6 @@ export default {
         "YYYY-MM-DD hh:mm:ss"
       );
       this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
-
-      // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
-      this.project.social = {
-        twitter: {
-          isEnabled: true,
-          twitterHandle: this.project.twitterHandle,
-          twitterPostFormat: this.project.twitterPostFormat,
-        },
-        telegram: {
-          isEnabled: true,
-          telegramHandle: this.project.telegramHandle,
-          telegramAnnouncementChannel: this.project.telegramAnnouncementChannel,
-        },
-      };
-
-      this.socialOptions.forEach((media) => {
-        if (media.value) {
-          media.value.fields.map((field) => {
-            field.value = this.project[field.name];
-          });
-        }
-      });
-
-      this.socialOptions.map((x) => {
-        if (x.value) {
-          this.addedSocialMedias.push(x.value);
-        }
-      });
-      this.blockchainType =
-        project.blockchainType !== undefined
-          ? project.blockchainType
-          : this.blockchainType;
-      this.contractType = project.contractType;
       this.themeColor =
         project.themeColor !== undefined ? project.themeColor : this.themeColor;
       this.fontColor =
@@ -1093,27 +962,27 @@ export default {
                 if (!json || !json.isArchived) {
                   throw new Error("Could not delete the event");
                 }
-                const index = this.projects
-                  .map((project) => project._id)
-                  .indexOf(json._id);
-                this.projects.splice(index, 1);
-                this.projectsToShow = this.projects.slice(0, this.perPage);
+                // const index = this.projects
+                //   .map((project) => project._id)
+                //   .indexOf(json._id);
+                // this.projects.splice(index, 1);
+                // this.projectsToShow = this.projects.slice(0, this.perPage);
+                this.$store.commit("deleteEvent",json._id)
+                // const tempProject = JSON.parse(
+                //   localStorage.getItem("userProjects")
+                // );
+                // localStorage.removeItem("userProjects");
 
-                const tempProject = JSON.parse(
-                  localStorage.getItem("userProjects")
-                );
-                localStorage.removeItem("userProjects");
-
-                if(tempProject){
-                  tempProject.projects.splice(index, 1);
-                  localStorage.setItem(
-                    "userProjects",
-                    JSON.stringify({
-                      projects: tempProject.projects,
-                      count: tempProject.projects.length,
-                    })
-                  );
-                }
+                // if(tempProject){
+                //   tempProject.projects.splice(index, 1);
+                //   localStorage.setItem(
+                //     "userProjects",
+                //     JSON.stringify({
+                //       projects: tempProject.projects,
+                //       count: tempProject.projects.length,
+                //     })
+                //   );
+                // }
                 
                 if (json) {
                   if (!resp.ok) {
@@ -1155,6 +1024,7 @@ export default {
         if (!this.isProjectEditing) {
           ////  not using this for the time being just  to test
           // this.whitelistingLink =  window.location.origin + ( resp.data.slug && resp.data.slug != "" ?  "/form/" + resp.data.slug :  "/form?projectId=" + resp.data._id )
+          this.$store.commit("addProject",resp)
           this.whitelistingLink =
             window.location.origin +
             (resp.data.slug && resp.data.slug != ""
@@ -1175,13 +1045,15 @@ export default {
         this.resetAllValues();
 
         if (this.isProjectEditing) {
-          await this.fetchProjects();
+          // await this.fetchProjects();
+          this.$store.commit("updateProject",resp)
           this.$root.$emit("bv::toggle::collapse", "sidebar-right");
           this.isProjectEditing = false;
           return;
         }
         if (this.isProjectClonning) {
-          await this.fetchProjects();
+          // await this.fetchProjects();
+          this.$store.commit("addProject",resp)
           this.isProjectClonning = false;
           await this.handlePaginateByProjectName(namePage);
 
@@ -1197,7 +1069,7 @@ export default {
           localStorage.setItem("userProjects", JSON.stringify(userProjects));
         }
 
-        await this.fetchProjects();
+        // await this.fetchProjects();
         await this.handlePaginateByProjectName(namePage);
         this.$bvModal.hide("create-project-modal");
 
@@ -1266,8 +1138,6 @@ export default {
         this.project.fontColor = this.fontColor.trim().length
           ? this.fontColor
           : this.fontColorDefault;
-        this.project.blockchainType = this.blockchainType;
-        this.project.contractType = this.contractType;
         this.project.actions = this.eventActionList;
         this.project.tags = this.tagsTemp;
         this.project.refereePoint = this.project.refereePoint.toString();
@@ -1357,10 +1227,6 @@ export default {
         return Messages.EVENTS.CREATE_EDIT_EVENT.CHOOSE_ATLEAST_ONE_TAG;
       }
 
-      if (!this.blockchainType) {
-        return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_BLOCKCHAIN_TYPE;
-      }
-
       if (this.themeColor == "#ffffff") {
         return Messages.EVENTS.CREATE_EDIT_EVENT.THEME_NOT_WHITE;
       }
@@ -1439,61 +1305,13 @@ export default {
       this.DeleteId="",
       this.projectToDelete="";
         (this.eventActionList = []),
-        (this.tagsTemp = []),
-        (this.selectedSocialMedia = null),
-        (this.addedSocialMedias = []),
-        // TODO:  This is agian bad way
-        //  need to use /api/v1/action API
-        (this.socialOptions = [
-          { value: null, label: "Select a Social Profile" },
-          {
-            label: "Twitter",
-            value: {
-              media: "twitter",
-              icon: "fab fa-twitter",
-              fields: [],
-            },
-          },
-          {
-            label: "Telegram",
-            value: {
-              media: "telegram",
-              icon: "fab fa-telegram-plane",
-              fields: [],
-            },
-          },
-          {
-            label: "Discord",
-            value: {
-              media: "discord",
-              icon: "fab fa-discord",
-              fields: [],
-            },
-          },
-        ]);
+        (this.tagsTemp = [])
     },
     truncate1(str, number) {
       return truncate(str, number);
     },
   },
-  computed: {
-     buttonThemeCss() {
-      return {
-        '--button-bg-color': config.app.buttonBgColor,
-        '--button-text-color':config.app.buttonTextColor
-      }
-     },
-    columns() {
-      let columns = [];
 
-      let mid = Math.ceil(this.projectsToShow.length / this.requiredColumn);
-      for (let col = 0; col < this.requiredColumn; col++) {
-        //console.log(this.projectsToShow.slice(col * mid, col * mid + mid));
-        columns.push(this.projectsToShow.slice(col * mid, col * mid + mid));
-      }
-      return columns;
-    },
-  },
   mixins: [notificationMixins],
 };
 </script>
