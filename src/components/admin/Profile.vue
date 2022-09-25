@@ -88,6 +88,12 @@ export default {
       '--header-bg-color': config.app.headerBGColor,
       '--header-text-color':config.app.headerTextColor
       }
+    },
+    projectCount(){
+      return this.$store.getters.projectCount
+    },
+    schemaCount(){
+       return this.$store.getters.schemaCount
     }
   },
   data() {
@@ -95,8 +101,8 @@ export default {
       active: 0,
       userKeys: [],
       appList: [],
-      schemaCount: 0,
-      projectCount: 0,
+      // schemaCount: 0,
+      // projectCount: 0,
       user: {},
       accessuser:{},
       authToken: localStorage.getItem("authToken"),
@@ -116,60 +122,61 @@ export default {
         ...JSON.parse(accessUser)
      }
     
-    await this.fetchProjects();
+    // await this.fetchProjects();
    
   },
   methods: {
-    async fetchProjects() {
-      try {
-        this.isLoading = true;
+    // async fetchProjects() {
+    //   try {
+    //     this.isLoading = true;
 
-        if (!this.user.id) throw new Error("No project owner found");
+    //     if (!this.user.id) throw new Error("No project owner found");
 
-        const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
+    //     const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
 
-        const headers = {
-          Authorization: `Bearer ${this.authToken}`,
-          AccessToken:`Bearer ${this.accessToken}`
-        };
-        const resp = await fetch(url, {
-          headers,
-          method: "GET",
-        });
+    //     const headers = {
+    //       Authorization: `Bearer ${this.authToken}`,
+    //       AccessToken:`Bearer ${this.accessToken}`
+    //     };
+    //     const resp = await fetch(url, {
+    //       headers,
+    //       method: "GET",
+    //     });
 
-        if (!resp.ok) {
-          return this.notifyErr(resp.statusText);
-        }
+    //     if (!resp.ok) {
+    //       return this.notifyErr(resp.statusText);
+    //     }
 
-        const json = await resp.json();
-        let investorCount = 0;
-        // console.log("JSON", json)
-        this.projects = json;
-        this.projects.map((x) => {
-          investorCount += x.investorsCount;
-          x["whitelisting_link"] =
-            window.location.origin + "/form?projectId=" + x._id;
-          x["investors_link"] =
-            window.location.origin + "/admin/participants?projectId=" + x._id;
-        });
+    //     const json = await resp.json();
+    //     let investorCount = 0;
+    //     // console.log("JSON", json)
+    //     console.log(json)
+    //     this.projects = json;
+    //     this.projects.map((x) => {
+    //       investorCount += x.investorsCount;
+    //       x["whitelisting_link"] =
+    //         window.location.origin + "/form?projectId=" + x._id;
+    //       x["investors_link"] =
+    //         window.location.origin + "/admin/participants?projectId=" + x._id;
+    //     });
+    //     console.log(this.projects)
+    //     this.projectCount = this.projects.length;
+    //     this.schemaCount = investorCount;
+    //     localStorage.setItem(
+    //       "userProjects",
+    //       JSON.stringify({
+    //         projects: this.projects,
+    //         count: this.projectCount,
+    //       })
+    //     );
 
-        this.projectCount = this.projects.length;
-        this.schemaCount = investorCount;
-        localStorage.setItem(
-          "userProjects",
-          JSON.stringify({
-            projects: this.projects,
-            count: this.projectCount,
-          })
-        );
-
-        // this.notifySuccess("No. of projects fetched " + this.projects.length);
-      } catch (e) {
-        this.notifyErr(e.message);
-      } finally {
-        this.isLoading = false;
-      }
-    },
+    //     // this.notifySuccess("No. of projects fetched " + this.projects.length);
+    //   } catch (e) {
+    //     this.notifyErr(e.message);
+    //   } finally {
+    //     this.isLoading = false;
+    //   }
+    // },
   },
 };
 </script>

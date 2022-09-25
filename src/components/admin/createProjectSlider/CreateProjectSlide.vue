@@ -415,28 +415,13 @@ export default {
     fontColorDefault: {
       type: String,
     },
-    blockChainType: {
-      type: String,
-    },
-    contractType: {
-      type: String,
-    },
      openPreview:{
        type:Function
      },
     saveProject: {
       type: Function,
     },
-    addedSocialMedias: {
-      type: Array,
-    },
     actionList: {
-      type: Array,
-    },
-    selectedSocialMedia: {
-      type: Object,
-    },
-    socialOptions: {
       type: Array,
     },
     isProjectEditing: {
