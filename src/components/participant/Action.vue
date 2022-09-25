@@ -282,8 +282,24 @@ export default {
           return this.notifyErr(Messsages.ACTIONS.SOME_ERROR);
         }
       } catch (e) {
-        this.notifyErr(e.message);
-        // console.log(e);
+        if(e.status === 401){
+          switch(actionItem.type){
+            case "TWITTER_FOLLOW":
+            case "TWITTER_RETWEET": {
+              localStorage.removeItem("twitterAccessToken")
+             return this.notifyErr(Messsages.EVENT_ACTIONS.TWITTER_AUTH_AGAIN)
+            }
+            case "GITHUB_PR":{
+              localStorage.removeItem("githubAccessToken")
+             return this.notifyErr(Messsages.EVENT_ACTIONS.GITHUB_PR.AUTH_AGAIN)
+            }
+          }
+        } else {
+          this.notifyErr(e.message);
+        }
+      }
+      finally{
+        this.isLoading = false;
       }
     },
   },
