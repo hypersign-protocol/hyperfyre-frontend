@@ -66,7 +66,6 @@ export default {
       name: config.appName,
       hover: false,
       authToken:null,
-      accessToken:null,
       isSidebarCollapsed: true,
       authRoutes: ["register", "PKIIdLogin"],
       showNavbar: false,
@@ -171,7 +170,6 @@ export default {
     if(this.authToken && !window.location.pathname.includes("/form")){
       this.$store.dispatch('getApps',this.authToken);
       this.$store.dispatch('getTeammates',this.authToken);
-      this.$store.dispatch('fetchProjects',this.authToken);
     }
     eventBus.$on("UpdateThemeEvent", (themeData) => {
       Object.assign(this.themeData, { ...themeData })
