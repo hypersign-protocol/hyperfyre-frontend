@@ -3,9 +3,9 @@
         <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="true"></loading>
         <h3>Org Setting</h3>
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-12">
 
-                <div class="card">
+                <div class="card event-card">
                     <div class="card-body">
 
                         <div class="row g-3 align-items-center w-100 mt-4">

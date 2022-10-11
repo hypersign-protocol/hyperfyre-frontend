@@ -13,14 +13,14 @@
     >
       <b-row>
         <b-col cols="1" sm="1" md="1">
-          <img src="../../../assets/twitter-4.svg" height="25px" />
+          <img src="../../../assets/github.svg" height="25px" />
         </b-col>
         <b-col cols="9" sm="9" class="text-left" md="9">
           <div class="text text-capitalize">{{ data.title }}</div>
         </b-col>
         <b-col cols="2" sm="2" md="2">
           <b-badge class="btn-score" :style="buttonThemeCss" @click="authToken && update()" v-if="!done">
-             <i class="fa fa-plus" aria-hidden="true"></i>
+            <i class="fa fa-plus" aria-hidden="true"></i>
             {{ data.score }}
           </b-badge>
           <img
@@ -40,17 +40,20 @@
               <button
                 :disabled="done"
                 @click="
-                  handleTwitterLogin(
-                    'https://twitter.com/' +
-                      twitter.sourceScreenName +
-                      '?ref_src=twsrc%5Etfw'
-                  )
+                  handleGithubLogin()
                 "
-                class="btn btn-outline-twitter text-black"
+                class="btn btn githubbtn mb-2"
               >
-                <img src="../../../assets/twitter.svg" />
-                Follow @{{ twitter.sourceScreenName }}
+                <img src="../../../assets/github.svg" height="30px"/>
+                Authorize Github
               </button>
+              <b-form-input
+                type="text"
+                placeholder="Please provide Pull Request URL here."
+                v-model="social.url"
+                :disabled="data.isDone"
+                :required="data.isManadatory"
+              ></b-form-input>
             </div>
           </b-col>
         </b-row>
@@ -68,6 +71,11 @@
 .center{
   display: block; margin-left: auto;margin-right: auto
 }
+.githubbtn{
+  border-color: #2e3440;
+  color: #2e3440;
+  
+}
 </style>
 <script>
 import Loading from "vue-loading-overlay";
@@ -76,9 +84,10 @@ import webAuth from "../../../mixins/twitterLogin";
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
+import { isEmpty } from '../../../mixins/fieldValidationMixin';
 export default {
   components: { Loading },
-  name: "TwitterFollow",
+  name: "GithubPr",
   props: {
     idValue: {
       required: true,
@@ -106,68 +115,77 @@ computed:{
   },
   data() {
     return {
-      visible: false,
-      actions: [],
-      twitter: {
-        sourceScreenName: "",
-        targetScreenName: "",
-      },
       social:{
-      socialAccessToken:''
+      url:'',
+      socialAccessToken:'',
       },
+      visible: false,
       isLoading: false,
       fullPage: true,
     };
   },
-  mounted() {
-      if (this.data.isDone && this.data.value) {
-        const twitter = JSON.parse(this.data.value);
-        this.twitter = { ...twitter };
+  updated(){
+    if(this.data.isDone && this.data.value){
+      if(this.social.url === ""){
+        this.social.url = (this.data.value.url)
       } else {
-        this.twitter.sourceScreenName = this.data.value;
+        this.social.url = (this.social.url)
       }
+      
+    }
+  },
+  mounted() {
+    if(this.data.isDone && this.data.value){
+      if(this.social.url === ""){
+        this.social.url = (this.data.value.url)
+      } else {
+        this.social.url = (this.social.url)
+      }
+    }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
-    async update() {
-      if (!localStorage.getItem("twitterAccessToken")){
-        return this.notifyErr(Messages.EVENT_ACTIONS.TWITTER_FOLLOW.TWITTER_AUTH);
-      } else {
-        this.social.socialAccessToken = localStorage.getItem("twitterAccessToken")
-        this.$emit(
-        "input",
-         JSON.stringify({
-          ...this.social,
-        })
-      );
-    }
-  },
+    update() {
+        if (!localStorage.getItem("githubAccessToken")) {
+            this.notifyErr(
+            Messages.EVENT_ACTIONS.GITHUB_PR.GITHUB_AUTH
+          );
+        } else if(!this.social.url || isEmpty(this.social.url)){
+          this.notifyErr(Messages.EVENT_ACTIONS.GITHUB_PR.GITHUB_PR_EMPTY)
+        } else if(!this.social.url.includes(this.data.value)){
+          this.social.url = "";
+          this.notifyErr(Messages.EVENT_ACTIONS.GITHUB_PR.INVALID_GITHUB_PR_URL)
+        }
+        else {
+          this.social.socialAccessToken = localStorage.getItem("githubAccessToken")
+          this.$emit("input", JSON.stringify({
+            ...this.social
+          }));
+        }
+    },
     disableInput(data) {
       this.done = data;
     },
-    handleTwitterLogin(urlToRedirect) {
+    handleGithubLogin() {
       try {
-        if (!localStorage.getItem("twitterAccessToken")) {
+        if(!localStorage.getItem("githubAccessToken")){
           webAuth.popup.authorize(
             {
-              connection: "twitter",
+              connection: "github",
               owp: true,
             },
             (err, authRes) => {
-              if (!err && authRes.accessToken) {
+              if(!err && authRes.accessToken){
                 this.social.socialAccessToken = authRes.accessToken;
-                localStorage.setItem("twitterAccessToken",this.social.socialAccessToken);
-                window.open(urlToRedirect, "_blank");
-                
+                localStorage.setItem("githubAccessToken",this.social.socialAccessToken)
               }
             }
           );
         } else {
-          this.social.socialAccessToken = localStorage.getItem("twitterAccessToken")
-          window.open(urlToRedirect, "_blank");
+          this.notifyErr(Messages.EVENT_ACTIONS.ALREADY_AUTHERIZED)
         }
       } catch (e) {
-        return this.notifyErr(e.message ? e.message : JSON.stringify(e));
+        this.notifyErr(e);
       }
     },
   },

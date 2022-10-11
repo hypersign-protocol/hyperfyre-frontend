@@ -109,186 +109,131 @@ label {
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-
-
-    <!-- <b-modal hide-footer ref="modal-1" title="Lottery">
+    <hf-pop-up
+      Header="Lottery"
+      >
       <hf-notes :notes="notes"></hf-notes>
-      <div class="d-flex mx-auto justify-content-between px-4">
-        <div class="bold">Total Records</div>
-        <div class="bold">{{ project.count }}</div>
-      </div>
-      <div class="d-flex mx-auto justify-content-between px-4 mt-4">
-        <div class="bold">Number of winners to choose</div>
-        <div class="bold">
-          <input
-            v-model="recordsForLottery"
-            type="number"
-            class="form-control"
-            placeholder="No. of records"
-          />
+        <div class="d-flex mx-auto justify-content-between px-4">
+          <div class="bold">Total Records</div>
+          <div class="bold">{{ project.count }}</div>
         </div>
-      </div>
-      <div class="d-flex mx-auto justify-content-between px-4 mt-4">
-        <div class="bold">Check to choose randomly (optional)</div>
-        <div class="bold">
-          <input
-            v-model="isRandom"
-            type="checkbox"
-            class=""
-            title="Check to choose randomly"
-          />
+        <div class="d-flex mx-auto justify-content-between px-4 mt-4">
+          <div class="bold">Number of winners to choose</div>
+          <div class="bold">
+            <input
+              v-model="recordsForLottery"
+              type="number"
+              class="form-control"
+              placeholder="No. of records"
+            />
+          </div>
         </div>
-      </div>
+        <div class="d-flex mx-auto justify-content-between px-4 mt-4">
+          <div class="bold">Check to choose randomly (optional)</div>
+          <div class="bold">
+            <input
+              v-model="isRandom"
+              type="checkbox"
+              class=""
+              title="Check to choose randomly"
+            />
+          </div>
+        </div>
+        <div class="mt-5 text-center">
+      <hf-buttons
+      name="Execute"
+      @executeAction="handleLottery"
+      />
+        </div>
+    </hf-pop-up>
+    
+    <div class="row card event-card page-nav">
+      <div class="form-row ">
+        <div class="col-sm-3 ">
+          <hf-select-drop-down
+            placeholder="Select an Event"
+            :options="projects"
+            textField="projectName"
+            valueField="_id"
+            @selected=" e => fetchProjectInvestors(e)"
+          ></hf-select-drop-down>
+        </div>
 
-      <div class="mt-5 text-center">
-        <button
-          @click="handleLottery"
-          type="button"
-          class="btn btn-primary button-theme"
-          :style="buttonThemeCss"
-        >
-          Execute
-        </button>
-      </div>
-    </b-modal> -->
-
-  <hf-pop-up
-    Header="Lottery"
-    >
-    <hf-notes :notes="notes"></hf-notes>
-      <div class="d-flex mx-auto justify-content-between px-4">
-        <div class="bold">Total Records</div>
-        <div class="bold">{{ project.count }}</div>
-      </div>
-      <div class="d-flex mx-auto justify-content-between px-4 mt-4">
-        <div class="bold">Number of winners to choose</div>
-        <div class="bold">
-          <input
-            v-model="recordsForLottery"
-            type="number"
-            class="form-control"
-            placeholder="No. of records"
-          />
-        </div>
-      </div>
-      <div class="d-flex mx-auto justify-content-between px-4 mt-4">
-        <div class="bold">Check to choose randomly (optional)</div>
-        <div class="bold">
-          <input
-            v-model="isRandom"
-            type="checkbox"
-            class=""
-            title="Check to choose randomly"
-          />
-        </div>
-      </div>
-      <div class="mt-5 text-center">
-    <hf-buttons
-    name="Execute"
-    @executeAction="handleLottery"
-    />
-      </div>
-  </hf-pop-up>
-    <div class="row" style="margin-top: 2%">
-      <div class="d-flex justify-content-between col-md-12">
-        <div class="projectSelector">
-       <hf-select-drop-down
-       placeholder="Select an Event"
-       :options="projects"
-       textField="projectName"
-       valueField="_id"
-       @selected=" e => fetchProjectInvestors(e)"
-       ></hf-select-drop-down>
-
-        </div>
-        <div class="d-flex ml-auto align-items-center">
-          
-            <!-- <b-form-input
-              @input.native="handleTableSearch"
+        <div class="col-sm-6 ">
+          <hf-search-box
+              @executeSearch="handleTableSearch"
               v-model="tableSearch"
-              placeholder="Search participants"
-              type="search"
-            ></b-form-input> -->
-            <hf-search-box
-            @executeSearch="handleTableSearch"
-            v-model="tableSearch"
-            placeholder="Search participants"            
-            ></hf-search-box>
-          
-          <div class="mx-3"
-          >
-          <!-- <button
-              @click="handleExport"
-              :disabled="project.investors.length ? false : true"
-              class="cta_btns btn btn-primary btn-md button-theme"
-              :style="buttonThemeCss"
-            >
-              Export All <i class="fas fa-file-export"></i>
-
-            </button> -->
-            
+              placeholder="Search participants"            
+              style="width: 400px"
+              ></hf-search-box>
+        </div>
+        
+        <div class="col-sm-3">  
+          <div style="float:right">
             <hf-buttons
             :disabled="project.investors.length ? false : true"
             name="Export All"
             @executeAction="handleExport"
             iconClass="fas fa-file-export"
-            ></hf-buttons>
-          </div>
-          <div>
-            <!-- <button
-              :disabled="project.investors.length ? false : true"
-              v-b-modal.modal-1
-              class="cta_btns btn btn-primary btn-md button-theme"
-              :style="buttonThemeCss"
-            >
-              Lottery <i class="fas fa-dharmachakra"></i>
-            </button> -->
-            <hf-buttons
+          ></hf-buttons>
+          <hf-buttons
             class="openBtn"
             :disabled="project.investors.length ? false : true"
             name="Lottery"
             @executeAction="openModal()"
             iconClass="fas fa-dharmachakra"
-            ></hf-buttons>
+            style="margin-left: 5px"
+          ></hf-buttons>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="row mb-3" style="margin-top: 2%">
-      <div class="col-md-12" style="text-align: left">
-        <div>
-          <ve-table
-            :border-x="true"
-            :border-y="true"
-            :border-around="true"
-            :sort-option="sortOption"
-            :columns="columns"
-            :table-data="project.investors"
-            :expand-option="expandOption"
-            row-key-field-name="_id"
-          />
+    <div class="row card event-card page-nav">
+      <div v-if="project.investors.length > 0">
+
+      
+        <div class="row mb-3" >
+          <div class="col-md-12" style="text-align: left">
+            <div>
+              <ve-table
+                :border-x="true"
+                :border-y="true"
+                :border-around="true"
+                :sort-option="sortOption"
+                :columns="columns"
+                :table-data="project.investors"
+                :expand-option="expandOption"
+                row-key-field-name="_id"
+              />
+            </div>
+          </div>
         </div>
+
+        <div class="d-flex mt-5">
+          <paginate
+            :pageCount="Math.ceil(this.project.count / this.perPage)"
+            :clickHandler="paginateChange"
+            :prevText="'Prev'"
+            v-model="paginateValue"
+            :nextText="'Next'"
+            :containerClass="'paginationContainer'"
+            :page-class="'paginationItem '"
+            :style="buttonThemeCss"
+          >
+          </paginate>
+          <div class="ml-auto">
+            <b-form-select
+              v-model="paginateValue"
+              :options="this.pageSelectDropdown"
+              @change="paginateChange"
+            ></b-form-select>
+          </div>
+        </div>
+        
       </div>
-    </div>
-    <div class="d-flex mt-5">
-      <paginate
-        :pageCount="Math.ceil(this.project.count / this.perPage)"
-        :clickHandler="paginateChange"
-        :prevText="'Prev'"
-        v-model="paginateValue"
-        :nextText="'Next'"
-        :containerClass="'paginationContainer'"
-        :page-class="'paginationItem '"
-        :style="buttonThemeCss"
-      >
-      </paginate>
-      <div class="ml-auto">
-        <b-form-select
-          v-model="paginateValue"
-          :options="this.pageSelectDropdown"
-          @change="paginateChange"
-        ></b-form-select>
+      <div v-else>
+        <hf-page-message :message="msg"></hf-page-message>
       </div>
     </div>
   </div>
@@ -311,12 +256,13 @@ const {LOTTERY_NOTES} = require("../../utils/messages/admin/Notes");
 import HfButtons from "../../components/elements/HfButtons.vue"
 import HfSearchBox from "../../components/elements/HfSearchBox.vue"
 import HfPopUp from "../../components/elements/HfPopUp.vue"
-import HfSelectDropDown from "../../components/elements/HfSelectDropDown.vue"
+import HfSelectDropDown from "../../components/elements/HfSelectDropDown.vue";
+import HfPageMessage from '../../components/elements/HfPageMessage.vue';
 export default {
   name: "Investor",
   components: { 
   Loading, Paginate, HfNotes,HfButtons, 
-  HfSearchBox, HfPopUp,HfSelectDropDown },
+  HfSearchBox, HfPopUp,HfSelectDropDown, HfPageMessage },
 computed:{
  buttonThemeCss() {
       return {
@@ -332,6 +278,7 @@ computed:{
       recordsForLottery: 0,
       issuedImgLink: issuedImgLink,
       cancelToken: undefined,
+      msg: "No participants found",
       sortOption: {
         sortChange: (params) => {
           // console.log("sortChange::", params);
@@ -465,9 +412,11 @@ computed:{
     if (this.$route.query.projectId) {
       this.selectedProjectId = this.$route.query.projectId;
       this.selectedProject = this.$route.query.projectId;
-      eventBus.$emit("setOption",this.selectedProject);
+      if(!this.$route.query.projectId){
+        await this.fetchProjectData(0, this.perPage);
+      }
+      eventBus.$emit("setForParticipant",this.selectedProject);
       this.investor.projectId = this.$route.query.projectId;
-      await this.fetchProjectData(0, this.perPage);
       this.holdInvestors = this.project.investors;
     }
 
@@ -491,11 +440,16 @@ computed:{
       this.$root.$emit('modal-show')
     },
     parseActionValue(action) {
+      console.log(action)
       switch (action.type) {
         case "DISCORD_JOIN":
         case "TELEGRAM_JOIN":
-        case "TWITTER_FOLLOW": {
+        case "TWITTER_FOLLOW":{
           return JSON.parse(action.value).targetScreenName;
+        }
+        case "GITHUB_PR":
+        case "TWITTER_RETWEET": {
+          return action.value.url
         }
         case "ETHEREUM_ERC20":
         case "MATIC_ERC20":
@@ -557,6 +511,9 @@ computed:{
       }
     },
     async handleLottery() {
+      if(!this.recordsForLottery){
+        return this.notifyErr(Messages.PARTICIPANTS.LOTTERY.ENTER_NUMBER_OF_WINNERS)
+      }
       if (
         this.recordsForLottery > this.project.count ||
         this.recordsForLottery <= 0
@@ -668,6 +625,7 @@ computed:{
         await this.fetchProjectData(0, this.perPage);
         this.holdInvestors = this.project.investors;
       } else {
+        this.holdInvestors = []
         this.project.investors = [];
       }
     },

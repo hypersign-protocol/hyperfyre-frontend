@@ -129,9 +129,7 @@ computed:{
 methods:{
   async update(){
    try{
-    if(this.kycData.reviewResult.reviewAnswer==="GREEN" && this.kycData.reviewStatus==="completed"){
-     
-     
+    if(this.kycData.reviewResult.reviewAnswer==="GREEN" && this.kycData.reviewStatus==="completed"){     
     this.$emit("input", "Verified");
     this.done=true
     }else if(this.kycData.reviewResult.reviewAnswer==="RED"){

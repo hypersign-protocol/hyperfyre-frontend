@@ -11,6 +11,8 @@ const EVENT = {
     INVALID_AUTH_TOKEN: "Please! login"
 }
 const EVENTS = {
+    EVENT_DELETED:"Event is deleted successfully",
+    WRONG_EVENT_ID:"Please enter valid event Id",
     EVENT_CLOSED:"Cannot edit CLOSED event! OPEN it to edit",
     NO_EVENT_FOUND:"No events found, click on create button to create a new event!",
     CHECK_ALL_TYPE: "PLease Check if any type left empty",
@@ -60,10 +62,12 @@ const EVENTS = {
             INVITE_NOT_EMPTY: "Invite Link Should not be empty",
             SOCIAL_HANDLE_EMPTY: "Social Handle Should not be empty",
             URL_IN_SOCIAL_HANDLE: "Do not put url in Social Handle",
-            RETWEET_VALID_URL: "Plase Enter valid retweet url",
+            RETWEET_VALID_URL: "Please Enter valid retweet url",
             INVALID_INVITE_LINK: "Invalid Invite Link",
             INVALID_TWITTER_USERNAME: "Invalid Twitter Username",
             INVALID_TELEGRAM_USERNAME: "Invalid Telegram Username",
+            GITHUB_REPONAME_EMPTY: "GitHub Repo URL should not be empty",
+            INVALID_GITHUB_URL: "Invalid GitHub repo URL"
         },
 
         CUSTOM: {
@@ -73,7 +77,9 @@ const EVENTS = {
         },
 
         BLOCKCHAIN: {
-            CHOOSE_TYPE: "Please choose Blockchain Type"
+            CHOOSE_TYPE: "Please choose Blockchain Type",
+            COSMOS_CHAIN_ID: "Please enter Chain Id",
+            INVALID_CHAIN_ID: "Invalid Chain Id"
         },
 
         SMARTCONTRACT: {
@@ -122,12 +128,13 @@ const ORGDATA= {
     ORG_UPDATED_SUCCESSFULLY:"Org details updated Successfully"
 }
 const PARTICIPANTS = {
-    SELECT_EVENT:"Plase select an event",
+    SELECT_EVENT:"Please select an event",
     EXPORT_ALL: {
 
     },
     LOTTERY: {
-        NO_OF_RECORDS: "No of records must be less or equal to total"
+        NO_OF_RECORDS: "Number of records must be less or equal to the total",
+        ENTER_NUMBER_OF_WINNERS: "Please enter Number of winners to choose"
     }
 }
 

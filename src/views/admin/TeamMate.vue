@@ -8,6 +8,11 @@
 </style>
 <template>
   <div class="home marginLeft marginRight">
+    <loading
+      :active.sync="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    ></loading>
     <div class="text-right">
       <!-- <button @click="invite()" class="btn button-theme" :style="buttonThemeCss">
          Invite <i class="fas fa-plus text-black"></i>
@@ -55,7 +60,7 @@
       <div class="col-md-12">
         <table
           v-if="teammates.length"
-          class="table table-bordered"
+          class="table event-card"
           style="background: #ffff"
         >
           <thead class="thead-light">
@@ -109,7 +114,7 @@
 
        
         <h3 v-if="$accounts.length" class="leftAlign">Team's you are part of</h3>
-         <table  v-if="$accounts.length" class="table table-bordered" style="background:#FFFF">
+         <table  v-if="$accounts.length" class="table event-card" style="background:#FFFF">
 
           <thead class="thead-light">
             <tr>
@@ -167,32 +172,34 @@ import HfPageMessage from "../../components/elements/HfPageMessage.vue"
 import Messages from "../../utils/messages/admin/en"
 import HfButtons from "../../components/elements/HfButtons.vue"
 import HfPopUp from "../../components/elements/HfPopUp.vue"
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 export default {
   name: "Teammate",
-  components: {HfPageMessage, HfButtons, HfPopUp},
+  components: {HfPageMessage, HfButtons, HfPopUp, Loading},
   computed:{
  buttonThemeCss() {
       return {
         '--button-bg-color': config.app.buttonBgColor,
         '--button-text-color':config.app.buttonTextColor
       }
-     }
+     },
+     teammates(){
+      return this.$store.state.teammates
+    }
   },
   data() {
     return {
       email: "",
       name: "",
-      teammates: [],
       user: {},
       accessuser: {},
       appName: "",
       authToken: localStorage.getItem("authToken"),
-      msg:Messages.TEAMMATES.NO_TEAMS_FOUND
+      msg:Messages.TEAMMATES.NO_TEAMS_FOUND,
+      isLoading:false,
+      fullPage:true
     };
-  },
-  async mounted() {
-    
-    await this.getTeammates();
   },
   created() {
     const usrStr = localStorage.getItem("user");
@@ -230,6 +237,7 @@ export default {
         localStorage.setItem("authToken", row.authToken);
 
         this.$router.push("/admin/dashboard");
+        this.$store.dispatch('getApps',row.authToken);
       } else {
         localStorage.setItem("accessToken", row.authToken);
         //console.log(row);
@@ -242,23 +250,8 @@ export default {
           })
         );
          this.$router.push("/admin/dashboard");
+         this.$store.dispatch('getApps',this.authToken);
         
-      }
-    },
-    async getTeammates() {
-      const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team`;
-      const headers = {
-        Authorization: `Bearer ${this.authToken}`,
-      };
-      const resp = await fetch(url, {
-        headers,
-        method: "GET",
-      });
-
-      if (!resp.ok) {
-        return this.notifyErr(resp.statusText);
-      } else{
-        this.teammates = await resp.json();
       }
     },
     gotosubpage: (id) => {
@@ -297,7 +290,7 @@ export default {
               } else {
                 this.$root.$emit('modal-close');
                 this.notifySuccess("Invitation Sent");
-                await this.getTeammates();
+                this.$store.commit('addTeammate',json)
               }
             } else {
               throw new Error("Error while Invitation sending");
@@ -312,6 +305,8 @@ export default {
     },
 
     async remove(id) {
+      try{
+      this.isLoading = true
       if (id) {
         const url = `${this.$config.studioServer.BASE_URL}api/v1/admin/team/delete`;
         let headers = {
@@ -331,11 +326,17 @@ export default {
             return this.notifyErr(json);
           } else {
             this.notifySuccess("Removed teammate Successfully");
-            await this.getTeammates();
+            this.$store.commit('removeTeammate',json._id)
           }
         } else {
           throw new Error("Error while Removing");
         }
+      }
+      }catch(e){
+        this.notifyErr(e)
+      }
+      finally{
+        this.isLoading = false
       }
     },
     clearAll(){

@@ -162,88 +162,74 @@ i {
       :is-full-page="fullPage"
     ></loading>
 
-    <div class="row">
-      <div class="col-md-3">
-        <div class="form-group" style="width: 925px">
-          <!-- <input
-            v-if="projects.length"
-            @keyup="handleSearch"
-            type="text"
-            class="form-control w-25"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            placeholder="Search events by name"
-          /> -->
+    <div class="">
+      <div class="form-row">
+        <div class="col-md-3">
+          <div v-if="projects.length">
+            <multiselect
+              v-model="selected"
+              placeholder="Search events by tags"
+              label="text"
+              track-by="value"
+              :options="this.tagToSearch"
+              :multiple="true"
+              :taggable="false"
+              :close-on-select="false"
+              :clear-on-select="false"
+              :style="buttonThemeCss"
+              @input="onInputTag"
+            >
+            </multiselect>
+          </div>
+        </div>
+
+        <div class="col-md-6">
           <hf-search-box
-          v-if="projects.length"
-          placeholder="Search events by name"
-          @executeSearch="handleSearch"
-          ></hf-search-box>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div v-if="projects.length">
-          <multiselect
-            v-model="selected"
-            placeholder="Search events by tags"
-            label="text"
-            track-by="value"
-            :options="this.tagToSearch"
-            :multiple="true"
-            :taggable="false"
-            :close-on-select="false"
-            :clear-on-select="false"
-            :style="buttonThemeCss"
-            @input="onInputTag"
-          >
-          </multiselect>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="text-right">
-          <!-- <button
-            @click="openCreateSidebar"
-            class="btn btn-primary button-theme"
-            :style="buttonThemeCss"
-          >
-            Create <i class="fas fa-plus text-white"></i>
-          </button> -->
-          <hf-buttons
-            name="Create"
-            @executeAction="openCreateSidebar()"
-            iconClass="fas fa-plus text-black"
-            title="Create Event"
-          >
-          </hf-buttons>
+            v-if="projects.length"
+            placeholder="Search events by name"
+            @executeSearch="handleSearch"
+            style="width: 400px"
+            ></hf-search-box>
         </div>
 
-        <div>
-          <create-project-slide
-            :isProjectEditing="isProjectEditing"
-            :project="project"
-            @UpdateColors="UpdateColors"
-            :themeColor="themeColor"
-            :themeColorDefault="themeColorDefault"
-            :fontColor="fontColor"
-            :fontColorDefault="fontColorDefault"
-            :blockChainType="blockchainType"
-            :contractType="contractType"
-            :eventActionType="eventActionType"
-            :saveProject="saveProject"
-            :openPreview="openPreview"
-            :addedSocialMedias="addedSocialMedias"
-            :selectedSocialMedia="selectedSocialMedia"
-            :socialOptions="socialOptions"
-            :actionList="project.actions"
-            :tagList="project.tags"
-            :tagFdb="tagFdb"
-            @updateEventActions="AddUpdateDelEventActions"
-            @updateTagActions="AddUpdateDelTagActions"
-          />
+        <div class="col-md-3">
+          <div class="text-right">
+            <hf-buttons
+              name="Create"
+              @executeAction="openCreateSidebar()"
+              iconClass="fas fa-plus text-black"
+              title="Create Event"
+            >
+            </hf-buttons>
+          </div>
         </div>
       </div>
     </div>
+
+    <div>
+            <create-project-slide
+              :isProjectEditing="isProjectEditing"
+              :project="project"
+              @UpdateColors="UpdateColors"
+              :themeColor="themeColor"
+              :themeColorDefault="themeColorDefault"
+              :fontColor="fontColor"
+              :fontColorDefault="fontColorDefault"
+              :blockChainType="blockchainType"
+              :contractType="contractType"
+              :eventActionType="eventActionType"
+              :saveProject="saveProject"
+              :openPreview="openPreview"
+              :addedSocialMedias="addedSocialMedias"
+              :selectedSocialMedia="selectedSocialMedia"
+              :socialOptions="socialOptions"
+              :actionList="eventActionList"
+              :tagList="project.tags"
+              :tagFdb="tagFdb"
+              @updateEventActions="AddUpdateDelEventActions"
+              @updateTagActions="AddUpdateDelTagActions"
+            />
+          </div>
 
     <div class="row" v-if="whitelistingLink != ''" style="margin-top: 2%">
       <div class="col-md-12" style="text-align: left">
@@ -260,10 +246,15 @@ i {
         </div>
       </div>
     </div>
-    <hf-page-message v-if="!this.projectsToShow.length" 
+
+    <div class="row">
+      <hf-page-message v-if="!this.projectsToShow.length" 
     :message="msg"
     >
     </hf-page-message>
+    </div>
+
+    
     <hf-pop-up
     Header="Delete Event"
     >
@@ -305,7 +296,9 @@ i {
             class="mb-2 eventCard"
             @error="onBannerError($event)"
           >
-            <ul
+            <div class="row">
+              <div class="col-md-9">
+                <ul
               style="
                 list-style-type: none;
                 padding-left: 0px;
@@ -319,22 +312,15 @@ i {
                   ><i class="far fa-copy"></i
                 ></span>
               </li>
+              
               <li
                 data-toggle="tooltip"
-                data-placement="bottom"
-                title="Start Date"
+                data-placement="bottom" 
+                title="Expiry Day"
               >
-                <i class="fas fa-hourglass-start"></i>
-                {{ formateDate(project.fromDate) }}
-              </li>
-              <li
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="End Date"
-              >
-                <i class="fas fa-hourglass-end"></i>
-                {{ formateDate(project.toDate) }}
-              </li>
+              <i class="fa fa-hourglass-end"></i>
+              Expires in {{ getDateDiff(project.toDate, new Date()) }} day (s)
+            </li>
 
               <li
                 data-toggle="tooltip"
@@ -368,11 +354,14 @@ i {
                   >Participants ({{ project.investorsCount }})</a
                 >
               </li>
-              <li data-toggle="tooltip" data-placement="bottom" title="Actions which participants will perform">
+              <!-- <li data-toggle="tooltip" data-placement="bottom" title="Actions which participants will perform">
                 <i class="fa fa-tasks"></i>
                 Actions ({{ project.actions.length }})
-              </li>
+              </li> -->
             </ul>
+              </div>
+            </div>
+            
             <footer>
               <small>
                 <b-badge
@@ -494,6 +483,7 @@ export default {
         referralPoint: 5,
         tags: [],
         slug: "",
+        referralDifficulty:30,
       },
       DeleteId:"",
       projectToDelete:"",
@@ -623,6 +613,12 @@ export default {
   },
 
   methods: {
+    getDateDiff(d1, d2){
+      const date1 = new Date(d1);
+      const date2 = new Date(d2);
+      const diffTime = Math.abs(date2 - date1);
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    },
     async getTags() {
       const url = `${this.$config.studioServer.BASE_URL}api/v1/tag`;
       const headers = {
@@ -687,26 +683,19 @@ export default {
           }
 
           case "DELETE": {
-            if (data._id) {
+            if (data.id) {
               const actionIndex = this.tagsTemp.findIndex(
-                (x) => x._id == data._id
-              );
-              if (actionIndex > -1) {
-                this.tagsTemp[actionIndex]["isDeleted"] = true;
-              }
-            } else {
-              const actionIndex = this.tagsTemp.findIndex(
-                (x) => x.id == data.id
+                (x) => x.type == data.type
               );
               if (actionIndex > -1) {
                 this.tagsTemp.splice(actionIndex, 1);
               }
-            }
 
             break;
           }
         }
       }
+    }
     },
     AddUpdateDelEventActions(event) {
       const { type, data } = event;
@@ -1131,15 +1120,13 @@ export default {
                     return this.notifyErr(json);
                   } else {
                     this.$root.$emit('modal-close');
-                    this.notifySuccess("Event is deleted successfully");
+                    this.notifySuccess(Messages.EVENTS.EVENT_DELETED);
                   }
                 } else {
                   throw new Error("Error while deleting event");
                 }
               } else {
-                throw new Error(
-                  "Looks like you were about to delete a event by mistake"
-                );
+                throw new Error(Messages.EVENTS.WRONG_EVENT_ID);
               }
             }
             
@@ -1447,6 +1434,7 @@ export default {
         refereePoint: 10,
         referralPoint: 5,
         tags: [],
+        referralDifficulty:30,
       }),
       this.DeleteId="",
       this.projectToDelete="";

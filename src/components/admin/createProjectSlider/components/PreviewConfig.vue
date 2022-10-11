@@ -134,6 +134,11 @@ cursor:default !important
                   ></i>
                   <i
                     style="color: gray"
+                    v-if="action.type.includes('GITHUB_PR')"
+                    class="fab fa-github"
+                  ></i>
+                  <i
+                    style="color: gray"
                     v-if="action.type.includes('INPUT_HYPERLINK')"
                     class="fa fa-link"
                   ></i>
@@ -259,6 +264,12 @@ cursor:default !important
                     style="padding-right: 5px"
                     src="../../../../assets/Reef.svg"
                     v-if="action.type.includes('BLOCKCHAIN_REEF')"
+                    height="20px"
+                  />
+                  <img
+                    style="padding-right: 5px"
+                    src="../../../../assets/cosmos-2.svg"
+                    v-if="action.type.includes('BLOCKCHAIN_COSMOS')"
                     height="20px"
                   />
                 </span>

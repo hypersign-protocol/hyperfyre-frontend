@@ -1,52 +1,7 @@
 <style scoped>
-.addmargin {
-  margin-top: 10px;
-  margin-bottom: 10px;
+.avatar{
+  position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); 
 }
-
-.vue-logo-back {
-  background-color: black;
-}
-
-.logo {
-  width: 144px;
-}
-
-.fullbody {
-  width: 100%;
-}
-.floatLeft {
-  float: left;
-}
-
-.floatRight {
-  float: right;
-}
-
-.noBullet {
-  list-style-type: none;
-}
-
-
-.dot {
-  height: 15px;
-  width: 15px;
-  background-color: green;
-  border-radius: 50%;
-  display: inline-block;
-  margin-top: 5px;
-  float: right;
-}
-
-
-.tile {
-  background: white;
-  border: 0;
-  border-radius: 5px;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
 .tile-profile{
   text-align: left;
 }
@@ -59,7 +14,6 @@
   color: gray;
   word-wrap: break-word;
 }
-
 .accordion-header-theme{
   background-color: var(--header-bg-color);
   border: 0;
@@ -69,15 +23,20 @@
 
 <template>
   <div>
-    <div class="row" style="margin-top: 2%">
+    <loading
+      :active.sync="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    ></loading>
+    <div class="row">
       <div class="col-md-6">
-        <div class="card tile" >
+        <div class="card tile event-card" >
           <div class="card-body tile-number">{{ projectCount }}</div>
           <div class="card-header accordion-header-theme" :style="headerThemeCss" style="font-size:13px; border-radius: 0px 0px 0px 5px;">TOTAL EVENTS</div>
         </div>
       </div>
       <div class="col-md-6" >
-        <div class="card tile">
+        <div class="card tile event-card">
           <div class="card-body tile-number">{{ schemaCount }}</div>
           <div class="card-header accordion-header-theme" :style="headerThemeCss"  style="font-size:13px; border-radius: 0px 0px 0px 5px;">TOTAL PARTICIPANTS</div>
         </div>
@@ -85,16 +44,11 @@
     </div>
     <div class="row" style="margin-top: 5%">
       <div class="col-md-12 leftAlign ">
-        <div class="card tile tile-profile" >
+        <div class="card tile tile-profile event-card" >
           <div class="card-body">
             <div class="row">
               <div class="col-md-4">
-                <!-- <img
-                  src="../../assets/avatar.png"
-                  alt="John"
-                  style="width: 100%;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);"
-                /> -->
-                <b-avatar style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);" square size="8rem" variant="info" :src="getProfileIcon(user.name) "></b-avatar>
+                <b-avatar class="avatar" icon="person-fill" size="8rem"></b-avatar>
               </div>
               <div class="col-md-8" style="flex-wrap: wrap; padding: 20px">
                 <p>DID</p>
@@ -120,12 +74,14 @@
 <script>
 import config from "../../config";
 import profileIconMixins from "../../mixins/profileIconMixins";
-
+import notificationMixins from "../../mixins/notificationMixins"
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 export default {
   name: "Profile",
   mounted() {},
-  components: {},
-  mixins: [profileIconMixins],
+  components: {Loading},
+  mixins: [profileIconMixins,notificationMixins],
    computed:{
     headerThemeCss(){
     return{
@@ -146,6 +102,8 @@ export default {
       authToken: localStorage.getItem("authToken"),
       accessToken:localStorage.getItem("accessToken"),
       projects: [],
+      fullPage:true,
+      isLoading:false
     };
   },
   async created() {
