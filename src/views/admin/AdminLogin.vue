@@ -258,7 +258,7 @@ export default {
         _this.qr_data=`${_this.$config.webWalletAddress}/deeplink?url=${_this.value}`
       } else if (messageData.op == "end") {
         _this.connection.close();
-        const authorizationToken = messageData.data.token;
+        const authorizationToken = messageData.data.hypersign.data.accessToken;
         // console.log(authorizationToken);
         localStorage.setItem("authToken", authorizationToken);
 
