@@ -34,7 +34,9 @@ class APICalls {
         response.response.status >= 400 &&
         response.response.status < 500)
     ) {
-      
+      if(response.response.status === 401){
+        return response.response
+      }
       return response.response.data || new Error("BAD REQUEST: Please check your request") 
     }
 
