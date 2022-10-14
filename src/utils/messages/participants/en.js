@@ -67,7 +67,7 @@ const EVENT_ACTIONS = {
         INSUFFICIENT_BALANCE: "Insufficient balance"
     },
     REEF: {
-        CONNECT_REEF_WALLET: "Connect your reef wallet by selcting address options"
+        CONNECT_REEF_WALLET: "Connect your reef wallet by selecting address options"
     },
     COSMOS:{
         CONNECT_KEPLR_WALLET: "Connect your Keplr Wallet"
