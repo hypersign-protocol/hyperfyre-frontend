@@ -402,7 +402,7 @@ import KycEventActionConfig from "../createProjectSlider/components/KycEventActi
 import PrizeEventActionConfig from "../createProjectSlider/components/PrizeEventActionConfig.vue"
 import SmartContractEventActionConfig from "../createProjectSlider/components/SmartContractEventActionConfig.vue"
 import CustomContractEventActionConfig from "../createProjectSlider/components/CustomContractEventActionConfig.vue"
-import CustomApiEventActionConfig from "../createProjectSlider/components/CustomApiEventActionConfig .vue"
+import CustomApiEventActionConfig from "../createProjectSlider/components/CustomApiEventActionConfig.vue"
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -491,8 +491,7 @@ export default {
        if (this.actionList && this.actionList.length > 0) {
         return this.actionList.filter(
           (x) =>
-            x.type.indexOf("CUSTOM_API_GET") > -1 ||
-            x.type.indexOf("CUSTOM_API_POST")
+            x.type.indexOf("CUSTOM_API") > -1          
         );
       } else {
         return [];

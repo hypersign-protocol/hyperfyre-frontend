@@ -62,7 +62,7 @@
         </div>
         <div class="col-lg-9 col-md-9 px-0">
           <input
-            v-model="selected.apiEndPoint"    
+            v-model="apiData.apiEndPoint"    
             type="text"
             id="title"
             class="form-control w-100"
@@ -81,7 +81,7 @@
         </div>
         <div class="col-lg-9 col-md-9 px-0">
           <input
-            v-model="selected.header"
+            v-model="apiData.header"
             type="text"
             id="title"
             class="form-control w-100"
@@ -108,6 +108,55 @@
 
       <div
         class="row g-3 align-items-center w-100 mt-4"
+        v-if="isGet === true"
+      >
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="title" class="col-form-label"
+            >Query Parameter<span style="color: red">*</span>:
+          </label>
+        </div>        
+          <div class="col-lg-2 col-md-2 px-0">
+           <input
+            v-model="apiData.queryParamValue"
+            type="text"
+            id="title"
+            class="form-control w-100"
+            placeholder="Enter Query parameter"
+          />         
+        </div>
+        <!-- <div class="col-lg-2 col-md-2 px-0">
+           <input
+            v-model="apiData.queryParamValue"
+            type="text"
+            id="title"
+            class="form-control w-100"
+            placeholder="Enter header"
+          />
+        </div> -->
+      </div>
+
+      <div
+        class="row g-3 align-items-center w-100 mt-4"
+        v-if="isPost === true"
+      >
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="title" class="col-form-label"
+            >Body Format<span style="color: red">*</span>:
+          </label>
+        </div>        
+          <div class="col-lg-9 col-md-9 px-0">
+           <input
+            v-model="apiData.bodyFormat"
+            type="textarea"
+            id="title"
+            class="form-control w-100"
+            placeholder="Enter body format in JSON"
+          />         
+        </div>
+      </div>
+
+      <div
+        class="row g-3 align-items-center w-100 mt-4"
       >
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="title" class="col-form-label"
@@ -128,7 +177,22 @@
           ></hf-select-drop-down>    
         </div>
       </div>
-
+      <div class="row g-3 align-items-center w-100 mt-4">
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="type" class="col-form-label"
+            >Placeholder<span style="color: red">*</span>:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+          <input
+            v-model="selected.placeHolder"     
+            type="text"
+            id="title"
+            class="form-control w-100"
+            placeholder="Enter Placeholder for the user input"
+          />
+        </div>
+      </div>
       <div class="row g-3 align-items-center w-100 mt-4">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="title" class="col-form-label"
@@ -263,6 +327,9 @@ export default {
   },
   data() {
     return {
+      counter:0,
+      isGet:false,
+      isPost:false,
       appName: config.appName,
       allCondition: [
         { text: "Select Method", value: null },
@@ -285,19 +352,25 @@ export default {
       ],      
       flash: null,
       isCreate: true,
-      currentSelectedId: 0,      
-      selected: {
-        type:"CUSTOM_API",  
-        title: "",
+      currentSelectedId: 0, 
+      apiData:{
         apiEndPoint: "",
-        isManadatory: true,
+        queryParamValue:"",
         header:"",
+        bodyFormat:"",
         apiMethod:null,
         returnType:null,
         condition:null,
+      },    
+      selected: {
+        type:"CUSTOM_API",  
+        title: "",
+        placeHolder:"",
+        isManadatory: true,
         score: 10,
         id: "",
         slug: "",
+        value:""
       },
       project:{},
       hfTgBotId: this.$config.verifierBot.TELEGRAM,
@@ -306,6 +379,7 @@ export default {
   async mounted() {
     this.$root.$on("callClearFromProject", () => {
       this.clearSelected();
+      this.counter = 0
     });
      EventBus.$on("sendProject", (project) => {
       this.project = {...project}
@@ -313,29 +387,44 @@ export default {
   },
   methods: {
     inputCondtion(e){
-      this.selected.condition = e
+      this.apiData.condition = e
     },
     inputReturnType(e) {
-      this.selected.returnType = e
+      this.apiData.returnType = e
     },
     inputMethod(e){
-      this.selected.apiMethod = e
+      if(e === "CUSTOM_API_GET") {
+        this.isPost = false
+        this.isGet = true
+      } else if(e === "CUSTOM_API_POST") {
+        this.isGet = false
+        this.isPost = true
+      }
+      this.apiData.apiMethod = e
     },
     clearSelected() {
+      this.isGet = false,
+      this.isPost = false,
+      this.apiData = {
+        apiEndPoint: "",      
+        header:"",
+        queryParamValue:"",
+        bodyFormat:"",
+        apiMethod:null,
+        returnType:null,
+        condition:null,
+      }
       this.flash = null;
       this.isCreate = true;
       this.selected = {
         type:"CUSTOM_API",  
         title: "",
-        apiEndPoint: "",
+        placeHolder:"",
         isManadatory: true,
-        header:"",
-        apiMethod:null,
-        returnType:null,
-        condition:null,
         score: 10,
         id: "",
         slug: "",
+        value:""
       };
     },
     handleEventActionValidation() {
@@ -381,11 +470,12 @@ export default {
     },
 
     handleEventActionAdd() {
-      console.log(this.selected)
       // Code to Add an Action
       // let isvalid = this.handleEventActionValidation();
-      // if (isvalid) {        
-        this.selected["id"] = this.eventActionType + "_" + this.eventActionList.length;
+      // if (isvalid) {  
+        this.counter +=1
+        this.selected.value = JSON.stringify(this.apiData);     
+        this.selected["id"] = this.counter
         this.eventActionType + "_" + this.eventActionList.length;
         console.log(this.selected)
         this.eventActionList.push(this.selected);
@@ -393,9 +483,9 @@ export default {
           type: "ADD",
           data: this.selected,
         });
-        EventBus.$emit("resetOption",this.selected.condition);
-        EventBus.$emit("resetOption",this.selected.returnType);
-        EventBus.$emit("resetOption",this.selected.apiMethod);
+        EventBus.$emit("resetOption",this.apiData.condition);
+        EventBus.$emit("resetOption",this.apiData.returnType);
+        EventBus.$emit("resetOption",this.apiData.apiMethod);
         this.clearSelected();
       // }
     },
@@ -407,9 +497,9 @@ export default {
         type: "DELETE",
         data: actionToDelete,
       });
-        EventBus.$emit("resetOption",this.selected.condition);
-        EventBus.$emit("resetOption",this.selected.returnType);
-        EventBus.$emit("resetOption",this.selected.apiMethod);
+        EventBus.$emit("resetOption",this.apiData.condition);
+        EventBus.$emit("resetOption",this.apiData.returnType);
+        EventBus.$emit("resetOption",this.apiData.apiMethod);
       this.clearSelected();
       this.isCreate = true;
     },
@@ -422,9 +512,9 @@ export default {
           type: "UPDATE",
           data: this.selected,
         });
-        EventBus.$emit("resetOption",this.selected.condition);
-        EventBus.$emit("resetOption",this.selected.returnType);
-        EventBus.$emit("resetOption",this.selected.apiMethod);
+        EventBus.$emit("resetOption",this.apiData.condition);
+        EventBus.$emit("resetOption",this.apiData.returnType);
+        EventBus.$emit("resetOption",this.apiData.apiMethod);
         this.clearSelected();
         this.isCreate = true;
       // }
@@ -437,9 +527,10 @@ export default {
       let updateData = this.eventActionList[idx];
       this.currentSelectedId = idx;
       this.selected = updateData;
-      EventBus.$emit("setOption",this.selected.condition);
-      EventBus.$emit("setOption",this.selected.returnType);
-      EventBus.$emit("setOption",this.selected.apiMethod);
+      this.apiData = { ...JSON.parse(this.selected.value)}
+      EventBus.$emit("setOption",this.apiData.condition);
+      EventBus.$emit("setOption",this.apiData.returnType);
+      EventBus.$emit("setOption",this.apiData.apiMethod);
     },
 
     truncate1(str, number) {
