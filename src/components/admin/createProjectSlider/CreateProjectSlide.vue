@@ -289,7 +289,8 @@
             <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
               <b-button block v-b-toggle.accordion-10 variant="info"
                 class="bg-transparent border-0 text-left theme-color"
-                title="Create Custom Api configuration for your event"><i class="fas fa-file-contract"></i>
+                title="Create Custom Api configuration for your event">
+                <img src="../../../assets/filled-rest-api-50.png" height="20px" class="ml-0" />
                 Custom API Configurations
               </b-button>
             </b-card-header>

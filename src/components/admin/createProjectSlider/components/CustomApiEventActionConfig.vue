@@ -22,7 +22,7 @@
           <span>
             <img
               style="padding-right: 5px"
-              src="/img/ethereum.2b470564.svg"          
+              src="../../../../assets/filled-rest-api-50.png"          
               height="22px"
             />  
           </span>
@@ -80,13 +80,16 @@
           </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
-          <input
-            v-model="apiData.header"
-            type="text"
-            id="title"
-            class="form-control w-100"
-            placeholder="Enter header"
-          />
+          <textarea
+          class="form-control w-100"
+          name="header"
+          id="title"
+          cols="30"
+          rows="5"
+          v-model="apiData.header"
+          placeholder =
+          "Enter Header in JSON format"
+          ></textarea>
         </div>
       </div>
 
@@ -115,7 +118,7 @@
             >Query Parameter<span style="color: red">*</span>:
           </label>
         </div>        
-          <div class="col-lg-2 col-md-2 px-0">
+          <div class="col-lg-9 col-md-9 px-0">
            <input
             v-model="apiData.queryParamValue"
             type="text"
@@ -124,15 +127,6 @@
             placeholder="Enter Query parameter"
           />         
         </div>
-        <!-- <div class="col-lg-2 col-md-2 px-0">
-           <input
-            v-model="apiData.queryParamValue"
-            type="text"
-            id="title"
-            class="form-control w-100"
-            placeholder="Enter header"
-          />
-        </div> -->
       </div>
 
       <div
@@ -141,17 +135,20 @@
       >
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="title" class="col-form-label"
-            >Body Format<span style="color: red">*</span>:
+            >Body<span style="color: red">*</span>:
           </label>
         </div>        
           <div class="col-lg-9 col-md-9 px-0">
-           <input
-            v-model="apiData.bodyFormat"
-            type="textarea"
-            id="title"
-            class="form-control w-100"
-            placeholder="Enter body format in JSON"
-          />         
+          <textarea
+          class="form-control w-100"
+          name="bodyFormat"
+          id="title"
+          cols="30"
+          rows="5"
+          v-model="apiData.bodyFormat"
+          placeholder =
+          "Enter body in JSON format"
+          ></textarea>     
         </div>
       </div>
 
@@ -163,18 +160,27 @@
             >Condition<span style="color: red">*</span>:
           </label>
         </div>        
-          <div class="col-lg-2 col-md-2 px-0">
+          <div class="col-lg-3 col-md-2 px-0">
           <hf-select-drop-down
           :options="returnTypeOption"
           @selected=" e =>inputReturnType(e)"  
 
           ></hf-select-drop-down>          
         </div>
-        <div class="col-lg-2 col-md-2 px-0">
+        <div class="col-lg-3 col-md-2 px-0">
           <hf-select-drop-down
           :options="condtionOption"
           @selected=" e =>inputCondtion(e)"
           ></hf-select-drop-down>    
+        </div>
+        <div class="col-lg-3 col-md-2 px-0">
+          <input
+            v-model="apiData.conditionValue"
+            type="textarea"
+            id="title"
+            class="form-control w-100"
+            placeholder="Enter condition value"
+          />    
         </div>
       </div>
       <div class="row g-3 align-items-center w-100 mt-4">
@@ -361,6 +367,7 @@ export default {
         apiMethod:null,
         returnType:null,
         condition:null,
+        conditionValue:""
       },    
       selected: {
         type:"CUSTOM_API",  
@@ -390,6 +397,21 @@ export default {
       this.apiData.condition = e
     },
     inputReturnType(e) {
+      if(e !== "CUSTOM_API_RETURN_TYPE_BOOLEAN") {
+        this.condtionOption=[
+        { text: "None", value: null },
+        { text: "===", value: "===" },
+        { text: "<", value: "<" },
+        { text: ">", value: ">" },
+        { text: ">=", value: ">=" },
+        { text: "<=", value: "<=" },
+      ]
+      } else {
+        this.condtionOption =[
+        { text: "None", value: null },
+        { text: "===", value: "===" },
+        ]
+      }
       this.apiData.returnType = e
     },
     inputMethod(e){
@@ -399,6 +421,9 @@ export default {
       } else if(e === "CUSTOM_API_POST") {
         this.isGet = false
         this.isPost = true
+      } else{
+        this.isGet = false
+        this.isPost = false
       }
       this.apiData.apiMethod = e
     },
@@ -413,6 +438,7 @@ export default {
         apiMethod:null,
         returnType:null,
         condition:null,
+        conditionValue:""
       }
       this.flash = null;
       this.isCreate = true;
@@ -476,8 +502,6 @@ export default {
         this.counter +=1
         this.selected.value = JSON.stringify(this.apiData);     
         this.selected["id"] = this.counter
-        this.eventActionType + "_" + this.eventActionList.length;
-        console.log(this.selected)
         this.eventActionList.push(this.selected);
         this.$emit("updateEventActions", {
           type: "ADD",
@@ -507,6 +531,7 @@ export default {
       // Code to update an Action
       // let isvalid = this.handleEventActionValidation();
       // if (isvalid) {
+        this.selected.value = JSON.stringify(this.apiData);
         this.eventActionList[this.currentSelectedId] = this.selected;
         this.$emit("updateEventActions", {
           type: "UPDATE",

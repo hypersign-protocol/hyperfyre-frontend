@@ -75,7 +75,7 @@ import Messsages from "../../utils/messages/participants/en";
 import EthereumNetwork from "./ActionInputs/EthereumNetwork.vue";
 import MaticNetwork from './ActionInputs/MaticNetwork.vue';
 import BinanceNetwork from './ActionInputs/BinanceNetwork.vue';
-
+import CustomApi from "./ActionInputs/CustomApi.vue";
 export default {
   name: "Action",
   props: {
@@ -143,6 +143,7 @@ export default {
     MoonriverErc721,
     PushNotification,
     SumsubKyc,
+    CustomApi,
     RecaptchaToken: "",
   },
   mounted() {
