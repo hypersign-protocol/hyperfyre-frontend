@@ -68,6 +68,10 @@
             class="form-control w-100"
             placeholder="Enter Api Endpoint"
           />
+          <span class="inputInfo"
+            >Make sure to whitelist <span style="color:#3457D5;font-weight: bold;">https://app.fyre.hypersign.id</span>
+            url on your server.</span
+          >
         </div>
       </div>
 
@@ -173,10 +177,16 @@
           @selected=" e =>inputCondtion(e)"
           ></hf-select-drop-down>    
         </div>
-        <div class="col-lg-3 col-md-2 px-0">
+        <div class="col-lg-3 col-md-2 px-0" v-show="isBoolean === true">
+          <hf-select-drop-down
+          :options="booleanCondition"
+          @selected=" e =>inputBooleanCondtion(e)"
+          ></hf-select-drop-down>
+        </div>
+        <div class="col-lg-3 col-md-2 px-0" v-show="isBoolean === false">
           <input
             v-model="apiData.conditionValue"
-            type="textarea"
+            :type="isNumber ? 'number' :'text'"
             id="title"
             class="form-control w-100"
             placeholder="Enter condition value"
@@ -308,6 +318,7 @@ import config from "../../../../config"
 import HfButtons from "../../../elements/HfButtons.vue"
 import EventBus from '../../../../eventBus';
 import HfSelectDropDown from "../../../elements/HfSelectDropDown.vue"
+import validator from 'validator';
 export default {
   name: "CustomAPIEventActionConfig",
   components: { HfButtons, HfSelectDropDown},
@@ -336,20 +347,27 @@ export default {
       counter:0,
       isGet:false,
       isPost:false,
+      isBoolean:false,
+      isNumber:false,
       appName: config.appName,
+      booleanCondition:[
+        { text: "Boolean Type", value: null },
+        { text: "True", value: true },
+        { text: "False", value: false },
+      ],
       allCondition: [
         { text: "Select Method", value: null },
         { text: "Get", value: "CUSTOM_API_GET" },
         { text: "Post", value: "CUSTOM_API_POST" },
       ],
       returnTypeOption:[
-        { text: "None", value: null },
+        { text: "Return Type", value: null },
         { text: "Boolean", value: "CUSTOM_API_RETURN_TYPE_BOOLEAN" },
         { text: "String", value: "CUSTOM_API_RETURN_TYPE_STRING" },
-        { text: "Integer", value: "CUSTOM_API_RETURN_TYPE_INTEGER" },      
+        { text: "Number", value: "CUSTOM_API_RETURN_TYPE_NUMBER" },      
       ],
       condtionOption:[
-        { text: "None", value: null },
+        { text: "Condition", value: null },
         { text: "===", value: "===" },
         { text: "<", value: "<" },
         { text: ">", value: ">" },
@@ -367,7 +385,7 @@ export default {
         apiMethod:null,
         returnType:null,
         condition:null,
-        conditionValue:""
+        conditionValue:null
       },    
       selected: {
         type:"CUSTOM_API",  
@@ -393,24 +411,57 @@ export default {
     });
   },
   methods: {
+    inputBooleanCondtion(e) {      
+      this.apiData.conditionValue = e
+    },
     inputCondtion(e){
       this.apiData.condition = e
     },
     inputReturnType(e) {
-      if(e !== "CUSTOM_API_RETURN_TYPE_BOOLEAN") {
-        this.condtionOption=[
-        { text: "None", value: null },
-        { text: "===", value: "===" },
-        { text: "<", value: "<" },
-        { text: ">", value: ">" },
-        { text: ">=", value: ">=" },
-        { text: "<=", value: "<=" },
-      ]
-      } else {
-        this.condtionOption =[
-        { text: "None", value: null },
+      switch(e){
+        case "CUSTOM_API_RETURN_TYPE_BOOLEAN": {
+          this.apiData.conditionValue = null
+          this.isBoolean = true          
+          this.condtionOption =[
+        { text: "Condition", value: null },
         { text: "===", value: "===" },
         ]
+        break;
+        }
+        case "CUSTOM_API_RETURN_TYPE_NUMBER":{
+          this.isBoolean = false
+          this.isNumber = true
+          this.condtionOption=[
+            { text: "Condition", value: null },
+            { text: "===", value: "===" },
+            { text: "<", value: "<" },
+            { text: ">", value: ">" },
+            { text: ">=", value: ">=" },
+            { text: "<=", value: "<=" },
+          ]
+        }
+        break;
+        case "CUSTOM_API_RETURN_TYPE_STRING":{          
+          this.isBoolean = false
+          this.isNumber = false
+          this.condtionOption=[
+            { text: "Condition", value: null },
+            { text: "===", value: "===" },            
+          ]
+        }
+        break;
+        default:{
+          this.isBoolean = false
+          this.isNumber = false
+          this.condtionOption=[
+            { text: "Condition", value: null },
+            { text: "===", value: "===" },
+            { text: "<", value: "<" },
+            { text: ">", value: ">" },
+            { text: ">=", value: ">=" },
+            { text: "<=", value: "<=" },
+          ]
+        }
       }
       this.apiData.returnType = e
     },
@@ -430,6 +481,8 @@ export default {
     clearSelected() {
       this.isGet = false,
       this.isPost = false,
+      this.isBoolean = false,
+      this.isNumber = false,
       this.apiData = {
         apiEndPoint: "",      
         header:"",
@@ -438,7 +491,7 @@ export default {
         apiMethod:null,
         returnType:null,
         condition:null,
-        conditionValue:""
+        conditionValue:null
       }
       this.flash = null;
       this.isCreate = true;
@@ -465,40 +518,59 @@ export default {
             isvalid = false;
             return this.notifyErr(Messages.EVENTS.EVENT_CLOSED)
           }
-          if (this.selected.type === null) {
-            isvalid = false;
-            this.notifyErr(
-              Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE
-            );
-          }else if (this.contract.methods===null || isEmpty(this.contract.methods)) {
-            isvalid = false;
-            this.notifyErr(
-              Messages.EVENTS.ACTIONS.SMARTCONTRACT.METHODS_EMPTY
-            );
-          } else if (isEmpty(this.contract.contractAddress)) {
-            isvalid = false;
-            this.notifyErr(
-              Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
-            );
-          } else if (isEmpty(this.contract.contractABI)) {
-            isvalid = false;
-            this.notifyErr(
-              Messages.EVENTS.ACTIONS.SMARTCONTRACT.ABI_NOT_EMPTY
-            )
-          }else if (isValidURL(this.selected.title)) {
-            isvalid = false;
-            this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL);
-          }else if (isEmpty(this.selected.title)) {
+         if (isEmpty(this.selected.title)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE);
+          } else if(isEmpty(this.apiData.apiEndPoint)) {
+            isvalid = false;
+            this.notifyErr('Api Endpoint should not be empty');
+          } else if (!this.apiData.apiEndPoint.includes('http://localhost') && !validator.isURL(this.apiData.apiEndPoint)) {
+            isvalid = false;
+            this.notifyErr('enter valid endpoint');
+          } else if (this.apiData.header!=="" && !this.isValidJson(this.apiData.header)) {
+            isvalid = false;
+            this.notifyErr("Enter header in JSON format");
+          } else if (this.apiData.apiMethod === null) {
+            isvalid = false;
+            this.notifyErr('Select API Method')
+          } else if (this.apiData.apiMethod === "CUSTOM_API_GET" && isEmpty(this.apiData.queryParamValue)) {
+            isvalid = false;
+            this.notifyErr('Enter Query Parameter')
+          } else if (this.apiData.apiMethod === "CUSTOM_API_POST") {
+            if(isEmpty(this.apiData.bodyFormat)){
+            isvalid = false;
+            this.notifyErr('Enter body format')
+            }  else if (!this.isValidJson(this.apiData.bodyFormat)) {
+              isvalid = false;
+              this.notifyErr('Enter Body in JSON format')
+            }
+          } else if (this.apiData.returnType === null) {
+            isvalid = false;
+            this.notifyErr('Select Return Type')
+          } else if(this.apiData.condition === null) {
+              isvalid = false;
+              this.notifyErr('Select Condition')
+            } else if (this.apiData.conditionValue === null || isEmpty(this.apiData.conditionValue)) {
+              isvalid = false;
+              this.notifyErr('Enter Condition value')
+            } else if (isEmpty(this.selected.placeHolder)) {
+            isvalid = false;
+            this.notifyErr('Enter Placeholder')
           }
       return isvalid;
     },
-
+    isValidJson(input){
+      try {
+        JSON.parse(input);
+    } catch (e) {
+        return false;
+    }
+    return true;
+    },
     handleEventActionAdd() {
       // Code to Add an Action
-      // let isvalid = this.handleEventActionValidation();
-      // if (isvalid) {  
+      let isvalid = this.handleEventActionValidation();
+      if (isvalid) {  
         this.counter +=1
         this.selected.value = JSON.stringify(this.apiData);     
         this.selected["id"] = this.counter
@@ -510,8 +582,12 @@ export default {
         EventBus.$emit("resetOption",this.apiData.condition);
         EventBus.$emit("resetOption",this.apiData.returnType);
         EventBus.$emit("resetOption",this.apiData.apiMethod);
+        if(this.apiData.returnType === "CUSTOM_API_RETURN_TYPE_BOOLEAN") {
+        this.isBoolean = true
+        EventBus.$emit("resetOption",this.apiData.conditionValue);
+        }
         this.clearSelected();
-      // }
+      }
     },
     handleEventActionDelete() {
       // Code to delete an Action
@@ -524,13 +600,17 @@ export default {
         EventBus.$emit("resetOption",this.apiData.condition);
         EventBus.$emit("resetOption",this.apiData.returnType);
         EventBus.$emit("resetOption",this.apiData.apiMethod);
+        if(this.apiData.returnType === "CUSTOM_API_RETURN_TYPE_BOOLEAN") {
+        this.isBoolean = true
+        EventBus.$emit("resetOption",this.apiData.conditionValue);
+        } 
       this.clearSelected();
       this.isCreate = true;
     },
     handleEventActionUpdate() {
       // Code to update an Action
-      // let isvalid = this.handleEventActionValidation();
-      // if (isvalid) {
+      let isvalid = this.handleEventActionValidation();
+      if (isvalid) {
         this.selected.value = JSON.stringify(this.apiData);
         this.eventActionList[this.currentSelectedId] = this.selected;
         this.$emit("updateEventActions", {
@@ -540,12 +620,17 @@ export default {
         EventBus.$emit("resetOption",this.apiData.condition);
         EventBus.$emit("resetOption",this.apiData.returnType);
         EventBus.$emit("resetOption",this.apiData.apiMethod);
+        if(this.apiData.returnType === "CUSTOM_API_RETURN_TYPE_BOOLEAN") {
+        this.isBoolean = true
+        EventBus.$emit("resetOption",this.apiData.conditionValue);
+        }        
         this.clearSelected();
         this.isCreate = true;
-      // }
+      }
     },
 
     handleEventActionClick(idx) {
+      this.clearSelected()
       this.isCreate = false;
       // Code to update an Action
       this.flash = idx;
@@ -553,9 +638,13 @@ export default {
       this.currentSelectedId = idx;
       this.selected = updateData;
       this.apiData = { ...JSON.parse(this.selected.value)}
-      EventBus.$emit("setOption",this.apiData.condition);
-      EventBus.$emit("setOption",this.apiData.returnType);
       EventBus.$emit("setOption",this.apiData.apiMethod);
+      EventBus.$emit("setOption",this.apiData.returnType);
+      EventBus.$emit("setOption",this.apiData.condition);
+      if(this.apiData.returnType === "CUSTOM_API_RETURN_TYPE_BOOLEAN") {
+        this.isBoolean = true
+        EventBus.$emit("setOption",this.apiData.conditionValue);
+      }
     },
 
     truncate1(str, number) {
