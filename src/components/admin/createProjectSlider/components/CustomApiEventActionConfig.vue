@@ -115,44 +115,97 @@
 
       <div
         class="row g-3 align-items-center w-100 mt-4"
-        v-if="isGet === true"
+        v-if="showAttribute === true"
       >
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="title" class="col-form-label"
-            >Query Parameter<span style="color: red">*</span>:
+            >{{isGet ? 'Query Parameter Fields':'Body Fields'}}<span style="color: red">*</span>:
           </label>
         </div>        
           <div class="col-lg-9 col-md-9 px-0">
-           <input
-            v-model="apiData.queryParamValue"
-            type="text"
-            id="title"
-            class="form-control w-100"
-            placeholder="Enter Query parameter"
-          />         
-        </div>
-      </div>
+           <b-card-header header-tag="header" class="p-1 border-0 accordin-header-theme" :style="headerThemeCss" role="tab">
+                    <b-button block v-b-toggle.accordion-11 style="text-decoration:none; color:#212529;" variant="secondary"
+                    :aria-expanded="visible ? 'true' : 'false'"
+                    @click="visible = !visible"
+                    aria-controls="collapse-1"
+                    class="text-left border-0 theme-color bg-transparant"
+                    title="Create Attribute configuration">Fields Configurations
+                    <i :class="!visible ? 'fa fa-arrow-down' : 'fa fa-arrow-up'" style="float:right;"></i>
+                    </b-button>
+                  </b-card-header>
+            <b-collapse id="collapse-1" class="mt-2" v-model="visible" style="padding:10px">
+                    <div class="selected-media-wrapper d-flex p-2 mb-4"  style="overflow-y: auto" v-if="apiData.attributes.length > 0">
+                      <div v-for="(attr,id) in apiData.attributes" v-bind:key="attr.id">
+                        <div :class="
+                            attrFlash == attr.id
+                            ? 'flash card rounded m-1 p-1 d-flex flex-row align-items-center'
+                            : 'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'"
+                            @click="handleClick(attr.id)"
+                            style="min-width:90px;"
+                            :title="attr.fieldName"
+                          >
+                          {{ attr.fieldName }}
+                           <span style="color: gray; padding-left: 5px">
+                            <i style="" class="fas fa-minus-circle"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
 
-      <div
-        class="row g-3 align-items-center w-100 mt-4"
-        v-if="isPost === true"
-      >
-        <div class="text-left col-lg-3 col-md-3 text-left">
-          <label for="title" class="col-form-label"
-            >Body<span style="color: red">*</span>:
-          </label>
-        </div>        
-          <div class="col-lg-9 col-md-9 px-0">
-          <textarea
-          class="form-control w-100"
-          name="bodyFormat"
-          id="title"
-          cols="30"
-          rows="5"
-          v-model="apiData.bodyFormat"
-          placeholder =
-          "Enter body in JSON format"
-          ></textarea>     
+                    <div class="row g-3 align-items-center w-100">
+                        <div class="col-lg-3 col-md-3 text-left">
+                          
+                          <label for="attributeName" class="col-form-label">Field Name<span style="color: red">*</span>: </label>                          
+                        </div>
+                        <div class="col-lg-9 col-md-9 px-0">
+                          <input v-model="attributeData.fieldName" type="text" id="attributeName" class="form-control w-100"
+                            placeholder="firstName">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 align-items-center w-100 mt-4">
+                        <div class="col-lg-3 col-md-3 text-left">                        
+                        <label for="type" class="col-form-label">Field Type<span style="color: red">*</span>:</label>
+                        </div>
+                        <div class="col-lg-9 col-md-9 px-0">
+                      <hf-select-drop-down
+                      :options="attributeFieldTypeOption"
+                      @selected=" e =>attributeData.fieldType = e"
+                      ></hf-select-drop-down>
+                      </div>
+                    </div>
+                    <div class="row g-3 align-items-center w-100 mt-4">
+                        <div class="col-lg-3 col-md-3 text-left">                        
+                        <label for="type" class="col-form-label">Field Placeholder:</label>
+                        </div>
+                        <div class="col-lg-9 col-md-9 px-0">
+                      <input v-model="attributeData.fieldPlaceHolder" type="text" id="attributeName" class="form-control w-100"
+                            placeholder="Enter Placeholder">
+                      </div>
+                    </div>
+                    <div class="form-group row mt-4" v-if="isAdd">
+                      <div class="col-sm-10">                        
+                        <hf-buttons 
+                          name="Add"                          
+                          @executeAction="addAttributesToBox()"
+                        ></hf-buttons>
+                      </div>                                            
+                    </div>
+                    <div class="form-group row mt-4" v-else>
+                      <div class="col-sm-10">                        
+                        <hf-buttons 
+                          name="Update"        
+                          class="btn btn-primary"
+                          @executeAction="updateAttributeData()"
+                        ></hf-buttons>
+                        <hf-buttons 
+                          name="Delete"        
+                          customClass="btn btn-danger slight-left-margin"
+                          @executeAction="deleteAttribute()"
+                        ></hf-buttons>
+                      </div>
+                    </div>                   
+                  </b-collapse>
         </div>
       </div>
 
@@ -191,22 +244,6 @@
             class="form-control w-100"
             placeholder="Enter condition value"
           />    
-        </div>
-      </div>
-      <div class="row g-3 align-items-center w-100 mt-4">
-        <div class="text-left col-lg-3 col-md-3 text-left">
-          <label for="type" class="col-form-label"
-            >Placeholder<span style="color: red">*</span>:
-          </label>
-        </div>
-        <div class="col-lg-9 col-md-9 px-0">
-          <input
-            v-model="selected.placeHolder"     
-            type="text"
-            id="title"
-            class="form-control w-100"
-            placeholder="Enter Placeholder for the user input"
-          />
         </div>
       </div>
       <div class="row g-3 align-items-center w-100 mt-4">
@@ -283,7 +320,10 @@
   box-shadow: 2px 0 10px rgb(0 0 0 / 10%);
   animation: flash 0.4s cubic-bezier(1, 0, 0, 1);
 }
-
+.accordion-header-theme {
+  background-color:var(--header-bg-color);
+  border: 0;
+}
 .fa-minus-circle {
   font-size: 14px;
 }
@@ -305,10 +345,14 @@
 .slight-left-margin {
   margin-left: 2px;
 }
+.theme-color{
+  color: var(--header-text-color);
+}
 </style>
 <script>
 import notificationMixins from "../../../../mixins/notificationMixins";
 import {
+  ifSpaceExists,
   isEmpty,
   isValidURL,
   truncate,
@@ -341,15 +385,33 @@ export default {
         '--button-text-color':config.app.buttonTextColor
       }
      },
+      headerThemeCss(){
+    return{
+      '--header-bg-color': config.app.headerBGColor,
+      '--header-text-color':config.app.headerTextColor
+      }
+  },
   },
   data() {
     return {
+      attrFlash:null,
+      selectedId:null,
+      showAttribute:false,
+      isAdd:true,
+      attrCounter:0,      
+      visible:false,
       counter:0,
       isGet:false,
       isPost:false,
       isBoolean:false,
       isNumber:false,
       appName: config.appName,
+      attributeFieldTypeOption:[
+        { text: "Return Type", value: null },
+        { text: "Boolean", value: "CUSTOM_API_ATTRIBUTE_TYPE_BOOLEAN" },
+        { text: "String", value: "CUSTOM_API_ATTRIBUTE_TYPE_STRING" },
+        { text: "Number", value: "CUSTOM_API_ATTRIBUTE_TYPE_NUMBER" },
+      ],
       booleanCondition:[
         { text: "Boolean Type", value: null },
         { text: "True", value: true },
@@ -357,8 +419,8 @@ export default {
       ],
       allCondition: [
         { text: "Select Method", value: null },
-        { text: "Get", value: "CUSTOM_API_GET" },
-        { text: "Post", value: "CUSTOM_API_POST" },
+        { text: "GET", value: "GET" },
+        { text: "POST", value: "POST" },
       ],
       returnTypeOption:[
         { text: "Return Type", value: null },
@@ -376,19 +438,24 @@ export default {
       ],      
       flash: null,
       isCreate: true,
+      selectedId:null,
       currentSelectedId: 0, 
       apiData:{
         apiEndPoint: "",
-        queryParamValue:"",
+        attributes:[],
         header:"",
-        bodyFormat:"",
         apiMethod:null,
         returnType:null,
         condition:null,
         conditionValue:null
-      },    
+      },
+      attributeData:{
+        fieldName:"",
+        fieldType:null,
+        fieldPlaceHolder:""
+      },
       selected: {
-        type:"CUSTOM_API",  
+        type:null,  
         title: "",
         placeHolder:"",
         isManadatory: true,
@@ -411,6 +478,79 @@ export default {
     });
   },
   methods: {
+    addAttributesToBox() {
+      let isValid = this.handleValidation()
+      if(isValid) {
+      this.attrCounter +=1
+      this.attributeData['id'] = this.attrCounter
+      this.apiData.attributes.push(this.attributeData)
+      EventBus.$emit("resetOption",this.attributeData.fieldType)
+      this.clearAttributeData()
+      }
+    },
+    handleClick(id) {
+      this.attrFlash = id
+      const found = this.apiData.attributes.find((x)=>x.id === id)
+      let updateData = found
+      this.selectedId = id
+      this.attributeData = { ...updateData}      
+      EventBus.$emit("setOption",updateData.fieldType);
+      this.isAdd = false
+    },
+    updateAttributeData() {
+      let isValid = this.handleValidation()
+      if(isValid) {
+      let obj = {
+        fieldName: this.attributeData.fieldName,
+        fieldType: this.attributeData.fieldType,
+        fieldPlaceHolder: this.attributeData.fieldPlaceHolder,
+        id: this.selectedId
+      }
+      const indexToUpdate = this.apiData.attributes.findIndex((x)=>x.id === this.selectedId)
+      if(indexToUpdate > -1){
+      this.apiData.attributes[indexToUpdate] = obj
+      EventBus.$emit("resetOption",this.attributeData.fieldType);
+      this.clearAttributeData()
+      this.isAdd = true
+      }
+      }
+      
+    },
+    deleteAttribute() {
+      let id = this.selectedId
+      const attrIndex = this.apiData.attributes.findIndex((x)=> x.id === id)
+      if(attrIndex > -1) {
+        this.apiData.attributes.splice(attrIndex,1)
+      }
+       EventBus.$emit("resetOption",this.attributeData.fieldType);
+       this.clearAttributeData()
+       this.isAdd = true
+    },
+    handleValidation() {
+      let isValid = true
+      if(isEmpty(this.attributeData.fieldName)) {
+        isValid = false
+        return this.notifyErr('Enter Field Name')
+      } else if (isValidURL(this.attributeData.fieldName)) {
+        isValid = false
+        return this.notifyErr('Enter Valid Field Name')
+      } else if (ifSpaceExists(this.attributeData.fieldName)) {
+        isValid = false
+        return this.notifyErr('Field name should not have space')
+      } else if(!this.attributeData.fieldType) {
+        isValid = false
+        return this.notifyErr('Select Field Type')
+      }
+      return isValid
+    },
+    clearAttributeData() {
+      this.selectedId = null
+      this.attrFlash = null
+      this.attributeData = {
+        fieldName:"",        
+        placeHolder:""
+      }
+    },
     inputBooleanCondtion(e) {      
       this.apiData.conditionValue = e
     },
@@ -466,13 +606,19 @@ export default {
       this.apiData.returnType = e
     },
     inputMethod(e){
-      if(e === "CUSTOM_API_GET") {
-        this.isPost = false
+      if(e === "GET") {
+        this.selected.type = "CUSTOM_API_GET"
+        this.showAttribute = true
         this.isGet = true
-      } else if(e === "CUSTOM_API_POST") {
+        this.isPost = false
+      } else if(e === "POST") {
+        this.selected.type = "CUSTOM_API_POST"
+        this.showAttribute = true
         this.isGet = false
         this.isPost = true
       } else{
+        this.selected.type = null
+        this.showAttribute = false
         this.isGet = false
         this.isPost = false
       }
@@ -486,8 +632,7 @@ export default {
       this.apiData = {
         apiEndPoint: "",      
         header:"",
-        queryParamValue:"",
-        bodyFormat:"",
+        attributes:[],
         apiMethod:null,
         returnType:null,
         condition:null,
@@ -496,7 +641,7 @@ export default {
       this.flash = null;
       this.isCreate = true;
       this.selected = {
-        type:"CUSTOM_API",  
+        type:null,  
         title: "",
         placeHolder:"",
         isManadatory: true,
@@ -533,30 +678,16 @@ export default {
           } else if (this.apiData.apiMethod === null) {
             isvalid = false;
             this.notifyErr('Select API Method')
-          } else if (this.apiData.apiMethod === "CUSTOM_API_GET" && isEmpty(this.apiData.queryParamValue)) {
-            isvalid = false;
-            this.notifyErr('Enter Query Parameter')
-          } else if (this.apiData.apiMethod === "CUSTOM_API_POST") {
-            if(isEmpty(this.apiData.bodyFormat)){
-            isvalid = false;
-            this.notifyErr('Enter body format')
-            }  else if (!this.isValidJson(this.apiData.bodyFormat)) {
-              isvalid = false;
-              this.notifyErr('Enter Body in JSON format')
-            }
           } else if (this.apiData.returnType === null) {
             isvalid = false;
             this.notifyErr('Select Return Type')
           } else if(this.apiData.condition === null) {
               isvalid = false;
               this.notifyErr('Select Condition')
-            } else if (this.apiData.conditionValue === null || isEmpty(this.apiData.conditionValue)) {
+            } else if (this.apiData.conditionValue === null || this.apiData.conditionValue === "") {
               isvalid = false;
               this.notifyErr('Enter Condition value')
-            } else if (isEmpty(this.selected.placeHolder)) {
-            isvalid = false;
-            this.notifyErr('Enter Placeholder')
-          }
+            }
       return isvalid;
     },
     isValidJson(input){
@@ -631,6 +762,7 @@ export default {
 
     handleEventActionClick(idx) {
       this.clearSelected()
+      this.clearAttributeData()
       this.isCreate = false;
       // Code to update an Action
       this.flash = idx;

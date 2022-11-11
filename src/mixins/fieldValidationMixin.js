@@ -161,3 +161,12 @@ export function urlSanitizer(url, endsWith) {
             return url;
     }
 }
+
+export function ifSpaceExists(str) {
+    str= str.trim()
+    str = str.split(' ')
+    if (str.length > 1) {
+       return true
+    }
+    else return false 
+  }
