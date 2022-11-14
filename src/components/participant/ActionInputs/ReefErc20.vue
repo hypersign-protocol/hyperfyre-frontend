@@ -45,7 +45,7 @@
               <b-form-input
                 type="text"
                 :placeholder="data.placeHolder"
-                v-model="isWalletAddress"
+                v-model="reefUserWalletAddress"
                 :disabled="true"
                 :required="data.isManadatory"
               v-else></b-form-input>
@@ -58,7 +58,7 @@
               <b-form-input
                 type="text"
                 :placeholder="data.placeHolder"
-                v-model="isWalletAddress"
+                v-model="reefUserWalletAddress"
                 :disabled="done"
                 :required="data.isManadatory"
               v-else></b-form-input>
@@ -116,7 +116,7 @@ export default {
     ErrorMessage,
   },
 computed:{
-  isWalletAddress() {
+  reefUserWalletAddress() {
     if(this.value.userWalletAddress.address){
       return this.value.userWalletAddress.address
     } else {
