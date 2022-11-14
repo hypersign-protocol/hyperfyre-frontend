@@ -45,7 +45,7 @@
               <b-form-input
                 type="text"
                 :placeholder="data.placeHolder"
-                v-model="value.userWalletAddress.address"
+                v-model="isWalletAddress"
                 :disabled="true"
                 :required="data.isManadatory"
               v-else></b-form-input>
@@ -58,7 +58,7 @@
             <b-form-input
                 type="text"
                 :placeholder="data.placeHolder"
-                v-model="value.userWalletAddress.address"
+                v-model="isWalletAddress"
                 :disabled="done"
                 :required="data.isManadatory"
               v-else></b-form-input>
@@ -116,6 +116,13 @@ export default {
     ErrorMessage,
   },
 computed:{
+isWalletAddress() {
+    if(this.value.userWalletAddress.address){
+      return this.value.userWalletAddress.address
+    } else {
+      return this.value.userWalletAddress
+    }
+  },
  buttonThemeCss() {
     return {
       '--button-bg-color': this.themeData.buttonBGColor,
