@@ -467,11 +467,14 @@ computed:{
         case "MOON_ERC721": {
           return JSON.parse(action.value).userWalletAddress;
         }
-        case "REEF_ERC20": {
-          return JSON.parse(action.value).userWalletAddress.address;
-        }
+        case "REEF_ERC20": 
         case "REEF_ERC721": {
-          return JSON.parse(action.value).userWalletAddress.address;
+          const tempData = JSON.parse(action.value)
+          if(tempData.userWalletAddress.address){
+            return tempData.userWalletAddress.address
+          } else {
+            return tempData.userWalletAddress
+          }
         }
         case "ETHEREUM_NETWORK":
         case "BINANCE_NETWORK":
