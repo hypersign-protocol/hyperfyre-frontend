@@ -26,7 +26,7 @@
           <b-col cols="12" sm="12" md="12">
             <div class="row g-3 align-items-center" v-for="(param, index) in values" v-bind:key="index">
               <div class="col-lg-12 col-md-12">
-                <div class="mt-3">                  
+                <div class="mt-3" v-if="param.fieldType !=='BOOLEAN'">                  
                   <b-form-input                            
                   id="title"
                   v-model="param.fieldValue"
@@ -35,6 +35,12 @@
                   :disabled="done"
                   :placeholder="param.fieldPlaceHolder"
                   ></b-form-input>
+                </div>
+                <div class="mt-3" v-if="param.fieldType ==='BOOLEAN'">
+                  <hf-select-drop-down                  
+                  :options="booleanOptions"
+                  @selected=" e =>param.fieldValue = e"                  
+                  ></hf-select-drop-down>
                 </div>
               </div>
             </div>
@@ -61,6 +67,7 @@ import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
+import HfSelectDropDown from "../../elements/HfSelectDropDown.vue"
 export default {
   name: "CustomApi",
   props: {
@@ -82,6 +89,7 @@ export default {
   },
   components: {
     ErrorMessage,
+    HfSelectDropDown
   },
 computed:{
  buttonThemeCss() {
@@ -93,6 +101,11 @@ computed:{
   },
   data() {
     return {
+      booleanOptions:[
+      { text: "Select True OR False", value: null },
+      { text: "True", value: true },
+      { text: "False", value: false },
+      ],
       visible: false,
       values:[],
       value:{
@@ -106,7 +119,9 @@ computed:{
     if(this.data.value){
       const parsedValue = JSON.parse(this.data.value)
       this.values = parsedValue
-      this.addValueField()
+      if(!done){
+        this.addValueField()
+      }
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
@@ -118,35 +133,36 @@ computed:{
       }      
     }
     },
-    async update() {      
-    //   if (this.values.length !==0) {
-    // try{      
-    //   this.values.forEach(attribute => {
-    //     switch (attribute.fieldType) {
-    //       case "CUSTOM_API_ATTRIBUTE_TYPE_STRING":            
-    //         if(attribute.fieldValue === null) {              
-    //           throw new Error(`enter ${attribute.fieldName}`)
-    //         }
-            
-    //       case "CUSTOM_API_ATTRIBUTE_TYPE_NUMBER":
-    //         if(attribute.fieldValue === null) {
-    //           throw new Error(`enter ${attribute.fieldName}`)
-    //         }
-            
-    //       default:
-    //         break;
-    //     }        
-    //   }      
-    //   );
-    //   } catch(error) {
-    //     console.log('wu')
-    //     return this.notifyErr(error)
-    //   }
-    //   } 
-      // else {
-        console.log(this.values)
-        this.$emit("input",this.values);
-      // }
+    async update() { 
+      if (this.values.length !==0) {
+    try{  
+      this.values.forEach(attribute => {
+        switch (attribute.fieldType) {
+          case "STRING":            
+            if(attribute.fieldValue === null || attribute.fieldValue === "") {                                         
+              throw new Error(`enter ${attribute.fieldName}`)              
+            }
+            break;
+          case "NUMBER":
+            if(attribute.fieldValue === null || attribute.fieldValue === "") {
+              throw new Error(`enter ${attribute.fieldName}`)
+            }
+            break;
+          case "BOOLEAN":            
+            if(attribute.fieldValue === null) {
+              throw new Error(`enter ${attribute.fieldName}`)
+            }
+            break;
+          default:
+            break;
+        }        
+      }      
+      );
+      this.$emit("input",JSON.stringify(this.values));
+      } catch(error) {       
+        return this.notifyErr(error)
+      }
+      }        
     },
     // isFieldValid() {
     //   if (isEmpty(this.value.userWalletAddress)) {
