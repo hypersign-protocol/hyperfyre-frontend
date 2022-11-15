@@ -358,8 +358,11 @@ export default {
               (ea.type === "MOONRIVER_ERC20") ||
               (ea.type === "MOONRIVER_ERC721") ||
               (ea.type === "MOON_ERC20") ||
-              (ea.type === "MOON_ERC721")
-            ){
+              (ea.type === "MOON_ERC721") ||
+              (ea.type === "CUSTOM_API_GET") ||
+              (ea.type === "CUSTOM_API_POST")
+            ){  
+                console.log(ea.value)
                 const parsedVal = JSON.parse(ea.value)
                 ea.value = parsedVal;
             }

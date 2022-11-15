@@ -470,7 +470,7 @@ export default {
       ],      
       flash: null,
       isCreate: true,
-      selectedId:null,
+      selectedAttrId:null,
       currentSelectedId: 0, 
       apiData:{
         apiEndPoint: "",
@@ -524,7 +524,7 @@ export default {
       this.attrFlash = id
       const found = this.apiData.attributes.find((x)=>x.id === id)
       let updateData = found
-      this.selectedId = id
+      this.selectedAttrId = id
       this.attributeData = { ...updateData}      
       EventBus.$emit("setOption",updateData.fieldType);
       this.isAdd = false
@@ -536,9 +536,9 @@ export default {
         fieldName: this.attributeData.fieldName,
         fieldType: this.attributeData.fieldType,
         fieldPlaceHolder: this.attributeData.fieldPlaceHolder,
-        id: this.selectedId
+        id: this.selectedAttrId
       }
-      const indexToUpdate = this.apiData.attributes.findIndex((x)=>x.id === this.selectedId)
+      const indexToUpdate = this.apiData.attributes.findIndex((x)=>x.id === this.selectedAttrId)
       if(indexToUpdate > -1){
       this.apiData.attributes[indexToUpdate] = obj
       EventBus.$emit("resetOption",this.attributeData.fieldType);
@@ -549,7 +549,7 @@ export default {
       
     },
     deleteAttribute() {
-      let id = this.selectedId
+      let id = this.selectedAttrId
       const attrIndex = this.apiData.attributes.findIndex((x)=> x.id === id)
       if(attrIndex > -1) {
         this.apiData.attributes.splice(attrIndex,1)
@@ -576,7 +576,7 @@ export default {
       return isValid
     },
     clearAttributeData() {
-      this.selectedId = null
+      this.selectedAttrId = null
       this.attrFlash = null
       this.attributeData = {
         fieldName:"",        

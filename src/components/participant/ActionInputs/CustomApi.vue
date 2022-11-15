@@ -117,9 +117,8 @@ computed:{
 },
   mounted() {        
     if(this.data.value){
-      const parsedValue = JSON.parse(this.data.value)
-      this.values = parsedValue
-      if(!done){
+      this.values = this.data.value     
+      if(!this.done){
         this.addValueField()
       }
     }
@@ -140,17 +139,17 @@ computed:{
         switch (attribute.fieldType) {
           case "STRING":            
             if(attribute.fieldValue === null || attribute.fieldValue === "") {                                         
-              throw new Error(`enter ${attribute.fieldName}`)              
+              throw new Error(`${attribute.fieldPlaceHolder}`)              
             }
             break;
           case "NUMBER":
             if(attribute.fieldValue === null || attribute.fieldValue === "") {
-              throw new Error(`enter ${attribute.fieldName}`)
+              throw new Error(`${attribute.fieldPlaceHolder}`)
             }
             break;
           case "BOOLEAN":            
             if(attribute.fieldValue === null) {
-              throw new Error(`enter ${attribute.fieldName}`)
+              throw new Error(`${attribute.fieldPlaceHolder}`)
             }
             break;
           default:
