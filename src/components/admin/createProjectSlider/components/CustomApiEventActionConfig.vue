@@ -84,16 +84,11 @@
           </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
-          <textarea
-          class="form-control w-100"
-          name="header"
-          id="title"
-          cols="30"
-          rows="5"
+          <codemirror
+          ref="json-cm"
           v-model="apiData.header"
-          placeholder =
-          "Enter Header in JSON format"
-          ></textarea>
+          :options="cmOptions"
+          ></codemirror>
         </div>
       </div>
 
@@ -363,9 +358,26 @@ import HfButtons from "../../../elements/HfButtons.vue"
 import EventBus from '../../../../eventBus';
 import HfSelectDropDown from "../../../elements/HfSelectDropDown.vue"
 import validator from 'validator';
+import { codemirror } from "vue-codemirror"
+// require styles
+import "codemirror/addon/lint/lint.css";
+import "codemirror/lib/codemirror.css";
+import "codemirror/mode/javascript/javascript";
+import "codemirror/addon/lint/lint";
+import "codemirror/addon/lint/json-lint";
+import "codemirror/keymap/sublime";
+import jsonlint from "jsonlint";
+import { JSHINT } from "jshint";
+window.JSHINT = JSHINT;
+window.jsonlint = jsonlint;
 export default {
   name: "CustomAPIEventActionConfig",
-  components: { HfButtons, HfSelectDropDown},
+  components: { codemirror,HfButtons, HfSelectDropDown},
+  filters: {
+    pretty: function (value) {
+      return JSON.stringify(JSON.parse(value), null, 2);
+    },
+  },
   props: {
     eventActionType: {
       type: String,
@@ -391,9 +403,28 @@ export default {
       '--header-text-color':config.app.headerTextColor
       }
   },
+   codemirror() {
+      return this.$refs.cmEditor.codemirror;
+    },
   },
   data() {
     return {
+      cmOptions: {
+        // codemirror options
+
+        styleActiveLine: true,
+        lineNumbers: true,
+        line: true,
+        mode: "application/json",
+        gutters: ["CodeMirror-lint-markers"],
+        lineWrapping: true,
+        theme: "default",
+        lint: true,
+        collapseIdentical: true,
+
+        keyMap: "sublime",
+        // more codemirror options,
+      },
       attrFlash:null,
       selectedId:null,
       showAttribute:false,
@@ -408,9 +439,9 @@ export default {
       appName: config.appName,
       attributeFieldTypeOption:[
         { text: "Return Type", value: null },
-        { text: "Boolean", value: "CUSTOM_API_ATTRIBUTE_TYPE_BOOLEAN" },
-        { text: "String", value: "CUSTOM_API_ATTRIBUTE_TYPE_STRING" },
-        { text: "Number", value: "CUSTOM_API_ATTRIBUTE_TYPE_NUMBER" },
+        { text: "Boolean", value: "BOOLEAN" },
+        { text: "String", value: "STRING" },
+        { text: "Number", value: "NUMBER" },
       ],
       booleanCondition:[
         { text: "Boolean Type", value: null },
@@ -424,9 +455,10 @@ export default {
       ],
       returnTypeOption:[
         { text: "Return Type", value: null },
-        { text: "Boolean", value: "CUSTOM_API_RETURN_TYPE_BOOLEAN" },
-        { text: "String", value: "CUSTOM_API_RETURN_TYPE_STRING" },
-        { text: "Number", value: "CUSTOM_API_RETURN_TYPE_NUMBER" },      
+        { text: "Boolean", value: "BOOLEAN" },
+        { text: "String", value: "STRING" },
+        { text: "Number", value: "NUMBER" },
+        { text: "Object", value: "OBJECT" },
       ],
       condtionOption:[
         { text: "Condition", value: null },
@@ -559,7 +591,7 @@ export default {
     },
     inputReturnType(e) {
       switch(e){
-        case "CUSTOM_API_RETURN_TYPE_BOOLEAN": {
+        case "BOOLEAN": {
           this.apiData.conditionValue = null
           this.isBoolean = true          
           this.condtionOption =[
@@ -568,7 +600,7 @@ export default {
         ]
         break;
         }
-        case "CUSTOM_API_RETURN_TYPE_NUMBER":{
+        case "NUMBER":{
           this.isBoolean = false
           this.isNumber = true
           this.condtionOption=[
@@ -581,7 +613,15 @@ export default {
           ]
         }
         break;
-        case "CUSTOM_API_RETURN_TYPE_STRING":{          
+        case "STRING":{
+          this.isBoolean = false
+          this.isNumber = false
+          this.condtionOption=[
+            { text: "Condition", value: null },
+            { text: "===", value: "===" },
+          ]
+        }
+        case "OBJECT":{          
           this.isBoolean = false
           this.isNumber = false
           this.condtionOption=[
@@ -713,7 +753,7 @@ export default {
         EventBus.$emit("resetOption",this.apiData.condition);
         EventBus.$emit("resetOption",this.apiData.returnType);
         EventBus.$emit("resetOption",this.apiData.apiMethod);
-        if(this.apiData.returnType === "CUSTOM_API_RETURN_TYPE_BOOLEAN") {
+        if(this.apiData.returnType === "BOOLEAN") {
         this.isBoolean = true
         EventBus.$emit("resetOption",this.apiData.conditionValue);
         }
@@ -731,7 +771,7 @@ export default {
         EventBus.$emit("resetOption",this.apiData.condition);
         EventBus.$emit("resetOption",this.apiData.returnType);
         EventBus.$emit("resetOption",this.apiData.apiMethod);
-        if(this.apiData.returnType === "CUSTOM_API_RETURN_TYPE_BOOLEAN") {
+        if(this.apiData.returnType === "BOOLEAN") {
         this.isBoolean = true
         EventBus.$emit("resetOption",this.apiData.conditionValue);
         } 
@@ -751,7 +791,7 @@ export default {
         EventBus.$emit("resetOption",this.apiData.condition);
         EventBus.$emit("resetOption",this.apiData.returnType);
         EventBus.$emit("resetOption",this.apiData.apiMethod);
-        if(this.apiData.returnType === "CUSTOM_API_RETURN_TYPE_BOOLEAN") {
+        if(this.apiData.returnType === "BOOLEAN") {
         this.isBoolean = true
         EventBus.$emit("resetOption",this.apiData.conditionValue);
         }        
@@ -773,7 +813,7 @@ export default {
       EventBus.$emit("setOption",this.apiData.apiMethod);
       EventBus.$emit("setOption",this.apiData.returnType);
       EventBus.$emit("setOption",this.apiData.condition);
-      if(this.apiData.returnType === "CUSTOM_API_RETURN_TYPE_BOOLEAN") {
+      if(this.apiData.returnType === "BOOLEAN") {
         this.isBoolean = true
         EventBus.$emit("setOption",this.apiData.conditionValue);
       }
