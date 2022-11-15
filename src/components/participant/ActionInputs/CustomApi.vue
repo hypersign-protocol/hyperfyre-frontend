@@ -24,14 +24,19 @@
       <b-card-body class="user-details">
         <b-row>
           <b-col cols="12" sm="12" md="12">
-            <div class="metamask">
-              <b-form-input type="text"
-              :placeholder="data.placeHolder"
-              v-model="value"
-              :disabled="done"
-              :required="data.isManadatory"
-              ></b-form-input>
-
+            <div class="row g-3 align-items-center" v-for="(param, index) in values" v-bind:key="index">
+              <div class="col-lg-12 col-md-12">
+                <div class="mt-3">                  
+                  <b-form-input                            
+                  id="title"
+                  v-model="param.fieldValue"
+                  :required="true"
+                  class="form-control w-100"
+                  :disabled="done"
+                  :placeholder="param.fieldPlaceHolder"
+                  ></b-form-input>
+                </div>
+              </div>
             </div>
           </b-col>
         </b-row>  
@@ -89,22 +94,59 @@ computed:{
   data() {
     return {
       visible: false,
-      value:""
-      }
-  },
-  mounted() {
-    if(this.done && this.data.value){
-      this.value = this.data.value
+      values:[],
+      value:{
+      fieldName: "",
+      fieldPlaceHolder: "",
+      fieldType: "",      
+    }
+  }
+},
+  mounted() {        
+    if(this.data.value){
+      const parsedValue = JSON.parse(this.data.value)
+      this.values = parsedValue
+      this.addValueField()
     }
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
+    addValueField(){      
+    for(let index = 0; index<this.values.length; index++) {
+      if(this.values.length !==0){
+        this.values[index]['fieldValue']= null
+      }      
+    }
+    },
     async update() {      
-      if (!this.value || this.value === "") {
-        return this.notifyErr('Enter value');
-      } else {
-        this.$emit("input",this.value);
-      }
+    //   if (this.values.length !==0) {
+    // try{      
+    //   this.values.forEach(attribute => {
+    //     switch (attribute.fieldType) {
+    //       case "CUSTOM_API_ATTRIBUTE_TYPE_STRING":            
+    //         if(attribute.fieldValue === null) {              
+    //           throw new Error(`enter ${attribute.fieldName}`)
+    //         }
+            
+    //       case "CUSTOM_API_ATTRIBUTE_TYPE_NUMBER":
+    //         if(attribute.fieldValue === null) {
+    //           throw new Error(`enter ${attribute.fieldName}`)
+    //         }
+            
+    //       default:
+    //         break;
+    //     }        
+    //   }      
+    //   );
+    //   } catch(error) {
+    //     console.log('wu')
+    //     return this.notifyErr(error)
+    //   }
+    //   } 
+      // else {
+        console.log(this.values)
+        this.$emit("input",this.values);
+      // }
     },
     // isFieldValid() {
     //   if (isEmpty(this.value.userWalletAddress)) {
