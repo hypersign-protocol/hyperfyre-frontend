@@ -118,7 +118,7 @@
           </label>
         </div>        
           <div class="col-lg-9 col-md-9 px-0">
-           <b-card-header header-tag="header" class="p-1 border-0 accordin-header-theme" :style="headerThemeCss" role="tab">
+           <b-card-header header-tag="header" class="p-1 border-0 accordin-header theme-color" role="tab">
                     <b-button block v-b-toggle.accordion-11 style="text-decoration:none; color:#212529;" variant="secondary"
                     :aria-expanded="visible ? 'true' : 'false'"
                     @click="visible = !visible"
@@ -341,7 +341,12 @@
   margin-left: 2px;
 }
 .theme-color{
-  color: var(--header-text-color);
+  background-color:rgba(241, 179, 25, 0.24);
+  color: #212529;
+}
+.bg-transparant{
+  background-color: transparent !important;
+  color: #212529;
 }
 </style>
 <script>
