@@ -358,16 +358,43 @@ export default {
               (ea.type === "MOONRIVER_ERC20") ||
               (ea.type === "MOONRIVER_ERC721") ||
               (ea.type === "MOON_ERC20") ||
-              (ea.type === "MOON_ERC721")
-            ){
+              (ea.type === "MOON_ERC721") ||
+              (ea.type === "CUSTOM_API_GET") ||
+              (ea.type === "CUSTOM_API_POST")
+            ){  
                 const parsedVal = JSON.parse(ea.value)
                 ea.value = parsedVal;
             }
             return ea
-          })
-
-        } else {
-            this.eventActionsToShow = eventActions;
+          })        
+        } else {                   
+            const temp = eventActions.map((x)=>{
+              if((x.type === "ETHEREUM_NETWORK") ||
+              (x.type === "BINANCE_NETWORK") ||
+              (x.type === "MATIC_NETWORK") ||
+              (x.type === "ETHEREUM_ERC20") ||
+              (x.type === "ETHEREUM_ERC721") ||
+              (x.type === "MATIC_ERC20") ||
+              (x.type === "MATIC_ERC721") ||
+              (x.type === "BINANCE_ERC20") ||
+              (x.type === "BINANCE_ERC721") ||
+              (x.type === "REEF_ERC20") ||
+              (x.type === "REEF_ERC721") ||
+              (x.type === "MOONBEAM_ERC20") ||
+              (x.type === "MOONBEAM_ERC721") ||
+              (x.type === "MOONRIVER_ERC20") ||
+              (x.type === "MOONRIVER_ERC721") ||
+              (x.type === "MOON_ERC20") ||
+              (x.type === "MOON_ERC721") ||
+              (x.type === "CUSTOM_API_GET") ||
+              (x.type === "CUSTOM_API_POST")
+              ){
+                const parsedVal = JSON.parse(x.value)
+                x.value = parsedVal;
+              }
+              return x
+            })
+            this.eventActionsToShow = temp;
         }
       } else { 
         this.eventActionsToShow = this.eventData.actions; 
