@@ -122,8 +122,15 @@ computed:{
     }
   }
 },
+   watch: {
+        data:{
+          deep:true,
+          handler: function(newValue,oldValue) {
+            this.values = newValue.value
+          }
+        }
+    },
   mounted() {  
-  console.log(this.data);      
     if(this.data.value){
       this.values = this.data.value     
       if(!this.done){
