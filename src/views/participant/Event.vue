@@ -362,7 +362,6 @@ export default {
               (ea.type === "CUSTOM_API_GET") ||
               (ea.type === "CUSTOM_API_POST")
             ){  
-                console.log(ea.value)
                 const parsedVal = JSON.parse(ea.value)
                 ea.value = parsedVal;
             }

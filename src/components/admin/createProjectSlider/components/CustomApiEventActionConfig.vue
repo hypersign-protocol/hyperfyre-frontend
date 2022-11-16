@@ -163,10 +163,10 @@
                         <label for="type" class="col-form-label">Field Type<span style="color: red">*</span>:</label>
                         </div>
                         <div class="col-lg-9 col-md-9 px-0">
-                      <hf-select-drop-down
+                      <b-form-select
+                      v-model="attributeData.fieldType"
                       :options="attributeFieldTypeOption"
-                      @selected=" e =>attributeData.fieldType = e"
-                      ></hf-select-drop-down>
+                      ></b-form-select>
                       </div>
                     </div>
                     <div class="row g-3 align-items-center w-100 mt-4">
@@ -351,6 +351,7 @@ import {
   isEmpty,
   isValidURL,
   truncate,
+  isFloat,
 } from "../../../../mixins/fieldValidationMixin";
 import Messages from "../../../../utils/messages/admin/en";
 import config from "../../../../config"
@@ -439,9 +440,10 @@ export default {
       appName: config.appName,
       attributeFieldTypeOption:[
         { text: "Return Type", value: null },
-        { text: "Boolean", value: "BOOLEAN" },
-        { text: "String", value: "STRING" },
-        { text: "Number", value: "NUMBER" },
+        { text: "boolean", value: "BOOLEAN" },
+        { text: "string", value: "STRING" },
+        { text: "integer", value: "NUMBER" },
+        { text: "float", value: "FLOAT" },
       ],
       booleanCondition:[
         { text: "Boolean Type", value: null },
@@ -455,10 +457,11 @@ export default {
       ],
       returnTypeOption:[
         { text: "Return Type", value: null },
-        { text: "Boolean", value: "BOOLEAN" },
-        { text: "String", value: "STRING" },
-        { text: "Number", value: "NUMBER" },
-        { text: "Object", value: "OBJECT" },
+        { text: "boolean", value: "BOOLEAN" },
+        { text: "string", value: "STRING" },
+        { text: "integer", value: "NUMBER" },
+        { text: "float", value: "FLOAT" },
+        { text: "object", value: "OBJECT" },
       ],
       condtionOption:[
         { text: "Condition", value: null },
@@ -514,9 +517,10 @@ export default {
       let isValid = this.handleValidation()
       if(isValid) {
       this.attrCounter +=1
-      this.attributeData['id'] = this.attrCounter
+      this.attributeData['id'] = this.attrCounter  
+      const trimFieldName = this.attributeData.fieldName.trim()
+      this.attributeData.fieldName = trimFieldName
       this.apiData.attributes.push(this.attributeData)
-      EventBus.$emit("resetOption",this.attributeData.fieldType)
       this.clearAttributeData()
       }
     },
@@ -526,14 +530,13 @@ export default {
       let updateData = found
       this.selectedAttrId = id
       this.attributeData = { ...updateData}      
-      EventBus.$emit("setOption",updateData.fieldType);
       this.isAdd = false
     },
     updateAttributeData() {
       let isValid = this.handleValidation()
       if(isValid) {
       let obj = {
-        fieldName: this.attributeData.fieldName,
+        fieldName: this.attributeData.fieldName.trim(),
         fieldType: this.attributeData.fieldType,
         fieldPlaceHolder: this.attributeData.fieldPlaceHolder,
         id: this.selectedAttrId
@@ -541,7 +544,6 @@ export default {
       const indexToUpdate = this.apiData.attributes.findIndex((x)=>x.id === this.selectedAttrId)
       if(indexToUpdate > -1){
       this.apiData.attributes[indexToUpdate] = obj
-      EventBus.$emit("resetOption",this.attributeData.fieldType);
       this.clearAttributeData()
       this.isAdd = true
       }
@@ -554,7 +556,6 @@ export default {
       if(attrIndex > -1) {
         this.apiData.attributes.splice(attrIndex,1)
       }
-       EventBus.$emit("resetOption",this.attributeData.fieldType);
        this.clearAttributeData()
        this.isAdd = true
     },
@@ -566,21 +567,34 @@ export default {
       } else if (isValidURL(this.attributeData.fieldName)) {
         isValid = false
         return this.notifyErr('Enter Valid Field Name')
-      } else if (ifSpaceExists(this.attributeData.fieldName)) {
+      } else if (ifSpaceExists(this.attributeData.fieldName)) {        
         isValid = false
         return this.notifyErr('Field name should not have space')
-      } else if(!this.attributeData.fieldType) {
+      } 
+      // else if(this.isPresent()) {
+      //   isValid = false
+      //   return this.notifyErr('Attribute with duplicate Field Name are not allowed')
+      // } 
+      else if(!this.attributeData.fieldType) {
         isValid = false
         return this.notifyErr('Select Field Type')
       }
       return isValid
     },
+    // isPresent(){
+    //    const element = this.apiData.attributes.find((value) => {
+    //         return value.fieldName === this.attributeData.fieldName;
+    //     });
+    //     return typeof element === "undefined" ? false : true;
+    
+    // },
     clearAttributeData() {
       this.selectedAttrId = null
       this.attrFlash = null
       this.attributeData = {
         fieldName:"",        
-        placeHolder:""
+        placeHolder:"",
+        fieldType:null
       }
     },
     inputBooleanCondtion(e) {      
@@ -600,7 +614,8 @@ export default {
         ]
         break;
         }
-        case "NUMBER":{
+        case "NUMBER":
+        case "FLOAT":{
           this.isBoolean = false
           this.isNumber = true
           this.condtionOption=[
@@ -665,6 +680,8 @@ export default {
       this.apiData.apiMethod = e
     },
     clearSelected() {
+      this.visible = false
+      this.isAdd = true
       this.isGet = false,
       this.isPost = false,
       this.isBoolean = false,
@@ -718,6 +735,9 @@ export default {
           } else if (this.apiData.apiMethod === null) {
             isvalid = false;
             this.notifyErr('Select API Method')
+          } else if(this.apiData.apiMethod !== null && !this.apiData.attributes.length) {
+            isvalid = false
+            return this.notifyErr('Please Add atleast One Attribute in Field configurations')
           } else if (this.apiData.returnType === null) {
             isvalid = false;
             this.notifyErr('Select Return Type')
@@ -726,8 +746,25 @@ export default {
               this.notifyErr('Select Condition')
             } else if (this.apiData.conditionValue === null || this.apiData.conditionValue === "") {
               isvalid = false;
-              this.notifyErr('Enter Condition value')
+              this.notifyErr('Enter a Valid Condition value')
+            } else if(this.apiData.returnType !== null) {
+            switch (this.apiData.returnType) {
+              case "NUMBER":
+              if(!Number.isInteger(parseFloat((this.apiData.conditionValue)))) {
+                  isvalid = false
+                  return this.notifyErr('Enter Integer value')
+                }
+                break;
+              case "FLOAT":
+                if(!isFloat(this.apiData.conditionValue)) {
+                  isvalid = false
+                  return this.notifyErr('Enter Float value')
+                }
+                break;
+              default:
+                break;
             }
+          }
       return isvalid;
     },
     isValidJson(input){

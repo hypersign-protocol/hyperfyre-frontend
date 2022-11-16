@@ -33,14 +33,20 @@
                   :required="true"
                   class="form-control w-100"
                   :disabled="done"
-                  :placeholder="param.fieldPlaceHolder"
+                  :placeholder="param.fieldPlaceHolder ? `${param.fieldPlaceHolder}` :`${param.fieldName}`"
                   ></b-form-input>
                 </div>
                 <div class="mt-3" v-if="param.fieldType ==='BOOLEAN'">
-                  <hf-select-drop-down                  
+                  <hf-select-drop-down
+                  v-if="!done"               
                   :options="booleanOptions"
                   @selected=" e =>param.fieldValue = e"                  
                   ></hf-select-drop-down>
+                   <b-form-input
+                  v-else                  
+                  v-model="param.fieldValue"
+                  :disabled="true"                 
+                  ></b-form-input>
                 </div>
               </div>
             </div>
@@ -66,6 +72,7 @@
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
+import {isFloat} from "../../../mixins/fieldValidationMixin"
 import ErrorMessage from "../ErrorMessage.vue";
 import HfSelectDropDown from "../../elements/HfSelectDropDown.vue"
 export default {
@@ -115,7 +122,8 @@ computed:{
     }
   }
 },
-  mounted() {        
+  mounted() {  
+  console.log(this.data);      
     if(this.data.value){
       this.values = this.data.value     
       if(!this.done){
@@ -129,6 +137,13 @@ computed:{
     for(let index = 0; index<this.values.length; index++) {
       if(this.values.length !==0){
         this.values[index]['fieldValue']= null
+        if(this.values[index].fieldType ==='BOOLEAN'){
+          this.booleanOptions=[
+          { text: `${this.values[index].fieldPlaceHolder}`, value: null },
+          { text: "True", value: true },
+          { text: "False", value: false },
+          ]
+        }
       }      
     }
     },
@@ -139,17 +154,26 @@ computed:{
         switch (attribute.fieldType) {
           case "STRING":            
             if(attribute.fieldValue === null || attribute.fieldValue === "") {                                         
-              throw new Error(`${attribute.fieldPlaceHolder}`)              
+              throw new Error(`Please fill ${attribute.fieldName} field`)              
             }
             break;
           case "NUMBER":
             if(attribute.fieldValue === null || attribute.fieldValue === "") {
-              throw new Error(`${attribute.fieldPlaceHolder}`)
+              throw new Error(`Please fill ${attribute.fieldName} field`)
+            } else if(!Number.isInteger(parseFloat((attribute.fieldValue)))) {                  
+              throw new Error('Enter Integer value')
+            }
+            break;
+          case "FLOAT":
+            if(attribute.fieldValue === null || attribute.fieldValue === "") {
+              throw new Error(`Please fill ${attribute.fieldName} field`)
+            } else if(!isFloat(attribute.fieldValue)) {                  
+              throw new Error('Enter Float value')
             }
             break;
           case "BOOLEAN":            
             if(attribute.fieldValue === null) {
-              throw new Error(`${attribute.fieldPlaceHolder}`)
+              throw new Error(`Please fill ${attribute.fieldName} field`)
             }
             break;
           default:
@@ -163,18 +187,6 @@ computed:{
       }
       }        
     },
-    // isFieldValid() {
-    //   if (isEmpty(this.value.userWalletAddress)) {
-    //     return false;
-    //   }
-    //   if (isValidURL(this.value.userWalletAddress)) {
-    //     return false;
-    //   }
-    //   if (!isValidText(this.value.userWalletAddress)) {
-    //     return false;
-    //   }
-    //   return true;
-    // },
     disableInput(data) {
      this.data.isDone = data;
     },

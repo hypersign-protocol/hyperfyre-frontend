@@ -133,7 +133,8 @@ export function checkValue(arr, prop) {
 
 }
 export function isFloat(n) {
-    if(n === n && n % 1 !== 0){
+    const parsedNumber = parseFloat(n)
+    if(parsedNumber === parsedNumber && parsedNumber % 1 !== 0){
         return true;
     }else{
         return false;
