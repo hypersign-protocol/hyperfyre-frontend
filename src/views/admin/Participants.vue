@@ -481,6 +481,15 @@ computed:{
         case "MATIC_NETWORK": {
           return JSON.parse(action.value).paramsList[0].value;
         }
+        case "CUSTOM_API_GET":
+        case "CUSTOM_API_POST": {
+          const tempActionDetail = JSON.parse(action.value);
+          const valueToShow = {};
+          tempActionDetail.forEach((attr) => {                    
+            valueToShow[attr.fieldName] = attr.fieldValue        
+          });          
+          return JSON.stringify(valueToShow);        
+        }    
         default:
           return action.value;
       }

@@ -66,29 +66,12 @@
             type="text"
             id="title"
             class="form-control w-100"
-            placeholder="Enter Api Endpoint"
+            placeholder="http://yourdomain.com/api/path"
           />
           <span class="inputInfo"
             >Make sure to whitelist <span style="color:#3457D5;font-weight: bold;">https://app.fyre.hypersign.id</span>
-            url on your server.</span
+            URL on your server.</span
           >
-        </div>
-      </div>
-
-     <div
-        class="row g-3 align-items-center w-100 mt-4"
-      >
-        <div class="text-left col-lg-3 col-md-3 text-left">
-          <label for="title" class="col-form-label"
-            >Header (Optional):
-          </label>
-        </div>
-        <div class="col-lg-9 col-md-9 px-0">
-          <codemirror
-          ref="json-cm"
-          v-model="apiData.header"
-          :options="cmOptions"
-          ></codemirror>
         </div>
       </div>
 
@@ -117,9 +100,9 @@
             >{{isGet ? 'Query Parameter Fields':'Body Fields'}}<span style="color: red">*</span>:
           </label>
         </div>        
-          <div class="col-lg-9 col-md-9 px-0">
+          <div class="col-lg-9 col-md-9 px-0 card">
            <b-card-header header-tag="header" class="p-1 border-0 accordin-header theme-color" role="tab">
-                    <b-button block v-b-toggle.accordion-11 style="text-decoration:none; color:#212529;" variant="secondary"
+                    <b-button block v-b-toggle.accordion-11 style="text-decoration:none; color:#212529;" variant="info"
                     :aria-expanded="visible ? 'true' : 'false'"
                     @click="visible = !visible"
                     aria-controls="collapse-1"
@@ -128,7 +111,7 @@
                     <i :class="!visible ? 'fa fa-arrow-down' : 'fa fa-arrow-up'" style="float:right;"></i>
                     </b-button>
                   </b-card-header>
-            <b-collapse id="collapse-1" class="mt-2" v-model="visible" style="padding:10px">
+            <b-collapse id="collapse-1" class="mt-2" v-model="visible" style="padding:10px" role="tabpanel">
                     <div class="selected-media-wrapper d-flex p-2 mb-4"  style="overflow-y: auto" v-if="apiData.attributes.length > 0">
                       <div v-for="(attr,fieldName) in apiData.attributes" v-bind:key="attr.fieldName">
                         <div :class="
@@ -139,7 +122,7 @@
                             style="min-width:90px;"
                             :title="attr.fieldName"
                           >
-                          {{ attr.fieldName }}
+                          {{ truncate1(attr.fieldName,6) }}
                            <span style="color: gray; padding-left: 5px">
                             <i style="" class="fas fa-minus-circle"></i>
                           </span>
@@ -150,17 +133,17 @@
                     <div class="row g-3 align-items-center w-100">
                         <div class="col-lg-3 col-md-3 text-left">
                           
-                          <label for="attributeName" class="col-form-label">Field Name<span style="color: red">*</span>: </label>                          
+                          <label for="attributeName" class="col-form-label">Name<span style="color: red">*</span>: </label>                          
                         </div>
                         <div class="col-lg-9 col-md-9 px-0">
                           <input v-model="attributeData.fieldName" type="text" id="attributeName" class="form-control w-100"
-                            placeholder="firstName">
+                            placeholder="Enter Name">
                         </div>
                     </div>
 
                     <div class="row g-3 align-items-center w-100 mt-4">
                         <div class="col-lg-3 col-md-3 text-left">                        
-                        <label for="type" class="col-form-label">Field Type<span style="color: red">*</span>:</label>
+                        <label for="type" class="col-form-label">Type<span style="color: red">*</span>:</label>
                         </div>
                         <div class="col-lg-9 col-md-9 px-0">
                       <b-form-select
@@ -171,7 +154,7 @@
                     </div>
                     <div class="row g-3 align-items-center w-100 mt-4">
                         <div class="col-lg-3 col-md-3 text-left">                        
-                        <label for="type" class="col-form-label">Field Placeholder:</label>
+                        <label for="type" class="col-form-label">Placeholder:</label>
                         </div>
                         <div class="col-lg-9 col-md-9 px-0">
                       <input v-model="attributeData.fieldPlaceHolder" type="text" id="attributeName" class="form-control w-100"
@@ -209,7 +192,7 @@
       >
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="title" class="col-form-label"
-            >Condition<span style="color: red">*</span>:
+            >Match Condition<span style="color: red">*</span>:
           </label>
         </div>        
           <div class="col-lg-3 col-md-2 px-0">
@@ -241,6 +224,26 @@
           />    
         </div>
       </div>
+
+      <div
+        class="row g-3 align-items-center w-100 mt-4"
+      >
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <label for="title" class="col-form-label"
+            >Headers (Optional):
+          </label>
+        </div>
+        
+        <div class="col-lg-9 col-md-9 px-0 borderHeader">
+          <codemirror
+          class="m-1"
+          ref="json-cm"
+          v-model="apiData.header"
+          :options="cmOptions"
+          ></codemirror>
+        </div>
+      </div>
+
       <div class="row g-3 align-items-center w-100 mt-4">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="title" class="col-form-label"
@@ -289,7 +292,10 @@
   color: #808080b5;
   font-size: smaller;
 }
-
+.borderHeader{
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
 .pointer {
   cursor: pointer;
 }
@@ -443,7 +449,7 @@ export default {
       isNumber:false,
       appName: config.appName,
       attributeFieldTypeOption:[
-        { text: "Return Type", value: null },
+        { text: "Select Datatype", value: null },
         { text: "boolean", value: "BOOLEAN" },
         { text: "string", value: "STRING" },
         { text: "integer", value: "NUMBER" },
@@ -460,7 +466,7 @@ export default {
         { text: "POST", value: "POST" },
       ],
       returnTypeOption:[
-        { text: "Return Type", value: null },
+        { text: "Response Type", value: null },
         { text: "boolean", value: "BOOLEAN" },
         { text: "string", value: "STRING" },
         { text: "integer", value: "NUMBER" },
@@ -607,7 +613,7 @@ export default {
       this.attrFlash = null
       this.attributeData = {
         fieldName:"",        
-        placeHolder:"",
+        fieldPlaceHolder:"",
         fieldType:null
       }
     },
@@ -697,8 +703,8 @@ export default {
     clearSelected() {
       this.visible = false
       this.isAdd = true
-      this.isGet = false,
-      this.isPost = false,
+      // this.isGet = false,
+      // this.isPost = false,
       this.isBoolean = false,
       this.isNumber = false,
       this.apiData = {
@@ -740,45 +746,49 @@ export default {
             this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE);
           } else if(isEmpty(this.apiData.apiEndPoint)) {
             isvalid = false;
-            this.notifyErr('Api Endpoint should not be empty');
+            this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.API_ENDPOINT);
           } else if (!this.apiData.apiEndPoint.includes('http://localhost') && !validator.isURL(this.apiData.apiEndPoint)) {
             isvalid = false;
-            this.notifyErr('enter valid endpoint');
+            this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.API_VALID_ENDPOINT);
           } else if (this.apiData.header!=="" && !this.isValidJson(this.apiData.header)) {
             isvalid = false;
-            this.notifyErr("Enter header in JSON format");
+            this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.HEADER_IN_JSON);
           } else if (this.apiData.apiMethod === null) {
             isvalid = false;
-            this.notifyErr('Select API Method')
+            this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.SELECT_API_METHOD)
           } else if(this.apiData.apiMethod !== null && !this.apiData.attributes.length) {
             isvalid = false
-            return this.notifyErr('Please Add atleast One Attribute in Field configurations')
+            return this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.ATLEAST_ONE_ATTRIBUTE)
           } else if (this.apiData.returnType === null) {
             isvalid = false;
-            this.notifyErr('Select Return Type')
+            this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.SELECT_RESPONSE_TPYE)
           } else if(this.apiData.condition === null) {
               isvalid = false;
-              this.notifyErr('Select Condition')
+              this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.SELECT_CONDITION)
             } else if (this.apiData.conditionValue === null || this.apiData.conditionValue === "") {
               isvalid = false;
-              this.notifyErr('Enter a Valid Condition value')
+              this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.VALID_CONDITION)
             } else if(this.apiData.returnType !== null) {
-            switch (this.apiData.returnType) {
+              switch (this.apiData.returnType) {
               case "NUMBER":
               if(!Number.isInteger(parseFloat((this.apiData.conditionValue)))) {
                   isvalid = false
-                  return this.notifyErr('Enter Integer value')
+                  return this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.INTEGER_VALUE)
                 }
                 break;
               case "FLOAT":
                 if(!isFloat(this.apiData.conditionValue)) {
                   isvalid = false
-                  return this.notifyErr('Enter Float value')
+                  return this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.FLOAT_VALUE)
                 }
-                break;
-              default:
-                break;
-            }
+                break;               
+            }            
+          } if (isNaN(parseInt(this.selected.score))) {            
+            isvalid = false;
+            return this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM);
+          } else if (parseInt(this.selected.score) < 0) {
+            isvalid = false;
+            return this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM);
           }
       return isvalid;
     },
