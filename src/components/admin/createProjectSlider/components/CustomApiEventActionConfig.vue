@@ -130,12 +130,12 @@
                   </b-card-header>
             <b-collapse id="collapse-1" class="mt-2" v-model="visible" style="padding:10px">
                     <div class="selected-media-wrapper d-flex p-2 mb-4"  style="overflow-y: auto" v-if="apiData.attributes.length > 0">
-                      <div v-for="(attr,id) in apiData.attributes" v-bind:key="attr.id">
+                      <div v-for="(attr,fieldName) in apiData.attributes" v-bind:key="attr.fieldName">
                         <div :class="
-                            attrFlash == attr.id
+                            attrFlash == attr.fieldName
                             ? 'flash card rounded m-1 p-1 d-flex flex-row align-items-center'
                             : 'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'"
-                            @click="handleClick(attr.id)"
+                            @click="handleClick(attr.fieldName)"
                             style="min-width:90px;"
                             :title="attr.fieldName"
                           >
@@ -434,8 +434,7 @@ export default {
       attrFlash:null,
       selectedId:null,
       showAttribute:false,
-      isAdd:true,
-      attrCounter:0,      
+      isAdd:true,      
       visible:false,
       counter:0,
       isGet:false,
@@ -511,6 +510,7 @@ export default {
   async mounted() {
     this.$root.$on("callClearFromProject", () => {
       this.clearSelected();
+      this.clearAttributeData();
       this.counter = 0
     });
      EventBus.$on("sendProject", (project) => {
@@ -520,9 +520,7 @@ export default {
   methods: {
     addAttributesToBox() {
       let isValid = this.handleValidation()
-      if(isValid) {
-      this.attrCounter +=1
-      this.attributeData['id'] = this.attrCounter  
+      if(isValid) {    
       const trimFieldName = this.attributeData.fieldName.trim()
       this.attributeData.fieldName = trimFieldName
       this.apiData.attributes.push(this.attributeData)
@@ -531,7 +529,7 @@ export default {
     },
     handleClick(id) {
       this.attrFlash = id
-      const found = this.apiData.attributes.find((x)=>x.id === id)
+      const found = this.apiData.attributes.find((x)=>x.fieldName === id)
       let updateData = found
       this.selectedAttrId = id
       this.attributeData = { ...updateData}      
@@ -544,10 +542,9 @@ export default {
         fieldName: this.attributeData.fieldName.trim(),
         fieldType: this.attributeData.fieldType,
         fieldPlaceHolder: this.attributeData.fieldPlaceHolder,
-        id: this.selectedAttrId
-      }
-      const indexToUpdate = this.apiData.attributes.findIndex((x)=>x.id === this.selectedAttrId)
-      if(indexToUpdate > -1){
+      }      
+      const indexToUpdate = this.apiData.attributes.findIndex((x)=>x.fieldName === this.attrFlash)      
+      if(indexToUpdate > -1){      
       this.apiData.attributes[indexToUpdate] = obj
       this.clearAttributeData()
       this.isAdd = true
@@ -557,7 +554,7 @@ export default {
     },
     deleteAttribute() {
       let id = this.selectedAttrId
-      const attrIndex = this.apiData.attributes.findIndex((x)=> x.id === id)
+      const attrIndex = this.apiData.attributes.findIndex((x)=> x.fieldName === id)
       if(attrIndex > -1) {
         this.apiData.attributes.splice(attrIndex,1)
       }
@@ -576,23 +573,35 @@ export default {
         isValid = false
         return this.notifyErr('Field name should not have space')
       } 
-      // else if(this.isPresent()) {
-      //   isValid = false
-      //   return this.notifyErr('Attribute with duplicate Field Name are not allowed')
-      // } 
+      else if(this.isPresent()) {
+        isValid = false
+        return this.notifyErr('Attribute with duplicate Field Name are not allowed')
+      } 
       else if(!this.attributeData.fieldType) {
         isValid = false
         return this.notifyErr('Select Field Type')
       }
       return isValid
     },
-    // isPresent(){
-    //    const element = this.apiData.attributes.find((value) => {
-    //         return value.fieldName === this.attributeData.fieldName;
-    //     });
-    //     return typeof element === "undefined" ? false : true;
-    
-    // },
+    isPresent(){
+      let status = false;
+       let temp = [ ...this.apiData.attributes]
+       const index = temp.findIndex((x)=> x.fieldName === this.attrFlash)
+       if(temp.length!==0){
+        if(this.isAdd === false){
+         temp.splice(index,1)
+        }
+       const element = temp.find((value) => {
+            if(this.attributeData.fieldName!==this.attrFlash && value.fieldName === this.attributeData.fieldName){
+              return value;
+            }
+       });       
+       if(element !== undefined){
+        status = true
+       }
+      }
+      return status
+    },
     clearAttributeData() {
       this.selectedAttrId = null
       this.attrFlash = null
@@ -641,6 +650,7 @@ export default {
             { text: "===", value: "===" },
           ]
         }
+        break;
         case "OBJECT":{          
           this.isBoolean = false
           this.isNumber = false
