@@ -110,6 +110,18 @@ const EVENTS = {
             DUPLICATE_KYC: "You cannot add more than one Kyc action",
             KYC_TITLE_URL: "KYC Title Cannot be URL"
 
+        },
+        CUSTOMAPI: {
+            API_ENDPOINT: "Api Endpoint should not be empty",
+            API_VALID_ENDPOINT: "Enter valid Api Endpoint",
+            HEADER_IN_JSON: "Enter Header in JSON format",
+            SELECT_API_METHOD: "Select API Method",
+            ATLEAST_ONE_ATTRIBUTE: "Please Add atleast One Attribute in Field configurations",
+            SELECT_RESPONSE_TPYE: "Select Response Type",
+            SELECT_CONDITION: "Select Condition",
+            VALID_CONDITION: "Enter a Valid Condition value",
+            INTEGER_VALUE: "Enter Integer value",
+            FLOAT_VALUE: "Enter Float value"
         }
 
     }
