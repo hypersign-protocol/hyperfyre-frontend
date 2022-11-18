@@ -738,9 +738,6 @@ export default {
       if(attrIndex > -1) {
         this.queryParameterAttributeArray.splice(attrIndex,1)        
       }
-      this.queryParameterAttributeArray.forEach(element => {
-        elem
-      });
        this.clearQuerryAttributeData() 
        this.isAdd = true
     },
