@@ -97,7 +97,7 @@
       >
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="title" class="col-form-label"
-            >{{isGet ? 'Query Parameter Fields':'Body Fields'}}<span style="color: red">*</span>:
+            >Fields<span style="color: red">*</span>:
           </label>
         </div>        
           <div class="col-lg-9 col-md-9 px-0 card">
@@ -111,14 +111,105 @@
                     <i :class="!visible ? 'fa fa-arrow-down' : 'fa fa-arrow-up'" style="float:right;"></i>
                     </b-button>
                   </b-card-header>
-            <b-collapse id="collapse-1" class="mt-2" v-model="visible" style="padding:10px" role="tabpanel">
-                    <div class="selected-media-wrapper d-flex p-2 mb-4"  style="overflow-y: auto" v-if="apiData.attributes.length > 0">
-                      <div v-for="(attr,fieldName) in apiData.attributes" v-bind:key="attr.fieldName">
+          <b-collapse id="collapse-1" class="mt-2" v-model="visible" style="padding:10px" role="tabpanel">          
+          <b-card no-body
+          class="p-2">
+              <b-tabs
+              card
+              
+              class="mt-1"  
+              >
+              <b-tab
+              title="Query Params"
+              active
+              >
+              <b-card-text>
+                    <div class="selected-media-wrapper d-flex p-2 mb-4"  style="overflow-y: auto" v-if="queryParameterAttributeArray.length > 0">
+                      <div v-for="(attr,fieldName) in queryParameterAttributeArray" v-bind:key="attr.fieldName">
+                        <div :class="
+                            querryAttrFlash == attr.fieldName
+                            ? 'flash card rounded m-1 p-1 d-flex flex-row align-items-center'
+                            : 'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'"
+                            @click="handleClickQueryParam(attr.fieldName)"
+                            style="min-width:90px;"
+                            :title="attr.fieldName"
+                          >
+                          {{ truncate1(attr.fieldName,6) }}
+                           <span style="color: gray; padding-left: 5px">
+                            <i style="" class="fas fa-minus-circle"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row g-3 align-items-center w-100">
+                        <div class="col-lg-3 col-md-3 text-left">
+                          
+                          <label for="attributeName" class="col-form-label">Name<span style="color: red">*</span>: </label>                          
+                        </div>
+                        <div class="col-lg-9 col-md-9 px-0">
+                          <input v-model="queryParamAttributeData.fieldName" type="text" id="attributeName" class="form-control w-100"
+                            placeholder="Enter Name">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 align-items-center w-100 mt-4">
+                        <div class="col-lg-3 col-md-3 text-left">                        
+                        <label for="type" class="col-form-label">Type<span style="color: red">*</span>:</label>
+                        </div>
+                        <div class="col-lg-9 col-md-9 px-0">
+                      <b-form-select
+                      v-model="queryParamAttributeData.fieldType"
+                      :options="attributeFieldTypeOption"
+                      ></b-form-select>
+                      </div>
+                    </div>
+                    <div class="row g-3 align-items-center w-100 mt-4">
+                        <div class="col-lg-3 col-md-3 text-left">                        
+                        <label for="type" class="col-form-label">Placeholder:</label>
+                        </div>
+                        <div class="col-lg-9 col-md-9 px-0">
+                      <input v-model="queryParamAttributeData.fieldPlaceHolder" type="text" id="attributeName" class="form-control w-100"
+                            placeholder="Enter Placeholder">
+                      </div>
+                    </div>
+                    <div class="form-group row mt-4" v-if="isAdd">
+                      <div class="col-sm-10">                        
+                        <hf-buttons 
+                          name="Add"                          
+                          @executeAction="addQuerryParamAttributesToBox()"
+                        ></hf-buttons>
+                      </div>                                            
+                    </div>
+                    <div class="form-group row mt-4" v-else>
+                      <div class="col-sm-10">                        
+                        <hf-buttons 
+                          name="Update"        
+                          class="btn btn-primary"
+                          @executeAction="updateQueryParamAttributeData()"
+                        ></hf-buttons>
+                        <hf-buttons 
+                          name="Delete"        
+                          customClass="btn btn-danger slight-left-margin"
+                          @executeAction="deleteQueryParamAttributeData()"
+                        ></hf-buttons>
+                      </div>
+                    </div>
+                    </b-card-text>
+                    </b-tab>
+                    <b-tab
+              title="Body Params"              
+              active
+              v-if="!isGet"
+              >
+              <b-card-text>
+              <div class="selected-media-wrapper d-flex p-2 mb-4"  style="overflow-y: auto" v-if="bodyParameterAttributeArray.length > 0">
+                      <div v-for="(attr,fieldName) in bodyParameterAttributeArray" v-bind:key="attr.fieldName">
                         <div :class="
                             attrFlash == attr.fieldName
                             ? 'flash card rounded m-1 p-1 d-flex flex-row align-items-center'
                             : 'card rounded m-1 p-1 d-flex flex-row align-items-center pointer'"
-                            @click="handleClick(attr.fieldName)"
+                            @click="handleClickBodyParam(attr.fieldName)"
                             style="min-width:90px;"
                             :title="attr.fieldName"
                           >
@@ -165,7 +256,7 @@
                       <div class="col-sm-10">                        
                         <hf-buttons 
                           name="Add"                          
-                          @executeAction="addAttributesToBox()"
+                          @executeAction="addBodyParamAttributesToBox()"
                         ></hf-buttons>
                       </div>                                            
                     </div>
@@ -174,16 +265,20 @@
                         <hf-buttons 
                           name="Update"        
                           class="btn btn-primary"
-                          @executeAction="updateAttributeData()"
+                          @executeAction="updateBodyParamAttributeData()"
                         ></hf-buttons>
                         <hf-buttons 
                           name="Delete"        
                           customClass="btn btn-danger slight-left-margin"
-                          @executeAction="deleteAttribute()"
+                          @executeAction="deleteBodyParamAttributeData()"
                         ></hf-buttons>
                       </div>
-                    </div>                   
-                  </b-collapse>
+                    </div> 
+              </b-card-text>             
+              </b-tab>
+              </b-tabs>
+              </b-card>             
+            </b-collapse>
         </div>
       </div>
 
@@ -364,6 +459,7 @@ import {
   truncate,
   isFloat,
 } from "../../../../mixins/fieldValidationMixin";
+import {BTab, BTabs} from "bootstrap-vue"
 import Messages from "../../../../utils/messages/admin/en";
 import config from "../../../../config"
 import HfButtons from "../../../elements/HfButtons.vue"
@@ -384,7 +480,14 @@ window.JSHINT = JSHINT;
 window.jsonlint = jsonlint;
 export default {
   name: "CustomAPIEventActionConfig",
-  components: { codemirror,HfButtons, HfSelectDropDown},
+  components:
+  {
+  codemirror,
+  HfButtons,
+  HfSelectDropDown,
+  BTabs,
+  BTab,
+  },
   filters: {
     pretty: function (value) {
       return JSON.stringify(JSON.parse(value), null, 2);
@@ -447,6 +550,8 @@ export default {
       isPost:false,
       isBoolean:false,
       isNumber:false,
+      queryAttributeArray:[],
+      bodyAttributeArray:[],
       appName: config.appName,
       attributeFieldTypeOption:[
         { text: "Select Datatype", value: null },
@@ -494,10 +599,21 @@ export default {
         condition:null,
         conditionValue:null
       },
+      queryParameterAttributeArray:[],
+      querryAttrFlash:null,
+      queryParamAttributeData:{
+        fieldName:"",
+        fieldType:null,
+        fieldPlaceHolder:"",
+        parameter:"query"
+      },
+      queryParamToAppend:"",
+      bodyParameterAttributeArray:[],
       attributeData:{
         fieldName:"",
         fieldType:null,
-        fieldPlaceHolder:""
+        fieldPlaceHolder:"",
+        parameter:"body"
       },
       selected: {
         type:null,  
@@ -516,7 +632,10 @@ export default {
   async mounted() {
     this.$root.$on("callClearFromProject", () => {
       this.clearSelected();
-      this.clearAttributeData();
+      this.clearBodyParamAttributeData()
+        this.clearQuerryAttributeData()
+        this.queryParameterAttributeArray = []
+        this.bodyParameterAttributeArray = []
       this.counter = 0
     });
      EventBus.$on("sendProject", (project) => {
@@ -524,50 +643,151 @@ export default {
     });
   },
   methods: {
-    addAttributesToBox() {
-      let isValid = this.handleValidation()
+    handleQueryParamValidation() {
+      let isValid = true
+      if(isEmpty(this.queryParamAttributeData.fieldName)) {
+        isValid = false
+        return this.notifyErr('Enter Field Name')
+      } else if (isValidURL(this.queryParamAttributeData.fieldName)) {
+        isValid = false
+        return this.notifyErr('Enter Valid Field Name')
+      } else if (ifSpaceExists(this.queryParamAttributeData.fieldName)) {        
+        isValid = false
+        return this.notifyErr('Field name should not have space')
+      } 
+      else if(this.isPresentQueryParamAttribute()) {
+        isValid = false
+        return this.notifyErr('Attribute with duplicate Field Name are not allowed')
+      } 
+      else if(!this.queryParamAttributeData.fieldType) {
+        isValid = false
+        return this.notifyErr('Select Field Type')
+      }
+      return isValid
+    },
+    isPresentQueryParamAttribute(){
+      let status = false;
+       let temp = [ ...this.queryParameterAttributeArray]
+       const index = temp.findIndex((x)=> x.fieldName === this.querryAttrFlash)
+       if(temp.length!==0){
+        if(this.isAdd === false){
+         temp.splice(index,1)
+        }
+       const element = temp.find((value) => {
+            if(this.queryParamAttributeData.fieldName!==this.querryAttrFlash && value.fieldName === this.queryParamAttributeData.fieldName){
+              return value;
+            }
+       });       
+       if(element !== undefined){
+        status = true
+       }
+      }
+      return status
+    },
+    clearQuerryAttributeData() {
+      this.querryAttrFlash = null
+      this.queryParamAttributeData = {
+        fieldName:"",
+        fieldType:null,
+        fieldPlaceHolder:"",
+        parameter:"query"
+      }
+    },
+    addQuerryParamAttributesToBox() {
+      console.log(this.queryParamAttributeData)
+      let isValid = this.handleQueryParamValidation()
+      if(isValid) {
+      // let paramStirng = this.apiData.apiEndPoint
+      const trimFieldName = this.queryParamAttributeData.fieldName.trim()
+      this.queryParamAttributeData.fieldName = trimFieldName
+      this.queryParameterAttributeArray.push(this.queryParamAttributeData)
+      // let url = new URL(this.apiData.apiEndPoint);
+      // url.searchParams.set(this.queryParamAttributeData.fieldName, this.queryParamAttributeData.fieldName);
+      // this.apiData.apiEndPoint = url.href
+      this.clearQuerryAttributeData()
+      }
+    },
+    handleClickQueryParam(id) {
+      this.querryAttrFlash = id
+      const found = this.queryParameterAttributeArray.find((x)=>x.fieldName === id)
+      let updateData = found
+      // this.selectedAttrId = id
+      this.queryParamAttributeData = { ...updateData}      
+      this.isAdd = false
+    },
+    updateQueryParamAttributeData() {
+      let isValid = this.handleQueryParamValidation()
+      if(isValid) {
+      let obj = {
+        fieldName: this.queryParamAttributeData.fieldName.trim(),
+        fieldType: this.queryParamAttributeData.fieldType,
+        fieldPlaceHolder: this.queryParamAttributeData.fieldPlaceHolder,
+        parameter:this.queryParamAttributeData.parameter
+      }      
+      const indexToUpdate = this.queryParameterAttributeArray.findIndex((x)=>x.fieldName === this.querryAttrFlash)      
+      if(indexToUpdate > -1){      
+      this.queryParameterAttributeArray[indexToUpdate] = obj
+      this.clearQuerryAttributeData() 
+      this.isAdd = true
+      }
+      }
+    },
+    deleteQueryParamAttributeData() {
+      let id = this.querryAttrFlash
+      const attrIndex = this.queryParameterAttributeArray.findIndex((x)=> x.fieldName === id)
+      if(attrIndex > -1) {
+        this.queryParameterAttributeArray.splice(attrIndex,1)        
+      }
+      this.queryParameterAttributeArray.forEach(element => {
+        elem
+      });
+       this.clearQuerryAttributeData() 
+       this.isAdd = true
+    },
+    addBodyParamAttributesToBox() {
+      let isValid = this.handleBodyParamValidation()
       if(isValid) {    
       const trimFieldName = this.attributeData.fieldName.trim()
       this.attributeData.fieldName = trimFieldName
-      this.apiData.attributes.push(this.attributeData)
-      this.clearAttributeData()
+      this.bodyParameterAttributeArray.push(this.attributeData)
+      this.clearBodyParamAttributeData()
       }
     },
-    handleClick(id) {
+    handleClickBodyParam(id) {
       this.attrFlash = id
-      const found = this.apiData.attributes.find((x)=>x.fieldName === id)
+      const found = this.bodyParameterAttributeArray.find((x)=>x.fieldName === id)
       let updateData = found
       this.selectedAttrId = id
       this.attributeData = { ...updateData}      
       this.isAdd = false
     },
-    updateAttributeData() {
-      let isValid = this.handleValidation()
+    updateBodyParamAttributeData() {
+      let isValid = this.handleBodyParamValidation()
       if(isValid) {
       let obj = {
         fieldName: this.attributeData.fieldName.trim(),
         fieldType: this.attributeData.fieldType,
         fieldPlaceHolder: this.attributeData.fieldPlaceHolder,
       }      
-      const indexToUpdate = this.apiData.attributes.findIndex((x)=>x.fieldName === this.attrFlash)      
+      const indexToUpdate = this.bodyParameterAttributeArray.findIndex((x)=>x.fieldName === this.attrFlash)      
       if(indexToUpdate > -1){      
-      this.apiData.attributes[indexToUpdate] = obj
-      this.clearAttributeData()
+      this.bodyParameterAttributeArray[indexToUpdate] = obj
+      this.clearBodyParamAttributeData()
       this.isAdd = true
       }
       }
       
     },
-    deleteAttribute() {
+    deleteBodyParamAttributeData() {
       let id = this.selectedAttrId
-      const attrIndex = this.apiData.attributes.findIndex((x)=> x.fieldName === id)
+      const attrIndex = this.bodyParameterAttributeArray.findIndex((x)=> x.fieldName === id)
       if(attrIndex > -1) {
-        this.apiData.attributes.splice(attrIndex,1)
+        this.bodyParameterAttributeArray.splice(attrIndex,1)
       }
-       this.clearAttributeData()
+       this.clearBodyParamAttributeData()
        this.isAdd = true
     },
-    handleValidation() {
+    handleBodyParamValidation() {
       let isValid = true
       if(isEmpty(this.attributeData.fieldName)) {
         isValid = false
@@ -579,7 +799,7 @@ export default {
         isValid = false
         return this.notifyErr('Field name should not have space')
       } 
-      else if(this.isPresent()) {
+      else if(this.isPresentBodyParamAttribute()) {
         isValid = false
         return this.notifyErr('Attribute with duplicate Field Name are not allowed')
       } 
@@ -589,9 +809,9 @@ export default {
       }
       return isValid
     },
-    isPresent(){
+    isPresentBodyParamAttribute(){
       let status = false;
-       let temp = [ ...this.apiData.attributes]
+       let temp = [ ...this.bodyParameterAttributeArray]
        const index = temp.findIndex((x)=> x.fieldName === this.attrFlash)
        if(temp.length!==0){
         if(this.isAdd === false){
@@ -608,13 +828,14 @@ export default {
       }
       return status
     },
-    clearAttributeData() {
+    clearBodyParamAttributeData() {
       this.selectedAttrId = null
       this.attrFlash = null
       this.attributeData = {
         fieldName:"",        
         fieldPlaceHolder:"",
-        fieldType:null
+        fieldType:null,
+        parameter:"body"
       }
     },
     inputBooleanCondtion(e) {      
@@ -756,7 +977,7 @@ export default {
           } else if (this.apiData.apiMethod === null) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.SELECT_API_METHOD)
-          } else if(this.apiData.apiMethod !== null && !this.apiData.attributes.length) {
+          } else if(this.apiData.apiMethod !== null && !(this.queryParameterAttributeArray.length || this.bodyParameterAttributeArray.length)) {
             isvalid = false
             return this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.ATLEAST_ONE_ATTRIBUTE)
           } else if (this.apiData.returnType === null) {
@@ -805,6 +1026,7 @@ export default {
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {  
         this.counter +=1
+        this.apiData.attributes = [...this.queryParameterAttributeArray, ...this.bodyParameterAttributeArray] // merging two arrays here in single one        
         this.selected.value = JSON.stringify(this.apiData);     
         this.selected["id"] = this.counter
         this.eventActionList.push(this.selected);
@@ -820,6 +1042,10 @@ export default {
         EventBus.$emit("resetOption",this.apiData.conditionValue);
         }
         this.clearSelected();
+        this.clearBodyParamAttributeData()
+        this.clearQuerryAttributeData()
+        this.queryParameterAttributeArray = []
+        this.bodyParameterAttributeArray = []
       }
     },
     handleEventActionDelete() {
@@ -844,7 +1070,8 @@ export default {
       // Code to update an Action
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {
-        this.selected.value = JSON.stringify(this.apiData);
+        this.apiData.attributes = [...this.queryParameterAttributeArray, ...this.bodyParameterAttributeArray]
+        this.selected.value = JSON.stringify(this.apiData);        
         this.eventActionList[this.currentSelectedId] = this.selected;
         this.$emit("updateEventActions", {
           type: "UPDATE",
@@ -858,13 +1085,18 @@ export default {
         EventBus.$emit("resetOption",this.apiData.conditionValue);
         }        
         this.clearSelected();
+        this.clearBodyParamAttributeData()
+        this.clearQuerryAttributeData()
+        this.queryParameterAttributeArray = []
+        this.bodyParameterAttributeArray = []
         this.isCreate = true;
       }
     },
 
     handleEventActionClick(idx) {
       this.clearSelected()
-      this.clearAttributeData()
+      this.clearBodyParamAttributeData()
+      this.clearQuerryAttributeData()
       this.isCreate = false;
       // Code to update an Action
       this.flash = idx;
@@ -872,6 +1104,17 @@ export default {
       this.currentSelectedId = idx;
       this.selected = updateData;
       this.apiData = { ...JSON.parse(this.selected.value)}
+      // need to extract the attributes and segregate it into two arrays
+      // queryParameterAttributeArray and in bodyParameterAttributeArray based on parameter field
+      if(this.apiData.attributes.length) {
+        for(let index = 0;index<this.apiData.attributes.length;index++) {
+          if(this.apiData.attributes[index].parameter === 'query') {
+            this.queryParameterAttributeArray.push(this.apiData.attributes[index])
+          } else {
+            this.bodyParameterAttributeArray.push(this.apiData.attributes[index])
+          }
+        }
+      }      
       EventBus.$emit("setOption",this.apiData.apiMethod);
       EventBus.$emit("setOption",this.apiData.returnType);
       EventBus.$emit("setOption",this.apiData.condition);
