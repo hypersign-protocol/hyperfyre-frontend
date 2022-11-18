@@ -97,7 +97,7 @@ export default {
         _this.socketMessage = null;
       } else if (messageData.op == "end") {
         _this.connection.close();
-        const authorizationToken = messageData.data.hypersign.data.accessToken;
+        const authorizationToken = messageData.data.hypersign ? messageData.data.hypersign.data.accessToken : messageData.data.token;
 
         // console.log("Emitting authentoken event")
 

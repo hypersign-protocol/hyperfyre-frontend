@@ -1,5 +1,7 @@
 # Fyre
+
 [![Netlify Status](https://api.netlify.com/api/v1/badges/898e327b-b9aa-439b-98c2-57c89608e648/deploy-status)](https://app.netlify.com/sites/hyperfyre-stage/deploys)
+
 A platform to automate the IDO whitelisting process using Hypersign SSI infrastructure.
 
 https://app.fyre.hypersign.id

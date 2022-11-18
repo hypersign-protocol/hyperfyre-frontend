@@ -271,6 +271,12 @@ cursor:default !important
                     src="../../../../assets/cosmos-2.svg"
                     v-if="action.type.includes('BLOCKCHAIN_COSMOS')"
                     height="20px"
+                  />                
+                   <img
+                    style="padding-right: 5px"
+                    src="../../../../assets/filled-rest-api-50.png"
+                    v-if="action.type.includes('CUSTOM_API')"
+                    height="20px"
                   />
                 </span>
               </b-col>

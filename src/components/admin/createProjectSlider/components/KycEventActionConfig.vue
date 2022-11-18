@@ -82,6 +82,7 @@
             type="text"
             id="title"
             class="form-control w-100"
+            placeholder="Enter Action Title"
           />
         </div>
       </div>
