@@ -69,8 +69,8 @@
             placeholder="http://yourdomain.com/api/path"
           />
           <span class="inputInfo"
-            >Make sure to whitelist <span style="color:#3457D5;font-weight: bold;">https://app.fyre.hypersign.id</span>
-            URL on your server.</span
+            >Make sure to whitelist [<span style="color:#3457D5;font-weight: bold;">https://app.fyre.hypersign.id</span>]
+            URL on your server and your API endpoint is publicly accessible.</span
           >
         </div>
       </div>
@@ -80,7 +80,7 @@
       >
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="type" class="col-form-label"
-            >API Method<span style="color: red">*</span>:
+            >HTTP Method<span style="color: red">*</span>:
           </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
@@ -643,6 +643,23 @@ export default {
     });
   },
   methods: {
+    modifyAPIEnpoint(){
+      // truncate the '/'
+      if(this.apiData.apiEndPoint.endsWith('/')){
+        this.apiData.apiEndPoint = this.apiData.apiEndPoint.substring(0, this.apiData.apiEndPoint.length-1 )
+      }
+      const epURL = new URL(this.apiData.apiEndPoint)
+      epURL.search = "?";
+      this.queryParameterAttributeArray.forEach(element => {
+        epURL.search += `${element.fieldName}=\$\{${element.fieldName}\}&`
+      });
+
+      // truncate the '&'
+      this.apiData.apiEndPoint = epURL.toString();
+      if(this.apiData.apiEndPoint.endsWith('&')){
+        this.apiData.apiEndPoint = this.apiData.apiEndPoint.substring(0, this.apiData.apiEndPoint.length-1 )
+      }
+    },
     handleQueryParamValidation() {
       let isValid = true
       if(isEmpty(this.queryParamAttributeData.fieldName)) {
@@ -705,6 +722,7 @@ export default {
       // url.searchParams.set(this.queryParamAttributeData.fieldName, this.queryParamAttributeData.fieldName);
       // this.apiData.apiEndPoint = url.href
       this.clearQuerryAttributeData()
+      this.modifyAPIEnpoint()
       }
     },
     handleClickQueryParam(id) {
@@ -729,6 +747,7 @@ export default {
       this.queryParameterAttributeArray[indexToUpdate] = obj
       this.clearQuerryAttributeData() 
       this.isAdd = true
+      this.modifyAPIEnpoint()
       }
       }
     },
@@ -740,6 +759,7 @@ export default {
       }
        this.clearQuerryAttributeData() 
        this.isAdd = true
+       this.modifyAPIEnpoint()
     },
     addBodyParamAttributesToBox() {
       let isValid = this.handleBodyParamValidation()
@@ -1035,8 +1055,8 @@ export default {
         EventBus.$emit("resetOption",this.apiData.returnType);
         EventBus.$emit("resetOption",this.apiData.apiMethod);
         if(this.apiData.returnType === "BOOLEAN") {
-        this.isBoolean = true
-        EventBus.$emit("resetOption",this.apiData.conditionValue);
+          this.isBoolean = true
+          EventBus.$emit("resetOption",this.apiData.conditionValue);
         }
         this.clearSelected();
         this.clearBodyParamAttributeData()
