@@ -166,7 +166,7 @@
                     </div>
                     <div class="row g-3 align-items-center w-100 mt-4">
                         <div class="col-lg-3 col-md-3 text-left">                        
-                        <label for="type" class="col-form-label">Placeholder:</label>
+                        <label for="type" class="col-form-label">Label<span style="color: red">*</span>:</label>
                         </div>
                         <div class="col-lg-9 col-md-9 px-0">
                       <input v-model="queryParamAttributeData.fieldPlaceHolder" type="text" id="attributeName" class="form-control w-100"
@@ -245,7 +245,7 @@
                     </div>
                     <div class="row g-3 align-items-center w-100 mt-4">
                         <div class="col-lg-3 col-md-3 text-left">                        
-                        <label for="type" class="col-form-label">Placeholder:</label>
+                        <label for="type" class="col-form-label">Label<span style="color: red">*</span>:</label>
                         </div>
                         <div class="col-lg-9 col-md-9 px-0">
                       <input v-model="attributeData.fieldPlaceHolder" type="text" id="attributeName" class="form-control w-100"
@@ -679,6 +679,9 @@ export default {
       else if(!this.queryParamAttributeData.fieldType) {
         isValid = false
         return this.notifyErr('Select Field Type')
+      } else if(isEmpty(this.queryParamAttributeData.fieldPlaceHolder)) {
+        isValid = false
+        return this.notifyErr('Enter Label')
       }
       return isValid
     },
@@ -824,6 +827,9 @@ export default {
       else if(!this.attributeData.fieldType) {
         isValid = false
         return this.notifyErr('Select Field Type')
+      } else if(isEmpty(this.attributeData.fieldPlaceHolder)) {
+        isValid = false
+        return this.notifyErr('Enter Label')
       }
       return isValid
     },
