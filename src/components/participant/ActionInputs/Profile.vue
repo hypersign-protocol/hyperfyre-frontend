@@ -35,8 +35,8 @@
                 ><i class="far fa-copy"></i
               ></span>
             </div>
-            <small class="text" v-if="count > 0">Valid Upto {{count}} referrals</small>
-            <small class="text" v-else>Referral link expired</small>
+            <small class="countCss" v-if="count > 0">Valid Upto {{count}} referrals</small>
+            <small class="countCss" v-else>Referral link expired</small>
           </b-col>         
         </b-row>
       </b-card-body>
@@ -50,6 +50,14 @@
   font-size: large;
   cursor: pointer;
   color: grey;
+}
+.countCss{
+  font-weight: 520;
+    font-size: 11px;
+    line-height: 20px;
+    letter-spacing: 0.2px;
+    color: #252733;
+    opacity: 0.6;
 }
 </style>
 <script>
