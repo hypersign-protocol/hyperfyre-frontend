@@ -303,7 +303,7 @@
           @selected=" e =>inputCondtion(e)"
           ></hf-select-drop-down>    
         </div>
-        <div class="col-lg-3 col-md-2 px-0" v-show="isBoolean === true">
+        <div class="col-lg-3 col-md-2 px-0" v-show="onlyBooleanOption">
           <hf-select-drop-down
           :options="booleanCondition"
           @selected=" e =>inputBooleanCondtion(e)"
@@ -316,6 +316,15 @@
             id="title"
             class="form-control w-100"
             placeholder="Enter condition value"
+          />    
+        </div>
+        <div class="col-lg-3 col-md-2 px-0" v-show="booleanAndRegexConditionOption">
+          <input
+            v-model="apiData.conditionValue"
+            type="text"
+            id="title"
+            class="form-control w-100"
+            placeholder="Enter Regex"
           />    
         </div>
       </div>
@@ -518,6 +527,20 @@ export default {
       '--header-text-color':config.app.headerTextColor
       }
   },
+  booleanAndRegexConditionOption() {
+    if(this.isBoolean == true && this.isRegex == true) {
+      return true    
+    } else {
+      return false
+    }
+  },
+  onlyBooleanOption() {
+    if(this.isBoolean == true && this.isRegex == false) {
+      return true
+    } else {
+      return false
+    }
+  },
    codemirror() {
       return this.$refs.cmEditor.codemirror;
     },
@@ -550,6 +573,7 @@ export default {
       isPost:false,
       isBoolean:false,
       isNumber:false,
+      isRegex:false,
       queryAttributeArray:[],
       bodyAttributeArray:[],
       appName: config.appName,
@@ -580,6 +604,7 @@ export default {
       ],
       condtionOption:[
         { text: "Condition", value: null },
+        { text: "Regex", value: "REGEXP"},
         { text: "===", value: "===" },
         { text: "<", value: "<" },
         { text: ">", value: ">" },
@@ -858,7 +883,12 @@ export default {
     inputBooleanCondtion(e) {      
       this.apiData.conditionValue = e
     },
-    inputCondtion(e){
+    inputCondtion(e){      
+      if(e === "REGEXP"){
+        this.isRegex = true
+      } else {
+        this.isRegex = false
+      }
       this.apiData.condition = e
     },
     inputReturnType(e) {
@@ -868,6 +898,7 @@ export default {
           this.isBoolean = true          
           this.condtionOption =[
         { text: "Condition", value: null },
+        { text: "Regex", value: "REGEXP"},
         { text: "===", value: "===" },
         ]
         break;
@@ -878,6 +909,7 @@ export default {
           this.isNumber = true
           this.condtionOption=[
             { text: "Condition", value: null },
+            { text: "Regex", value: "REGEXP"},
             { text: "===", value: "===" },
             { text: "<", value: "<" },
             { text: ">", value: ">" },
@@ -891,6 +923,7 @@ export default {
           this.isNumber = false
           this.condtionOption=[
             { text: "Condition", value: null },
+            { text: "Regex", value: "REGEXP"},
             { text: "===", value: "===" },
           ]
         }
@@ -900,6 +933,7 @@ export default {
           this.isNumber = false
           this.condtionOption=[
             { text: "Condition", value: null },
+            { text: "Regex", value: "REGEXP"},
             { text: "===", value: "===" },            
           ]
         }
@@ -909,6 +943,7 @@ export default {
           this.isNumber = false
           this.condtionOption=[
             { text: "Condition", value: null },
+            { text: "Regex", value: "REGEXP"},
             { text: "===", value: "===" },
             { text: "<", value: "<" },
             { text: ">", value: ">" },
@@ -945,6 +980,7 @@ export default {
       // this.isPost = false,
       this.isBoolean = false,
       this.isNumber = false,
+      this.isRegex = false,
       this.apiData = {
         apiEndPoint: "",      
         header:"",
