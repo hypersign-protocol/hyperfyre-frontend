@@ -1114,6 +1114,8 @@ export default {
       this.clearSelected()
       this.clearBodyParamAttributeData()
       this.clearQuerryAttributeData()
+      this.queryParameterAttributeArray = []
+      this.bodyParameterAttributeArray = []
       this.isCreate = false;
       // Code to update an Action
       this.flash = idx;
