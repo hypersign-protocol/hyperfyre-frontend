@@ -31,11 +31,11 @@
             <div class="text text-left">
               {{ truncate1(referalLink,25) }}
               <span @click="copy" class="copy"
-                v-if="count > 0"
+                v-if="userReferralCount.count > 0"
                 ><i class="far fa-copy"></i
               ></span>
             </div>
-            <small class="countCss" v-if="count > 0">Valid Upto {{count}} referrals</small>
+            <small class="countCss" v-if="userReferralCount.count > 0">Valid Upto {{userReferralCount.count}} referrals</small>
             <small class="countCss" v-else>Referral link expired</small>
           </b-col>         
         </b-row>
@@ -71,8 +71,8 @@ export default {
       required: true,
       type: Object,
     },
-    count: {
-      type: Number,
+    userReferralCount: {
+      type: Object,
     }
   },
   data() {

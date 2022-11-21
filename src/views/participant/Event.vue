@@ -20,7 +20,7 @@
 
     <template>
       <Action v-if="eventData.projectStatus"
-        :count="count"
+        :userReferralCount="userReferralCount"
         :userProfile="Object.keys(userProfileData).length > 0 ? userProfileData : null"
         :ActionSchema="eventActionsToShow" :authToken="authToken" :prizeData="prizeData"
         @UserUpdateEvent="updateUserData" :themeData="eventData.orgData" />
@@ -73,7 +73,9 @@ export default {
       authToken: "",
       externalUserId:"",
       userEventData: null,
-      count:0,      
+      userReferralCount:{
+        count:0
+      },      
       userAuthData: null,
       eventActionsToShow: [],
       eventSlug: "",
@@ -327,8 +329,9 @@ export default {
         this.userEventData = {
           ...res.data[0]
         }        
-        if(this.eventData.referralUsageLimit && this.userEventData.referralCount >= 0) {          
-          this.count  = this.eventData.referralUsageLimit - this.userEventData.referralCount
+        if(this.eventData.referralUsageLimit && this.userEventData.referralCount >= 0) {
+          this.userReferralCount.count = 0;
+          this.userReferralCount.count  = this.eventData.referralUsageLimit - this.userEventData.referralCount
         }
 
         this.prizeData=this.eventData.actions.filter((x) => {

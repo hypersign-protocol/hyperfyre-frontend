@@ -2,7 +2,7 @@
   <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px"
     @click="checkIfUserHasLoggedIn()">
     <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
-    <Profile v-if="userProfile" :user="userProfile" :count="count" />
+    <Profile v-if="userProfile" :user="userProfile" :userReferralCount="userReferralCount" />
 
     <template v-for="(actionItem, index) in ActionSchema">
       <component v-if="actionItem.type==='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
@@ -87,8 +87,8 @@ export default {
       required: true,
       type: Object,
     },
-    count: {
-      type: Number,
+    userReferralCount: {
+      type: Object,
     },
     authToken: {
       required: true,
