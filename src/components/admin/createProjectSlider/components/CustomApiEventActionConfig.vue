@@ -785,6 +785,7 @@ export default {
         fieldName: this.attributeData.fieldName.trim(),
         fieldType: this.attributeData.fieldType,
         fieldPlaceHolder: this.attributeData.fieldPlaceHolder,
+        parameter:this.attributeData.parameter
       }      
       const indexToUpdate = this.bodyParameterAttributeArray.findIndex((x)=>x.fieldName === this.attrFlash)      
       if(indexToUpdate > -1){      
@@ -1081,6 +1082,10 @@ export default {
         EventBus.$emit("resetOption",this.apiData.conditionValue);
         } 
       this.clearSelected();
+      this.clearBodyParamAttributeData();
+      this.clearQuerryAttributeData();
+      this.queryParameterAttributeArray = []
+      this.bodyParameterAttributeArray = []
       this.isCreate = true;
     },
     handleEventActionUpdate() {
