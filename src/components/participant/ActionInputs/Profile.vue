@@ -34,7 +34,8 @@
                 ><i class="far fa-copy"></i
               ></span>
             </div>
-          </b-col>
+            <small class="countCss">Valid Upto {{userReferralCount.count}} referrals</small>
+          </b-col>         
         </b-row>
       </b-card-body>
     </b-collapse>
@@ -48,6 +49,14 @@
   cursor: pointer;
   color: grey;
 }
+.countCss{
+  font-weight: 520;
+    font-size: 11px;
+    line-height: 20px;
+    letter-spacing: 0.2px;
+    color: #252733;
+    opacity: 0.6;
+}
 </style>
 <script>
 import notificationMixin from "../../../mixins/notificationMixins";
@@ -60,6 +69,9 @@ export default {
       required: true,
       type: Object,
     },
+    userReferralCount: {
+      type: Object,
+    }
   },
   data() {
     return {

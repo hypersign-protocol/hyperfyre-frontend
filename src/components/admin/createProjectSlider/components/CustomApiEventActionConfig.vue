@@ -682,6 +682,9 @@ export default {
       } else if(isEmpty(this.queryParamAttributeData.fieldPlaceHolder)) {
         isValid = false
         return this.notifyErr('Enter Label')
+      } else if (isValidURL(this.queryParamAttributeData.fieldPlaceHolder)) {
+        isValid = false
+        return this.notifyErr('Enter Valid Label')
       }
       return isValid
     },
@@ -830,6 +833,9 @@ export default {
       } else if(isEmpty(this.attributeData.fieldPlaceHolder)) {
         isValid = false
         return this.notifyErr('Enter Label')
+      } else if (isValidURL(this.attributeData.fieldPlaceHolder)) {
+        isValid = false
+        return this.notifyErr('Enter Valid Label')
       }
       return isValid
     },
@@ -931,6 +937,7 @@ export default {
         this.selected.type = "CUSTOM_API_GET"
         this.showAttribute = true
         this.isGet = true
+        this.bodyParameterAttributeArray = []
         this.isPost = false
       } else if(e === "POST") {
         this.selected.type = "CUSTOM_API_POST"
