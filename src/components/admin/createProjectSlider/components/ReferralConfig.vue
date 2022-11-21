@@ -74,16 +74,16 @@
 
      <div class="row g-3 align-items-center w-100  mt-4">
       <div class="col-lg-5 col-md-5 text-left">
-        <tool-tips infoMessage="Usage limit is limit for user participant to share the Referral link"></tool-tips><label for="usageLimit" class="col-form-label"
+        <tool-tips infoMessage="Referral Usage Limit is limit for user participant to share the Referral link"></tool-tips><label for="referralUsageLimit" class="col-form-label"
           >Usage Limit<span style="color: red">*</span>:
         </label>
       </div>
       <div class=" col-lg-7 col-md-7 px-0">
         <input
-          v-model="project.usageLimit"
+          v-model="project.referralUsageLimit"
           type="number"
           placeholder=""
-          id="usageLimit"
+          id="referralUsageLimit"
           class="form-control w-100"
         />
       </div>
