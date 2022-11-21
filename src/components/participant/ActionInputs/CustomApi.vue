@@ -164,26 +164,26 @@ computed:{
         switch (attribute.fieldType) {
           case "STRING":            
             if(attribute.fieldValue === null || attribute.fieldValue === "") {                                         
-              throw new Error(`Please fill ${attribute.fieldName} field`)              
+              throw new Error(`Please fill ${attribute.fieldPlaceHolder} field`)              
             }
             break;
           case "NUMBER":
             if(attribute.fieldValue === null || attribute.fieldValue === "") {
-              throw new Error(`Please fill ${attribute.fieldName} field`)
+              throw new Error(`Please fill ${attribute.fieldPlaceHolder} field`)
             } else if(!Number.isInteger(parseFloat((attribute.fieldValue)))) {                  
               throw new Error('Enter Integer value')
             }
             break;
           case "FLOAT":
             if(attribute.fieldValue === null || attribute.fieldValue === "") {
-              throw new Error(`Please fill ${attribute.fieldName} field`)
+              throw new Error(`Please fill ${attribute.fieldPlaceHolder} field`)
             } else if(!isFloat(attribute.fieldValue)) {                  
               throw new Error('Enter Float value')
             }
             break;
           case "BOOLEAN":            
             if(attribute.fieldValue === null) {
-              throw new Error(`Please fill ${attribute.fieldName} field`)
+              throw new Error(`Please fill ${attribute.fieldPlaceHolder} field`)
             }
             break;
           default:

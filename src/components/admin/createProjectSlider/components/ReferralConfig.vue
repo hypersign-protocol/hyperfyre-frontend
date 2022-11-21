@@ -72,6 +72,23 @@
       </div>
     </div>
 
+     <div class="row g-3 align-items-center w-100  mt-4">
+      <div class="col-lg-5 col-md-5 text-left">
+        <tool-tips infoMessage="Usage limit is limit for user participant to share the Referral link"></tool-tips><label for="usageLimit" class="col-form-label"
+          >Usage Limit<span style="color: red">*</span>:
+        </label>
+      </div>
+      <div class=" col-lg-7 col-md-7 px-0">
+        <input
+          v-model="project.usageLimit"
+          type="number"
+          placeholder=""
+          id="usageLimit"
+          class="form-control w-100"
+        />
+      </div>
+    </div>
+
     <div class="row g-3 align-items-center w-100  mt-4">
       <div class="col-lg-5 col-md-5 text-left">
         <tool-tips infoMessage="% of tasks a user must do in order to receieve referral points."></tool-tips><label for="referralPoint" class="col-form-label"
