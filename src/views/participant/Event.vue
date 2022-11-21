@@ -327,7 +327,7 @@ export default {
         this.userEventData = {
           ...res.data[0]
         }        
-        if(this.eventData.referralUsageLimit && this.userEventData.referralCount) {          
+        if(this.eventData.referralUsageLimit && this.userEventData.referralCount >= 0) {          
           this.count  = this.eventData.referralUsageLimit - this.userEventData.referralCount
         }
 
