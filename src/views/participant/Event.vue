@@ -74,7 +74,8 @@ export default {
       externalUserId:"",
       userEventData: null,
       userReferralCount:{
-        count:0
+        count:0,
+        usageCount:0
       },      
       userAuthData: null,
       eventActionsToShow: [],
@@ -223,7 +224,7 @@ export default {
         this.eventData = {
           ...resp.data
                 }
-        
+        this.userReferralCount.usageCount = this.eventData.referralUsageLimit
         // If it is old event then just recreating this variable using default values from config
         if (!this.eventData['orgData']){
           this.eventData['orgData'] = {}
