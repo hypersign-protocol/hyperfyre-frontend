@@ -37,6 +37,10 @@
   background: #fcedc8; /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
+.usageDiv {
+  height: calc(1.5em + 0.75rem + 2px);
+padding: 0.375rem 0.75rem;
+}
 </style>
 
 <template>
@@ -72,29 +76,6 @@
       </div>
     </div>
 
-    <div
-        class="row g-3 align-items-center w-100  mt-4"
-      >
-        <div class="text-right col-lg-3 col-md-3">
-          <tool-tips infoMessage="Number of participants can use a referral link"></tool-tips>
-          <label for="referralUsageLimit" class="col-form-label"
-          >Referral Usage Limit:</label>
-      </div>                    
-              
-        <div class="col-lg-2 col-md-2 ml-5 text-right">          
-          <b-form-checkbox v-model="project.isReferralLimitEnabled" name="check-button" switch></b-form-checkbox>
-          </div>  
-          <div class="col-lg-2 col-md-2 px-0">
-          <input
-          v-if="project.isReferralLimitEnabled === true"
-          v-model="project.referralUsageLimit"
-          type="number"
-          placeholder=""
-          id="referralUsageLimit"
-          class="form-control w-100"
-        />
-      </div>
-    </div>
 
     <div class="row g-3 align-items-center w-100  mt-4">
       <div class="col-lg-5 col-md-5 text-left">
@@ -116,6 +97,28 @@
         <small class="col-sm-2" style="color:grey">{{ project.referralDifficulty }} %</small>
         </div>
         
+      </div>
+    </div>
+    <div
+        class="row g-3 align-items-center w-100  mt-4"
+      >
+        <div class="text-left col-lg-3 col-md-3 usageDiv">
+          <tool-tips infoMessage="Number of participants can use a referral link"></tool-tips>
+          <label for="referralUsageLimit"
+          >Referral Usage Limit:</label>
+      </div>                    
+              
+        <div class="col-lg-2 col-md-2 ml-5 text-right">          
+          <b-form-checkbox v-model="project.isReferralLimitEnabled" name="check-button" switch></b-form-checkbox>
+          </div>  
+          <div class="col-lg-2 col-md-2 px-0">
+          <input
+          v-if="project.isReferralLimitEnabled === true"
+          v-model="project.referralUsageLimit"
+          type="number"          
+          id="referralUsageLimit"
+          class="form-control w-100"
+        />
       </div>
     </div>
   </div>
