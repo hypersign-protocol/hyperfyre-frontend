@@ -31,6 +31,7 @@
             <div class="text text-left">
               {{ truncate1(referalLink,25) }}
               <span @click="copy" class="copy"
+              v-if="userReferralCount.count !==0"
                 ><i class="far fa-copy"></i
               ></span>
             </div>
