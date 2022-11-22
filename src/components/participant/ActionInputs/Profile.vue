@@ -31,10 +31,14 @@
             <div class="text text-left">
               {{ truncate1(referalLink,25) }}
               <span @click="copy" class="copy"
+              v-if="userReferralCount.count !==0"
                 ><i class="far fa-copy"></i
               ></span>
             </div>
-          </b-col>
+            <small class="countCss" v-if="userReferralCount.count == null">Valid Upto {{userReferralCount.usageCount}} referrals</small>
+            <small class="countCss" v-else-if="userReferralCount.count >0 ">Valid Upto {{userReferralCount.count}} referrals</small>
+            <small class="countCss" v-else>Referral link expired</small>
+          </b-col>         
         </b-row>
       </b-card-body>
     </b-collapse>
@@ -48,6 +52,14 @@
   cursor: pointer;
   color: grey;
 }
+.countCss{
+  font-weight: 520;
+    font-size: 11px;
+    line-height: 20px;
+    letter-spacing: 0.2px;
+    color: #252733;
+    opacity: 0.6;
+}
 </style>
 <script>
 import notificationMixin from "../../../mixins/notificationMixins";
@@ -60,6 +72,9 @@ export default {
       required: true,
       type: Object,
     },
+    userReferralCount: {
+      type: Object,
+    }
   },
   data() {
     return {

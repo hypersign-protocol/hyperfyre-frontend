@@ -484,6 +484,7 @@ export default {
         tags: [],
         slug: "",
         referralDifficulty:30,
+        referralUsageLimit:10
       },
       DeleteId:"",
       projectToDelete:"",
@@ -1243,7 +1244,16 @@ export default {
         ) {
           throw new Error(Messages.EVENTS.REF_POINT.NOT_POS_INP);
         }
-
+        if (
+          isNaN(parseInt(this.project.referralUsageLimit))
+        ) {
+          throw new Error('Enter valid usage limit')
+        }
+        if (
+          parseInt(this.project.referralUsageLimit) < 0
+        ) {
+          throw new Error('Enter Usage Limit should be positive number')
+        }
         //this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
@@ -1272,6 +1282,7 @@ export default {
         this.project.tags = this.tagsTemp;
         this.project.refereePoint = this.project.refereePoint.toString();
         this.project.referralPoint = this.project.referralPoint.toString();
+        this.project.referralUsageLimit = this.project.referralUsageLimit.toString();
         const resp = await apiClientMixin.makeCall({
           url,
           body: this.project,
@@ -1435,6 +1446,7 @@ export default {
         referralPoint: 5,
         tags: [],
         referralDifficulty:30,
+        referralUsageLimit:10,
       }),
       this.DeleteId="",
       this.projectToDelete="";

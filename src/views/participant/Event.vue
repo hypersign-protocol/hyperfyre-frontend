@@ -20,6 +20,7 @@
 
     <template>
       <Action v-if="eventData.projectStatus"
+        :userReferralCount="userReferralCount"
         :userProfile="Object.keys(userProfileData).length > 0 ? userProfileData : null"
         :ActionSchema="eventActionsToShow" :authToken="authToken" :prizeData="prizeData"
         @UserUpdateEvent="updateUserData" :themeData="eventData.orgData" />
@@ -72,6 +73,10 @@ export default {
       authToken: "",
       externalUserId:"",
       userEventData: null,
+      userReferralCount:{
+        count:0,
+        usageCount:0
+      },      
       userAuthData: null,
       eventActionsToShow: [],
       eventSlug: "",
@@ -219,7 +224,7 @@ export default {
         this.eventData = {
           ...resp.data
                 }
-        
+        this.userReferralCount.usageCount = this.eventData.referralUsageLimit
         // If it is old event then just recreating this variable using default values from config
         if (!this.eventData['orgData']){
           this.eventData['orgData'] = {}
@@ -324,6 +329,14 @@ export default {
 
         this.userEventData = {
           ...res.data[0]
+        }        
+        if(this.eventData.referralUsageLimit) {
+          if (this.userEventData.referralCount == undefined) {
+            this.userReferralCount.count = null;
+          } else if (this.userEventData.referralCount >= 0) {
+             this.userReferralCount.count = 0;
+            this.userReferralCount.count = this.eventData.referralUsageLimit - this.userEventData.referralCount
+          }
         }
 
         this.prizeData=this.eventData.actions.filter((x) => {

@@ -69,8 +69,8 @@
             placeholder="http://yourdomain.com/api/path"
           />
           <span class="inputInfo"
-            >Make sure to whitelist <span style="color:#3457D5;font-weight: bold;">https://app.fyre.hypersign.id</span>
-            URL on your server.</span
+            >Make sure to whitelist [<span style="color:#3457D5;font-weight: bold;">https://app.fyre.hypersign.id</span>]
+            URL on your server and your API endpoint is publicly accessible.</span
           >
         </div>
       </div>
@@ -80,7 +80,7 @@
       >
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="type" class="col-form-label"
-            >API Method<span style="color: red">*</span>:
+            >HTTP Method<span style="color: red">*</span>:
           </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
@@ -166,7 +166,7 @@
                     </div>
                     <div class="row g-3 align-items-center w-100 mt-4">
                         <div class="col-lg-3 col-md-3 text-left">                        
-                        <label for="type" class="col-form-label">Placeholder:</label>
+                        <label for="type" class="col-form-label">Label<span style="color: red">*</span>:</label>
                         </div>
                         <div class="col-lg-9 col-md-9 px-0">
                       <input v-model="queryParamAttributeData.fieldPlaceHolder" type="text" id="attributeName" class="form-control w-100"
@@ -245,7 +245,7 @@
                     </div>
                     <div class="row g-3 align-items-center w-100 mt-4">
                         <div class="col-lg-3 col-md-3 text-left">                        
-                        <label for="type" class="col-form-label">Placeholder:</label>
+                        <label for="type" class="col-form-label">Label<span style="color: red">*</span>:</label>
                         </div>
                         <div class="col-lg-9 col-md-9 px-0">
                       <input v-model="attributeData.fieldPlaceHolder" type="text" id="attributeName" class="form-control w-100"
@@ -643,6 +643,25 @@ export default {
     });
   },
   methods: {
+    modifyAPIEnpoint(){
+      // truncate the '/'
+      if(this.apiData.apiEndPoint.endsWith('/')){
+        this.apiData.apiEndPoint = this.apiData.apiEndPoint.trim()
+        this.apiData.apiEndPoint = this.apiData.apiEndPoint.substring(0, this.apiData.apiEndPoint.length-1 )
+      }
+      const epURL = new URL(this.apiData.apiEndPoint)
+      epURL.search = "?";
+      this.queryParameterAttributeArray.forEach(element => {
+        epURL.search += `${element.fieldName}=\$\{${element.fieldName}\}&`
+      });
+
+      // truncate the '&'
+      this.apiData.apiEndPoint = epURL.toString();
+      if(this.apiData.apiEndPoint.endsWith('&')){
+        this.apiData.apiEndPoint = this.apiData.apiEndPoint.trim()
+        this.apiData.apiEndPoint = this.apiData.apiEndPoint.substring(0, this.apiData.apiEndPoint.length-1 )         
+      }
+    },
     handleQueryParamValidation() {
       let isValid = true
       if(isEmpty(this.queryParamAttributeData.fieldName)) {
@@ -662,6 +681,12 @@ export default {
       else if(!this.queryParamAttributeData.fieldType) {
         isValid = false
         return this.notifyErr('Select Field Type')
+      } else if(isEmpty(this.queryParamAttributeData.fieldPlaceHolder)) {
+        isValid = false
+        return this.notifyErr('Enter Label')
+      } else if (isValidURL(this.queryParamAttributeData.fieldPlaceHolder)) {
+        isValid = false
+        return this.notifyErr('Enter Valid Label')
       }
       return isValid
     },
@@ -705,6 +730,7 @@ export default {
       // url.searchParams.set(this.queryParamAttributeData.fieldName, this.queryParamAttributeData.fieldName);
       // this.apiData.apiEndPoint = url.href
       this.clearQuerryAttributeData()
+      this.modifyAPIEnpoint()
       }
     },
     handleClickQueryParam(id) {
@@ -729,6 +755,7 @@ export default {
       this.queryParameterAttributeArray[indexToUpdate] = obj
       this.clearQuerryAttributeData() 
       this.isAdd = true
+      this.modifyAPIEnpoint()
       }
       }
     },
@@ -740,6 +767,7 @@ export default {
       }
        this.clearQuerryAttributeData() 
        this.isAdd = true
+       this.modifyAPIEnpoint()
     },
     addBodyParamAttributesToBox() {
       let isValid = this.handleBodyParamValidation()
@@ -765,6 +793,7 @@ export default {
         fieldName: this.attributeData.fieldName.trim(),
         fieldType: this.attributeData.fieldType,
         fieldPlaceHolder: this.attributeData.fieldPlaceHolder,
+        parameter:this.attributeData.parameter
       }      
       const indexToUpdate = this.bodyParameterAttributeArray.findIndex((x)=>x.fieldName === this.attrFlash)      
       if(indexToUpdate > -1){      
@@ -803,6 +832,12 @@ export default {
       else if(!this.attributeData.fieldType) {
         isValid = false
         return this.notifyErr('Select Field Type')
+      } else if(isEmpty(this.attributeData.fieldPlaceHolder)) {
+        isValid = false
+        return this.notifyErr('Enter Label')
+      } else if (isValidURL(this.attributeData.fieldPlaceHolder)) {
+        isValid = false
+        return this.notifyErr('Enter Valid Label')
       }
       return isValid
     },
@@ -904,6 +939,7 @@ export default {
         this.selected.type = "CUSTOM_API_GET"
         this.showAttribute = true
         this.isGet = true
+        this.bodyParameterAttributeArray = []
         this.isPost = false
       } else if(e === "POST") {
         this.selected.type = "CUSTOM_API_POST"
@@ -1023,7 +1059,8 @@ export default {
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {  
         this.counter +=1
-        this.apiData.attributes = [...this.queryParameterAttributeArray, ...this.bodyParameterAttributeArray] // merging two arrays here in single one        
+        this.apiData.attributes = [...this.queryParameterAttributeArray, ...this.bodyParameterAttributeArray] // merging two arrays here in single one     
+        this.apiData.apiEndPoint = this.apiData.apiEndPoint.trim()   
         this.selected.value = JSON.stringify(this.apiData);     
         this.selected["id"] = this.counter
         this.eventActionList.push(this.selected);
@@ -1035,8 +1072,8 @@ export default {
         EventBus.$emit("resetOption",this.apiData.returnType);
         EventBus.$emit("resetOption",this.apiData.apiMethod);
         if(this.apiData.returnType === "BOOLEAN") {
-        this.isBoolean = true
-        EventBus.$emit("resetOption",this.apiData.conditionValue);
+          this.isBoolean = true
+          EventBus.$emit("resetOption",this.apiData.conditionValue);
         }
         this.clearSelected();
         this.clearBodyParamAttributeData()
@@ -1061,6 +1098,10 @@ export default {
         EventBus.$emit("resetOption",this.apiData.conditionValue);
         } 
       this.clearSelected();
+      this.clearBodyParamAttributeData();
+      this.clearQuerryAttributeData();
+      this.queryParameterAttributeArray = []
+      this.bodyParameterAttributeArray = []
       this.isCreate = true;
     },
     handleEventActionUpdate() {
@@ -1068,6 +1109,7 @@ export default {
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {
         this.apiData.attributes = [...this.queryParameterAttributeArray, ...this.bodyParameterAttributeArray]
+        this.apiData.apiEndPoint = this.apiData.apiEndPoint.trim()
         this.selected.value = JSON.stringify(this.apiData);        
         this.eventActionList[this.currentSelectedId] = this.selected;
         this.$emit("updateEventActions", {
@@ -1094,6 +1136,8 @@ export default {
       this.clearSelected()
       this.clearBodyParamAttributeData()
       this.clearQuerryAttributeData()
+      this.queryParameterAttributeArray = []
+      this.bodyParameterAttributeArray = []
       this.isCreate = false;
       // Code to update an Action
       this.flash = idx;

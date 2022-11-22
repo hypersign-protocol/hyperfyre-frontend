@@ -27,13 +27,13 @@
             <div class="row g-3 align-items-center" v-for="(param, index) in values" v-bind:key="index">
               <div class="col-lg-12 col-md-12">
                 <div class="mt-3" v-if="param.fieldType !=='BOOLEAN'">                  
+                   <span class="spanClass">{{param.fieldPlaceHolder}}</span>
                   <b-form-input                            
                   id="title"
                   v-model="param.fieldValue"
                   :required="true"
-                  class="form-control w-100"
-                  :disabled="done"
-                  :placeholder="param.fieldPlaceHolder ? `${param.fieldPlaceHolder}` :`${param.fieldName}`"
+                  class="form-control w-100 mt-1"
+                  :disabled="done"                  
                   ></b-form-input>
                 </div>
                 <div class="mt-3" v-if="param.fieldType ==='BOOLEAN'">
@@ -64,6 +64,9 @@
 <style scoped>
 .center{
   display: block; margin-left: auto;margin-right: auto
+}
+.spanClass{  
+  color:rgb(26 26 26 / 90%);
 }
 </style>
 
@@ -161,26 +164,26 @@ computed:{
         switch (attribute.fieldType) {
           case "STRING":            
             if(attribute.fieldValue === null || attribute.fieldValue === "") {                                         
-              throw new Error(`Please fill ${attribute.fieldName} field`)              
+              throw new Error(`Please fill ${attribute.fieldPlaceHolder} field`)              
             }
             break;
           case "NUMBER":
             if(attribute.fieldValue === null || attribute.fieldValue === "") {
-              throw new Error(`Please fill ${attribute.fieldName} field`)
+              throw new Error(`Please fill ${attribute.fieldPlaceHolder} field`)
             } else if(!Number.isInteger(parseFloat((attribute.fieldValue)))) {                  
               throw new Error('Enter Integer value')
             }
             break;
           case "FLOAT":
             if(attribute.fieldValue === null || attribute.fieldValue === "") {
-              throw new Error(`Please fill ${attribute.fieldName} field`)
+              throw new Error(`Please fill ${attribute.fieldPlaceHolder} field`)
             } else if(!isFloat(attribute.fieldValue)) {                  
               throw new Error('Enter Float value')
             }
             break;
           case "BOOLEAN":            
             if(attribute.fieldValue === null) {
-              throw new Error(`Please fill ${attribute.fieldName} field`)
+              throw new Error(`Please fill ${attribute.fieldPlaceHolder} field`)
             }
             break;
           default:
