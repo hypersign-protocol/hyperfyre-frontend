@@ -646,6 +646,7 @@ export default {
     modifyAPIEnpoint(){
       // truncate the '/'
       if(this.apiData.apiEndPoint.endsWith('/')){
+        this.apiData.apiEndPoint = this.apiData.apiEndPoint.trim()
         this.apiData.apiEndPoint = this.apiData.apiEndPoint.substring(0, this.apiData.apiEndPoint.length-1 )
       }
       const epURL = new URL(this.apiData.apiEndPoint)
@@ -657,7 +658,8 @@ export default {
       // truncate the '&'
       this.apiData.apiEndPoint = epURL.toString();
       if(this.apiData.apiEndPoint.endsWith('&')){
-        this.apiData.apiEndPoint = this.apiData.apiEndPoint.substring(0, this.apiData.apiEndPoint.length-1 )
+        this.apiData.apiEndPoint = this.apiData.apiEndPoint.trim()
+        this.apiData.apiEndPoint = this.apiData.apiEndPoint.substring(0, this.apiData.apiEndPoint.length-1 )         
       }
     },
     handleQueryParamValidation() {
@@ -1057,7 +1059,8 @@ export default {
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {  
         this.counter +=1
-        this.apiData.attributes = [...this.queryParameterAttributeArray, ...this.bodyParameterAttributeArray] // merging two arrays here in single one        
+        this.apiData.attributes = [...this.queryParameterAttributeArray, ...this.bodyParameterAttributeArray] // merging two arrays here in single one     
+        this.apiData.apiEndPoint = this.apiData.apiEndPoint.trim()   
         this.selected.value = JSON.stringify(this.apiData);     
         this.selected["id"] = this.counter
         this.eventActionList.push(this.selected);
@@ -1106,6 +1109,7 @@ export default {
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {
         this.apiData.attributes = [...this.queryParameterAttributeArray, ...this.bodyParameterAttributeArray]
+        this.apiData.apiEndPoint = this.apiData.apiEndPoint.trim()
         this.selected.value = JSON.stringify(this.apiData);        
         this.eventActionList[this.currentSelectedId] = this.selected;
         this.$emit("updateEventActions", {
