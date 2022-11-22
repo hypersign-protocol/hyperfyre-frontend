@@ -31,7 +31,7 @@
             <div class="text text-left">
               {{ truncate1(referalLink,25) }}
               <span @click="copy" class="copy"
-              v-if="userReferralCount.count !==0"
+              v-if="showCopyIcon"
                 ><i class="far fa-copy"></i
               ></span>
             </div>
@@ -84,6 +84,16 @@ export default {
     },
     userReferralCount: {
       type: Object,
+    }
+  },
+  computed: {
+    showCopyIcon() {
+      if((this.userReferralCount.count !==0 || this.userReferralCount.usageCount === undefined)
+      ||( this.userReferralCount.isReferralLimitEnabled === false)) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   data() {

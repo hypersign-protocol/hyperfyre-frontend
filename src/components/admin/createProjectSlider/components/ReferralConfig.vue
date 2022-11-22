@@ -41,6 +41,9 @@
   height: calc(1.5em + 0.75rem + 2px);
 padding: 0.375rem 0.75rem;
 }
+.alignDiv{
+  display: inline-flex;
+}
 </style>
 
 <template>
@@ -65,7 +68,7 @@ padding: 0.375rem 0.75rem;
           >Referral Points<span style="color: red">*</span>:
         </label>
       </div>
-      <div class=" col-lg-7 col-md-7 px-0">
+      <div class="col-lg-7 col-md-7 px-0">
         <input
           v-model="project.referralPoint"
           type="number"
@@ -99,26 +102,25 @@ padding: 0.375rem 0.75rem;
         
       </div>
     </div>
-    <div
-        class="row g-3 align-items-center w-100  mt-4"
-      >
-        <div class="text-left col-lg-3 col-md-3 usageDiv">
-          <tool-tips infoMessage="Number of participants can use a referral link"></tool-tips>
-          <label for="referralUsageLimit"
+    <div class="row g-3 align-items-center w-100 mt-4">
+      <div class="text-left col-lg-5 col-md-5 text-left usageDiv">
+        <tool-tips infoMessage="Number of participants can use a referral link"></tool-tips>
+        <label for="referralUsageLimit"
           >Referral Limit:</label>
-      </div>                    
-              
-        <div class="col-lg-2 col-md-2 ml-5 text-right">          
-          <b-form-checkbox v-model="project.isReferralLimitEnabled" name="check-button" switch></b-form-checkbox>
-          </div>  
-          <div class="col-lg-2 col-md-2 px-0">
-          <input
-          v-if="project.isReferralLimitEnabled === true"
+      </div>
+      <div class="col-lg-6 col-md-6 w-100 px-0 align-items-center alignDiv">
+      <div class="col-lg-2 col-md-2 px-0">
+        <b-form-checkbox v-model="project.isReferralLimitEnabled" name="check-button" switch></b-form-checkbox>        
+      </div>
+      <div class="col-lg-12 col-md-6 pr-1 text-right px-0"
+      v-if="project.isReferralLimitEnabled === true">        
+        <input
           v-model="project.referralUsageLimit"
-          type="number"          
+          type="number"
           id="referralUsageLimit"
           class="form-control w-100"
         />
+      </div>
       </div>
     </div>
   </div>

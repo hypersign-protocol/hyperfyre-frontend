@@ -1050,13 +1050,16 @@ export default {
       let index = this.eventActionList
         .map((action) => action.title)
         .indexOf("Hypersign Authentication");
-      this.eventActionList.splice(index, 1);
-      index = this.eventActionList
+        if(index >-1 ) {
+          this.eventActionList.splice(index, 1);
+        }              
+     let indexToFindNotification = this.eventActionList
         .map((action) => action.title)
         .indexOf("Subscribe  Notification");
-      this.eventActionList.splice(index, 1);
-      this.tagsTemp = project.tags;
-
+        if(indexToFindNotification > -1) {
+          this.eventActionList.splice(indexToFindNotification, 1);
+        }
+      this.tagsTemp = project.tags;      
       await this.saveProject();
     },
     async handlePaginateByProjectName(namePaginate) {
