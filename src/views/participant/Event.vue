@@ -330,9 +330,13 @@ export default {
         this.userEventData = {
           ...res.data[0]
         }        
-        if(this.eventData.referralUsageLimit && this.userEventData.referralCount >= 0) {
-          this.userReferralCount.count = 0;
-          this.userReferralCount.count  = this.eventData.referralUsageLimit - this.userEventData.referralCount
+        if(this.eventData.referralUsageLimit) {
+          if (this.userEventData.referralCount == undefined) {
+            this.userReferralCount.count = null;
+          } else if (this.userEventData.referralCount >= 0) {
+             this.userReferralCount.count = 0;
+            this.userReferralCount.count = this.eventData.referralUsageLimit - this.userEventData.referralCount
+          }
         }
 
         this.prizeData=this.eventData.actions.filter((x) => {
