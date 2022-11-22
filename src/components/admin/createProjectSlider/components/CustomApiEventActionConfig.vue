@@ -179,7 +179,7 @@
                             placeholder="Field label for user input">
                       </div>
                     </div>
-                    <div class="form-group row mt-4" v-if="isAdd">
+                    <div class="form-group row mt-4" v-if="isAddForQuerry">
                       <div class="col-sm-10">                        
                         <hf-buttons 
                           name="Add"                          
@@ -556,7 +556,8 @@ export default {
       attrFlash:null,
       selectedId:null,
       showAttribute:false,
-      isAdd:true,      
+      isAdd: true,
+      isAddForQuerry:true,      
       visible:false,
       counter:0,
       isGet:false,
@@ -708,7 +709,7 @@ export default {
        let temp = [ ...this.queryParameterAttributeArray]
        const index = temp.findIndex((x)=> x.fieldName === this.querryAttrFlash)
        if(temp.length!==0){
-        if(this.isAdd === false){
+        if(this.isAddForQuerry === false){
          temp.splice(index,1)
         }
        const element = temp.find((value) => {
@@ -752,7 +753,7 @@ export default {
       let updateData = found
       // this.selectedAttrId = id
       this.queryParamAttributeData = { ...updateData}      
-      this.isAdd = false
+      this.isAddForQuerry = false
     },
     updateQueryParamAttributeData() {
       let isValid = this.handleQueryParamValidation()
@@ -767,7 +768,7 @@ export default {
       if(indexToUpdate > -1){      
       this.queryParameterAttributeArray[indexToUpdate] = obj
       this.clearQuerryAttributeData() 
-      this.isAdd = true
+      this.isAddForQuerry = true
       this.modifyAPIEnpoint()
       }
       }
@@ -779,7 +780,7 @@ export default {
         this.queryParameterAttributeArray.splice(attrIndex,1)        
       }
        this.clearQuerryAttributeData() 
-       this.isAdd = true
+       this.isAddForQuerry = true
        this.modifyAPIEnpoint()
     },
     addBodyParamAttributesToBox() {
@@ -970,6 +971,7 @@ export default {
     clearSelected() {
       this.visible = false
       this.isAdd = true
+      this.isAddForQuerry = true
       // this.isGet = false,
       // this.isPost = false,
       this.isBoolean = false,
