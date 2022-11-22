@@ -918,6 +918,10 @@ export default {
       // return new Date(d).toLocaleString();
     },
     editProject(project) {
+      if(!project.isReferralLimitEnabled && !project.referralUsageLimit) {            // making this for old events since "project.isReferralLimitEnabled" & "project.referralUsageLimit" are not there
+        project['isReferralLimitEnabled'] = false
+        project['referralUsageLimit'] = 10
+      }   
       eventBus.$emit("resetForFresh")
       this.resetAllValues();
       this.isProjectEditing = true;
@@ -980,6 +984,10 @@ export default {
     },
 
     async cloneProject(project) {
+      if(!project.isReferralLimitEnabled && !project.referralUsageLimit) {            // making this for old events 
+        project['isReferralLimitEnabled'] = false
+        project['referralUsageLimit'] = 10
+      }      
       this.resetAllValues();
       this.isProjectEditing = false;
       this.isProjectClonning = true;
