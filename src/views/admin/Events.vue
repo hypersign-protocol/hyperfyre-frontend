@@ -446,6 +446,7 @@ import {
   checkTitle,
   checkValue,
   isValidSlug,
+  isFloat
 } from "../../mixins/fieldValidationMixin.js";
 import CreateProjectSlide from "../../components/admin/createProjectSlider/CreateProjectSlide.vue";
 import dayjs from "dayjs";
@@ -474,6 +475,7 @@ export default {
         fromDate: "",
         toDate: "",
         isNotificaionEnabled: false,
+        isReferralLimitEnabled: false,
         ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
         investorsCount: 0,
         social: {},
@@ -484,7 +486,7 @@ export default {
         tags: [],
         slug: "",
         referralDifficulty:30,
-        referralUsageLimit:10
+        referralUsageLimit:10,
       },
       DeleteId:"",
       projectToDelete:"",
@@ -1244,15 +1246,21 @@ export default {
         ) {
           throw new Error(Messages.EVENTS.REF_POINT.NOT_POS_INP);
         }
-        if (
+        if(this.project.isReferralLimitEnabled === true) {
+          if (
           isNaN(parseInt(this.project.referralUsageLimit))
         ) {
-          throw new Error('Enter valid usage limit')
+          throw new Error('Enter valid Referral Usage Limit')
         }
         if (
           parseInt(this.project.referralUsageLimit) < 0
         ) {
-          throw new Error('Enter Usage Limit should be positive number')
+          throw new Error('Enter Referral Usage Limit should be positive number')
+        }
+        if (isFloat(this.project.referralUsageLimit)
+        ) {
+          throw new Error('Referral Usage Limit should be Positive Integer')
+        }
         }
         //this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
@@ -1447,6 +1455,7 @@ export default {
         tags: [],
         referralDifficulty:30,
         referralUsageLimit:10,
+        isReferralLimitEnabled:false
       }),
       this.DeleteId="",
       this.projectToDelete="";

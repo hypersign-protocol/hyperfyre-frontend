@@ -37,7 +37,7 @@
             </div>
             <small class="countCss" v-if="userReferralCount.count == null">Valid Upto {{userReferralCount.usageCount}} referrals</small>
             <small class="countCss" v-else-if="userReferralCount.count >0 ">Valid Upto {{userReferralCount.count}} referrals</small>
-            <small class="countCss" v-else>Referral link expired</small>
+            <small class="countCss" v-else>Referral link expired!</small>
           </b-col>         
         </b-row>
       </b-card-body>
