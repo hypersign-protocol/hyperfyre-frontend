@@ -35,9 +35,11 @@
                 ><i class="far fa-copy"></i
               ></span>
             </div>
+            <div v-if="userReferralCount.isReferralLimitEnabled === true">
             <small class="countCss" v-if="userReferralCount.count == null">Valid Upto {{userReferralCount.usageCount}} referrals</small>
             <small class="countCss" v-else-if="userReferralCount.count >0 ">Valid Upto {{userReferralCount.count}} referrals</small>
-            <small class="countCss" v-else>Referral link expired!</small>
+            <small class="expiredText" v-else>Referral link expired!</small>
+            </div>
           </b-col>         
         </b-row>
       </b-card-body>
@@ -46,6 +48,14 @@
 </template>
 
 <style scoped>
+.expiredText{
+  font-weight: 510;
+    font-size: 10px;
+    line-height: 20px;
+    letter-spacing: 0.2px;
+    color: #e4181e;
+    opacity: 0.7;
+}
 .copy {
   padding: 4px;
   font-size: large;
@@ -53,11 +63,11 @@
   color: grey;
 }
 .countCss{
-  font-weight: 520;
-    font-size: 11px;
+  font-weight: 510;
+    font-size: 10px;
     line-height: 20px;
     letter-spacing: 0.2px;
-    color: #252733;
+    color: #01411C;
     opacity: 0.6;
 }
 </style>

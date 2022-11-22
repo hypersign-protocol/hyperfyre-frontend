@@ -75,7 +75,8 @@ export default {
       userEventData: null,
       userReferralCount:{
         count:0,
-        usageCount:0
+        usageCount:0,
+        isReferralLimitEnabled:false
       },      
       userAuthData: null,
       eventActionsToShow: [],
@@ -223,7 +224,8 @@ export default {
         const resp = await apiClient.makeCall({ method: "GET", url: url, header: headers })
         this.eventData = {
           ...resp.data
-                }
+                }        
+        this.userReferralCount.isReferralLimitEnabled = this.eventData.isReferralLimitEnabled
         this.userReferralCount.usageCount = this.eventData.referralUsageLimit
         // If it is old event then just recreating this variable using default values from config
         if (!this.eventData['orgData']){

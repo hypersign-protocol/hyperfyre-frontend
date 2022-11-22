@@ -105,7 +105,7 @@ padding: 0.375rem 0.75rem;
         <div class="text-left col-lg-3 col-md-3 usageDiv">
           <tool-tips infoMessage="Number of participants can use a referral link"></tool-tips>
           <label for="referralUsageLimit"
-          >Referral Usage Limit:</label>
+          >Referral Limit:</label>
       </div>                    
               
         <div class="col-lg-2 col-md-2 ml-5 text-right">          
