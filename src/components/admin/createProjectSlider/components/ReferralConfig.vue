@@ -74,7 +74,7 @@
 
      <div class="row g-3 align-items-center w-100  mt-4">
       <div class="col-lg-5 col-md-5 text-left">
-        <tool-tips infoMessage="Referral Usage Limit is limit for user participant to share the Referral link"></tool-tips><label for="referralUsageLimit" class="col-form-label"
+        <tool-tips infoMessage="Number of participants can use a referral link"></tool-tips><label for="referralUsageLimit" class="col-form-label"
           >Referral Usage Limit<span style="color: red">*</span>:
         </label>
       </div>
