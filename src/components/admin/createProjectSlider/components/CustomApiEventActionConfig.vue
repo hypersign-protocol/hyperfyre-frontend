@@ -37,6 +37,7 @@
     <div>
       <div class="row g-3 align-items-center w-100 mt-4">
         <div class="text-left col-lg-3 col-md-3 text-left">
+          <tool-tips infoMessage="Title of the action which participant will see in the form"></tool-tips>
           <label for="type" class="col-form-label"
             >Title<span style="color: red">*</span>:
           </label>
@@ -56,6 +57,7 @@
         class="row g-3 align-items-center w-100 mt-4"
       >
         <div class="text-left col-lg-3 col-md-3 text-left">
+          <tool-tips infoMessage="API Endpoint which Fyre server will call to verify user's input"></tool-tips>
           <label for="title" class="col-form-label"
             >API Endpoint<span style="color: red">*</span>:
           </label>
@@ -79,6 +81,7 @@
         class="row g-3 align-items-center w-100 mt-4"
       >
         <div class="text-left col-lg-3 col-md-3 text-left">
+          <tool-tips infoMessage="Method (GET/POST) of the API"></tool-tips>
           <label for="type" class="col-form-label"
             >HTTP Method<span style="color: red">*</span>:
           </label>
@@ -96,6 +99,7 @@
         v-if="showAttribute === true"
       >
         <div class="text-left col-lg-3 col-md-3 text-left">
+          <tool-tips infoMessage="Query or body parameter fields of the API"></tool-tips>
           <label for="title" class="col-form-label"
             >Fields<span style="color: red">*</span>:
           </label>
@@ -144,17 +148,18 @@
 
                     <div class="row g-3 align-items-center w-100">
                         <div class="col-lg-3 col-md-3 text-left">
-                          
+                          <tool-tips infoMessage="Field name"></tool-tips>
                           <label for="attributeName" class="col-form-label">Name<span style="color: red">*</span>: </label>                          
                         </div>
                         <div class="col-lg-9 col-md-9 px-0">
                           <input v-model="queryParamAttributeData.fieldName" type="text" id="attributeName" class="form-control w-100"
-                            placeholder="Enter Name">
+                            placeholder="Field name e.g userId">
                         </div>
                     </div>
 
                     <div class="row g-3 align-items-center w-100 mt-4">
                         <div class="col-lg-3 col-md-3 text-left">                        
+                        <tool-tips infoMessage="Field Datatype"></tool-tips>
                         <label for="type" class="col-form-label">Type<span style="color: red">*</span>:</label>
                         </div>
                         <div class="col-lg-9 col-md-9 px-0">
@@ -166,11 +171,12 @@
                     </div>
                     <div class="row g-3 align-items-center w-100 mt-4">
                         <div class="col-lg-3 col-md-3 text-left">                        
+                        <tool-tips infoMessage="Field label for user input"></tool-tips>
                         <label for="type" class="col-form-label">Label<span style="color: red">*</span>:</label>
                         </div>
                         <div class="col-lg-9 col-md-9 px-0">
                       <input v-model="queryParamAttributeData.fieldPlaceHolder" type="text" id="attributeName" class="form-control w-100"
-                            placeholder="Enter Placeholder">
+                            placeholder="Field label for user input">
                       </div>
                     </div>
                     <div class="form-group row mt-4" v-if="isAdd">
@@ -223,17 +229,18 @@
 
                     <div class="row g-3 align-items-center w-100">
                         <div class="col-lg-3 col-md-3 text-left">
-                          
+                          <tool-tips infoMessage="Field name"></tool-tips>
                           <label for="attributeName" class="col-form-label">Name<span style="color: red">*</span>: </label>                          
                         </div>
                         <div class="col-lg-9 col-md-9 px-0">
                           <input v-model="attributeData.fieldName" type="text" id="attributeName" class="form-control w-100"
-                            placeholder="Enter Name">
+                            placeholder="Field name e.g userId">
                         </div>
                     </div>
 
                     <div class="row g-3 align-items-center w-100 mt-4">
                         <div class="col-lg-3 col-md-3 text-left">                        
+                        <tool-tips infoMessage="Field Datatype"></tool-tips>
                         <label for="type" class="col-form-label">Type<span style="color: red">*</span>:</label>
                         </div>
                         <div class="col-lg-9 col-md-9 px-0">
@@ -245,11 +252,12 @@
                     </div>
                     <div class="row g-3 align-items-center w-100 mt-4">
                         <div class="col-lg-3 col-md-3 text-left">                        
+                        <tool-tips infoMessage="Field label for user input"></tool-tips>
                         <label for="type" class="col-form-label">Label<span style="color: red">*</span>:</label>
                         </div>
                         <div class="col-lg-9 col-md-9 px-0">
                       <input v-model="attributeData.fieldPlaceHolder" type="text" id="attributeName" class="form-control w-100"
-                            placeholder="Enter Placeholder">
+                            placeholder="Field label for user input">
                       </div>
                     </div>
                     <div class="form-group row mt-4" v-if="isAdd">
@@ -286,6 +294,27 @@
         class="row g-3 align-items-center w-100 mt-4"
       >
         <div class="text-left col-lg-3 col-md-3 text-left">
+          <tool-tips infoMessage="API header in JSON format"></tool-tips>
+          <label for="title" class="col-form-label"
+            >Headers (Optional):
+          </label>
+        </div>
+        
+        <div class="col-lg-9 col-md-9 px-0 borderHeader">
+          <codemirror
+          class="m-1"
+          ref="json-cm"
+          v-model="apiData.header"
+          :options="cmOptions"
+          ></codemirror>
+        </div>
+      </div>
+
+      <div
+        class="row g-3 align-items-center w-100 mt-4"
+      >
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <tool-tips infoMessage="Configure condition which you want Fyre server to apply upon getting response from your API"></tool-tips>
           <label for="title" class="col-form-label"
             >Match Condition<span style="color: red">*</span>:
           </label>
@@ -320,27 +349,9 @@
         </div>
       </div>
 
-      <div
-        class="row g-3 align-items-center w-100 mt-4"
-      >
-        <div class="text-left col-lg-3 col-md-3 text-left">
-          <label for="title" class="col-form-label"
-            >Headers (Optional):
-          </label>
-        </div>
-        
-        <div class="col-lg-9 col-md-9 px-0 borderHeader">
-          <codemirror
-          class="m-1"
-          ref="json-cm"
-          v-model="apiData.header"
-          :options="cmOptions"
-          ></codemirror>
-        </div>
-      </div>
-
       <div class="row g-3 align-items-center w-100 mt-4">
         <div class="text-left col-lg-3 col-md-3 text-left">
+          <tool-tips infoMessage="Score you want to give the user upon successfully performing this action"></tool-tips>
           <label for="title" class="col-form-label"
             >Score<span style="color: red">*</span>:
           </label>
@@ -465,6 +476,7 @@ import config from "../../../../config"
 import HfButtons from "../../../elements/HfButtons.vue"
 import EventBus from '../../../../eventBus';
 import HfSelectDropDown from "../../../elements/HfSelectDropDown.vue"
+import ToolTips from "../../../basic/toolTips.vue"
 import validator from 'validator';
 import { codemirror } from "vue-codemirror"
 // require styles
@@ -487,6 +499,7 @@ export default {
   HfSelectDropDown,
   BTabs,
   BTab,
+  ToolTips
   },
   filters: {
     pretty: function (value) {
@@ -566,7 +579,7 @@ export default {
         { text: "False", value: false },
       ],
       allCondition: [
-        { text: "Select Method", value: null },
+        { text: "Select HTTP Method", value: null },
         { text: "GET", value: "GET" },
         { text: "POST", value: "POST" },
       ],
