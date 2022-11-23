@@ -88,8 +88,10 @@ export default {
   },
   computed: {
     showCopyIcon() {
-      if((this.userReferralCount.count !==0 || this.userReferralCount.usageCount === undefined)
-      ||( this.userReferralCount.isReferralLimitEnabled === false)) {
+      if (this.userReferralCount.count < 0 && this.userReferralCount.isReferralLimitEnabled === true) {
+       return false
+      }else if((this.userReferralCount.count !==0||this.userReferralCount.usageCount === undefined)
+        || (this.userReferralCount.isReferralLimitEnabled === false)) {
         return true
       } else {
         return false
