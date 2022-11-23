@@ -68,7 +68,7 @@
     line-height: 20px;
     letter-spacing: 0.2px;
     color: #01411C;
-    opacity: 0.6;
+    opacity: 0.7;
 }
 </style>
 <script>
