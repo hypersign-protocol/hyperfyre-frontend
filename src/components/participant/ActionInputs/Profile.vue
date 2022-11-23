@@ -88,9 +88,7 @@ export default {
   },
   computed: {
     showCopyIcon() {
-     if( this.userReferralCount.count< 0) {
-       return false
-      }else if((this.userReferralCount.count !==0||this.userReferralCount.usageCount === undefined)
+      if((this.userReferralCount.count !==0||this.userReferralCount.usageCount === undefined)
         || (this.userReferralCount.isReferralLimitEnabled === false)) {
         return true
       } else {
