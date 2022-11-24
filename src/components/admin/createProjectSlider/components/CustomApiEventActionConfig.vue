@@ -166,8 +166,19 @@
                       <b-form-select
                       v-model="queryParamAttributeData.fieldType"
                       :options="attributeFieldTypeOption"
+                      @input="showQueryParamChainIDFieldOnSelect"
                       ></b-form-select>
                       </div>
+                    </div>
+                    <div class="row g-3 align-items-center w-100 mt-4" v-if="showQueryAttrChainIdField">
+                        <div class="col-lg-3 col-md-3 text-left">
+                          <tool-tips infoMessage="Chain Id of cosmos blockchain"></tool-tips>
+                          <label for="chainId" class="col-form-label">Chain ID<span style="color: red">*</span>: </label>                          
+                        </div>
+                        <div class="col-lg-9 col-md-9 px-0">
+                          <input v-model="chainId" type="text" id="chainId" class="form-control w-100"
+                            placeholder="cosmos-hub1">
+                        </div>
                     </div>
                     <div class="row g-3 align-items-center w-100 mt-4">
                         <div class="col-lg-3 col-md-3 text-left">                        
@@ -247,8 +258,19 @@
                       <b-form-select
                       v-model="attributeData.fieldType"
                       :options="attributeFieldTypeOption"
+                      @input="showBodyParamChainIDFieldOnSelect"
                       ></b-form-select>
                       </div>
+                    </div>
+                     <div class="row g-3 align-items-center w-100 mt-4" v-if="showBodyAttrChainIdField">
+                        <div class="col-lg-3 col-md-3 text-left">
+                          <tool-tips infoMessage="Chain Id of cosmos blockchain"></tool-tips>
+                          <label for="bodyAttrChainId" class="col-form-label">Chain ID<span style="color: red">*</span>: </label>                          
+                        </div>
+                        <div class="col-lg-9 col-md-9 px-0">
+                          <input v-model="bodyAttrChainId" type="text" id="bodyAttrChainId" class="form-control w-100"
+                            placeholder="cosmos-hub1">
+                        </div>
                     </div>
                     <div class="row g-3 align-items-center w-100 mt-4">
                         <div class="col-lg-3 col-md-3 text-left">                        
@@ -564,15 +586,28 @@ export default {
       isPost:false,
       isBoolean:false,
       isNumber:false,
+      showQueryAttrChainIdField: false,
+      showBodyAttrChainIdField:false,
+      chainId:"",
+      bodyAttrChainId:"",
       queryAttributeArray:[],
       bodyAttributeArray:[],
       appName: config.appName,
       attributeFieldTypeOption:[
-        { text: "Select Datatype", value: null },
+        {
+        label:"Data types",
+        options:[
         { text: "boolean", value: "BOOLEAN" },
         { text: "string", value: "STRING" },
         { text: "integer", value: "NUMBER" },
-        { text: "float", value: "FLOAT" },
+        { text: "float", value: "FLOAT" },],
+        },{
+        label:"Wallet Connect",
+        options: [
+          { text: "Ethereum", value: "BLOCKCHAIN_ETH" },
+          { text: "Cosmos blockchain", value: "BLOCKCHAIN_COSMOS" },
+        ]
+        }
       ],
       booleanCondition:[
         { text: "Boolean Type", value: null },
@@ -657,6 +692,20 @@ export default {
     });
   },
   methods: {
+    showQueryParamChainIDFieldOnSelect(e) {
+      if(e === "BLOCKCHAIN_COSMOS") {
+        this.showQueryAttrChainIdField = true
+      } else {
+        this.showQueryAttrChainIdField = false
+      }
+    },
+    showBodyParamChainIDFieldOnSelect(e) {
+      if(e === "BLOCKCHAIN_COSMOS") {
+        this.showBodyAttrChainIdField = true
+      } else {
+        this.showBodyAttrChainIdField = false
+      }
+    },
     modifyAPIEnpoint(){
       // truncate the '/'
       if(this.apiData.apiEndPoint.endsWith('/')){
@@ -695,6 +744,9 @@ export default {
       else if(!this.queryParamAttributeData.fieldType) {
         isValid = false
         return this.notifyErr('Select Field Type')
+      } else if(this.showQueryAttrChainIdField === true && isEmpty(this.chainId)) {
+          isValid = false
+        return this.notifyErr('Enter Chain Id')        
       } else if(isEmpty(this.queryParamAttributeData.fieldPlaceHolder)) {
         isValid = false
         return this.notifyErr('Enter Label')
@@ -724,25 +776,25 @@ export default {
       return status
     },
     clearQuerryAttributeData() {
+      this.chainId = ""
       this.querryAttrFlash = null
       this.queryParamAttributeData = {
         fieldName:"",
         fieldType:null,
         fieldPlaceHolder:"",
         parameter:"query"
-      }
+      }    
+      this.showQueryAttrChainIdField = false 
     },
-    addQuerryParamAttributesToBox() {
-      console.log(this.queryParamAttributeData)
+    addQuerryParamAttributesToBox() {           
       let isValid = this.handleQueryParamValidation()
       if(isValid) {
-      // let paramStirng = this.apiData.apiEndPoint
+        if(this.showQueryAttrChainIdField === true) {
+          this.queryParamAttributeData['chainId'] = this.chainId
+        }
       const trimFieldName = this.queryParamAttributeData.fieldName.trim()
       this.queryParamAttributeData.fieldName = trimFieldName
       this.queryParameterAttributeArray.push(this.queryParamAttributeData)
-      // let url = new URL(this.apiData.apiEndPoint);
-      // url.searchParams.set(this.queryParamAttributeData.fieldName, this.queryParamAttributeData.fieldName);
-      // this.apiData.apiEndPoint = url.href
       this.clearQuerryAttributeData()
       this.modifyAPIEnpoint()
       }
@@ -752,6 +804,10 @@ export default {
       const found = this.queryParameterAttributeArray.find((x)=>x.fieldName === id)
       let updateData = found
       // this.selectedAttrId = id
+     if(updateData.hasOwnProperty('chainId')){
+      this.showQueryAttrChainIdField = true
+      this.chainId = updateData.chainId      
+     }   
       this.queryParamAttributeData = { ...updateData}      
       this.isAddForQuerry = false
     },
@@ -764,6 +820,9 @@ export default {
         fieldPlaceHolder: this.queryParamAttributeData.fieldPlaceHolder,
         parameter:this.queryParamAttributeData.parameter
       }      
+      if(this.showQueryAttrChainIdField === true) {
+        obj['chainId']= this.chainId
+      }
       const indexToUpdate = this.queryParameterAttributeArray.findIndex((x)=>x.fieldName === this.querryAttrFlash)      
       if(indexToUpdate > -1){      
       this.queryParameterAttributeArray[indexToUpdate] = obj
@@ -785,7 +844,10 @@ export default {
     },
     addBodyParamAttributesToBox() {
       let isValid = this.handleBodyParamValidation()
-      if(isValid) {    
+      if(isValid) {   
+        if(this.showBodyAttrChainIdField === true) {
+          this.attributeData['chainId'] = this.bodyAttrChainId
+        } 
       const trimFieldName = this.attributeData.fieldName.trim()
       this.attributeData.fieldName = trimFieldName
       this.bodyParameterAttributeArray.push(this.attributeData)
@@ -796,6 +858,10 @@ export default {
       this.attrFlash = id
       const found = this.bodyParameterAttributeArray.find((x)=>x.fieldName === id)
       let updateData = found
+      if(updateData.hasOwnProperty('chainId')){
+      this.showBodyAttrChainIdField = true
+      this.bodyAttrChainId = updateData.chainId      
+     } 
       this.selectedAttrId = id
       this.attributeData = { ...updateData}      
       this.isAdd = false
@@ -809,6 +875,9 @@ export default {
         fieldPlaceHolder: this.attributeData.fieldPlaceHolder,
         parameter:this.attributeData.parameter
       }      
+      if(this.showBodyAttrChainIdField === true) {
+        obj['chainId']= this.bodyAttrChainId
+      }
       const indexToUpdate = this.bodyParameterAttributeArray.findIndex((x)=>x.fieldName === this.attrFlash)      
       if(indexToUpdate > -1){      
       this.bodyParameterAttributeArray[indexToUpdate] = obj
@@ -846,6 +915,9 @@ export default {
       else if(!this.attributeData.fieldType) {
         isValid = false
         return this.notifyErr('Select Field Type')
+      } else if(this.showBodyAttrChainIdField === true && isEmpty(this.bodyAttrChainId)) {
+        isValid = false
+        return this.notifyErr('Enter Chain Id')        
       } else if(isEmpty(this.attributeData.fieldPlaceHolder)) {
         isValid = false
         return this.notifyErr('Enter Label')
@@ -875,6 +947,7 @@ export default {
       return status
     },
     clearBodyParamAttributeData() {
+      this.bodyAttrChainId = ""
       this.selectedAttrId = null
       this.attrFlash = null
       this.attributeData = {
@@ -883,6 +956,7 @@ export default {
         fieldType:null,
         parameter:"body"
       }
+      this.showBodyAttrChainIdField = false
     },
     inputBooleanCondtion(e) {      
       this.apiData.conditionValue = e
