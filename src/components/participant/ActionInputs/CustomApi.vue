@@ -26,11 +26,11 @@
           <b-col cols="12" sm="12" md="12">
             <div class="row g-3 align-items-center" v-for="(param, index) in values" v-bind:key="index">
               <div class="col-lg-12 col-md-12">
-                <span class="spanClass">{{param.fieldPlaceHolder}}</span>
-                <div class="mt-3" v-if="param.fieldType !=='BOOLEAN'">                  
-                       
+                
+                <div class="mt-2" v-if="param.fieldType !=='BOOLEAN'">                  
+                <span class="spanClass">{{param.fieldPlaceHolder}}</span>       
               <div v-if="onlyWallet(param)">         
-                <b-input-group class="mt-3" v-if="param.fieldType === 'BLOCKCHAIN_COSMOS'">
+                <b-input-group class="mt-2" v-if="param.fieldType === 'BLOCKCHAIN_COSMOS'">
                   <b-form-input                            
                   id="title"
                   v-model="param.fieldValue"
@@ -41,10 +41,10 @@
                     <b-button class="connectBtn" variant="btn btn-outline-twitter"                    
                     @click="invokeKeplr(param)"
                     >
-                    <img src="../../../assets/cosmos-2.svg" class="mr-1" height="20px" />Connect</b-button>                          
+                    <img src="../../../assets/keplr_logo.png" class="mr-1" height="20px" />Connect</b-button>                          
                   </b-input-group-append>                  
                 </b-input-group>
-                <b-input-group class="mt-3" v-else>
+                <b-input-group class="mt-2" v-else>
                   <b-form-input                            
                   id="title"
                   v-model="param.fieldValue"
@@ -55,7 +55,7 @@
                     <b-button class="connectBtn" variant="btn btn-outline-twitter"                  
                     @click="invokeMetamask(param)"
                     >
-                    <img src="/img/ethereum.2b470564.svg" class="mr-1" height="20px" />Connect</b-button>                          
+                    <img src="../../../assets/metamask.svg" class="mr-1" height="20px" />Connect</b-button>                          
                   </b-input-group-append>
                   
                 </b-input-group>
@@ -70,7 +70,7 @@
                   ></b-form-input>
                   </div>
                 </div>
-                <div class="mt-3" v-if="param.fieldType ==='BOOLEAN'">
+                <div class="mt-2" v-if="param.fieldType ==='BOOLEAN'">
                   <hf-select-drop-down
                   v-if="!done"               
                   :options="booleanOptions"
