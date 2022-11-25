@@ -26,17 +26,51 @@
           <b-col cols="12" sm="12" md="12">
             <div class="row g-3 align-items-center" v-for="(param, index) in values" v-bind:key="index">
               <div class="col-lg-12 col-md-12">
-                <div class="mt-3" v-if="param.fieldType !=='BOOLEAN'">                  
-                   <span class="spanClass">{{param.fieldPlaceHolder}}</span>
+                
+                <div class="mt-2" v-if="param.fieldType !=='BOOLEAN'">                  
+                <span class="spanClass">{{param.fieldPlaceHolder}}</span>       
+              <div v-if="onlyWallet(param)">         
+                <b-input-group class="mt-2" v-if="param.fieldType === 'BLOCKCHAIN_COSMOS'">
                   <b-form-input                            
                   id="title"
                   v-model="param.fieldValue"
-                  :required="true"
+                  :required="data.isManadatory"                  
+                  :disabled="true"                  
+                  ></b-form-input>
+                  <b-input-group-append v-if="!done">                    
+                    <b-button class="connectBtn" variant="btn btn-outline-twitter"                    
+                    @click="invokeKeplr(param)"
+                    >
+                    <img src="../../../assets/keplr_logo.png" class="mr-1" height="20px" />Connect</b-button>                          
+                  </b-input-group-append>                  
+                </b-input-group>
+                <b-input-group class="mt-2" v-else>
+                  <b-form-input                            
+                  id="title"
+                  v-model="param.fieldValue"
+                  :required="data.isManadatory"                  
+                  :disabled="true"                  
+                  ></b-form-input>
+                  <b-input-group-append v-if="!done">                    
+                    <b-button class="connectBtn" variant="btn btn-outline-twitter"                  
+                    @click="invokeMetamask(param)"
+                    >
+                    <img src="../../../assets/metamask.svg" class="mr-1" height="20px" />Connect</b-button>                          
+                  </b-input-group-append>
+                  
+                </b-input-group>
+              </div>
+              <div v-else>
+                <b-form-input 
+                  id="title"
+                  v-model="param.fieldValue"
+                  :required="data.isManadatory"
                   class="form-control w-100 mt-1"
                   :disabled="done"                  
                   ></b-form-input>
+                  </div>
                 </div>
-                <div class="mt-3" v-if="param.fieldType ==='BOOLEAN'">
+                <div class="mt-2" v-if="param.fieldType ==='BOOLEAN'">
                   <hf-select-drop-down
                   v-if="!done"               
                   :options="booleanOptions"
@@ -68,16 +102,22 @@
 .spanClass{  
   color:rgb(26 26 26 / 90%);
 }
+.connectBtn{
+  border: #ced4da 1px solid;
+}
 </style>
 
 <script>
 
 import eventBus from "../../../eventBus.js";
 import notificationMixins from "../../../mixins/notificationMixins";
+import { SigningCosmosClient } from "@cosmjs/launchpad";
+import Web3 from "web3";
 import Messages from "../../../utils/messages/participants/en";
 import {isFloat} from "../../../mixins/fieldValidationMixin"
 import ErrorMessage from "../ErrorMessage.vue";
 import HfSelectDropDown from "../../elements/HfSelectDropDown.vue"
+import Vue from "vue"
 export default {
   name: "CustomApi",
   props: {
@@ -111,6 +151,9 @@ computed:{
   },
   data() {
     return {
+      
+      signature:"",
+      message_sign:"",
       booleanOptions:[
       { text: "Select True OR False", value: null },
       { text: "True", value: true },
@@ -143,6 +186,85 @@ computed:{
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
+    onlyWallet(param) {
+      if(param.fieldType ==="BLOCKCHAIN_COSMOS" || param.fieldType === "BLOCKCHAIN_ETH") {
+        return true
+      } else {
+        return false
+      }
+     },
+   async invokeKeplr(param) {      
+       try {
+        if (!window.keplr) {
+        this.notifyErr("Please install keplr browser extension");
+        } else {
+        const chainId = param.chainId;
+        await window.keplr.enable(chainId);
+        const offlineSigner = window.keplr.getOfflineSigner(chainId);
+        const accounts = await offlineSigner.getAccounts();
+        const cosmJS = new SigningCosmosClient(
+        "https://lcd-cosmoshub.keplr.app/rest",
+        accounts[0].address,
+        offlineSigner,
+        );
+        param.fieldValue = cosmJS.anyValidAddress        
+        let index = this.values.findIndex((x)=>{
+          return (x.fieldName === param.fieldName && x.parameter === param.parameter)
+        })        
+        Vue.set(this.values, index, param)    //  Due to vues reactivity we need to set updated object in the values array Ref:[https://v2.vuejs.org/v2/guide/reactivity.html#For-Arrays]
+      }
+    } catch (error) {
+      return this.notifyErr(error.message);
+  }
+},
+    async signMessage() {
+      const message =
+        "You are Signing this message to ensure your participation in this event";
+      this.message_sign = message;
+      return await this.web3.eth.personal.sign(
+        message,
+        ethereum.selectedAddress
+      );
+    },
+   async checkWeb3Injection() {
+      try {
+        if (ethereum && ethereum.isMetaMask) {
+          this.web3 = new Web3(window.ethereum);
+        }
+      } catch (error) {        
+        throw new Error('Install Metamask')        
+      }
+    },
+    async invokeMetamask(param) {      
+      try {
+       await this.checkWeb3Injection()
+        if (ethereum.isMetaMask) {
+          const wallet = await ethereum.request({
+            method: "eth_requestAccounts",
+          });
+          this.signature  = await this.signMessage();
+          
+          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(this.message_sign, this.signature)
+          
+          let isSigVerified =  false;
+          if(generatedWalletAddr === wallet[0]){
+              isSigVerified = true;
+          } 
+      
+          if (isSigVerified) {
+            param.fieldValue = wallet[0];            
+            let index = this.values.findIndex((x)=>{
+          return (x.fieldName === param.fieldName && x.parameter === param.parameter)
+        })        
+        Vue.set(this.values, index, param) //  Due to vues reactivity we need to set updated object in the values array Ref:[https://v2.vuejs.org/v2/guide/reactivity.html#For-Arrays]
+          } else{
+            return this.notifyErr('Invalid Signature')
+          }
+        } 
+      } catch (error) {
+        return this.notifyErr(error.message)
+      }
+    },
     addValueField(){      
     for(let index = 0; index<this.values.length; index++) {
       if(this.values.length !==0){
@@ -184,6 +306,16 @@ computed:{
           case "BOOLEAN":            
             if(attribute.fieldValue === null) {
               throw new Error(`Please fill ${attribute.fieldPlaceHolder} field`)
+            }
+            break;
+          case "BLOCKCHAIN_COSMOS":
+            if(attribute.fieldValue === null || attribute.fieldValue === "") {
+              throw new Error('Please Connect Keplr wallet')
+            }
+            break;
+          case "BLOCKCHAIN_ETH":
+            if(attribute.fieldValue === null || attribute.fieldValue === "") {
+              throw new Error('Please Connect metamask  wallet')
             }
             break;
           default:
