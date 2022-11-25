@@ -318,7 +318,7 @@
         <div class="text-left col-lg-3 col-md-3 text-left">
           <tool-tips infoMessage="API header in JSON format"></tool-tips>
           <label for="title" class="col-form-label"
-            >Headers (Optional):
+            >Headers:
           </label>
         </div>
         
@@ -368,6 +368,24 @@
             class="form-control w-100"
             placeholder="Enter condition value"
           />    
+        </div>
+      </div>
+
+      <div class="row g-3 align-items-center w-100 mt-4">
+        <div class="text-left col-lg-3 col-md-3 text-left">
+          <tool-tips infoMessage="Error message upon unsuccessful verfication of match condition"></tool-tips>
+          <label for="type" class="col-form-label"
+            >Error message:
+          </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+          <input
+            v-model="apiData.customApiErrorMessage"     
+            type="text"
+            id="customApiErrorMessage"
+            class="form-control w-100"
+            placeholder="Enter error message"
+          />
         </div>
       </div>
 
@@ -646,7 +664,8 @@ export default {
         apiMethod:null,
         returnType:null,
         condition:null,
-        conditionValue:null
+        conditionValue:null,
+        customApiErrorMessage:""
       },
       queryParameterAttributeArray:[],
       querryAttrFlash:null,
@@ -1057,7 +1076,8 @@ export default {
         apiMethod:null,
         returnType:null,
         condition:null,
-        conditionValue:null
+        conditionValue:null,
+        customApiErrorMessage:""
       }
       this.flash = null;
       this.isCreate = true;
