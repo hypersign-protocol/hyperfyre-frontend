@@ -341,26 +341,56 @@
             >Match Condition<span style="color: red">*</span>:
           </label>
         </div>        
-          <div class="col-lg-3 col-md-2 px-0">
+          <div class="col-lg-2 col-md-2 px-0">
           <hf-select-drop-down
           :options="returnTypeOption"
           @selected=" e =>inputReturnType(e)"  
 
           ></hf-select-drop-down>          
         </div>
-        <div class="col-lg-3 col-md-2 px-0">
+        <div class="col-lg-2 col-md-2 px-0">
           <hf-select-drop-down
           :options="condtionOption"
           @selected=" e =>inputCondtion(e)"
           ></hf-select-drop-down>    
         </div>
-        <div class="col-lg-3 col-md-2 px-0" v-show="isBoolean === true">
+        <div class="col-lg-5 col-md-2 px-0" v-show="isBoolean === true">
           <hf-select-drop-down
           :options="booleanCondition"
           @selected=" e =>inputBooleanCondtion(e)"
           ></hf-select-drop-down>
         </div>
-        <div class="col-lg-3 col-md-2 px-0" v-show="isBoolean === false">
+
+        <div class="col-lg-5 col-md-2 px-0" v-show="showRegexInputField === true">
+                 <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">/</span>
+            </div>
+            <input type="text" class="form-control" ref="pattern" v-model="pattern"
+            placeholder="pattern">
+            <div class="input-group-append">
+              <span class="input-group-text" id="basic-addon1">/</span>
+            </div>
+
+            <input type="text" class="form-control col-lg-3" v-model="flags.join('')" disabled></input>
+            <div class="input-group-append box">
+              <b-dropdown id="dropdown-right" class="dropBtn" right text="Flag" size="sm" variant="secondary">                 
+              <b-form-checkbox-group                       
+                stacked        
+                size="sm"      
+                v-model="flags"
+                :options="checkBoxOptions"                             
+                value-field="item"
+                text-field="name"
+                disabled-field="notEnabled"
+              ></b-form-checkbox-group>                  
+              </b-dropdown>
+          </div>
+        </div>
+    
+        </div>
+
+        <div class="col-lg-5 col-md-2 px-0" v-show="showStringInput">
           <input
             v-model="apiData.conditionValue"
             :type="isNumber ? 'number' :'text'"
@@ -571,6 +601,13 @@ export default {
       '--header-text-color':config.app.headerTextColor
       }
   },
+  showStringInput() {
+    if(this.isBoolean === false && this.showRegexInputField === false) {
+      return true
+    } else {
+      return false
+    }
+  },
    codemirror() {
       return this.$refs.cmEditor.codemirror;
     },
@@ -604,6 +641,17 @@ export default {
       isPost:false,
       isBoolean:false,
       isNumber:false,
+      showRegexInputField:false,
+      flags:[],
+      pattern:"",
+       checkBoxOptions: [
+          { item: 'g', name: 'g' },
+          { item: 'i', name: 'i' },
+          { item: 'm', name: 'm' },
+          { item: 's', name: 's' },
+          { item: 'u', name: 'u' },
+          { item: 'y', name: 'y' },          
+        ],
       showQueryAttrChainIdField: false,
       showBodyAttrChainIdField:false,
       chainId:"",
@@ -612,7 +660,8 @@ export default {
       bodyAttributeArray:[],
       appName: config.appName,
       attributeFieldTypeOption:[
-        {
+        {text:"Select",value:null},
+        {        
         label:"Data types",
         options:[
         { text: "boolean", value: "BOOLEAN" },
@@ -647,6 +696,7 @@ export default {
       ],
       condtionOption:[
         { text: "Condition", value: null },
+        { text: "Regex", value: "REGEXP" },
         { text: "===", value: "===" },
         { text: "<", value: "<" },
         { text: ">", value: ">" },
@@ -696,6 +746,17 @@ export default {
       project:{},
       hfTgBotId: this.$config.verifierBot.TELEGRAM,
     };
+  },
+  watch:{
+     pattern:{
+          deep:true,
+          handler: function(newValue,oldValue) {            
+            if(newValue.startsWith('/') || newValue.endsWith('/')) {      
+            const trimed = newValue.replace(/^\/|\/$/g, '')
+            this.pattern = trimed
+          }
+        }
+     }
   },
   async mounted() {
     this.$root.$on("callClearFromProject", () => {
@@ -981,6 +1042,11 @@ export default {
       this.apiData.conditionValue = e
     },
     inputCondtion(e){
+      if(e === "REGEXP") {
+        this.showRegexInputField = true        
+      }  else {
+        this.showRegexInputField = false
+      }
       this.apiData.condition = e
     },
     inputReturnType(e) {
@@ -988,6 +1054,7 @@ export default {
         case "BOOLEAN": {
           this.apiData.conditionValue = null
           this.isBoolean = true          
+          this.showRegexInputField = false
           this.condtionOption =[
         { text: "Condition", value: null },
         { text: "===", value: "===" },
@@ -1000,6 +1067,7 @@ export default {
           this.isNumber = true
           this.condtionOption=[
             { text: "Condition", value: null },
+            { text: "Regex", value: "REGEXP" },
             { text: "===", value: "===" },
             { text: "<", value: "<" },
             { text: ">", value: ">" },
@@ -1013,6 +1081,7 @@ export default {
           this.isNumber = false
           this.condtionOption=[
             { text: "Condition", value: null },
+            { text: "Regex", value: "REGEXP" },
             { text: "===", value: "===" },
           ]
         }
@@ -1022,6 +1091,7 @@ export default {
           this.isNumber = false
           this.condtionOption=[
             { text: "Condition", value: null },
+            { text: "Regex", value: "REGEXP" },
             { text: "===", value: "===" },            
           ]
         }
@@ -1031,6 +1101,7 @@ export default {
           this.isNumber = false
           this.condtionOption=[
             { text: "Condition", value: null },
+            { text: "Regex", value: "REGEXP" },
             { text: "===", value: "===" },
             { text: "<", value: "<" },
             { text: ">", value: ">" },
@@ -1069,6 +1140,9 @@ export default {
       // this.isPost = false,
       this.isBoolean = false,
       this.isNumber = false,
+      this.showRegexInputField = false
+      this.pattern = ""
+      this.flags = []
       this.apiData = {
         apiEndPoint: "",      
         header:"",
@@ -1128,12 +1202,28 @@ export default {
           } else if(this.apiData.condition === null) {
               isvalid = false;
               this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.SELECT_CONDITION)
-            } else if (this.apiData.conditionValue === null || this.apiData.conditionValue === "") {
-              isvalid = false;
-              this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.VALID_CONDITION)
-            } else if(this.apiData.returnType !== null) {
+            } 
+            // else if (this.apiData.conditionValue === null || this.apiData.conditionValue === "") {
+            //   isvalid = false;
+            //   this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.VALID_CONDITION)
+            // } 
+            else if(this.apiData.returnType !== null) {
+              if(this.showRegexInputField === true) {
+                if(isEmpty(this.pattern)) {
+                  isvalid = false
+                  return this.notifyErr('Enter Pattern for the regex')
+                }
+              } else {
               switch (this.apiData.returnType) {
-              case "NUMBER":
+              case "BOOLEAN":
+              case "STRING":
+              case "OBJECT":
+                if(this.apiData.conditionValue === null) {
+                  isvalid = false
+                  return this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.VALID_CONDITION)
+                }
+                break;
+              case "NUMBER":              
               if(!Number.isInteger(parseFloat((this.apiData.conditionValue)))) {
                   isvalid = false
                   return this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.INTEGER_VALUE)
@@ -1145,7 +1235,8 @@ export default {
                   return this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.FLOAT_VALUE)
                 }
                 break;               
-            }            
+            }         
+          }   
           } if (isNaN(parseInt(this.selected.score))) {            
             isvalid = false;
             return this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM);
@@ -1168,9 +1259,19 @@ export default {
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {  
         this.counter +=1
-        this.apiData.attributes = [...this.queryParameterAttributeArray, ...this.bodyParameterAttributeArray] // merging two arrays here in single one     
-        this.apiData.apiEndPoint = this.apiData.apiEndPoint.trim()   
-        this.selected.value = JSON.stringify(this.apiData);     
+        this.apiData.attributes = [...this.queryParameterAttributeArray, ...this.bodyParameterAttributeArray] // merging two arrays here in single one        
+        this.apiData.apiEndPoint = this.apiData.apiEndPoint.trim() 
+        if(this.showRegexInputField === true) {
+          let tempObject = {
+            pattern:"",
+            flag:""
+          }
+          let flags = this.flags.join('')
+          tempObject.flag = flags
+          tempObject.pattern = this.pattern
+          this.apiData.conditionValue = JSON.stringify(tempObject)
+        }        
+        this.selected.value = JSON.stringify(this.apiData);        
         this.selected["id"] = this.counter
         this.eventActionList.push(this.selected);
         this.$emit("updateEventActions", {
@@ -1219,6 +1320,16 @@ export default {
       if (isvalid) {
         this.apiData.attributes = [...this.queryParameterAttributeArray, ...this.bodyParameterAttributeArray]
         this.apiData.apiEndPoint = this.apiData.apiEndPoint.trim()
+        if(this.showRegexInputField === true) {
+          let tempObject = {
+            pattern:"",
+            flag:""
+          }
+          let flags = this.flags.join('')
+          tempObject.flag = flags
+          tempObject.pattern = this.pattern
+          this.apiData.conditionValue = JSON.stringify(tempObject)
+        }  
         this.selected.value = JSON.stringify(this.apiData);        
         this.eventActionList[this.currentSelectedId] = this.selected;
         this.$emit("updateEventActions", {
@@ -1253,7 +1364,12 @@ export default {
       let updateData = this.eventActionList[idx];
       this.currentSelectedId = idx;
       this.selected = updateData;
-      this.apiData = { ...JSON.parse(this.selected.value)}
+      this.apiData = { ...JSON.parse(this.selected.value)}      
+      if(this.apiData.condition === "REGEXP") {
+        this.apiData.conditionValue = JSON.parse(this.apiData.conditionValue)
+        this.pattern = this.apiData.conditionValue.pattern
+        this.flags = this.apiData.conditionValue.flag.split('')
+      }
       // need to extract the attributes and segregate it into two arrays
       // queryParameterAttributeArray and in bodyParameterAttributeArray based on parameter field
       if(this.apiData.attributes.length) {
