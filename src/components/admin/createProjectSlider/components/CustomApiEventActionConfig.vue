@@ -128,7 +128,7 @@
               active
               >
               <b-card-text>
-                    <div class="selected-media-wrapper d-flex p-2 mb-4"  style="overflow-y: auto" v-if="queryParameterAttributeArray.length > 0">
+                    <div class="selected-media-wrapper d-flex p-2 mb-4 m-1"  style="overflow-y: auto" v-if="queryParameterAttributeArray.length > 0">
                       <div v-for="(attr,fieldName) in queryParameterAttributeArray" v-bind:key="attr.fieldName">
                         <div :class="
                             querryAttrFlash == attr.fieldName
@@ -338,7 +338,7 @@
         <div class="text-left col-lg-3 col-md-3 text-left">
           <tool-tips infoMessage="Configure condition which you want Fyre server to apply upon getting response from your API"></tool-tips>
           <label for="title" class="col-form-label"
-            >Match Condition<span style="color: red">*</span>:
+            >Condition<span style="color: red">*</span>:
           </label>
         </div>        
           <div class="col-lg-2 col-md-2 px-0">
@@ -464,6 +464,13 @@
   </div>
 </template>
 <style scoped>
+.card-body{
+padding: 0rem !important;
+margin-top: 2rem;
+}
+.bv-no-focus-ring{
+  margin-left:1rem !important;
+}
 .inputInfo {
   color: #808080b5;
   font-size: smaller;
@@ -669,7 +676,7 @@ export default {
         { text: "integer", value: "NUMBER" },
         { text: "float", value: "FLOAT" },],
         },{
-        label:"Wallet Connect",
+        label:"Blockchain type",
         options: [
           { text: "Ethereum", value: "BLOCKCHAIN_ETH" },
           { text: "Cosmos blockchain", value: "BLOCKCHAIN_COSMOS" },
@@ -827,6 +834,9 @@ export default {
       } else if(this.showQueryAttrChainIdField === true && isEmpty(this.chainId)) {
           isValid = false
         return this.notifyErr('Enter Chain Id')        
+      } else if(this.showQueryAttrChainIdField === true && isValidURL(this.chainId)) {
+        isValid = false
+        return this.notifyErr('Enter valid Chain Id')
       } else if(isEmpty(this.queryParamAttributeData.fieldPlaceHolder)) {
         isValid = false
         return this.notifyErr('Enter Label')
@@ -998,6 +1008,9 @@ export default {
       } else if(this.showBodyAttrChainIdField === true && isEmpty(this.bodyAttrChainId)) {
         isValid = false
         return this.notifyErr('Enter Chain Id')        
+      } else if(this.showBodyAttrChainIdField === true && isValidURL(this.bodyAttrChainId)) {
+        isValid = false
+        return this.notifyErr('Enter valid Chain Id')
       } else if(isEmpty(this.attributeData.fieldPlaceHolder)) {
         isValid = false
         return this.notifyErr('Enter Label')
@@ -1044,7 +1057,10 @@ export default {
     inputCondtion(e){
       if(e === "REGEXP") {
         this.showRegexInputField = true        
-      }  else {
+      }  else {        
+        if(typeof(this.apiData.conditionValue)==="object") {
+          this.apiData.conditionValue = ""
+        }        
         this.showRegexInputField = false
       }
       this.apiData.condition = e
