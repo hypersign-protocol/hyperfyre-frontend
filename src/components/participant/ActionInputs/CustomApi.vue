@@ -293,14 +293,14 @@ computed:{
             if(attribute.fieldValue === null || attribute.fieldValue === "") {
               throw new Error(`Please fill ${attribute.fieldPlaceHolder} field`)
             } else if(!Number.isInteger(parseFloat((attribute.fieldValue)))) {                  
-              throw new Error('Enter Integer value')
+              throw new Error(`Enter Integer value for ${attribute.fieldPlaceHolder}`)
             }
             break;
           case "FLOAT":
             if(attribute.fieldValue === null || attribute.fieldValue === "") {
               throw new Error(`Please fill ${attribute.fieldPlaceHolder} field`)
             } else if(!isFloat(attribute.fieldValue)) {                  
-              throw new Error('Enter Float value')
+              throw new Error(`Enter Float value for ${attribute.fieldPlaceHolder}`)
             }
             break;
           case "BOOLEAN":            
