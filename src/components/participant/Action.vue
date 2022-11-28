@@ -2,7 +2,7 @@
   <div class="accordion mt-3 mx-auto overflow-hidden" role="tablist" style="max-width: 600px"
     @click="checkIfUserHasLoggedIn()">
     <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
-    <Profile v-if="userProfile" :user="userProfile" />
+    <Profile v-if="userProfile" :user="userProfile" :userReferralCount="userReferralCount" />
 
     <template v-for="(actionItem, index) in ActionSchema">
       <component v-if="actionItem.type==='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
@@ -75,7 +75,7 @@ import Messsages from "../../utils/messages/participants/en";
 import EthereumNetwork from "./ActionInputs/EthereumNetwork.vue";
 import MaticNetwork from './ActionInputs/MaticNetwork.vue';
 import BinanceNetwork from './ActionInputs/BinanceNetwork.vue';
-
+import CustomApi from "./ActionInputs/CustomApi.vue";
 export default {
   name: "Action",
   props: {
@@ -85,6 +85,9 @@ export default {
     },
     userProfile: {
       required: true,
+      type: Object,
+    },
+    userReferralCount: {
       type: Object,
     },
     authToken: {
@@ -143,6 +146,7 @@ export default {
     MoonriverErc721,
     PushNotification,
     SumsubKyc,
+    CustomApi,
     RecaptchaToken: "",
   },
   mounted() {
@@ -210,7 +214,9 @@ export default {
         let socialAccessToken;
 
         let parsedValue;
-        if(actionItem.type.includes("GITHUB_PR")){
+        if(actionItem.type.includes("GITHUB_PR") ||
+        actionItem.type.includes("TWITTER_RETWEET") ||
+        actionItem.type.includes("TWITTER_FOLLOW")){
         parsedValue = JSON.parse(value)
         if(parsedValue.socialAccessToken){
         socialAccessToken = parsedValue.socialAccessToken
@@ -280,8 +286,24 @@ export default {
           return this.notifyErr(Messsages.ACTIONS.SOME_ERROR);
         }
       } catch (e) {
-        this.notifyErr(Messsages.EVENT_ACTIONS.ERROR + e.message);
-        // console.log(e);
+        if(e.status === 401){
+          switch(actionItem.type){
+            case "TWITTER_FOLLOW":
+            case "TWITTER_RETWEET": {
+              localStorage.removeItem("twitterAccessToken")
+             return this.notifyErr(Messsages.EVENT_ACTIONS.TWITTER_AUTH_AGAIN)
+            }
+            case "GITHUB_PR":{
+              localStorage.removeItem("githubAccessToken")
+             return this.notifyErr(Messsages.EVENT_ACTIONS.GITHUB_PR.AUTH_AGAIN)
+            }
+          }
+        } else {
+          this.notifyErr(e.message);
+        }
+      }
+      finally{
+        this.isLoading = false;
       }
     },
   },

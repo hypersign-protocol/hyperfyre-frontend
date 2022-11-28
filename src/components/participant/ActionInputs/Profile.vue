@@ -31,10 +31,16 @@
             <div class="text text-left">
               {{ truncate1(referalLink,25) }}
               <span @click="copy" class="copy"
+              v-if="showCopyIcon"
                 ><i class="far fa-copy"></i
               ></span>
             </div>
-          </b-col>
+            <div v-if="userReferralCount.isReferralLimitEnabled === true">
+            <small class="countCss" v-if="userReferralCount.count == null">Valid Upto {{userReferralCount.usageCount}} referrals</small>
+            <small class="countCss" v-else-if="userReferralCount.count >0 ">Valid Upto {{userReferralCount.count}} referrals</small>
+            <small class="expiredText" v-else>Referral link expired!</small>
+            </div>
+          </b-col>         
         </b-row>
       </b-card-body>
     </b-collapse>
@@ -42,11 +48,27 @@
 </template>
 
 <style scoped>
+.expiredText{
+  font-weight: 510;
+    font-size: 10px;
+    line-height: 20px;
+    letter-spacing: 0.2px;
+    color: #e4181e;
+    opacity: 0.7;
+}
 .copy {
   padding: 4px;
   font-size: large;
   cursor: pointer;
   color: grey;
+}
+.countCss{
+  font-weight: 510;
+    font-size: 10px;
+    line-height: 20px;
+    letter-spacing: 0.2px;
+    color: #01411C;
+    opacity: 0.7;
 }
 </style>
 <script>
@@ -60,6 +82,21 @@ export default {
       required: true,
       type: Object,
     },
+    userReferralCount: {
+      type: Object,
+    }
+  },
+  computed: {
+    showCopyIcon() {
+      if (this.userReferralCount.count < 0 && this.userReferralCount.isReferralLimitEnabled === true) {
+       return false
+      }else if((this.userReferralCount.count !==0||this.userReferralCount.usageCount === undefined)
+        || (this.userReferralCount.isReferralLimitEnabled === false)) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   data() {
     return {

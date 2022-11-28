@@ -444,10 +444,11 @@ computed:{
       switch (action.type) {
         case "DISCORD_JOIN":
         case "TELEGRAM_JOIN":
-        case "TWITTER_FOLLOW": {
+        case "TWITTER_FOLLOW":{
           return JSON.parse(action.value).targetScreenName;
         }
-         case "GITHUB_PR":{
+        case "GITHUB_PR":
+        case "TWITTER_RETWEET": {
           return action.value.url
         }
         case "ETHEREUM_ERC20":
@@ -466,17 +467,29 @@ computed:{
         case "MOON_ERC721": {
           return JSON.parse(action.value).userWalletAddress;
         }
-        case "REEF_ERC20": {
-          return JSON.parse(action.value).userWalletAddress.address;
-        }
+        case "REEF_ERC20": 
         case "REEF_ERC721": {
-          return JSON.parse(action.value).userWalletAddress.address;
+          const tempData = JSON.parse(action.value)
+          if(tempData.userWalletAddress.address){
+            return tempData.userWalletAddress.address
+          } else {
+            return tempData.userWalletAddress
+          }
         }
         case "ETHEREUM_NETWORK":
         case "BINANCE_NETWORK":
         case "MATIC_NETWORK": {
           return JSON.parse(action.value).paramsList[0].value;
         }
+        case "CUSTOM_API_GET":
+        case "CUSTOM_API_POST": {
+          const tempActionDetail = JSON.parse(action.value);
+          const valueToShow = {};
+          tempActionDetail.forEach((attr) => {                    
+            valueToShow[attr.fieldName] = attr.fieldValue        
+          });          
+          return JSON.stringify(valueToShow);        
+        }    
         default:
           return action.value;
       }

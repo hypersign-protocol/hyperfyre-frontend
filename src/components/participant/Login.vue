@@ -29,13 +29,11 @@
 </template>
 <script>
 import config from "../../config";
-import VueRecaptcha from "vue-recaptcha";
 import Messages from "../../utils/messages/participants/en";
 import url from "url";
 export default {
-  components: {
-    VueRecaptcha
-  },
+  components: { },
+  
   props: {
     fontColor: String,
     themeColor: String,
@@ -99,7 +97,7 @@ export default {
         _this.socketMessage = null;
       } else if (messageData.op == "end") {
         _this.connection.close();
-        const authorizationToken = messageData.data.token;
+        const authorizationToken = messageData.data.hypersign ? messageData.data.hypersign.data.accessToken : messageData.data.token;
 
         // console.log("Emitting authentoken event")
 

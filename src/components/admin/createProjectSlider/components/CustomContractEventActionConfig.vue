@@ -89,9 +89,10 @@
             >Contract ABI<span style="color: red">*</span>:
           </label>
         </div>
-        <div class="col-lg-9 col-md-9 px-0">
+        <div class="col-lg-9 col-md-9 px-0 borderHeader">
           <codemirror
             ref="json-cm"
+            class="m-1"
             v-model="contract.contractABI"
             :options="cmOptions"
             @input="onCmCodeChange"
@@ -163,6 +164,7 @@
             type="text"
             id="title"
             class="form-control w-100"
+            placeholder="Enter Action Title"
           />
         </div>
       </div>
@@ -215,7 +217,10 @@
   color: #808080b5;
   font-size: smaller;
 }
-
+.borderHeader{
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
 .pointer {
   cursor: pointer;
 }
@@ -480,6 +485,12 @@ export default {
           }else if (isEmpty(this.selected.title)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE);
+          } else if (isNaN(parseInt(this.selected.score))) {            
+            isvalid = false;
+            return this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_NUM);
+          } else if (parseInt(this.selected.score) < 0) {
+            isvalid = false;
+            return this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM);
           }
       return isvalid;
     },

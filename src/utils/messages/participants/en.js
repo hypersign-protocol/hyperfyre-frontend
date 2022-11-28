@@ -29,6 +29,7 @@ const EVENT_ACTIONS = {
     WENT_WRONG: "Something Went Wrong",
     ERROR: "Error occurred: ",
     ALREADY_AUTHERIZED:"You are already authorized. Please proceed to perform action.",
+    TWITTER_AUTH_AGAIN:"Authentication failed Please authorize Twitter again",
     INPUT_DATE: {
         INVALID_DATE_TIME: "Invalid date time"
     },
@@ -49,12 +50,15 @@ const EVENT_ACTIONS = {
         TWITTER_SCREENS_BLANK: "Source or target twitter screen name is blank",
     },
     TWITTER_RETWEET: {
-        INVALID_RETWEET: "Invalid retweet"
+        INVALID_RETWEET: "Invalid retweet",
+        TWITTER_RETWEET_AUTH: "Please authorize and give Retweet URL",
+        ENTER_RETWEET_URL: "Please enter Retweet URL"
     },
     GITHUB_PR:{
         GITHUB_AUTH:"Please authorize and give GitHub PR URL",
         GITHUB_PR_EMPTY:"Please Enter your GitHub PR URL",
-        INVALID_GITHUB_PR_URL:"Invalid GitHub PR URL"
+        INVALID_GITHUB_PR_URL:"Invalid GitHub PR URL",
+        AUTH_AGAIN: "Authentication failed Please authorize GitHub again"
     },
     ETH: {
         INVALIDWEB3: "Web3 provider not found. Please install Metamask wallet",
@@ -63,7 +67,7 @@ const EVENT_ACTIONS = {
         INSUFFICIENT_BALANCE: "Insufficient balance"
     },
     REEF: {
-        CONNECT_REEF_WALLET: "Connect your reef wallet by selcting address options"
+        CONNECT_REEF_WALLET: "Connect your reef wallet by selecting address options"
     },
     COSMOS:{
         CONNECT_KEPLR_WALLET: "Connect your Keplr Wallet"

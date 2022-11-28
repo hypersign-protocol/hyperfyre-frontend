@@ -1,6 +1,6 @@
 {
     "name": "hyperfye-frontend",
-    "version": "v5.9.0",
+    "version": "v5.10.0",
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve --mode production",
@@ -40,6 +40,7 @@
         "system": "^2.0.1",
         "v-markdown-editor": "^1.2.6",
         "valid-url": "^1.0.9",
+        "validator": "^13.7.0",
         "vue": "^2.5.16",
         "vue-codemirror": "^4.0.6",
         "vue-css-donut-chart": "^1.3.0",
@@ -75,6 +76,7 @@
         "eslint-loader": "^3.0.2",
         "eslint-plugin-vue": "^5.2.3",
         "prettier": "^2.4.1",
+        "vue-cli": "^2.9.6",
         "vue-template-compiler": "^2.5.16"
     },
     "browserify": {

@@ -283,6 +283,28 @@
             </b-collapse>
           </b-card>
 
+          <!-- Custom API Config -->
+
+          <b-card no-body class="mb-1">
+            <b-card-header header-tag="header" class="p-1 accordin-header accordion-header-theme"  :style="headerThemeCss" role="tab">
+              <b-button block v-b-toggle.accordion-10 variant="info"
+                class="bg-transparent border-0 text-left theme-color"
+                title="Create Custom Api configuration for your event">
+                <img src="../../../assets/filled-rest-api-50.png" height="20px" class="ml-0" />
+                Custom API Configurations
+              </b-button>
+            </b-card-header>
+            <b-collapse id="accordion-10" accordion="my-accordion" role="tabpanel">
+              <b-card-body>               
+                <custom-api-event-action-config
+                v-on="$listeners"
+                :eventActionList="CustomApi"
+                eventActionType="CUSTOMAPI"                
+                ></custom-api-event-action-config>
+              </b-card-body>
+            </b-collapse>
+          </b-card>
+
           <!-- <b-card no-body class="mb-1">
             <b-card-header
               header-tag="header"
@@ -381,6 +403,7 @@ import KycEventActionConfig from "../createProjectSlider/components/KycEventActi
 import PrizeEventActionConfig from "../createProjectSlider/components/PrizeEventActionConfig.vue"
 import SmartContractEventActionConfig from "../createProjectSlider/components/SmartContractEventActionConfig.vue"
 import CustomContractEventActionConfig from "../createProjectSlider/components/CustomContractEventActionConfig.vue"
+import CustomApiEventActionConfig from "../createProjectSlider/components/CustomApiEventActionConfig.vue"
 export default {
   name: "CreateProjectSlide",
   components: {
@@ -395,7 +418,8 @@ export default {
     KycEventActionConfig,
     PrizeEventActionConfig,
     SmartContractEventActionConfig,
-    CustomContractEventActionConfig
+    CustomContractEventActionConfig,
+    CustomApiEventActionConfig
   },
 
   props: {
@@ -464,6 +488,16 @@ export default {
       '--header-text-color':config.app.headerTextColor
       }
   },
+    CustomApi: function () {      
+       if (this.actionList && this.actionList.length > 0) {
+        return this.actionList.filter(
+          (x) =>
+            x.type.indexOf("CUSTOM_API") > -1          
+        );
+      } else {
+        return [];
+      }
+    },
     getTagDb: function () {
       if (this.tagFdb && this.tagFdb.length > 0) {
         for (let index = 0; index < this.tagFdb.length; index++) {

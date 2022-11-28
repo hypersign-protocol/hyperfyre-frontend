@@ -446,6 +446,7 @@ import {
   checkTitle,
   checkValue,
   isValidSlug,
+  isFloat
 } from "../../mixins/fieldValidationMixin.js";
 import CreateProjectSlide from "../../components/admin/createProjectSlider/CreateProjectSlide.vue";
 import dayjs from "dayjs";
@@ -474,6 +475,7 @@ export default {
         fromDate: "",
         toDate: "",
         isNotificaionEnabled: false,
+        isReferralLimitEnabled: false,
         ownerDid: "did:hs:QWERTlkasd090123SWEE12322",
         investorsCount: 0,
         social: {},
@@ -484,6 +486,7 @@ export default {
         tags: [],
         slug: "",
         referralDifficulty:30,
+        referralUsageLimit:10,
       },
       DeleteId:"",
       projectToDelete:"",
@@ -915,6 +918,10 @@ export default {
       // return new Date(d).toLocaleString();
     },
     editProject(project) {
+      if(!project.isReferralLimitEnabled && !project.referralUsageLimit) {            // making this for old events since "project.isReferralLimitEnabled" & "project.referralUsageLimit" are not there
+        project['isReferralLimitEnabled'] = false
+        project['referralUsageLimit'] = 10
+      }   
       eventBus.$emit("resetForFresh")
       this.resetAllValues();
       this.isProjectEditing = true;
@@ -977,6 +984,10 @@ export default {
     },
 
     async cloneProject(project) {
+      if(!project.isReferralLimitEnabled && !project.referralUsageLimit) {            // making this for old events 
+        project['isReferralLimitEnabled'] = false
+        project['referralUsageLimit'] = 10
+      }      
       this.resetAllValues();
       this.isProjectEditing = false;
       this.isProjectClonning = true;
@@ -1039,13 +1050,16 @@ export default {
       let index = this.eventActionList
         .map((action) => action.title)
         .indexOf("Hypersign Authentication");
-      this.eventActionList.splice(index, 1);
-      index = this.eventActionList
+        if(index >-1 ) {
+          this.eventActionList.splice(index, 1);
+        }              
+     let indexToFindNotification = this.eventActionList
         .map((action) => action.title)
         .indexOf("Subscribe  Notification");
-      this.eventActionList.splice(index, 1);
-      this.tagsTemp = project.tags;
-
+        if(indexToFindNotification > -1) {
+          this.eventActionList.splice(indexToFindNotification, 1);
+        }
+      this.tagsTemp = project.tags;      
       await this.saveProject();
     },
     async handlePaginateByProjectName(namePaginate) {
@@ -1243,7 +1257,22 @@ export default {
         ) {
           throw new Error(Messages.EVENTS.REF_POINT.NOT_POS_INP);
         }
-
+        if(this.project.isReferralLimitEnabled === true) {
+          if (
+          isNaN(parseInt(this.project.referralUsageLimit))
+        ) {
+          throw new Error('Enter valid Referral Usage Limit')
+        }
+        if (
+          parseInt(this.project.referralUsageLimit) < 0
+        ) {
+          throw new Error('Enter Referral Usage Limit should be positive number')
+        }
+        if (isFloat(this.project.referralUsageLimit)
+        ) {
+          throw new Error('Referral Usage Limit should be Positive Integer')
+        }
+        }
         //this.isLoading = true;
         const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
         let headers = {
@@ -1272,6 +1301,7 @@ export default {
         this.project.tags = this.tagsTemp;
         this.project.refereePoint = this.project.refereePoint.toString();
         this.project.referralPoint = this.project.referralPoint.toString();
+        this.project.referralUsageLimit = this.project.referralUsageLimit.toString();
         const resp = await apiClientMixin.makeCall({
           url,
           body: this.project,
@@ -1435,6 +1465,8 @@ export default {
         referralPoint: 5,
         tags: [],
         referralDifficulty:30,
+        referralUsageLimit:10,
+        isReferralLimitEnabled:false
       }),
       this.DeleteId="",
       this.projectToDelete="";

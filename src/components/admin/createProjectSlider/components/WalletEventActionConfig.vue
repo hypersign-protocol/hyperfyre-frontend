@@ -114,6 +114,7 @@
             type="text"
             id="title"
             class="form-control w-100"
+            placeholder="Enter Action Title"
           />
         </div>
       </div>
@@ -151,7 +152,7 @@
             id="placeHolder"
             class="form-control w-100"
             :placeholder="
-            selected.type === 'BLOCKCHAIN_COSMOS' ? 'cosmos1yya5gl4v6sj3qn0l06ngz0uuxg995mm9rrfkte' : ''"
+            selected.type === 'BLOCKCHAIN_COSMOS' ? 'cosmos1yya5gl4v6sj3qn0l06ngz0uuxg995mm9rrfkte' : 'Enter Placeholder'"
           />
         </div>
       </div>
