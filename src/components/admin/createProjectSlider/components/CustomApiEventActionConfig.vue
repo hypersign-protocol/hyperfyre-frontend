@@ -1070,8 +1070,7 @@ export default {
         case "BOOLEAN": {
           this.apiData.conditionValue = null
           this.isBoolean = true          
-          this.showRegexInputField = false
-          EventBus.$emit("resetOption",this.apiData.condition);
+          this.showRegexInputField = false          
           this.condtionOption =[
         { text: "Condition", value: null },
         { text: "===", value: "===" },
@@ -1235,7 +1234,7 @@ export default {
               case "BOOLEAN":
               case "STRING":
               case "OBJECT":
-                if(this.apiData.conditionValue === null) {
+                if(this.apiData.conditionValue === null || this.apiData.conditionValue === "") {
                   isvalid = false
                   return this.notifyErr(Messages.EVENTS.ACTIONS.CUSTOMAPI.VALID_CONDITION)
                 }
