@@ -1071,6 +1071,7 @@ export default {
           this.apiData.conditionValue = null
           this.isBoolean = true          
           this.showRegexInputField = false
+          EventBus.$emit("resetOption",this.apiData.condition);
           this.condtionOption =[
         { text: "Condition", value: null },
         { text: "===", value: "===" },

@@ -302,7 +302,7 @@ export default {
           } else if (parseInt(this.selected.score) < 0) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.SCORE_IS_POSITIVE_NUM);
-          } else if (this.eventActionList.length > 0) {
+          } else if (this.isCreate === true && this.eventActionList.length > 0 && this.eventActionList.length <= 1) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.KYCACCORDIN.DUPLICATE_KYC);
           }
