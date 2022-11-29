@@ -138,7 +138,7 @@
                             style="min-width:90px;"
                             :title="attr.fieldName"
                           >
-                          {{ truncate1(attr.fieldName,6) }}
+                          {{ truncate1(attr.fieldName,8) }}
                            <span style="color: gray; padding-left: 5px">
                             <i style="" class="fas fa-minus-circle"></i>
                           </span>
@@ -230,7 +230,7 @@
                             style="min-width:90px;"
                             :title="attr.fieldName"
                           >
-                          {{ truncate1(attr.fieldName,6) }}
+                          {{ truncate1(attr.fieldName,8) }}
                            <span style="color: gray; padding-left: 5px">
                             <i style="" class="fas fa-minus-circle"></i>
                           </span>
