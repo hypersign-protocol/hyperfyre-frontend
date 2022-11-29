@@ -31,7 +31,7 @@
               style="padding-right: 5px"
               src="../../../../assets/matic-logo.svg"
               v-if="eventAction.type.includes('MATIC_NETWORK')"
-              height="20px"
+              height="16px"
             />
             <img
               style="padding-right: 5px"

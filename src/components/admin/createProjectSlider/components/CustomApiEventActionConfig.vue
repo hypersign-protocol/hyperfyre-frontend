@@ -23,7 +23,7 @@
             <img
               style="padding-right: 5px"
               src="../../../../assets/filled-rest-api-50.png"          
-              height="22px"
+              height="18px"
             />  
           </span>
           <span>{{ truncate1(eventAction.title, 6) }}</span>
