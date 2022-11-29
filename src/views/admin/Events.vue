@@ -319,7 +319,8 @@ i {
                 title="Expiry Day"
               >
               <i class="fa fa-hourglass-end"></i>
-              Expires in {{ getDateDiff(project.toDate, new Date()) }} day (s)
+              <span v-if="!isEventExpired(project.toDate)">Expires in {{ getDateDiff(project.toDate, new Date()) }} day (s)</span>
+              <span v-if="isEventExpired(project.toDate)">Expired !</span>
             </li>
 
               <li
@@ -587,6 +588,15 @@ export default {
       deleteNote:DELETE_EVENT_NOTE
     };
   },
+ watch: {
+        project:{
+          deep:true,
+          handler: function(newValue,oldValue) {
+            this.project = newValue            
+            eventBus.$emit("sendProject", this.project);
+          }
+        }
+    },
 
   async mounted() {
     //const usrStr = localStorage.getItem("user");
@@ -616,6 +626,14 @@ export default {
   },
 
   methods: {
+    isEventExpired(d1) {
+      const ToDate = new Date();
+       if (new Date(d1).getTime() <= ToDate.getTime()) {
+      return true
+        } else {
+          return false
+        }
+    },
     getDateDiff(d1, d2){
       const date1 = new Date(d1);
       const date2 = new Date(d2);
@@ -931,7 +949,7 @@ export default {
       );
       this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
 
-      eventBus.$emit("sendProject", this.project);
+      // eventBus.$emit("sendProject", this.project);
       // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
       this.project.social = {
         twitter: {
@@ -1323,6 +1341,7 @@ export default {
     },
 
     checkIfEverythingIsFilled() {
+      const ToDate = new Date()
       for (let index = 0; index < this.eventActionList.length; index++) {
         if (
           this.eventActionList[index].score === null ||
@@ -1382,6 +1401,9 @@ export default {
       }
       if (!(this.project.fromDate && this.project.toDate)) {
         return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_DATE_TIME;
+      }
+      if(new Date(this.project.toDate).getTime() <= ToDate.getTime()) {            
+        return Messages.EVENTS.EVENT_EXPIRY_DATE
       }
       if (this.tagsTemp.length < 1) {
         return Messages.EVENTS.CREATE_EDIT_EVENT.CHOOSE_ATLEAST_ONE_TAG;
