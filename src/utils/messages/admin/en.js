@@ -14,6 +14,7 @@ const EVENTS = {
     EVENT_DELETED:"Event is deleted successfully",
     WRONG_EVENT_ID:"Please enter valid event Id",
     EVENT_CLOSED:"Cannot edit CLOSED event! OPEN it to edit",
+    EVENT_EXPIRY_DATE:"Event is expired! Please select expiry date greater than current date",
     NO_EVENT_FOUND:"No events found, click on create button to create a new event!",
     CHECK_ALL_TYPE: "PLease Check if any type left empty",
     CHECK_ALL_TITLE_EMPTY: "Check if any Title field you left empty",
@@ -90,6 +91,11 @@ const EVENTS = {
             ABI_NOT_EMPTY: "Contract ABI Should not be empty",
             THBALANCE_NOT_NEGATIVE: "Enter the Threshold balance that should be a Positive Number",
             VALID_CONTRACT_ADDRESS: "Please enter valid Contract address"
+        },
+        CUSTOM_CONTRACT: {
+            SELECT_OPERATOR: "Select operator",
+            ENTER_CONDITION_VALUE: "Enter condition value"
+
         },
 
         PRIZECARD: {

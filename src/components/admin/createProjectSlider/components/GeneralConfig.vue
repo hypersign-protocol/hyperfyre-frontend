@@ -126,10 +126,14 @@
             </div>
             <div class="col-lg-9 col-md-9 px-0">
                 
-                 <select class="form-control" v-model="project.projectStatus">
+                 <!-- <select class="form-control" v-model="project.projectStatus">
                       <option value="true" >OPEN</option>
                       <option value="false">CLOSE</option>
-                </select >
+                </select > -->
+                 <b-form-select
+                      v-model="project.projectStatus"
+                      :options="statusOptions"
+                ></b-form-select>
             </div>  
     </div>
 
@@ -266,6 +270,10 @@ buttonThemeCss() {
           "type": null,
           "id": "",
         },
+        statusOptions:[
+          {text:"OPEN",value:true},
+          {text:"CLOSE",value:false}
+        ]
       }
     },
   props:{

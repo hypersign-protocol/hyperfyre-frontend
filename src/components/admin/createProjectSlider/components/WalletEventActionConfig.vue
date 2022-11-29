@@ -31,7 +31,7 @@
               style="padding-right: 5px"
               src="../../../../assets/matic-logo.svg"
               v-if="eventAction.type === 'BLOCKCHAIN_MATIC'"
-              height="20px"
+              height="16px"
             />
             <img
               style="padding-right: 5px"
@@ -67,7 +67,7 @@
               style="padding-right: 5px"
               src="../../../../assets/cardano_128.png"
               v-if="eventAction.type === 'BLOCKCHAIN_CARDANO'"
-              height="22px"
+              height="20px"
             />
             <img
               style="padding-right: 5px"
@@ -335,7 +335,7 @@ export default {
     },
     handleEventActionValidation() {
       let isvalid = true;
-
+      const ToDate = new Date();
       //////
       //// WARNINGS: This is worst way of handeling validation
       //// You should return or break the moment first error occured
@@ -344,7 +344,10 @@ export default {
         if(this.project.projectStatus ==false){
           isvalid = false;
           return this.notifyErr(Messages.EVENTS.EVENT_CLOSED)
-        }
+        } if(new Date(this.project.toDate).getTime() <= ToDate.getTime()) {
+            isvalid = false
+            return this.notifyErr(Messages.EVENTS.EVENT_EXPIRY_DATE)
+          }
           if (this.selected.type === null) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.BLOCKCHAIN.CHOOSE_TYPE);
