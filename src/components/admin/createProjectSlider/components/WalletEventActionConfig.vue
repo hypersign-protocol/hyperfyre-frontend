@@ -31,7 +31,7 @@
               style="padding-right: 5px"
               src="../../../../assets/matic-logo.svg"
               v-if="eventAction.type === 'BLOCKCHAIN_MATIC'"
-              height="20px"
+              height="16px"
             />
             <img
               style="padding-right: 5px"
@@ -67,7 +67,7 @@
               style="padding-right: 5px"
               src="../../../../assets/cardano_128.png"
               v-if="eventAction.type === 'BLOCKCHAIN_CARDANO'"
-              height="22px"
+              height="20px"
             />
             <img
               style="padding-right: 5px"

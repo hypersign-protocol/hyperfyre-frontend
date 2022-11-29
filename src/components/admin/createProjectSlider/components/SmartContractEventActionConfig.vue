@@ -31,7 +31,7 @@
               style="padding-right: 5px"
               src="../../../../assets/matic-logo.svg"
               v-if="eventAction.type.includes('MATIC_')"
-              height="20px"
+              height="16px"
             />
             <img
               style="padding-right: 5px"
@@ -55,7 +55,7 @@
               style="padding-right: 5px"
               src="../../../../assets/moonbase-alpha.svg"
               v-if="eventAction.type.includes('MOON_')"
-              height="22px"
+              height="16px"
             />
             <img
               style="padding-right: 5px"
