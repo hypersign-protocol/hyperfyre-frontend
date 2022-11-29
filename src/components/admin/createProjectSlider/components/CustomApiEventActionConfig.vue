@@ -1184,7 +1184,7 @@ export default {
     },
     handleEventActionValidation() {
       let isvalid = true;
-
+      const ToDate = new Date();
       //////
       //// WARNINGS: This is worst way of handeling validation
       //// You should return or break the moment first error occured
@@ -1193,6 +1193,9 @@ export default {
           if(this.project.projectStatus ==false){
             isvalid = false;
             return this.notifyErr(Messages.EVENTS.EVENT_CLOSED)
+          } if(new Date(this.project.toDate).getTime() <= ToDate.getTime()) {
+            isvalid = false
+            return this.notifyErr(Messages.EVENTS.EVENT_EXPIRY_DATE)
           }
          if (isEmpty(this.selected.title)) {
             isvalid = false;
