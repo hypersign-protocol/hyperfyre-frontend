@@ -91,6 +91,11 @@ const EVENTS = {
             THBALANCE_NOT_NEGATIVE: "Enter the Threshold balance that should be a Positive Number",
             VALID_CONTRACT_ADDRESS: "Please enter valid Contract address"
         },
+        CUSTOM_CONTRACT: {
+            SELECT_OPERATOR: "Select operator",
+            ENTER_CONDITION_VALUE: "Enter condition value"
+
+        },
 
         PRIZECARD: {
             PRIZE_TYPE: "Please select prize type",

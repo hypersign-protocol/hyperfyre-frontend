@@ -275,6 +275,7 @@ import {
   isEmpty,
   isValidURL,
   truncate,
+  isContractValid
 } from "../../../../mixins/fieldValidationMixin";
 import Messages from "../../../../utils/messages/admin/en";
 import config from "../../../../config"
@@ -330,7 +331,7 @@ export default {
     return {
       appName: config.appName,
       allCondition: [
-        { text: "None", value: null },
+        { text: "Operator", value: null },
         { text: "=", value: "===" },
         { text: ">", value: ">" },
         { text: "<", value: "<" },
@@ -364,7 +365,7 @@ export default {
         contractABI: "",
         methods: null,
         operand: null,
-        operator: "",
+        operator: null,
         returnType: "",
       },
       selected: {
@@ -441,7 +442,7 @@ export default {
         contractABI: "",
         methods: null,
         operand: null,
-        operator: "",
+        operator: null,
         returnType: "",
       };
       this.selected = clearData;
@@ -464,25 +465,40 @@ export default {
             this.notifyErr(
               Messages.EVENTS.ACTIONS.SMARTCONTRACT.CHOOSE_CONTRACT_TYPE
             );
-          }else if (this.contract.methods===null || isEmpty(this.contract.methods)) {
-            isvalid = false;
-            this.notifyErr(
-              Messages.EVENTS.ACTIONS.SMARTCONTRACT.METHODS_EMPTY
-            );
-          } else if (isEmpty(this.contract.contractAddress)) {
+          }  else if (isEmpty(this.contract.contractAddress)) {
             isvalid = false;
             this.notifyErr(
               Messages.EVENTS.ACTIONS.SMARTCONTRACT.ADDRESS_NOT_EMPTY
             );
+          } else if (!isContractValid(this.contract.contractAddress)) {
+            isvalid = false;
+            this.notifyErr(
+              Messages.EVENTS.ACTIONS.SMARTCONTRACT.VALID_CONTRACT_ADDRESS
+            )
           } else if (isEmpty(this.contract.contractABI)) {
             isvalid = false;
             this.notifyErr(
               Messages.EVENTS.ACTIONS.SMARTCONTRACT.ABI_NOT_EMPTY
             )
-          }else if (isValidURL(this.selected.title)) {
+          } else if (this.contract.methods===null || isEmpty(this.contract.methods)) {
+            isvalid = false;
+            this.notifyErr(
+              Messages.EVENTS.ACTIONS.SMARTCONTRACT.METHODS_EMPTY
+            );
+          } else if (this.contract.operator === null) {
+            isvalid = false;
+            this.notifyErr(
+             Messages.EVENTS.ACTIONS.CUSTOM_CONTRACT.SELECT_OPERATOR
+            );
+          } else if (isEmpty(this.contract.operand)) {
+            isvalid = false;
+            this.notifyErr(
+              Messages.EVENTS.ACTIONS.CUSTOM_CONTRACT.ENTER_CONDITION_VALUE
+            )
+          } else if (isValidURL(this.selected.title)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.TITLE_URL);
-          }else if (isEmpty(this.selected.title)) {
+          } else if (isEmpty(this.selected.title)) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.EMPTY_TITLE);
           } else if (isNaN(parseInt(this.selected.score))) {            
