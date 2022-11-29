@@ -286,7 +286,7 @@ export default {
             return this.notifyErr(Messages.EVENTS.EVENT_CLOSED)
           }
           this.selected.type = "PRIZE_CARD"
-          if (this.selected.type === null) {
+          if (this.prizeDetails.type === null) {
             isvalid = false;
             this.notifyErr(Messages.EVENTS.ACTIONS.PRIZECARD.PRIZE_TYPE);
           } else if (isEmpty(this.selected.title)) {
