@@ -181,7 +181,7 @@ methods:{
                 }              
                 button.continue,button.submit{
                   color : ${config.app.buttonTextColor} !important;
-                  background: ${config.app.buttonBgColors}!important;
+                  background: ${config.app.buttonBgColor}!important;
                 }
                 div.tab-content{
                   background-color:#faedcd !important
@@ -190,12 +190,12 @@ methods:{
                   color:#252733 !important
                 }
                 div.round-icon{
-                  background-image:linear-gradient(204deg,${config.app.buttonBgColors},#dedede) !important
+                  background-image:linear-gradient(204deg,${config.app.buttonBgColor},#dedede) !important
                 }
               
               :root{
                 --primary-color:${config.app.buttonTextColor} !important;
-                --success-color:${config.app.buttonBgColors} !important;
+                --success-color:${config.app.buttonBgColor} !important;
               }
                 
                 `
