@@ -40,6 +40,10 @@ const config = {
     },
     moopay:{
         payment_url:process.env.VUE_APP_MOOPAY_PAYMENT_URL,
+    },
+    marketPlace:{
+        create_merkel_tree_finance_vote:process.env.VUE_APP_FINANCE_VOTE,        
+
     }
 }
 
