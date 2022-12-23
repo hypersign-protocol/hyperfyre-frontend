@@ -23,12 +23,22 @@
         :userReferralCount="userReferralCount"
         :userProfile="Object.keys(userProfileData).length > 0 ? userProfileData : null"
         :ActionSchema="eventActionsToShow" :authToken="authToken" :prizeData="prizeData"
+        :projectStatus="eventData.projectStatus"
         @UserUpdateEvent="updateUserData" :themeData="eventData.orgData" />
     </template>
 
     <template v-if="authToken != '' && authToken != null">
-      <ErrorMessage v-if="!eventData.projectStatus" errorMessage="Event is over" />
 
+      <ErrorMessage v-if="isEventOver && !checkIfRewardDistributed" errorMessage="Event is over awaiting for reward distribution" />
+      <Action v-if="checkIfRewardDistributed"      
+      @UserUpdateEvent="updateUserData" :themeData="eventData.orgData"      
+      :ActionSchema="eventActionsToShow"
+      :authToken="authToken" 
+      :userProfile="Object.keys(userProfileData).length > 0 ? userProfileData : null"    
+      :projectStatus="eventData.projectStatus"
+      :eventId="eventData._id"
+      :prizeData="prizeData"
+      />
       <div class="footer mx-auto overflow-hidden mainContentWdth" style="align-items:center;padding-top:20px">
         <b>Disclaimer:</b>
         Anyone can create campaigns on {{appName}}, rewards are distributed by the campaign creator and {{appName}} is
@@ -118,6 +128,42 @@ export default {
   },*/
 
   computed: {
+    checkIfRewardDistributed() {
+      let isRewardDistributed = false
+      if(!this.eventData.projectStatus) {
+       isRewardDistributed = this.eventData.actions.find((x)=>{
+          if(x.type === "PRIZE_CARD" && JSON.parse(x.value).type === "Tokens") {
+            if(JSON.parse(x.value).isDistributed) {              
+              return true
+            } else {
+              return false
+            }           
+          } else {
+            return false
+          }
+        })       
+      }      
+      return isRewardDistributed
+    },
+    isEventOver() {      
+      let show = true
+      if(!this.eventData.projectStatus) {         
+       show = this.eventData.actions.find((x)=>{
+          if(x.type === "PRIZE_CARD" && JSON.parse(x.value).type === "Tokens") {             
+            if(JSON.parse(x.value).isDistributed) {                        
+              return false
+            } else {
+              return true
+            }           
+          } else{           
+            return true
+          }
+        })                 
+      } else {
+        show = false
+      }
+      return show
+    },
     timeLeft: function() {
       if (this.eventData.fromDate && this.eventData.projectStatus) {
 

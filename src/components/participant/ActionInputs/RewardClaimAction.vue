@@ -1,0 +1,324 @@
+<template>
+  <b-card no-body class="action-wrap">
+    <loading
+      :active.sync="isLoading"
+      :can-cancel="true"
+      :is-full-page="fullPage"
+    ></loading>
+    <b-card-header
+      :class="visible ? null : 'collapsed'"
+      :aria-expanded="visible ? 'true' : 'false'"
+      aria-controls="profile"
+      @click="visible = !visible"
+    >
+      <b-row>
+        <b-col cols="1" sm="1" md="1">
+          <img src="../../../assets/premium-badge.png" height="25px" />
+        </b-col>
+        <b-col cols="9" sm="9" class="text-left" md="9">
+          <div class="text">Claim Rewards</div>
+        </b-col>
+      </b-row>
+    </b-card-header>
+    <b-collapse id="profile" v-model="visible">
+      <b-card-body class="user-details">
+        <p class="border rounded-lg p-2 modal-text" :style="backroundThemeCss">
+          {{ sticyNote }}
+          <span class="btn-xs btn-link fetchList" @click="fetchList()"
+            >here</span
+          >
+        </p>
+        <table
+          v-if="claimData.length"
+          class="table table-bordered"
+          style="background: #ffff
+          table-layout:fixed;
+          word-wrap:break-word;"
+        >
+          <thead class="thead-light">
+            <tr>
+              <th>Prize Name</th>
+              <th>Number of winners</th>
+              <th>Prize Per Winner</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in claimData" :key="row._id">
+              <th v-if="JSON.parse(row.value).isDistributed" class="wrapword">
+                {{ row.title }}
+              </th>
+              <td v-if="JSON.parse(row.value).isDistributed" class="wrapword">
+                {{ JSON.parse(row.value).winners }}
+              </td>
+              <td v-if="JSON.parse(row.value).isDistributed" class="wrapword">
+                {{ JSON.parse(row.value).prizeValue }}
+                <span style="display: inline">
+                  <button
+                    class="btn btn-link btn-sm"
+                    @click="importToken(row)"
+                    title="Import Token in metamask wallet"
+                  >
+                    Import
+                  </button>
+                </span>
+              </td>
+              <td v-if="JSON.parse(row.value).isDistributed" class="wrapword">
+                <button class="btn btn-link btn-sm" @click="claimReward(row)">
+                  Claim
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </b-card-body>
+    </b-collapse>
+  </b-card>
+</template>
+<script>
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
+import loadweb3 from "../../../mixins/getWeb3";
+import { abi, address } from "../../../mixins/merkelDropFactoryAbi";
+import notificationMixins from "../../../mixins/notificationMixins";
+import axios from "axios";
+import { utils } from "web3";
+import profileIconMixins from "../../../mixins/profileIconMixins";
+import { erc20ABI } from "../../../mixins/ERC20ContractAbi";
+import HfNotes from "../../elements/HfNotes.vue";
+import config from "../../../config";
+import { truncate } from "../../../mixins/fieldValidationMixin";
+export default {
+  name: "RewardClaim",
+  components: { HfNotes, Loading },
+  props: {
+    claimData: {
+      required: true,
+      type: Array,
+    },
+    eventId: {
+      required: true,
+      type: String,
+    },
+  },
+  data() {
+    return {
+      fyreWalletAddress: "0xe8E06659F296D7c0561f41250A8a2674E83e8B98",
+      whitelistAddress: [],
+      authToken: localStorage.getItem("authToken"),
+      sticyNote: "See the list of winners",
+      isLoading: false,
+      fullPage: true,
+      accounts: [],
+      visible: false,
+    };
+  },
+  computed: {
+    backroundThemeCss() {
+      return {
+        "--modal-bg-text": config.app.headerBGColor,
+      };
+    },
+  },
+  methods: {
+    async fetchList() {
+      this.isLoading = true;
+      const url = `${this.$config.studioServer.BASE_URL}api/v1/reward/distribution/event/${this.eventId}`;
+      let headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.authToken}`,
+      };
+
+      const resp = await fetch(url, {
+        headers,
+        method: "GET",
+      });
+
+      if (!resp.ok) {
+        return this.notifyErr(resp.statusText);
+      }
+      const json = await resp.json();
+      // const list = json.filter((x)=>{
+      //   return x.
+      // })
+      const list = json.map((x) => {
+        return [...x.whiteListedAddress];
+      });
+      console.log(list);
+      var swal_html = `<div class="list-group list-group-flush" style="max-height:500px;overflow-y: scroll;">`;
+      list.forEach((element, index) => {
+        `<span class="mr-auto">ABCD</span>`;
+        element.forEach((element, index) => {
+          let img1 = this.getProfileIcon(element.destination + index);
+          swal_html =
+            swal_html +
+            `<div class="list-group-item d-flex align-items-center">
+          <span class="b-avatar mr-3 badge-info rounded-circle">
+            <span class="b-avatar-img">
+              <img src="` +
+            img1 +
+            `" alt="avatar">
+            </span><!---->
+          </span>          
+          <span class="mr-auto">` +
+            element.destination +
+            `</span> 
+          <span class="badge badge-primary">` +
+            this.friendlyValue(element.value) +
+            `</span>         
+        </div> `;
+        });
+      });
+
+      swal_html = swal_html + `</div>`;
+      this.$swal.fire({
+        position: "center",
+        focusConfirm: true,
+        html: swal_html,
+        toast: false,
+        title: "<h5>Winner list</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        width: "50rem",
+        background: "white",
+      });
+      this.isLoading = false;
+    },
+    friendlyValue(str) {
+      const toEthStd = utils.fromWei(str.toString(), "ether").toString();
+      return toEthStd;
+    },
+    async importToken(data) {
+      this.isLoading = true;
+      const web3 = await loadweb3();
+      const tokenAddress = JSON.parse(data.value).contractAddress;
+      const contract = new web3.eth.Contract(erc20ABI, tokenAddress);
+      const tokenSymbol = await contract.methods.symbol().call();
+      const tokenDecimals = await contract.methods.decimals().call();
+      const tokenImage = this.getTokenIcon(tokenSymbol);
+      try {
+        // wasAdded is a boolean. Like any RPC method, an error may be thrown.
+        const wasAdded = await web3.currentProvider.request({
+          method: "wallet_watchAsset",
+          params: {
+            type: "ERC20", // Initially only supports ERC20, but eventually more!
+            options: {
+              address: tokenAddress, // The address that the token is at.
+              symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
+              decimals: tokenDecimals, // The number of decimals in the token
+              image: tokenImage, // A string url of the token logo
+            },
+          },
+        });
+
+        if (wasAdded) {
+          this.notifySuccess(`${tokenSymbol} Token added in your wallet`);
+        } else {
+          this.notifyErr(`Not able to add ${tokenSymbol} in your wallet`);
+        }
+      } catch (error) {
+        this.notifyErr(error.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async claimReward(row) {
+      try {
+        this.isLoading = true;
+        let data = [];
+        const parsedData = JSON.parse(row.value);
+        const airdropId = parsedData.externalRecordId;
+        const web3 = await loadweb3();
+        this.accounts = await web3.eth.getAccounts();
+        const url = `${this.$config.marketPlace.create_merkel_tree_finance_vote}/bank/check/${this.accounts[0]}`;
+        const res = await axios.get(url);
+        data = [...res.data];
+        console.log(data);
+        const filteredObject = data.find((x) => {
+          return x._id === airdropId;
+        });
+        if (filteredObject === undefined) {
+          throw new Error("You are not whitelisted in the winner list");
+        }
+        console.log(filteredObject.treeIndex);
+        console.log(filteredObject.additionalData.chainId);
+        console.log(filteredObject.inputData.hash);
+        console.log(filteredObject.version);
+        const contract = new web3.eth.Contract(abi, address);
+        const [tree, withdrawn] = await Promise.all([
+          contract.methods.merkleTrees(filteredObject.treeIndex - 1).call(),
+          contract.methods
+            .getWithdrawn(
+              filteredObject.treeIndex - 1,
+              filteredObject.inputData.hash
+            )
+            .call(),
+        ]);
+        console.log(tree);
+        console.log(withdrawn);
+        if (!withdrawn) {
+          const getProofFromApi = await this.getProof(
+            airdropId,
+            this.accounts[0]
+          );
+          console.log(getProofFromApi);
+          const amountInWei = utils
+            .toWei(filteredObject.inputData.data.value, "wei")
+            .toString();
+          console.log(amountInWei);
+          const withDrawToken = await contract.methods
+            .withdraw(
+              filteredObject.treeIndex - 1,
+              this.accounts[0],
+              amountInWei,
+              getProofFromApi
+            )
+            .send({ from: this.accounts[0] });
+          console.log(withDrawToken.status);
+          if (withDrawToken.status === true) {
+            this.notifySuccess(
+              "Reward claimed successfully! check your wallet"
+            );
+          }
+        } else {
+          throw new Error("Reward already claimed");
+        }
+      } catch (e) {
+        this.notifyErr(e);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async getProof(airdropId, walletAddress) {
+      console.log(airdropId, walletAddress);
+      const proof = await axios.get(
+        `https://bank.influencebackend.xyz/proof/${airdropId}/${walletAddress}`
+      );
+      console.log(proof.data);
+      return proof.data.merkleProof;
+    },
+    truncate1(str, number) {
+      return truncate(str, number);
+    },
+  },
+  mixins: [notificationMixins, profileIconMixins],
+};
+</script>
+<style scoped>
+.fetchList {
+  cursor: pointer;
+}
+.modal-text {
+  font-size: 12px;
+  background-color: var(--modal-bg-text);
+}
+.wrapword {
+  white-space: -moz-pre-wrap !important;
+  white-space: -webkit-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  white-space: normal;
+}
+</style>

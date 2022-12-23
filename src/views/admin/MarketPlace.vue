@@ -190,6 +190,22 @@
         v-if="showContractField"
       >
         <div class="col-lg-9 col-md-9 px-0">
+          <label for="placeHolder" class="col-form-label">Select Your chain: </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">
+            <b-form-select                  
+              placeholder="Select an Event"
+              :options="chainOptions"
+              v-model="selectedChain"                          
+              @input="onSelectChain"
+            ></b-form-select>
+        </div>
+      </div>
+      <div
+        class="row g-3 align-items-center w-100 mt-4 ml-2"
+        v-if="showContractField"
+      >
+        <div class="col-lg-9 col-md-9 px-0">
           <label for="placeHolder" class="col-form-label">Enter your contract address: </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
@@ -220,7 +236,7 @@
           ></b-form-textarea>
         </div>        
       </div>
-      <div class="mt-2" style="display: flex" v-if="showContractField">
+      <div class="mt-4" style="display: flex" v-if="showContractField">
           <div class="col-lg-6 col-md-9 px-0"></div>
           <div class="col-lg-4 col-md-3" style="display: block">
             <hf-buttons
@@ -238,7 +254,18 @@
           <label for="placeHolder" class="col-form-label">You need to pay platform fee as token: </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">    
-          <span v-if="feeStructure.fyrePlatformCommision!==''">{{feeStructure.fyrePlatformCommision}} Tokens as a platfrom Fee</span>
+          <span v-if="feeStructure.fyrePlatformCommision!==''">{{getFriendlyValue(feeStructure.fyrePlatformCommision)}} {{feeStructure.symbol}} Tokens as a platfrom Fee</span>
+        </div>        
+      </div>
+      <div
+        class="row g-3 align-items-center w-100 mt-4 ml-2"
+        v-if="showContractField"
+      >
+        <div class="col-lg-3 col-md-3 align-items-center"  v-if="feeStructure.totalAmountToDistribute!==''">
+          <label for="placeHolder" class="col-form-label">Total Payable Amount: </label>
+        </div>
+        <div class="col-lg-9 col-md-9 px-0">    
+          <span v-if="feeStructure.totalAmountToDistribute!==''">{{getFriendlyValue(feeStructure.totalAmountToDistribute)}} {{feeStructure.symbol}} Tokens</span>
         </div>        
       </div>
       <!-- <div
@@ -283,7 +310,7 @@
     </b-sidebar>
     <div class="row">
       <div class="col-md-12">
-        <h3>MarketPlace Your App</h3>
+        <h3>Create your Airdrop here</h3>
         <div class="card event-card">
           <div class="card-body">
             <b-card
@@ -303,12 +330,7 @@
                   <h5 class="card-title"
                     >Create Reward Distribution Through finanace.vote</h5
                   >
-                </li>
-                <!-- <li>
-                  <p class="card-title"
-                    >Schemass</p
-                  >
-                </li>                 -->
+                </li>          
               </ul>
               <footer>
                 <div class="form-group row" style="margin-bottom: 0rem">
@@ -339,6 +361,7 @@ import HfNotes from "../../components/elements/HfNotes.vue";
 import notificationMixins from "../../mixins/notificationMixins";
 import {ipfsHashToBytes32,getMaxApprove} from "../../mixins/rewardDistUtils"
 import loadweb3 from "../../mixins/getWeb3"
+import {utils} from "web3"
 import apiClient from "../../mixins/apiClientMixin"
 import { abi, address} from '../../mixins/merkelDropFactoryAbi'
 import {erc20ABI} from "../../mixins/ERC20ContractAbi"
@@ -346,11 +369,10 @@ import ToolTips from "../../components/basic/toolTips";
 import config from "../../config";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import { isValidURL, isValidText } from "../../mixins/fieldValidationMixin";
-import Messages from "../../utils/messages/admin/en";
+import { isValidURL, isValidText,shortenName } from "../../mixins/fieldValidationMixin";
 import HfButtons from "../../components/elements/HfButtons.vue";
 import axios from "axios"
-import {utils} from "web3"
+import Fyre_Small from "../../assets/Fyre_Small.png"
 export default {
   name: "MarketPlace",
   components: { Loading, ToolTips, HfButtons, HfNotes },
@@ -366,12 +388,20 @@ export default {
     },
   },
   data() {
-    return {
+    return {      
+      selectedChain:null,
+      chainOptions:[
+        {text:"Select Chain",value:null},
+        {text:"Ethereum Mainnet",disabled:true,value:{name:"ETH_MAINNET", chainId:1, contractAddress:""}}, //disabled for now 
+        {text:"Goerli Testnet",value:{name:"GOERLI_MAINNET", chainId:5, contractAddress:""}},
+        {text:"Matic Mainnet",disabled:true,value:{name:"MATIC_MAINNET", chainId:137, contractAddress:""}}],
       proceed:false,
       isCheckEveryThing:false,
       feeStructure:{
         fyrePlatformCommision:'',
-        yourTotalAmount:''
+        serviceFeePercente:0,
+        totalAmountToDistribute:"",
+        symbol:""
       },
       simpleData:"",
       dataParsed:"",
@@ -398,30 +428,20 @@ export default {
       depositTokenAddress: "",
       tokenBalance: "",
       accounts: [],
+      newData:{},
       data: {
-        inputData: [
-        {
-        destination:	"0x68E6ecaAe37F9a780B9A337ec9D88768c0425A4d",
-        value:	"100000000000000000000"
-        }
-        ],
+        inputData: [],
         additionalData: {
           showcase: false,
           depositToken: "",
           project: {
-            _id: "6391709d7f9eb60013c7507b",
-            label: "RP Raj Patil",
-            symbol: "RP NEW TOKEN",
-            address: {
-              5: "0x6cBAD888Bf20b35192AdfFA909c5cfeeD8463f81",
-            },
-            key: "RP NEW TOKEN",
-            createdAt: "2022-12-08T05:05:33.799Z",
-            updatedAt: "2022-12-08T05:05:33.799Z",
-            __v: 0,
+            label: "",
+            symbol: "",
+            address: {},
+            key: "",
           },
           contract: "MerkleDropFactory",
-          chainId: 5,
+          chainId: 0,
         },
         friendlyValues: false,
       },
@@ -450,6 +470,14 @@ export default {
     });
   },
   methods: {
+    getFriendlyValue(str){
+    const toEthStd = utils.fromWei(str.toString(), "ether").toString();
+    return toEthStd
+    },
+    onSelectChain(e){
+      console.log(e)  
+      console.log(this.selectedChain)    
+    },
     callChange(e) {
       console.log(e)
     },
@@ -504,36 +532,41 @@ export default {
 //       )     
   },
 async calculateFee() { 
-    this.proceed = false         
-      if(this.depositTokenAddress ===""){
+    this.proceed = false
+    if(this.selectedChain === null) {
+      throw new Error(this.notifyErr('Select Chain'))
+    } else if(this.depositTokenAddress ===""){
         throw new Error(this.notifyErr('Enter Contract Address'))
       }
       else if(this.simpleData===""){
         throw new Error(this.notifyErr('Enter Wallet addresses and respective token value'))
       }
+      const web3 = await loadweb3()
+      const contract = new web3.eth.Contract(erc20ABI, this.depositTokenAddress);
+      this.feeStructure.symbol = await contract.methods.symbol().call();
       console.log(this.simpleData)
       var allTextLines = this.simpleData.split(/\r\n|\n/);
         //Split per line on tabs and commas        
         console.log(allTextLines.length)        
         let locations = []; 
         for (var i=0; i<allTextLines.length; i++) {
-            var data = allTextLines[i].split(',');
-            console.log(data)            
-            let location = {"destination":data[0], "value":data[1],};            
-            console.log(location)
+            var data = allTextLines[i].split(',');                     
+            let location = {"destination":data[0], "value":data[1],};                        
             locations.push(location);
-        }        
-        console.log(locations)        
-        if(locations.length < JSON.parse(this.flash.value).winners){
-          console.log(JSON.parse(this.flash.value).winners)
+        }                       
+        if(locations.length < JSON.parse(this.flash.value).winners){          
          throw new Error (this.notifyErr('Number of winners entered are less than you mentioned in Prize'))
         } else if(locations.length > JSON.parse(this.flash.value).winners){
          throw new Error(this.notifyErr('Number of winners entered are more than you mentioned in Prize'))
-        } else {             
-          console.log(locations)    
-          this.data.additionalData.depositToken = this.depositTokenAddress      
-          this.data.inputData = [...locations]
-          console.log(this.data)
+        } else {          
+          const chainIdd = this.selectedChain.chainId
+          this.data.additionalData.depositToken = this.depositTokenAddress
+          this.data.additionalData.chainId = this.selectedChain.chainId     
+          this.data.additionalData.project.address = {[`${chainIdd}`]:this.depositTokenAddress}
+          this.data.additionalData.project.label = this.flash.title +this.flash._id
+          this.data.additionalData.project.symbol = this.shortenName1(this.flash.title,this.flash._id)
+          this.data.additionalData.project.key = this.data.additionalData.project.symbol
+          this.data.inputData = [...locations]                  
            const url = `${this.$config.studioServer.BASE_URL}api/v1/reward/distribution/serviceFee`;
           let data = {}
           data ={...this.data}
@@ -541,37 +574,34 @@ async calculateFee() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
           AccessToken:`Bearer ${this.accessToken}`
-        };
-        // const resp = await fetch(url, {
-        //   headers,
-        //   method: "GET",
-        //   body:JSON.stringify(this.data)
-        // });
+        };     
         const resp = await apiClient.makeCall({
           url,
           method:'POST',
           body:data,
           header:headers
         })
-        const res = resp.data        
-        console.log(res)
+        const res = resp.data
+        this.feeStructure.totalAmountToDistribute = res.totalAmountToPay.toString()
+        this.feeStructure.fyrePlatformCommision= res.serviceFee.toString()
+        this.feeStructure.serviceFeePercente = res.serviceFeePercent
+        delete res.serviceFee
+        delete res.serviceFeePercent
+        delete res.totalAmountToPay        
+        const dataToUploadToBlockchain = res      
+        this.newData = {...dataToUploadToBlockchain}        
           this.proceed = true
           this.isCheckEveryThing = true
         }        
-        console.log(this.data.inputData)        
   },
   async createDistribution() {    
-    console.log(this.proceed)
     if(this.proceed) {      
       try{
       this.isLoading = true
-      console.log('hi')
-      const web3 = await loadweb3();
-        console.log(web3);
-        this.accounts = await web3.eth.getAccounts();
-        console.log(this.accounts);
+      const web3 = await loadweb3();        
+        this.accounts = await web3.eth.getAccounts();        
       const signerAddress = this.accounts[0]
-      const requestData = this.data
+      const requestData = this.newData
       const msg = JSON.stringify(requestData)
       const sig = await web3.eth.personal.sign(
         msg, signerAddress
@@ -584,11 +614,10 @@ async calculateFee() {
           msg:requestData,
           sig
         })
-      )     
-      let url = `${this.$config.marketPlace.create_merkel_tree_finance_vote}/create-merkle-tree/bank`;
-      console.log(url)
-      const result = await axios.post(url,formData);      
-      console.log(result.data)       
+      )      
+      formData.append('projectLogo', new Blob([Fyre_Small], { type: 'image/png' }), 'Fyre_small.png')
+      let url = `${this.$config.marketPlace.create_merkel_tree_finance_vote}/create-merkle-tree/bank`;      
+      const result = await axios.post(url,formData);                   
       const { ipfsHash, root, totalBalance, dbTreeId } = result.data;
       console.log(ipfsHash)        
       console.log(root)
@@ -604,8 +633,7 @@ async calculateFee() {
         root,
         ipfsHashBytes,
         this.depositTokenAddress,
-        totalBalance.toString())
-      console.log(abi,address); 
+        totalBalance.toString())      
       console.log(newTreeId)
       console.log(dbTreeId)   
       const updateBody = {
@@ -615,11 +643,9 @@ async calculateFee() {
       const signature = await web3.eth.personal.sign(
         JSON.stringify(updateBody),
         signerAddress
-      )    
-      console.log(signature,updateBody)
+      )      
       url = `${this.$config.marketPlace.create_merkel_tree_finance_vote}/update-merkle-tree`
-      const a = await axios.post(url, {updateBody,signature})      
-    console.log(a)
+      const a = await axios.post(url, {updateBody,signature})    
     const resultData = a.data.success
     console.log(resultData)
      if(resultData === true) {      
@@ -629,14 +655,12 @@ async calculateFee() {
       console.log(parsedValue)
       parsedValue["isDistributed"]= true
       parsedValue["externalRecordId"] = dbTreeId.toString()
+      parsedValue["contractAddress"] = this.depositTokenAddress.toString()
       console.log(parsedValue)
-      this.flash.value = JSON.stringify(parsedValue)
-      console.log(this.flash)
+      this.flash.value = JSON.stringify(parsedValue)      
       const index = this.eventToAirdrop.actions.findIndex((x)=>{
       return x._id === this.flash._id
-      })
-      console.log(this.flash)
-      console.log(index)
+      })     
       if(index > -1) {
         this.eventToAirdrop.actions[index] = this.flash
         console.log(this.eventToAirdrop)
@@ -655,7 +679,30 @@ async calculateFee() {
           header: headers,
         });
         if(resp.status === 200) {
+          const url = `${this.$config.studioServer.BASE_URL}api/v1/reward/distribution/details`;
+        let headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.authToken}`,
+          AccessToken: `Bearer ${this.accessToken}`,
+        };
+        const body={
+          eventId:this.eventToAirdrop._id,
+          actionId:this.flash._id,
+          whiteListedAddress:[...this.newData.inputData],
+          externalAppId:dbTreeId,
+          totalAmountToDistribute:this.feeStructure.totalAmountToDistribute.toString()
+        }        
+        let method = "POST";
+        const resp = await apiClient.makeCall({
+          url,
+          body: body,
+          method,
+          header: headers,
+        });        
+        const json =  resp.data        
+        if(resp.status === 200){
           this.notifySuccess("Reward Distribution created successfully");
+        }          
         }        
       }
      } 
@@ -674,14 +721,14 @@ async calculateFee() {
         console.log(web3);
         // this.accounts = await web3.eth.getAccounts();
         // console.log(this.accounts);
-        const contract = new web3.eth.Contract(abi, address);
-        console.log(depositToken)
-        console.log(erc20ABI)
+        const contract = new web3.eth.Contract(abi, address);    
         const getApprovalContract = new web3.eth.Contract(erc20ABI,depositToken)   
-        const maxApprove = getMaxApprove()
-        console.log(maxApprove)             
+        const maxApprove = getMaxApprove()                     
        const approval = await getApprovalContract.methods.approve('0xe18898Db95f7B803CF707f3AAAe2ecA14857c916', maxApprove).send({from:this.accounts[0]})                      
-       console.log(approval)
+       console.log(approval.status)
+       if(approval.status !== true) {
+       return this.notifyErr('Not Approved')
+       }
         const transaction = await contract.methods.addMerkleTree(
         newRoot,
         ipfsHash,
@@ -698,18 +745,17 @@ async calculateFee() {
       throw new Error(e)
     }
     }, 
-    prizeCardSelectedForAirdrop(prize) {      
+    prizeCardSelectedForAirdrop(prize) {     
       if(JSON.parse(prize.value).isDistributed === true) {
         return this.notifyErr('Reward distribution is already created')
       }
       this.flash = prize            
       if(this.selectedEvent !== null){
       this.showContractField = true
-      }      
-      console.log(prize);  
-      console.log(this.flash);    
+      }        
     },
     selectOption(e) {
+      console.log(e)
       this.flash = null
       this.showContractField = false
       this.prizeList = [];
@@ -727,13 +773,10 @@ async calculateFee() {
               return x;
             }
           }
-        });
-        console.log(this.eventToAirdrop);
-        console.log(this.prizeList);        
+        });               
       }
     },
-    openSidebar() {
-      console.log(this.flash)
+    openSidebar() {      
       this.selectedEvent = null
       this.depositTokenAddress="";
       this.flash = null    
@@ -746,7 +789,10 @@ async calculateFee() {
       this.app._id = "";
       this.app.appWalletAddress = "";
       this.app.toggle = false;
-    },    
+    }, 
+    shortenName1(first,last) {
+      return shortenName(first,last)
+    }   
   },
   mixins: [notificationMixins],
 };
