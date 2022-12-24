@@ -145,8 +145,18 @@ export default {
         return [...x.whiteListedAddress];
       });
       console.log(list);
+      const groupByMake = (list = []) => {
+        let result = [];
+        result = list.reduce((r, a) => {
+          r[a.actionId] = r[a.actionId] || [];
+          r[a.actionId].push(a);
+          return r;
+        }, Object.create(null));
+        return result;
+      };
+      
       var swal_html = `<div class="list-group list-group-flush" style="max-height:500px;overflow-y: scroll;">`;
-      list.forEach((element, index) => {
+      groupByMake.forEach((element, index) => {
         `<span class="mr-auto">ABCD</span>`;
         element.forEach((element, index) => {
           let img1 = this.getProfileIcon(element.destination + index);

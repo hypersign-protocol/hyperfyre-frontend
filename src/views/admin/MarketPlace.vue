@@ -306,7 +306,7 @@
         <hr />
         <div></div>
         <div style="display: flex" v-if="isCheckEveryThing">
-          <div class="col-lg-6 col-md-9 px-0"></div>
+          <div class="col-lg-12 col-md-12 px-0"></div>
           <div class="col-lg-4 col-md-3" style="display: block">
             <hf-buttons
              @executeAction="createDistribution()"
