@@ -208,7 +208,7 @@
         <div class="col-lg-9 col-md-9 px-0">
           <label for="placeHolder" class="col-form-label">Select Your chain: </label>
         </div>
-        <div class="col-lg-9 col-md-9 px-0">
+        <div class="col-lg-12 col-md-12 px-0">
             <b-form-select                  
               placeholder="Select an Event"
               :options="chainOptions"
@@ -224,7 +224,7 @@
         <div class="col-lg-9 col-md-9 px-0">
           <label for="placeHolder" class="col-form-label">Enter your contract address: </label>
         </div>
-        <div class="col-lg-9 col-md-9 px-0">
+        <div class="col-lg-12 col-md-12 px-0">
           <input
             v-model="depositTokenAddress"        
             type="text"
@@ -241,7 +241,7 @@
         <div class="col-lg-9 col-md-9 px-0">
           <label for="placeHolder" class="col-form-label">Enter wallet addresss and amount of token: </label>
         </div>
-        <div class="col-lg-9 col-md-9 px-0">    
+        <div class="col-lg-12 col-md-12 px-0">    
           <b-form-textarea
             id="textarea"
             v-model="simpleData"
@@ -253,7 +253,6 @@
         </div>        
       </div>
       <div class="mt-4" style="display: flex" v-if="showContractField">
-          <div class="col-lg-6 col-md-9 px-0"></div>
           <div class="col-lg-4 col-md-3" style="display: block">
             <hf-buttons
              @executeAction="calculateFee()"
