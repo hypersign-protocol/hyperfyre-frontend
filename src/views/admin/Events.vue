@@ -591,7 +591,7 @@ export default {
  watch: {
         project:{
           deep:true,
-          handler: function(newValue,oldValue) {
+          handler: function(newValue) {
             this.project = newValue            
             eventBus.$emit("sendProject", this.project);
           }

@@ -1,0 +1,67 @@
+{
+    "keys": {
+        "publicKey": {
+            "@context": "https://w3id.org/security/v2",
+            "id": "did:hid:testnet:z7HAgbm3m9KKBEC8CxWuJoWmDnUs9Snr3QNxdRPtD1u4G",
+            "type": "Ed25519VerificationKey2018",
+            "publicKeyBase58": "z6MkqKwdcpajzu3dyANeRDhHNEEMKZHbVsx1mc9hsn8DuFie"
+        },
+        "privateKeyBase58": "zrv3aFJvb6YKMXE24VjoZBr9viRhpGW9BmCW8VJrZs1VWqVu9jMFU2Qd2Mx3EPrEnCzNvaqz8xUpjQPcTJ5k3mgh5AW"
+    },
+    "schemaId": "sch:hid:testnet:z12GNMh8pWFnY4wN1evLaQ52gwD8Be4VKstKSriVEnpe8:1.0",
+    "networkUrl": "https://jagrat.hypersign.id/rpc",
+    "networkRestUrl": "https://jagrat.hypersign.id/rest",
+    "mail": {
+        "host": "hypermine.in",
+        "port": 465,
+        "user": "connect@hypermine.in",
+        "pass": "Talk_to_Hypermine.666#",
+        "name": "Hypersign Auth Server"
+    },
+    "jwt": {
+        "secret": "00c2c433-a077-4e68-b19c-1234f014a510",
+        "expiryTime": 120000
+    },
+    "appCredential": {
+        "@context": [
+            "https://www.w3.org/2018/credentials/v1",
+            {
+                "hsscheme": "https://stage.hypermine.in/core/api/v1/schema/sch_2bdcd8d6-0b58-49af-ae1e-e253738929b5"
+            },
+            { "name": "hsscheme:name" },
+            { "did": "hsscheme:did" },
+            { "owner": "hsscheme:owner" },
+            { "schemaId": "hsscheme:schemaId" },
+            { "serviceEp": "hsscheme:serviceEp" },
+            { "subscriptionId": "hsscheme:subscriptionId" },
+            { "planId": "hsscheme:planId" },
+            { "planName": "hsscheme:planName" }
+        ],
+        "id": "vc_d8d45577-fc03-4151-9eb9-018353851376",
+        "type": ["VerifiableCredential", "Hypersign Developer"],
+        "expirationDate": "2021-08-12T07:58:29.982Z",
+        "issuanceDate": "2021-06-13T07:58:30.006Z",
+        "issuer": "did:hs:z14RaKjdGWLxJ2PtVu9SHkauyN6ZWc9jDksAqYup61rqM",
+        "credentialSubject": {
+            "name": "Hypersign Auth",
+            "did": "did:hid:testnet:z7HAgbm3m9KKBEC8CxWuJoWmDnUs9Snr3QNxdRPtD1u4G",
+            "owner": "did:hid:testnet:z7HAgbm3m9KKBEC8CxWuJoWmDnUs9Snr3QNxdRPtD1u4G",
+            "schemaId": "sch:hid:testnet:z12GNMh8pWFnY4wN1evLaQ52gwD8Be4VKstKSriVEnpe8:1.0",
+            "serviceEp": "http://localhost:6006",
+            "subscriptionId": "dummy_id",
+            "planId": "dummy_id",
+            "planName": "dummy_id",
+            "id": "did:hid:testnet:z7HAgbm3m9KKBEC8CxWuJoWmDnUs9Snr3QNxdRPtD1u4G",
+            "verifyResourcePath": ""
+        },
+        "proof": {
+            "type": "Ed25519Signature2018",
+            "created": "2021-06-13T07:58:30Z",
+            "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..sQNSoqP3Izve_vnoxTOSLi6fWkHA7MV27WS1co10P6-aOzWDl0Xs_vmOdTxUInqhrDgy8tmR0w7nMhnT-HlzCA",
+            "proofPurpose": "assertionMethod",
+            "verificationMethod": "did:hs:092fe5aa-1e27-4705-9ed2-b389b962cd83#z6MkwKEgNLdynkBdkcGa1aiNEYAuYY1uFcVHTfcnQdJfxPEA"
+        }
+    },
+    "isSubcriptionEnabled": false,
+    "namespace": "testnet"
+}

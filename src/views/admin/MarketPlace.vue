@@ -1,4 +1,8 @@
 <style scoped>
+.card-img-top {
+      padding-right: 5px !important;
+        padding-left: 5px !important;
+}
 .addmargin {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -89,7 +93,20 @@
       backdrop-variant="dark"
     >
       <div class="px-3 py-2">
-        <hf-notes :notes="deleteNote"></hf-notes>
+        <b-card
+        :style="buttonThemeCss"
+        >
+          <b-card-title>{{stickyNoteTitle}}</b-card-title>
+          <b-card-text>
+            Bank tool is set of tools to manage tokens developed by Finance.vote, 
+            We have integrated the Bulk airdrop to reduce gas cost.
+          </b-card-text>
+          <b-card-text class="small text-muted">
+            <b-link>Website</b-link> |
+            <b-link>Telegram</b-link> |
+            <b-link>Twitter</b-link>
+          </b-card-text>
+        </b-card>
         <hr />
         <div></div>
         <div>
@@ -122,7 +139,7 @@
             >
               <div>           
                 <b-card
-                  :title="eachPrize.title"
+                  :title="truncate1(eachPrize.title, 8)"
                   tag="article"                               
                   style="max-width: 20rem; margin-top: 20px;height:10rem;"                  
                   :class="
@@ -133,7 +150,7 @@
                   @click="prizeCardSelectedForAirdrop(eachPrize)"
                 >
                   <div class="row">
-                    <div class="col-md-9">
+                    <div class="col-md-12">
                       <ul
                         style="
                           list-style-type: none;
@@ -147,9 +164,8 @@
                           title="Event Url"
                         >
                           <i class="fas fa-users"></i>
-                          <span class="ml-2"
-                            >Winners:
-                            {{ JSON.parse(eachPrize.value).winners }}</span
+                          <span
+                            > {{ JSON.parse(eachPrize.value).winners }} Winners</span
                           >
                         </li>
 
@@ -158,8 +174,8 @@
                           data-placement="bottom"                          
                         >
                           <i class="fas fa-award"></i>
-                          <span class="ml-2"
-                            >{{ JSON.parse(eachPrize.value).prizeValue }}</span
+                          <span
+                            > {{ JSON.parse(eachPrize.value).prizeValue }} Each</span
                           >
                         </li>
                       </ul>
@@ -310,54 +326,58 @@
     </b-sidebar>
     <div class="row">
       <div class="col-md-12">
-        <h3>Create your Airdrop here</h3>
-        <div class="card event-card">
+              <h3>Fyre Marketplace</h3>
+      </div>
+    </div>
+    <div class="row" v-if="whitelistingLink != ''" style="margin-top: 2%">
+      <div class="col-md-12" style="text-align: left">
+        <div class="card">
           <div class="card-body">
-            <b-card
-              title="Finance.vote"
-              tag="article"
-              style="max-width: 30rem; margin-top: 10px; height: 13rem"
-              class="mb-2 eventCard"
-            >
-              <ul
-                style="
-                  list-style-type: none;
-                  padding-left: 0px;
-                  min-height: 80px;
-                "
-              >
-                <li>
-                  <h5 class="card-title"
-                    >Create Reward Distribution Through finanace.vote</h5
-                  >
-                </li>          
-              </ul>
-              <footer>
-                <div class="form-group row" style="margin-bottom: 0rem">
-                  <div class="col-sm-10">
-                    <ul style="list-style-type: none; padding-left: 0px"></ul>
-                  </div>
-                  <b-button
-                    class="mt-2"
-                    size="sm"
-                    aria-hidden="true"
-                    title="Try"
-                    style="cursor: pointer; float: right"
-                    @click="openSidebar()"
-                    >try now</b-button
-                  >
-                </div>
-              </footer>
-            </b-card>
+            <h5>
+              Disclaimer: Please! note these are 3rd party softwares, 
+              any problem related with these apps needs to be resolved in their community.
+              Fyre team will support in resolving the issue but will not take reponsibility of loss of assets.
+            </h5>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <b-card
+          title="Finance.vote"
+          img-src="https://finance.vote/static/media/financevote.58d8bed770991818567e0dc0c3ce8ca3.svg"
+          tag="article"
+          img-top
+          bg-variant="dark"
+          img-height="150"
+          img-width="150"
+          style="max-width: 20rem; margin-top: 20px"
+          class="mb-2 eventCard"
+          text-variant="white"
+        >
+          <b-card-text>
+            MerkleHash based token airdrop tool for EVM compatible chains.
+          </b-card-text>
+          <footer>
+            <small>
+              <b-badge  pill variant="secondary" style="margin-left: 2px">Polygon</b-badge>
+              <b-badge  pill variant="secondary" style="margin-left: 2px">Ethereum</b-badge>
+              <b-badge  pill variant="secondary" style="margin-left: 2px">BSC</b-badge>
+            </small>
+            <small style="float: right"> 
+              <hf-buttons name="Create" @executeAction="openSidebar()" iconClass="text-black" title="Create Event">
+              </hf-buttons>
+            </small>
+          </footer>
+        </b-card>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import HfNotes from "../../components/elements/HfNotes.vue";
+// import HfNotes from "../../components/elements/HfNotes.vue";
 import notificationMixins from "../../mixins/notificationMixins";
 import {ipfsHashToBytes32,getMaxApprove} from "../../mixins/rewardDistUtils"
 import loadweb3 from "../../mixins/getWeb3"
@@ -365,22 +385,22 @@ import {utils} from "web3"
 import apiClient from "../../mixins/apiClientMixin"
 import { abi, address} from '../../mixins/merkelDropFactoryAbi'
 import {erc20ABI} from "../../mixins/ERC20ContractAbi"
-import ToolTips from "../../components/basic/toolTips";
+// import ToolTips from "../../components/basic/toolTips";
 import config from "../../config";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-import { isValidURL, isValidText,shortenName } from "../../mixins/fieldValidationMixin";
+import { shortenName, truncate } from "../../mixins/fieldValidationMixin";
 import HfButtons from "../../components/elements/HfButtons.vue";
 import axios from "axios"
 import Fyre_Small from "../../assets/Fyre_Small.png"
 export default {
   name: "MarketPlace",
-  components: { Loading, ToolTips, HfButtons, HfNotes },
+  components: { Loading, HfButtons },
   computed: {
     buttonThemeCss() {
       return {
-        "--button-bg-color": config.app.buttonBgColor,
-        "--button-text-color": config.app.buttonTextColor,
+        "background-color": config.app.buttonBgColor,
+        "color": config.app.buttonTextColor,
       };
     },
     apps() {
@@ -420,7 +440,9 @@ export default {
         { text: "Tokens", value: "Tokens" },
         { text: "Others", value: "Others" },
       ],
-      deleteNote: "ashbfjgev",
+      deleteNote: false,
+      stickyNote: "ashbfjgev",
+      stickyNoteTitle: "💡 InfoBox",
       isEdit: false,
       appName: config.appName,
       newRoot: "",
@@ -481,6 +503,9 @@ export default {
     callChange(e) {
       console.log(e)
     },
+    truncate1(str, number) {
+      return truncate(str, number);
+    },
   //   handleButtonClick(event) {
   //    let fileInputElement = this.$refs.file;
   //   fileInputElement.click();
@@ -492,7 +517,7 @@ export default {
   //  const temp = this.readFile(this.files[0])
   //  console.log(temp)
   // },
-  readFile(file) {
+  // readFile(file) {
     // var fileReader = new FileReader();        
     // fileReader.readAsText(file);
     
@@ -530,7 +555,7 @@ export default {
 //           console.log(error);
 //         }
 //       )     
-  },
+  // },
 async calculateFee() { 
     this.proceed = false
     if(this.selectedChain === null) {
@@ -699,7 +724,7 @@ async calculateFee() {
           method,
           header: headers,
         });        
-        const json =  resp.data        
+        // const json =  resp.data        
         if(resp.status === 200){
           this.notifySuccess("Reward Distribution created successfully");
         }          
