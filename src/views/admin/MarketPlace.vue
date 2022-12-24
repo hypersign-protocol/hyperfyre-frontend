@@ -241,7 +241,7 @@
         <div class="col-lg-9 col-md-9 px-0">
           <label for="placeHolder" class="col-form-label">Enter wallet addresss and amount of token: </label>
         </div>
-        <div class="col-lg-12 col-md-12 px-0">    
+        <div class="col-lg-12 col-md-12 px-0" style="max-height: 200px;overflow-y: scroll;">    
           <b-form-textarea
             id="textarea"
             v-model="simpleData"
