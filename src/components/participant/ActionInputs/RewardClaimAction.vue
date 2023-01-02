@@ -85,12 +85,12 @@ import axios from "axios";
 import { utils } from "web3";
 import profileIconMixins from "../../../mixins/profileIconMixins";
 import { erc20ABI } from "../../../mixins/ERC20ContractAbi";
-import HfNotes from "../../elements/HfNotes.vue";
+// import HfNotes from "../../elements/HfNotes.vue";
 import config from "../../../config";
 import { truncate } from "../../../mixins/fieldValidationMixin";
 export default {
   name: "RewardClaim",
-  components: { HfNotes, Loading },
+  components: { Loading },
   props: {
     claimData: {
       required: true,
@@ -141,7 +141,7 @@ export default {
       // const list = json.filter((x)=>{
       //   return x.
       // })
-      const list = json.map((x) => {
+      let list = json.map((x) => {
         return [...x.whiteListedAddress];
       });
       console.log(list);
@@ -154,9 +154,9 @@ export default {
         }, Object.create(null));
         return result;
       };
-      
+      list = groupByMake(json)
       var swal_html = `<div class="list-group list-group-flush" style="max-height:500px;overflow-y: scroll;">`;
-      groupByMake.forEach((element, index) => {
+      list.forEach((element) => {
         `<span class="mr-auto">ABCD</span>`;
         element.forEach((element, index) => {
           let img1 = this.getProfileIcon(element.destination + index);
