@@ -144,6 +144,16 @@ export default {
       let list = json.map((x) => {
         return [...x.whiteListedAddress];
       });
+
+      /**
+       * Added code to group list by eventId {_id1:[{},{}],_id2:[]}
+       * Then Iterate on ClaimData to get _id  
+       * and then print List for each Action _id
+       * this.claimData.forEach((el) => {
+        let element = list[el._id]
+        `<span class="mr-auto">ABCD</span>`;
+        element.forEach((element, index) => {
+       */
       console.log(list);
       const groupByMake = (list = []) => {
         let result = [];
@@ -156,7 +166,8 @@ export default {
       };
       list = groupByMake(json)
       var swal_html = `<div class="list-group list-group-flush" style="max-height:500px;overflow-y: scroll;">`;
-      list.forEach((element) => {
+      this.claimData.forEach((el) => {
+        let element = list[el._id]
         `<span class="mr-auto">ABCD</span>`;
         element.forEach((element, index) => {
           let img1 = this.getProfileIcon(element.destination + index);
