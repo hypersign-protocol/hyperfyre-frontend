@@ -143,8 +143,7 @@ export default {
       // })
       let list = json.map((x) => {
         return [...x.whiteListedAddress];
-      });
-
+      });      
       /**
        * Added code to group list by eventId {_id1:[{},{}],_id2:[]}
        * Then Iterate on ClaimData to get _id  
@@ -166,13 +165,20 @@ export default {
       };
       list = groupByMake(json)
       var swal_html = `<div class="list-group list-group-flush" style="max-height:500px;overflow-y: scroll;">`;
-      this.claimData.forEach((el) => {
-        let element = list[el._id]
-        `<span class="mr-auto">ABCD</span>`;
-        element.forEach((element, index) => {
-          let img1 = this.getProfileIcon(element.destination + index);
-          swal_html =
-            swal_html +
+      var groupName = `<div style="font-weight:bold">`   
+      this.claimData.forEach((el) => {         
+        let ele = list[el._id]        
+        ele.forEach((x,index)=>{          
+          groupName = el.title
+          swal_html = swal_html + `<strong class="grpName pt-3" style="text-align: left;">`+ groupName +`</strong>`
+          let objectToRemove = x.whiteListedAddress.findIndex((x)=>{
+            return x.destination === "0xe8E06659F296D7c0561f41250A8a2674E83e8B98"
+          })         
+          x.whiteListedAddress.splice(objectToRemove,1)        
+          x.whiteListedAddress.forEach((y, index) => {                  
+          let img1 = this.getTokenIcon(index+1);
+          swal_html =          
+            swal_html +            
             `<div class="list-group-item d-flex align-items-center">
           <span class="b-avatar mr-3 badge-info rounded-circle">
             <span class="b-avatar-img">
@@ -182,14 +188,15 @@ export default {
             </span><!---->
           </span>          
           <span class="mr-auto">` +
-            element.destination +
+            y.destination +
             `</span> 
           <span class="badge badge-primary">` +
-            this.friendlyValue(element.value) +
+            this.friendlyValue(y.value) +
             `</span>         
         </div> `;
         });
-      });
+      })
+    });
 
       swal_html = swal_html + `</div>`;
       this.$swal.fire({

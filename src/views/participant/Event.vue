@@ -500,7 +500,7 @@ export default {
 
         var swal_html = `<div class="list-group list-group-flush" style="max-height:500px;overflow-y: scroll;">`;
         data.forEach((element, index) => {
-          let img1 = this.getProfileIcon(element.name+index)
+          let img1 = this.getTokenIcon(index+1)
           swal_html=swal_html+`<div class="list-group-item d-flex align-items-center">
           <span class="b-avatar mr-3 badge-info rounded-circle">
             <span class="b-avatar-img">

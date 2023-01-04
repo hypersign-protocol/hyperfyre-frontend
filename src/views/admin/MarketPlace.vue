@@ -51,7 +51,7 @@
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-    <market-place-slide :projects="projects" @closeMPSlider="clearselected" :openMPSlider="openMPSidebar"/>
+    <market-place-slide :projects="projects"/>
     <div class="row">
       <div class="col-md-12">
               <h3>Fyre Marketplace</h3>
@@ -94,7 +94,7 @@
               <b-badge  pill variant="secondary" style="margin-left: 2px">BSC</b-badge>
             </small>
             <small style="float: right"> 
-              <hf-buttons name="Create" @executeAction="openMPSidebar()" iconClass="text-black" title="Create Event">
+              <hf-buttons name="Create" @executeAction="openMPSidebar()" iconClass="text-black" title="Create airdrop">
               </hf-buttons>
             </small>
           </footer>
@@ -156,17 +156,10 @@ export default {
       projectName: "Select an event",
     });
   },
-  methods: {
-    
-    openSidebar() {      
-      this.selectedEvent = null
-      this.depositTokenAddress="";
-      this.flash = null    
-      this.files = null
-      this.$root.$emit("bv::toggle::collapse", "sidebar-right");
-    }, 
+  methods: {    
     openMPSidebar() {
-      this.$root.$emit("openMPSlider");
+      this.$root.$emit('resetMarketPlaceSlide')
+      this.$root.$emit('bv::toggle::collapse', 'airdrop-sidebar-right')      
     },      
     clearselected() {
       this.projects=[]

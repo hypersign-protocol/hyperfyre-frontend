@@ -57,7 +57,7 @@ allButtons {
 <template>
   <div>
     <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
-    <b-sidebar backdrop width="50%" id="sidebar-right" title="Create Reward Distribution"
+    <b-sidebar backdrop width="50%" id="airdrop-sidebar-right" title="Create Reward Distribution"
       class="sidebarContainer background-transparent" right shadow no-close-on-backdrop backdrop-variant="dark">
       <div class="px-3 py-2">
         <b-card :style="buttonThemeCss">
@@ -67,9 +67,9 @@ allButtons {
             We have integrated the Bulk airdrop to reduce gas cost.
           </b-card-text>
           <b-card-text class="small text-muted">
-            <b-link>Website</b-link> |
-            <b-link>Telegram</b-link> |
-            <b-link>Twitter</b-link>
+            <b-link target="_blank" href="https://finance.vote/">Website</b-link> |
+            <b-link target="_blank" href="https://t.me/financedotvote">Telegram</b-link> |
+            <b-link target="_blank" href="https://twitter.com/financedotvote">Twitter</b-link>
           </b-card-text>
         </b-card>
         <hr />
@@ -89,10 +89,11 @@ allButtons {
               </div>
             </div>
           </div>
-          <div class="row scroll mt-5">
+          <h6 class="mt-2" v-if="selectedEvent!==null">Prize Details</h6>
+          <div class="row scroll mt-2">
             <div class="col-lg-3" v-for="eachPrize in prizeList" :key="eachPrize._id">
-              <div>
-                <b-card :title="truncate1(eachPrize.title, 8)" tag="article"
+              <div :title="eachPrize.title">
+                <b-card :title="truncate1(eachPrize.title, 10)" tag="article"
                   style="max-width: 20rem; margin-top: 20px;height:10rem;" :class="
                         flash == eachPrize
                           ? 'flash eventCard card rounded m-1 p-1 d-flex flex-row align-items-center'
@@ -105,7 +106,7 @@ allButtons {
                               padding-left: 4px;
                               font-size: small;
                             ">
-                        <li data-toggle="tooltip" data-placement="bottom" title="Event Url">
+                        <li data-toggle="tooltip" data-placement="bottom">
                           <i class="fas fa-users"></i>
                           <span> {{ JSON.parse(eachPrize.value).winners }} Winners</span>
                         </li>
@@ -157,7 +158,7 @@ allButtons {
               <label for="placeHolder" class="col-form-label">Enter wallet addresss and amount of token: </label>
             </div>
             <div class="col-lg-12 col-md-12 px-0" style="max-height: 200px;overflow-y: scroll;">
-              <b-form-textarea id="textarea" v-model="simpleData" placeholder="address,tokenvalue"
+              <b-form-textarea id="textarea" v-model="simpleData" placeholder="address,tokenvalue(in wei)"
                 :rows="JSON.parse(flash.value).winners" :max-rows="JSON.parse(flash.value).winners"
                 @change="callChange"></b-form-textarea>
             </div>
@@ -210,10 +211,13 @@ allButtons {
         <hr />
         <div></div>
         <div style="display: flex" v-if="isCheckEveryThing">
-          <div class="col-lg-12 col-md-12 px-0"></div>
+          <div class="col-lg-6 col-md-9 px-0"></div>
           <div class="col-lg-4 col-md-3" style="display: block">
-            <hf-buttons @executeAction="createDistribution()" name="Create Distribution"
-              customClass="btn btn-outline-primary button-theme"></hf-buttons>
+            <hf-buttons
+             @executeAction="createDistribution()"
+              name="Create Distribution"
+              customClass="btn btn-outline-primary button-theme"
+            ></hf-buttons>
           </div>
         </div>
         <div></div>
@@ -256,10 +260,7 @@ export default {
   props: {
     projects : {
       type: Array,
-    },
-    openMPSlider: {
-      type: Function
-    },
+    },   
   },
 
   computed: {
@@ -322,14 +323,27 @@ export default {
       tokenBalance: "",
       accounts: [],
       newData: {},
+      data: {
+        inputData: [],
+        additionalData: {
+          showcase: false,
+          depositToken: "",
+          project: {
+            label: "",
+            symbol: "",
+            address: {},
+            key: "",
+          },
+          contract: "MerkleDropFactory",
+          chainId: 0,
+        },
+        friendlyValues: false,
+      },
     };
   },
-  created() {
+  mounted() {
     this.$root.$on("resetMarketPlaceSlide", () => {
       this.resetAllValues();
-    });
-    this.$root.$on("openMPSlider", () => {
-      this.$root.$emit("bv::toggle::collapse", "sidebar-right");
     });
   },
   methods: {
@@ -337,7 +351,7 @@ export default {
       //To Do
       this.selectedEvent = null
       this.depositTokenAddress = "";
-      this.flash = null
+      this.selectedChain = null
       this.files = null
     },
     getFriendlyValue(str) {
@@ -353,11 +367,6 @@ export default {
     },
     truncate1(str, number) {
       return truncate(str, number);
-    },
-    handleInput(e){
-      if (e.key === "Backspace" || e.key === "Delete" || e.ctrlKey) {
-       this.resetGrandTotal();
-      }
     },
     async calculateFee() {
       this.proceed = false
@@ -505,7 +514,19 @@ export default {
                 body: this.eventToAirdrop,
                 method,
                 header: headers,
-              });
+              });              
+              let projects = []
+              const userProjects = localStorage.getItem("userProjects");
+              const userProjectsData = JSON.parse(userProjects).projects;                            
+              projects = [...userProjectsData];
+              const findProjectIndex = projects.findIndex((x)=>{
+                return x._id === this.flash.eventId
+              })
+              Object.assign(projects[findProjectIndex], {...resp.data});              
+              localStorage.setItem("userProjects",JSON.stringify({
+              projects: projects,
+              count: projects.length,
+            }))
               if (resp.status === 200) {
                 const url = `${this.$config.studioServer.BASE_URL}api/v1/reward/distribution/details`;
                 let headers = {
@@ -530,6 +551,12 @@ export default {
                 // const json =  resp.data        
                 if (resp.status === 200) {
                   this.notifySuccess("Reward Distribution created successfully");
+                  this.depositTokenAddress = "";
+                  this.selectedChain = null
+                  this.flash = null
+                  this.showContractField = false
+                  this.isCheckEveryThing = false
+
                 }
               }
             }
@@ -583,7 +610,6 @@ export default {
       }
     },
     selectOption(e) {
-      console.log(e)
       this.flash = null
       this.showContractField = false
       this.prizeList = [];
@@ -603,13 +629,6 @@ export default {
           }
         });
       }
-    },
-    openSidebar() {
-      this.selectedEvent = null
-      this.depositTokenAddress = "";
-      this.flash = null
-      this.files = null
-      this.$root.$emit("bv::toggle::collapse", "sidebar-right");
     },
     clearselected() {
       this.app.appName = "";
