@@ -79,7 +79,7 @@
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import loadweb3 from "../../../mixins/getWeb3";
-import { abi, address } from "../../../mixins/merkelDropFactoryAbi";
+import { abi, getAddress } from "../../../mixins/merkelDropFactoryAbi";
 import notificationMixins from "../../../mixins/notificationMixins";
 import axios from "axios";
 import { utils } from "web3";
@@ -172,7 +172,7 @@ export default {
           groupName = el.title
           swal_html = swal_html + `<strong class="grpName pt-3" style="text-align: left;">`+ groupName +`</strong>`
           let objectToRemove = x.whiteListedAddress.findIndex((x)=>{
-            return x.destination === "0xe8E06659F296D7c0561f41250A8a2674E83e8B98"
+            return x.destination === config.marketPlace.fyre_wallet_address
           })         
           x.whiteListedAddress.splice(objectToRemove,1)        
           x.whiteListedAddress.forEach((y, index) => {                  
@@ -258,7 +258,7 @@ export default {
         const airdropId = parsedData.externalRecordId;
         const web3 = await loadweb3();
         this.accounts = await web3.eth.getAccounts();
-        const url = `${this.$config.marketPlace.create_merkel_tree_finance_vote}/bank/check/${this.accounts[0]}`;
+        const url = `${parsedData.appBaseUrl}/bank/check/${this.accounts[0]}`;
         const res = await axios.get(url);
         data = [...res.data];
         console.log(data);
@@ -272,6 +272,7 @@ export default {
         console.log(filteredObject.additionalData.chainId);
         console.log(filteredObject.inputData.hash);
         console.log(filteredObject.version);
+        let address = getAddress(filteredObject.additionalData.chainId)
         const contract = new web3.eth.Contract(abi, address);
         const [tree, withdrawn] = await Promise.all([
           contract.methods.merkleTrees(filteredObject.treeIndex - 1).call(),
@@ -285,7 +286,7 @@ export default {
         console.log(tree);
         console.log(withdrawn);
         if (!withdrawn) {
-          const getProofFromApi = await this.getProof(
+          const getProofFromApi = await this.getProof(parsedData.appBaseUrl,
             airdropId,
             this.accounts[0]
           );
@@ -317,10 +318,10 @@ export default {
         this.isLoading = false;
       }
     },
-    async getProof(airdropId, walletAddress) {
+    async getProof(baseUrl,airdropId, walletAddress) {
       console.log(airdropId, walletAddress);
       const proof = await axios.get(
-        `https://bank.influencebackend.xyz/proof/${airdropId}/${walletAddress}`
+        `${baseUrl}/proof/${airdropId}/${walletAddress}`
       );
       console.log(proof.data);
       return proof.data.merkleProof;

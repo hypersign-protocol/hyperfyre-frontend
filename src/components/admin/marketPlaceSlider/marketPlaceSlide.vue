@@ -239,7 +239,7 @@ import Fyre_Small from "../../../assets/Fyre_Small.png"
 
 //Mixins
 import notificationMixins from "../../../mixins/notificationMixins";
-import { abi, address } from '../../../mixins/merkelDropFactoryAbi';
+import { abi,getAddress } from '../../../mixins/merkelDropFactoryAbi';
 import { erc20ABI } from "../../../mixins/ERC20ContractAbi";
 import loadweb3 from "../../../mixins/getWeb3";
 import apiClient from "../../../mixins/apiClientMixin";
@@ -261,6 +261,9 @@ export default {
     projects : {
       type: Array,
     },   
+    selectedTool: {
+      type: Object,
+    }
   },
 
   computed: {
@@ -287,11 +290,7 @@ export default {
       selectedEvent: null,
       prizeList: [],
       selectedChain: null,
-      chainOptions: [
-        { text: "Select Chain", value: null },
-        { text: "Ethereum Mainnet", disabled: true, value: { name: "ETH_MAINNET", chainId: 1, contractAddress: "" } }, //disabled for now 
-        { text: "Goerli Testnet", value: { name: "GOERLI_MAINNET", chainId: 5, contractAddress: "" } },
-        { text: "Matic Mainnet", disabled: true, value: { name: "MATIC_MAINNET", chainId: 137, contractAddress: "" } }],
+      chainOptions: [],
       options: [
         { text: "Select Prize Type", value: null },
         { text: "NFT", value: "NFT" },
@@ -346,9 +345,28 @@ export default {
       this.resetAllValues();
     });
   },
-  methods: {
+  watch: {
+        selectedTool:{
+          deep:true,
+          handler: function(newValue,oldValue) {            
+            const temp = [ ...newValue.supportedChain]
+            temp.forEach(x => {
+              this.chainOptions.push({
+                text:x.name,
+                value:x.chainId
+              })
+            });
+            this.chainOptions.unshift({
+              text:'Select Chain',
+              value:null
+            })
+          }
+        }
+    },
+  methods: {  
     resetAllValues () {
       //To Do
+      this.chainOptions = []
       this.selectedEvent = null
       this.depositTokenAddress = "";
       this.selectedChain = null
@@ -396,9 +414,9 @@ export default {
       } else if (locations.length > JSON.parse(this.flash.value).winners) {
         throw new Error(this.notifyErr('Number of winners entered are more than you mentioned in Prize'))
       } else {
-        const chainIdd = this.selectedChain.chainId
+        const chainIdd = parseInt(this.selectedChain)
         this.data.additionalData.depositToken = this.depositTokenAddress
-        this.data.additionalData.chainId = this.selectedChain.chainId
+        this.data.additionalData.chainId = parseInt(this.selectedChain)
         this.data.additionalData.project.address = { [`${chainIdd}`]: this.depositTokenAddress }
         this.data.additionalData.project.label = this.flash.title + this.flash._id
         this.data.additionalData.project.symbol = this.shortenName1(this.flash.title, this.flash._id)
@@ -453,7 +471,7 @@ export default {
             })
           )
           formData.append('projectLogo', new Blob([Fyre_Small], { type: 'image/png' }), 'Fyre_small.png')
-          let url = `${this.$config.marketPlace.create_merkel_tree_finance_vote}/create-merkle-tree/bank`;
+          let url = `${this.selectedTool.meta.appBaseUrl}/create-merkle-tree/bank`;
           const result = await axios.post(url, formData);
           const { ipfsHash, root, totalBalance, dbTreeId } = result.data;
           console.log(ipfsHash)
@@ -481,7 +499,7 @@ export default {
             JSON.stringify(updateBody),
             signerAddress
           )
-          url = `${this.$config.marketPlace.create_merkel_tree_finance_vote}/update-merkle-tree`
+          url = `${this.selectedTool.meta.appBaseUrl}/update-merkle-tree`
           const a = await axios.post(url, { updateBody, signature })
           const resultData = a.data.success
           console.log(resultData)
@@ -493,6 +511,7 @@ export default {
             parsedValue["isDistributed"] = true
             parsedValue["externalRecordId"] = dbTreeId.toString()
             parsedValue["contractAddress"] = this.depositTokenAddress.toString()
+            parsedValue["appBaseUrl"] = this.selectedTool.meta.appBaseUrl.toString()
             console.log(parsedValue)
             this.flash.value = JSON.stringify(parsedValue)
             const index = this.eventToAirdrop.actions.findIndex((x) => {
@@ -576,10 +595,11 @@ export default {
         console.log(web3);
         // this.accounts = await web3.eth.getAccounts();
         // console.log(this.accounts);
+        const address = getAddress(parseInt(this.selectedChain))        
         const contract = new web3.eth.Contract(abi, address);
         const getApprovalContract = new web3.eth.Contract(erc20ABI, depositToken)
         const maxApprove = getMaxApprove()
-        const approval = await getApprovalContract.methods.approve('0xe18898Db95f7B803CF707f3AAAe2ecA14857c916', maxApprove).send({ from: this.accounts[0] })
+        const approval = await getApprovalContract.methods.approve(address, maxApprove).send({ from: this.accounts[0] })
         console.log(approval.status)
         if (approval.status !== true) {
           return this.notifyErr('Not Approved')

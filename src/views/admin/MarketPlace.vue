@@ -51,7 +51,7 @@
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-    <market-place-slide :projects="projects"/>
+    <market-place-slide :projects="projects" :selectedTool="selectedTool"/>
     <div class="row">
       <div class="col-md-12">
               <h3>Fyre Marketplace</h3>
@@ -71,10 +71,10 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-4" v-for="tool in tools" :key="tool._id">       
         <b-card
-          title="Finance.vote"
-          img-src="https://finance.vote/static/media/financevote.58d8bed770991818567e0dc0c3ce8ca3.svg"
+          :title="tool.toolName"
+          :img-src="tool.logoUrl"
           tag="article"
           img-top
           bg-variant="dark"
@@ -89,12 +89,10 @@
           </b-card-text>
           <footer>
             <small>
-              <b-badge  pill variant="secondary" style="margin-left: 2px">Polygon</b-badge>
-              <b-badge  pill variant="secondary" style="margin-left: 2px">Ethereum</b-badge>
-              <b-badge  pill variant="secondary" style="margin-left: 2px">BSC</b-badge>
+              <b-badge v-for="chain in tool.supportedChain" pill variant="secondary" style="margin-left: 2px">{{chain.name}}</b-badge>
             </small>
             <small style="float: right"> 
-              <hf-buttons name="Create" @executeAction="openMPSidebar()" iconClass="text-black" title="Create airdrop">
+              <hf-buttons name="Create" @executeAction="openMPSidebar(tool)" iconClass="text-black" title="Create airdrop">
               </hf-buttons>
             </small>
           </footer>
@@ -130,7 +128,9 @@ export default {
     },
   },
   data() {
-    return {      
+    return {
+      selectedTool:{},
+      tools:[],
       projects:[],
       isLoading: false,
       fullPage: true,
@@ -139,7 +139,7 @@ export default {
       accessToken: null,
     };
   },
-  mounted() {
+async mounted() {
     if (localStorage.getItem("authToken")) {
       this.authToken = localStorage.getItem("authToken");
     }
@@ -155,11 +155,32 @@ export default {
       _id: null,
       projectName: "Select an event",
     });
+   await this.getDistributerDetails()
   },
-  methods: {    
-    openMPSidebar() {
+  methods: {
+    async getDistributerDetails() {      
+      const url = `${this.$config.studioServer.BASE_URL}api/v1/reward/distribution/tool`;
+      let headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.authToken}`,
+      };
+
+      const resp = await fetch(url, {
+        headers,
+        method: "GET",
+      });
+
+      if (!resp.ok) {
+        return this.notifyErr(resp.statusText);
+      }
+      const json = await resp.json();
+      this.tools = [...json]
+      console.log(this.tools)
+    },
+    openMPSidebar(tool) {       
+      this.selectedTool =  { ...tool}           
+      this.$root.$emit('bv::toggle::collapse', 'airdrop-sidebar-right')
       this.$root.$emit('resetMarketPlaceSlide')
-      this.$root.$emit('bv::toggle::collapse', 'airdrop-sidebar-right')      
     },      
     clearselected() {
       this.projects=[]

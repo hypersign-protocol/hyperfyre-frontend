@@ -176,7 +176,22 @@ const abi = [
     },
   ];
   
-  const address = "0xe18898Db95f7B803CF707f3AAAe2ecA14857c916";
+ export function getAddress(chainID) {
+    let address = ''
+    switch(chainID) {
+      case 1:
+        address = "0xabb8CA4F42A68A13484524812A0B141db315E671"
+        break;
+      case 5:
+        address = "0xe18898Db95f7B803CF707f3AAAe2ecA14857c916"
+        break;
+      case 137:
+        address= "0xDb012c51D3451bda3502f75D80540C615D71dE70"
+        break;
+    }
+    return address
+  }
+  // const address = "0xe18898Db95f7B803CF707f3AAAe2ecA14857c916";
   
-  export { abi, address };
+  export { abi };
   
