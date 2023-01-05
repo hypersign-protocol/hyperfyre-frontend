@@ -87,7 +87,7 @@
           <b-card-text>
             MerkleHash based token airdrop tool for EVM compatible chains.
           </b-card-text>
-          <footer>
+          <footer style="display:flex;">
             <small>
               <b-badge v-for="chain in tool.supportedChain" pill variant="secondary" style="margin-left: 2px">{{chain.name}}</b-badge>
             </small>

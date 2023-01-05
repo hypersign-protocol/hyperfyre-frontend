@@ -396,7 +396,7 @@ export default {
       else if (this.simpleData === "") {
         throw new Error(this.notifyErr('Enter Wallet addresses and respective token value'))
       }
-      const web3 = await loadweb3()
+      const web3 = await loadweb3(this.selectedChain)
       const contract = new web3.eth.Contract(erc20ABI, this.depositTokenAddress);
       this.feeStructure.symbol = await contract.methods.symbol().call();
       console.log(this.simpleData)
@@ -453,7 +453,7 @@ export default {
       if (this.proceed) {
         try {
           this.isLoading = true
-          const web3 = await loadweb3();
+          const web3 = await loadweb3(this.selectedChain);
           this.accounts = await web3.eth.getAccounts();
           const signerAddress = this.accounts[0]
           const requestData = this.newData
@@ -512,6 +512,7 @@ export default {
             parsedValue["externalRecordId"] = dbTreeId.toString()
             parsedValue["contractAddress"] = this.depositTokenAddress.toString()
             parsedValue["appBaseUrl"] = this.selectedTool.meta.appBaseUrl.toString()
+            parsedValue["chainId"] = this.selectedChain
             console.log(parsedValue)
             this.flash.value = JSON.stringify(parsedValue)
             const index = this.eventToAirdrop.actions.findIndex((x) => {
@@ -591,8 +592,7 @@ export default {
     async addMerkelTree(newRoot, ipfsHash, depositToken, tokenBalance) {
       try {
         console.log(newRoot, ipfsHash, depositToken, tokenBalance)
-        const web3 = await loadweb3();
-        console.log(web3);
+        const web3 = await loadweb3(this.selectedChain);        
         // this.accounts = await web3.eth.getAccounts();
         // console.log(this.accounts);
         const address = getAddress(parseInt(this.selectedChain))        
