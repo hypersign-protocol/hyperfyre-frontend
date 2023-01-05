@@ -119,6 +119,17 @@ export function truncate(str, limit) {
     return firstPart + " ... " + lastPart;
 }
 
+export function shortenName(first,last) {
+    if (!first || !last) {
+        return
+    }
+    const eachLen = 3
+    const firstPart = first.substr(0, eachLen);
+    const lastPart = last.slice(-eachLen);
+    console.log(firstPart+lastPart)
+    return firstPart + lastPart;
+}
+
 export function checkTitle(arr, prop) {
 
     const actionTitle = arr.map(item => item[prop] !== "");

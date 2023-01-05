@@ -165,6 +165,20 @@ const router = new Router({
             },
         },
         {
+            path: "/admin/marketplace",
+            name: "MarketPlace",
+            component: () =>
+                import (
+                    /* webpackChunkName: "MarketPlace" */
+                    "./views/admin/MarketPlace.vue"
+                ),
+            meta: {
+                requiresAuth: true,
+                admin: true,
+                title: `${config.appName} - Marketplace`
+            },
+        },
+        {
             path: "/sa/home",
             name: "SuperAdmin Home",
             component: () =>
