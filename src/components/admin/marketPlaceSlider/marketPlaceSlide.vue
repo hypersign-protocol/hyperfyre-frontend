@@ -285,6 +285,7 @@ export default {
     return {
       /// TODO: Need to do it in a neat way
       authToken: localStorage.getItem("authToken"),
+      accessToken:localStorage.getItem("accessToken"),
       eventToAirdrop: {},   
       stickyNoteTitle: "💡 InfoBox",
       selectedEvent: null,
@@ -520,6 +521,7 @@ export default {
             })
             if (index > -1) {
               this.eventToAirdrop.actions[index] = this.flash
+              this.eventToAirdrop["isRewardDistribution"] = true
               console.log(this.eventToAirdrop)
               const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
               let headers = {
