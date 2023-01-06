@@ -5,7 +5,7 @@
     <Profile v-if="userProfile" :user="userProfile" :userReferralCount="userReferralCount" />
 
     <template v-for="(actionItem, index) in ActionSchema">
-      <component v-if="actionItem.type==='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
+      <component v-if="actionItem.type==='INFO_TEXT' && projectStatus === true" :is="CapitaliseString(actionItem.type)" :key="index"
         :idValue="index" :data="actionItem" :done="actionItem.isDone" :authToken="authToken"
         @input="updateUserInfo(actionItem, $event)" :themeData="themeData">
       </component>
@@ -17,7 +17,7 @@
     :eventId="eventId"/>
     <template v-for="(actionItem, index) in ActionSchema">
 
-      <component v-if="(actionItem.type !== 'INFO_TEXT') && (actionItem.type !=='PRIZE_CARD') "
+      <component v-if="(actionItem.type !== 'INFO_TEXT') && (actionItem.type !=='PRIZE_CARD') && projectStatus === true"
         :is="CapitaliseString(actionItem.type)" :key="index" :idValue="index" :data="actionItem" :authToken="authToken"
         :done="actionItem.isDone" @input="updateUserInfo(actionItem, $event)" :themeData="themeData">
       </component>
