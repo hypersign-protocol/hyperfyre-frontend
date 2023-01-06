@@ -218,7 +218,8 @@ export default {
     },
     async importToken(data) {
       this.isLoading = true;
-      const web3 = await loadweb3();
+      const chainIdFromData = JSON.parse(data.value).chainId 
+      const web3 = await loadweb3(chainIdFromData);
       const tokenAddress = JSON.parse(data.value).contractAddress;
       const contract = new web3.eth.Contract(erc20ABI, tokenAddress);
       const tokenSymbol = await contract.methods.symbol().call();
@@ -256,7 +257,7 @@ export default {
         let data = [];
         const parsedData = JSON.parse(row.value);
         const airdropId = parsedData.externalRecordId;
-        const web3 = await loadweb3();
+        const web3 = await loadweb3(parsedData.chainId);
         this.accounts = await web3.eth.getAccounts();
         const url = `${parsedData.appBaseUrl}/bank/check/${this.accounts[0]}`;
         const res = await axios.get(url);
