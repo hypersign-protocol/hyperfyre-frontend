@@ -153,7 +153,7 @@ export default {
         `<span class="mr-auto">ABCD</span>`;
         element.forEach((element, index) => {
        */
-      console.log(list);
+      
       const groupByMake = (list = []) => {
         let result = [];
         result = list.reduce((r, a) => {
@@ -166,8 +166,11 @@ export default {
       list = groupByMake(json)
       var swal_html = `<div class="list-group list-group-flush" style="max-height:500px;overflow-y: scroll;">`;
       var groupName = `<div style="font-weight:bold">`   
-      this.claimData.forEach((el) => {         
-        let ele = list[el._id]        
+      this.claimData.forEach((el) => {                        
+        let ele = list[el._id]
+        if(ele === undefined) {
+          return
+        }    
         ele.forEach((x,index)=>{          
           groupName = el.title
           swal_html = swal_html + `<strong class="grpName pt-3" style="text-align: left;">`+ groupName +`</strong>`

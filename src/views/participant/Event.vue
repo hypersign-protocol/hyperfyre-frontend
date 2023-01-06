@@ -29,7 +29,7 @@
 
     <template v-if="authToken != '' && authToken != null">
 
-      <ErrorMessage v-if="isEventOver && !checkIfRewardDistributed" errorMessage="Event is over awaiting for reward distribution" />
+      <ErrorMessage v-if="isEventOver && !checkIfRewardDistributed" errorMessage="Event is over" />
       <Action v-if="checkIfRewardDistributed"      
       @UserUpdateEvent="updateUserData" :themeData="eventData.orgData"      
       :ActionSchema="eventActionsToShow"

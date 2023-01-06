@@ -1077,6 +1077,19 @@ export default {
         if(indexToFindNotification > -1) {
           this.eventActionList.splice(indexToFindNotification, 1);
         }
+      this.eventActionList.forEach((action)=>{
+        if(action.type === "PRIZE_CARD") {                            
+            const parsedData = JSON.parse(action.value)
+            if(parsedData.type ==="Tokens" && parsedData.isDistributed===true) {
+              delete parsedData["isDistributed"];
+              delete parsedData["externalRecordId"];
+              delete parsedData["contractAddress"];
+              delete parsedData["appBaseUrl"];
+              delete parsedData["chainId"];              
+              return action.value = JSON.stringify(parsedData);
+            }          
+        }
+      })            
       this.tagsTemp = project.tags;      
       await this.saveProject();
     },

@@ -425,7 +425,8 @@ export default {
         this.data.inputData = [...locations]
         const url = `${this.$config.studioServer.BASE_URL}api/v1/reward/distribution/serviceFee`;
         let data = {}
-        data = { ...this.data }
+        data = { ...this.data }        
+        data["eventId"] = this.eventToAirdrop._id
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.authToken}`,
