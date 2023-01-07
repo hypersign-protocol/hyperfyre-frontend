@@ -171,7 +171,7 @@ export default {
         if(ele === undefined) {
           return
         }    
-        ele.forEach((x,index)=>{          
+        ele.forEach((x)=>{          
           groupName = el.title
           swal_html = swal_html + `<strong class="grpName pt-3" style="text-align: left;">`+ groupName +`</strong>`
           let objectToRemove = x.whiteListedAddress.findIndex((x)=>{
