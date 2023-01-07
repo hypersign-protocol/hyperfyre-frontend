@@ -51,7 +51,7 @@
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-    <market-place-slide :projects="projects" :selectedTool="selectedTool"/>
+    <market-place-slide :projects="projects" :selectedProjectId="selectedProjectId" :selectedTool="selectedTool"/>
     <!-- <div class="row">
       <div class="col-md-12">
               <h3>Fyre Marketplace</h3>
@@ -137,6 +137,7 @@ export default {
       errors: [],
       authToken: null,
       accessToken: null,
+      selectedProjectId:'',
     };
   },
 async mounted() {
@@ -155,7 +156,13 @@ async mounted() {
       _id: null,
       projectName: "Select an event",
     });
-   await this.getDistributerDetails()
+    await this.getDistributerDetails()
+    //Hardcoding tool since we have only 1 tool for now
+    if (this.$route.query.projectId) {
+      this.selectedProjectId = this.$route.query.projectId;
+      this.openMPSidebar(this.tools[0])
+
+    }
   },
   methods: {
     async getDistributerDetails() {      

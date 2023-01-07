@@ -89,7 +89,7 @@ allButtons {
                 </div>
                 <div class="col-lg-9 col-md-9 px-0">
                   <b-form-select placeholder="Select an Event" :options="projects" v-model="selectedEvent"
-                    textField="projectName" valueField="_id" @input="selectOption"></b-form-select>
+                    textField="projectName" valueField="_id" @input="selectOption()"></b-form-select>
                 </div>
               </div>
             </div>
@@ -326,6 +326,9 @@ export default {
     },   
     selectedTool: {
       type: Object,
+    },
+    selectedProjectId: {
+      type: String,
     }
   },
 
@@ -411,6 +414,16 @@ export default {
     this.$root.$on("resetMarketPlaceSlide", () => {
       this.resetAllValues();
     });
+    console.log(this.selectedProjectId, 'selectedProjectId')
+    console.log(this.selectedEvent, 'selectedEvent')
+    if (this.selectedProjectId){
+      this.selectedEvent = this.selectedProjectId
+      console.log(this.selectedEvent,'selectedEvent')
+      this.flash = null
+      this.showContractField = false
+      this.prizeList = [];
+      this.setPrizeList()    
+    }
   },
   watch: {
         selectedTool:{
@@ -726,22 +739,31 @@ export default {
       this.flash = null
       this.showContractField = false
       this.prizeList = [];
-      if (e) {
-        const filterEvent = this.projects.find((x) => {
-          return x._id === e;
-        });
-        this.eventToAirdrop = { ...filterEvent }
-        console.log(this.eventToAirdrop)
-        let parsed = null;
-        this.prizeList = this.eventToAirdrop.actions.filter((x) => {
-          if (x.type === "PRIZE_CARD") {
-            parsed = JSON.parse(x.value);
-            if (parsed.type === "Tokens") {
-              return x;
-            }
-          }
-        });
+
+      if (this.selectedEvent) {
+        
+        this.setPrizeList()
       }
+    },
+    setPrizeList () {
+      console.log('setPrize-begin')
+      console.log('print-selectedEvent', this.selectedEvent)
+      const filterEvent = this.projects.find((x) => {
+        return x._id === this.selectedEvent;
+      });
+      this.eventToAirdrop = { ...filterEvent }
+      console.log(this.eventToAirdrop,'eventAirdrop')
+      let parsed = null;
+      this.prizeList = this.eventToAirdrop.actions.filter((x) => {
+        if (x.type === "PRIZE_CARD") {
+          parsed = JSON.parse(x.value);
+          if (parsed.type === "Tokens") {
+            return x;
+          }
+        }
+      });
+      console.log('setPrize-close')
+
     },
     clearselected() {
       this.app.appName = "";
