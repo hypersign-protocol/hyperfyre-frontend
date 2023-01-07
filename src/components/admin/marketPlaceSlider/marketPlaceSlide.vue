@@ -159,13 +159,14 @@ allButtons {
             </div>
           </div>
           <div class="row g-3 align-items-center w-100 mt-4 ml-2" v-if="showContractField">
-            <div class="col-lg-9 col-md-9 px-0">
+            <div class="col-lg-12 col-md-12 px-0">
               <label for="placeHolder" class="col-form-label">Recipients and Amounts (in Wei): </label>
-            </div>
-            <div class="col-lg-12 col-md-12 px-0" style="max-height: 200px;overflow-y: scroll;">
               <b-alert v-model="showDismissibleAlert.status" variant="danger" dismissible>
                 {{ showDismissibleAlert.text }}
               </b-alert>
+            </div>
+            <div class="col-lg-12 col-md-12 px-0" style="max-height: 200px;overflow-y: scroll;">
+              
               <b-form-textarea id="textarea" v-model="simpleData" placeholder="address,tokenvalue(in wei)"
                 :rows="JSON.parse(flash.value).winners" :max-rows="JSON.parse(flash.value).winners"
                 @keyup="calculateFee()" ></b-form-textarea>
