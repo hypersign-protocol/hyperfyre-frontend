@@ -137,7 +137,7 @@ export default {
       errors: [],
       authToken: null,
       accessToken: null,
-      selectedProjectId:'',
+      selectedProjectId:null,
     };
   },
 async mounted() {
@@ -160,6 +160,7 @@ async mounted() {
     //Hardcoding tool since we have only 1 tool for now
     if (this.$route.query.projectId) {
       this.selectedProjectId = this.$route.query.projectId;
+      console.log(this.selectedProjectId,'pid')
       this.openMPSidebar(this.tools[0])
 
     }

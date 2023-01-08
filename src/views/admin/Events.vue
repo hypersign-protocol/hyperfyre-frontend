@@ -377,7 +377,7 @@ i {
               
               <small style="float: right">
                 <span
-                  title="Click to Reward Distribution"
+                  title="Click to Distribute Reward"
                   style="cursor: pointer"
                   v-if="project.isDistributed"
                 >

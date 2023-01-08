@@ -68,8 +68,8 @@ allButtons {
         <b-card :style="buttonThemeCss">
           <b-card-title>{{stickyNoteTitle}}</b-card-title>
           <b-card-text>
-            Bank tool is set of tools to manage tokens developed by Finance.vote,
-            We have integrated the Bulk airdrop to reduce gas cost.
+            This tool is to distribute ERC20 reward developed by Finance.vote,
+            It can help to send reward to large number of wallets at low cost.
           </b-card-text>
           <b-card-text class="small text-muted">
             <b-link target="_blank" href="https://finance.vote/">Website</b-link> |
@@ -160,7 +160,7 @@ allButtons {
           </div>
           <div class="row g-3 align-items-center w-100 mt-4 ml-2" v-if="showContractField">
             <div class="col-lg-12 col-md-12 px-0">
-              <label for="placeHolder" class="col-form-label">Recipients and Amounts (in Wei): </label>
+              <label for="placeHolder" class="col-form-label">Recipients and Amounts <a target="_blank" href="https://www.eth-to-wei.com/">(in Wei):</a></label>
               <b-alert v-model="showDismissibleAlert.status" variant="danger" dismissible>
                 {{ showDismissibleAlert.text }}
               </b-alert>
@@ -414,18 +414,25 @@ export default {
     this.$root.$on("resetMarketPlaceSlide", () => {
       this.resetAllValues();
     });
-    console.log(this.selectedProjectId, 'selectedProjectId')
-    console.log(this.selectedEvent, 'selectedEvent')
-    if (this.selectedProjectId){
-      this.selectedEvent = this.selectedProjectId
-      console.log(this.selectedEvent,'selectedEvent')
-      this.flash = null
-      this.showContractField = false
-      this.prizeList = [];
-      this.setPrizeList()    
-    }
+    console.log(this.$route.query.projectId, 'this.$route.query.projectId')
+    
   },
   watch: {
+        selectedProjectId:{
+          deep:true,
+          handler: function () {
+            if (this.$route.query.projectId) {
+              // this.selectedProjectId = this.$route.query.projectId
+              this.selectedEvent = this.$route.query.projectId
+              console.log(this.selectedEvent, 'selectedEvent')
+              this.flash = null
+              this.showContractField = false
+              this.prizeList = [];
+              this.setPrizeList()
+            }
+          }
+        },
+
         selectedTool:{
           deep:true,
           handler: function(newValue) {            
@@ -442,7 +449,7 @@ export default {
             })
           }
         }
-    },
+  },
   methods: {  
     resetAllValues () {
       //To Do
@@ -730,6 +737,7 @@ export default {
       if (JSON.parse(prize.value).isDistributed === true) {
         return this.notifyErr('Reward distribution is already created')
       }
+      this.isCheckEveryThing = false
       this.flash = prize
       if (this.selectedEvent !== null) {
         this.showContractField = true
