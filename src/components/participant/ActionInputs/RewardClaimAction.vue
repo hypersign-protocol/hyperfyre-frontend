@@ -30,10 +30,8 @@
         </p>
         <table
           v-if="claimData.length"
-          class="table table-bordered"
-          style="background: #ffff
-          table-layout:fixed;
-          word-wrap:break-word;"
+          class="table mr-2 table-bordered"
+          style="background: #ffff"
         >
           <thead class="thead-light">
             <tr>
@@ -207,7 +205,7 @@ export default {
         focusConfirm: true,
         html: swal_html,
         toast: false,
-        title: "<h5>Winner list</h5>",
+        title: "<h5>Winners List</h5>",
         showCloseButton: true,
         showConfirmButton: false,
         width: "50rem",
@@ -220,6 +218,7 @@ export default {
       return toEthStd;
     },
     async importToken(data) {
+      try {
       this.isLoading = true;
       const chainIdFromData = JSON.parse(data.value).chainId 
       const web3 = await loadweb3(chainIdFromData);
@@ -227,8 +226,7 @@ export default {
       const contract = new web3.eth.Contract(erc20ABI, tokenAddress);
       const tokenSymbol = await contract.methods.symbol().call();
       const tokenDecimals = await contract.methods.decimals().call();
-      const tokenImage = this.getTokenIcon(tokenSymbol);
-      try {
+      const tokenImage = this.getTokenIcon(tokenSymbol);      
         // wasAdded is a boolean. Like any RPC method, an error may be thrown.
         const wasAdded = await web3.currentProvider.request({
           method: "wallet_watchAsset",
@@ -264,18 +262,13 @@ export default {
         this.accounts = await web3.eth.getAccounts();
         const url = `${parsedData.appBaseUrl}/bank/check/${this.accounts[0]}`;
         const res = await axios.get(url);
-        data = [...res.data];
-        console.log(data);
+        data = [...res.data];        
         const filteredObject = data.find((x) => {
           return x._id === airdropId;
         });
         if (filteredObject === undefined) {
           throw new Error("You are not whitelisted in the winner list");
-        }
-        console.log(filteredObject.treeIndex);
-        console.log(filteredObject.additionalData.chainId);
-        console.log(filteredObject.inputData.hash);
-        console.log(filteredObject.version);
+        }    
         let address = getAddress(filteredObject.additionalData.chainId)
         const contract = new web3.eth.Contract(abi, address);
         const [tree, withdrawn] = await Promise.all([
@@ -286,19 +279,15 @@ export default {
               filteredObject.inputData.hash
             )
             .call(),
-        ]);
-        console.log(tree);
-        console.log(withdrawn);
+        ]);       
         if (!withdrawn) {
           const getProofFromApi = await this.getProof(parsedData.appBaseUrl,
             airdropId,
             this.accounts[0]
-          );
-          console.log(getProofFromApi);
+          );          
           const amountInWei = utils
             .toWei(filteredObject.inputData.data.value, "wei")
-            .toString();
-          console.log(amountInWei);
+            .toString();          
           const withDrawToken = await contract.methods
             .withdraw(
               filteredObject.treeIndex - 1,
@@ -306,8 +295,7 @@ export default {
               amountInWei,
               getProofFromApi
             )
-            .send({ from: this.accounts[0] });
-          console.log(withDrawToken.status);
+            .send({ from: this.accounts[0] });          
           if (withDrawToken.status === true) {
             this.notifySuccess(
               "Reward claimed successfully! check your wallet"
@@ -322,12 +310,10 @@ export default {
         this.isLoading = false;
       }
     },
-    async getProof(baseUrl,airdropId, walletAddress) {
-      console.log(airdropId, walletAddress);
+    async getProof(baseUrl,airdropId, walletAddress) {      
       const proof = await axios.get(
         `${baseUrl}/proof/${airdropId}/${walletAddress}`
-      );
-      console.log(proof.data);
+      );      
       return proof.data.merkleProof;
     },
     truncate1(str, number) {
@@ -345,7 +331,7 @@ export default {
   font-size: 12px;
   background-color: var(--modal-bg-text);
 }
-.wrapword {
+/* .wrapword {
   white-space: -moz-pre-wrap !important;
   white-space: -webkit-pre-wrap;
   white-space: -pre-wrap;
@@ -353,5 +339,69 @@ export default {
   white-space: pre-wrap;
   word-wrap: break-word;
   white-space: normal;
+} */
+
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
+}
+tr { border: 2px solid #dee2e6;}
+
+th {  
+  font-weight: Montserrat, Helvetica, Arial, serif; 
+}
+td, th {  
+  padding: 4px;  
+  border: 1px solid #dee2e6; 
+  text-align: left; 
+}
+
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {	
+	table, thead, tbody, th, td, tr { 
+		display: block; 
+	}		
+	thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;    
+	}
+	tr { border: 1px solid #dee2e6}
+	td {	
+		border: none;
+		border-bottom: 1px solid #dee2e6; 
+		position: relative;
+		padding-left: 50%; 
+	}
+  th {		
+		border: none;
+		border-bottom: 1px solid #dee2e6; 
+    background: #ccc; 
+		position: relative;   
+    padding-left: 50%; 
+	}
+	
+	td:before { 	
+		position: absolute;	
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+  th:before { 		
+		position: absolute;		
+		top: 6px;
+    left: 6px;
+		background: #ccc;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}	
+  th:nth-of-type(1):before { content: "Prize name"; }
+	td:nth-of-type(1):before { content: "Number of winners"; }
+	td:nth-of-type(2):before { content: "Prize Per Winner"; }
+	td:nth-of-type(3):before { content: "Action"; }	
 }
 </style>

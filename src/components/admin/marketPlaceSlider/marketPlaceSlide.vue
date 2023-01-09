@@ -94,7 +94,7 @@ allButtons {
               </div>
             </div>
           </div>
-          <h6 class="mt-2" v-if="selectedEvent!==null">Prize Details</h6>
+          <h6 class="mt-2" v-if="selectedEvent!==null && prizeList.length ">Prize Details</h6>
           <div class="row scroll mt-2">
             <div class="col-lg-4" v-for="eachPrize in prizeList" :key="eachPrize._id">
               <div :title="eachPrize.title">
@@ -142,7 +142,8 @@ allButtons {
           </div>
           <div class="row g-3 align-items-center w-100 mt-4 ml-2" v-if="showContractField">
             <div class="col-lg-9 col-md-9 px-0">
-              <label for="placeHolder" class="col-form-label">Select Your chain: </label>
+              <tool-tips infoMessage="Select blockchain for the distribution"></tool-tips>
+              <label for="placeHolder" class="col-form-label">Select Your chain<span style="color: red">*</span>: </label>
             </div>
             <div class="col-lg-12 col-md-12 px-0">
               <b-form-select placeholder="Select an Event" :options="chainOptions" v-model="selectedChain"
@@ -151,25 +152,27 @@ allButtons {
           </div>
           <div class="row g-3 align-items-center w-100 mt-4 ml-2" v-if="showContractField">
             <div class="col-lg-9 col-md-9 px-0">
-              <label for="placeHolder" class="col-form-label">Token Address: </label>
+              <tool-tips infoMessage="Contract address of your token"></tool-tips>
+              <label for="placeHolder" class="col-form-label">Token Address<span style="color: red">*</span>: </label>
             </div>
             <div class="col-lg-12 col-md-12 px-0">
               <input v-model="depositTokenAddress" type="text" id="placeHolder" class="form-control w-100"
-                placeholder="Enter contract address" />
+                placeholder="Enter token address" @input="checkContractAddress()"/>
             </div>
           </div>
           <div class="row g-3 align-items-center w-100 mt-4 ml-2" v-if="showContractField">
             <div class="col-lg-12 col-md-12 px-0">
-              <label for="placeHolder" class="col-form-label">Recipients and Amounts <a target="_blank" href="https://www.eth-to-wei.com/">(in Wei):</a></label>
+              <tool-tips infoMessage="Enter Wallet address and token amount(token amount should be positive numbers)"></tool-tips>
+              <label for="placeHolder" class="col-form-label">Recipients and Amounts<span style="color: red">*</span>:</label>              
               <b-alert v-model="showDismissibleAlert.status" variant="danger" dismissible>
                 {{ showDismissibleAlert.text }}
               </b-alert>
             </div>
             <div class="col-lg-12 col-md-12 px-0" style="max-height: 200px;overflow-y: scroll;">
               
-              <b-form-textarea id="textarea" v-model="simpleData" placeholder="address,tokenvalue(in wei)"
+              <b-form-textarea id="textarea" v-model="simpleData" placeholder="address,tokenvalue(in positive numbers)"
                 :rows="JSON.parse(flash.value).winners" :max-rows="JSON.parse(flash.value).winners"
-                @keyup="calculateFee()" ></b-form-textarea>
+                @input="calculateFee()" ></b-form-textarea>
             </div>
           </div>
           <!-- <div class="mt-4" style="display: flex" v-if="showContractField">
@@ -198,7 +201,7 @@ allButtons {
                   <label for="placeHolder" class="col-form-label">{{location.destination}}</label>
                 </div>
                 <div class="col-lg-6 col-md-6 px-0">
-                  <label for="placeHolder" class="col-form-label" style="float:right">{{ location.value / 1000000000000000000 }} </label>
+                  <label for="placeHolder" class="col-form-label" style="float:right">{{getRoundOffValue(location.value)}} </label>
                 </div>
               </div>
             </div>
@@ -312,10 +315,13 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import HfButtons from "../../../components/elements/HfButtons.vue";
 import axios from "axios";
+import ToolTips from "../../basic/toolTips.vue"
+const checkWalletAddress = require('multicoin-address-validator');      
 export default {
   name: "MarketPlaceSlide",
   components: {
     // InputDate,
+    ToolTips,
     Loading,
     HfButtons
   },
@@ -376,7 +382,8 @@ export default {
         fyrePlatformCommision: '',
         serviceFeePercente: 0,
         totalAmountToDistribute: "",
-        symbol: ""
+        symbol: "",
+        decimal:0
       },
       simpleData: "",
       dataParsed: "",
@@ -413,8 +420,7 @@ export default {
   mounted() {
     this.$root.$on("resetMarketPlaceSlide", () => {
       this.resetAllValues();
-    });
-    console.log(this.$route.query.projectId, 'this.$route.query.projectId')
+    });    
     
   },
   watch: {
@@ -423,8 +429,7 @@ export default {
           handler: function () {
             if (this.$route.query.projectId) {
               // this.selectedProjectId = this.$route.query.projectId
-              this.selectedEvent = this.$route.query.projectId
-              console.log(this.selectedEvent, 'selectedEvent')
+              this.selectedEvent = this.$route.query.projectId              
               this.flash = null
               this.showContractField = false
               this.prizeList = [];
@@ -461,67 +466,103 @@ export default {
     },
     getFriendlyValue(str) {
       const toEthStd = utils.fromWei(str.toString(), "ether").toString();
-      return toEthStd
+      const rounded = Number(toEthStd).toFixed(4)
+      return rounded
     },
-    onSelectChain(e) {
-      console.log(e)
-      console.log(this.selectedChain)
+    getRoundOffValue(num) {
+      const inwei = (10 ** this.feeStructure.decimal)
+      const inNumber = num/inwei
+      return inNumber
+
     },
-    callChange(e) {
-      console.log(e)
+   async onSelectChain(e) {
+      if(e===null) {
+        return this.notifyErr('Select Chain')
+      }   if(this.depositTokenAddress!=="" && this.simpleData!=="") {
+        await this.calculateFee()
+      }
     },
     truncate1(str, number) {
       return truncate(str, number);
     },
+   async checkContractAddress() {
+      if (this.depositTokenAddress === "") {        
+        return(this.notifyErr('Enter token Address'))
+      } if(!checkWalletAddress.validate(this.depositTokenAddress,'Ethereum','eth')){
+        return(this.notifyErr('Enter valid contract address'))
+      }
+      if(this.simpleData!=='') {
+        await this.calculateFee()
+      }
+    },
     async calculateFee() {
+      
       this.proceed = false
       this.feeStructure = {
         fyrePlatformCommision: '',
         serviceFeePercente: 0,
         totalAmountToDistribute: "",
-        symbol: ""
+        symbol: "",
+        decimal:0
       }
       this.isCheckEveryThing=false
+      // this.onSelectChain(this.selectedChain)
+      // this.checkContractAddress()
       if (this.selectedChain === null) {
-        this.showDismissibleAlert.status = true
-        this.showDismissibleAlert.text = 'Select Chain'
-
+        // this.showDismissibleAlert.status = true
+        // this.showDismissibleAlert.text = 'Select Chain'
         throw new Error(this.notifyErr('Select Chain'))
-      } else if (this.depositTokenAddress === "") {
-        this.showDismissibleAlert.status = true
-        this.showDismissibleAlert.text = 'Enter Contract Address'
+      }  if (this.depositTokenAddress === "") {
+        // this.showDismissibleAlert.status = true
+        // this.showDismissibleAlert.text = 'Enter Contract Address'
 
-        // throw new Error(this.notifyErr('Enter Contract Address'))
+        throw new Error(this.notifyErr('Enter token Address'))
       }
-      else if (this.simpleData === "") {
+       if (this.simpleData === "") {
         this.showDismissibleAlert.status = true
-        this.showDismissibleAlert.text = 'Enter Wallet addresses and respective token value'
-        // throw new Error(this.notifyErr('Enter Wallet addresses and respective token value'))
+        this.showDismissibleAlert.text = 'Enter Wallet addresses and respective token value'        
       }
-      const web3 = await loadweb3(this.selectedChain)
-      const contract = new web3.eth.Contract(erc20ABI, this.depositTokenAddress);
+      try{
+      const web3 = await loadweb3(this.selectedChain)                  
+      const contract = new web3.eth.Contract(erc20ABI, this.depositTokenAddress);      
       this.feeStructure.symbol = await contract.methods.symbol().call();
-      console.log(this.simpleData,"simpledata")
+      this.feeStructure.decimal = await contract.methods.decimals().call();
       var allTextLines = this.simpleData.split(/\r\n|\n/);
-      //Split per line on tabs and commas        
-      console.log(allTextLines.length)
+      //Split per line on tabs and commas              
       this.locations = [];
       for (var i = 0; i < allTextLines.length; i++) {
         var data = allTextLines[i].split(',');
-        if(data[1]) {
-          let location = { "destination": data[0], "value": data[1], };
+        if(data[0]==="") {
+        this.showDismissibleAlert.status = true                    
+        return this.showDismissibleAlert.text = `Enter wallet addrress and respective token value`
+        }    
+        const isValidWalletAddress = checkWalletAddress.validate(data[0],'Ethereum','eth')
+        if(isValidWalletAddress === false) {        
+        this.showDismissibleAlert.status = true                    
+        return this.showDismissibleAlert.text = `Distribution list contains invalid address at line ${i+1}`        
+        }
+        // if(data[1]==="") {
+        // this.showDismissibleAlert.status = true
+        // return this.showDismissibleAlert.text = 'Enter token value'
+        // }        
+        if(Number(data[1]) && Number(data[1])>0) {
+
+          const inwei = BigInt((data[1] * 10 ** this.feeStructure.decimal)).toString();                     
+          let location = { "destination": data[0], "value": inwei.toString(), };
           this.locations.push(location);
+        }else{
+          this.showDismissibleAlert.status = true                    
+        return this.showDismissibleAlert.text = `Distribution list contains invalid amount for token at line ${i+1}`
         }
       }
-      //Final Data       
-      console.log(this.locations.length,"LocationDatas")
+      //Final Data             
       if (this.locations.length < JSON.parse(this.flash.value).winners) {
         this.showDismissibleAlert.status = true
-        this.showDismissibleAlert.text = 'Number of winners entered are less than you mentioned in Prize'
+       return this.showDismissibleAlert.text = 'Number of winners entered are less than you mentioned in Prize'
         // throw new Error(this.notifyErr('Number of winners entered are less than you mentioned in Prize'))
       } else if (this.locations.length > JSON.parse(this.flash.value).winners) {
         this.showDismissibleAlert.status = true
-        this.showDismissibleAlert.text = 'Number of winners entered are more than you mentioned in Prize'
+       return this.showDismissibleAlert.text = 'Number of winners entered are more than you mentioned in Prize'
         // throw new Error(this.notifyErr('Number of winners entered are more than you mentioned in Prize'))
       } else {
         this.showDismissibleAlert.status=false
@@ -560,11 +601,20 @@ export default {
         this.proceed = true
         this.isCheckEveryThing = true
       }
+      }catch(e) {                       
+        this.notifyErr(e.message);
+      }
     },
     async createDistribution() {
       if (this.proceed) {
         try {
           this.isLoading = true
+          if(this.selectedChain===null) {
+            return this.notifyErr('Select Chain')
+          }
+          if(this.depositTokenAddress===""){
+            return this.notifyErr('Enter token address')
+          }
           const web3 = await loadweb3(this.selectedChain);
           this.accounts = await web3.eth.getAccounts();
           const signerAddress = this.accounts[0]
@@ -585,24 +635,16 @@ export default {
           formData.append('projectLogo', new Blob([Fyre_Small], { type: 'image/png' }), 'Fyre_small.png')
           let url = `${this.selectedTool.meta.appBaseUrl}/create-merkle-tree/bank`;
           const result = await axios.post(url, formData);
-          const { ipfsHash, root, totalBalance, dbTreeId } = result.data;
-          console.log(ipfsHash)
-          console.log(root)
-          console.log(totalBalance)
-          console.log(dbTreeId)
+          const { ipfsHash, root, totalBalance, dbTreeId } = result.data;          
           this.tokenBalance = totalBalance
           this.newRoot = root
-          this.ipfsHash = ipfsHash
-          console.log(this.tokenBalance)
-          const ipfsHashBytes = ipfsHashToBytes32(ipfsHash);
-          console.log(ipfsHashBytes)
+          this.ipfsHash = ipfsHash          
+          const ipfsHashBytes = ipfsHashToBytes32(ipfsHash);          
           const newTreeId = await this.addMerkelTree(
             root,
             ipfsHashBytes,
             this.depositTokenAddress,
-            totalBalance.toString())
-          console.log(newTreeId)
-          console.log(dbTreeId)
+            totalBalance.toString())       
           const updateBody = {
             dbTreeId,
             newTreeId
@@ -613,27 +655,21 @@ export default {
           )
           url = `${this.selectedTool.meta.appBaseUrl}/update-merkle-tree`
           const a = await axios.post(url, { updateBody, signature })
-          const resultData = a.data.success
-          console.log(resultData)
+          const resultData = a.data.success          
           if (resultData === true) {
-            console.log("===================Merkel Tree Added=============")
-
-            const parsedValue = JSON.parse(this.flash.value)
-            console.log(parsedValue)
+            const parsedValue = JSON.parse(this.flash.value)            
             parsedValue["isDistributed"] = true
             parsedValue["externalRecordId"] = dbTreeId.toString()
             parsedValue["contractAddress"] = this.depositTokenAddress.toString()
             parsedValue["appBaseUrl"] = this.selectedTool.meta.appBaseUrl.toString()
-            parsedValue["chainId"] = this.selectedChain
-            console.log(parsedValue)
+            parsedValue["chainId"] = this.selectedChain            
             this.flash.value = JSON.stringify(parsedValue)
             const index = this.eventToAirdrop.actions.findIndex((x) => {
               return x._id === this.flash._id
             })
             if (index > -1) {
               this.eventToAirdrop.actions[index] = this.flash
-              this.eventToAirdrop["isRewardDistribution"] = true
-              console.log(this.eventToAirdrop)
+              this.eventToAirdrop["isRewardDistribution"] = true              
               const url = `${this.$config.studioServer.BASE_URL}api/v1/project`;
               let headers = {
                 "Content-Type": "application/json",
@@ -695,7 +731,7 @@ export default {
             }
           }
         } catch (e) {
-          this.notifyErr(e || e.message);
+          this.notifyErr(e.message);
         } finally {
           this.isLoading = false
         }
@@ -703,17 +739,13 @@ export default {
 
     },
     async addMerkelTree(newRoot, ipfsHash, depositToken, tokenBalance) {
-      try {
-        console.log(newRoot, ipfsHash, depositToken, tokenBalance)
-        const web3 = await loadweb3(this.selectedChain);        
-        // this.accounts = await web3.eth.getAccounts();
-        // console.log(this.accounts);
+      try {        
+        const web3 = await loadweb3(this.selectedChain);       
         const address = getAddress(parseInt(this.selectedChain))        
         const contract = new web3.eth.Contract(abi, address);
         const getApprovalContract = new web3.eth.Contract(erc20ABI, depositToken)
         const maxApprove = getMaxApprove()
-        const approval = await getApprovalContract.methods.approve(address, maxApprove).send({ from: this.accounts[0] })
-        console.log(approval.status)
+        const approval = await getApprovalContract.methods.approve(address, maxApprove).send({ from: this.accounts[0] })        
         if (approval.status !== true) {
           return this.notifyErr('Not Approved')
         }
@@ -723,10 +755,7 @@ export default {
           depositToken,
           tokenBalance.toString()
         ).send({ from: this.accounts[0] })
-        console.log(transaction)
-        console.log(contract.methods)
-        const oldTreeId = await contract.methods.numTrees().call()
-        console.log(oldTreeId)
+        const oldTreeId = await contract.methods.numTrees().call()        
         const returnOldTreeId = Number(oldTreeId) + 1
         return returnOldTreeId
       } catch (e) {
@@ -744,23 +773,30 @@ export default {
       }
     },
     selectOption(e) {
+      this.isCheckEveryThing = false
       this.flash = null
+      this.simpleData = ''
+      this.depositTokenAddress =''
+      this.selectedChain = null
       this.showContractField = false
       this.prizeList = [];
+      this.feeStructure = {
+        fyrePlatformCommision: '',
+        serviceFeePercente: 0,
+        totalAmountToDistribute: "",
+        symbol: ""
+      }
 
       if (this.selectedEvent) {
         
         this.setPrizeList()
       }
     },
-    setPrizeList () {
-      console.log('setPrize-begin')
-      console.log('print-selectedEvent', this.selectedEvent)
+    setPrizeList () {     
       const filterEvent = this.projects.find((x) => {
         return x._id === this.selectedEvent;
       });
-      this.eventToAirdrop = { ...filterEvent }
-      console.log(this.eventToAirdrop,'eventAirdrop')
+      this.eventToAirdrop = { ...filterEvent }      
       let parsed = null;
       this.prizeList = this.eventToAirdrop.actions.filter((x) => {
         if (x.type === "PRIZE_CARD") {
@@ -769,8 +805,7 @@ export default {
             return x;
           }
         }
-      });
-      console.log('setPrize-close')
+      });      
 
     },
     clearselected() {
