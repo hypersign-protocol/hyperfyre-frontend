@@ -11,7 +11,7 @@ async function loadWeb3(inDecimal)  {
           method:'wallet_switchEthereumChain',
           params: [{ chainId: chain }],
         })
-        console.log(res)
+        
       }catch(switchError) {        
         if(switchError.code === 4902) {
               try{               
@@ -76,9 +76,11 @@ async function loadWeb3(inDecimal)  {
                 }
                 
               } catch(addError){
-                console.log(addError)
+                throw new Error(addError.message)
               }    
-        }
+        } else{
+          throw new Error(switchError.message)
+        }       
       }
       }
       await window.ethereum.request({ method: "eth_requestAccounts" });      
@@ -87,8 +89,7 @@ async function loadWeb3(inDecimal)  {
       window.web3 = new Web3(window.web3.currentProvider);
       return window.web3;
     }else{
-      window.alert("Non-Ethereum browser detected");
-      return null;
+      throw new Error("Install Metamask browser extention");
     }
 }
 

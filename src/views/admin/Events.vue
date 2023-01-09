@@ -1046,6 +1046,9 @@ export default {
           this.project.projectName + " copy " + Date.now();
         this.project.slug = "";
         this.project.investorsCount = 0;
+        let date = new Date()
+        date.setDate(date.getDate() + 1)
+        project.toDate = date.toISOString()
       }
       this.project.fromDate = dayjs(project.fromDate).format(
         "YYYY-MM-DD hh:mm:ss"
@@ -1265,12 +1268,27 @@ export default {
         }
 
         /// WARNING:: This code is redundant it seems.
-        /// Not removing but handling the condition.
-        const userProjects = JSON.parse(localStorage.getItem("userProjects"));
-        if (userProjects) {
-          userProjects.count += 1;
-          userProjects.projects.push(resp.data);
-          localStorage.setItem("userProjects", JSON.stringify(userProjects));
+        /// Not removing but handling the condition.      
+        let setProjectInLocalStorage = []
+        const userProjects = localStorage.getItem("userProjects");
+        const userProjectsData = JSON.parse(userProjects).projects;
+        setProjectInLocalStorage = [ ...userProjectsData]        
+        if (setProjectInLocalStorage.length) {
+          const findIndexToUpdateProject = setProjectInLocalStorage.findIndex((x)=>{
+            return x._id === this.project._id
+          })          
+          if(findIndexToUpdateProject>-1) {
+            Object.assign(setProjectInLocalStorage[findIndexToUpdateProject],{ ...resp.data});
+            localStorage.setItem("userProjects",JSON.stringify({
+              projects: setProjectInLocalStorage,
+              count: setProjectInLocalStorage.length,
+            }))
+          }          
+
+          // userProjects.count += 1;
+          // userProjects.projects.push(resp.data);
+          // localStorage.setItem("userProjects", JSON.stringify(userProjects));
+
         }
 
         await this.fetchProjects();
@@ -1381,6 +1399,23 @@ export default {
        })
        this.eventActionList = [] 
        this.eventActionList = resp.data ? resp.data.actions : this.eventActionList;
+       
+       let setProjectInLocalStorage = []
+        const userProjects = localStorage.getItem("userProjects");
+        const userProjectsData = JSON.parse(userProjects).projects;
+        setProjectInLocalStorage = [ ...userProjectsData]        
+        if (setProjectInLocalStorage.length) {
+          const findIndexToUpdateProject = setProjectInLocalStorage.findIndex((x)=>{
+            return x._id === this.project._id
+          })          
+          if(findIndexToUpdateProject>-1) {
+            Object.assign(setProjectInLocalStorage[findIndexToUpdateProject],{ ...resp.data});
+            localStorage.setItem("userProjects",JSON.stringify({
+              projects: setProjectInLocalStorage,
+              count: setProjectInLocalStorage.length,
+            }))
+          }
+        }          
        return resp;
     },
 
