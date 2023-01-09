@@ -51,12 +51,12 @@
       :can-cancel="true"
       :is-full-page="fullPage"
     ></loading>
-    <market-place-slide :projects="projects" :selectedTool="selectedTool"/>
-    <div class="row">
+    <market-place-slide :projects="projects" :selectedProjectId="selectedProjectId" :selectedTool="selectedTool"/>
+    <!-- <div class="row">
       <div class="col-md-12">
               <h3>Fyre Marketplace</h3>
       </div>
-    </div>
+    </div> -->
     <div class="row" style="margin-top: 2%">
       <div class="col-md-12" style="text-align: left">
         <div class="card">
@@ -89,7 +89,7 @@
           </b-card-text>
           <footer style="display:flex;">
             <small>
-              <b-badge v-for="chain in tool.supportedChain" pill variant="secondary" style="margin-left: 2px">{{chain.name}}</b-badge>
+              <b-badge v-for="chain in tool.supportedChain" :key="chain._id" pill variant="secondary" style="margin-left: 2px">{{chain.name}}</b-badge>
             </small>
             <small style="float: right"> 
               <hf-buttons name="Create" @executeAction="openMPSidebar(tool)" iconClass="text-black" title="Create airdrop">
@@ -137,6 +137,7 @@ export default {
       errors: [],
       authToken: null,
       accessToken: null,
+      selectedProjectId:null,
     };
   },
 async mounted() {
@@ -155,7 +156,14 @@ async mounted() {
       _id: null,
       projectName: "Select an event",
     });
-   await this.getDistributerDetails()
+    await this.getDistributerDetails()
+    //Hardcoding tool since we have only 1 tool for now
+    if (this.$route.query.projectId) {
+      this.selectedProjectId = this.$route.query.projectId;
+      console.log(this.selectedProjectId,'pid')
+      this.openMPSidebar(this.tools[0])
+
+    }
   },
   methods: {
     async getDistributerDetails() {      

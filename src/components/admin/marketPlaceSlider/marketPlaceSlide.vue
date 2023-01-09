@@ -1,4 +1,9 @@
 <style scoped>
+.final-wallets{
+  font-size: 12px;
+  max-height: 200px;
+  overflow-y: scroll;
+  }
 .accordion > .card {
   overflow: inherit !important;
 }
@@ -63,8 +68,8 @@ allButtons {
         <b-card :style="buttonThemeCss">
           <b-card-title>{{stickyNoteTitle}}</b-card-title>
           <b-card-text>
-            Bank tool is set of tools to manage tokens developed by Finance.vote,
-            We have integrated the Bulk airdrop to reduce gas cost.
+            This tool is to distribute ERC20 reward developed by Finance.vote,
+            It can help to send reward to large number of wallets at low cost.
           </b-card-text>
           <b-card-text class="small text-muted">
             <b-link target="_blank" href="https://finance.vote/">Website</b-link> |
@@ -76,7 +81,7 @@ allButtons {
         <div></div>
         <div>
           <div class="row" style="margin-top: 2%">
-            <div class="col-md-9">
+            <div class="col-md-12">
               <div class="row g-3 align-items-center w-100 mt-4">
                 <div class="text-left col-lg-3 col-md-3 text-left">
                   <label for="type" class="col-form-label">Select Event<span style="color: red">*</span>:
@@ -84,14 +89,14 @@ allButtons {
                 </div>
                 <div class="col-lg-9 col-md-9 px-0">
                   <b-form-select placeholder="Select an Event" :options="projects" v-model="selectedEvent"
-                    textField="projectName" valueField="_id" @input="selectOption"></b-form-select>
+                    textField="projectName" valueField="_id" @input="selectOption()"></b-form-select>
                 </div>
               </div>
             </div>
           </div>
           <h6 class="mt-2" v-if="selectedEvent!==null">Prize Details</h6>
           <div class="row scroll mt-2">
-            <div class="col-lg-3" v-for="eachPrize in prizeList" :key="eachPrize._id">
+            <div class="col-lg-4" v-for="eachPrize in prizeList" :key="eachPrize._id">
               <div :title="eachPrize.title">
                 <b-card :title="truncate1(eachPrize.title, 10)" tag="article"
                   style="max-width: 20rem; margin-top: 20px;height:10rem;" :class="
@@ -113,7 +118,7 @@ allButtons {
     
                         <li data-toggle="tooltip" data-placement="bottom">
                           <i class="fas fa-award"></i>
-                          <span> {{ JSON.parse(eachPrize.value).prizeValue }} Each</span>
+                          <span>  {{ JSON.parse(eachPrize.value).prizeValue }} Each</span>
                         </li>
                       </ul>
                     </div>
@@ -146,7 +151,7 @@ allButtons {
           </div>
           <div class="row g-3 align-items-center w-100 mt-4 ml-2" v-if="showContractField">
             <div class="col-lg-9 col-md-9 px-0">
-              <label for="placeHolder" class="col-form-label">Enter your contract address: </label>
+              <label for="placeHolder" class="col-form-label">Token Address: </label>
             </div>
             <div class="col-lg-12 col-md-12 px-0">
               <input v-model="depositTokenAddress" type="text" id="placeHolder" class="form-control w-100"
@@ -154,22 +159,80 @@ allButtons {
             </div>
           </div>
           <div class="row g-3 align-items-center w-100 mt-4 ml-2" v-if="showContractField">
-            <div class="col-lg-9 col-md-9 px-0">
-              <label for="placeHolder" class="col-form-label">Enter wallet addresss and amount of token: </label>
+            <div class="col-lg-12 col-md-12 px-0">
+              <label for="placeHolder" class="col-form-label">Recipients and Amounts <a target="_blank" href="https://www.eth-to-wei.com/">(in Wei):</a></label>
+              <b-alert v-model="showDismissibleAlert.status" variant="danger" dismissible>
+                {{ showDismissibleAlert.text }}
+              </b-alert>
             </div>
             <div class="col-lg-12 col-md-12 px-0" style="max-height: 200px;overflow-y: scroll;">
+              
               <b-form-textarea id="textarea" v-model="simpleData" placeholder="address,tokenvalue(in wei)"
                 :rows="JSON.parse(flash.value).winners" :max-rows="JSON.parse(flash.value).winners"
-                @change="callChange"></b-form-textarea>
+                @keyup="calculateFee()" ></b-form-textarea>
             </div>
           </div>
-          <div class="mt-4" style="display: flex" v-if="showContractField">
+          <!-- <div class="mt-4" style="display: flex" v-if="showContractField">
             <div class="col-lg-4 col-md-3" style="display: block">
-              <hf-buttons @executeAction="calculateFee()" name="Procced"
+              <hf-buttons @executeAction="calculateFee()" name="Calculate"
                 customClass="btn btn-outline-primary button-theme"></hf-buttons>
             </div>
+          </div> -->
+          <div v-if="showContractField" >
+            <div class="row g-3 align-items-center w-100 mt-4 ml-2">
+              <div class="col-lg-12 col-md-12 px-0">
+                <label for="placeHolder" class="col-form-label">Confirm: </label>
+              </div>
+            </div>
+            <div class="row g-3 align-items-center w-100 mt-2 ml-2">
+              <div class="col-lg-6 col-md-6 px-0">
+                <label for="placeHolder" class="col-form-label">Address: </label>
+              </div>
+              <div class="col-lg-6 col-md-6 px-0">
+                <label for="placeHolder" class="col-form-label" style="float:right">Amount: </label>
+              </div>
+            </div>
+            <div class="final-wallets g-3 w-100 ml-2 p-3" v-if="isCheckEveryThing">
+              <div class="row g-3 align-items-center w-100 ml-2" v-for="location in locations" :key="location.destination">
+                <div class="col-lg-6 col-md-6 px-0">
+                  <label for="placeHolder" class="col-form-label">{{location.destination}}</label>
+                </div>
+                <div class="col-lg-6 col-md-6 px-0">
+                  <label for="placeHolder" class="col-form-label" style="float:right">{{ location.value / 1000000000000000000 }} </label>
+                </div>
+              </div>
+            </div>
+          
+            <div class="row g-3 align-items-center w-100 mt-4 ml-2">
+              <div class="col-lg-6 col-md-6 px-0" >
+                <label for="placeHolder" class="col-form-label">Total:</label>
+              </div>
+              <div class="col-lg-6 col-md-6 px-0">
+                <span v-if="feeStructure.fyrePlatformCommision!==''" style="float:right">{{ getFriendlyValue(feeStructure.totalAmountToDistribute) - getFriendlyValue(feeStructure.fyrePlatformCommision)}}
+                  {{feeStructure.symbol}} Tokens</span>
+              </div>
+            </div>
+            <div class="row g-3 align-items-center w-100 mt-2 ml-2">
+              <div class="col-lg-6 col-md-6 px-0" >
+                <label for="placeHolder" class="col-form-label">Platform Fee:</label>
+              </div>
+              <div class="col-lg-6 col-md-6 px-0">
+                <span v-if="feeStructure.fyrePlatformCommision!==''" style="float:right">{{getFriendlyValue(feeStructure.fyrePlatformCommision)}}
+                  {{feeStructure.symbol}} Tokens</span>
+              </div>
+            </div>
+            <div class="row g-3 align-items-center w-100 mt-2 ml-2">
+              <div class="col-lg-6 col-md-6 px-0" >
+                <label for="placeHolder" class="col-form-label">Total Payable:</label>
+              </div>
+              <div class="col-lg-6 col-md-6 px-0">
+                <span v-if="feeStructure.totalAmountToDistribute!==''" style="float:right">{{getFriendlyValue(feeStructure.totalAmountToDistribute)}}
+                  {{feeStructure.symbol}} Tokens</span>
+              </div>
+            </div>
           </div>
-          <div class="row g-3 align-items-center w-100 mt-4 ml-2" v-if="showContractField">
+          
+          <!-- <div class="row g-3 align-items-center w-100 mt-4 ml-2" v-if="showContractField">
             <div class="col-lg-3 col-md-3 align-items-center" v-if="feeStructure.fyrePlatformCommision!==''">
               <label for="placeHolder" class="col-form-label">You need to pay platform fee as token: </label>
             </div>
@@ -187,7 +250,7 @@ allButtons {
                 v-if="feeStructure.totalAmountToDistribute!==''">{{getFriendlyValue(feeStructure.totalAmountToDistribute)}}
                 {{feeStructure.symbol}} Tokens</span>
             </div>
-          </div>
+          </div> -->
           <!-- <div
             class="row g-3 align-items-center w-100 mt-4"
             v-if="showContractField"
@@ -211,12 +274,12 @@ allButtons {
         <hr />
         <div></div>
         <div style="display: flex" v-if="isCheckEveryThing">
-          <div class="col-lg-6 col-md-9 px-0"></div>
-          <div class="col-lg-4 col-md-3" style="display: block">
+          <div class="col-lg-4 col-md-12" style="display: block">
             <hf-buttons
              @executeAction="createDistribution()"
               name="Create Distribution"
               customClass="btn btn-outline-primary button-theme"
+              style="float:left"
             ></hf-buttons>
           </div>
         </div>
@@ -263,6 +326,9 @@ export default {
     },   
     selectedTool: {
       type: Object,
+    },
+    selectedProjectId: {
+      type: String,
     }
   },
 
@@ -283,6 +349,9 @@ export default {
   },
   data() {
     return {
+      // TEMP WALLETS
+      locations: [],
+      showDismissibleAlert:{status:false,text:""},
       /// TODO: Need to do it in a neat way
       authToken: localStorage.getItem("authToken"),
       accessToken:localStorage.getItem("accessToken"),
@@ -345,11 +414,28 @@ export default {
     this.$root.$on("resetMarketPlaceSlide", () => {
       this.resetAllValues();
     });
+    console.log(this.$route.query.projectId, 'this.$route.query.projectId')
+    
   },
   watch: {
+        selectedProjectId:{
+          deep:true,
+          handler: function () {
+            if (this.$route.query.projectId) {
+              // this.selectedProjectId = this.$route.query.projectId
+              this.selectedEvent = this.$route.query.projectId
+              console.log(this.selectedEvent, 'selectedEvent')
+              this.flash = null
+              this.showContractField = false
+              this.prizeList = [];
+              this.setPrizeList()
+            }
+          }
+        },
+
         selectedTool:{
           deep:true,
-          handler: function(newValue,oldValue) {            
+          handler: function(newValue) {            
             const temp = [ ...newValue.supportedChain]
             temp.forEach(x => {
               this.chainOptions.push({
@@ -363,7 +449,7 @@ export default {
             })
           }
         }
-    },
+  },
   methods: {  
     resetAllValues () {
       //To Do
@@ -389,32 +475,56 @@ export default {
     },
     async calculateFee() {
       this.proceed = false
+      this.feeStructure = {
+        fyrePlatformCommision: '',
+        serviceFeePercente: 0,
+        totalAmountToDistribute: "",
+        symbol: ""
+      }
+      this.isCheckEveryThing=false
       if (this.selectedChain === null) {
+        this.showDismissibleAlert.status = true
+        this.showDismissibleAlert.text = 'Select Chain'
+
         throw new Error(this.notifyErr('Select Chain'))
       } else if (this.depositTokenAddress === "") {
-        throw new Error(this.notifyErr('Enter Contract Address'))
+        this.showDismissibleAlert.status = true
+        this.showDismissibleAlert.text = 'Enter Contract Address'
+
+        // throw new Error(this.notifyErr('Enter Contract Address'))
       }
       else if (this.simpleData === "") {
-        throw new Error(this.notifyErr('Enter Wallet addresses and respective token value'))
+        this.showDismissibleAlert.status = true
+        this.showDismissibleAlert.text = 'Enter Wallet addresses and respective token value'
+        // throw new Error(this.notifyErr('Enter Wallet addresses and respective token value'))
       }
       const web3 = await loadweb3(this.selectedChain)
       const contract = new web3.eth.Contract(erc20ABI, this.depositTokenAddress);
       this.feeStructure.symbol = await contract.methods.symbol().call();
-      console.log(this.simpleData)
+      console.log(this.simpleData,"simpledata")
       var allTextLines = this.simpleData.split(/\r\n|\n/);
       //Split per line on tabs and commas        
       console.log(allTextLines.length)
-      let locations = [];
+      this.locations = [];
       for (var i = 0; i < allTextLines.length; i++) {
         var data = allTextLines[i].split(',');
-        let location = { "destination": data[0], "value": data[1], };
-        locations.push(location);
+        if(data[1]) {
+          let location = { "destination": data[0], "value": data[1], };
+          this.locations.push(location);
+        }
       }
-      if (locations.length < JSON.parse(this.flash.value).winners) {
-        throw new Error(this.notifyErr('Number of winners entered are less than you mentioned in Prize'))
-      } else if (locations.length > JSON.parse(this.flash.value).winners) {
-        throw new Error(this.notifyErr('Number of winners entered are more than you mentioned in Prize'))
+      //Final Data       
+      console.log(this.locations.length,"LocationDatas")
+      if (this.locations.length < JSON.parse(this.flash.value).winners) {
+        this.showDismissibleAlert.status = true
+        this.showDismissibleAlert.text = 'Number of winners entered are less than you mentioned in Prize'
+        // throw new Error(this.notifyErr('Number of winners entered are less than you mentioned in Prize'))
+      } else if (this.locations.length > JSON.parse(this.flash.value).winners) {
+        this.showDismissibleAlert.status = true
+        this.showDismissibleAlert.text = 'Number of winners entered are more than you mentioned in Prize'
+        // throw new Error(this.notifyErr('Number of winners entered are more than you mentioned in Prize'))
       } else {
+        this.showDismissibleAlert.status=false
         const chainIdd = parseInt(this.selectedChain)
         this.data.additionalData.depositToken = this.depositTokenAddress
         this.data.additionalData.chainId = parseInt(this.selectedChain)
@@ -422,7 +532,7 @@ export default {
         this.data.additionalData.project.label = this.flash.title + this.flash._id
         this.data.additionalData.project.symbol = this.shortenName1(this.flash.title, this.flash._id)
         this.data.additionalData.project.key = this.data.additionalData.project.symbol
-        this.data.inputData = [...locations]
+        this.data.inputData = [...this.locations]
         const url = `${this.$config.studioServer.BASE_URL}api/v1/reward/distribution/serviceFee`;
         let data = {}
         data = { ...this.data }        
@@ -627,6 +737,7 @@ export default {
       if (JSON.parse(prize.value).isDistributed === true) {
         return this.notifyErr('Reward distribution is already created')
       }
+      this.isCheckEveryThing = false
       this.flash = prize
       if (this.selectedEvent !== null) {
         this.showContractField = true
@@ -636,22 +747,31 @@ export default {
       this.flash = null
       this.showContractField = false
       this.prizeList = [];
-      if (e) {
-        const filterEvent = this.projects.find((x) => {
-          return x._id === e;
-        });
-        this.eventToAirdrop = { ...filterEvent }
-        console.log(this.eventToAirdrop)
-        let parsed = null;
-        this.prizeList = this.eventToAirdrop.actions.filter((x) => {
-          if (x.type === "PRIZE_CARD") {
-            parsed = JSON.parse(x.value);
-            if (parsed.type === "Tokens") {
-              return x;
-            }
-          }
-        });
+
+      if (this.selectedEvent) {
+        
+        this.setPrizeList()
       }
+    },
+    setPrizeList () {
+      console.log('setPrize-begin')
+      console.log('print-selectedEvent', this.selectedEvent)
+      const filterEvent = this.projects.find((x) => {
+        return x._id === this.selectedEvent;
+      });
+      this.eventToAirdrop = { ...filterEvent }
+      console.log(this.eventToAirdrop,'eventAirdrop')
+      let parsed = null;
+      this.prizeList = this.eventToAirdrop.actions.filter((x) => {
+        if (x.type === "PRIZE_CARD") {
+          parsed = JSON.parse(x.value);
+          if (parsed.type === "Tokens") {
+            return x;
+          }
+        }
+      });
+      console.log('setPrize-close')
+
     },
     clearselected() {
       this.app.appName = "";

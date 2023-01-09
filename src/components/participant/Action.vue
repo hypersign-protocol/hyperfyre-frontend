@@ -210,7 +210,7 @@ export default {
     },
   },
   methods: {
-    checkIfUserHasLoggedIn(e) {
+    checkIfUserHasLoggedIn() {
       if (!this.userProfile) {
         // TODO:  bad way of coding.  We should only hide which is being clicked 
         document.querySelectorAll(".card-header").forEach(elm => {

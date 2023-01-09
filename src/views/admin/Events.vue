@@ -374,7 +374,26 @@ i {
                   >{{ tag.type.split("_")[0] }}</b-badge
                 >
               </small>
+              
               <small style="float: right">
+                <span
+                  title="Click to Distribute Reward"
+                  style="cursor: pointer"
+                  v-if="project.isDistributed"
+                >
+                  <a :href="`/admin/marketplace?projectId=${project._id}`" target="_blank" class="card-body-custom">
+                                    <i class="fa fa-trophy" style="color: #39ff14"></i>
+                  </a>
+                </span>
+                <span
+                  title="Click to Reward Distribution"
+                  style="cursor: pointer"
+                  v-else
+                >
+                  <a :href="`/admin/marketplace?projectId=${project._id}`" target="_blank" class="card-body-custom">
+                    <i class="fa fa-trophy" ></i>
+                  </a>                  
+                </span>
                 <span
                   @click="editProject(project)"
                   title="Click to edit this event"
@@ -897,7 +916,6 @@ export default {
             count: this.projects.length,
           })
         );
-        this.projectsToShow = this.projects.slice(0, this.perPage);
         this.projects.map((x) => {
           x["whitelisting_link"] =
             window.location.origin +
@@ -906,7 +924,20 @@ export default {
               : "/form?projectId=" + x._id);
           x["investors_link"] =
             window.location.origin + "/admin/participants?projectId=" + x._id;
+          x.actions.forEach((action)=>{
+            if (action.type && action.type == "PRIZE_CARD"){
+              if (action.value && JSON.parse(action.value).type === "Tokens")
+              {
+                if (JSON.parse(action.value).isDistributed) {
+                  x['isDistributed']=true
+                }
+              }
+            }
+          });
         });
+
+        this.projectsToShow = this.projects.slice(0, this.perPage);
+
         this.notifySuccess(
           Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_FETCHED_NO +
             this.projects.length
