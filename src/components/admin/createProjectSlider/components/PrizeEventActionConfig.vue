@@ -361,6 +361,10 @@ export default {
     },
     handleEventActionUpdate() {
       // Code to update an Action
+      const data = {...this.prizeDetails}
+      if(data.hasOwnProperty('isDistributed') && data.isDistributed=== true) {
+        return this.notifyErr('Reward has been distributed for this prize you cannot edit it!')
+      }      
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {
         this.selected.value = JSON.stringify(this.prizeDetails);

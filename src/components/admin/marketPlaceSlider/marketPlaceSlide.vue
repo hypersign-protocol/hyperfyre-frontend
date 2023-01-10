@@ -759,7 +759,7 @@ export default {
         const returnOldTreeId = Number(oldTreeId) + 1
         return returnOldTreeId
       } catch (e) {
-        throw new Error(e)
+        throw new Error(e.message)
       }
     },
     prizeCardSelectedForAirdrop(prize) {
