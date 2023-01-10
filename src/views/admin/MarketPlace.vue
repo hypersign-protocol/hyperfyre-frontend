@@ -156,14 +156,13 @@ async mounted() {
       _id: null,
       projectName: "Select an event",
     });
-    await this.getDistributerDetails()
-    //Hardcoding tool since we have only 1 tool for now
-    if (this.$route.query.projectId) {
-      this.selectedProjectId = this.$route.query.projectId;
-      console.log(this.selectedProjectId,'pid')
-      this.openMPSidebar(this.tools[0])
-
-    }
+    await this.getDistributerDetails()     
+    if(this.$route.params.project){
+    const projectId = this.$route.params.project    
+    this.selectedProjectId = projectId
+    //Hardcoding tool since we have only 1 tool for now  
+    this.openMPSidebar(this.tools[0])
+    }    
   },
   methods: {
     async getDistributerDetails() {      

@@ -211,7 +211,7 @@ allButtons {
                 <label for="placeHolder" class="col-form-label">Total:</label>
               </div>
               <div class="col-lg-6 col-md-6 px-0">
-                <span v-if="feeStructure.fyrePlatformCommision!==''" style="float:right">{{ getFriendlyValue(feeStructure.totalAmountToDistribute) - getFriendlyValue(feeStructure.fyrePlatformCommision)}}
+                <span v-if="feeStructure.fyrePlatformCommision!==''" style="float:right">{{ (getFriendlyValue(feeStructure.totalAmountToDistribute) - getFriendlyValue(feeStructure.fyrePlatformCommision)).toFixed(4)}}
                   {{feeStructure.symbol}} Tokens</span>
               </div>
             </div>
@@ -427,9 +427,9 @@ export default {
         selectedProjectId:{
           deep:true,
           handler: function () {
-            if (this.$route.query.projectId) {
-              // this.selectedProjectId = this.$route.query.projectId
-              this.selectedEvent = this.$route.query.projectId              
+            if (this.$route.params.project) {
+              // this.selectedProjectId = this.$route.params.project
+              this.selectedEvent = this.$route.params.project              
               this.flash = null
               this.showContractField = false
               this.prizeList = [];
@@ -772,7 +772,7 @@ export default {
         this.showContractField = true
       }
     },
-    selectOption(e) {
+    selectOption() {
       this.isCheckEveryThing = false
       this.flash = null
       this.simpleData = ''

@@ -125,7 +125,7 @@ export default {
          {
           href: "/admin/marketplace",
           title: "Marketplace",
-          icon: "fa fa-trophy",
+          icon: "fas fa-store",
           exactPath: true,
         },
         {
