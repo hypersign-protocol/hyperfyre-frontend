@@ -305,7 +305,7 @@ export default {
           throw new Error("Reward already claimed");
         }
       } catch (e) {
-        this.notifyErr(e);
+        this.notifyErr(e.message);
       } finally {
         this.isLoading = false;
       }
