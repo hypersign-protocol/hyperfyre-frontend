@@ -305,7 +305,7 @@ export default {
           throw new Error("Reward already claimed");
         }
       } catch (e) {
-        this.notifyErr(e);
+        this.notifyErr(e.message);
       } finally {
         this.isLoading = false;
       }
@@ -370,16 +370,18 @@ only screen and (max-width: 760px),
 	tr { border: 1px solid #dee2e6}
 	td {	
 		border: none;
+    font-size: 0.9rem;
 		border-bottom: 1px solid #dee2e6; 
 		position: relative;
-		padding-left: 50%; 
+		padding-left: 60%; 
 	}
   th {		
 		border: none;
+    font-size:1rem;
 		border-bottom: 1px solid #dee2e6; 
     background: #ccc; 
 		position: relative;   
-    padding-left: 50%; 
+    padding-left: 60%; 
 	}
 	
 	td:before { 	
