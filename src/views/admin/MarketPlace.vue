@@ -148,10 +148,8 @@ async mounted() {
       this.accessToken = localStorage.getItem("accessToken");
     }
     const userProjectStr = localStorage.getItem("userProjects");
-    const userProjectsData = JSON.parse(userProjectStr).projects;
-    console.log(userProjectsData);
-    this.projects = [...userProjectsData];
-    console.log(this.projects);
+    const userProjectsData = JSON.parse(userProjectStr).projects;    
+    this.projects = [...userProjectsData];    
     this.projects.unshift({
       _id: null,
       projectName: "Select an event",
@@ -181,8 +179,7 @@ async mounted() {
         return this.notifyErr(resp.statusText);
       }
       const json = await resp.json();
-      this.tools = [...json]
-      console.log(this.tools)
+      this.tools = [...json]      
     },
     openMPSidebar(tool) {       
       this.selectedTool =  { ...tool}           
