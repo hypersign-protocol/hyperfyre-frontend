@@ -379,20 +379,9 @@ i {
                 <span
                   title="Click to Distribute Reward"
                   style="cursor: pointer"
-                  v-if="project.isDistributed"
+                  @click="goToMarketPlace(project._id)"
                 >
-                  <a :href="`/admin/marketplace?projectId=${project._id}`" target="_blank" class="card-body-custom">
-                                    <i class="fa fa-trophy" style="color: #39ff14"></i>
-                  </a>
-                </span>
-                <span
-                  title="Click to Reward Distribution"
-                  style="cursor: pointer"
-                  v-else
-                >
-                  <a :href="`/admin/marketplace?projectId=${project._id}`" target="_blank" class="card-body-custom">
-                    <i class="fa fa-trophy" ></i>
-                  </a>                  
+                <i class="fa fa-trophy"></i>                 
                 </span>
                 <span
                   @click="editProject(project)"
@@ -645,6 +634,9 @@ export default {
   },
 
   methods: {
+    goToMarketPlace(projectId) {
+      this.$router.push({name: 'MarketPlace', params: { project: projectId }})
+    },
     isEventExpired(d1) {
       const ToDate = new Date();
        if (new Date(d1).getTime() <= ToDate.getTime()) {

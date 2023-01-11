@@ -10,8 +10,7 @@ function buf2hex(buffer) {
       .join("");
 }
 export function ipfsHashToBytes32(ipfsHash) {
-  const bytes = "0x" + buf2hex(bs58.decode(ipfsHash)).slice(4);
-  console.log(bytes);
+  const bytes = "0x" + buf2hex(bs58.decode(ipfsHash)).slice(4);  
   return bytes;
 }
 export function bytes32ToIpfsHash(bytes32Hex) {

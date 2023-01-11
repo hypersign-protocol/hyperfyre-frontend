@@ -84,6 +84,7 @@ allButtons {
             <div class="col-md-12">
               <div class="row g-3 align-items-center w-100 mt-4">
                 <div class="text-left col-lg-3 col-md-3 text-left">
+                  <tool-tips infoMessage="Select Event for the reward distribution"></tool-tips>
                   <label for="type" class="col-form-label">Select Event<span style="color: red">*</span>:
                   </label>
                 </div>
@@ -94,7 +95,17 @@ allButtons {
               </div>
             </div>
           </div>
-          <h6 class="mt-2" v-if="selectedEvent!==null && prizeList.length ">Prize Details</h6>
+
+          <div class="row" style="margin-top: 1%">
+            <div class="col-md-12">
+              <div class="row g-3 align-items-center w-100 mt-2">
+                <div class="text-left col-lg-3 col-md-3 text-left">
+                <tool-tips v-if="selectedEvent!==null && prizeList.length " infoMessage="Below Prize details are of token type that you configured in the Prize Configurations"></tool-tips>
+                <label class="col-form-label" v-if="selectedEvent!==null && prizeList.length ">Prize Details:</label>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="row scroll mt-2">
             <div class="col-lg-4" v-for="eachPrize in prizeList" :key="eachPrize._id">
               <div :title="eachPrize.title">
@@ -142,7 +153,7 @@ allButtons {
           </div>
           <div class="row g-3 align-items-center w-100 mt-4 ml-2" v-if="showContractField">
             <div class="col-lg-9 col-md-9 px-0">
-              <tool-tips infoMessage="Select blockchain for the distribution"></tool-tips>
+              <tool-tips infoMessage="Chain for the distribution"></tool-tips>
               <label for="placeHolder" class="col-form-label">Select Your chain<span style="color: red">*</span>: </label>
             </div>
             <div class="col-lg-12 col-md-12 px-0">
@@ -162,7 +173,7 @@ allButtons {
           </div>
           <div class="row g-3 align-items-center w-100 mt-4 ml-2" v-if="showContractField">
             <div class="col-lg-12 col-md-12 px-0">
-              <tool-tips infoMessage="Enter Wallet address and token amount(token amount should be positive numbers)"></tool-tips>
+              <tool-tips infoMessage="Enter Wallet address and token amount(token amount should be positive numbers) ex:1,5,6.5,etc."></tool-tips>
               <label for="placeHolder" class="col-form-label">Recipients and Amounts<span style="color: red">*</span>:</label>              
               <b-alert v-model="showDismissibleAlert.status" variant="danger" dismissible>
                 {{ showDismissibleAlert.text }}
@@ -170,7 +181,7 @@ allButtons {
             </div>
             <div class="col-lg-12 col-md-12 px-0" style="max-height: 200px;overflow-y: scroll;">
               
-              <b-form-textarea id="textarea" v-model="simpleData" placeholder="address,tokenvalue(in positive numbers)"
+              <b-form-textarea id="textarea" v-model="simpleData" placeholder="address,tokenvalue(in positive numbers) ex:1,5,6.5,etc."
                 :rows="JSON.parse(flash.value).winners" :max-rows="JSON.parse(flash.value).winners"
                 @input="calculateFee()" ></b-form-textarea>
             </div>
@@ -189,6 +200,7 @@ allButtons {
             </div>
             <div class="row g-3 align-items-center w-100 mt-2 ml-2">
               <div class="col-lg-6 col-md-6 px-0">
+                <tool-tips infoMessage="Wallet addresses in the whitelisting list for the distribution"></tool-tips>
                 <label for="placeHolder" class="col-form-label">Address: </label>
               </div>
               <div class="col-lg-6 col-md-6 px-0">
@@ -208,15 +220,17 @@ allButtons {
           
             <div class="row g-3 align-items-center w-100 mt-4 ml-2">
               <div class="col-lg-6 col-md-6 px-0" >
+                <tool-tips infoMessage="Total amount for the distribution"></tool-tips>
                 <label for="placeHolder" class="col-form-label">Total:</label>
               </div>
               <div class="col-lg-6 col-md-6 px-0">
-                <span v-if="feeStructure.fyrePlatformCommision!==''" style="float:right">{{ getFriendlyValue(feeStructure.totalAmountToDistribute) - getFriendlyValue(feeStructure.fyrePlatformCommision)}}
+                <span v-if="feeStructure.fyrePlatformCommision!==''" style="float:right">{{ (getFriendlyValue(feeStructure.totalAmountToDistribute) - getFriendlyValue(feeStructure.fyrePlatformCommision)).toFixed(4)}}
                   {{feeStructure.symbol}} Tokens</span>
               </div>
             </div>
             <div class="row g-3 align-items-center w-100 mt-2 ml-2">
               <div class="col-lg-6 col-md-6 px-0" >
+                <tool-tips infoMessage="0.5% as a Fyre platform fee on total distribution"></tool-tips>
                 <label for="placeHolder" class="col-form-label">Platform Fee:</label>
               </div>
               <div class="col-lg-6 col-md-6 px-0">
@@ -226,6 +240,7 @@ allButtons {
             </div>
             <div class="row g-3 align-items-center w-100 mt-2 ml-2">
               <div class="col-lg-6 col-md-6 px-0" >
+                <tool-tips infoMessage="Total payable amount for the distribution"></tool-tips>
                 <label for="placeHolder" class="col-form-label">Total Payable:</label>
               </div>
               <div class="col-lg-6 col-md-6 px-0">
@@ -427,9 +442,9 @@ export default {
         selectedProjectId:{
           deep:true,
           handler: function () {
-            if (this.$route.query.projectId) {
-              // this.selectedProjectId = this.$route.query.projectId
-              this.selectedEvent = this.$route.query.projectId              
+            if (this.$route.params.project) {
+              // this.selectedProjectId = this.$route.params.project
+              this.selectedEvent = this.$route.params.project              
               this.flash = null
               this.showContractField = false
               this.prizeList = [];
@@ -772,7 +787,7 @@ export default {
         this.showContractField = true
       }
     },
-    selectOption(e) {
+    selectOption() {
       this.isCheckEveryThing = false
       this.flash = null
       this.simpleData = ''
