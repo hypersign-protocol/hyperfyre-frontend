@@ -23,7 +23,7 @@
             <img
               style="padding-right: 5px"
               src="../../../../assets/filled-rest-api-50.png"          
-              height="22px"
+              height="18px"
             />  
           </span>
           <span>{{ truncate1(eventAction.title, 6) }}</span>
@@ -138,7 +138,7 @@
                             style="min-width:90px;"
                             :title="attr.fieldName"
                           >
-                          {{ truncate1(attr.fieldName,6) }}
+                          {{ truncate1(attr.fieldName,8) }}
                            <span style="color: gray; padding-left: 5px">
                             <i style="" class="fas fa-minus-circle"></i>
                           </span>
@@ -230,7 +230,7 @@
                             style="min-width:90px;"
                             :title="attr.fieldName"
                           >
-                          {{ truncate1(attr.fieldName,6) }}
+                          {{ truncate1(attr.fieldName,8) }}
                            <span style="color: gray; padding-left: 5px">
                             <i style="" class="fas fa-minus-circle"></i>
                           </span>
@@ -1184,7 +1184,7 @@ export default {
     },
     handleEventActionValidation() {
       let isvalid = true;
-
+      const ToDate = new Date();
       //////
       //// WARNINGS: This is worst way of handeling validation
       //// You should return or break the moment first error occured
@@ -1193,6 +1193,9 @@ export default {
           if(this.project.projectStatus ==false){
             isvalid = false;
             return this.notifyErr(Messages.EVENTS.EVENT_CLOSED)
+          } if(new Date(this.project.toDate).getTime() <= ToDate.getTime()) {
+            isvalid = false
+            return this.notifyErr(Messages.EVENTS.EVENT_EXPIRY_DATE)
           }
          if (isEmpty(this.selected.title)) {
             isvalid = false;

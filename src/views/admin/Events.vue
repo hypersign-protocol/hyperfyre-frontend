@@ -319,7 +319,8 @@ i {
                 title="Expiry Day"
               >
               <i class="fa fa-hourglass-end"></i>
-              Expires in {{ getDateDiff(project.toDate, new Date()) }} day (s)
+              <span v-if="!isEventExpired(project.toDate)">Expires in {{ getDateDiff(project.toDate, new Date()) }} day (s)</span>
+              <span v-if="isEventExpired(project.toDate)">Expired !</span>
             </li>
 
               <li
@@ -373,7 +374,15 @@ i {
                   >{{ tag.type.split("_")[0] }}</b-badge
                 >
               </small>
+              
               <small style="float: right">
+                <span
+                  title="Click to Distribute Reward"
+                  style="cursor: pointer"
+                  @click="goToMarketPlace(project._id)"
+                >
+                <i class="fa fa-trophy"></i>                 
+                </span>
                 <span
                   @click="editProject(project)"
                   title="Click to edit this event"
@@ -587,6 +596,15 @@ export default {
       deleteNote:DELETE_EVENT_NOTE
     };
   },
+ watch: {
+        project:{
+          deep:true,
+          handler: function(newValue) {
+            this.project = newValue            
+            eventBus.$emit("sendProject", this.project);
+          }
+        }
+    },
 
   async mounted() {
     //const usrStr = localStorage.getItem("user");
@@ -616,6 +634,17 @@ export default {
   },
 
   methods: {
+    goToMarketPlace(projectId) {
+      this.$router.push({name: 'MarketPlace', params: { project: projectId }})
+    },
+    isEventExpired(d1) {
+      const ToDate = new Date();
+       if (new Date(d1).getTime() <= ToDate.getTime()) {
+      return true
+        } else {
+          return false
+        }
+    },
     getDateDiff(d1, d2){
       const date1 = new Date(d1);
       const date2 = new Date(d2);
@@ -879,7 +908,6 @@ export default {
             count: this.projects.length,
           })
         );
-        this.projectsToShow = this.projects.slice(0, this.perPage);
         this.projects.map((x) => {
           x["whitelisting_link"] =
             window.location.origin +
@@ -888,7 +916,20 @@ export default {
               : "/form?projectId=" + x._id);
           x["investors_link"] =
             window.location.origin + "/admin/participants?projectId=" + x._id;
+          x.actions.forEach((action)=>{
+            if (action.type && action.type == "PRIZE_CARD"){
+              if (action.value && JSON.parse(action.value).type === "Tokens")
+              {
+                if (JSON.parse(action.value).isDistributed) {
+                  x['isDistributed']=true
+                }
+              }
+            }
+          });
         });
+
+        this.projectsToShow = this.projects.slice(0, this.perPage);
+
         this.notifySuccess(
           Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_FETCHED_NO +
             this.projects.length
@@ -931,7 +972,7 @@ export default {
       );
       this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
 
-      eventBus.$emit("sendProject", this.project);
+      // eventBus.$emit("sendProject", this.project);
       // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
       this.project.social = {
         twitter: {
@@ -997,6 +1038,9 @@ export default {
           this.project.projectName + " copy " + Date.now();
         this.project.slug = "";
         this.project.investorsCount = 0;
+        let date = new Date()
+        date.setDate(date.getDate() + 1)
+        project.toDate = date.toISOString()
       }
       this.project.fromDate = dayjs(project.fromDate).format(
         "YYYY-MM-DD hh:mm:ss"
@@ -1059,6 +1103,19 @@ export default {
         if(indexToFindNotification > -1) {
           this.eventActionList.splice(indexToFindNotification, 1);
         }
+      this.eventActionList.forEach((action)=>{
+        if(action.type === "PRIZE_CARD") {                            
+            const parsedData = JSON.parse(action.value)
+            if(parsedData.type ==="Tokens" && parsedData.isDistributed===true) {
+              delete parsedData["isDistributed"];
+              delete parsedData["externalRecordId"];
+              delete parsedData["contractAddress"];
+              delete parsedData["appBaseUrl"];
+              delete parsedData["chainId"];              
+              return action.value = JSON.stringify(parsedData);
+            }          
+        }
+      })            
       this.tagsTemp = project.tags;      
       await this.saveProject();
     },
@@ -1203,12 +1260,27 @@ export default {
         }
 
         /// WARNING:: This code is redundant it seems.
-        /// Not removing but handling the condition.
-        const userProjects = JSON.parse(localStorage.getItem("userProjects"));
-        if (userProjects) {
-          userProjects.count += 1;
-          userProjects.projects.push(resp.data);
-          localStorage.setItem("userProjects", JSON.stringify(userProjects));
+        /// Not removing but handling the condition.      
+        let setProjectInLocalStorage = []
+        const userProjects = localStorage.getItem("userProjects");
+        const userProjectsData = JSON.parse(userProjects).projects;
+        setProjectInLocalStorage = [ ...userProjectsData]        
+        if (setProjectInLocalStorage.length) {
+          const findIndexToUpdateProject = setProjectInLocalStorage.findIndex((x)=>{
+            return x._id === this.project._id
+          })          
+          if(findIndexToUpdateProject>-1) {
+            Object.assign(setProjectInLocalStorage[findIndexToUpdateProject],{ ...resp.data});
+            localStorage.setItem("userProjects",JSON.stringify({
+              projects: setProjectInLocalStorage,
+              count: setProjectInLocalStorage.length,
+            }))
+          }          
+
+          // userProjects.count += 1;
+          // userProjects.projects.push(resp.data);
+          // localStorage.setItem("userProjects", JSON.stringify(userProjects));
+
         }
 
         await this.fetchProjects();
@@ -1319,10 +1391,28 @@ export default {
        })
        this.eventActionList = [] 
        this.eventActionList = resp.data ? resp.data.actions : this.eventActionList;
+       
+       let setProjectInLocalStorage = []
+        const userProjects = localStorage.getItem("userProjects");
+        const userProjectsData = JSON.parse(userProjects).projects;
+        setProjectInLocalStorage = [ ...userProjectsData]        
+        if (setProjectInLocalStorage.length) {
+          const findIndexToUpdateProject = setProjectInLocalStorage.findIndex((x)=>{
+            return x._id === this.project._id
+          })          
+          if(findIndexToUpdateProject>-1) {
+            Object.assign(setProjectInLocalStorage[findIndexToUpdateProject],{ ...resp.data});
+            localStorage.setItem("userProjects",JSON.stringify({
+              projects: setProjectInLocalStorage,
+              count: setProjectInLocalStorage.length,
+            }))
+          }
+        }          
        return resp;
     },
 
     checkIfEverythingIsFilled() {
+      const ToDate = new Date()
       for (let index = 0; index < this.eventActionList.length; index++) {
         if (
           this.eventActionList[index].score === null ||
@@ -1382,6 +1472,9 @@ export default {
       }
       if (!(this.project.fromDate && this.project.toDate)) {
         return Messages.EVENTS.CREATE_EDIT_EVENT.PROJECT_DATE_TIME;
+      }
+      if(new Date(this.project.toDate).getTime() <= ToDate.getTime()) {            
+        return Messages.EVENTS.EVENT_EXPIRY_DATE
       }
       if (this.tagsTemp.length < 1) {
         return Messages.EVENTS.CREATE_EDIT_EVENT.CHOOSE_ATLEAST_ONE_TAG;

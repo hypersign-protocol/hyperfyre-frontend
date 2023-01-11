@@ -122,6 +122,12 @@ export default {
             }
           ]
         },
+         {
+          href: "/admin/marketplace",
+          title: "Marketplace",
+          icon: "fas fa-store",
+          exactPath: true,
+        },
         {
           href: "/admin/login",
           title: "Logout",
@@ -183,7 +189,8 @@ export default {
           window.location.pathname.includes("/admin/subscription") ||
           window.location.pathname.includes("/admin/teams") ||
           window.location.pathname.includes("/admin/setting/org") ||
-          window.location.pathname.includes("/admin/createapp") ?
+          window.location.pathname.includes("/admin/createapp") ||
+          window.location.pathname.includes("/admin/marketplace") ?
           true :
           false;
     }else{
@@ -200,7 +207,8 @@ export default {
           window.location.pathname.includes("/admin/subscription") ||
           window.location.pathname.includes("/admin/teams") ||
       window.location.pathname.includes("/admin/setting/org") ||
-          window.location.pathname.includes("/admin/createapp") ?
+          window.location.pathname.includes("/admin/createapp") ||
+          window.location.pathname.includes("/admin/marketplace") ?
           true :
           false;
     this.showChat = 
@@ -210,7 +218,8 @@ export default {
           window.location.pathname.includes("/admin/subscription") ||
           window.location.pathname.includes("/admin/teams") ||
       window.location.pathname.includes("/admin/setting/org") ||
-          window.location.pathname.includes("/admin/createapp") ?
+          window.location.pathname.includes("/admin/createapp") ||
+          window.location.pathname.includes("/admin/marketplace") ?
           true :
           false;
   },
@@ -255,7 +264,8 @@ export default {
         window.location.pathname.includes("dashboard") ||
         window.location.pathname.includes("/admin/subscription")||
         window.location.pathname.includes("/admin/teams") ||
-        window.location.pathname.includes("/admin/createapp")
+        window.location.pathname.includes("/admin/createapp") ||
+        window.location.pathname.includes("/admin/marketplace")
       ) {
         this.showNavbar = true;
       } else {

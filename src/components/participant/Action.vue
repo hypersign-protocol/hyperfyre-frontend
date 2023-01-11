@@ -5,17 +5,19 @@
     <Profile v-if="userProfile" :user="userProfile" :userReferralCount="userReferralCount" />
 
     <template v-for="(actionItem, index) in ActionSchema">
-      <component v-if="actionItem.type==='INFO_TEXT'" :is="CapitaliseString(actionItem.type)" :key="index"
+      <component v-if="actionItem.type==='INFO_TEXT' && projectStatus === true" :is="CapitaliseString(actionItem.type)" :key="index"
         :idValue="index" :data="actionItem" :done="actionItem.isDone" :authToken="authToken"
         @input="updateUserInfo(actionItem, $event)" :themeData="themeData">
       </component>
     </template>
 
     <prize-card v-if="isPrizedata" :prizeData="prizeData" />
-
+    <reward-claim-action v-if="checkDataForClaimReward" :claimData="prizeData"
+    @input="updateUserInfo(actionItem, $event)" :themeData="themeData"
+    :eventId="eventId"/>
     <template v-for="(actionItem, index) in ActionSchema">
 
-      <component v-if="(actionItem.type !== 'INFO_TEXT') && (actionItem.type !=='PRIZE_CARD') "
+      <component v-if="(actionItem.type !== 'INFO_TEXT') && (actionItem.type !=='PRIZE_CARD') && projectStatus === true"
         :is="CapitaliseString(actionItem.type)" :key="index" :idValue="index" :data="actionItem" :authToken="authToken"
         :done="actionItem.isDone" @input="updateUserInfo(actionItem, $event)" :themeData="themeData">
       </component>
@@ -51,7 +53,7 @@ import MoonErc20 from "./ActionInputs/MoonErc20.vue";
 import MoonErc721 from "./ActionInputs/MoonErc721.vue";
 import MoonbeamErc20 from "./ActionInputs/MoonbeamErc20.vue";
 import MoonbeamErc721 from "./ActionInputs/MoonbeamErc721.vue";
-
+import RewardClaimAction from "./ActionInputs/RewardClaimAction.vue"
 import MoonriverErc20 from "./ActionInputs/MoonriverErc20.vue";
 import MoonriverErc721 from "./ActionInputs/MoonriverErc721.vue";
 import BinanceErc20 from "./ActionInputs/BinanceErc20.vue";
@@ -79,6 +81,9 @@ import CustomApi from "./ActionInputs/CustomApi.vue";
 export default {
   name: "Action",
   props: {
+    eventId:{
+      type:String
+    },
     ActionSchema: {
       required: true,
       type: Array,
@@ -101,6 +106,10 @@ export default {
     themeData:{
       required: true,
       type: Object,
+    },
+    projectStatus: {
+      required:true,
+      type:Boolean
     }
   },
   components: {
@@ -139,6 +148,7 @@ export default {
     InfoText,
     MoonErc721,
     PrizeCard,
+    RewardClaimAction,
     MoonErc20,
     MoonbeamErc20,
     MoonbeamErc721,
@@ -174,15 +184,33 @@ export default {
   computed: {
     // eslint-disable-next-line vue/return-in-computed-property
     isPrizedata() {
-      if (this.prizeData && this.prizeData.length > 0) {
+      if (this.prizeData && this.prizeData.length > 0 && this.projectStatus) {
         return true;
+      } else {
+        return false;
+      }
+    },
+    checkDataForClaimReward() {
+      if (this.prizeData && this.prizeData.length > 0 && !this.projectStatus) {
+        let check = this.prizeData.find((x)=>{
+         if(x.type === "PRIZE_CARD" && JSON.parse(x.value).type ==="Tokens"){
+          if(JSON.parse(x.value).isDistributed){
+            return true
+          } else{
+            return false
+          }         
+         } else {
+          return false
+         }
+        })
+        return check
       } else {
         return false;
       }
     },
   },
   methods: {
-    checkIfUserHasLoggedIn(e) {
+    checkIfUserHasLoggedIn() {
       if (!this.userProfile) {
         // TODO:  bad way of coding.  We should only hide which is being clicked 
         document.querySelectorAll(".card-header").forEach(elm => {
