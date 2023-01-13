@@ -348,6 +348,10 @@ export default {
     },
     handleEventActionDelete() {
       // Code to delete an Action
+      const data = {...this.prizeDetails}
+      if(data.hasOwnProperty('isDistributed') && data.isDistributed=== true) {
+        return this.notifyErr('Reward has been distributed for this prize you cannot delete it!')
+      } 
       const actionToDelete = this.eventActionList[this.currentSelectedId];
       this.eventActionList.splice(this.currentSelectedId, 1);
       this.$emit("updateEventActions", {

@@ -41,11 +41,6 @@ const config = {
     moopay:{
         payment_url:process.env.VUE_APP_MOOPAY_PAYMENT_URL,
     },
-    marketPlace:{
-        // create_merkel_tree_finance_vote:process.env.VUE_APP_FINANCE_VOTE || 'https://bank.influencebackend.xyz',        
-        fyre_wallet_address:process.env.VUE_APP_FYRE_WALLET_ADDRESS
-
-    }
 }
 
 export default config
