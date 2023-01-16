@@ -125,8 +125,7 @@ export function shortenName(first,last) {
     }
     const eachLen = 3
     const firstPart = first.substr(0, eachLen);
-    const lastPart = last.slice(-eachLen);
-    console.log(firstPart+lastPart)
+    const lastPart = last.slice(-eachLen);    
     return firstPart + lastPart;
 }
 

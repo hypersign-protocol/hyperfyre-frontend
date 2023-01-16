@@ -224,7 +224,7 @@ allButtons {
                 <label for="placeHolder" class="col-form-label">Total:</label>
               </div>
               <div class="col-lg-6 col-md-6 px-0">
-                <span v-if="feeStructure.fyrePlatformCommision!==''" style="float:right">{{ (getFriendlyValue(feeStructure.totalAmountToDistribute) - getFriendlyValue(feeStructure.fyrePlatformCommision)).toFixed(4)}}
+                <span v-if="feeStructure.fyrePlatformCommision!==''" style="float:right">{{ total}}
                   {{feeStructure.symbol}} Tokens</span>
               </div>
             </div>
@@ -234,7 +234,7 @@ allButtons {
                 <label for="placeHolder" class="col-form-label">Platform Fee:</label>
               </div>
               <div class="col-lg-6 col-md-6 px-0">
-                <span v-if="feeStructure.fyrePlatformCommision!==''" style="float:right">{{getFriendlyValue(feeStructure.fyrePlatformCommision)}}
+                <span v-if="feeStructure.fyrePlatformCommision!==''" style="float:right">{{getPlatformFee}}
                   {{feeStructure.symbol}} Tokens</span>
               </div>
             </div>
@@ -244,7 +244,7 @@ allButtons {
                 <label for="placeHolder" class="col-form-label">Total Payable:</label>
               </div>
               <div class="col-lg-6 col-md-6 px-0">
-                <span v-if="feeStructure.totalAmountToDistribute!==''" style="float:right">{{getFriendlyValue(feeStructure.totalAmountToDistribute)}}
+                <span v-if="feeStructure.totalAmountToDistribute!==''" style="float:right">{{totalPayable(feeStructure.totalAmountToDistribute)}}
                   {{feeStructure.symbol}} Tokens</span>
               </div>
             </div>
@@ -366,7 +366,31 @@ export default {
         '--header-bg-color': config.app.headerBGColor,
         '--header-text-color':config.app.headerTextColor
       }
-  }
+  },
+  getPlatformFee() {   
+    const convertToDecimal = Number(this.feeStructure.fyrePlatformCommision)/Number(10 ** this.feeStructure.decimals)       
+    const roundedFyreCommisson = Number(convertToDecimal).toFixed(4)     
+    return roundedFyreCommisson
+  },
+   totalPayable() {
+    return friendlyValue => {
+    const convertToDecimal = Number(friendlyValue)/Number(10 ** this.feeStructure.decimals)      
+    const rounded = Number(convertToDecimal).toFixed(4)     
+    return rounded
+    }              
+    },
+    total(){    
+      let amountWithCommisson = Number(this.feeStructure.totalAmountToDistribute)/Number(10 **this.feeStructure.decimals)
+      let onlyAmountCommission = Number(this.feeStructure.fyrePlatformCommision)/Number(10 **this.feeStructure.decimals)
+       return (amountWithCommisson-onlyAmountCommission).toFixed(4)      
+    },
+    getRoundOffValue(){
+      return roudOff => {             
+      const inwei = (10 ** this.feeStructure.decimal)
+      const inNumber = roudOff/inwei
+      return inNumber   
+      }      
+      }
   },
   data() {
     return {
@@ -480,18 +504,7 @@ export default {
       this.files = null
       this.showDismissibleAlert.status = false
       this.simpleData=""
-    },
-    getFriendlyValue(str) {
-      const convertToDecimal = Number(str)/Number(10 ** this.feeStructure.decimals)      
-      const rounded = Number(convertToDecimal).toFixed(4)
-      return rounded
-    },
-    getRoundOffValue(num) {
-      const inwei = (10 ** this.feeStructure.decimal)
-      const inNumber = num/inwei
-      return inNumber
-
-    },
+    },  
    async onSelectChain(e) {
       if(e===null) {
         return this.notifyErr('Select Chain')
