@@ -77,7 +77,9 @@
     "eslint": "^5.16.0",
     "eslint-loader": "^3.0.2",
     "eslint-plugin-vue": "^5.2.3",
+    "node-sass": "^8.0.0",
     "prettier": "^2.4.1",
+    "sass-loader": "^10",
     "vue-cli": "^2.9.6",
     "vue-template-compiler": "^2.5.16"
   },

@@ -11,8 +11,47 @@
 
 .centered{
     justify-content: center;
+    text-align: center;
 }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  
+}
+
+/* .grid-item {
+  text-align: center;
+} */
+
+.notFound{
+        padding: 10px;
+        border-left: 5px solid #ff00007a;
+        border-right: 1px solid #8080803b;
+        border-bottom: 1px solid #8080803b;
+        border-top: 1px solid #8080803b;
+        width: 100%;
+        background-color: white;
+        border-radius: 2px;
+        margin-top: 10px;
+        font-weight: bold;
+        color: rgba(128, 128, 128, 0.578);
+
+    }
+
+.card-title{
+    font-size: small
+}
+
+
+.imageClass{
+    height: auto;
+    width: 60%;
+    vertical-align: middle;
+}
+
 </style>
+
 <template>
     <div class="home  marginLeft marginRight">
         <div class="form-inline row" style="padding-top:10px">
@@ -27,49 +66,77 @@
                 </button>
             </div>   
         </div>
-        <hr>
+        <!-- <hr> -->
+
+        <div class="body">
+            <div class="search__container">
+                <p class="search__title">
+                        Go ahead, search your Decentralized ID
+                </p>
+                <input class="search__input" type="text" placeholder="Search" v-model="did">
+            </div>
+
+            <div class="credits__container">
+                <p class="credits__text">Built on top of <a href="https://hypersign.id" target="_blank" class="credits__link">Hypersign Identity Network</a></p>
+            </div>
+        </div>
         
-        <div class="form-group">
-            <div class="row">
-                <label class="col-form-label col-sm-4">DID:</label>
-                
-                
-                <div class="col-sm-8 input-group mb-3">
+        <!-- <div class="form-group">
+                <div class="col-sm-12 input-group mb-3 centered">
                     <input type="text" class="form-control" placeholder="did:hid:0x121" v-model="did">
                     <div class="input-group-append">
                         <button class="btn btn-light input-group-text" @click="sign()"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
-                
-                
-<!--                 
-                <span class="col-sm-7 form-control-plaintext"><input type="text" class="form-control" v-model="did"/></span>
-                <div class="col-sm-1">
-                    <button class="btn btn-light" @click="sign()"><i class="fas fa-search"></i></button>
-                </div> -->
-            </div>            
-        </div>
+        </div> -->
         
         <div class="form-group">
-            <label class="">Linked Wallets (<span class="">{{this.signedDidDoc.proof? this.signedDidDoc.proof.length: 0}}</span>)</label>
-            <table class="table  table-bordered" v-if="Object.keys(signedDidDoc).length > 0">
-                <thead>
-                    <tr>
-                    <th></th>
-                    <th scope="col">ChainName</th>
-                    <th scope="col">WalletAddress</th>
-                    <th scope="col">VerificationMethodId</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="vMethod in signedDidDoc.verificationMethod" :key="vMethod.id">
-                        <td><img style="width: 30px; height: 30px;" src="../../assets/did-score/matic-token.png"></td>
-                        <td>{{ parseBlockchainAccountId(vMethod.blockchainAccountId).chainData.chainName }}</td>
-                        <td>{{ parseBlockchainAccountId(vMethod.blockchainAccountId).walletAddress }}</td>
-                        <td>{{vMethod.id}}</td>
-                    </tr>
-                </tbody>
-            </table>               
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="">Linked Wallets (<span class="">{{this.signedDidDoc.proof? this.signedDidDoc.proof.length: 0}}</span>)</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div style="overflow: auto; width: 30em;overflow-x: auto;white-space: nowrap;" class="col-sm-12">
+                        <div class="event-card" v-for="vMethod in signedDidDoc.verificationMethod" :key="vMethod.id" 
+                        style="background-color:white; margin-right: 10px; width: 400px;display: inline-block;">
+                            <div class="card-body" style="">
+                                <div class="row"> 
+                                    <div class="col-md-5">
+                                        <div class="centered"><img class="imageClass"  :src="getImgUrl(parseBlockchainAccountId(vMethod.blockchainAccountId).chainData.logo)" v-bind:alt="parseBlockchainAccountId(vMethod.blockchainAccountId).chainData.logo"/></div>
+                                        <div class="centered card-title"><label>{{ parseBlockchainAccountId(vMethod.blockchainAccountId).chainData.chainName }}</label></div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="form-group">
+                                            <label class="card-title"><i class="far fa-id-card"></i> Wallet Address</label>
+                                            <div>
+                                                    <span >{{ trunc(parseBlockchainAccountId(vMethod.blockchainAccountId).walletAddress, 20) }}</span>
+                                                    <span @click="copy(parseBlockchainAccountId(vMethod.blockchainAccountId).walletAddress, 'EventId')" class="copy"></span><span><i class="far fa-copy" style="margin-left:3px"></i></span>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="form-group">
+                                            <label class="card-title"><i class="far fa-id-card"></i> Blockchain Account Id</label>
+                                            <div>
+                                                    <span >{{ trunc(vMethod.blockchainAccountId, 30) }}</span>
+                                                    <span @click="copy(vMethod.blockchainAccountId, 'EventId')" class="copy"></span><span><i class="far fa-copy" style="margin-left:3px"></i></span>
+                                                </div>
+                                        </div> -->
+                                        
+                                        <div class="form-group">
+                                            <label class="card-title"><i class="far fa-id-card"></i> Verification Method Id</label>
+                                            <div>
+                                                    <span >{{ trunc(vMethod.id, 20) }}</span>
+                                                    <span @click="copy(vMethod.id, 'EventId')" class="copy"></span><span><i class="far fa-copy" style="margin-left:3px"></i></span>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
         </div>
         
         <hr>
@@ -83,20 +150,21 @@
 
                     <button class="btn btn-light largeButton" @click="ok(1)">
                         <span>
-                            <img class="imgCls"  :src="require('../../assets/did-score/eth_logo.svg')"/>
+                            <!-- <img class="imgCls"  :src="require('../../assets/did-score/eth_logo.svg')"/> -->
+                            <img class="imgCls" :src="getImgUrl(chainIdChainMap['1'].logo)" v-bind:alt="chainIdChainMap['1'].logo"/>
                         </span>
                     </button>
 
                     <button class="btn btn-light largeButton" @click="ok(137)">
                         <span>
-                            <img class="imgCls" src="../../assets/did-score/matic-token.png"/>
+                            <img class="imgCls" :src="getImgUrl(chainIdChainMap['137'].logo)" v-bind:alt="chainIdChainMap['137'].logo"/>
                         </span>
                     </button>
 
             
                     <button class="btn btn-light largeButton" @click="ok(56)">
                         <span>
-                            <img  class="imgCls" src="../../assets/did-score/bnb.png"/>
+                            <img class="imgCls" :src="getImgUrl(chainIdChainMap['56'].logo)" v-bind:alt="chainIdChainMap['56'].logo"/>
                         </span>
                     </button>
                     <button class="btn btn-light largeButton" disabled>
@@ -134,9 +202,16 @@
 </template>
 
 <script>
+import Messages from "../../utils/messages/admin/en";
+
 import loadweb3 from "../../mixins/getWeb3";
 import { HypersignDID } from 'hs-ssi-sdk';
 import HfPopUp from "../../components/elements/HfPopUp.vue"
+import {
+  truncate,
+} from "../../mixins/fieldValidationMixin.js";
+import notificationMixins from "../../mixins/notificationMixins";
+
 export default {
     components:{HfPopUp},
     data(){
@@ -145,15 +220,17 @@ export default {
                 "1": {
                     chainName: "Ethereum",
                     token: "ETH",
-                    logo: "../../assets/did-score/eth_logo.svg"
+                    logo: "eth_logo.svg"
                 },
                 "137": {
                     chainName: "Polygon",
                     token: "MATIC",
+                    logo: "matic-token.png"
                 },
                 "56": {
                     chainName: "Binance Smart Chain",
-                    token: "BNB",
+                    token: "BSC",
+                    logo: "bnb.png"
                 }
             },
             web3: null,
@@ -162,10 +239,168 @@ export default {
                 chainId: ""
             },
             hypersignDIDSDK: null,
-            didDoc: {},
+            didDoc: {
+  "@context": [
+    "https://www.w3.org/ns/did/v1"
+  ],
+  "id": "did:hid:0x749183517381758E186910DC47bcbE456458216E",
+  "controller": [
+    "did:hid:0x749183517381758E186910DC47bcbE456458216E"
+  ],
+  "alsoKnownAs": [
+    "did:hid:0x749183517381758E186910DC47bcbE456458216E"
+  ],
+  "verificationMethod": [
+    {
+      "id": "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
+      "type": "EcdsaSecp256k1RecoveryMethod2020",
+      "controller": "did:hid:0x749183517381758E186910DC47bcbE456458216E",
+      "blockchainAccountId": "eip155:1:0x749183517381758E186910DC47bcbE456458216E"
+    },
+    {
+      "id": "#key-2",
+      "type": "EcdsaSecp256k1RecoveryMethod2020",
+      "controller": "",
+      "blockchainAccountId": "eip155:137:0x749183517381758E186910DC47bcbE456458216E"
+    },
+    {
+      "id": "#key-3",
+      "type": "EcdsaSecp256k1RecoveryMethod2020",
+      "controller": "",
+      "blockchainAccountId": "eip155:56:0x749183517381758E186910DC47bcbE456458216E"
+    },
+    {
+      "id": "#key-4",
+      "type": "EcdsaSecp256k1RecoveryMethod2020",
+      "controller": "",
+      "blockchainAccountId": "eip155:56:0x749183517381758E186910DC47bcbE456458216E"
+    }
+  ],
+  "authentication": [
+    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
+    "#key-2",
+    "#key-3"
+  ],
+  "assertionMethod": [
+    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
+    "#key-2",
+    "#key-3"
+  ],
+  "keyAgreement": [
+    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
+    "#key-2",
+    "#key-3"
+  ],
+  "capabilityInvocation": [
+    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
+    "#key-2",
+    "#key-3"
+  ],
+  "capabilityDelegation": [
+    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
+    "#key-2",
+    "#key-3"
+  ],
+  "service": [],
+  "proof": [
+    {
+      "type": "EcdsaSecp256k1RecoverySignature2020",
+      "created": "2023-01-25T12:35:12.637Z",
+      "verificationMethod": "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
+      "proofPurpose": "assertionMethod",
+      "proofValue": "0xce1ecb4a06082331277dec2608ba996a50896910d806c3b344fe447f33939bf80247bb39f86635edd56379a36100b0405f1537700c1a66c080bc5cb9050b586f1c"
+    },
+    {
+      "type": "EcdsaSecp256k1RecoverySignature2020",
+      "created": "2023-01-25T13:07:28.612Z",
+      "verificationMethod": "#key-2",
+      "proofPurpose": "assertionMethod",
+      "proofValue": "0x601cb76a7881d05ee7a2d3aa1fca247e07b98f10bca6fe5859508b9f457a6d205d7f70ba7e0e0319fe844156ef7d0f8c46e792d9d4303d4f393702094d4aba851b"
+    }
+  ]
+},
             proof: [],
             walletAddresss: [],
-            signedDidDoc: {},
+            signedDidDoc:{
+  "@context": [
+    "https://www.w3.org/ns/did/v1"
+  ],
+  "id": "did:hid:0x749183517381758E186910DC47bcbE456458216E",
+  "controller": [
+    "did:hid:0x749183517381758E186910DC47bcbE456458216E"
+  ],
+  "alsoKnownAs": [
+    "did:hid:0x749183517381758E186910DC47bcbE456458216E"
+  ],
+  "verificationMethod": [
+    {
+      "id": "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
+      "type": "EcdsaSecp256k1RecoveryMethod2020",
+      "controller": "did:hid:0x749183517381758E186910DC47bcbE456458216E",
+      "blockchainAccountId": "eip155:1:0x749183517381758E186910DC47bcbE456458216E"
+    },
+    {
+      "id": "#key-2",
+      "type": "EcdsaSecp256k1RecoveryMethod2020",
+      "controller": "",
+      "blockchainAccountId": "eip155:137:0x749183517381758E186910DC47bcbE456458216E"
+    },
+    {
+      "id": "#key-3",
+      "type": "EcdsaSecp256k1RecoveryMethod2020",
+      "controller": "",
+      "blockchainAccountId": "eip155:56:0x749183517381758E186910DC47bcbE456458216E"
+    },
+    {
+      "id": "#key-3",
+      "type": "EcdsaSecp256k1RecoveryMethod2020",
+      "controller": "",
+      "blockchainAccountId": "eip155:56:0x749183517381758E186910DC47bcbE456458216E"
+    }
+  ],
+  "authentication": [
+    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
+    "#key-2",
+    "#key-3"
+  ],
+  "assertionMethod": [
+    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
+    "#key-2",
+    "#key-3"
+  ],
+  "keyAgreement": [
+    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
+    "#key-2",
+    "#key-3"
+  ],
+  "capabilityInvocation": [
+    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
+    "#key-2",
+    "#key-3"
+  ],
+  "capabilityDelegation": [
+    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
+    "#key-2",
+    "#key-3"
+  ],
+  "service": [],
+  "proof": [
+    {
+      "type": "EcdsaSecp256k1RecoverySignature2020",
+      "created": "2023-01-25T12:35:12.637Z",
+      "verificationMethod": "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
+      "proofPurpose": "assertionMethod",
+      "proofValue": "0xce1ecb4a06082331277dec2608ba996a50896910d806c3b344fe447f33939bf80247bb39f86635edd56379a36100b0405f1537700c1a66c080bc5cb9050b586f1c"
+    },
+    {
+      "type": "EcdsaSecp256k1RecoverySignature2020",
+      "created": "2023-01-25T13:07:28.612Z",
+      "verificationMethod": "#key-2",
+      "proofPurpose": "assertionMethod",
+      "proofValue": "0x601cb76a7881d05ee7a2d3aa1fca247e07b98f10bca6fe5859508b9f457a6d205d7f70ba7e0e0319fe844156ef7d0f8c46e792d9d4303d4f393702094d4aba851b"
+    }
+  ]
+},
             success: false,
             did: "",
             images: {
@@ -188,6 +423,12 @@ export default {
         
     },
     methods: {
+        trunc(str, number){
+            return truncate(str, number)
+        },
+        getImgUrl(pet) {
+            return require('../../assets/did-score/' + pet)
+        },
         openWalletPopup(){
             this.$root.$emit('modal-show')
         },  
@@ -262,7 +503,7 @@ export default {
             }
 
 
-            const sig = await web3.eth.personal.sign(
+            const sig = await this.web3.eth.personal.sign(
                 this.didDocString, this.walletAddress.address
             )
 
@@ -336,8 +577,27 @@ export default {
             this.walletAddress = ""
         },
 
+        copy(textToCopy, contentType) {
+      if (textToCopy) {
+        navigator.clipboard
+          .writeText(textToCopy)
+          .then(() => {
+            this.notifySuccess(
+              `${contentType}, ${Messages.EVENTS.CREATE_EDIT_EVENT.COPIED_TO_CLIPBOARD}`
+            );
+          })
+          .catch((err) => {
+            this.notifyErr(
+              Messages.EVENTS.CREATE_EDIT_EVENT.ERROR_WHILE_COPYING,
+              err
+            );
+          });
+      }
+    },
         async register(){}
-    }
+    },
+
+    mixins: [notificationMixins]
 
 }
 </script>

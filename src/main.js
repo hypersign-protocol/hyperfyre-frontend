@@ -11,6 +11,7 @@ import 'vue-css-donut-chart/dist/vcdonut.css';
 import "@mdi/font/css/materialdesignicons.css";
 import "@mdi/light-font/css/materialdesignicons-light.css";
 import './assets/css/style.css';
+import './assets/did-score/did.scss';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import Multiselect from "vue-multiselect";
