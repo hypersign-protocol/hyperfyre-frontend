@@ -4,6 +4,7 @@ import config from "./config";
 import fetch from "node-fetch";
 import eventBus from "./eventBus";
 
+
 Vue.use(Router);
 
 const router = new Router({
@@ -79,6 +80,20 @@ const router = new Router({
                 ),
             meta: {
                 requiresAuth: true,
+                admin: true,
+                title: `${config.appName} - Admin Dashboard`
+            },
+        },
+        {
+            path: "/admin/did",
+            name: "Did",
+            component: () =>
+                import (
+                    /* webpackChunkName: "dashboard" */
+                    "./views/admin/DID.vue"
+                ),
+            meta: {
+                requiresAuth: false,
                 admin: true,
                 title: `${config.appName} - Admin Dashboard`
             },
