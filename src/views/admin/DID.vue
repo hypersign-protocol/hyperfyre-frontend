@@ -50,6 +50,39 @@
     vertical-align: middle;
 }
 
+
+
+.button-save {
+  background-color: #004A7F;
+  color: white;
+  -webkit-animation: glowing 3000ms infinite;
+  -moz-animation: glowing 2000ms infinite;
+  -o-animation: glowing 2000ms infinite;
+  /* animation: glowing 2000ms infinite; */
+}
+@-webkit-keyframes glowing {
+  0% { background-color: grey; -webkit-box-shadow: 0 0 3px red; }
+  50% { background-color: rgba(128, 128, 128, 0.335); -webkit-box-shadow: 0 0 20px red; }
+  100% { background-color: grey; -webkit-box-shadow: 0 0 3px red; }
+}
+
+@-moz-keyframes glowing {
+ 0% { background-color: grey; -webkit-box-shadow: 0 0 3px red; }
+  50% { background-color: rgba(128, 128, 128, 0.335); -webkit-box-shadow: 0 0 20px red; }
+  100% { background-color: grey; -webkit-box-shadow: 0 0 3px red; }
+}
+
+@-o-keyframes glowing {
+  0% { background-color: grey; -webkit-box-shadow: 0 0 3px red; }
+  50% { background-color: rgba(128, 128, 128, 0.335); -webkit-box-shadow: 0 0 20px red; }
+  100% { background-color: grey; -webkit-box-shadow: 0 0 3px red; }
+}
+
+@keyframes glowing {
+ 0% { background-color: grey; -webkit-box-shadow: 0 0 3px red; }
+  50% { background-color: rgba(128, 128, 128, 0.335); -webkit-box-shadow: 0 0 20px red; }
+  100% { background-color: grey; -webkit-box-shadow: 0 0 3px red; }
+} 
 </style>
 
 <template>
@@ -60,6 +93,9 @@
                 <img src="../../assets/did-score/DODO.png" width="200" height="50"/>
             </div>
             <div class="input-group col-sm-5" style="float:right">
+                <!-- <button type="submit" class="button-save" v-if="isEditing" @click="">Save Changes</button> -->
+                <button  class="btn btn-link button-save"  v-if="isEditing"  @click="updateDID()">Save Changes</button>                    
+
                 <input type="text" class="form-control" placeholder="blockchain wallet address" v-model="walletAddress.address"  disabled/>
                 <button class="btn btn-outline-primary" @click="openWalletPopup()">
                             <i class="fas fa-link"></i> Connect Wallet
@@ -73,11 +109,14 @@
                 <p class="search__title">
                         Go ahead, search your Decentralized ID
                 </p>
-                <input class="search__input" type="text" placeholder="Search" v-model="did">
+                <input class="search__input" type="text" placeholder="Search" v-model="did" v-on:keyup.enter="resolve">
             </div>
 
             <div class="credits__container">
-                <p class="credits__text">Built on top of <a href="https://hypersign.id" target="_blank" class="credits__link">Hypersign Identity Network</a></p>
+                <p class="credits__text">Built on top of 
+                    <a href="https://hypersign.id" target="_blank" class="credits__link">Hypersign Identity Network</a>                    
+                    
+                </p>
             </div>
         </div>
         
@@ -92,14 +131,18 @@
         
         <div class="form-group">
             <div class="row">
-                <div class="col-sm-12">
-                    <label class="">Linked Wallets (<span class="">{{this.signedDidDoc.proof? this.signedDidDoc.proof.length: 0}}</span>)</label>
+                <div class="col-sm-10">
+                    <label class="">Linked Wallets (<span class="">{{this.didDoc.proof? this.didDoc.proof.length: 0}}</span>)</label>
                 </div>
+                <div class="col-sm-2" >
+                    <button class="btn btn-light" style="float: right" @click="addWallet()"><i class="fa fa-plus"></i> Add Wallet</button>
+                </div>
+
             </div>
 
             <div class="row">
                 <div style="overflow: auto; width: 30em;overflow-x: auto;white-space: nowrap;" class="col-sm-12">
-                        <div class="event-card" v-for="vMethod in signedDidDoc.verificationMethod" :key="vMethod.id" 
+                        <div class="event-card" v-for="vMethod in didDoc.verificationMethod" :key="vMethod.id" 
                         style="background-color:white; margin-right: 10px; width: 400px;display: inline-block;">
                             <div class="card-body" style="">
                                 <div class="row"> 
@@ -193,10 +236,10 @@
             <textarea class="form-control"   rows="10" disabled>{{this.didDocString}}</textarea>
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label >Signed DID Doc</label>
             <textarea class="form-control"   rows="10" disabled>{{this.signedDidDocString}}</textarea>
-        </div>
+        </div> -->
         
     </div>    
 </template>
@@ -238,174 +281,21 @@ export default {
                 address: "",
                 chainId: ""
             },
+            walletAddressEdit: {
+                address: "",
+                chainId: ""
+            },
             hypersignDIDSDK: null,
-            didDoc: {
-  "@context": [
-    "https://www.w3.org/ns/did/v1"
-  ],
-  "id": "did:hid:0x749183517381758E186910DC47bcbE456458216E",
-  "controller": [
-    "did:hid:0x749183517381758E186910DC47bcbE456458216E"
-  ],
-  "alsoKnownAs": [
-    "did:hid:0x749183517381758E186910DC47bcbE456458216E"
-  ],
-  "verificationMethod": [
-    {
-      "id": "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
-      "type": "EcdsaSecp256k1RecoveryMethod2020",
-      "controller": "did:hid:0x749183517381758E186910DC47bcbE456458216E",
-      "blockchainAccountId": "eip155:1:0x749183517381758E186910DC47bcbE456458216E"
-    },
-    {
-      "id": "#key-2",
-      "type": "EcdsaSecp256k1RecoveryMethod2020",
-      "controller": "",
-      "blockchainAccountId": "eip155:137:0x749183517381758E186910DC47bcbE456458216E"
-    },
-    {
-      "id": "#key-3",
-      "type": "EcdsaSecp256k1RecoveryMethod2020",
-      "controller": "",
-      "blockchainAccountId": "eip155:56:0x749183517381758E186910DC47bcbE456458216E"
-    },
-    {
-      "id": "#key-4",
-      "type": "EcdsaSecp256k1RecoveryMethod2020",
-      "controller": "",
-      "blockchainAccountId": "eip155:56:0x749183517381758E186910DC47bcbE456458216E"
-    }
-  ],
-  "authentication": [
-    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
-    "#key-2",
-    "#key-3"
-  ],
-  "assertionMethod": [
-    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
-    "#key-2",
-    "#key-3"
-  ],
-  "keyAgreement": [
-    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
-    "#key-2",
-    "#key-3"
-  ],
-  "capabilityInvocation": [
-    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
-    "#key-2",
-    "#key-3"
-  ],
-  "capabilityDelegation": [
-    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
-    "#key-2",
-    "#key-3"
-  ],
-  "service": [],
-  "proof": [
-    {
-      "type": "EcdsaSecp256k1RecoverySignature2020",
-      "created": "2023-01-25T12:35:12.637Z",
-      "verificationMethod": "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
-      "proofPurpose": "assertionMethod",
-      "proofValue": "0xce1ecb4a06082331277dec2608ba996a50896910d806c3b344fe447f33939bf80247bb39f86635edd56379a36100b0405f1537700c1a66c080bc5cb9050b586f1c"
-    },
-    {
-      "type": "EcdsaSecp256k1RecoverySignature2020",
-      "created": "2023-01-25T13:07:28.612Z",
-      "verificationMethod": "#key-2",
-      "proofPurpose": "assertionMethod",
-      "proofValue": "0x601cb76a7881d05ee7a2d3aa1fca247e07b98f10bca6fe5859508b9f457a6d205d7f70ba7e0e0319fe844156ef7d0f8c46e792d9d4303d4f393702094d4aba851b"
-    }
-  ]
-},
+            didDoc: {},
             proof: [],
             walletAddresss: [],
-            signedDidDoc:{
-  "@context": [
-    "https://www.w3.org/ns/did/v1"
-  ],
-  "id": "did:hid:0x749183517381758E186910DC47bcbE456458216E",
-  "controller": [
-    "did:hid:0x749183517381758E186910DC47bcbE456458216E"
-  ],
-  "alsoKnownAs": [
-    "did:hid:0x749183517381758E186910DC47bcbE456458216E"
-  ],
-  "verificationMethod": [
-    {
-      "id": "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
-      "type": "EcdsaSecp256k1RecoveryMethod2020",
-      "controller": "did:hid:0x749183517381758E186910DC47bcbE456458216E",
-      "blockchainAccountId": "eip155:1:0x749183517381758E186910DC47bcbE456458216E"
-    },
-    {
-      "id": "#key-2",
-      "type": "EcdsaSecp256k1RecoveryMethod2020",
-      "controller": "",
-      "blockchainAccountId": "eip155:137:0x749183517381758E186910DC47bcbE456458216E"
-    },
-    {
-      "id": "#key-3",
-      "type": "EcdsaSecp256k1RecoveryMethod2020",
-      "controller": "",
-      "blockchainAccountId": "eip155:56:0x749183517381758E186910DC47bcbE456458216E"
-    },
-    {
-      "id": "#key-3",
-      "type": "EcdsaSecp256k1RecoveryMethod2020",
-      "controller": "",
-      "blockchainAccountId": "eip155:56:0x749183517381758E186910DC47bcbE456458216E"
-    }
-  ],
-  "authentication": [
-    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
-    "#key-2",
-    "#key-3"
-  ],
-  "assertionMethod": [
-    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
-    "#key-2",
-    "#key-3"
-  ],
-  "keyAgreement": [
-    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
-    "#key-2",
-    "#key-3"
-  ],
-  "capabilityInvocation": [
-    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
-    "#key-2",
-    "#key-3"
-  ],
-  "capabilityDelegation": [
-    "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
-    "#key-2",
-    "#key-3"
-  ],
-  "service": [],
-  "proof": [
-    {
-      "type": "EcdsaSecp256k1RecoverySignature2020",
-      "created": "2023-01-25T12:35:12.637Z",
-      "verificationMethod": "did:hid:0x749183517381758E186910DC47bcbE456458216E#key-1",
-      "proofPurpose": "assertionMethod",
-      "proofValue": "0xce1ecb4a06082331277dec2608ba996a50896910d806c3b344fe447f33939bf80247bb39f86635edd56379a36100b0405f1537700c1a66c080bc5cb9050b586f1c"
-    },
-    {
-      "type": "EcdsaSecp256k1RecoverySignature2020",
-      "created": "2023-01-25T13:07:28.612Z",
-      "verificationMethod": "#key-2",
-      "proofPurpose": "assertionMethod",
-      "proofValue": "0x601cb76a7881d05ee7a2d3aa1fca247e07b98f10bca6fe5859508b9f457a6d205d7f70ba7e0e0319fe844156ef7d0f8c46e792d9d4303d4f393702094d4aba851b"
-    }
-  ]
-},
+            signedDidDoc:{},
             success: false,
             did: "",
             images: {
                 matick: ""
-            }
+            },
+            isEditing: false,
         }
     },
 
@@ -448,17 +338,32 @@ export default {
         async ok(chainId){
             this.web3 = await loadweb3(chainId)        
             const accounts  = await this.web3.eth.getAccounts();
-            this.walletAddress = {
-                address: "",
-                chainId: ""
+            
+            
+            console.log('inside ok')
+            if(!this.isEditing){
+                this.walletAddress = {
+                    address: "",
+                    chainId: ""
+                }
+                this.walletAddress.address = accounts[0]
+                this.walletAddress.chainId = `${chainId}`
+            } else {
+                this.walletAddressEdit = {
+                    address: "",
+                    chainId: ""
+                }
+                this.walletAddressEdit.address = accounts[0]
+                this.walletAddressEdit.chainId = `${chainId}`
             }
-            this.walletAddress.address = accounts[0]
-            this.walletAddress.chainId = `${chainId}`
-
+            
             this.closeWalletPopup()
             await this.sign()
-            
+        },
 
+        addWallet(){
+            this.isEditing = true;
+            this.openWalletPopup();
         },
         async verify(){
 
@@ -467,11 +372,11 @@ export default {
             }
 
 
-            if(!this.signedDidDoc){
+            if(!this.didDoc){
                 throw new Error('Signed DID doc is not generated')
             }
 
-            const parsedSignDidDc = this.signedDidDoc
+            const parsedSignDidDc = this.didDoc
             const recoveredWalletAddress = await this.web3.eth.personal.ecRecover(this.didDocString, parsedSignDidDc.proof.proofValue);
             console.log({
                 recoveredWall: recoveredWalletAddress.toUpperCase(),
@@ -490,51 +395,90 @@ export default {
         },
         async sign(){
 
-            await this.generateDID()
+            try {
+
+            
+            if(!this.isEditing){
+                await this.generateDID()
+
+                if(!this.walletAddress){
+                    throw new Error('Wallet address is not set')
+                }
+
+                if(!this.didDoc){
+                    throw new Error('DID doc is not generated')
+                }
 
 
-            if(!this.walletAddress){
-                throw new Error('Wallet address is not set')
+                const sig = await this.web3.eth.personal.sign(
+                    this.didDocString, this.walletAddress.address
+                )
+
+                // this.signedDidDoc = this.didDoc
+                // Object.assign(this.signedDidDoc, {...this.didDoc})
+                const signerVm  = this.didDoc.verificationMethod.find(x => x.blockchainAccountId === this.getBlockchainAccountId(this.walletAddress.address, this.walletAddress.chainId));
+                const proof = {
+                    type: 'EcdsaSecp256k1RecoverySignature2020',
+                    created: (new Date()).toISOString(),
+                    verificationMethod: signerVm.id,
+                    proofPurpose: "assertionMethod",
+                    proofValue: sig
+                }
+                this.didDoc['proof'].push(proof)
+
+                await this.createDID()
+            } else{
+                console.log('inside sign isEditing = ' + this.isEditing)
+                if(!this.walletAddressEdit){
+                    throw new Error('Wallet address is not set')
+                }
+
+                if(!this.didDoc){
+                    throw new Error('DID doc is not generated')
+                }
+                const bcAccountId = this.getBlockchainAccountId(this.walletAddressEdit.address, this.walletAddressEdit.chainId)
+
+                console.log(bcAccountId)
+
+
+                this.addVerificationMethod(`${this.did}#key-${this.didDoc.verificationMethod.length + 1}`, this.did, bcAccountId)
+
+
+                const sig = await this.web3.eth.personal.sign(
+                    this.didDocString, this.walletAddressEdit.address
+                )
+
+                const signerVm  = this.didDoc.verificationMethod.find(x => x.blockchainAccountId == bcAccountId);
+                const proof = {
+                    type: 'EcdsaSecp256k1RecoverySignature2020',
+                    created: (new Date()).toISOString(),
+                    verificationMethod: signerVm.id,
+                    proofPurpose: "assertionMethod",
+                    proofValue: sig
+                }
+                this.didDoc['proof'].push(proof)
+
             }
-
-
-            if(!this.didDoc){
-                throw new Error('DID doc is not generated')
-            }
-
-
-            const sig = await this.web3.eth.personal.sign(
-                this.didDocString, this.walletAddress.address
-            )
-
-            this.signedDidDoc = this.didDoc
-            const signerVm  = this.didDoc.verificationMethod.find(x => x.blockchainAccountId === this.getBlockchainAccountId(this.walletAddress.address, this.walletAddress.chainId));
-            console.log(signerVm.id)
-            const proof = {
-                type: 'EcdsaSecp256k1RecoverySignature2020',
-                created: (new Date()).toISOString(),
-                verificationMethod: signerVm.id,
-                proofPurpose: "assertionMethod",
-                proofValue: sig
-            }
-            this.signedDidDoc['proof'].push(proof)
+            
            
-            this.proof.push(proof)
-           
-
+            // this.proof.push(proof)
             // this.verify()
+            // this.walletAddresss.push(this.walletAddress)
+            // this.clean()
 
-            this.walletAddresss.push(this.walletAddress)
-            this.clean()
+        }catch(e){
+                this.isEditing = false
+                this.notifyErr(e.message)
+            }
         },
         async generateDID(){
             if(!this.walletAddress){
                 throw new Error('Wallet address is not set')
             }
 
-            
             if(Object.keys(this.didDoc).length <= 0){
                 const kp = await this.hypersignDIDSDK.generateKeys();
+
                 const didDoc = await this.hypersignDIDSDK.generate({ methodSpecificId: this.walletAddress.address, publicKeyMultibase: kp.publicKeyMultibase });
                 didDoc.verificationMethod = []
                 didDoc.authentication = []
@@ -543,8 +487,17 @@ export default {
                 didDoc.capabilityInvocation = []
                 didDoc.capabilityDelegation = []
                 didDoc['proof'] = []
+                
+                
+                
                 this.did = didDoc.id
-                this.didDoc = didDoc;
+
+                try{
+                    this.resolveDID()
+                }catch(e){
+                    console.log(e.message)
+                    this.didDoc = didDoc;
+                }
             }
             
             console.log(1)
@@ -556,8 +509,19 @@ export default {
             return `eip155:${chainId}:${walletAddress}`
         },
 
-        async addVerificationMethod(vmId, controller, blockchainId){
+        addVM(){
+            
+        },
+
+        addVerificationMethod(vmId, controller, blockchainId){
             if(this.didDoc){
+
+                const t = this.didDoc.verificationMethod.find(x => x.blockchainAccountId === blockchainId)
+                if(t){
+                    throw new Error('Wallet Address already added in the didDoc, choose different one')    
+                }
+
+
                 this.didDoc.verificationMethod.push({
                     id: vmId,            
                     type: "EcdsaSecp256k1RecoveryMethod2020",
@@ -569,7 +533,11 @@ export default {
                 this.didDoc.keyAgreement.push(vmId)
                 this.didDoc.capabilityInvocation.push(vmId)
                 this.didDoc.capabilityDelegation.push(vmId)
-            } 
+
+                // this.updateDID()
+            } else {
+                throw new Error('No DID doc found to update')
+            }
              
         } ,
 
@@ -594,7 +562,81 @@ export default {
           });
       }
     },
-        async register(){}
+
+        
+        async createDID(){
+            try{
+                console.log('Inside register')
+
+                if(!this.did || !this.didDoc){
+                    throw new Error('DID and Signed DIDDocuments are not passed')
+                }
+
+                const didDocStr = localStorage.getItem(this.did)
+                if(didDocStr){
+                    return this.updateDID()
+                }
+
+                
+                // TODO
+                // verify all proofValues before storing...
+                
+                localStorage.setItem(this.did, JSON.stringify(this.didDoc))
+                this.notifySuccess('Successfully created')
+                
+            }catch(e){
+                this.notifyErr(e.message);
+            }
+            
+        },
+
+        updateDID(){
+            try{
+                if(!this.did){
+                    throw new Error('No DID to update')
+                }
+
+                const didDocString = localStorage.getItem(this.did);
+                if(!didDocString){
+                    console.log('DID is not registered so going to create a new one')
+                    return this.createDID()
+                }
+
+                localStorage.removeItem(this.did);
+                localStorage.setItem(this.did, JSON.stringify(this.didDoc))
+                this.notifySuccess('Successfully updated')
+                this.isEditing = false
+    
+            }catch(e){
+                this.notifyError(e.message)
+            }
+            
+        },
+
+        resolve(){
+            try{
+                console.log(1)
+                this.resolveDID()
+                console.log(2)
+            }catch(e){
+                console.log(3)
+                this.notifyError(e.message)
+            }
+        },
+        resolveDID(){
+            if(!this.did) {
+                    throw new Error('Did must be passed to resolve')
+                }
+            const didDocStr = localStorage.getItem(this.did)
+            if(!didDocStr){
+                throw new Error('DID is not registered')
+            }
+            const didDoc  = JSON.parse(didDocStr)
+            this.didDoc = didDoc
+            //this.signedDidDoc = didDoc;
+            this.notifySuccess('DID resolved successfully')
+            
+        }
     },
 
     mixins: [notificationMixins]
