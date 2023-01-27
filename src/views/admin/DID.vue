@@ -88,12 +88,10 @@
 <template>
     <div class="home  marginLeft marginRight">
         <div class="form-inline row" style="padding-top:10px">
-            <!-- <h3 >DODO</h3> -->
             <div class="col-sm-7">
                 <img src="../../assets/did-score/DODO.png" width="200" height="50"/>
             </div>
             <div class="input-group col-sm-5" style="float:right">
-                <!-- <button type="submit" class="button-save" v-if="isEditing" @click="">Save Changes</button> -->
                 <button  class="btn btn-link button-save"  v-if="isEditing"  @click="updateDID()">Save Changes</button>                    
 
                 <input type="text" class="form-control" placeholder="blockchain wallet address" v-model="walletAddress.address"  disabled/>
@@ -102,46 +100,35 @@
                 </button>
             </div>   
         </div>
-        <!-- <hr> -->
 
         <div class="body">
             <div class="search__container">
                 <p class="search__title">
-                        Go ahead, search your Decentralized ID
+                    Go ahead, search your Decentralized ID
                 </p>
                 <input class="search__input" type="text" placeholder="Search" v-model="did" v-on:keyup.enter="resolve">
             </div>
 
-            <div class="credits__container">
-                <p class="credits__text">Built on top of 
-                    <a href="https://hypersign.id" target="_blank" class="credits__link">Hypersign Identity Network</a>                    
-                    
+            <div class="credits__container" v-if="Object.keys(didDoc).length > 0">
+                <p class="credits__text">
+                    Click to view the <a @click="openWalletPopup('show-did-doc'); return false;" href="#" >DID Document</a>                    
                 </p>
             </div>
         </div>
-        
-        <!-- <div class="form-group">
-                <div class="col-sm-12 input-group mb-3 centered">
-                    <input type="text" class="form-control" placeholder="did:hid:0x121" v-model="did">
-                    <div class="input-group-append">
-                        <button class="btn btn-light input-group-text" @click="sign()"><i class="fas fa-search"></i></button>
-                    </div>
-                </div>
-        </div> -->
-        
+         
         <div class="form-group">
-            <div class="row">
+            <div class="row" style="margin-bottom:1%">
                 <div class="col-sm-10">
                     <label class="">Linked Wallets (<span class="">{{this.didDoc.proof? this.didDoc.proof.length: 0}}</span>)</label>
                 </div>
-                <div class="col-sm-2" >
+                <div class="col-sm-2">
                     <button class="btn btn-light" style="float: right" @click="addWallet()"><i class="fa fa-plus"></i> Add Wallet</button>
                 </div>
 
             </div>
 
             <div class="row">
-                <div style="overflow: auto; width: 30em;overflow-x: auto;white-space: nowrap;" class="col-sm-12">
+                <div style="overflow: auto; width: 30em;overflow-x: auto;white-space: nowrap; padding-bottom:7px;" class="col-sm-12">
                         <div class="event-card" v-for="vMethod in didDoc.verificationMethod" :key="vMethod.id" 
                         style="background-color:white; margin-right: 10px; width: 400px;display: inline-block;">
                             <div class="card-body" style="">
@@ -183,8 +170,10 @@
         </div>
         
         <hr>
+
         <hf-pop-up
             Header="Connect Wallets"
+            Id ='conn-wallet'
         >
         <div class="form-group">
             <!-- <label>Connect Wallet :</label> -->
@@ -227,20 +216,18 @@
             </div> -->
         </div>
         </hf-pop-up>
-        
 
-
+        <hf-pop-up
+            Header="DID Document"
+            Id ='show-did-doc'
+            Size = 'lg'
+        >
         <div class="form-group">
-            <label >DID Doc</label>
-        
+            <label >{{this.did}}</label>
             <textarea class="form-control"   rows="10" disabled>{{this.didDocString}}</textarea>
         </div>
+        </hf-pop-up>
 
-        <!-- <div class="form-group">
-            <label >Signed DID Doc</label>
-            <textarea class="form-control"   rows="10" disabled>{{this.signedDidDocString}}</textarea>
-        </div> -->
-        
     </div>    
 </template>
 
@@ -319,11 +306,11 @@ export default {
         getImgUrl(pet) {
             return require('../../assets/did-score/' + pet)
         },
-        openWalletPopup(){
-            this.$root.$emit('modal-show')
+        openWalletPopup(id = 'conn-wallet'){
+            this.$root.$emit('bv::show::modal', id)
         },  
-        closeWalletPopup(){
-            this.$root.$emit('modal-close')
+        closeWalletPopup(id = 'conn-wallet'){
+            this.$root.$emit('bv::hide::modal', id)
         },  
         parseBlockchainAccountId(bId){
             if(bId){
