@@ -183,7 +183,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <table class="table table-bordered  event-card" v-if="walletsPortfolio.length >0" style="background-color: white">
+                    <table class="table table-bordered  table-hover event-card" v-if="walletsPortfolio.length >0" style="background-color: white">
                         <thead class="">
                             <th></th>
                             <!-- <th>Network</th>
