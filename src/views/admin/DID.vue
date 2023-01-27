@@ -134,14 +134,14 @@
                             <div class="card-body" style="">
                                 <div class="row"> 
                                     <div class="col-md-5">
-                                        <div class="centered"><img class="imageClass"  :src="getImgUrl(parseBlockchainAccountId(vMethod.blockchainAccountId).chainData.logo)" v-bind:alt="parseBlockchainAccountId(vMethod.blockchainAccountId).chainData.logo"/></div>
+                                        <div class="centered" style="margin-top:10%"><img class="imageClass" style="opacity: 0.7;"  :src="getImgUrl(parseBlockchainAccountId(vMethod.blockchainAccountId).chainData.logo)" v-bind:alt="parseBlockchainAccountId(vMethod.blockchainAccountId).chainData.logo"/></div>
                                         <div class="centered card-title"><label>{{ parseBlockchainAccountId(vMethod.blockchainAccountId).chainData.chainName }}</label></div>
                                     </div>
                                     <div class="col-md-7">
                                         <div class="form-group">
-                                            <label class="card-title"><i class="far fa-id-card"></i> Wallet Address</label>
+                                            <label class="card-title"><i class="far fa-id-card"></i>Wallet Address</label>
                                             <div>
-                                                    <span >{{ trunc(parseBlockchainAccountId(vMethod.blockchainAccountId).walletAddress, 20) }}</span>
+                                                    <span style="font-weight:200">{{ trunc(parseBlockchainAccountId(vMethod.blockchainAccountId).walletAddress, 20) }}</span>
                                                     <span @click="copy(parseBlockchainAccountId(vMethod.blockchainAccountId).walletAddress, 'EventId')" class="copy"></span><span><i class="far fa-copy" style="margin-left:3px"></i></span>
                                             </div>
                                         </div>
@@ -157,7 +157,7 @@
                                         <div class="form-group">
                                             <label class="card-title"><i class="far fa-id-card"></i> Verification Method Id</label>
                                             <div>
-                                                    <span >{{ trunc(vMethod.id, 20) }}</span>
+                                                    <span style="font-weight:200">{{ trunc(vMethod.id, 20) }}</span>
                                                     <span @click="copy(vMethod.id, 'EventId')" class="copy"></span><span><i class="far fa-copy" style="margin-left:3px"></i></span>
                                                 </div>
                                         </div>
@@ -170,6 +170,55 @@
         </div>
         
         <hr>
+        <div class="form-group">
+            <div class="row" style="margin-bottom:1%">
+                <div class="col-sm-10">
+                    <label class="">Your PortFolio</label>
+
+
+                    </div>
+                <div class="col-sm-2">
+                    <label style="float: right;     font-size: x-large; font-weight: bold;">${{ parseFloat(totalBalance).toFixed(2) }}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-bordered  event-card" v-if="walletsPortfolio.length >0" style="background-color: white">
+                        <thead class="">
+                            <th></th>
+                            <!-- <th>Network</th>
+                            <th>Asset</th> -->
+                            <th>Balance</th>
+                            <th>Price ($)</th>
+                            <th>Value ($)</th>
+                        </thead>
+                        <tbody>
+                            <tr v-for="eachToken in walletsPortfolio" :key="walletsPortfolio">
+                                <td>
+                                    <div class="display: table;">
+                                        <div style="float: left;padding:3px;">
+                                            <img class="imgCls"  :src="eachToken.logo? getImgUrl(eachToken.logo): eachToken.logoPath" v-bind:alt="eachToken.logo"/>
+                                        </div>
+                                        <div style="float: left;padding: 2px; margin-left: 3px">
+                                            <div style="font-weight:bold">{{eachToken.symbol}}</div>                                            
+                                            <div style="font-weight:200">{{eachToken.network }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <!-- <td><img class="imgCls"  :src="eachToken.logo? getImgUrl(eachToken.logo): eachToken.logoPath" v-bind:alt="eachToken.logo"/></td> -->
+                                <!-- <td>{{eachToken.network }}</td>
+                                <td>{{eachToken.symbol}}</td> -->
+                                <td>{{eachToken.balance}}</td>
+                                <td>{{eachToken.price}}</td>
+                                <td>{{eachToken.value}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        
 
         <hf-pop-up
             Header="Connect Wallets"
@@ -241,26 +290,38 @@ import {
   truncate,
 } from "../../mixins/fieldValidationMixin.js";
 import notificationMixins from "../../mixins/notificationMixins";
-
+import M from "minimatch";
+const Moralis = require('moralis').default;
+const { EvmChain } = require('@moralisweb3/common-evm-utils');
 export default {
     components:{HfPopUp},
     data(){
-        return {            
+        return {   
+            moralisAPIKey: "7VaD6UFyu5cFAE3A7uJrIsUahL9RDrJmZtZgcBMP8HunQ0WmCdzX2WKH0MTydGuw",         
             chainIdChainMap: {
                 "1": {
                     chainName: "Ethereum",
                     token: "ETH",
-                    logo: "eth_logo.svg"
+                    logo: "eth_logo.svg",
+                    logoPath: 'https://token-icons.s3.amazonaws.com/eth.png',
+                    hex: "0x1",
+                    wrappedTokenAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
                 },
                 "137": {
                     chainName: "Polygon",
                     token: "MATIC",
-                    logo: "matic-token.png"
+                    logo: "matic-token.png",
+                    hex: "0x89",
+                    wrappedTokenAddress: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"
+
                 },
                 "56": {
-                    chainName: "Binance Smart Chain",
-                    token: "BSC",
-                    logo: "bnb.png"
+                    chainName: "BSC",
+                    token: "BNB",
+                    logo: "bnb.png",
+                    hex: "0x38",
+                    wrappedTokenAddress: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+
                 }
             },
             web3: null,
@@ -283,10 +344,27 @@ export default {
                 matick: ""
             },
             isEditing: false,
+
+            walletsPortfolio:[]
         }
     },
 
     computed: {
+        totalBalance(){
+            if(this.walletsPortfolio.length > 0){
+                let val = 0
+               
+                this.walletsPortfolio.forEach(token => {
+                    
+                    val += token.value
+                    console.log(val)
+                })
+                return val
+            } else { 
+                return 0
+            }
+            
+        },
         didDocString(){
             return JSON.stringify(this.didDoc, null, 2);
         },
@@ -297,9 +375,161 @@ export default {
 
     async created(){
         this.hypersignDIDSDK = new HypersignDID();
-        
+        await Moralis.start({
+            apiKey: this.moralisAPIKey            
+        });
     },
     methods: {
+        async fetchTokenPrice(tokenAddress, chain){
+            const address = tokenAddress;
+            
+            const response = await Moralis.EvmApi.token.getTokenPrice({
+                address,
+                chain,
+            });
+
+            // console.log(response.toJSON());
+            return response.toJSON();
+        },
+
+        async getNativeBalance({ address, chain }){
+            
+            const response = await Moralis.EvmApi.balance.getNativeBalance({
+                address,
+                chain,
+            });
+
+            return response.toJSON()
+        },
+
+
+        // async getTokenBalanceOnPoly(){
+        //     console.log('getTokenBalanceOnPoly  ...  ')
+        //     let response = await Moralis.EvmApi.token.getWalletTokenBalances({
+        //             address: '0xB9D3F4DB034F5D575C13D0DdA6d777C5941b0127',
+        //             chain: EvmChain.POLYGON,
+        //             tokenAddresses: ['0x87847703D4bb4FCD42DB887FfdcB94496e77e3ab'] // token addresses of ERC20 contracts
+        //         });
+
+        //         console.log(response.toJSON())
+        //         console.log('getTokenBalanceOnPoly  ...  ')
+        // },
+        async getTokenBalance({ walletAddress, chain, tokenAddresses }){
+
+            console.log({ walletAddress, chain, tokenAddresses })
+            let response = await Moralis.EvmApi.token.getWalletTokenBalances({
+                    address: walletAddress,
+                    chain,
+                    tokenAddresses // token addresses of ERC20 contracts
+                });
+                return response.toJSON()
+        },
+
+        async loadAllBalances(){
+            const verMethods = this.didDoc.verificationMethod;
+            if(verMethods && verMethods.length > 0){
+                verMethods.forEach(async eachVerMeth => {
+                    const parsedBCAId = this.parseBlockchainAccountId(eachVerMeth.blockchainAccountId)
+                    console.log(parsedBCAId)
+                    const walletAddress =  parsedBCAId.walletAddress//'0xb9d3f4db034f5d575c13d0dda6d777c5941b0127';
+                    const evmChain  = parsedBCAId.chainData.chainName.toUpperCase()
+                    console.log(evmChain)
+                    const chain = EvmChain[evmChain];
+                    this.loadBalance({ walletAddress, chain, wrappedTokenAddress: parsedBCAId.chainData.wrappedTokenAddress , logo: parsedBCAId.chainData.logo, logoPath: parsedBCAId.chainData.logoPath, symbol: parsedBCAId.chainData.token })
+                })
+
+            } else {
+                console.log('this.didDoc.verificationMethod is undefined')
+            }
+        },
+
+        async loadBalance({walletAddress, chain,  wrappedTokenAddress,  logo = '', logoPath ='',  symbol = ''}){
+                const nativeTokenData = await this.getNativeBalance({ address: walletAddress, chain})
+
+                if(nativeTokenData && nativeTokenData.balance > 0){
+                    
+                    const nativeTokenPrice = await this.fetchTokenPrice(wrappedTokenAddress, chain)
+                    
+                    const nativeBalance = nativeTokenData.balance/1e18;
+                    this.walletsPortfolio.push({
+                        balance: nativeBalance.toFixed(4),
+                        name:  chain.name,
+                        symbol,
+                        network: chain.name,
+                        logoPath,
+                        logo,
+                        price: (nativeTokenPrice.usdPrice.toFixed(4)),
+                        value: (parseFloat(nativeTokenPrice.usdPrice) * parseFloat(nativeBalance))
+                    })
+                } else {
+                    console.log('No balance found for ' + chain.name)
+                }
+
+                
+
+                const USDCERC20ContractAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+                let response = await this.getTokenBalance({
+                    walletAddress,
+                    chain,
+                    tokenAddresses: [ USDCERC20ContractAddress ] // token address of USDC
+                });
+                if(response && response.length >0){
+                    response = response[0]
+                    if(response.balance > 0){
+                        const usdcTokenPrice = await this.fetchTokenPrice(USDCERC20ContractAddress, chain)
+                        const usdcbal = response.balance/1e6;
+                        this.walletsPortfolio.push({
+                            balance: usdcbal.toFixed(4),
+                            logoPath: response.logo,
+                            symbol: response.symbol,
+                            name: response.name,
+                            network: chain.name,
+                            price: (usdcTokenPrice.usdPrice.toFixed(4)),
+                            value: (parseFloat(usdcTokenPrice.usdPrice) * parseFloat(usdcbal))
+                        })
+                    } else {
+                        console.log('No balance found for USDC')
+                    }
+                } else {
+                    console.log('No balance found for USDC')
+                }
+
+
+                const HIDERC20WalletAddress = {
+                    'ETH': '0xB14eBF566511B9e6002bB286016AB2497B9b9c9D', // contract address of hid on eth
+                    'MATIC': '0x87847703D4bb4FCD42DB887FfdcB94496e77e3ab' // contract address of hid on polygon
+                }
+
+                if(HIDERC20WalletAddress[symbol]){
+                        let hidResponse = await this.getTokenBalance({
+                            walletAddress,
+                            chain,
+                            tokenAddresses: [ HIDERC20WalletAddress[symbol] ] // token address of USDC
+                        });
+                    if(hidResponse && hidResponse.length >0){
+                        hidResponse = hidResponse[0]
+                        if(hidResponse.balance > 0){
+                            const usdcTokenPrice = await this.fetchTokenPrice(HIDERC20WalletAddress[symbol], chain)
+                            const usdcbal = hidResponse.balance/1e18;
+                            this.walletsPortfolio.push({
+                                balance: usdcbal.toFixed(4),
+                                logoPath: 'https://etherscan.io/token/images/hypersign_32.png',
+                                symbol: hidResponse.name,
+                                name: hidResponse.name,
+                                network: chain.name,
+                                price: (usdcTokenPrice.usdPrice.toFixed(4)),
+                                value: (parseFloat(usdcTokenPrice.usdPrice) * parseFloat(usdcbal))
+                            })
+                        } else {
+                            console.log('No balance found for HID ')
+                        }
+                    } else {
+                        console.log('No balance found for HID')
+                    }
+                }
+                
+        },
+
         trunc(str, number){
             return truncate(str, number)
         },
@@ -343,9 +573,9 @@ export default {
                 this.walletAddressEdit.address = accounts[0]
                 this.walletAddressEdit.chainId = `${chainId}`
             }
-            
             this.closeWalletPopup()
             await this.sign()
+            this.loadAllBalances()
         },
 
         addWallet(){
@@ -602,9 +832,8 @@ export default {
 
         resolve(){
             try{
-                console.log(1)
                 this.resolveDID()
-                console.log(2)
+                this.loadAllBalances()
             }catch(e){
                 console.log(3)
                 this.notifyError(e.message)
