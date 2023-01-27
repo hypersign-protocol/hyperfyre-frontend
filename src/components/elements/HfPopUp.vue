@@ -1,5 +1,5 @@
 <template>
-  <b-modal v-model="show" hide-footer ref="modal-1" :title="Header" centered>
+  <b-modal :size="Size" hide-footer :id="Id" :title="Header" centered>
     <slot />
   </b-modal>
 </template>
@@ -16,6 +16,12 @@ export default {
       type: String,
       require: true,
     },
+    Id: {
+      type: String,
+    },
+    Size: {
+      type: String,
+    }
   },
   created() {
     this.openModal();
