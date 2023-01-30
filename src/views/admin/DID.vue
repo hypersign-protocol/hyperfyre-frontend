@@ -513,6 +513,7 @@ export default {
                             const usdcbal = hidResponse.balance/1e18;
                             this.walletsPortfolio.push({
                                 balance: usdcbal.toFixed(4),
+                                logo: 'HS_White.png',
                                 logoPath: 'https://etherscan.io/token/images/hypersign_32.png',
                                 symbol: hidResponse.name,
                                 name: hidResponse.name,
