@@ -764,7 +764,11 @@ export default {
         const contract = new web3.eth.Contract(abi, address);
         const getApprovalContract = new web3.eth.Contract(erc20ABI, depositToken)
         const maxApprove = getMaxApprove()
-        const approval = await getApprovalContract.methods.approve(address, maxApprove).send({ from: this.accounts[0] })        
+        const approval = await getApprovalContract.methods.approve(address, maxApprove).send({ 
+          from: this.accounts[0],
+          maxPriorityFeePerGas: null,
+          maxFeePerGas: null, 
+         })        
         if (approval.status !== true) {
           return this.notifyErr('Not Approved')
         }
