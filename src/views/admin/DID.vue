@@ -611,30 +611,70 @@ export default {
             this.success = true;
 
         },
+
+        getDIDFromWalletAddress (walletAddress){
+            if(!walletAddress){
+                throw new Error('Wallet Address is not passed')
+            }
+
+            return `did:hid:${walletAddress}`;
+        },
         async sign(){
 
             try {
 
+                // if(!this.walletAddress){
+                //     throw new Error('Wallet address is not set, please connect your wallet')
+                // }
+
+                
+                
             
             if(!this.isEditing){
-                await this.generateDID()
+                
 
                 if(!this.walletAddress){
                     throw new Error('Wallet address is not set')
                 }
 
-                if(!this.didDoc){
-                    throw new Error('DID doc is not generated')
+                let didId = this.getDIDFromWalletAddress(this.walletAddress.address);
+
+                let didDoc; 
+                // Check if this did already exists.. 
+                const didDocResolved = this.resolveDID(didId)
+                this.did = didId;
+
+                if(didDocResolved){
+                    // if exists
+                    didDoc = didDocResolved;
+                    this.didDoc  = didDoc;
+                    this.loadAllBalances()
+                    return;
+                } else {
+                    // else then generate a new
+                    didDoc = await this.generateDID(this.walletAddress.address)
+                    didId = didDoc.id;
+                    
                 }
+
+                this.did = didId;
+
+                if(!didDoc){
+                    throw new Error('DID doc is not generated or resolved')
+                }
+
+                const bcAccountId = this.getBlockchainAccountId(this.walletAddress.address, this.walletAddress.chainId)
+
+                didDoc = this.addVerificationMethod(didDoc, `${didId}#key-${didDoc.verificationMethod.length + 1}`, didId, bcAccountId)
 
 
                 const sig = await this.web3.eth.personal.sign(
-                    this.didDocString, this.walletAddress.address
+                    JSON.stringify(didDoc, null, 2), this.walletAddress.address
                 )
 
                 // this.signedDidDoc = this.didDoc
                 // Object.assign(this.signedDidDoc, {...this.didDoc})
-                const signerVm  = this.didDoc.verificationMethod.find(x => x.blockchainAccountId === this.getBlockchainAccountId(this.walletAddress.address, this.walletAddress.chainId));
+                const signerVm  = didDoc.verificationMethod.find(x => x.blockchainAccountId === bcAccountId);
                 const proof = {
                     type: 'EcdsaSecp256k1RecoverySignature2020',
                     created: (new Date()).toISOString(),
@@ -642,9 +682,14 @@ export default {
                     proofPurpose: "assertionMethod",
                     proofValue: sig
                 }
-                this.didDoc['proof'].push(proof)
+                didDoc['proof'].push(proof)
+
+                this.didDoc = didDoc;
+                
 
                 await this.createDID()
+
+
             } else{
                 console.log('inside sign isEditing = ' + this.isEditing)
                 if(!this.walletAddressEdit){
@@ -656,17 +701,25 @@ export default {
                 }
                 const bcAccountId = this.getBlockchainAccountId(this.walletAddressEdit.address, this.walletAddressEdit.chainId)
 
-                console.log(bcAccountId)
+                let newDidDoc = structuredClone(this.didDoc);
 
+                const controller = newDidDoc.id;
+                const vmId =  `${controller}#key-${newDidDoc.verificationMethod.length + 1}`
+                
+                newDidDoc = this.addVerificationMethod(newDidDoc, vmId, controller,  bcAccountId)
+    
+                const signerVm  = newDidDoc.verificationMethod.find(x => x.blockchainAccountId == bcAccountId);
 
-                this.addVerificationMethod(`${this.did}#key-${this.didDoc.verificationMethod.length + 1}`, this.did, bcAccountId)
-
+                if(!signerVm){
+                    console.error("No verification method found")    
+                    return;
+                }
 
                 const sig = await this.web3.eth.personal.sign(
-                    this.didDocString, this.walletAddressEdit.address
+                    JSON.stringify(newDidDoc, null, 2), this.walletAddressEdit.address
                 )
 
-                const signerVm  = this.didDoc.verificationMethod.find(x => x.blockchainAccountId == bcAccountId);
+                
                 const proof = {
                     type: 'EcdsaSecp256k1RecoverySignature2020',
                     created: (new Date()).toISOString(),
@@ -674,30 +727,26 @@ export default {
                     proofPurpose: "assertionMethod",
                     proofValue: sig
                 }
-                this.didDoc['proof'].push(proof)
+                newDidDoc['proof'].push(proof)
+
+                this.didDoc = newDidDoc;
 
             }
-            
-           
-            // this.proof.push(proof)
-            // this.verify()
-            // this.walletAddresss.push(this.walletAddress)
-            // this.clean()
-
         }catch(e){
                 this.isEditing = false
                 this.notifyErr(e.message)
             }
         },
-        async generateDID(){
+        async generateDID(walletAddress){
+            let didDoc;
             if(!this.walletAddress){
                 throw new Error('Wallet address is not set')
             }
 
-            if(Object.keys(this.didDoc).length <= 0){
+            //if(Object.keys(this.didDoc).length <= 0){
                 const kp = await this.hypersignDIDSDK.generateKeys();
 
-                const didDoc = await this.hypersignDIDSDK.generate({ methodSpecificId: this.walletAddress.address, publicKeyMultibase: kp.publicKeyMultibase });
+                didDoc = await this.hypersignDIDSDK.generate({ methodSpecificId: walletAddress, publicKeyMultibase: kp.publicKeyMultibase });
                 didDoc.verificationMethod = []
                 didDoc.authentication = []
                 didDoc.assertionMethod = []
@@ -708,19 +757,17 @@ export default {
                 
                 
                 
-                this.did = didDoc.id
+                // this.did = didDoc.id
 
-                try{
-                    this.resolveDID()
-                }catch(e){
-                    console.log(e.message)
-                    this.didDoc = didDoc;
-                }
-            }
-            
-            console.log(1)
-            this.addVerificationMethod(`${this.did}#key-${this.didDoc.verificationMethod.length + 1}`, this.did, this.getBlockchainAccountId(this.walletAddress.address, this.walletAddress.chainId))
-            console.log(2)
+                // try{
+                //     this.resolveDID()
+                // }catch(e){
+                //     console.log(e.message)
+                //     this.didDoc = didDoc;
+                // }
+            //}
+            //didDoc = this.addVerificationMethod(didDoc, `${this.did}#key-${this.didDoc.verificationMethod.length + 1}`, this.did, this.getBlockchainAccountId(this.walletAddress.address, this.walletAddress.chainId))
+            return didDoc;
         },
 
         getBlockchainAccountId(walletAddress, chainId){
@@ -731,28 +778,28 @@ export default {
             
         },
 
-        addVerificationMethod(vmId, controller, blockchainId){
-            if(this.didDoc){
+        addVerificationMethod(didDoc, vmId, controller, blockchainId){
+            if(didDoc){
 
-                const t = this.didDoc.verificationMethod.find(x => x.blockchainAccountId === blockchainId)
+                const t = didDoc.verificationMethod.find(x => x.blockchainAccountId === blockchainId)
                 if(t){
                     throw new Error('Wallet Address already added in the didDoc, choose different one')    
                 }
 
 
-                this.didDoc.verificationMethod.push({
+                didDoc.verificationMethod.push({
                     id: vmId,            
                     type: "EcdsaSecp256k1RecoveryMethod2020",
                     controller: controller,
                     blockchainAccountId: blockchainId
                 })
-                this.didDoc.authentication.push(vmId)
-                this.didDoc.assertionMethod.push(vmId)
-                this.didDoc.keyAgreement.push(vmId)
-                this.didDoc.capabilityInvocation.push(vmId)
-                this.didDoc.capabilityDelegation.push(vmId)
-
-                // this.updateDID()
+                didDoc.authentication.push(vmId)
+                didDoc.assertionMethod.push(vmId)
+                didDoc.keyAgreement.push(vmId)
+                didDoc.capabilityInvocation.push(vmId)
+                didDoc.capabilityDelegation.push(vmId)
+          
+                return didDoc
             } else {
                 throw new Error('No DID doc found to update')
             }
@@ -833,25 +880,30 @@ export default {
 
         resolve(){
             try{
-                this.resolveDID()
+                this.didDoc = this.resolveDID(this.did)
                 this.loadAllBalances()
             }catch(e){
                 console.log(3)
                 this.notifyError(e.message)
             }
         },
-        resolveDID(){
-            if(!this.did) {
+        resolveDID(didId = this.did){
+            if(!didId) {
                     throw new Error('Did must be passed to resolve')
                 }
-            const didDocStr = localStorage.getItem(this.did)
+            const didDocStr = localStorage.getItem(didId)
             if(!didDocStr){
-                throw new Error('DID is not registered')
+                console.error('DID is not registered ' + didId)
+                return null;
             }
             const didDoc  = JSON.parse(didDocStr)
-            this.didDoc = didDoc
+
+            
+            // this.didDoc = didDoc
             //this.signedDidDoc = didDoc;
             this.notifySuccess('DID resolved successfully')
+
+            return didDoc
             
         }
     },
