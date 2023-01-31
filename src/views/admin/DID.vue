@@ -92,7 +92,7 @@
                 <img src="../../assets/did-score/DODO.png" width="200" height="50"/>
             </div>
             <div class="input-group col-sm-5" style="float:right">
-                <button  class="btn btn-link button-save"  v-if="isEditing"  @click="updateDID()">Save Changes</button>                    
+                <button  class="btn btn-link button-save"  v-if="showSaveButton"  @click="saveChanges()">Save Changes</button>                    
 
                 <input type="text" class="form-control" placeholder="blockchain wallet address" v-model="walletAddress.address"  disabled/>
                 <button class="btn btn-outline-primary" @click="openWalletPopup()">
@@ -282,7 +282,7 @@
 
 <script>
 import Messages from "../../utils/messages/admin/en";
-
+import Web3 from 'web3'
 import loadweb3 from "../../mixins/getWeb3";
 import { HypersignDID } from 'hs-ssi-sdk';
 import HfPopUp from "../../components/elements/HfPopUp.vue"
@@ -291,12 +291,17 @@ import {
 } from "../../mixins/fieldValidationMixin.js";
 import notificationMixins from "../../mixins/notificationMixins";
 import M from "minimatch";
+import { constants } from "buffer";
 const Moralis = require('moralis').default;
 const { EvmChain } = require('@moralisweb3/common-evm-utils');
+const crypto = require('crypto');
+const createKeccakHash = require('keccak')
 export default {
     components:{HfPopUp},
     data(){
-        return {   
+        return {  
+            showSaveButton: false,
+            hashAlgo: 'sha256', 
             moralisAPIKey: "7VaD6UFyu5cFAE3A7uJrIsUahL9RDrJmZtZgcBMP8HunQ0WmCdzX2WKH0MTydGuw",         
             chainIdChainMap: {
                 "1": {
@@ -349,7 +354,38 @@ export default {
         }
     },
 
+    watch: {
+    // whenever question changes, this function will run
+    didDoc: {
+            handler(newValue, oldValue) {
+                // console.log({
+                //     newValue: this.hashData(newValue),
+                //     oldValue: this.hashData(oldValue)
+                // })
+                if(Object.keys(oldValue).length <= 0){
+                    return ;
+                }
+
+                this.showSaveButton = true;
+
+            },
+            deep: true
+        }
+    },
+
     computed: {
+
+        isDidDocEmpty(){
+            console.log(Object.keys(this.didDoc).length);
+            if(Object.keys(this.didDoc).length <= 0){
+                return true
+            } else  return false
+        },
+
+        hashDIDDOC(){
+            return  this.hashData(this.didDoc)
+        },
+        
         totalBalance(){
             if(this.walletsPortfolio.length > 0){
                 let val = 0
@@ -380,6 +416,19 @@ export default {
         });
     },
     methods: {
+        hashData(data){
+            return crypto.createHash(this.hashAlgo).update(data).digest("hex")
+        },
+        hasSomethingChanged(){
+
+            const newDID = this.hashData(this.didDoc)
+            const oldDID = this.hashDIDDOC;
+            if(newDID === oldDID){
+                return false
+            }
+
+            return  true;
+        },
         async fetchTokenPrice(tokenAddress, chain){
             const address = tokenAddress;
             
@@ -554,18 +603,34 @@ export default {
             }
         },
         async ok(chainId){
+            console.log({chainId});
             this.web3 = await loadweb3(chainId)        
             const accounts  = await this.web3.eth.getAccounts();
             
             
             console.log('inside ok')
             if(!this.isEditing){
+                // if(!this.isDidDocEmpty){
+                //     let text = "Account is alreay connect, do you want to refresh and reconnect?";
+                //     if (confirm(text) == true) {
+                //         this.didDoc = "";
+                //         this.did = "";
+                //             this.walletAddress = {
+                //                 address: "",
+                //                 chainId: ""
+                //             }
+                //         return;
+                //     } 
+                // }
+
                 this.walletAddress = {
                     address: "",
                     chainId: ""
                 }
                 this.walletAddress.address = accounts[0]
                 this.walletAddress.chainId = `${chainId}`
+                
+
             } else {
                 this.walletAddressEdit = {
                     address: "",
@@ -576,39 +641,27 @@ export default {
             }
             this.closeWalletPopup()
             await this.sign()
-            this.loadAllBalances()
+            //this.loadAllBalances()
         },
 
         addWallet(){
             this.isEditing = true;
             this.openWalletPopup();
         },
-        async verify(){
+        async verify(message, walletAddress, signature){
 
-            if(!this.walletAddress.address){
-                throw new Error('Wallet address is not set')
-            }
-
-
-            if(!this.didDoc){
-                throw new Error('Signed DID doc is not generated')
-            }
-
-            const parsedSignDidDc = this.didDoc
-            const recoveredWalletAddress = await this.web3.eth.personal.ecRecover(this.didDocString, parsedSignDidDc.proof.proofValue);
+            let  recoveredWalletAddress = await this.web3.eth.personal.ecRecover(message, signature);
+            recoveredWalletAddress = Web3.utils.toChecksumAddress(recoveredWalletAddress)
             console.log({
-                recoveredWall: recoveredWalletAddress.toUpperCase(),
-                actualAddress: this.walletAddress
+                recoveredWalletAddress,
+                walletAddress
             })
 
-            if(recoveredWalletAddress.toUpperCase() === this.walletAddress.address ){
-                alert('true')    
-            } else {
-                alert('false')
+            if(recoveredWalletAddress !== walletAddress){
+                return false
             }
 
-
-            this.success = true;
+            return true
 
         },
 
@@ -648,7 +701,7 @@ export default {
                     // if exists
                     didDoc = didDocResolved;
                     this.didDoc  = didDoc;
-                    this.loadAllBalances()
+                    //this.loadAllBalances()
                     return;
                 } else {
                     // else then generate a new
@@ -733,7 +786,7 @@ export default {
 
             }
         }catch(e){
-                this.isEditing = false
+                this.clear()
                 this.notifyErr(e.message)
             }
         },
@@ -840,13 +893,16 @@ export default {
                 const didDocStr = localStorage.getItem(this.did)
                 if(didDocStr){
                     return this.updateDID()
-                }
+                } 
 
-                
                 // TODO
                 // verify all proofValues before storing...
+                // this.didDoc.proof.forEach(e => {
+                //     const verified = await this.verify(this.didDocString, walletAddress, sig)
+                // })
+
                 
-                localStorage.setItem(this.did, JSON.stringify(this.didDoc))
+                localStorage.setItem(this.did, JSON.stringify(this.didDoc,  null, 2))
                 this.notifySuccess('Successfully created')
                 
             }catch(e){
@@ -855,11 +911,73 @@ export default {
             
         },
 
-        updateDID(){
+        async saveChanges(){
             try{
                 if(!this.did){
                     throw new Error('No DID to update')
                 }
+                const didDocResolved = this.resolveDID(this.did)
+
+                if(didDocResolved){
+                  // if exists
+                  const allWallets =  didDocResolved.verificationMethod.map(x => x.blockchainAccountId);
+
+                  const t = allWallets.find(x => x.indexOf(this.walletAddress.address) > 0)
+                  if(!t){
+                    this.isEditing = false;
+                    throw new Error(`Connect either of these accounts to save ` + allWallets.toString())
+                  }
+
+
+                  // Get the signature 
+                  const message = JSON.stringify(this.didDoc, null, 2)
+                  const sig = await this.web3.eth.personal.sign(
+                    message, this.walletAddress.address
+                  )
+                  // verify the signateur
+
+                  // Update the dID
+                  this.updateDID(sig, this.walletAddress.address, message);
+
+                  return;
+                } else {
+                    // else then generate a new
+                    console.log('Could not resolve the DID')
+                    
+                }
+
+
+            }catch(e){
+                this.notifyErr(e.message)
+
+            }
+            
+        },
+        async updateDID(sig = '', walletAddress = '', message=''){
+            try{
+                if(!this.did){
+                    throw new Error('No DID to update')
+                }
+
+                
+                if(sig  && walletAddress){
+                    // const recoveredWalletAddress = await this.web3.eth.personal.ecRecover(this.didDocString, sig);
+                    // console.log({
+                    //     recoveredWalletAddress: Web3.utils.toChecksumAddress(recoveredWalletAddress), 
+                    //     walletAddress
+                    // })
+
+                    // if(recoveredWalletAddress !== walletAddress){
+                    //     throw new Error('Invaild signature')
+                    // }
+
+                    const verified = await this.verify(message, walletAddress, sig)
+
+                    if(!verified){
+                        throw new Error('Invaild signature')
+                    }
+                }
+
 
                 const didDocString = localStorage.getItem(this.did);
                 if(!didDocString){
@@ -870,21 +988,41 @@ export default {
                 localStorage.removeItem(this.did);
                 localStorage.setItem(this.did, JSON.stringify(this.didDoc))
                 this.notifySuccess('Successfully updated')
-                this.isEditing = false
+                this.clear()
     
             }catch(e){
-                this.notifyError(e.message)
+                this.notifyErr(e.message)
             }
-            
+        },
+
+        clear(){
+            this.isEditing = false
+                this.showSaveButton = false
         },
 
         resolve(){
             try{
-                this.didDoc = this.resolveDID(this.did)
-                this.loadAllBalances()
+
+                if(!this.did){
+                    throw new Error('DID must be passed')
+                }
+
+                if(!this.did.startsWith('did:hid:')){
+                    throw new Error('Enter a valid did')
+                }
+
+                const didDoc = this.resolveDID(this.did)
+                if(didDoc){
+                    this.didDoc = didDoc;
+                    //this.loadAllBalances()
+                } else {
+                    
+                    throw new Error('Could not resolve the DID ' + this.did )
+                }
+                
             }catch(e){
                 console.log(3)
-                this.notifyError(e.message)
+                this.notifyErr(e.message);
             }
         },
         resolveDID(didId = this.did){
