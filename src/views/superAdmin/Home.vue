@@ -327,7 +327,6 @@ import config from "../../config";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
-import Datepicker from "vuejs-datetimepicker";
 import { isValidURL,isFloat } from "../../mixins/fieldValidationMixin";
 import dayjs from "dayjs";
 import HfButtons from "../../components/elements/HfButtons.vue"
@@ -336,7 +335,7 @@ import HfTable from "../../components/elements/HfTable.vue"
 export default {
   components: {
     Loading,
-    Datepicker,
+    
     HfButtons,
     HfPopUp,
     HfTable
