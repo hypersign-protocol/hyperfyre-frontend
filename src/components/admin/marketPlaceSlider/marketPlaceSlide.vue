@@ -764,7 +764,13 @@ export default {
         const contract = new web3.eth.Contract(abi, address);
         const getApprovalContract = new web3.eth.Contract(erc20ABI, depositToken)
         const maxApprove = getMaxApprove()
-        const approval = await getApprovalContract.methods.approve(address, maxApprove).send({ from: this.accounts[0] })        
+
+        // Ref: https://stackoverflow.com/questions/68926306/how-to-avoid-this-gas-fee-has-been-suggested-by-message-in-metamask-using-web3
+        const approval = await getApprovalContract.methods.approve(address, maxApprove).send({ 
+          from: this.accounts[0],
+          maxPriorityFeePerGas: null,
+          maxFeePerGas: null
+         })        
         if (approval.status !== true) {
           return this.notifyErr('Not Approved')
         }
@@ -773,7 +779,11 @@ export default {
           ipfsHash,
           depositToken,
           tokenBalance.toString()
-        ).send({ from: this.accounts[0] })
+        ).send({ 
+          from: this.accounts[0],
+          maxPriorityFeePerGas: null,
+          maxFeePerGas: null
+        })
         const oldTreeId = await contract.methods.numTrees().call()        
         const returnOldTreeId = Number(oldTreeId) + 1
         return returnOldTreeId

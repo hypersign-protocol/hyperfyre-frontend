@@ -290,7 +290,11 @@ export default {
               amountInWei,
               getProofFromApi
             )
-            .send({ from: this.accounts[0] });          
+            .send({ 
+              from: this.accounts[0], 
+              maxPriorityFeePerGas: null,
+              maxFeePerGas: null  
+            });          
           if (withDrawToken.status === true) {
             this.notifySuccess(
               "Reward claimed successfully! check your wallet"
