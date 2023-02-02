@@ -968,9 +968,9 @@ export default {
       this.isProjectEditing = true;
       this.project = { ...project };
       this.project.fromDate = dayjs(project.fromDate).format(
-        "YYYY-MM-DD hh:mm:ss"
+        "YYYY-MM-DD HH:mm:ss"
       );
-      this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
+      this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD HH:mm:ss");
 
       // eventBus.$emit("sendProject", this.project);
       // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE

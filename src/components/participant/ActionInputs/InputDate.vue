@@ -21,8 +21,17 @@
 			<b-card-body class="user-details">
 				<b-row>
 					<b-col cols="12" sm="12" md="12">
-						<div class="follow">
-							<b-form-input type="date" :placeholder="data.placeHolder" v-model="data.value" :disabled="done" :required="data.isManadatory"></b-form-input>
+							<date-time-picker
+							v-model="data.value"
+							:clear-button="true"
+							:close-button="true"
+							empty-value=""
+							:today-button="true"
+							format="DDDD"
+							:time-picker="false"
+							:disabled="done"
+							:required="data.isManadatory"
+							></date-time-picker>
 						</div>
 					</b-col>
 				</b-row>
@@ -36,6 +45,7 @@
 	</b-card>
 </template>
 <style scoped>
+@import url("../../../assets/css/participant-side-datetime-override.css");
 .center{
   display: block; margin-left: auto;margin-right: auto
 }

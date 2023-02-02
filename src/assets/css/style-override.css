@@ -1,0 +1,12 @@
+.weekday__row {    
+    color: rgb(241, 179, 25);    
+}
+.datetime-picker__button{
+    border-radius: 5px;
+    width: 100%;
+    background: #fff;
+}
+.datetime-picker-main {    
+    width: 100%;
+    z-index: 10;
+}
