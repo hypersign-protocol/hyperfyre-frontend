@@ -23,7 +23,7 @@ import {
   VeLoading,
   VeLocale,
 } from "vue-easytable"; // import VUE EASY TABLE
-
+import DateTimePicker from 'vue-vanilla-datetime-picker';
 import VueSidebarMenu from "vue-sidebar-menu";
 import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 import VueMeta from 'vue-meta';
@@ -47,7 +47,7 @@ Vue.use(VeTable);
 Vue.use(VePagination);
 Vue.use(VeIcon);
 Vue.use(VeLoading);
-
+Vue.component('date-time-picker', DateTimePicker);
 Vue.prototype.$veLoading = VeLoading;
 Vue.prototype.$veLocale = VeLocale;
 

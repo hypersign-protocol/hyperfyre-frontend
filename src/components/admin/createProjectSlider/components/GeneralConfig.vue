@@ -62,15 +62,6 @@
     
     
 }
-.datetime-picker input{
-        background-color: red !important;
-        min-width: 0px !important;
-}
-.datetime-picker input#tj-datetime-input{
-    display: none;
-    border: none !important;
-    min-width: none !important;
-}
 
 .slight-left-margin {
   margin-left: 2px;
@@ -153,14 +144,15 @@
             </div>
             
             <div class="col-lg-9 col-md-9 px-0 datepicker">
-
-         
-                <datepicker 
-                    v-model="project.fromDate"
-                    name="fromDate"
-                    format="YYYY-MM-DD h:i:s" 
-
-                   />
+              <date-time-picker 
+                v-model="project.fromDate"
+                :clear-button="true"
+                :close-button="true"
+                empty-value=""
+                :today-button="true"
+                :time-picker="true" 
+                :hour-time="24"     
+              ></date-time-picker>
                    
             </div>  
             
@@ -173,12 +165,14 @@
                 <tool-tips infoMessage="End date time of the event"></tool-tips><label for="endDate" class="col-form-label">End Date<span style="color: red">*</span>: </label>
             </div>
             <div class="col-lg-9 col-md-9 px-0">
-                <Datepicker 
-                class="datepicker"
-                    v-model="project.toDate"
-                    name="toDate"
-                    format="YYYY-MM-DD h:i:s" 
-                />
+                <date-time-picker                 
+                  v-model="project.toDate"
+                  :clear-button="true"
+                  :close-button="true"
+                  empty-value=""
+                  :today-button="true"
+                  :hour-time="24" 
+                ></date-time-picker>
             </div>  
     </div>
 
@@ -240,7 +234,6 @@
 
 <script>
 import config from "../../../../config"
-import Datepicker from 'vuejs-datetimepicker'
 import notificationMixins from "../../../../mixins/notificationMixins"
 import Messages from "../../../../utils/messages/admin/en";
 import ToolTips from "../../../basic/toolTips.vue";
@@ -249,7 +242,7 @@ import HfSelectDropDown from "../../../elements/HfSelectDropDown.vue"
 import EventBus from "../../../../eventBus"
 export default {
   name: "GeneralConfig",
-  components: {Datepicker, ToolTips, HfButtons, HfSelectDropDown},
+  components: {ToolTips, HfButtons, HfSelectDropDown},
   computed:{
 buttonThemeCss() {
       return {

@@ -275,6 +275,10 @@ export default {
   },
 };
 </script>
+<style>
+@import "../node_modules/vue-vanilla-datetime-picker/dist/DateTimePicker.css";
+@import url("./assets/css/style-override.css");
+</style>
 <style scoped>
 .logo {
   /* width: 144px; */
