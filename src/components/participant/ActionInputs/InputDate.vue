@@ -26,9 +26,9 @@
 							:clear-button="true"
 							:close-button="true"
 							empty-value=""
-							:today-button="true"
-							format="DDDD"
-							:time-picker="false"
+							format="DDDD HH:mm"
+							:today-button="true"							
+							:time-picker="true"
 							:disabled="done"
 							:required="data.isManadatory"
 							></date-time-picker>
@@ -53,6 +53,7 @@
 
 <script>
 import config from "../../../config.js";
+import dayjs from "dayjs"
 import eventBus from "../../../eventBus.js";
 import {  isDate } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
@@ -90,7 +91,12 @@ computed:{
 			value: ''
 		}
 	},
-	mounted() {
+	mounted() {		
+		if(this.data.value !== "" && dayjs(this.data.value).format('YYYY-MM-DD')){			
+			this.data.value = dayjs(this.data.value).format(
+        "YYYY-MM-DD HH:mm:ss"
+      	);
+		}
 		eventBus.$on(`disableInput${this.data._id}`, this.disableInput)
 	},
 	methods: {
