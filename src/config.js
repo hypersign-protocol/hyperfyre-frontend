@@ -13,6 +13,9 @@ const config = {
         headerTextColor: process.env.VUE_APP_HEADER_TEXT_COLOR || "#212529",
         themeBgColor: process.env.VUE_APP_THEME_BACKGROUND || "rgb(54, 55, 64)"
     },
+    banner: {
+        bannersize: process.env.VUE_APP_CREATE_EVENT_BANNER_SIZE_MAX || 400000,
+    },
     recaptchaSiteKey: process.env.VUE_APP_RECAPTCHA_SITE_KEY,
     webWalletAddress: urlSanitizer(process.env.VUE_APP_WEBWALLET_URL, false),
     mobileWalletAddress: urlSanitizer(process.env.VUE_APP_MOBILEWALLET_URL, false),
@@ -38,8 +41,8 @@ const config = {
     verifierBot: {
         TELEGRAM: process.env.VUE_APP_TELEGRAM_VERIFIER_BOT
     },
-    moopay:{
-        payment_url:process.env.VUE_APP_MOOPAY_PAYMENT_URL,
+    moopay: {
+        payment_url: process.env.VUE_APP_MOOPAY_PAYMENT_URL,
     },
 }
 
