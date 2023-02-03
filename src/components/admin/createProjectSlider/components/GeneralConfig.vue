@@ -137,11 +137,10 @@ input.largerCheckbox {
 
     <div class="row g-3 align-items-center w-100 mt-4">
       <div class="col-lg-3 col-md-3 text-left">
-        <tool-tips infoMessage="Url of banner image (Maximum size 400kb)"></tool-tips><label for="logoUrl" class="col-form-label">Banner
-          URL<span style="color: red">*</span>: </label>
+        <tool-tips infoMessage="Banner image (Maximum size 400kb)"></tool-tips><label for="logoUrl" class="col-form-label">Banner<span style="color: red">*</span>: </label>
       </div>
       <div class="col-lg-9 col-md-9 px-0" style="display: flex;">
-        <input v-model="project.logoUrl" type="text" placeholder="of aspect ratio 16:9 or 4:3 (Maximum size 400kb)" id="logoUrl" :disabled="isDisabled" 
+        <input v-model="project.logoUrl" type="text" placeholder="Image of aspect ratio 16:9 or 4:3 (Maximum size 400kb)" id="logoUrl" :disabled="true" 
           class="form-control w-100">
           <input type="file" ref="file" accept="image/jpeg, image/png" hidden>
 
@@ -266,7 +265,6 @@ export default {
   },
   data() {
     return {
-      isDisabled:false,
       idx: null,
       flash: null,
       isCreate: true,
@@ -349,7 +347,6 @@ export default {
             }
             image.width=imageWidth
             image.height=imageHeight
-            this.isDisabled=true
             this.project.logoUrl=dataUrl
 
           }

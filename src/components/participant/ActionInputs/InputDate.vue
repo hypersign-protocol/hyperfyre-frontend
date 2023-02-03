@@ -31,8 +31,7 @@
 							:time-picker="true"
 							:disabled="done"
 							:required="data.isManadatory"
-							></date-time-picker>
-						</div>
+							></date-time-picker>						
 					</b-col>
 				</b-row>
 				<b-row v-if="!done">
@@ -52,7 +51,6 @@
 </style>
 
 <script>
-import config from "../../../config.js";
 import dayjs from "dayjs"
 import eventBus from "../../../eventBus.js";
 import {  isDate } from "../../../mixins/fieldValidationMixin";
@@ -80,8 +78,8 @@ export default {
 computed:{
  buttonThemeCss() {
       return {
-		  '--button-bg-color': this.themeData.buttonBGColor,
-		  '--button-text-color': this.themeData.buttonTextColor
+		'--button-bg-color': this.themeData.buttonBGColor,
+		'--button-text-color': this.themeData.buttonTextColor,
       }
      }
   },
@@ -94,8 +92,7 @@ computed:{
 	mounted() {		
 		if(this.data.value !== "" && dayjs(this.data.value).format('YYYY-MM-DD')){			
 			this.data.value = dayjs(this.data.value).format(
-        "YYYY-MM-DD HH:mm:ss"
-      	);
+        "YYYY-MM-DD HH:mm:ss")
 		}
 		eventBus.$on(`disableInput${this.data._id}`, this.disableInput)
 	},

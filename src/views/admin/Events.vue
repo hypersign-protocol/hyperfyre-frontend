@@ -1038,14 +1038,14 @@ export default {
           this.project.projectName + " copy " + Date.now();
         this.project.slug = "";
         this.project.investorsCount = 0;
-        let date = new Date()
+        let date = new Date(project.toDate)
         date.setDate(date.getDate() + 1)
         project.toDate = date.toISOString()
       }
       this.project.fromDate = dayjs(project.fromDate).format(
-        "YYYY-MM-DD hh:mm:ss"
+        "YYYY-MM-DD HH:mm:ss"
       );
-      this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
+      this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD HH:mm:ss");
 
       // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
       this.project.social = {
@@ -1358,7 +1358,8 @@ export default {
         if (this.isProjectEditing) {
           method = "PUT";
         }
-        const toDate= this.project.toDate 
+        const toDate= this.project.toDate
+        const fromDate = this.project.fromDate 
         this.project.toDate = new Date(this.project.toDate).toISOString();
         this.project.fromDate = new Date(this.project.fromDate).toISOString();
         this.project.themeColor = this.themeColor.trim().length
@@ -1381,6 +1382,7 @@ export default {
           header: headers,
         });
         this.project.toDate=toDate;
+        this.project.fromDate = fromDate
 
         /// Refreshing the temporary list other wise duplicate actions were showing
         // see issue #1346 & #1389      
