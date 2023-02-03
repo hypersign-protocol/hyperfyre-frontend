@@ -1038,7 +1038,7 @@ export default {
           this.project.projectName + " copy " + Date.now();
         this.project.slug = "";
         this.project.investorsCount = 0;
-        let date = new Date()
+        let date = new Date(project.toDate)
         date.setDate(date.getDate() + 1)
         project.toDate = date.toISOString()
       }

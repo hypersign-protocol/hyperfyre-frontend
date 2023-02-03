@@ -258,6 +258,7 @@ import HfSearchBox from "../../components/elements/HfSearchBox.vue"
 import HfPopUp from "../../components/elements/HfPopUp.vue"
 import HfSelectDropDown from "../../components/elements/HfSelectDropDown.vue";
 import HfPageMessage from '../../components/elements/HfPageMessage.vue';
+import dayjs from "dayjs"
 export default {
   name: "Investor",
   components: { 
@@ -440,7 +441,6 @@ computed:{
       this.$root.$emit('modal-show')
     },
     parseActionValue(action) {
-      console.log(action)
       switch (action.type) {
         case "DISCORD_JOIN":
         case "TELEGRAM_JOIN":
@@ -489,7 +489,15 @@ computed:{
             valueToShow[attr.fieldName] = attr.fieldValue        
           });          
           return JSON.stringify(valueToShow);        
-        }    
+        }
+        case "INPUT_DATE":{          
+          let dateToConvert;
+          if(action.value !== "" && dayjs(action.value).format('YYYY-MM-DD'))
+          {
+            dateToConvert = dayjs(action.value).format("dddd MMMM-DD YYYY HH:mm")
+          } 
+          return dateToConvert
+          }
         default:
           return action.value;
       }
