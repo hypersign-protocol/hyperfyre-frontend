@@ -1019,8 +1019,7 @@ export default {
     },
 
     openPreview() {
-      this.project.actions = this.eventActionList;
-      // console.log(this.project);
+      this.project.actions = this.eventActionList;      
       this.$root.$emit("openPreview");
     },
 
@@ -1038,15 +1037,14 @@ export default {
           this.project.projectName + " copy " + Date.now();
         this.project.slug = "";
         this.project.investorsCount = 0;
-        let date = new Date(project.toDate)
+        let date = new Date()
         date.setDate(date.getDate() + 1)
         project.toDate = date.toISOString()
       }
       this.project.fromDate = dayjs(project.fromDate).format(
         "YYYY-MM-DD HH:mm:ss"
       );
-      this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD HH:mm:ss");
-
+      this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD HH:mm:ss");      
       // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
       this.project.social = {
         twitter: {
