@@ -140,13 +140,13 @@ input.largerCheckbox {
         <tool-tips infoMessage="Url of banner image"></tool-tips><label for="logoUrl" class="col-form-label">Banner
           URL<span style="color: red">*</span>: </label>
       </div>
-      <div class="col-lg-7 col-md-7 px-0">
+      <div class="col-lg-8 col-md-8 px-0">
         <input v-model="project.logoUrl" type="text" placeholder="of size 600x300" id="logoUrl" :disabled="isDisabled" 
           class="form-control w-100">
       </div>
       <input type="file" ref="file" accept="image/gif, 
     image/jpeg, image/png" hidden>
-      <div class="col-lg-2 col-md-2 px-0">
+      <div class="col-lg-1 col-md-1 px-0">
         <hf-buttons name="Select" @executeAction="fileUpload()"
           customClass="btn button-theme slight-left-margin-5"></hf-buttons>
       </div>
