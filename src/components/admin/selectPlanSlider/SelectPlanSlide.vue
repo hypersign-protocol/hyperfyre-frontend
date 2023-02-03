@@ -210,9 +210,6 @@
 <script>
 import config from "../../../config";
 import InputDate from "../../participant/ActionInputs/InputDate.vue";
-import EventActionConfig from "./components/EventActionConfig.vue";
-import GeneralConfig from "./components/GeneralConfig.vue";
-import ReferralConfig from "./components/ReferralConfig.vue";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/admin/en";
 import Loading from "vue-loading-overlay";
@@ -221,9 +218,6 @@ import HfButtons from "../../../components/elements/HfButtons.vue";
 export default {
   name: "CreateProjectSlide",
   components: {
-    GeneralConfig,
-    EventActionConfig,
-    ReferralConfig,
     InputDate,
     Loading,
     HfButtons

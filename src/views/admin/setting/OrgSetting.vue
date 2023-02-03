@@ -82,7 +82,6 @@ import config from "../../../config"
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import Messages from "../../../utils/messages/admin/en"
-import PreviewConfig from "../../../components/admin/createProjectSlider/components/PreviewConfig.vue";
 import notificationMixins from "../../../mixins/notificationMixins";
 import HfButtons from "../../../components/elements/HfButtons.vue"
 import {
@@ -90,7 +89,7 @@ import {
 } from "../../../mixins/fieldValidationMixin";
 export default {
     name: "OrgSetting",
-    components: { Loading, ToolTips, PreviewConfig, HfButtons },
+    components: { Loading, ToolTips, HfButtons },
     computed: {
         buttonThemeCss() {
             return {
