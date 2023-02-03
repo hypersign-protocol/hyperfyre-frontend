@@ -154,30 +154,45 @@ input.largerCheckbox {
 
 
     <div class="row g-3 align-items-center w-100 mt-4">
-      <div class="col-lg-3 col-md-3 text-left">
-        <tool-tips infoMessage="Start date time of the event"></tool-tips><label for="startDate"
-          class="col-form-label">Start Date<span style="color: red">*</span>: </label>
-      </div>
 
-      <div class="col-lg-9 col-md-9 px-0 datepicker">
-        <date-time-picker v-model="project.fromDate" :clear-button="true" :close-button="true" empty-value=""
-          :today-button="true" :time-picker="true" :hour-time="24"></date-time-picker>
-
-      </div>
-
+            <div class="col-lg-3 col-md-3 text-left">
+                <tool-tips infoMessage="Start date time of the event"></tool-tips><label for="startDate" class="col-form-label">Start Date<span style="color: red">*</span>: </label>
+            </div>
+            
+            <div class="col-lg-9 col-md-9 px-0 datepicker">
+              <date-time-picker 
+                v-model="project.fromDate"
+                :clear-button="true"
+                :close-button="true"
+                empty-value=""
+                format="DDDD HH:mm"
+                :today-button="true"
+                :time-picker="true" 
+                :hour-time="24"     
+              ></date-time-picker>
+                   
+            </div>  
+            
     </div>
 
 
 
     <div class="row g-3 align-items-center w-100 mt-4">
-      <div class="col-lg-3 col-md-3 text-left">
-        <tool-tips infoMessage="End date time of the event"></tool-tips><label for="endDate" class="col-form-label">End
-          Date<span style="color: red">*</span>: </label>
-      </div>
-      <div class="col-lg-9 col-md-9 px-0">
-        <date-time-picker v-model="project.toDate" :clear-button="true" :close-button="true" empty-value=""
-          :today-button="true" :hour-time="24"></date-time-picker>
-      </div>
+
+            <div class="col-lg-3 col-md-3 text-left">
+                <tool-tips infoMessage="End date time of the event"></tool-tips><label for="endDate" class="col-form-label">End Date<span style="color: red">*</span>: </label>
+            </div>
+            <div class="col-lg-9 col-md-9 px-0">
+                <date-time-picker                 
+                  v-model="project.toDate"
+                  :clear-button="true"
+                  :close-button="true"
+                  format="DDDD HH:mm"
+                  empty-value=""
+                  :today-button="true"
+                  :hour-time="24" 
+                ></date-time-picker>
+            </div>  
     </div>
 
     <!-- Tile -->
