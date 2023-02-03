@@ -2,6 +2,7 @@
     color: rgb(241, 179, 25);    
 }
 .datetime-picker__button{
+    color:  #495057;;
     border-radius: 5px;
     width: 100%;
     background: #fff;

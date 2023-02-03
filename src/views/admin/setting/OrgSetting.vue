@@ -51,7 +51,7 @@
                                 </label>
                             </div>
                             <div class="col-lg-4 col-md-4 px-0" style="display:flex;">
-                                <input type="text" placeholder="Aspect ratio 16:9 or 4:3 (Maximum size 400kb)" id="name" :disabled="true" class="form-control w-100" />
+                                <input type="text" placeholder="Maximum size 400kb" id="name" :disabled="true" class="form-control w-100" />
                                 <input type="file" ref="file" accept="image/jpeg, image/png" hidden>
 
                                 <hf-buttons name="" @executeAction="fileUpload()"
@@ -248,19 +248,7 @@ export default {
         reader.readAsDataURL(chosenFile)
         reader.onload=e=>{
           dataUrl=e.target.result
-          let image= new Image()
-          image.src=dataUrl
-          image.onload=()=>{            
-            let imageHeight = image.naturalHeight;
-            let imageWidth = image.naturalWidth;
-            const aspect_ratio=imageWidth/imageHeight
-            if(aspect_ratio!==4/3 || aspect_ratio!==16/9){
-              this.notifyWarning(`Ideal banner aspect ratio sholud be 16:9 or 4:3 for better rendering`)
-            }
-            image.width=imageWidth
-            image.height=imageHeight            
-            this.orgSetting.logoPath=dataUrl            
-          }
+          this.orgSetting.logoPath=dataUrl
         }
       });
     },
