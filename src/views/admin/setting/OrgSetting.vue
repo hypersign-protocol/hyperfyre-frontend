@@ -46,12 +46,16 @@
                         </div>
                         <div class="row g-3 align-items-center w-100 mt-4">
                             <div class="text-left col-lg-8 col-md-8 text-left">
-                                <tool-tips infoMessage="Enter logo path"></tool-tips><label for="name"
-                                    class="col-form-label">Logo Path:
+                                <tool-tips infoMessage="Logo (Maximum size 400kb)"></tool-tips><label for="name"
+                                    class="col-form-label">Logo:
                                 </label>
                             </div>
-                            <div class="col-lg-4 col-md-4 px-0">
-                                <input type="text" placeholder="https://app.fyre.hypersign.id/img/Fyre_Small.e094f135.png" id="name" v-model="orgSetting.logoPath" class="form-control w-100" />
+                            <div class="col-lg-4 col-md-4 px-0" style="display:flex;">
+                                <input type="text" placeholder="Aspect ratio 16:9 or 4:3 (Maximum size 400kb)" id="name" :disabled="true" class="form-control w-100" />
+                                <input type="file" ref="file" accept="image/jpeg, image/png" hidden>
+
+                                <hf-buttons name="" @executeAction="fileUpload()"
+                                customClass="btn button-theme slight-left-margin-5 " iconClass="fa fa-upload"></hf-buttons>
                             </div>
                         </div>
                         <div class="row g-3 align-items-center w-100 mt-4" style="float:right; padding-right: 1.5%">
@@ -224,6 +228,42 @@ export default {
         }
     },
     methods: {
+        fileUpload() {            
+      let fileInputElement = this.$refs.file
+      fileInputElement.click()
+      fileInputElement.addEventListener("change", (event) => {        
+        let chosenFile        
+        if(event.dataTransfer===undefined){            
+           chosenFile= event.target.files[0];
+
+        }else{
+          chosenFile=event.dataTransfer.files[0]
+        }
+        // Do something with the chosen file
+        if (chosenFile.size>config.banner.bannersize){
+          return this.notifyErr(`File size should be smaller than ${config.banner.bannersize/1000}kb`)
+        }
+        const reader=new FileReader()
+        let dataUrl
+        reader.readAsDataURL(chosenFile)
+        reader.onload=e=>{
+          dataUrl=e.target.result
+          let image= new Image()
+          image.src=dataUrl
+          image.onload=()=>{            
+            let imageHeight = image.naturalHeight;
+            let imageWidth = image.naturalWidth;
+            const aspect_ratio=imageWidth/imageHeight
+            if(aspect_ratio!==4/3 || aspect_ratio!==16/9){
+              this.notifyWarning(`Ideal banner aspect ratio sholud be 16:9 or 4:3 for better rendering`)
+            }
+            image.width=imageWidth
+            image.height=imageHeight            
+            this.orgSetting.logoPath=dataUrl            
+          }
+        }
+      });
+    },
         checkIfValidHex(hex){
             
             if(hex){
@@ -311,6 +351,9 @@ export default {
     border-collapse: var(--button-bg-color);
     color: var(--button-text-color);
     border: 0;
+}
+.slight-left-margin-5 {
+  margin-left: 5px;
 }
 
 </style>
