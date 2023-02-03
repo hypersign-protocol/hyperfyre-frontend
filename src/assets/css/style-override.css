@@ -5,6 +5,7 @@
     border-radius: 5px;
     width: 100%;
     background: #fff;
+    border: 1px solid #ced4da;
 }
 .datetime-picker-main {    
     z-index: 10;
