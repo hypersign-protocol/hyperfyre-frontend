@@ -137,19 +137,18 @@ input.largerCheckbox {
 
     <div class="row g-3 align-items-center w-100 mt-4">
       <div class="col-lg-3 col-md-3 text-left">
-        <tool-tips infoMessage="Url of banner image"></tool-tips><label for="logoUrl" class="col-form-label">Banner
+        <tool-tips infoMessage="Url of banner image (Maximum size 400kb)"></tool-tips><label for="logoUrl" class="col-form-label">Banner
           URL<span style="color: red">*</span>: </label>
       </div>
-      <div class="col-lg-8 col-md-8 px-0">
-        <input v-model="project.logoUrl" type="text" placeholder="of size 600x300" id="logoUrl" :disabled="isDisabled" 
+      <div class="col-lg-9 col-md-9 px-0" style="display: flex;">
+        <input v-model="project.logoUrl" type="text" placeholder="of aspect ratio 16:9 or 4:3 (Maximum size 400kb)" id="logoUrl" :disabled="isDisabled" 
           class="form-control w-100">
+          <input type="file" ref="file" accept="image/jpeg, image/png" hidden>
+
+          <hf-buttons name="" @executeAction="fileUpload()"
+          customClass="btn button-theme slight-left-margin-5 " iconClass="fa fa-upload"></hf-buttons>
       </div>
-      <input type="file" ref="file" accept="image/gif, 
-    image/jpeg, image/png" hidden>
-      <div class="col-lg-1 col-md-1 px-0">
-        <hf-buttons name="Select" @executeAction="fileUpload()"
-          customClass="btn button-theme slight-left-margin-5"></hf-buttons>
-      </div>
+      
     </div>
 
 
