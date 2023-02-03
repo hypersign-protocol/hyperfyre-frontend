@@ -87,6 +87,12 @@ export default {
           exactPath: true,
         },
         {
+          href: "/admin/marketplace",
+          title: "Marketplace",
+          icon: "fas fa-store",
+          exactPath: true,
+        },
+        {
           title: "Settings",
           icon: "fas fa-cog",
           badge: {
@@ -121,13 +127,7 @@ export default {
               exactPath: true,
             }
           ]
-        },
-         {
-          href: "/admin/marketplace",
-          title: "Marketplace",
-          icon: "fas fa-store",
-          exactPath: true,
-        },
+        },         
         {
           href: "/admin/login",
           title: "Logout",
