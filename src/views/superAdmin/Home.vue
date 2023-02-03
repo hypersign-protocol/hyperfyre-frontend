@@ -132,6 +132,7 @@
                   :close-button="true"
                   empty-value=""   
                   :time-picker="true" 
+                  format="DDDD HH:mm"
                   :hour-time="24"
                 />
               </div>
