@@ -50,12 +50,13 @@
                                     class="col-form-label">Logo:
                                 </label>
                             </div>
-                            <div class="col-lg-4 col-md-4 px-0" style="display:flex;">
-                                <input type="text" placeholder="Maximum size 400kb" id="name" :disabled="true" class="form-control w-100" />
-                                <input type="file" ref="file" accept="image/jpeg, image/png" hidden>
-
-                                <hf-buttons name="" @executeAction="fileUpload()"
-                                customClass="btn button-theme slight-left-margin-5 " iconClass="fa fa-upload"></hf-buttons>
+                            <div class="col-lg-4 col-md-4 px-0">
+                                <div style="display:flex;">
+                                <div placeholder="Maximum size 400kb" id="name" class="form-control w-100">
+                                <input type="file" id="file" accept="image/jpeg, image/png" @change="fileUpload">
+                            </div>    
+                            </div>
+                            <a href="#" style="float:right;color:#495057" @click.prevent="preview">Preview</a>                               
                             </div>
                         </div>
                         <div class="row g-3 align-items-center w-100 mt-4" style="float:right; padding-right: 1.5%">
@@ -228,30 +229,34 @@ export default {
         }
     },
     methods: {
-        fileUpload() {            
-      let fileInputElement = this.$refs.file
-      fileInputElement.click()
-      fileInputElement.addEventListener("change", (event) => {        
-        let chosenFile        
-        if(event.dataTransfer===undefined){            
-           chosenFile= event.target.files[0];
-
-        }else{
-          chosenFile=event.dataTransfer.files[0]
-        }
-        // Do something with the chosen file
-        if (chosenFile.size>config.banner.bannersize){
-          return this.notifyErr(`File size should be smaller than ${config.banner.bannersize/1000}kb`)
-        }
-        const reader=new FileReader()
-        let dataUrl
-        reader.readAsDataURL(chosenFile)
+    fileUpload(e) {                 
+    var file
+        if((file = e.target.files[0])) {
+        if(file.size>config.banner.bannersize)
+        {
+        return this.notifyErr('File size is more than 400kb')
+        }        
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        // let dataUrl
         reader.onload=e=>{
-          dataUrl=e.target.result
-          this.orgSetting.logoPath=dataUrl
+            this.orgSetting.logoPath= e.target.result
         }
-      });
+    }    
+
+       
     },
+    preview(){    
+    this.$swal.fire({
+    position:'center',
+    title: 'Preview',
+    imageUrl: this.orgSetting.logoPath,
+    imageWidth: 400,
+    imageHeight: 300,
+    imageAlt: 'Custom image',
+    confirmButtonColor:'rgb(241, 179, 25)',
+})
+  },
         checkIfValidHex(hex){
             
             if(hex){
@@ -334,6 +339,9 @@ export default {
 </script>
 
 <style scoped>
+.uploading-image{
+     display:flex;
+   }
 .button-theme {
     background-color: var(--button-bg-color);
     border-collapse: var(--button-bg-color);

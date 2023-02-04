@@ -139,14 +139,24 @@ input.largerCheckbox {
       <div class="col-lg-3 col-md-3 text-left">
         <tool-tips infoMessage="Banner image (Maximum size 400kb)"></tool-tips><label for="logoUrl" class="col-form-label">Banner<span style="color: red">*</span>: </label>
       </div>
-      <div class="col-lg-9 col-md-9 px-0" style="display: flex;">
-        <input v-model="project.logoUrl" type="text" placeholder="Image of aspect ratio 16:9 or 4:3 (Maximum size 400kb)" id="logoUrl" :disabled="true" 
-          class="form-control w-100">
-          <input type="file" ref="file" accept="image/jpeg, image/png" hidden>
-
-          <hf-buttons name="" @executeAction="fileUpload()"
-          customClass="btn button-theme slight-left-margin-5 " iconClass="fa fa-upload"></hf-buttons>
-      </div>
+      <div class="col-lg-9 col-md-9 px-0" style="display: flex">
+        <div
+          v-model="project.logoUrl"
+          type="text"
+          placeholder=""
+          id="logoUrl"
+          :disabled="true"
+          class="form-control w-100"
+        >
+          <input
+            type="file"
+            id="file"
+            @change="fileUploadForBanner"
+            accept="image/jpeg, image/png"
+          />
+          <span style="float: right">Image of aspect ratio 16:9 or 4:3</span>
+        </div>
+     </div>
       
     </div>
 
@@ -316,44 +326,33 @@ export default {
 
   },
   methods: {
-    fileUpload() {
-      let fileInputElement = this.$refs.file
-      fileInputElement.click()
-      fileInputElement.addEventListener("change", (event) => {
-        let chosenFile
-        if(event.dataTransfer===undefined){
-           chosenFile= event.target.files[0];
-
-        }else{
-          chosenFile=event.dataTransfer.files[0]
-        }
-        // Do something with the chosen file
-        if (chosenFile.size>config.banner.bannersize){
-          return this.notifyErr(`File size should be smaller than ${config.banner.bannersize/1000}kb`)
-        }
-        const reader=new FileReader()
-        let dataUrl
-        reader.readAsDataURL(chosenFile)
-        reader.onload=e=>{
-          dataUrl=e.target.result
-          let image= new Image()
-          image.src=dataUrl
-          image.onload=()=>{
-            let imageHeight = image.naturalHeight;
-            let imageWidth = image.naturalWidth;
-            const aspect_ratio=imageWidth/imageHeight
-            if(aspect_ratio!==4/3 || aspect_ratio!==16/9){
-              this.notifyWarning(`Ideal banner aspect ratio sholud be 16:9 or 4:3 for better rendering`)
-            }
-            image.width=imageWidth
-            image.height=imageHeight
-            this.project.logoUrl=dataUrl
-
-          }
-
-        }
-      });
-    },
+    fileUploadForBanner(e) {
+    let file;
+    if ((file = e.target.files[0])) {
+      if (file.size > config.banner.bannersize) {
+      return  this.notifyErr("File size is more than 400kb");
+    }
+    const  reader = new  FileReader();
+    reader.readAsDataURL(file);
+    let  dataUrl;
+    reader.onload = (e) => {
+    dataUrl = e.target.result;
+    let  image = new  Image();
+    image.src = dataUrl;
+    image.onload = () => {
+    let  imageHeight = image.naturalHeight;
+    let  imageWidth = image.naturalWidth;
+    const  aspectRatio = imageWidth / imageHeight;
+    if (aspectRatio != 4 / 3) {
+    this.notifyWarning(`Ideal banner aspect ratio should be 16:9 or 4:3 for better rendering`);
+    }
+    image.height = imageHeight;
+    image.width = imageWidth;
+    this.project.logoUrl = dataUrl;
+    };
+  };
+  }
+},
     getTagText(tagType) {
       const t = this.options.find(x => x.value === tagType)
       return t ? t.text : "";

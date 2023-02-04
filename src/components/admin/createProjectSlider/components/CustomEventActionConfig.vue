@@ -310,8 +310,8 @@ export default {
     },
     placeH() {
       if (
-        this.selected.type != "HYPERLINK_URL" &&
-        this.selected.type != "INFO_TEXT"
+        (this.selected.type != "HYPERLINK_URL" &&
+        this.selected.type != "INFO_TEXT" && this.selected.type != "INPUT_DATE") 
       ) {
         return true;
       } else {
