@@ -286,7 +286,7 @@ i {
       >
         <div>
           <b-card
-            :title="truncate1(project.projectName, 25)"
+            :title="truncate1(project.projectName, 20)"
             :img-src="project.logoUrl"
             img-alt="Image"
             img-top
@@ -307,7 +307,7 @@ i {
             >
               <li data-toggle="tooltip" data-placement="bottom" title="EventId">
                 <i class="far fa-id-card"></i
-                ><span class="card-title">{{ project._id }}</span>
+                ><span class="card-title">{{ truncate1(project._id,20) }}</span>
                 <span @click="copy(project._id, 'EventId')" class="copy"
                   ><i class="far fa-copy"></i
                 ></span>
