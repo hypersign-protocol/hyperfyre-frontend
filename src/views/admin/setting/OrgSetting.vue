@@ -339,9 +339,6 @@ export default {
 </script>
 
 <style scoped>
-.uploading-image{
-     display:flex;
-   }
 .button-theme {
     background-color: var(--button-bg-color);
     border-collapse: var(--button-bg-color);
