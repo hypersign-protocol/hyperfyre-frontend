@@ -47,7 +47,7 @@
                         <div class="row g-3 align-items-center w-100 mt-4">
                             <div class="text-left col-lg-8 col-md-8 text-left">
                                 <tool-tips infoMessage="Logo (Maximum size 400kb)"></tool-tips><label for="name"
-                                    class="col-form-label">Logo:
+                                    class="col-form-label pb-4">Logo:
                                 </label>
                             </div>
                             <div class="col-lg-4 col-md-4 px-0">
