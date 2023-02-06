@@ -47,16 +47,17 @@
                         <div class="row g-3 align-items-center w-100 mt-4">
                             <div class="text-left col-lg-8 col-md-8 text-left">
                                 <tool-tips infoMessage="Logo (Maximum size 400kb)"></tool-tips><label for="name"
-                                    class="col-form-label">Logo:
+                                    class="col-form-label pb-4">Logo:
                                 </label>
                             </div>
                             <div class="col-lg-4 col-md-4 px-0">
-                                <div style="display:flex;">
-                                <div placeholder="Maximum size 400kb" id="name" class="form-control w-100">
-                                <input type="file" id="file" accept="image/jpeg, image/png" @change="fileUpload">
-                            </div>    
-                            </div>
-                            <a href="#" style="float:right;color:#495057" @click.prevent="preview">Preview</a>                               
+                                <div style="display:flex;">                                
+                                <input type="file" ref="file" id="file" accept="image/jpeg, image/png" @change="fileUpload" hidden>
+                                <input type="text" class="form-control w-100" :placeholder="fileName!==''?fileName : 'Maximum size 400kb'" :disabled="true">                               
+                             <hf-buttons name="" iconClass="fa fa-upload" @executeAction="uploadBtn"
+                                customClass="btn button-theme slight-left-margin-5"></hf-buttons>                                                                                                                 
+                            </div>  
+                            <a href="#" style="float:right;color:#495057" @click.prevent="preview">Preview</a>  
                             </div>
                         </div>
                         <div class="row g-3 align-items-center w-100 mt-4" style="float:right; padding-right: 1.5%">
@@ -105,6 +106,7 @@ export default {
     },
     data(){
         return{
+            fileName:"",
             orgSetting: {
                 buttonBGColor: "#f1b319",
                 buttonTextColor: "#000000",
@@ -228,9 +230,13 @@ export default {
 
         }
     },
-    methods: {
-    fileUpload(e) {                 
-    var file
+    methods: {      
+    uploadBtn(){
+            this.$refs.file.click();
+        },
+    fileUpload(e) {
+        this.fileName =""                 
+    let file = this.$refs.file.files;     
         if((file = e.target.files[0])) {
         if(file.size>config.banner.bannersize)
         {
@@ -241,10 +247,9 @@ export default {
         // let dataUrl
         reader.onload=e=>{
             this.orgSetting.logoPath= e.target.result
+            this.fileName = file.name   
         }
-    }    
-
-       
+    }               
     },
     preview(){    
     this.$swal.fire({
@@ -329,6 +334,7 @@ export default {
                 this.notifyErr(e)
             } finally {
                 this.isLoading = false;
+                this.fileName = ""
             }
         }
     },

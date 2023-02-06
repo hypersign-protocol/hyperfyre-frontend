@@ -140,24 +140,17 @@ input.largerCheckbox {
         <tool-tips infoMessage="Banner image (Maximum size 400kb)"></tool-tips><label for="logoUrl" class="col-form-label">Banner<span style="color: red">*</span>: </label>
       </div>
       <div class="col-lg-9 col-md-9 px-0" style="display: flex">
-        <div
-          v-model="project.logoUrl"
-          type="text"
-          placeholder=""
-          id="logoUrl"
-          :disabled="true"
-          class="form-control w-100"
-        >
+        <input class="form-control w-100" type="text" disabled :placeholder="project.logoUrl? project.logoUrl :'Image of aspect ratio 16:9 or 4:3'">
           <input
             type="file"
-            id="file"
+            ref="file"
             @change="fileUploadForBanner"
             accept="image/jpeg, image/png"
+            hidden
           />
-          <span style="float: right">Image of aspect ratio 16:9 or 4:3</span>
-        </div>
-     </div>
-      
+     <hf-buttons name="" iconClass="fa fa-upload" @executeAction="uploadBtn"
+            customClass="btn button-theme slight-left-margin-5"></hf-buttons>
+        </div>      
     </div>
 
 
@@ -326,8 +319,11 @@ export default {
 
   },
   methods: {
+    uploadBtn(){
+      this.$refs.file.click();
+    },
     fileUploadForBanner(e) {
-    let file;
+    let file = this.$refs.file.files;
     if ((file = e.target.files[0])) {
       if (file.size > config.banner.bannersize) {
       return  this.notifyErr("File size is more than 400kb");
