@@ -140,10 +140,7 @@ input.largerCheckbox {
         <tool-tips infoMessage="Banner image (Maximum size 400kb)"></tool-tips><label for="logoUrl" class="col-form-label">Banner<span style="color: red">*</span>: </label>
       </div>
       <div class="col-lg-9 col-md-9 px-0" style="display: flex">
-        <div          
-          :disabled="true"
-          class="form-control w-100"
-        >
+        <input class="form-control w-100" type="text" disabled :placeholder="project.logoUrl? project.logoUrl :'Image of aspect ratio 16:9 or 4:3'">
           <input
             type="file"
             ref="file"
@@ -151,8 +148,6 @@ input.largerCheckbox {
             accept="image/jpeg, image/png"
             hidden
           />
-          <span>Image of aspect ratio 16:9 or 4:3</span>          
-     </div>
      <hf-buttons name="" iconClass="fa fa-upload" @executeAction="uploadBtn"
             customClass="btn button-theme slight-left-margin-5"></hf-buttons>
         </div>      

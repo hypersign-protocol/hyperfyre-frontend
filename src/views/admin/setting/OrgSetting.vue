@@ -51,11 +51,9 @@
                                 </label>
                             </div>
                             <div class="col-lg-4 col-md-4 px-0">
-                                <div style="display:flex;">
-                                <div id="name" class="form-control w-100">
+                                <div style="display:flex;">                                
                                 <input type="file" ref="file" id="file" accept="image/jpeg, image/png" @change="fileUpload" hidden>
-                                <span>{{fileName!==''?fileName : 'Maximum size 400kb'}}</span>
-                            </div>    
+                                <input type="text" class="form-control w-100" :placeholder="fileName!==''?fileName : 'Maximum size 400kb'" :disabled="true">                               
                              <hf-buttons name="" iconClass="fa fa-upload" @executeAction="uploadBtn"
                                 customClass="btn button-theme slight-left-margin-5"></hf-buttons>                                                                                                                 
                             </div>  
