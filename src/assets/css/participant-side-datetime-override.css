@@ -1,0 +1,8 @@
+.datetime-picker-main {
+    width: 100%;    
+    position: static;    
+}
+.datetime-picker__button{
+    color: rgb(26 26 26 / 90%);; 
+    height: calc(1.5em + 0.75rem + 2px);
+}

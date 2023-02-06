@@ -126,9 +126,14 @@
                 </label>
               </div>
               <div class="col-lg-6 col-md-9 px-0 py-1 datepicker">
-                <datepicker
+                <date-time-picker
                   v-model='resource.value.expiredAt'
-                  format="YYYY-MM-DD h:i:s"
+                  :clear-button="true"
+                  :close-button="true"
+                  empty-value=""   
+                  :time-picker="true" 
+                  format="DDDD HH:mm"
+                  :hour-time="24"
                 />
               </div>
 
@@ -323,7 +328,6 @@ import config from "../../config";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import notificationMixins from "../../mixins/notificationMixins";
-import Datepicker from "vuejs-datetimepicker";
 import { isValidURL,isFloat } from "../../mixins/fieldValidationMixin";
 import dayjs from "dayjs";
 import HfButtons from "../../components/elements/HfButtons.vue"
@@ -332,7 +336,7 @@ import HfTable from "../../components/elements/HfTable.vue"
 export default {
   components: {
     Loading,
-    Datepicker,
+    
     HfButtons,
     HfPopUp,
     HfTable
@@ -475,7 +479,7 @@ export default {
       this.resources.map(x => {
         if(x.id === id){
             Object.assign(x.value, { ...coupon })
-            if(id === 5) x.value.expiredAt = dayjs(x.value.expiredAt).format("YYYY-MM-DD hh:mm:ss");
+            if(id === 5) x.value.expiredAt = dayjs(x.value.expiredAt).format("YYYY-MM-DD HH:mm:ss");
             return x
         }
       })

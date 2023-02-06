@@ -87,6 +87,12 @@ export default {
           exactPath: true,
         },
         {
+          href: "/admin/marketplace",
+          title: "Marketplace",
+          icon: "fas fa-store",
+          exactPath: true,
+        },
+        {
           title: "Settings",
           icon: "fas fa-cog",
           badge: {
@@ -121,13 +127,7 @@ export default {
               exactPath: true,
             }
           ]
-        },
-         {
-          href: "/admin/marketplace",
-          title: "Marketplace",
-          icon: "fas fa-store",
-          exactPath: true,
-        },
+        },         
         {
           href: "/admin/login",
           title: "Logout",
@@ -275,6 +275,10 @@ export default {
   },
 };
 </script>
+<style>
+@import "../node_modules/vue-vanilla-datetime-picker/dist/DateTimePicker.css";
+@import url("./assets/css/style-override.css");
+</style>
 <style scoped>
 .logo {
   /* width: 144px; */

@@ -21,9 +21,17 @@
 			<b-card-body class="user-details">
 				<b-row>
 					<b-col cols="12" sm="12" md="12">
-						<div class="follow">
-							<b-form-input type="date" :placeholder="data.placeHolder" v-model="data.value" :disabled="done" :required="data.isManadatory"></b-form-input>
-						</div>
+							<date-time-picker
+							v-model="data.value"
+							:clear-button="true"
+							:close-button="true"
+							empty-value=""
+							format="DDDD HH:mm"
+							:today-button="true"							
+							:time-picker="true"
+							:disabled="done"
+							:required="data.isManadatory"
+							></date-time-picker>						
 					</b-col>
 				</b-row>
 				<b-row v-if="!done">
@@ -36,13 +44,14 @@
 	</b-card>
 </template>
 <style scoped>
+@import url("../../../assets/css/participant-side-datetime-override.css");
 .center{
   display: block; margin-left: auto;margin-right: auto
 }
 </style>
 
 <script>
-import config from "../../../config.js";
+import dayjs from "dayjs"
 import eventBus from "../../../eventBus.js";
 import {  isDate } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
@@ -69,8 +78,8 @@ export default {
 computed:{
  buttonThemeCss() {
       return {
-		  '--button-bg-color': this.themeData.buttonBGColor,
-		  '--button-text-color': this.themeData.buttonTextColor
+		'--button-bg-color': this.themeData.buttonBGColor,
+		'--button-text-color': this.themeData.buttonTextColor,
       }
      }
   },
@@ -80,7 +89,11 @@ computed:{
 			value: ''
 		}
 	},
-	mounted() {
+	mounted() {		
+		if(this.data.value !== "" && dayjs(this.data.value).format('YYYY-MM-DD')){			
+			this.data.value = dayjs(this.data.value).format(
+        "YYYY-MM-DD HH:mm:ss")
+		}
 		eventBus.$on(`disableInput${this.data._id}`, this.disableInput)
 	},
 	methods: {

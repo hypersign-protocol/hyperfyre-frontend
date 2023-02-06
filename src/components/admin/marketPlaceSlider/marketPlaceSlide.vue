@@ -224,7 +224,7 @@ allButtons {
                 <label for="placeHolder" class="col-form-label">Total:</label>
               </div>
               <div class="col-lg-6 col-md-6 px-0">
-                <span v-if="feeStructure.fyrePlatformCommision!==''" style="float:right">{{ (getFriendlyValue(feeStructure.totalAmountToDistribute) - getFriendlyValue(feeStructure.fyrePlatformCommision)).toFixed(4)}}
+                <span v-if="feeStructure.fyrePlatformCommision!==''" style="float:right">{{ total}}
                   {{feeStructure.symbol}} Tokens</span>
               </div>
             </div>
@@ -234,7 +234,7 @@ allButtons {
                 <label for="placeHolder" class="col-form-label">Platform Fee:</label>
               </div>
               <div class="col-lg-6 col-md-6 px-0">
-                <span v-if="feeStructure.fyrePlatformCommision!==''" style="float:right">{{getFriendlyValue(feeStructure.fyrePlatformCommision)}}
+                <span v-if="feeStructure.fyrePlatformCommision!==''" style="float:right">{{getPlatformFee}}
                   {{feeStructure.symbol}} Tokens</span>
               </div>
             </div>
@@ -244,7 +244,7 @@ allButtons {
                 <label for="placeHolder" class="col-form-label">Total Payable:</label>
               </div>
               <div class="col-lg-6 col-md-6 px-0">
-                <span v-if="feeStructure.totalAmountToDistribute!==''" style="float:right">{{getFriendlyValue(feeStructure.totalAmountToDistribute)}}
+                <span v-if="feeStructure.totalAmountToDistribute!==''" style="float:right">{{totalPayable(feeStructure.totalAmountToDistribute)}}
                   {{feeStructure.symbol}} Tokens</span>
               </div>
             </div>
@@ -366,7 +366,31 @@ export default {
         '--header-bg-color': config.app.headerBGColor,
         '--header-text-color':config.app.headerTextColor
       }
-  }
+  },
+  getPlatformFee() {   
+    const convertToDecimal = Number(this.feeStructure.fyrePlatformCommision)/Number(10 ** this.feeStructure.decimals)       
+    const roundedFyreCommisson = Number(convertToDecimal).toFixed(4)     
+    return roundedFyreCommisson
+  },
+   totalPayable() {
+    return friendlyValue => {
+    const convertToDecimal = Number(friendlyValue)/Number(10 ** this.feeStructure.decimals)      
+    const rounded = Number(convertToDecimal).toFixed(4)     
+    return rounded
+    }              
+    },
+    total(){    
+      let amountWithCommisson = Number(this.feeStructure.totalAmountToDistribute)/Number(10 **this.feeStructure.decimals)
+      let onlyAmountCommission = Number(this.feeStructure.fyrePlatformCommision)/Number(10 **this.feeStructure.decimals)
+       return (amountWithCommisson-onlyAmountCommission).toFixed(4)      
+    },
+    getRoundOffValue(){
+      return roudOff => {             
+      const inwei = (10 ** this.feeStructure.decimal)
+      const inNumber = roudOff/inwei
+      return inNumber   
+      }      
+      }
   },
   data() {
     return {
@@ -478,22 +502,13 @@ export default {
       this.depositTokenAddress = "";
       this.selectedChain = null
       this.files = null
-    },
-    getFriendlyValue(str) {
-      const toEthStd = utils.fromWei(str.toString(), "ether").toString();
-      const rounded = Number(toEthStd).toFixed(4)
-      return rounded
-    },
-    getRoundOffValue(num) {
-      const inwei = (10 ** this.feeStructure.decimal)
-      const inNumber = num/inwei
-      return inNumber
-
-    },
+      this.showDismissibleAlert.status = false
+      this.simpleData=""
+    },  
    async onSelectChain(e) {
       if(e===null) {
         return this.notifyErr('Select Chain')
-      }   if(this.depositTokenAddress!=="" && this.simpleData!=="") {
+      } if(this.depositTokenAddress!=="" && this.simpleData!=="") {
         await this.calculateFee()
       }
     },
@@ -504,14 +519,14 @@ export default {
       if (this.depositTokenAddress === "") {        
         return(this.notifyErr('Enter token Address'))
       } if(!checkWalletAddress.validate(this.depositTokenAddress,'Ethereum','eth')){
-        return(this.notifyErr('Enter valid contract address'))
+        return(this.notifyErr('Enter valid token address'))
       }
       if(this.simpleData!=='') {
         await this.calculateFee()
       }
     },
     async calculateFee() {
-      
+      try{
       this.proceed = false
       this.feeStructure = {
         fyrePlatformCommision: '',
@@ -520,28 +535,17 @@ export default {
         symbol: "",
         decimal:0
       }
-      this.isCheckEveryThing=false
-      // this.onSelectChain(this.selectedChain)
-      // this.checkContractAddress()
-      if (this.selectedChain === null) {
-        // this.showDismissibleAlert.status = true
-        // this.showDismissibleAlert.text = 'Select Chain'
-        throw new Error(this.notifyErr('Select Chain'))
+      this.isCheckEveryThing=false      
+      if (this.selectedChain === null) {        
+        return (this.notifyErr('Select Chain'))
       }  if (this.depositTokenAddress === "") {
-        // this.showDismissibleAlert.status = true
-        // this.showDismissibleAlert.text = 'Enter Contract Address'
-
-        throw new Error(this.notifyErr('Enter token Address'))
+        return (this.notifyErr('Enter token Address'))
       }
        if (this.simpleData === "") {
         this.showDismissibleAlert.status = true
         this.showDismissibleAlert.text = 'Enter Wallet addresses and respective token value'        
       }
-      try{
-      const web3 = await loadweb3(this.selectedChain)                  
-      const contract = new web3.eth.Contract(erc20ABI, this.depositTokenAddress);      
-      this.feeStructure.symbol = await contract.methods.symbol().call();
-      this.feeStructure.decimal = await contract.methods.decimals().call();
+      
       var allTextLines = this.simpleData.split(/\r\n|\n/);
       //Split per line on tabs and commas              
       this.locations = [];
@@ -556,14 +560,8 @@ export default {
         this.showDismissibleAlert.status = true                    
         return this.showDismissibleAlert.text = `Distribution list contains invalid address at line ${i+1}`        
         }
-        // if(data[1]==="") {
-        // this.showDismissibleAlert.status = true
-        // return this.showDismissibleAlert.text = 'Enter token value'
-        // }        
-        if(Number(data[1]) && Number(data[1])>0) {
-
-          const inwei = BigInt((data[1] * 10 ** this.feeStructure.decimal)).toString();                     
-          let location = { "destination": data[0], "value": inwei.toString(), };
+        if(Number(data[1]) && Number(data[1])>0) {          
+          let location = { "destination": data[0], "value": data[1].toString() };
           this.locations.push(location);
         }else{
           this.showDismissibleAlert.status = true                    
@@ -573,12 +571,10 @@ export default {
       //Final Data             
       if (this.locations.length < JSON.parse(this.flash.value).winners) {
         this.showDismissibleAlert.status = true
-       return this.showDismissibleAlert.text = 'Number of winners entered are less than you mentioned in Prize'
-        // throw new Error(this.notifyErr('Number of winners entered are less than you mentioned in Prize'))
+       return this.showDismissibleAlert.text = 'Number of winners entered are less than you mentioned in Prize'        
       } else if (this.locations.length > JSON.parse(this.flash.value).winners) {
         this.showDismissibleAlert.status = true
-       return this.showDismissibleAlert.text = 'Number of winners entered are more than you mentioned in Prize'
-        // throw new Error(this.notifyErr('Number of winners entered are more than you mentioned in Prize'))
+       return this.showDismissibleAlert.text = 'Number of winners entered are more than you mentioned in Prize'        
       } else {
         this.showDismissibleAlert.status=false
         const chainIdd = parseInt(this.selectedChain)
@@ -608,16 +604,21 @@ export default {
         this.feeStructure.totalAmountToDistribute = res.totalAmountToPay.toString()
         this.feeStructure.fyrePlatformCommision = res.serviceFee.toString()
         this.feeStructure.serviceFeePercente = res.serviceFeePercent
+        this.feeStructure.decimals = res.decimals
+        this.feeStructure.symbol = res.symbol
         delete res.serviceFee
         delete res.serviceFeePercent
         delete res.totalAmountToPay
+        delete res.decimals
+        delete res.eventId
+        delete res.symbol
         const dataToUploadToBlockchain = res
         this.newData = { ...dataToUploadToBlockchain }
         this.proceed = true
         this.isCheckEveryThing = true
       }
       }catch(e) {                       
-        this.notifyErr(e.message);
+        this.notifyErr(e);
       }
     },
     async createDistribution() {
@@ -677,7 +678,9 @@ export default {
             parsedValue["externalRecordId"] = dbTreeId.toString()
             parsedValue["contractAddress"] = this.depositTokenAddress.toString()
             parsedValue["appBaseUrl"] = this.selectedTool.meta.appBaseUrl.toString()
-            parsedValue["chainId"] = this.selectedChain            
+            parsedValue["chainId"] = this.selectedChain
+            parsedValue["decimals"] = this.feeStructure.decimals.toString()
+            parsedValue["symbol"] = this.feeStructure.symbol            
             this.flash.value = JSON.stringify(parsedValue)
             const index = this.eventToAirdrop.actions.findIndex((x) => {
               return x._id === this.flash._id
@@ -722,6 +725,7 @@ export default {
                   eventId: this.eventToAirdrop._id,
                   actionId: this.flash._id,
                   whiteListedAddress: [...this.newData.inputData],
+                  decimals:this.feeStructure.decimals,
                   externalAppId: dbTreeId,
                   totalAmountToDistribute: this.feeStructure.totalAmountToDistribute.toString()
                 }
@@ -760,7 +764,13 @@ export default {
         const contract = new web3.eth.Contract(abi, address);
         const getApprovalContract = new web3.eth.Contract(erc20ABI, depositToken)
         const maxApprove = getMaxApprove()
-        const approval = await getApprovalContract.methods.approve(address, maxApprove).send({ from: this.accounts[0] })        
+
+        // Ref: https://stackoverflow.com/questions/68926306/how-to-avoid-this-gas-fee-has-been-suggested-by-message-in-metamask-using-web3
+        const approval = await getApprovalContract.methods.approve(address, maxApprove).send({ 
+          from: this.accounts[0],
+          maxPriorityFeePerGas: null,
+          maxFeePerGas: null
+         })        
         if (approval.status !== true) {
           return this.notifyErr('Not Approved')
         }
@@ -769,7 +779,11 @@ export default {
           ipfsHash,
           depositToken,
           tokenBalance.toString()
-        ).send({ from: this.accounts[0] })
+        ).send({ 
+          from: this.accounts[0],
+          maxPriorityFeePerGas: null,
+          maxFeePerGas: null
+        })
         const oldTreeId = await contract.methods.numTrees().call()        
         const returnOldTreeId = Number(oldTreeId) + 1
         return returnOldTreeId

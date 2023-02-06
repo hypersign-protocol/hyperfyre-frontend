@@ -286,7 +286,7 @@ i {
       >
         <div>
           <b-card
-            :title="truncate1(project.projectName, 25)"
+            :title="truncate1(project.projectName, 20)"
             :img-src="project.logoUrl"
             img-alt="Image"
             img-top
@@ -307,7 +307,7 @@ i {
             >
               <li data-toggle="tooltip" data-placement="bottom" title="EventId">
                 <i class="far fa-id-card"></i
-                ><span class="card-title">{{ project._id }}</span>
+                ><span class="card-title">{{ truncate1(project._id,20) }}</span>
                 <span @click="copy(project._id, 'EventId')" class="copy"
                   ><i class="far fa-copy"></i
                 ></span>
@@ -968,9 +968,9 @@ export default {
       this.isProjectEditing = true;
       this.project = { ...project };
       this.project.fromDate = dayjs(project.fromDate).format(
-        "YYYY-MM-DD hh:mm:ss"
+        "YYYY-MM-DD HH:mm:ss"
       );
-      this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
+      this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD HH:mm:ss");
 
       // eventBus.$emit("sendProject", this.project);
       // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
@@ -1019,8 +1019,7 @@ export default {
     },
 
     openPreview() {
-      this.project.actions = this.eventActionList;
-      // console.log(this.project);
+      this.project.actions = this.eventActionList;      
       this.$root.$emit("openPreview");
     },
 
@@ -1043,10 +1042,9 @@ export default {
         project.toDate = date.toISOString()
       }
       this.project.fromDate = dayjs(project.fromDate).format(
-        "YYYY-MM-DD hh:mm:ss"
+        "YYYY-MM-DD HH:mm:ss"
       );
-      this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD hh:mm:ss");
-
+      this.project.toDate = dayjs(project.toDate).format("YYYY-MM-DD HH:mm:ss");      
       // CHECK IF TELEGRAM AND TWITTER EXISTS AND UPDATE THE DATA STRUCTURE
       this.project.social = {
         twitter: {
@@ -1358,7 +1356,8 @@ export default {
         if (this.isProjectEditing) {
           method = "PUT";
         }
-        const toDate= this.project.toDate 
+        const toDate= this.project.toDate
+        const fromDate = this.project.fromDate 
         this.project.toDate = new Date(this.project.toDate).toISOString();
         this.project.fromDate = new Date(this.project.fromDate).toISOString();
         this.project.themeColor = this.themeColor.trim().length
@@ -1381,6 +1380,7 @@ export default {
           header: headers,
         });
         this.project.toDate=toDate;
+        this.project.fromDate = fromDate
 
         /// Refreshing the temporary list other wise duplicate actions were showing
         // see issue #1346 & #1389      

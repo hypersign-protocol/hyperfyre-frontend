@@ -82,8 +82,6 @@ import notificationMixins from "../../../mixins/notificationMixins";
 import axios from "axios";
 import { utils } from "web3";
 import profileIconMixins from "../../../mixins/profileIconMixins";
-import { erc20ABI } from "../../../mixins/ERC20ContractAbi";
-// import HfNotes from "../../elements/HfNotes.vue";
 import config from "../../../config";
 import { truncate } from "../../../mixins/fieldValidationMixin";
 export default {
@@ -171,28 +169,22 @@ export default {
         }    
         ele.forEach((x)=>{          
           groupName = el.title
-          swal_html = swal_html + `<strong class="grpName pt-3" style="text-align: left;">`+ groupName +`</strong>`
-          let objectToRemove = x.whiteListedAddress.findIndex((x)=>{
-            return x.destination === config.marketPlace.fyre_wallet_address
-          })         
-          x.whiteListedAddress.splice(objectToRemove,1)        
-          x.whiteListedAddress.forEach((y, index) => {                  
-          let img1 = this.getTokenIcon(index+1);
+          swal_html = swal_html + `<strong class="grpName pt-3" style="text-align: left;">`+ groupName +`</strong>`            
+          x.whiteListedAddress.forEach((y, index) => {           
+          let rank = index+1
           swal_html =          
             swal_html +            
             `<div class="list-group-item d-flex align-items-center">
-          <span class="b-avatar mr-3 badge-info rounded-circle">
+          <span class="b-avatar mr-3 badge-success rounded-circle">
             <span class="b-avatar-img">
-              <img src="` +
-            img1 +
-            `" alt="avatar">
+              <span class="badge circle circle-md bg-success">`+ rank +`</span>
             </span><!---->
           </span>          
           <span class="mr-auto">` +
             y.destination +
             `</span> 
           <span class="badge badge-primary">` +
-            this.friendlyValue(y.value) +
+            this.friendlyValue(y.value,x.decimals) +
             `</span>         
         </div> `;
         });
@@ -213,8 +205,12 @@ export default {
       });
       this.isLoading = false;
     },
-    friendlyValue(str) {
-      const toEthStd = utils.fromWei(str.toString(), "ether").toString();
+    friendlyValue(str,decimal) {
+      let decimalCount = 18
+      if(!(isNaN(decimal) || decimal === undefined)){
+        decimalCount = decimal
+      }
+      const toEthStd = Number(str)/Number(10 ** decimalCount)
       return toEthStd;
     },
     async importToken(data) {
@@ -223,9 +219,8 @@ export default {
       const chainIdFromData = JSON.parse(data.value).chainId 
       const web3 = await loadweb3(chainIdFromData);
       const tokenAddress = JSON.parse(data.value).contractAddress;
-      const contract = new web3.eth.Contract(erc20ABI, tokenAddress);
-      const tokenSymbol = await contract.methods.symbol().call();
-      const tokenDecimals = await contract.methods.decimals().call();
+      const tokenDecimals = JSON.parse(data.value).decimals;
+      const tokenSymbol = JSON.parse(data.value).symbol;   
       const tokenImage = this.getTokenIcon(tokenSymbol);      
         // wasAdded is a boolean. Like any RPC method, an error may be thrown.
         const wasAdded = await web3.currentProvider.request({
@@ -295,7 +290,11 @@ export default {
               amountInWei,
               getProofFromApi
             )
-            .send({ from: this.accounts[0] });          
+            .send({ 
+              from: this.accounts[0], 
+              maxPriorityFeePerGas: null,
+              maxFeePerGas: null  
+            });          
           if (withDrawToken.status === true) {
             this.notifySuccess(
               "Reward claimed successfully! check your wallet"
