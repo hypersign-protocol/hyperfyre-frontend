@@ -25,14 +25,15 @@ https://app.fyre.hypersign.id
 
 ## Installing & Building
 
-node version = 14.17.1
-npm version=8.3.1
+node version = 14.20.0
+npm version = 8.9.0
+vue cli version = 5.0.8
 
 
 ```bash
-npm i # to install packages
-npm run dev # to run in development
-npm run build # to build for production
+yarn 
+yarn start:dev # to run in development
+yarn start:build # to build for production
 ```
 
 
