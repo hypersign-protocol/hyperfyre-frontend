@@ -8,7 +8,7 @@
     >
       <b-row>
         <b-col cols="1" sm="1" md="1">
-          <img src="/img/ethereum.2b470564.svg" height="25px" />
+          <img src="../../../assets/ethereum.svg" height="25px" />
           <!-- <img src="../../../assets/metamask.svg" height="25px" /> -->
         </b-col>
         <b-col cols="9" sm="9" class="text-left" md="9">
@@ -58,13 +58,24 @@
         </b-row>
         <b-row v-if="!done && !showerror">
          <b-col class= "btn-group" cols="12" sm="12" md="12">
-            <button class="btn btn-link" @click="invokeMetamask()">Connect Metamask</button>
+            <button class="btn btn-link" @click="invokeMetamask()">Connect Wallet</button>
             <button class="btn btn-link" @click="update()">Continue</button>   
           </b-col>  
         </b-row>
       </b-card-body>
     </b-collapse>
-  </b-card>
+     <hf-pop-up
+     :id="data.title"      
+  Header="Sign Message">   
+ <hf-notes :notes="message_sign"></hf-notes>
+      <div class="text-center">
+      <hf-buttons
+      name="Sign"
+      @executeAction="getSignAndWalletAddress"
+      />
+      </div>  
+  </hf-pop-up>
+  </b-card> 
 </template>
 <style scoped>
 .center {
@@ -75,7 +86,10 @@
 </style>
 
 <script>
+import {web3modal} from "../../../mixins/myWallet"
+import {watchAccount,disconnect } from "@wagmi/core";
 import eventBus from "../../../eventBus.js";
+import signWallet from "../../../mixins/collectWallet"
 import apiClient from "../../../mixins/apiClientMixin.js";
 import {
   isValidURL,
@@ -83,10 +97,11 @@ import {
   isEmpty,
 } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
-import config from "../../../config.js";
 import Messages from "../../../utils/messages/participants/en";
 import ErrorMessage from "../ErrorMessage.vue";
-import Web3 from "web3";
+import HfPopUp from "../../elements/HfPopUp.vue"
+import HfNotes from "../../elements/HfNotes.vue"
+import HfButtons from "../../elements/HfButtons.vue"
 export default {
   name: "EthereumErc20",
   props: {
@@ -107,7 +122,7 @@ export default {
     }
   },
   components: {
-    ErrorMessage,
+    ErrorMessage,HfPopUp,HfNotes,HfButtons
   },
 computed:{
  buttonThemeCss() {
@@ -115,14 +130,17 @@ computed:{
         '--button-bg-color': this.themeData.buttonBGColor,
         '--button-text-color': this.themeData.buttonTextColor
       }
-     }
+     },     
   },
   data() {
     return {
+      unsubscribe:null,
+      web3modal:web3modal,      
+      unwatchAccount:null,
       visible: false,
       showerror: false,
       signature: "",
-      message_sign: "",
+      message_sign: "You are signing this message to ensure your participation in this event",
       value: {
         contractAddress: "",
         userWalletAddress: "",
@@ -139,54 +157,55 @@ computed:{
     if (this.data.value && typeof(this.data.value) === "object") {
       Object.assign(this.value, { ...(this.data.value) });
     }
-    eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
-    this.checkWeb3Injection();
+    eventBus.$on(`disableInput${this.data._id}`, this.disableInput);     
   },
   methods: {
-    checkWeb3Injection() {
-      try {
-        if (ethereum && ethereum.isMetaMask) {
-          this.web3 = new Web3(window.ethereum);
-        }
-      } catch (error) {
-        console.log(error);
-        this.showerror = true;
+    async getSignAndWalletAddress(){
+      try{
+      const {modalClose,address, signature } = await signWallet()
+      console.log(address)
+      console.log(signature)      
+      if(modalClose===true){        
+        this.signature = signature;
+        this.value.userWalletAddress = address        
+        this.$root.$emit('bv::hide::modal',this.data.title);  
+      }
+      }catch(e){
+        console.log(e)
+        this.notifyErr(e)
       }
     },
-    async signMessage() {
-      const message =
-        "You are Signing this message to ensure your participation in this event";
-      this.message_sign = message;
-      return await this.web3.eth.personal.sign(
-        message,
-        ethereum.selectedAddress
-      );
-    },
-    async invokeMetamask() {
-      try {
-        if (ethereum.isMetaMask) {
-          const wallet = await ethereum.request({
-            method: "eth_requestAccounts",
-          });
-          this.signature = await this.signMessage();
-
-          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(
-            this.message_sign,
-            this.signature
-          );
-
-          let isSigVerified = false;
-          if (generatedWalletAddr === wallet[0]) {
-            isSigVerified = true;
-          }
-
-          if (isSigVerified) {
-            this.value.userWalletAddress = wallet[0];
-          } else {
-            return this.notifyErr(Messages.EVENT_ACTIONS.ETH.INVALID_SIG);
-          }
-        }
+    async invokeMetamask() {       
+      console.log('in eth')
+      try {                        
+        if(!(this.data.value.hasOwnProperty('userWalletAddress')) && localStorage.getItem('wagmi.store')){          
+          const getDataFromLocalStorage = localStorage.getItem('wagmi.store')          
+          const parsed = JSON.parse(getDataFromLocalStorage)          
+          if(parsed.state.data.hasOwnProperty('account')){            
+            if(this.signature===""){                            
+            this.$root.$emit('bv::show::modal',this.data.title);
+            }else{             
+              await this.web3modal.openModal();                            
+            }           
+          }else{                                      
+            await this.web3modal.openModal()            
+          }                 
+        } 
+        this.unsubscribe =  this.web3modal.subscribeModal((newState)=>{          
+          if(newState.open === false){          
+          this.unwatchAccount();          
+          }           
+        }) 
+     this.unwatchAccount = watchAccount(async account=>{            
+          if(account.isConnected === true && this.signature===""){                                 
+            this.$root.$emit('bv::show::modal',this.data.title);                                         
+          }if(account.isDisconnected === false){                                
+            this.$root.$emit('bv::hide::modal',this.data.title);            
+            this.signature = ""           
+          }        
+        })             
       } catch (error) {
+        console.log(error)
         return this.notifyErr(error.message);
       }
     },
@@ -252,10 +271,15 @@ computed:{
 
       return result;
     },
-    disableInput(data) {
+   async disableInput(data) {
       this.data.isDone = data;
-    },
-  },
+      if(data === true){      
+      this.unwatchAccount();
+      this.unsubscribe();              
+      await disconnect();                
+      }     
+    },    
+  },  
   mixins: [notificationMixins],
 };
 </script>

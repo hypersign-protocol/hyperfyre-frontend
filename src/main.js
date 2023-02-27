@@ -27,7 +27,7 @@ import DateTimePicker from 'vue-vanilla-datetime-picker';
 import VueSidebarMenu from "vue-sidebar-menu";
 import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 import VueMeta from 'vue-meta';
-
+import { initWalletConnect } from "./mixins/myWallet";
 
 // Tell Vue to install the plugin.
 // Vue.use(VuejsDialog.main.default);
@@ -50,7 +50,7 @@ Vue.use(VeLoading);
 Vue.component('date-time-picker', DateTimePicker);
 Vue.prototype.$veLoading = VeLoading;
 Vue.prototype.$veLocale = VeLocale;
-
+initWalletConnect()
 //// VUE EASY TABLE ////
 
 //// CHARTS ON DASHBAORD

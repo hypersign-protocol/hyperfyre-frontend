@@ -23,7 +23,7 @@
            
             <img
               style="padding-right: 5px"
-              src="/img/ethereum.2b470564.svg"
+              src="../../../../assets/ethereum.svg"
               v-if="eventAction.type === 'BLOCKCHAIN_ETH'"
               height="22px"
             />

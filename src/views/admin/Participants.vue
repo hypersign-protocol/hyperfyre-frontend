@@ -110,6 +110,7 @@ label {
       :is-full-page="fullPage"
     ></loading>
     <hf-pop-up
+      id="hf-popup-lottery"
       Header="Lottery"
       >
       <hf-notes :notes="notes"></hf-notes>
@@ -438,7 +439,7 @@ computed:{
 
   methods: {
     openModal(){
-      this.$root.$emit('modal-show')
+      this.$root.$emit('bv::show::modal','hf-popup-lottery');
     },
     parseActionValue(action) {
       switch (action.type) {
@@ -563,7 +564,7 @@ computed:{
         this.notifyErr(e);
       } finally {
         this.isLoading = false;
-        this.$root.$emit('modal-close');
+        this.$root.$emit('bv::hide::modal','hf-popup-lottery');  
       }
     },
     sortChange(params) {

@@ -44,8 +44,9 @@
         </b-row>
 
         <b-row v-if="!done">
-					<b-col cols="12" sm="12" md="12" >
-						<button class="btn btn-link center" @click="update()">Continue</button>
+					<b-col class="btn-group" cols="12" sm="12" md="12" >
+            <button class="btn btn-link"  @click="invokeWallet">Connect</button>
+						<button class="btn btn-link" @click="update()">Continue</button>
 					</b-col>
 				</b-row>
       </b-card-body>
@@ -65,7 +66,9 @@ import {
   isValidText,
   isEmpty,
 } from "../../../mixins/fieldValidationMixin";
-import config from "../../../config.js";
+import {web3modal} from "../../../mixins/myWallet"
+import {watchAccount, disconnect } from "@wagmi/core";
+// import config from "../../../config.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
 export default {
@@ -97,13 +100,35 @@ computed:{
   },
   data() {
     return {
-      visible: false      
+      visible: false,
+      unwatchAccount:null,
+      unsubscribe:null,
+      web3modal:web3modal,      
     };
   },
   mounted() {
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
+    async invokeWallet() {    
+    await this.web3modal.openModal();                 
+        if(this.data.value === '' && localStorage.getItem('wagmi.store')){          
+          const getDataFromLocalStorage = localStorage.getItem('wagmi.store')         
+          const parsed = JSON.parse(getDataFromLocalStorage).state.data.account         
+          console.log(parsed)
+          this.data.value = parsed
+        }
+        this.unsubscribe = this.web3modal.subscribeModal((newState)=>{
+          if(newState.open === false){
+            this.unwatchAccount()
+          }
+        })     
+        this.unwatchAccount = watchAccount(account=>{    
+          if(account.isConnected){
+           this.data.value = account.address 
+          }        
+        })                
+   },
     update() {
       if (!this.isFieldValid()) {
         this.data.value = "";
@@ -124,8 +149,13 @@ computed:{
       }
       return true;
     },
-    disableInput(data) {
+  async disableInput(data) {
       this.done = data;
+      if(data === true) {
+        this.unwatchAccount()
+        this.unsubscribe()
+        await disconnect()
+      }
     },
   },
   mixins: [notificationMixins],

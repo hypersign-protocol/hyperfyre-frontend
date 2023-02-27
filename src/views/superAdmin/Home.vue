@@ -272,6 +272,7 @@
       </b-card>
     </div>
     <hf-pop-up
+    id="hf-popup-superadmin"
     Header="Super Admin Confirmation"
     >
      <div class="row g-3 align-items-center w-100  mt-4">
@@ -601,7 +602,7 @@ export default {
        ab = this.checkEveryThingisOk(resource)
     }
       if(ab == true){
-        this.$root.$emit("modal-show")
+        this.$root.$emit('bv::show::modal','hf-popup-superadmin');            
       }
     },
     async confirm() {
@@ -701,7 +702,7 @@ export default {
         this.notifyErr(e.message);
       } finally {
         this.Loading = false;
-        this.$root.$emit("modal-close")
+        this.$root.$emit('bv::hide::modal','hf-popup-superadmin');
       }
     },
     checkEveryThingisOk(resource) {

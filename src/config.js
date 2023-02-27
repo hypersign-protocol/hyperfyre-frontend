@@ -44,6 +44,9 @@ const config = {
     moopay: {
         payment_url: process.env.VUE_APP_MOOPAY_PAYMENT_URL,
     },
+    wallet:{
+        message_sign:'You are signing this message to ensure your participation in this event'
+    }
 }
 
 export default config
