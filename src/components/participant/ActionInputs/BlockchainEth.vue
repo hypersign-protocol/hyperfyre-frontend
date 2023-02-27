@@ -104,8 +104,7 @@ computed:{
       web3modal:web3modal,
     };
   },
-  mounted() {
-    initWalletConnect();
+  mounted() {    
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);    
   },
   methods: {

@@ -5,15 +5,16 @@
   "scripts": {
     "serve": "vue-cli-service serve --mode production",
     "watch": "watchify src/serviceWorker.js  -o public/service-worker.js  -v [ babelify --presets [es2015] ]",
-    "start:dev": " vue-cli-service serve --mode staging ",
-    "dev": "npm run watch & npm run start:dev",
+    "start:dev": "vue-cli-service serve --mode staging",
+    "dev": "yarn watch & yarn start:dev",
     "setEnv": "cp env.staging .env",
     "serviceworker": "browserify src/serviceWorker.js  -o public/service-worker.js  -v [ babelify --presets [es2015] ]",
-    "build": " npm run serviceworker & vue-cli-service build ",
+    "build": "yarn serviceworker && vue-cli-service build",
     "build-stage": "vue-cli-service build --mode staging",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
-    "predeploy": "npm run build"
+    "predeploy": "yarn build"
+
   },
   "dependencies": {
     "@cosmjs/launchpad": "^0.27.1",
