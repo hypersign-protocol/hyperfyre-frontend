@@ -5,15 +5,11 @@ async function signWallet() {
     let modalClose = false
     let address;
     const getDataFromLocalStorage = localStorage.getItem('wagmi.store')
-    const parsed = JSON.parse(getDataFromLocalStorage).state.data.account 
-    console.log(parsed)
+    const parsed = JSON.parse(getDataFromLocalStorage).state.data.account    
     const getWalletConnect = localStorage.getItem('walletconnect')
     if(getWalletConnect !== null){
-      console.log(getWalletConnect)
-    console.log(JSON.parse(getWalletConnect).accounts[0])
     const parsedData = JSON.parse(getWalletConnect)
-    const isMetamask = parsedData.peerMeta.name
-    console.log(isMetamask)
+    const isMetamask = parsedData.peerMeta.name    
     if(isMetamask === 'MetaMask'){
       if(/iPhone/i.test(navigator.userAgent)){
         const url = "metamask://dapp/google.co"
@@ -32,7 +28,6 @@ async function signWallet() {
     })
     const signingKey = await fetchSigner()      
     const resolvedAddress = signingKey._address    
-    console.log(resolvedAddress)  
     if(parsed === resolvedAddress){
     modalClose = true  
     address = resolvedAddress       
@@ -43,14 +38,8 @@ async function signWallet() {
       modalClose
     }
     return userData  
- }catch(e){
-  console.log(e.message)
+ }catch(e){  
   throw new Error (e.message)
  }           
-}
-function iOS(){
-  return [    
-    'iPhone',   
-  ].includes(navigator.platform)
 }
 export default signWallet;

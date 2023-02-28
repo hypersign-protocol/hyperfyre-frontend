@@ -36,7 +36,7 @@
                 type="text"
                 :placeholder="data.placeHolder"
                 v-model="data.value"
-                :disabled="done"
+                :disabled="true"
                 :required="data.isManadatory"
               ></b-form-input>
             </div>
@@ -45,7 +45,7 @@
 
         <b-row v-if="!done">
 					<b-col class="btn-group" cols="12" sm="12" md="12" >
-            <button class="btn btn-link"  @click="invokeWallet">Connect</button>
+            <button class="btn btn-link"  @click="invokeWallet">Connect Wallet</button>
 						<button class="btn btn-link" @click="update()">Continue</button>
 					</b-col>
 				</b-row>
@@ -68,9 +68,9 @@ import {
 } from "../../../mixins/fieldValidationMixin";
 import {web3modal} from "../../../mixins/myWallet"
 import {watchAccount, disconnect } from "@wagmi/core";
-// import config from "../../../config.js";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
+const checkWalletAddress = require('multicoin-address-validator');
 export default {
   name: "BlockchainBsc",
   props: {
@@ -114,8 +114,7 @@ computed:{
     await this.web3modal.openModal();                 
         if(this.data.value === '' && localStorage.getItem('wagmi.store')){          
           const getDataFromLocalStorage = localStorage.getItem('wagmi.store')         
-          const parsed = JSON.parse(getDataFromLocalStorage).state.data.account         
-          console.log(parsed)
+          const parsed = JSON.parse(getDataFromLocalStorage).state.data.account          
           this.data.value = parsed
         }
         this.unsubscribe = this.web3modal.subscribeModal((newState)=>{
@@ -132,7 +131,7 @@ computed:{
     update() {
       if (!this.isFieldValid()) {
         this.data.value = "";
-        return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
+        return this.notifyErr(Messages.EVENT_ACTIONS.WALLETCONNECT.CONNECT_WALLET);
       } else {
         this.$emit("input", this.data.value);
       }
@@ -145,6 +144,9 @@ computed:{
         return false;
       }
       if (!isValidText(this.data.value)) {
+        return false;
+      }
+      if(!checkWalletAddress.validate(this.data.value,'Ethereum','eth')){
         return false;
       }
       return true;
