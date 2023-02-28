@@ -15,12 +15,7 @@ async function signWallet() {
     const isMetamask = parsedData.peerMeta.name
     console.log(isMetamask)
     if(isMetamask === 'MetaMask'){
-      var userAgent = navigator.userAgent.toLowerCase();
-      var Android = userAgent.indexOf("android") > -1;              
-      const isIos = iOS()
-      console.log(Android)
-      console.log(isIos)
-      if(Android === true || isIos === true){
+      if(/iPhone/i.test(navigator.userAgent)){
         const url = "metamask://dapp/google.co"
         const a = document.createElement("a");
         a.href = url;
