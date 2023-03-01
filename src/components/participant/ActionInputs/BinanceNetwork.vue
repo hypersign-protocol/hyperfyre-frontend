@@ -35,25 +35,19 @@
           <b-col cols="12" sm="12" md="12">
             <div class="row g-3 align-items-center" v-for="(param, index) in value.paramsList" v-bind:key="index">
                   <div class="col-lg-12 col-md-12" v-if="param.name === 'address'">
-                <div v-if="!showerror">
+                <div>
                   <input v-model="param.value" type="" id="title" :required="true" class="form-control w-100"
                     :disabled="true" :placeholder="param.name" />
 
                   <div v-if="!done" class="btn-group w-100">
-                    <button class="btn btn-link" @click="invokeMetamask(index)">Connect Metamask</button>
+                    <button class="btn btn-link" @click="invokeWallet(index)">Connect Wallet</button>
                     <button class="btn btn-link" @click="update()">Continue</button>
                   </div>
-                </div>
-                <div v-else>
-                  <ErrorMessage errorMessage="Install Metamask browser extension" v-if="!done" />
-                  <input v-model="param.value" type="" id="title" :required="true" class="form-control w-100"
-                    :disabled="true" v-else />
-                </div>
+                </div>                
                 </div>
               <div class="col-lg-12 col-md-12" v-else>
                 <input v-model="param.value" type="" id="title" :required="true" class="form-control w-100"
                   :disabled="done" />
-
                 <div v-if="!done" cols="12" sm="12" md="12">
                   <button class="btn btn-link center" @click="update()">Continue</button>
                 </div>
@@ -63,6 +57,17 @@
         </b-row>
       </b-card-body>
     </b-collapse>
+    <hf-pop-up
+     :id="data.title"      
+  Header="Sign Message">   
+ <hf-notes :notes="message_sign"></hf-notes>
+      <div class="text-center">
+      <hf-buttons
+      name="Sign"
+      @executeAction="getSignAndWalletAddress"
+      />
+      </div>  
+  </hf-pop-up>
   </b-card>
 </template>
 <style scoped>
@@ -74,20 +79,24 @@
 </style>
 
 <script>
+import {web3modal} from "../../../mixins/myWallet"
+import {watchAccount,disconnect } from "@wagmi/core";
+import signWallet from "../../../mixins/collectWallet"
 import eventBus from "../../../eventBus.js";
 import apiClient from "../../../mixins/apiClientMixin.js";
-// import {
-//   isValidURL,
-//   isValidText,
-//   isEmpty,
-// } from "../../../mixins/fieldValidationMixin";
+import {
+  isValidURL,
+  isValidText,
+  isEmpty,
+} from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
+import HfPopUp from "../../elements/HfPopUp.vue"
+import HfNotes from "../../elements/HfNotes.vue"
+import HfButtons from "../../elements/HfButtons.vue"
 import Messages from "../../../utils/messages/participants/en";
-import ErrorMessage from "../ErrorMessage.vue";
-import config from "../../../config.js";
-import Web3 from "web3";
+const checkWalletAddress = require('multicoin-address-validator');
 export default {
-  name: "MaticNetwork",
+  name: "BinanceNetwork",
   props: {
     idValue: {
       required: true,
@@ -106,7 +115,7 @@ export default {
     }
   },
   components: {
-    ErrorMessage,
+  HfPopUp,HfNotes,HfButtons
   },
 computed:{
  buttonThemeCss() {
@@ -118,10 +127,14 @@ computed:{
   },
   data() {
     return {
-      visible: false,
-      showerror: false,
+      unsubscribe:null,
+      web3modal:web3modal,      
+      unwatchAccount:null,
+      walletAddress:'',
+      index:0,
+      visible: false,      
       signature: "",
-      message_sign: "",
+      message_sign: "You are signing this message to ensure your participation in this event",
       value: {
         contractAddress: "",
         thresholdBalance: 0,
@@ -141,8 +154,7 @@ computed:{
     }
   },
   mounted() {
-    this.cleanValue();
-    this.checkWeb3Injection();
+    this.cleanValue();    
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
 
     if (this.data.value && typeof(this.data.value) === "object") {
@@ -182,59 +194,53 @@ computed:{
         condition: "",
       }
     },
-    checkWeb3Injection() {
-      try {
-        if (window.ethereum && window.ethereum.isMetaMask) {
-          this.web3 = new Web3(window.ethereum);
-        }else {
-          this.showerror = true;
-        }
-      } catch (error) {
-        console.log(error);
-        this.showerror = true;
+    async getSignAndWalletAddress(){
+      try{
+      const {modalClose,address, signature } = await signWallet()         
+      if(modalClose===true){        
+        this.signature = signature;
+        this.value.paramsList[this.index].value = address;
+        this.walletAddress= address        
+        this.$root.$emit('bv::hide::modal',this.data.title);  
       }
-    },
-    async signMessage() {
-      const message =
-        "You are Signing this message to ensure your participation in this event";
-      this.message_sign = message;
-      return await this.web3.eth.personal.sign(
-        message,
-        window.ethereum.selectedAddress
-      );
-    },
-    async invokeMetamask(e) {
-      console.log(e);
-      try {
-        if (window.ethereum.isMetaMask) {
-          const wallet = await window.ethereum.request({
-            method: "eth_requestAccounts",
-          });
-          this.signature = await this.signMessage();
-
-          const generatedWalletAddr = await this.web3.eth.personal.ecRecover(
-            this.message_sign,
-            this.signature
-          );
-
-          let isSigVerified = false;
-          if (generatedWalletAddr === wallet[0]) {
-            isSigVerified = true;
-          }
-
-          if (isSigVerified) {
-            console.log(this.value.paramsList);
-            this.value.paramsList[e].value = wallet[0];
-          } else {
-            return this.notifyErr(Messages.EVENT_ACTIONS.ETH.INVALID_SIG);
-          }
-        }
-      } catch (error) {
+      }catch(e){        
+        this.notifyErr(e)
+      }
+    },  
+    async invokeWallet(e) {              
+      try {         
+        this.index = e;               
+        if(!(this.data.value.hasOwnProperty('userWalletAddress')) && localStorage.getItem('wagmi.store')){          
+          const getDataFromLocalStorage = localStorage.getItem('wagmi.store')          
+          const parsed = JSON.parse(getDataFromLocalStorage)          
+          if(parsed.state.data.hasOwnProperty('account')){            
+            if(this.signature===""){                            
+            this.$root.$emit('bv::show::modal',this.data.title);
+            }else{             
+              await this.web3modal.openModal();                            
+            }           
+          }else{                                      
+            await this.web3modal.openModal()            
+          }                 
+        } 
+        this.unsubscribe =  this.web3modal.subscribeModal((newState)=>{          
+          if(newState.open === false){          
+          this.unwatchAccount();          
+          }           
+        }) 
+        this.unwatchAccount = watchAccount(async account=>{            
+          if(account.isConnected === true && this.signature===""){                                 
+            this.$root.$emit('bv::show::modal',this.data.title);                                         
+          }if(account.isDisconnected === false){                                
+            this.$root.$emit('bv::hide::modal',this.data.title);            
+            this.signature = ""           
+          }        
+        })             
+      } catch (error) {        
         return this.notifyErr(error.message);
       }
     },
-    emitToUpdate() {
-      //this.notifySuccess("Success");
+    emitToUpdate() {      
       const { contractAddress, paramsList } = this.value;
       const valueToStore = {
         contractAddress, paramsList
@@ -249,21 +255,11 @@ computed:{
       );
     },
     async update() {
+    if(!this.isFieldValid()){
+      return this.notifyErr(Messages.EVENT_ACTIONS.WALLETCONNECT.CONNECT_WALLET);
+    }
       try {
-        let result = await this.execute();
-        // if (balance !== undefined) {
-        //   if (balance >= Number.parseFloat(this.value.thresholdBalance)) {
-        //     this.$emit(
-        //       "input",
-        //       JSON.stringify({
-        //         ...this.value,
-        //       })
-        //     );
-        //   } else {
-        //     throw new Error(Messages.EVENT_ACTIONS.ETH.INSUFFICIENT_BALANCE);
-        //   }
-        // }
-
+        let result = await this.execute();      
         switch (this.value.operator) {
           case "===": {
             switch (this.value.returnType) {
@@ -370,20 +366,22 @@ computed:{
         this.data.value = "";
         return this.notifyErr(error);
       }
+    },    
+    isFieldValid() {
+      if (isEmpty(this.walletAddress)) {
+        return false;
+      }
+      if (isValidURL(this.walletAddress)) {
+        return false;
+      }
+      if (!isValidText(this.walletAddress)) {
+        return false;
+      }
+      if(!checkWalletAddress.validate(this.walletAddress,'Ethereum','eth')){
+        return false;
+      }
+      return true;
     },
-    // ,
-    // isFieldValid() {
-    //   if (isEmpty(this.value.userWalletAddress)) {
-    //     return false;
-    //   }
-    //   if (isValidURL(this.value.userWalletAddress)) {
-    //     return false;
-    //   }
-    //   if (!isValidText(this.value.userWalletAddress)) {
-    //     return false;
-    //   }
-    //   return true;
-    // }
     async execute() {
       const body = {
         actionType: this.data.type,
@@ -410,8 +408,13 @@ computed:{
 
       return result;
     },
-    disableInput(data) {
+  async disableInput(data) {
       this.data.isDone = data;
+      if(data === true){      
+      this.unwatchAccount();
+      this.unsubscribe();              
+      await disconnect();                
+      }
     },
   },
   mixins: [notificationMixins],

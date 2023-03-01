@@ -8,8 +8,7 @@
     >
       <b-row>
         <b-col cols="1" sm="1" md="1">
-          <img src="../../../assets/ethereum.svg" height="25px" />
-          <!-- <img src="../../../assets/metamask.svg" height="25px" /> -->
+          <img src="../../../assets/ethereum.svg" height="25px" />          
         </b-col>
         <b-col cols="9" sm="9" class="text-left" md="9">
           <div class="text text-capitalize">{{ data.title }}</div>
@@ -30,35 +29,21 @@
       </b-row>
     </b-card-header>
     <b-collapse :id="`collapse-${idValue}`" v-model="visible">
-      <b-card-body class="user-details">
-        <b-row v-if="!showerror">
-          <b-col cols="12" sm="12" md="12">
-            <div class="metamask">
-              <b-form-input
-                type="text"
-                :placeholder="data.placeHolder"
-                v-model="value.userWalletAddress"
-                :disabled="true"
-                :required="data.isManadatory"
-              ></b-form-input>
-            </div>
-          </b-col>
-        </b-row>
-        <b-row v-else>
-          <b-col cols="12" sm="12" md="12">
-               <ErrorMessage errorMessage="Install Metamask browser extension" v-if="!done"/>
+      <b-card-body class="user-details">        
+        <b-row>
+          <b-col cols="12" sm="12" md="12">               
             <b-form-input
                 type="text"
                 :placeholder="data.placeHolder"
                 v-model="value.userWalletAddress"
                 :disabled="true"
                 :required="data.isManadatory"
-              v-else></b-form-input>
+              ></b-form-input>
           </b-col>
         </b-row>
-        <b-row v-if="!done && !showerror">
+        <b-row v-if="!done">
          <b-col class= "btn-group" cols="12" sm="12" md="12">
-            <button class="btn btn-link" @click="invokeMetamask()">Connect Wallet</button>
+            <button class="btn btn-link" @click="invokeWallet()">Connect Wallet</button>
             <button class="btn btn-link" @click="update()">Continue</button>   
           </b-col>  
         </b-row>
@@ -98,10 +83,10 @@ import {
 } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
-import ErrorMessage from "../ErrorMessage.vue";
 import HfPopUp from "../../elements/HfPopUp.vue"
 import HfNotes from "../../elements/HfNotes.vue"
 import HfButtons from "../../elements/HfButtons.vue"
+const checkWalletAddress = require('multicoin-address-validator');
 export default {
   name: "EthereumErc20",
   props: {
@@ -122,7 +107,7 @@ export default {
     }
   },
   components: {
-    ErrorMessage,HfPopUp,HfNotes,HfButtons
+  HfPopUp,HfNotes,HfButtons
   },
 computed:{
  buttonThemeCss() {
@@ -137,8 +122,7 @@ computed:{
       unsubscribe:null,
       web3modal:web3modal,      
       unwatchAccount:null,
-      visible: false,
-      showerror: false,
+      visible: false,      
       signature: "",
       message_sign: "You are signing this message to ensure your participation in this event",
       value: {
@@ -162,21 +146,17 @@ computed:{
   methods: {
     async getSignAndWalletAddress(){
       try{
-      const {modalClose,address, signature } = await signWallet()
-      console.log(address)
-      console.log(signature)      
+      const {modalClose,address, signature } = await signWallet()         
       if(modalClose===true){        
         this.signature = signature;
         this.value.userWalletAddress = address        
         this.$root.$emit('bv::hide::modal',this.data.title);  
       }
-      }catch(e){
-        console.log(e)
+      }catch(e){        
         this.notifyErr(e)
       }
     },
-    async invokeMetamask() {       
-      console.log('in eth')
+    async invokeWallet() {      
       try {                        
         if(!(this.data.value.hasOwnProperty('userWalletAddress')) && localStorage.getItem('wagmi.store')){          
           const getDataFromLocalStorage = localStorage.getItem('wagmi.store')          
@@ -196,7 +176,7 @@ computed:{
           this.unwatchAccount();          
           }           
         }) 
-     this.unwatchAccount = watchAccount(async account=>{            
+        this.unwatchAccount = watchAccount(async account=>{            
           if(account.isConnected === true && this.signature===""){                                 
             this.$root.$emit('bv::show::modal',this.data.title);                                         
           }if(account.isDisconnected === false){                                
@@ -204,14 +184,13 @@ computed:{
             this.signature = ""           
           }        
         })             
-      } catch (error) {
-        console.log(error)
+      } catch (error) {        
         return this.notifyErr(error.message);
       }
     },
     async update() {
       if (!this.isFieldValid() || this.value.userWalletAddress === "") {
-        return this.notifyErr(Messages.EVENT_ACTIONS.ETH.CONNECT_METAMASK);
+        return this.notifyErr(Messages.EVENT_ACTIONS.WALLETCONNECT.CONNECT_WALLET);
       } else {
         try {
           let balance = await this.fetchBalance();
@@ -241,6 +220,9 @@ computed:{
         return false;
       }
       if (!isValidText(this.value.userWalletAddress)) {
+        return false;
+      }
+      if(!checkWalletAddress.validate(this.value.userWalletAddress,'Ethereum','eth')){
         return false;
       }
       return true;

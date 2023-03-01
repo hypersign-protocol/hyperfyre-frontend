@@ -76,7 +76,7 @@ const EVENT_ACTIONS = {
         SUBS_NOTIFICATION: "Click On Subscribe Notification"
     },
     WALLETCONNECT:{
-        CONNECT_WALLET:"Connect wallet to proceed"
+        CONNECT_WALLET:"Connect your wallet to proceed"
     }
 }
 
