@@ -65,10 +65,11 @@ import {
   isValidText,
   isEmpty,
 } from "../../../mixins/fieldValidationMixin";
-import {initWalletConnect, web3modal} from "../../../mixins/myWallet"
+import {web3modal} from "../../../mixins/myWallet"
 import {watchAccount, disconnect } from "@wagmi/core";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
+const checkWalletAddress = require('multicoin-address-validator');
 export default {
   name: "BlockchainEth",
   props: {
@@ -130,10 +131,9 @@ computed:{
     update() {
       if (!this.isFieldValid()) {
         this.data.value = "";
-        return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
+        return this.notifyErr(Messages.EVENT_ACTIONS.WALLETCONNECT.CONNECT_WALLET);
       } else {
         this.$emit("input", this.data.value);
-        // console.log(this.data.value)
       }
     },
     isFieldValid() {
@@ -144,6 +144,9 @@ computed:{
         return false;
       }
       if (!isValidText(this.data.value)) {
+        return false;
+      }
+      if(!checkWalletAddress.validate(this.data.value,'Ethereum','eth')){
         return false;
       }
       return true;
