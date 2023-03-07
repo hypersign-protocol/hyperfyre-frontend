@@ -9,7 +9,7 @@
                 Session expired. <a href="#" class="ml-2 alert-link" @click="reloadQR">Click to reload.</a>
               </div>
             </template>
-            <template v-else-if="value && value != ''">
+            <template >
               <b-button  class="btn-login button-theme" :style="buttonThemeCss" @click.prevent="openWalletAfterRecaptcha()">Click To Login
                 <!--<vue-recaptcha
                   ref="recaptcha"
@@ -30,6 +30,7 @@
 <script>
 import config from "../../config";
 import Messages from "../../utils/messages/participants/en";
+import loginWithGoogle from '../../mixins/loginWithGoogle'
 import url from "url";
 export default {
   components: { },
@@ -60,63 +61,65 @@ export default {
     };
   },
   async created() {
-    let baseUrl = this.$config.studioServer.BASE_URL;
-    let websocketUrl = "ws://localhost:3003";
+    localStorage.setItem('path',this.$route.fullPath)
+    // let baseUrl = this.$config.studioServer.BASE_URL;
+    // let websocketUrl = "ws://localhost:3003";
 
-    let parsedUrl = {};
-    try {
-      parsedUrl = url.parse(baseUrl);
+    // let parsedUrl = {};
+    // try {
+    //   parsedUrl = url.parse(baseUrl);
 
-      websocketUrl =
-        parsedUrl.protocol === "https:" ?
-        `wss://${parsedUrl.host}` :
-        `ws://${parsedUrl.host}`;
-    } catch (e) {
-      websocketUrl = "ws://localhost:3003";
-    }
-    if (websocketUrl[websocketUrl.length - 1] == "/") {
-      websocketUrl = websocketUrl.substring(0, websocketUrl.length - 1);
-    }
+    //   websocketUrl =
+    //     parsedUrl.protocol === "https:" ?
+    //     `wss://${parsedUrl.host}` :
+    //     `ws://${parsedUrl.host}`;
+    // } catch (e) {
+    //   websocketUrl = "ws://localhost:3003";
+    // }
+    // if (websocketUrl[websocketUrl.length - 1] == "/") {
+    //   websocketUrl = websocketUrl.substring(0, websocketUrl.length - 1);
+    // }
 
-    this.isLoading = true;
-    var _this = this;
+    // this.isLoading = true;
+    // var _this = this;
 
-    // take it in the env
-    _this.socketMessage = Messages.EVENT.LOGIN.SOCKET_INIT;
-    this.connection = new WebSocket(this.$config.websocketUrl);
-    this.connection.onopen = function() {
-      _this.socketMessage = Messages.EVENT.LOGIN.SOCKET_OPEN;
-    };
+    // // take it in the env
+    // _this.socketMessage = Messages.EVENT.LOGIN.SOCKET_INIT;
+    // this.connection = new WebSocket(this.$config.websocketUrl);
+    // this.connection.onopen = function() {
+    //   _this.socketMessage = Messages.EVENT.LOGIN.SOCKET_OPEN;
+    // };
 
-    this.connection.onmessage = ({ data }) => {
-      let messageData = JSON.parse(data);
-      if (messageData.op == "init") {
-        _this.isLoading = false;
-         messageData.data['provider'] = 'google';
-        _this.value = JSON.stringify(messageData.data);
-        _this.socketMessage = null;
-      } else if (messageData.op == "end") {
-        _this.connection.close();
-        const authorizationToken = messageData.data.hypersign ? messageData.data.hypersign.data.accessToken : messageData.data.token;
+    // this.connection.onmessage = ({ data }) => {
+    //   let messageData = JSON.parse(data);
+    //   if (messageData.op == "init") {
+    //     _this.isLoading = false;
+    //      messageData.data['provider'] = 'google';
+    //     _this.value = JSON.stringify(messageData.data);
+    //     _this.socketMessage = null;
+    //   } else if (messageData.op == "end") {
+    //     _this.connection.close();
+    //     const authorizationToken = messageData.data.hypersign ? messageData.data.hypersign.data.accessToken : messageData.data.token;
 
-        // console.log("Emitting authentoken event")
+    //     // console.log("Emitting authentoken event")
 
-        localStorage.setItem("authToken", authorizationToken);
-        this.$emit("AuthTokenUpdateEvent", authorizationToken);
+    //     localStorage.setItem("authToken", authorizationToken);
+    //     this.$emit("AuthTokenUpdateEvent", authorizationToken);
 
 
-      } else if (messageData.op == "reload") {
-        _this.QRRefresh = true;
-        _this.connection.close(4001, messageData.data.clientId);
-      }
-    };
+    //   } else if (messageData.op == "reload") {
+    //     _this.QRRefresh = true;
+    //     _this.connection.close(4001, messageData.data.clientId);
+    //   }
+    // };
 
-    this.connection.onerror = function(error) {
-      console.log(error);
-      _this.error = true;
-      _this.socketMessage = Messages.EVENT.LOGIN.SOCKET_ERROR;
-    };
+    // this.connection.onerror = function(error) {
+    //   console.log(error);
+    //   _this.error = true;
+    //   _this.socketMessage = Messages.EVENT.LOGIN.SOCKET_ERROR;
+    // };
   },
+  mixins:[loginWithGoogle],
   methods: {
     reloadQR() {
       window.location.reload();
@@ -125,15 +128,17 @@ export default {
       this.$refs.recaptcha.execute()
     },
     openWalletAfterRecaptcha(){
-      if (this.value != "") {
-        this.walletWindow = window.open(
-          `${this.$config.webWalletAddress}/deeplink?url=${this.value}`,
-          "popUpWindow",
-          `height=800,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`
-        );
-      } else {
-        // console.log("this value is not")
-      }
+      this.loginWithGoogle()
+
+      // if (this.value != "") {
+      //   this.walletWindow = window.open(
+      //     `${this.$config.webWalletAddress}/deeplink?url=${this.value}`,
+      //     "popUpWindow",
+      //     `height=800,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`
+      //   );
+      // } else {
+      //   // console.log("this value is not")
+      // }
     },
     onCaptchaExpired: function() {
       // console.log("Captcha expired");
