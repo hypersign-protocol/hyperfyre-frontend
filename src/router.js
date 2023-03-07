@@ -3,7 +3,7 @@ import Router from "vue-router";
 import config from "./config";
 import fetch from "node-fetch";
 import eventBus from "./eventBus";
-
+import Auth from './components/login/Auth'
 Vue.use(Router);
 
 const router = new Router({
@@ -49,6 +49,10 @@ const router = new Router({
             name: "Invitation",
             component: () =>
                 import ( /* webpackChunkName: "adminLogin" */ "./views/Invitation.vue"),
+        },
+        {
+            path:'/auth/google',
+            component:Auth
         },
         {
             path: "/admin/login",
