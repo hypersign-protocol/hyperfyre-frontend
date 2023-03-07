@@ -120,11 +120,12 @@ h5 span {
 </style>
 <template>
   <!-- <div class="row" style="margin-left: 35%;"> -->
-  <div style="justify-content: center; padding-top:3%">
-    <img class="align-center" style="margin-bottom: 20px" height="60px" src="../../assets/Fyre_Gold_Black.png" />
+  <div style="justify-content: center; padding-top:10%">
     <b-card no-body class="loginContent event-card ">
+      <img class="align-center" style="margin-bottom: 20px ; padding-top: 10px;" height="70px" src="../../assets/Fyre_Gold_Black.png" />
+
       <loading :active.sync="isLoading" :can-cancel="true" :is-full-page="fullPage"></loading>
-      <h4>Admin Login</h4>
+      <!-- <h4>Admin Login</h4> -->
       <div class="row" style="margin-top:3%">
         <div v-if="QRRefresh" class="QRRefresh">
           <i @click="reloadQR" class="fas fa-redo" style="font-size: xx-large; color: gray;"></i>
@@ -136,23 +137,23 @@ h5 span {
           <div class="form-group">
             <vue-qr v-if="qr_data != ''" margin="1" :text="qr_data" :size="200" :logoSrc="src2"
               logoBackgroundColor="white" logoCornerRadius="2"></vue-qr>
-            <label style="font-size:small; color:grey; margin-top:1%">Scan QR code using Hypersign Mobile App</label>
+            <!-- <label style="font-size:small; color:grey; margin-top:1%">Scan QR code using Hypersign Mobile App</label> -->
             <div>
               <!-- <p style="font-size:small;"> Don’t have the app yet? <a href="#">Get it now</a></p> -->
-              <span style="font-size: small; color:grey; padding: 10px">
+              <!-- <span style="font-size: small; color:grey; padding: 10px">
                 Get the app on
                 <a href="https://play.google.com/store/apps/details?id=com.hypersign.cordova"
                   target="__blank">Android</a>
                 or
                 <a :href="$config.webWalletAddress" target="__blank">Web</a>
-              </span>
+              </span> -->
             </div>
           </div>
 
-          <h5><span>OR</span></h5>
+          <!-- <h5><span>OR</span></h5> -->
 
           <div class="mb-2 ">
-            <a v-if="this.value != ''" class="btn btn-hypersign  button-theme" :style="buttonThemeCss"  href="#" @click.prevent="openWallet()">
+            <a class="btn btn-hypersign  button-theme" :style="buttonThemeCss"  href="#" @click.prevent="openWallet()">
               <div style="font-size: smaller; padding: 10px;">
                 Click To Login
               </div>
@@ -174,6 +175,7 @@ import url from "url";
 import notificationMixins from "../../mixins/notificationMixins";
 import localStorageMixin from "../../mixins/localStorageMixin";
 import config from "../../config"
+import loginWithGoogle from '../../mixins/loginWithGoogle'
 export default {
   name: "Login",
   components: {
@@ -215,75 +217,76 @@ export default {
   },
   created() {
     localStorage.clear();
+    localStorage.setItem('path','/admin/dashboard')
      document.title = `${config.appName} - Login`;
     // console.log("Beofer creating websoceket connection");
-    let baseUrl = this.$config.studioServer.BASE_URL;
-    let websocketUrl = "ws://localhost:3003";
+    // let baseUrl = this.$config.studioServer.BASE_URL;
+    // let websocketUrl = "ws://localhost:3003";
 
-    let parsedUrl = {};
-    try {
-      parsedUrl = url.parse(baseUrl);
-      // console.log(parsedUrl);
-      websocketUrl =
-        parsedUrl.protocol === "https:"
-          ? `wss://${parsedUrl.host}`
-          : `ws://${parsedUrl.host}`;
-      // console.log(websocketUrl);
-    } catch (e) {
-      websocketUrl = "ws://localhost:3003";
-    }
-    if (websocketUrl[websocketUrl.length - 1] == "/") {
-      websocketUrl = websocketUrl.substring(0, websocketUrl.length - 1);
-    }
-    // console.log(websocketUrl);
+    // let parsedUrl = {};
+    // try {
+    //   parsedUrl = url.parse(baseUrl);
+    //   // console.log(parsedUrl);
+    //   websocketUrl =
+    //     parsedUrl.protocol === "https:"
+    //       ? `wss://${parsedUrl.host}`
+    //       : `ws://${parsedUrl.host}`;
+    //   // console.log(websocketUrl);
+    // } catch (e) {
+    //   websocketUrl = "ws://localhost:3003";
+    // }
+    // if (websocketUrl[websocketUrl.length - 1] == "/") {
+    //   websocketUrl = websocketUrl.substring(0, websocketUrl.length - 1);
+    // }
+    // // console.log(websocketUrl);
 
-    // take it in the env
-    this.connection = new WebSocket(this.$config.websocketUrl);
-    this.connection.onopen = function() {
-      console.log("Socket connection is open");
-    };
+    // // take it in the env
+    // this.connection = new WebSocket(this.$config.websocketUrl);
+    // this.connection.onopen = function() {
+    //   console.log("Socket connection is open");
+    // };
 
-    this.isLoading = true;
-    var _this = this;
+    // this.isLoading = true;
+    // var _this = this;
 
-    this.connection.onmessage = function({ data }) {
-      // console.log("Websocket connection messag receieved ", data);
-      let messageData = JSON.parse(data);
-      // console.log(messageData);
-      if (messageData.op == "init") {
-        _this.isLoading = false;
-        /// Sending provider from here........
-        messageData.data['provider'] = 'google';
-        _this.value = JSON.stringify(messageData.data);
-        _this.qr_data=`${_this.$config.webWalletAddress}/deeplink?url=${_this.value}`
-      } else if (messageData.op == "end") {
-        _this.connection.close();
-        const authorizationToken = messageData.data.hypersign ? messageData.data.hypersign.data.accessToken : messageData.data.token;
-        // console.log(authorizationToken);
-        localStorage.setItem("authToken", authorizationToken);
+    // this.connection.onmessage = function({ data }) {
+    //   // console.log("Websocket connection messag receieved ", data);
+    //   let messageData = JSON.parse(data);
+    //   // console.log(messageData);
+    //   if (messageData.op == "init") {
+    //     _this.isLoading = false;
+    //     /// Sending provider from here........
+    //     messageData.data['provider'] = 'google';
+    //     _this.value = JSON.stringify(messageData.data);
+    //     _this.qr_data=`${_this.$config.webWalletAddress}/deeplink?url=${_this.value}`
+    //   } else if (messageData.op == "end") {
+    //     _this.connection.close();
+    //     const authorizationToken = messageData.data.hypersign ? messageData.data.hypersign.data.accessToken : messageData.data.token;
+    //     // console.log(authorizationToken);
+    //     localStorage.setItem("authToken", authorizationToken);
 
-        if (localStorage.getItem("authToken") != null) {
-          if (this.walletWindow) {
-            this.walletWindow.close();
-          }
-          if (_this.$route.params.nextUrl != null) {
-            _this.$router.push(_this.$route.params.nextUrl);
-          } else {
-            // console.log(_this.$router);
-            window.location.href =
-              window.location.origin + "/admin/dashboard";
-            // _this.$router.push("dashboard");
-          }
-        }
-      } else if (messageData.op == "reload") {
-        // console.log("Timeout for clientId: " + messageData.data.clientId)
-        _this.QRRefresh = true;
-        _this.connection.close(4001, messageData.data.clientId);
-      }
-    };
-    this.connection.onerror = function(error) {
-      console.log("Websocket connection error ", error);
-    };
+    //     if (localStorage.getItem("authToken") != null) {
+    //       if (this.walletWindow) {
+    //         this.walletWindow.close();
+    //       }
+    //       if (_this.$route.params.nextUrl != null) {
+    //         _this.$router.push(_this.$route.params.nextUrl);
+    //       } else {
+    //         // console.log(_this.$router);
+    //         window.location.href =
+    //           window.location.origin + "/admin/dashboard";
+    //         // _this.$router.push("dashboard");
+    //       }
+    //     }
+    //   } else if (messageData.op == "reload") {
+    //     // console.log("Timeout for clientId: " + messageData.data.clientId)
+    //     _this.QRRefresh = true;
+    //     _this.connection.close(4001, messageData.data.clientId);
+    //    }
+    // };
+    // this.connection.onerror = function(error) {
+    //   console.log("Websocket connection error ", error);
+    // };
   },
   mounted() {
     this.clean();
@@ -293,13 +296,14 @@ export default {
       window.location.reload()
     },
     openWallet() {
-      if (this.value != "") {
-        this.walletWindow = window.open(
-          `${this.$config.webWalletAddress}/deeplink?url=${this.value}`,
-          "popUpWindow",
-          `height=800,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`
-        );
-      }
+      this.loginWithGoogle()
+      // if (this.value != "") {
+      //   this.walletWindow = window.open(
+      //     `${this.$config.webWalletAddress}/deeplink?url=${this.value}`,
+      //     "popUpWindow",
+      //     `height=800,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes`
+      //   );
+      // }
     },
     push(path) {
       this.$router.push(path);
@@ -309,6 +313,6 @@ export default {
       this.$router.push(`${id}`);
     },
   },
-  mixins: [notificationMixins, localStorageMixin],
+  mixins: [notificationMixins, localStorageMixin,loginWithGoogle],
 };
 </script>
