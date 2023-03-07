@@ -33,24 +33,11 @@ const initWalletConnect = () => {
         provider,
         webSocketProvider,
     });     
-    const ethereumClient = new EthereumClient(wagmiClient, chains);
-
+    const ethereumClient = new EthereumClient(wagmiClient, chains)
     web3modal = new Web3Modal(
         { projectId, themeMode: 'dark', themeColor: 'blue', themeBackground: 'gradient' },
         ethereumClient
-    );    
-    // unwatch = watchAccount((account)=>{
-    //     if(account.isDisconnected){
-    //         console.log('disconected in js')
-    //         eventBus.$emit('accountDisconnected');
-    //     }
-    // })
-    // web3modal.onClose(() => {
-    //     console.log("Modal closed");
-    //     });
-//     unsubscribe = web3modal.subscribeModal((newState) =>
-//   console.log(newState)
-// ); 
+    );
 };   
 
 export { initWalletConnect, web3modal };
