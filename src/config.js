@@ -21,6 +21,7 @@ const config = {
     mobileWalletAddress: urlSanitizer(process.env.VUE_APP_MOBILEWALLET_URL, false),
     websocketUrl: urlSanitizer(process.env.VUE_APP_SERVER_WEBSOCKET_URL, true),
     auth0Domain: urlSanitizer(process.env.VUE_APP_AUTH0_DOMAIN, false),
+    auth0LOGINCLIENTID:process.env.VUE_APP_AUTH0_LOGIN_CLIENT_ID,
     auth0ClinetId: process.env.VUE_APP_AUTH0_CLIENT_ID,
     telegramBotId: process.env.VUE_APP_TELEGRAM_BOT_ID,
     kommunicateAppId: process.env.VUE_APP_KOMMINICATE_APP_ID,
