@@ -256,6 +256,7 @@ i {
 
     
     <hf-pop-up
+    id="hf-popup-event-delete"
     Header="Delete Event"
     >
     <hf-notes
@@ -1188,7 +1189,7 @@ export default {
                   if (!resp.ok) {
                     return this.notifyErr(json);
                   } else {
-                    this.$root.$emit('modal-close');
+                    this.$root.$emit('bv::hide::modal','hf-popup-event-delete');
                     this.notifySuccess(Messages.EVENTS.EVENT_DELETED);
                   }
                 } else {
@@ -1211,7 +1212,7 @@ export default {
     deleteProject(projectId) {
       this.resetAllValues();
       this.projectToDelete = projectId;
-      this.$root.$emit('modal-show');
+      this.$root.$emit('bv::show::modal','hf-popup-event-delete');
     },
 
     async saveProject() {

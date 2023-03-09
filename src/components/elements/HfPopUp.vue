@@ -1,5 +1,5 @@
 <template>
-  <b-modal v-model="show" hide-footer ref="modal-1" :title="Header" centered>
+  <b-modal :id="id" hide-footer :title="Header" centered>
     <slot />
   </b-modal>
 </template>
@@ -16,22 +16,9 @@ export default {
       type: String,
       require: true,
     },
-  },
-  created() {
-    this.openModal();
-    this.closeModal();
-  },
-  methods: {
-    openModal() {
-      this.$root.$on("modal-show", () => {
-        this.show = true;
-      });
-    },
-    closeModal() {
-      this.$root.$on("modal-close", () => {
-        this.show = false;
-      });
-    },
+    id:{
+      type:String,      
+    }
   },
 };
 </script>
