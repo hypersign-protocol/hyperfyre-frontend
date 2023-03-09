@@ -221,7 +221,8 @@ export default {
           window.location.pathname.includes("/admin/createapp") ||
           window.location.pathname.includes("/admin/marketplace") ?
           true :
-          false;
+          false; 
+    this.showUserNav = window.location.pathname.includes("/admin") || window.location.pathname.includes("/auth/google")?false : true            
   },
 
   methods: {
