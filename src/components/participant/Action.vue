@@ -69,7 +69,7 @@ import InputHyperlink from "./ActionInputs/InputHyperlink.vue";
 import PushNotification from "./ActionInputs/PushNotification.vue";
 import PrizeCard from "./ActionInputs/PrizeCard.vue";
 import eventBus from "../../eventBus.js";
-import crypto from 'crypto'
+import crypto from 'crypto-browserify'
 import apiClient from "../../mixins/apiClientMixin";
 import notificationMixins from "../../mixins/notificationMixins";
 import config from "../../config";

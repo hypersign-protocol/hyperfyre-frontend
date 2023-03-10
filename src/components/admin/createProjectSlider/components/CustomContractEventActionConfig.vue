@@ -22,7 +22,7 @@
           <span>
             <img
               style="padding-right: 5px"
-              src="/img/ethereum.2b470564.svg"
+              src="../../../../assets/ethereum.svg"
               v-if="eventAction.type.includes('ETHEREUM_NETWORK')"
               height="22px"
             />

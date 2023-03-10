@@ -36,7 +36,7 @@
                 type="text"
                 :placeholder="data.placeHolder"
                 v-model="data.value"
-                :disabled="done"
+                :disabled="true"
                 :required="data.isManadatory"
               ></b-form-input>
             </div>
@@ -44,7 +44,8 @@
         </b-row>
 
         <b-row v-if="!done">
-					<b-col cols="12" sm="12" md="12" >
+					<b-col class="btn-group" cols="12" sm="12" md="12" >
+            <button class="btn btn-link"  @click="invokeWallet">Connect Wallet</button>
 						<button class="btn btn-link center" @click="update()">Continue</button>
 					</b-col>
 				</b-row>
@@ -59,6 +60,8 @@
 </style>
 
 <script>
+import {web3modal} from "../../../mixins/myWallet"
+import {watchAccount, disconnect} from "@wagmi/core";
 import eventBus from "../../../eventBus.js";
 import {
   isValidURL,
@@ -67,7 +70,7 @@ import {
 } from "../../../mixins/fieldValidationMixin";
 import notificationMixins from "../../../mixins/notificationMixins";
 import Messages from "../../../utils/messages/participants/en";
-import config from "../../../config.js";
+const checkWalletAddress = require('multicoin-address-validator');
 export default {
   name: "BlockchainAvax",
   props: {
@@ -97,17 +100,38 @@ computed:{
   },
   data() {
     return {
-      visible: false
+      visible: false,
+      unwatchAccount:null,
+      unsubscribe:null,
+      web3modal:web3modal,
     };
   },
   mounted() {
     eventBus.$on(`disableInput${this.data._id}`, this.disableInput);
   },
   methods: {
+    async invokeWallet() {    
+    await this.web3modal.openModal();                 
+        if(this.data.value === '' && localStorage.getItem('wagmi.store')){          
+          const getDataFromLocalStorage = localStorage.getItem('wagmi.store')         
+          const parsed = JSON.parse(getDataFromLocalStorage).state.data.account         
+          this.data.value = parsed
+        }
+        this.unsubscribe = this.web3modal.subscribeModal((newState)=>{
+          if(newState.open === false){            
+            this.unwatchAccount()
+          }
+        })
+        this.unwatchAccount = watchAccount(account=>{    
+          if(account.isConnected){            
+           this.data.value = account.address 
+          }
+        })                
+   },
     update() {
       if (!this.isFieldValid()) {
         this.data.value = "";
-        return this.notifyErr(Messages.EVENT_ACTIONS.INVALID_INPUT);
+        return this.notifyErr(Messages.EVENT_ACTIONS.WALLETCONNECT.CONNECT_WALLET);
       } else {
         this.$emit("input", this.data.value);
       }
@@ -122,10 +146,18 @@ computed:{
       if (!isValidText(this.data.value)) {
         return false;
       }
+      if(!checkWalletAddress.validate(this.data.value,'Ethereum','eth')){
+        return false;
+      }
       return true;
     },
-    disableInput(data) {
+  async disableInput(data) {
       this.done = data;
+      if(data === true) {
+        this.unwatchAccount()
+        this.unsubscribe()
+        await disconnect()
+      }
     },
   },
   mixins: [notificationMixins],

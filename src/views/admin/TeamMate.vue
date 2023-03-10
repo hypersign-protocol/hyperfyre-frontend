@@ -27,6 +27,7 @@
     >
     </hf-page-message>
     <hf-pop-up
+    id="hf-popup-teammate"
     Header="Invite Form"
     >
      <div class="row g-3 align-items-center w-100  mt-4">
@@ -259,7 +260,7 @@ export default {
     },
      openInvite() {
     this.clearAll();
-    this.$root.$emit('modal-show')
+    this.$root.$emit('bv::show::modal','hf-popup-teammate');                    
     },
     async invite(){
       try{
@@ -288,7 +289,7 @@ export default {
               if (!resp.ok) {
                 return this.notifyErr(json);
               } else {
-                this.$root.$emit('modal-close');
+                this.$root.$emit('bv::hide::modal','hf-popup-teammate');
                 this.notifySuccess("Invitation Sent");
                 this.$store.commit('addTeammate',json)
               }
