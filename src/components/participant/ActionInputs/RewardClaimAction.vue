@@ -54,8 +54,8 @@
                 <span style="display: inline">
                   <button
                     class="btn btn-link btn-sm"
-                    @click="importToken(row)"
-                    title="Import Token in metamask wallet"
+                    @click="clickOnImportRow(row)"
+                    title="Import Token in wallet"
                   >
                     Import
                   </button>
@@ -71,22 +71,69 @@
         </table>
       </b-card-body>
     </b-collapse>
+    <hf-pop-up
+    id="hf-cleaim-reward"      
+  Header="Claim Rewards">    
+      <div class="row g-2 p-3 m-2" style="background:wheat; height:auto; border-radius:5px;">
+        <div class="col-8" style="display:inline-block;"><p>{{showDismissibleAlert.text}}</p></div>
+          <div style="display:inline-block; float:right" class="col-4">                    
+            <hf-buttons                  
+        style="width:max-content;float:right;"        
+        name=""        
+        iconClass="fas fa-wallet"
+        title="Connected wallet"
+        @executeAction="walletStatus"
+        />
+          </div>         
+        <div>
+          <div class="col-8">            
+        <hf-buttons          
+        v-if="isSwitchNetwork"
+        style="width:max-content;"        
+        name="Switch network"
+        @executeAction="switchNetworkWallet"
+        />
+        <hf-buttons
+        v-else
+        style="width:max-content;"
+        name="Claim"
+        @executeAction="claim"
+        />       
+      </div>
+      </div>                          
+      </div>      
+      </div>          
+  </hf-pop-up>
+<hf-pop-up
+    id="hf-cleaim-reward-import"      
+  Header="Import Token">
+  <div class="text-center pt-2" style="background:wheat; height:auto; border-radius:5px;">      
+    <p>Import token manually in your wallet by copying below token address.</p>
+      <div class="row p-3 mb-2 text-center" style="background:white;border-radius:5px; display:inline-flex">                
+        <div class="col-xs-6">{{truncate1(rewardData.contractAddress,14)}}</div>
+        <div class="col-xs-6 pl-4"><i class="far fa-copy" style="cursor:pointer;" @click="copyTokenAddress('Token address')"></i></div>
+      </div>     
+        </div>
+  </hf-pop-up>
   </b-card>
 </template>
 <script>
+import {web3modal} from "../../../mixins/myWallet"
+import {watchAccount,getNetwork,switchNetwork, readContract, getAccount,getContract } from "@wagmi/core";
 import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
-import loadweb3 from "../../../mixins/getWeb3";
+import "vue-loading-overlay/dist/vue-loading.css"
 import { abi, getAddress } from "../../../mixins/merkelDropFactoryAbi";
 import notificationMixins from "../../../mixins/notificationMixins";
 import axios from "axios";
-import { utils } from "web3";
 import profileIconMixins from "../../../mixins/profileIconMixins";
 import config from "../../../config";
 import { truncate } from "../../../mixins/fieldValidationMixin";
+import HfPopUp from "../../elements/HfPopUp.vue"
+import HfNotes from "../../elements/HfNotes.vue"
+import HfButtons from "../../elements/HfButtons.vue"
 export default {
   name: "RewardClaim",
-  components: { Loading },
+  components: { Loading,HfPopUp,HfNotes,HfButtons },
   props: {
     claimData: {
       required: true,
@@ -98,7 +145,14 @@ export default {
     },
   },
   data() {
-    return {
+    return {     
+      rewardData:{},
+      showDismissibleAlert:{status:false,text:""},
+      isSwitchNetwork:false,      
+      walletAddress:'',      
+      web3modal:web3modal,            
+      currentChain:'',
+      rewardChain:'',      
       fyreWalletAddress: "0xe8E06659F296D7c0561f41250A8a2674E83e8B98",
       whitelistAddress: [],
       authToken: localStorage.getItem("authToken"),
@@ -117,6 +171,164 @@ export default {
     },
   },
   methods: {
+    copyTokenAddress(contentType) {
+      const textToCopy = this.rewardData.contractAddress      
+      if (textToCopy) {
+        navigator.clipboard
+          .writeText(textToCopy)
+          .then(() => {
+            this.notifySuccess(
+              `${contentType}, copied to clipboard`
+            );
+          })
+          .catch((err) => {
+            this.notifyErr(
+              'error while copying',
+              err
+            );
+          });
+      }
+    },
+    async walletStatus(){
+    this.$root.$emit('bv::hide::modal','hf-cleaim-reward');  
+    await this.web3modal.openModal()
+    },
+  async switchNetworkWallet(){
+    try{
+      this.isLoading = true       
+      const getWalletConnect = localStorage.getItem('walletconnect')
+      if(getWalletConnect !== null){
+    const parsedData = JSON.parse(getWalletConnect)
+    const isMetamask = parsedData.peerMeta.name    
+    if(isMetamask === 'MetaMask'){
+      if(/iPhone/i.test(navigator.userAgent)){
+        console.log('iphonee')
+        const url = "metamask://dapp/google.co"
+        const a = document.createElement("a");
+        a.href = url;
+        a.target = "_self";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }
+    }    
+    }
+      this.$root.$emit('bv::hide::modal','hf-cleaim-reward');      
+      const network = await switchNetwork({
+        chainId: Number(this.rewardData.chainId),
+        })        
+        if((network.id).toString() === this.rewardData.chainId){          
+          this.$root.$emit('bv::show::modal','hf-cleaim-reward');
+          this.isSwitchNetwork = false
+          this.showDismissibleAlert.status = true                 
+          this.showDismissibleAlert.text = `Claim your Reward!`
+        }
+    }catch(e){      
+      this.notifyErr(e.message)
+    }finally{
+      this.isLoading = false
+    }
+    },
+   async claim(){      
+      try{
+        const getAccountAddress = getAccount()        
+        this.walletAddress = getAccountAddress.address        
+        const { chain } = getNetwork();        
+        if((chain.id).toString()!==(this.rewardData.chainId)){          
+          this.isSwitchNetwork=true 
+          this.showDismissibleAlert.status = true                           
+          this.showDismissibleAlert.text = `Reward is distributed on ${this.chainName(this.rewardData.chainId)}. Please switch network in your wallet.`            
+          return
+        }
+        this.$root.$emit('bv::hide::modal','hf-cleaim-reward');
+      const getWalletConnect = localStorage.getItem('walletconnect')
+      if(getWalletConnect !== null){
+      const parsedData = JSON.parse(getWalletConnect)
+      const isMetamask = parsedData.peerMeta.name    
+      if(isMetamask === 'MetaMask'){
+        if(/iPhone/i.test(navigator.userAgent)){
+          console.log('iphonee')
+          const url = "metamask://dapp/google.co"
+          const a = document.createElement("a");
+          a.href = url;
+          a.target = "_self";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        }
+      }    
+      }        
+        this.isLoading = true;
+        let data = [];        
+        const airdropId = this.rewardData.externalRecordId;               
+        const url = `${this.rewardData.appBaseUrl}/bank/check/${this.walletAddress}`;       
+        const res = await axios.get(url);
+        data = [...res.data];        
+        const filteredObject = data.find((x) => {
+          return x._id === airdropId;
+        });
+        if (filteredObject === undefined) {
+          throw new Error("You are not whitelisted in the winner list");
+        }    
+        let address = getAddress(filteredObject.additionalData.chainId)
+        const withdrawn = await readContract({
+          address:address,
+          abi:abi,
+          functionName:'getWithdrawn',
+          args:[filteredObject.treeIndex - 1,
+              filteredObject.inputData.hash]
+        })
+        console.log("withdrawn",withdrawn)
+        if(withdrawn === true){
+          throw new Error("Reward already claimed")
+        }       
+        if (!withdrawn) {
+          const getProofFromApi = await this.getProof(this.rewardData.appBaseUrl,
+            airdropId,
+            this.walletAddress
+          );          
+          const amountInWei = (filteredObject.inputData.data.value).toString();          
+          const account = getAccount();
+          const signer = await account.connector?.getSigner();
+          const contract = getContract({
+            address:address,
+            abi:abi,
+            signerOrProvider:signer
+          })          
+          const treeIndex = filteredObject.treeIndex-1          
+          await contract.functions.withdraw(
+            treeIndex,
+            this.walletAddress,
+            amountInWei,
+            getProofFromApi,{
+              gasLimit:250000
+            }
+          )          
+          contract.on('WithdrawalOccurred',(treeIndex, destination, value,event)=>{
+            console.log('in callback')
+            let info={
+              treeIndex:treeIndex,
+              destination:destination,
+              value:value,
+              data:event
+            };
+            console.log(info)
+            if(info.destination === this.walletAddress && info.data.event === 'WithdrawalOccurred'){            
+              this.notifySuccess(
+              "Reward claimed successfully! check your wallet"
+            );
+            this.$root.$emit('bv::hide::modal','hf-cleaim-reward');
+            this.isLoading = false
+            }
+          }) 
+        } else {
+          throw new Error("Reward already claimed");
+        }
+      } catch (e) {
+        console.log(e.message)
+        this.notifyErr(e.message);
+      }
+    },
     async fetchList() {
       this.isLoading = true;
       const url = `${this.$config.studioServer.BASE_URL}api/v1/reward/distribution/event/${this.eventId}`;
@@ -213,100 +425,74 @@ export default {
       const toEthStd = Number(str)/Number(10 ** decimalCount)
       return toEthStd;
     },
-    async importToken(data) {
-      try {
-      this.isLoading = true;
-      const chainIdFromData = JSON.parse(data.value).chainId 
-      const web3 = await loadweb3(chainIdFromData);
-      const tokenAddress = JSON.parse(data.value).contractAddress;
-      const tokenDecimals = JSON.parse(data.value).decimals;
-      const tokenSymbol = JSON.parse(data.value).symbol;   
-      const tokenImage = this.getTokenIcon(tokenSymbol);      
-        // wasAdded is a boolean. Like any RPC method, an error may be thrown.
-        const wasAdded = await web3.currentProvider.request({
-          method: "wallet_watchAsset",
-          params: {
-            type: "ERC20", // Initially only supports ERC20, but eventually more!
-            options: {
-              address: tokenAddress, // The address that the token is at.
-              symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
-              decimals: tokenDecimals, // The number of decimals in the token
-              image: tokenImage, // A string url of the token logo
-            },
-          },
-        });
-
-        if (wasAdded) {
-          this.notifySuccess(`${tokenSymbol} Token added in your wallet`);
-        } else {
-          this.notifyErr(`Not able to add ${tokenSymbol} in your wallet`);
-        }
-      } catch (error) {
-        this.notifyErr(error.message);
-      } finally {
-        this.isLoading = false;
-      }
+    clickOnImportRow(data){
+      this.$root.$emit('bv::show::modal','hf-cleaim-reward-import');  
+      const parsedData = JSON.parse(data.value);
+          this.rewardData ={...parsedData}          
     },
-    async claimReward(row) {
-      try {
-        this.isLoading = true;
-        let data = [];
-        const parsedData = JSON.parse(row.value);
-        const airdropId = parsedData.externalRecordId;
-        const web3 = await loadweb3(parsedData.chainId);
-        this.accounts = await web3.eth.getAccounts();
-        const url = `${parsedData.appBaseUrl}/bank/check/${this.accounts[0]}`;
-        const res = await axios.get(url);
-        data = [...res.data];        
-        const filteredObject = data.find((x) => {
-          return x._id === airdropId;
-        });
-        if (filteredObject === undefined) {
-          throw new Error("You are not whitelisted in the winner list");
-        }    
-        let address = getAddress(filteredObject.additionalData.chainId)
-        const contract = new web3.eth.Contract(abi, address);
-        const [tree, withdrawn] = await Promise.all([
-          contract.methods.merkleTrees(filteredObject.treeIndex - 1).call(),
-          contract.methods
-            .getWithdrawn(
-              filteredObject.treeIndex - 1,
-              filteredObject.inputData.hash
-            )
-            .call(),
-        ]);       
-        if (!withdrawn) {
-          const getProofFromApi = await this.getProof(parsedData.appBaseUrl,
-            airdropId,
-            this.accounts[0]
-          );          
-          const amountInWei = utils
-            .toWei(filteredObject.inputData.data.value, "wei")
-            .toString();          
-          const withDrawToken = await contract.methods
-            .withdraw(
-              filteredObject.treeIndex - 1,
-              this.accounts[0],
-              amountInWei,
-              getProofFromApi
-            )
-            .send({ 
-              from: this.accounts[0], 
-              maxPriorityFeePerGas: null,
-              maxFeePerGas: null  
-            });          
-          if (withDrawToken.status === true) {
-            this.notifySuccess(
-              "Reward claimed successfully! check your wallet"
-            );
-          }
-        } else {
-          throw new Error("Reward already claimed");
-        }
-      } catch (e) {
-        this.notifyErr(e.message);
-      } finally {
-        this.isLoading = false;
+    chainName(id){
+      let chainName = ''
+      console.log(id)
+      switch (id) {
+        case '1':
+          chainName = 'Ethereum mainnet'
+          break;
+        case '5':
+          chainName = 'Goerli Testnet'
+          break;
+        case '137':
+          chainName = 'Polygon Mainnet'
+        default:
+          break;        
+      }
+      return chainName
+    },
+    async claimReward(row) {      
+        try {  
+          const parsedData = JSON.parse(row.value);
+          this.rewardData ={...parsedData}            
+          this.rewardData.chainId = parsedData.chainId
+        if(localStorage.getItem('wagmi.store')){          
+          const getDataFromLocalStorage = localStorage.getItem('wagmi.store')          
+          const parsed = JSON.parse(getDataFromLocalStorage)                                      
+          if(parsed.state.data.hasOwnProperty('account')&& parsed.state.data.hasOwnProperty('chain')){            
+            this.walletAddress = parsed.state.data.account           
+            this.currentChain = (parsed.state.data.chain.id).toString()
+            if(this.currentChain!==parsedData.chainId){
+            this.isSwitchNetwork=true 
+            this.showDismissibleAlert.status = true                           
+            this.showDismissibleAlert.text = `Reward is distributed on ${this.chainName(parsedData.chainId)}. Please switch network in your wallet.`            
+            this.$root.$emit('bv::show::modal','hf-cleaim-reward');            
+            }else{            
+            this.isSwitchNetwork=false           
+            this.showDismissibleAlert.status = true                 
+            this.showDismissibleAlert.text = `Claim your Reward!` 
+            this.$root.$emit('bv::show::modal','hf-cleaim-reward');                                                     
+            }           
+          }else{                     
+            await this.web3modal.openModal()            
+          }                 
+        }   
+        watchAccount(async account=>{            
+          if(account.isConnected === true){            
+            const { chain } = getNetwork();                        
+            if(parsedData.chainId!==(chain.id).toString()){
+            this.isSwitchNetwork = true
+            this.showDismissibleAlert.status = true                           
+            this.showDismissibleAlert.text = `Reward is distributed on ${this.chainName(parsedData.chainId)}. Please switch network in your wallet.`
+            }else{
+            this.isSwitchNetwork=false            
+            this.showDismissibleAlert.status = true                 
+            this.showDismissibleAlert.text = `Claim your Reward!`
+            }
+            this.$root.$emit('bv::show::modal','hf-cleaim-reward');                                         
+          }if(account.isDisconnected === true){                                      
+            this.$root.$emit('bv::hide::modal','hf-cleaim-reward');            
+            this.walletAddress = ''       
+          }        
+        })             
+      } catch (error) {        
+        return this.notifyErr(error.message);
       }
     },
     async getProof(baseUrl,airdropId, walletAddress) {      
@@ -330,16 +516,6 @@ export default {
   font-size: 12px;
   background-color: var(--modal-bg-text);
 }
-/* .wrapword {
-  white-space: -moz-pre-wrap !important;
-  white-space: -webkit-pre-wrap;
-  white-space: -pre-wrap;
-  white-space: -o-pre-wrap;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  white-space: normal;
-} */
-
 table { 
   width: 100%; 
   border-collapse: collapse; 
@@ -382,7 +558,7 @@ only screen and (max-width: 760px),
 		position: relative;   
     padding-left: 60%; 
 	}
-	
+ 
 	td:before { 	
 		position: absolute;	
 		top: 6px;

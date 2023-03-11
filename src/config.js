@@ -45,6 +45,9 @@ const config = {
     moopay: {
         payment_url: process.env.VUE_APP_MOOPAY_PAYMENT_URL,
     },
+    walletConnect:{
+        WALLETCONNECT_PROJECT_ID:process.env.VUE_APP_FYRE_WALLETCONNECT_PROJECT_ID,        
+    }
 }
 
 export default config
