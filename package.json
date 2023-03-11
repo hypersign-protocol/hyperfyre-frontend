@@ -1,6 +1,6 @@
 {
   "name": "hyperfye-frontend",
-  "version": "v5.12.0",
+  "version": "v5.13.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode production",
@@ -56,8 +56,8 @@
     "vue-sidebar-menu": "^4.7.4",
     "vue-stepper": "^1.4.2",
     "vue-sweetalert2": "^5.0.2",
-    "vuedraggable": "^2.24.3",
     "vue-vanilla-datetime-picker": "^1.2.0",
+    "vuedraggable": "^2.24.3",
     "vuejs-paginate": "^2.1.0",
     "vuex": "^3.0.0",
     "watchify": "^4.0.0",
@@ -69,6 +69,7 @@
     "@vue/cli-plugin-unit-mocha": "^3.0.0-rc.10",
     "@vue/cli-service": "^3.0.0-rc.10",
     "@vue/test-utils": "^1.0.0-beta.20",
+    "babel-eslint": "^10.1.0",
     "babel-preset-es2015": "^6.24.1",
     "babelify": "^7.2.0",
     "chai": "^4.1.2",

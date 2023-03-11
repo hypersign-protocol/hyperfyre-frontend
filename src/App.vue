@@ -194,7 +194,7 @@ export default {
           true :
           false;
     }else{
-      this.showUserNav = window.location.pathname.includes("/form") ||
+      this.showUserNav = window.location.pathname.includes("/form") || window.location.pathname.includes('/auth/google') ||
         window.location.pathname.includes("/user") || window.location.pathname.includes("/sa/home")?true : false
         this.isForm= window.location.pathname.includes("/form")? true:false
     }
@@ -221,7 +221,8 @@ export default {
           window.location.pathname.includes("/admin/createapp") ||
           window.location.pathname.includes("/admin/marketplace") ?
           true :
-          false;
+          false; 
+    this.showUserNav = window.location.pathname.includes("/admin") || window.location.pathname.includes("/auth/google")?false : true            
   },
 
   methods: {
