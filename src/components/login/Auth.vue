@@ -3,6 +3,7 @@
 <script>
 
 import config from '../../config';
+import eventBus from "../../eventBus"
 export default {
   name: 'Auth',
   components: {},
@@ -29,7 +30,8 @@ export default {
 
     const data = await resp.json()
     if (data.authToken) {
-      localStorage.setItem('authToken', data.authToken)
+      localStorage.setItem('authToken', data.authToken)                  
+      eventBus.$emit('getAuthToken', data.authToken)                  
       const path = localStorage.getItem('path')
       if (path) {
         return this.$router.push(path)

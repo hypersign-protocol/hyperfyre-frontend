@@ -141,7 +141,10 @@ export default {
   computed: {},
   async created() {
     try {
-      this.authToken = localStorage.getItem("authToken");
+      this.authToken = localStorage.getItem("authToken");      
+      if(this.authToken!==null){
+        await this.updateAuthentication(this.authToken)
+      }
       const userDetail = localStorage.getItem("user");
       if (userDetail) {
         this.userAuthData = JSON.parse(userDetail);
