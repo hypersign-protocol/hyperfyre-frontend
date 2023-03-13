@@ -65,7 +65,6 @@ export default {
       },
       name: config.appName,
       hover: false,
-      authToken:null,
       isSidebarCollapsed: true,
       authRoutes: ["register", "PKIIdLogin"],
       showNavbar: false,
@@ -165,17 +164,13 @@ export default {
   },
 
   mounted() {
-
-    if(localStorage.getItem("authToken")){
-      this.authToken = localStorage.getItem("authToken")
-    }
-    eventBus.$on('UpdateAdminNav',   (isSubscribed) => {
-        this.isSubscribed = isSubscribed;
-    })
-
-    if(this.authToken && !window.location.pathname.includes("/form")){
-      this.$store.dispatch('getApps',this.authToken);
-      this.$store.dispatch('getTeammates',this.authToken);
+    eventBus.$on('UpdateAdminNav',   (isSubscribed) => {    
+        this.isSubscribed = isSubscribed;})
+    eventBus.$on('getAuthTokenForAdminSide', this.getAppTeamData) 
+    if(localStorage.getItem('authToken') && window.location.pathname.includes("/admin")){      
+      const authToken = localStorage.getItem('authToken')
+      this.$store.dispatch('getApps',authToken);
+      this.$store.dispatch('getTeammates',authToken);
     }
     eventBus.$on("UpdateThemeEvent", (themeData) => {
       Object.assign(this.themeData, { ...themeData })
@@ -226,6 +221,12 @@ export default {
   },
 
   methods: {
+    getAppTeamData(token){     
+      if(token){        
+      this.$store.dispatch('getApps',token);
+      this.$store.dispatch('getTeammates',token);
+    }
+    },
     filterMenu() {
       if (localStorage.getItem("user")) {
         const user = JSON.parse(localStorage.getItem("user"));
