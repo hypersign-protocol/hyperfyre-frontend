@@ -6,9 +6,9 @@ module.exports = {
   chainWebpack: config => {
     config.resolve.set("fallback",{
       crypto: require.resolve("crypto-browserify"),
-      path:require.resolve("path-browserify"),
       stream:require.resolve("stream-browserify"),
-      fs:false
+      fs:false,
+      path:false
     });
       config.plugins.delete("prefetch");
     },

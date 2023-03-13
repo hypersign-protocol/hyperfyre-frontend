@@ -42,7 +42,6 @@
     "marked": "^3.0.8",
     "multicoin-address-validator": "^0.5.10",
     "node-fetch": "^2.6.0",
-    "path-browserify": "^1.0.1",
     "simple-vue-validator": "^0.16.0",
     "system": "^2.0.1",
     "v-markdown-editor": "^1.2.6",
