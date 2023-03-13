@@ -164,13 +164,17 @@ export default {
   },
 
   mounted() {
-    eventBus.$on('UpdateAdminNav',   (isSubscribed) => {    
-        this.isSubscribed = isSubscribed;})
-    eventBus.$on('getAuthTokenForAdminSide', this.getAppTeamData) 
-    if(localStorage.getItem('authToken') && window.location.pathname.includes("/admin")){      
-      const authToken = localStorage.getItem('authToken')
-      this.$store.dispatch('getApps',authToken);
-      this.$store.dispatch('getTeammates',authToken);
+    eventBus.$on("UpdateAdminNav", (isSubscribed) => {
+      this.isSubscribed = isSubscribed;
+    });
+    eventBus.$on("getAuthTokenForAdminSide", this.getAppTeamData);
+    if (
+      localStorage.getItem("authToken") &&
+      window.location.pathname.includes("/admin")
+    ) {
+      const authToken = localStorage.getItem("authToken");
+      this.$store.dispatch("getApps", authToken);
+      this.$store.dispatch("getTeammates", authToken);
     }
     eventBus.$on("UpdateThemeEvent", (themeData) => {
       Object.assign(this.themeData, { ...themeData })
@@ -221,11 +225,11 @@ export default {
   },
 
   methods: {
-    getAppTeamData(token){     
-      if(token){        
-      this.$store.dispatch('getApps',token);
-      this.$store.dispatch('getTeammates',token);
-    }
+    getAppTeamData(token) {
+      if (token) {
+        this.$store.dispatch("getApps", token);
+        this.$store.dispatch("getTeammates", token);
+      }
     },
     filterMenu() {
       if (localStorage.getItem("user")) {

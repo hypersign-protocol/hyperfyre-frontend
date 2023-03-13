@@ -30,20 +30,18 @@ export default {
 
     const data = await resp.json()
     if (data.authToken) {
-      localStorage.setItem('authToken', data.authToken)
-      const path = localStorage.getItem('path')      
-      if(path.includes('/form')){
-      eventBus.$emit('getAuthToken', data.authToken)           
-      }else if(path.includes('/admin')){
-        eventBus.$emit('getAuthTokenForAdminSide', data.authToken)
+      localStorage.setItem("authToken", data.authToken);
+      const path = localStorage.getItem("path");
+      if (path.includes("/form")) {
+        eventBus.$emit("getAuthToken", data.authToken);
+      } else if (path.includes("/admin")) {
+        eventBus.$emit("getAuthTokenForAdminSide", data.authToken);
       }
       if (path) {
-        return this.$router.push(path)
+        return this.$router.push(path);
       } else {
-        return this.$router.push('/admin/dashboard')
-
+        return this.$router.push("/admin/dashboard");
       }
-
     }
 
 
