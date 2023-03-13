@@ -16,6 +16,7 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.min.css";
 import store from "./store/store";
+import { initWalletConnect } from "./mixins/myWallet";
 import {
   VeTable,
   VePagination,
@@ -41,7 +42,7 @@ Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(Notifications);
-
+initWalletConnect();
 //// VUE EASY TABEL ////
 Vue.use(VeTable);
 Vue.use(VePagination);
