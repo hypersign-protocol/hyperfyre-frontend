@@ -119,7 +119,7 @@
 </template>
 <script>
 import {web3modal} from "../../../mixins/myWallet"
-import {watchAccount,getNetwork,switchNetwork, readContract, getAccount,getContract } from "@wagmi/core";
+import {watchAccount,getNetwork,switchNetwork, readContract, getAccount,getContract,watchContractEvent } from "@wagmi/core";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css"
 import { abi, getAddress } from "../../../mixins/merkelDropFactoryAbi";
@@ -131,6 +131,7 @@ import { truncate } from "../../../mixins/fieldValidationMixin";
 import HfPopUp from "../../elements/HfPopUp.vue"
 import HfNotes from "../../elements/HfNotes.vue"
 import HfButtons from "../../elements/HfButtons.vue"
+import Messages from "../../../utils/messages/participants/en"
 export default {
   name: "RewardClaim",
   components: { Loading,HfPopUp,HfNotes,HfButtons },
@@ -161,6 +162,7 @@ export default {
       fullPage: true,
       accounts: [],
       visible: false,
+      conAddress:'',
     };
   },
   computed: {
@@ -169,6 +171,31 @@ export default {
         "--modal-bg-text": config.app.headerBGColor,
       };
     },
+  },
+  watch:{
+     conAddress:{
+          deep:true,
+          handler: function(newValue) {                  
+            if(newValue!==""){
+              watchContractEvent(
+        {
+            address: newValue,
+            abi: abi,
+            eventName: 'WithdrawalOccurred',
+            once:true
+        },
+        () => {          
+            this.notifySuccess(
+              Messages.EVENT_ACTIONS.REWARD_CLAIM.SUCCESS
+            );
+            this.$root.$emit('bv::hide::modal','hf-cleaim-reward');
+            this.isLoading = false
+            this.conAddress = ""
+          },
+        );
+        }               
+      }
+     }
   },
   methods: {
     copyTokenAddress(contentType) {
@@ -268,7 +295,7 @@ export default {
           return x._id === airdropId;
         });
         if (filteredObject === undefined) {
-          throw new Error("You are not whitelisted in the winner list");
+          throw new Error(Messages.EVENT_ACTIONS.REWARD_CLAIM.NOT_WHITELISTED);
         }    
         let address = getAddress(filteredObject.additionalData.chainId)
         const withdrawn = await readContract({
@@ -278,10 +305,7 @@ export default {
           args:[filteredObject.treeIndex - 1,
               filteredObject.inputData.hash]
         })
-        console.log("withdrawn",withdrawn)
-        if(withdrawn === true){
-          throw new Error("Reward already claimed")
-        }       
+              
         if (!withdrawn) {
           const getProofFromApi = await this.getProof(this.rewardData.appBaseUrl,
             airdropId,
@@ -295,7 +319,8 @@ export default {
             abi:abi,
             signerOrProvider:signer
           })          
-          const treeIndex = filteredObject.treeIndex-1          
+          const treeIndex = filteredObject.treeIndex-1 
+          this.conAddress = address;         
           await contract.functions.withdraw(
             treeIndex,
             this.walletAddress,
@@ -303,26 +328,9 @@ export default {
             getProofFromApi,{
               gasLimit:250000
             }
-          )          
-          contract.on('WithdrawalOccurred',(treeIndex, destination, value,event)=>{
-            console.log('in callback')
-            let info={
-              treeIndex:treeIndex,
-              destination:destination,
-              value:value,
-              data:event
-            };
-            console.log(info)
-            if(info.destination === this.walletAddress && info.data.event === 'WithdrawalOccurred'){            
-              this.notifySuccess(
-              "Reward claimed successfully! check your wallet"
-            );
-            this.$root.$emit('bv::hide::modal','hf-cleaim-reward');
-            this.isLoading = false
-            }
-          }) 
+          )                
         } else {
-          throw new Error("Reward already claimed");
+          throw new Error(Messages.EVENT_ACTIONS.REWARD_CLAIM.CLAIMED_ALREADY);
         }
       } catch (e) {
         console.log(e.message)
@@ -346,9 +354,6 @@ export default {
         return this.notifyErr(resp.statusText);
       }
       const json = await resp.json();
-      // const list = json.filter((x)=>{
-      //   return x.
-      // })
       let list = json.map((x) => {
         return [...x.whiteListedAddress];
       });      

@@ -74,6 +74,11 @@ const EVENT_ACTIONS = {
     },
     SUBS: {
         SUBS_NOTIFICATION: "Click On Subscribe Notification"
+    },
+    REWARD_CLAIM:{
+        SUCCESS: "Reward claimed successfully! check your wallet",
+        NOT_WHITELISTED: "You are not whitelisted in the winner list",
+        CLAIMED_ALREADY: "Reward already claimed"
     }
 }
 
