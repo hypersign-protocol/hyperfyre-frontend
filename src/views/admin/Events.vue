@@ -1358,8 +1358,6 @@ export default {
         }
         const toDate= this.project.toDate
         const fromDate = this.project.fromDate 
-        this.project.toDate = new Date(this.project.toDate).toISOString();
-        this.project.fromDate = new Date(this.project.fromDate).toISOString();
         this.project.themeColor = this.themeColor.trim().length
           ? this.themeColor
           : this.themeColorDefault;
@@ -1373,9 +1371,12 @@ export default {
         this.project.refereePoint = this.project.refereePoint.toString();
         this.project.referralPoint = this.project.referralPoint.toString();
         this.project.referralUsageLimit = this.project.referralUsageLimit.toString();
+        let projectToSend = {...this.project}
+        projectToSend.toDate = new Date(toDate).toISOString();
+        projectToSend.fromDate = new Date(fromDate).toISOString();        
         const resp = await apiClientMixin.makeCall({
           url,
-          body: this.project,
+          body: projectToSend,
           method,
           header: headers,
         });
