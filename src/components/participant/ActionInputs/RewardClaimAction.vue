@@ -69,6 +69,9 @@
             </tr>
           </tbody>
         </table>
+        <div class="footer mx-auto overflow-hidden" style="align-items:center;padding-top:20px">
+        <p style="color:orange;"><b>Warning:</b> The claim reward works on web browser or Android based mobile phones.</p>
+        </div>      
       </b-card-body>
     </b-collapse>
     <hf-pop-up
