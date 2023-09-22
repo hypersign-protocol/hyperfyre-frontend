@@ -81,7 +81,7 @@ export function isNum(str) {
     }
 }
 export function isretweetUrl(str) {
-    if (!(str.match(/https:\/\/x\.com\/.*\/status\/[0-9]+/)||!(str.match(/https:\/\/twitter\.com\/.*\/status\/[0-9]+/)))) {
+    if (!(str.match(/https:\/\/x\.com\/.*\/status\/[0-9]+/))||!(str.match(/https:\/\/twitter\.com\/.*\/status\/[0-9]+/))) {
         return true
     }
 }
