@@ -20,11 +20,10 @@
           style="min-width: 120px"
         >
           <span>
-            <i
-              style="color: gray"
-              v-if="eventAction.type.includes('TWITTER')"
-              class="fab fa-twitter"
-            ></i>
+          
+            <span v-if="eventAction.type.includes('TWITTER')">
+            <img src="../../../../assets/x-twitter.svg" height="15px" />
+            </span>
             <i
               style="color: gray"
               v-if="eventAction.type.includes('TELEGRAM')"
