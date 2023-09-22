@@ -513,6 +513,10 @@ export default {
       // Code to Add an Action
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {
+        if(this.selected.type === 'TWITTER_RETWEET' && this.selected.value.includes('x.com')){          
+          const modifiedUrl = this.selected.value.replace('x.com', "twitter.com");          
+          this.selected.value = modifiedUrl
+        }
         this.selected["id"] =
           this.eventActionType + "_" + this.eventActionList.length;
         this.eventActionList.push(this.selected);
