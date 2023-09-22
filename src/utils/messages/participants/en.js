@@ -50,9 +50,9 @@ const EVENT_ACTIONS = {
         TWITTER_SCREENS_BLANK: "Source or target twitter screen name is blank",
     },
     TWITTER_RETWEET: {
-        INVALID_RETWEET: "Invalid retweet",
-        TWITTER_RETWEET_AUTH: "Please authorize and give Retweet URL",
-        ENTER_RETWEET_URL: "Please enter Retweet URL"
+        INVALID_RETWEET: "Invalid repost",
+        TWITTER_RETWEET_AUTH: "Please authorize and give Repost URL",
+        ENTER_RETWEET_URL: "Please enter Repost URL"
     },
     GITHUB_PR:{
         GITHUB_AUTH:"Please authorize and give GitHub PR URL",

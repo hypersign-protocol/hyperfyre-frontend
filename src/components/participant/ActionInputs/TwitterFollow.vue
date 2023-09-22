@@ -48,7 +48,7 @@
                 "
                 class="btn btn-outline-twitter text-black"
               >
-                <img src="../../../assets/x-twitter.svg" />
+                <img src="../../../assets/x-twitter.svg" height="25px" />
                 Follow @{{ twitter.sourceScreenName }}
               </button>
             </div>

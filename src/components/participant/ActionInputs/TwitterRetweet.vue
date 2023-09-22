@@ -46,7 +46,7 @@
                 "
                 class="btn btn-outline-twitter text-black mb-2"
               >
-                <img src="../../../assets/x-twitter.svg" />
+                <img src="../../../assets/x-twitter.svg" height="25px"/>
                 Repost
               </button>
               <b-form-input

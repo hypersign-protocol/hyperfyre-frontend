@@ -59,11 +59,11 @@ const EVENTS = {
 
         SOCIAL: {
             SOCIAL_TYPE: "Please choose Social Action Type",
-            RETWEET_NOT_EMPTY: "Retweet Url Should not be empty",
+            RETWEET_NOT_EMPTY: "Repost Url Should not be empty",
             INVITE_NOT_EMPTY: "Invite Link Should not be empty",
             SOCIAL_HANDLE_EMPTY: "Social Handle Should not be empty",
             URL_IN_SOCIAL_HANDLE: "Do not put url in Social Handle",
-            RETWEET_VALID_URL: "Please Enter valid retweet url",
+            RETWEET_VALID_URL: "Please Enter valid repost url",
             INVALID_INVITE_LINK: "Invalid Invite Link",
             INVALID_TWITTER_USERNAME: "Invalid X Username",
             INVALID_TELEGRAM_USERNAME: "Invalid Telegram Username",
