@@ -65,7 +65,7 @@ const EVENTS = {
             URL_IN_SOCIAL_HANDLE: "Do not put url in Social Handle",
             RETWEET_VALID_URL: "Please Enter valid retweet url",
             INVALID_INVITE_LINK: "Invalid Invite Link",
-            INVALID_TWITTER_USERNAME: "Invalid Twitter Username",
+            INVALID_TWITTER_USERNAME: "Invalid X Username",
             INVALID_TELEGRAM_USERNAME: "Invalid Telegram Username",
             GITHUB_REPONAME_EMPTY: "GitHub Repo URL should not be empty",
             INVALID_GITHUB_URL: "Invalid GitHub repo URL"
