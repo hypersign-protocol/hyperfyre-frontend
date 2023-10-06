@@ -120,7 +120,7 @@
       <div class="row g-3 align-items-center w-100 mt-4" v-if="showRetweet">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="value" class="col-form-label"
-            >Retweet URL<span style="color: red">*</span>:
+            >Repost URL<span style="color: red">*</span>:
           </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
@@ -128,7 +128,7 @@
             v-model="selected.value"
             type="text"
             :placeholder="
-              selected.type === null ? '' : 'Please Enter Your Retweet URL'
+              selected.type === null ? '' : 'Please Enter Your Repost URL'
             "
             id="value"
             class="form-control w-100"
