@@ -624,8 +624,8 @@ export default {
         ],
         socialAction: [
           { text: "Select Social Action type", value: null },
-          { text: "Twitter Follow", value: "TWITTER_FOLLOW" },
-          { text: "Twitter Retweet", value: "TWITTER_RETWEET" },
+          { text: "X (Previously Twitter) Follow", value: "TWITTER_FOLLOW" },
+          { text: "X (Previously Twitter) Repost", value: "TWITTER_RETWEET" },
           { text: "Telegram Join", value: "TELEGRAM_JOIN" },
           { text: "Discord Join", value: "DISCORD_JOIN" },
           { text: "Github PR", value: "GITHUB_PR" },
