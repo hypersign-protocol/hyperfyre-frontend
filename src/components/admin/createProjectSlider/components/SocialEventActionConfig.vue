@@ -20,11 +20,10 @@
           style="min-width: 120px"
         >
           <span>
-            <i
-              style="color: gray"
-              v-if="eventAction.type.includes('TWITTER')"
-              class="fab fa-twitter"
-            ></i>
+          
+            <span v-if="eventAction.type.includes('TWITTER')">
+            <img src="../../../../assets/x-twitter.svg" height="15px" />
+            </span>
             <i
               style="color: gray"
               v-if="eventAction.type.includes('TELEGRAM')"
@@ -121,7 +120,7 @@
       <div class="row g-3 align-items-center w-100 mt-4" v-if="showRetweet">
         <div class="text-left col-lg-3 col-md-3 text-left">
           <label for="value" class="col-form-label"
-            >Retweet URL<span style="color: red">*</span>:
+            >Repost URL<span style="color: red">*</span>:
           </label>
         </div>
         <div class="col-lg-9 col-md-9 px-0">
@@ -129,7 +128,7 @@
             v-model="selected.value"
             type="text"
             :placeholder="
-              selected.type === null ? '' : 'Please Enter Your Retweet URL'
+              selected.type === null ? '' : 'Please Enter Your Repost URL'
             "
             id="value"
             class="form-control w-100"
@@ -514,6 +513,10 @@ export default {
       // Code to Add an Action
       let isvalid = this.handleEventActionValidation();
       if (isvalid) {
+        if(this.selected.type === 'TWITTER_RETWEET' && this.selected.value.includes('x.com')){          
+          const modifiedUrl = this.selected.value.replace('x.com', "twitter.com");          
+          this.selected.value = modifiedUrl
+        }
         this.selected["id"] =
           this.eventActionType + "_" + this.eventActionList.length;
         this.eventActionList.push(this.selected);
