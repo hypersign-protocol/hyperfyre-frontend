@@ -32,6 +32,68 @@ jobs:
 
       - name: "Docker Auth"
         run: gcloud auth configure-docker ${{ secrets.GOOGLE_ARTIFACT_URL }}
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__NODE_ENV__#${{ vars.NODE_ENV }}#" {} \;
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_AUTH0_CLIENT_ID__#${{ vars.VUE_APP_AUTH0_CLIENT_ID }}#" {} \;
+
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_AUTH0_DOMAIN__#${{ vars.VUE_APP_AUTH0_DOMAIN }}#" {} \;
+
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_MOBILEWALLET_URL__#${{ vars.VUE_APP_MOBILEWALLET_URL }}#" {} \;
+
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_RECAPTCHA_SITE_KEY__#${{ vars.VUE_APP_RECAPTCHA_SITE_KEY }}#" {} \;
+
+      - name: Replace Secrets
+
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_SERVER_WEBSOCKET_URL__#${{ vars.VUE_APP_SERVER_WEBSOCKET_URL }}#" {} \;
+
+      - name: Replace Secrets
+
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_TITLE__#${{ vars.VUE_APP_TITLE }}#" {} \;
+
+      - name: Replace Secrets
+
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_VERSION__#${{ vars.VUE_APP_VERSION }}#" {} \;
+
+      - name: Replace Secrets
+
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_WEBWALLET_URL__#${{ vars.VUE_APP_WEBWALLET_URL }}#" {} \;
+
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_GA_CODE__#${{ vars.VUE_APP_GA_CODE }}#" {} \;
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_KOMMINICATE_APP_ID__#${{ vars.VUE_APP_KOMMINICATE_APP_ID }}#" {} \;
+      - name: Replace Secrets
+
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_WEBPUSH_VAPID_PUBLIC_KEY__#${{ vars.VUE_APP_WEBPUSH_VAPID_PUBLIC_KEY }}#" {} \;
+      - name: Replace Secrets
+
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_INVESTOR_API_SECRET_KEY__#${{ vars.VUE_APP_INVESTOR_API_SECRET_KEY }}#" {} \;
+      - name: Replace Secrets
+
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_BTN_BACKGROUND__#${{ vars.VUE_APP_BTN_BACKGROUND }}#" {} \;
+      - name: Replace Secrets
+
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_HEADER_BACKGROUND__#${{ vars.VUE_APP_HEADER_BACKGROUND }}#" {} \;
+      - name: Replace Secrets
+
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_HEADER_TEXT_COLOR__#${{ vars.VUE_APP_HEADER_TEXT_COLOR }}#" {} \;
+      - name: Replace Secrets
+
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_THEME_BACKGROUND__#${{ vars.VUE_APP_THEME_BACKGROUND }}#" {} \;
+      - name: Replace Secrets
+
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_MOOPAY_PAYMENT_URL__#${{ vars.VUE_APP_MOOPAY_PAYMENT_URL }}#" {} \;
+      - name: Replace Secrets
+
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_FYRE_WALLET_ADDRESS__#${{ vars.VUE_APP_FYRE_WALLET_ADDRESS }}#" {} \;
+      - name: Replace Secrets
+
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_AUTH0_LOGIN_CLIENT_ID__#${{ vars.VUE_APP_AUTH0_LOGIN_CLIENT_ID }}#" {} \;
+
       - name: "Docker Build and Push"
         env:
           NODE_ENV: ${{ vars.NODE_ENV }}
@@ -59,63 +121,6 @@ jobs:
           VUE_APP_FYRE_WALLET_ADDRESS: ${{ vars.VUE_APP_FYRE_WALLET_ADDRESS }}
           VUE_APP_AUTH0_LOGIN_CLIENT_ID: ${{ vars.VUE_APP_AUTH0_LOGIN_CLIENT_ID }}
         run:
-          find Dockerfile -type f -exec sed  -i  "s#__NODE_ENV__#${{ vars.NODE_ENV }}#" {} \;
-
-
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_AUTH0_CLIENT_ID__#${{ vars.VUE_APP_AUTH0_CLIENT_ID }}#" {} \;
-
-
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_AUTH0_DOMAIN__#${{ vars.VUE_APP_AUTH0_DOMAIN }}#" {} \;
-
-
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_MOBILEWALLET_URL__#${{ vars.VUE_APP_MOBILEWALLET_URL }}#" {} \;
-
-
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_RECAPTCHA_SITE_KEY__#${{ vars.VUE_APP_RECAPTCHA_SITE_KEY }}#" {} \;
-
-
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_SERVER_WEBSOCKET_URL__#${{ vars.VUE_APP_SERVER_WEBSOCKET_URL }}#" {} \;
-
-
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_TITLE__#${{ vars.VUE_APP_TITLE }}#" {} \;
-
-
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_VERSION__#${{ vars.VUE_APP_VERSION }}#" {} \;
-
-
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_WEBWALLET_URL__#${{ vars.VUE_APP_WEBWALLET_URL }}#" {} \;
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_GA_CODE__#${{ vars.VUE_APP_GA_CODE }}#" {} \;
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_KOMMINICATE_APP_ID__#${{ vars.VUE_APP_KOMMINICATE_APP_ID }}#" {} \;
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_WEBPUSH_VAPID_PUBLIC_KEY__#${{ vars.VUE_APP_WEBPUSH_VAPID_PUBLIC_KEY }}#" {} \;
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_INVESTOR_API_SECRET_KEY__#${{ vars.VUE_APP_INVESTOR_API_SECRET_KEY }}#" {} \;
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_BTN_BACKGROUND__#${{ vars.VUE_APP_BTN_BACKGROUND }}#" {} \;
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_HEADER_BACKGROUND__#${{ vars.VUE_APP_HEADER_BACKGROUND }}#" {} \;
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_HEADER_TEXT_COLOR__#${{ vars.VUE_APP_HEADER_TEXT_COLOR }}#" {} \;
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_THEME_BACKGROUND__#${{ vars.VUE_APP_THEME_BACKGROUND }}#" {} \;
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_MOOPAY_PAYMENT_URL__#${{ vars.VUE_APP_MOOPAY_PAYMENT_URL }}#" {} \;
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_FYRE_WALLET_ADDRESS__#${{ vars.VUE_APP_FYRE_WALLET_ADDRESS }}#" {} \;
-
-          find Dockerfile -type f -exec sed  -i  "s#__VUE_APP_AUTH0_LOGIN_CLIENT_ID__#${{ vars.VUE_APP_AUTH0_LOGIN_CLIENT_ID }}#" {} \;
-
-
           docker build -t $GOOGLE_ARTIFACT_URL/$GOOGLE_PROJECT_ID/$GOOGLE_ARTIFACT_REPO/fyre-frontend:${{ env.LATEST_RELEASE_TAG }}  .
 
           docker push $GOOGLE_ARTIFACT_URL/$GOOGLE_PROJECT_ID/$GOOGLE_ARTIFACT_REPO/fyre-frontend:${{ env.LATEST_RELEASE_TAG }}
@@ -144,7 +149,7 @@ jobs:
       - name: "Configure kubectl"
         run: gcloud container clusters get-credentials hypermine-gke --region=asia-south1
       - name: Replace tags
-        run: find .deploy/deployment.yaml -type f -exec sed  -i  "s#__LATEST_RELEASE_TAG__#${{ env.LATEST_RELEASE_TAG }}#" {} \;
+        run: find .deploy/deployment.yaml -type f -exec sed  -i -e "s#__LATEST_RELEASE_TAG__#${{ env.LATEST_RELEASE_TAG }}#" {} \;
 
       - name: "Replace secrets"
         run: find .deploy/deployment.yaml -type f -exec sed  -i ''s/__GOOGLE_ARTIFACT_URL__/${{ secrets.GOOGLE_ARTIFACT_URL }}/g'' {} \;
