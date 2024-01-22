@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fyre-ui
+  namespace: hypermine-development
+spec:
+  selector:
+    matchLabels:
+      app: fyre-ui
+  template:
+    metadata:
+      labels:
+        app: fyre-ui
+    spec:
+      containers:
+        - name: fyre-ui
+          image: __GOOGLE_ARTIFACT_URL__/__GOOGLE_PROJECT_ID__/__GOOGLE_ARTIFACT_REPO__/fyre-frontend:__LATEST_RELEASE_TAG__
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: NODE_ENV
+              value: __NODE_ENV__
+            - name: VUE_APP_AUTH0_CLIENT_ID
+              value: __VUE_APP_AUTH0_CLIENT_ID__
+            - name: VUE_APP_AUTH0_DOMAIN
+              value: __VUE_APP_AUTH0_DOMAIN__
+            - name: VUE_APP_MOBILEWALLET_URL
+              value: __VUE_APP_MOBILEWALLET_URL__
+            - name: VUE_APP_RECAPTCHA_SITE_KEY
+              value: __VUE_APP_RECAPTCHA_SITE_KEY__
+            - name: VUE_APP_SERVER_WEBSOCKET_URL
+              value: __VUE_APP_SERVER_WEBSOCKET_URL__
+            - name: VUE_APP_STUDIO_SERVER_BASE_URL
+              value: __VUE_APP_STUDIO_SERVER_BASE_URL__
+            - name: VUE_APP_TELEGRAM_BOT_ID
+              value: __VUE_APP_TELEGRAM_BOT_ID__
+            - name: VUE_APP_TELEGRAM_VERIFIER_BOT
+              value: __VUE_APP_TELEGRAM_VERIFIER_BOT__
+            - name: VUE_APP_TITLE
+              value: __VUE_APP_TITLE__
+            - name: VUE_APP_VERSION
+              value: __VUE_APP_VERSION__
+            - name: VUE_APP_WEBWALLET_URL
+              value: __VUE_APP_WEBWALLET_URL__
+            - name: VUE_APP_GA_CODE
+              value: __VUE_APP_GA_CODE__
+            - name: VUE_APP_KOMMINICATE_APP_ID
+              value: __VUE_APP_KOMMINICATE_APP_ID__
+            - name: VUE_APP_WEBPUSH_VAPID_PUBLIC_KEY
+              value: __VUE_APP_WEBPUSH_VAPID_PUBLIC_KEY__
+            - name: VUE_APP_INVESTOR_API_SECRET_KEY
+              value: __VUE_APP_INVESTOR_API_SECRET_KEY__
+            - name: VUE_APP_BTN_BACKGROUND
+              value: __VUE_APP_BTN_BACKGROUND__
+            - name: VUE_APP_BTN_TXT_COLOR
+              value: __VUE_APP_BTN_TXT_COLOR__
+            - name: VUE_APP_HEADER_BACKGROUND
+              value: __VUE_APP_HEADER_BACKGROUND__
+            - name: VUE_APP_HEADER_TEXT_COLOR
+              value: __VUE_APP_HEADER_TEXT_COLOR__
+            - name: VUE_APP_THEME_BACKGROUND
+              value: __VUE_APP_THEME_BACKGROUND__
+            - name: VUE_APP_MOOPAY_PAYMENT_URL
+              value: __VUE_APP_MOOPAY_PAYMENT_URL__
+            - name: VUE_APP_FYRE_WALLET_ADDRESS
+              value: __VUE_APP_FYRE_WALLET_ADDRESS__
+            - name: VUE_APP_AUTH0_LOGIN_CLIENT_ID
+              value: __VUE_APP_AUTH0_LOGIN_CLIENT_ID__
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fyre-ui-svc
+  namespace: hypermine-development
+
+spec:
+  type: NodePort
+  selector:
+    app: fyre-ui
+  ports:
+    - port: 8080
+      targetPort: 80
