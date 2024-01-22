@@ -1,4 +1,4 @@
-name: Dashbord UI Build and Deploy Pipeline
+name: Fyre UI Build and Deploy Pipeline
 on:
   push:
     tags:
