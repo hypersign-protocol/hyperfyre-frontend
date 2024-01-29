@@ -93,6 +93,26 @@ jobs:
       - name: Replace Secrets
 
         run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_AUTH0_LOGIN_CLIENT_ID__#${{ vars.VUE_APP_AUTH0_LOGIN_CLIENT_ID }}#" {} \;
+
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_TELEGRAM_BOT_ID__#${{ vars.VUE_APP_TELEGRAM_BOT_ID }}#" {} \;
+
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_TELEGRAM_VERIFIER_BOT__#${{ vars.VUE_APP_TELEGRAM_VERIFIER_BOT }}#" {} \;
+
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_BTN_BACKGROUND__#${{ vars.VUE_APP_BTN_BACKGROUND }}#" {} \;
+
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_BTN_TXT_COLOR__#${{ vars.VUE_APP_BTN_TXT_COLOR }}#" {} \;
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_HEADER_BACKGROUND__#${{ vars.VUE_APP_HEADER_BACKGROUND }}#" {} \;
+
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_HEADER_TEXT_COLOR__#${{ vars.VUE_APP_HEADER_TEXT_COLOR }}#" {} \;
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_THEME_BACKGROUND__#${{ vars.VUE_APP_THEME_BACKGROUND }}#" {} \;
+
       - name: Display secrets
         run: cat Dockerfile
       - name: "Docker Build and Push"
