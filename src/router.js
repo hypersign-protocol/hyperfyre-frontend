@@ -7,7 +7,7 @@ import Auth from './components/login/Auth'
 Vue.use(Router);
 
 const router = new Router({
-    mode: "hash",
+    mode: "history",
     routes: [{
             path: "/form/:slug",
             name: "Event",
@@ -50,6 +50,7 @@ const router = new Router({
             component: () =>
                 import ( /* webpackChunkName: "adminLogin" */ "./views/Invitation.vue"),
         },
+        
         {
             path:'/auth/google',
             component:Auth

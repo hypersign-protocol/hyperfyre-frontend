@@ -173,56 +173,56 @@ export default {
         this.isSubscribed = isSubscribed;
     })
 
-    if(this.authToken && !window.location.hash.includes("/form")){
+    if(this.authToken && !window.location.pathname.includes("/form")){
       this.$store.dispatch('getApps',this.authToken);
       this.$store.dispatch('getTeammates',this.authToken);
     }
     eventBus.$on("UpdateThemeEvent", (themeData) => {
       Object.assign(this.themeData, { ...themeData })
-      this.isForm = window.location.hash.includes("/form") ? true : false
+      this.isForm = window.location.pathname.includes("/form") ? true : false
     })
     if(this.$route.meta.admin){
       this.showNavbar =
-          window.location.hash.includes("/admin/participants") ||
-          window.location.hash.includes("/admin/events") ||
-          window.location.hash.includes("/admin/dashboard") ||
-          window.location.hash.includes("/admin/subscription") ||
-          window.location.hash.includes("/admin/teams") ||
-          window.location.hash.includes("/admin/setting/org") ||
-          window.location.hash.includes("/admin/createapp") ||
-          window.location.hash.includes("/admin/marketplace") ?
+          window.location.pathname.includes("/admin/participants") ||
+          window.location.pathname.includes("/admin/events") ||
+          window.location.pathname.includes("/admin/dashboard") ||
+          window.location.pathname.includes("/admin/subscription") ||
+          window.location.pathname.includes("/admin/teams") ||
+          window.location.pathname.includes("/admin/setting/org") ||
+          window.location.pathname.includes("/admin/createapp") ||
+          window.location.pathname.includes("/admin/marketplace") ?
           true :
           false;
     }else{
-      this.showUserNav = window.location.hash.includes("/form") || window.location.pathname.includes('/auth/google') ||
-        window.location.hash.includes("/user") || window.location.hash.includes("/sa/home")?true : false
-        this.isForm= window.location.hash.includes("/form")? true:false
+      this.showUserNav = window.location.pathname.includes("/form") || window.location.pathname.includes('/auth/google') ||
+        window.location.pathname.includes("/user") || window.location.pathname.includes("/sa/home")?true : false
+        this.isForm= window.location.pathname.includes("/form")? true:false
     }
   },
   updated() {
     this.showNavbar =
-          window.location.hash.includes("/admin/participants") ||
-          window.location.hash.includes("/admin/events") ||
-          window.location.hash.includes("/admin/dashboard") ||
-          window.location.hash.includes("/admin/subscription") ||
-          window.location.hash.includes("/admin/teams") ||
-      window.location.hash.includes("/admin/setting/org") ||
-          window.location.hash.includes("/admin/createapp") ||
-          window.location.hash.includes("/admin/marketplace") ?
+          window.location.pathname.includes("/admin/participants") ||
+          window.location.pathname.includes("/admin/events") ||
+          window.location.pathname.includes("/admin/dashboard") ||
+          window.location.pathname.includes("/admin/subscription") ||
+          window.location.pathname.includes("/admin/teams") ||
+      window.location.pathname.includes("/admin/setting/org") ||
+          window.location.pathname.includes("/admin/createapp") ||
+          window.location.pathname.includes("/admin/marketplace") ?
           true :
           false;
     this.showChat = 
-          window.location.hash.includes("/admin/participants") ||
-          window.location.hash.includes("/admin/events") ||
-          window.location.hash.includes("/admin/dashboard") ||
-          window.location.hash.includes("/admin/subscription") ||
-          window.location.hash.includes("/admin/teams") ||
-      window.location.hash.includes("/admin/setting/org") ||
-          window.location.hash.includes("/admin/createapp") ||
-          window.location.hash.includes("/admin/marketplace") ?
+          window.location.pathname.includes("/admin/participants") ||
+          window.location.pathname.includes("/admin/events") ||
+          window.location.pathname.includes("/admin/dashboard") ||
+          window.location.pathname.includes("/admin/subscription") ||
+          window.location.pathname.includes("/admin/teams") ||
+      window.location.pathname.includes("/admin/setting/org") ||
+          window.location.pathname.includes("/admin/createapp") ||
+          window.location.pathname.includes("/admin/marketplace") ?
           true :
           false; 
-    this.showUserNav = window.location.hash.includes("/admin") || window.location.pathname.includes("/auth/google")?false : true            
+    this.showUserNav = window.location.pathname.includes("/admin") || window.location.pathname.includes("/auth/google")?false : true            
   },
 
   methods: {
@@ -260,13 +260,13 @@ export default {
     },
     onItemClick() {
       if (
-        window.location.hash.includes("investors") ||
-        window.location.hash.includes("project") ||
-        window.location.hash.includes("dashboard") ||
-        window.location.hash.includes("/admin/subscription")||
-        window.location.hash.includes("/admin/teams") ||
-        window.location.hash.includes("/admin/createapp") ||
-        window.location.hash.includes("/admin/marketplace")
+        window.location.pathname.includes("investors") ||
+        window.location.pathname.includes("project") ||
+        window.location.pathname.includes("dashboard") ||
+        window.location.pathname.includes("/admin/subscription")||
+        window.location.pathname.includes("/admin/teams") ||
+        window.location.pathname.includes("/admin/createapp") ||
+        window.location.pathname.includes("/admin/marketplace")
       ) {
         this.showNavbar = true;
       } else {
