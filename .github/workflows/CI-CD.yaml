@@ -112,6 +112,10 @@ jobs:
         run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_HEADER_TEXT_COLOR__#${{ vars.VUE_APP_HEADER_TEXT_COLOR }}#" {} \;
       - name: Replace Secrets
         run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_THEME_BACKGROUND__#${{ vars.VUE_APP_THEME_BACKGROUND }}#" {} \;
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_STUDIO_SERVER_BASE_URL__#${{ vars.VUE_APP_STUDIO_SERVER_BASE_URL }}#" {} \;
+      - name: Replace Secrets
+        run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_SERVER_WEBSOCKET_URL__#${{ vars.VUE_APP_SERVER_WEBSOCKET_URL }}#" {} \;
 
       - name: Display secrets
         run: cat Dockerfile
