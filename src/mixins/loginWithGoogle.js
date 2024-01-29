@@ -6,7 +6,7 @@ export default{
             webAuth.authorize(
                 {
                   connection: "google-oauth2",
-                  redirectUri: window.location.origin + "/#/auth/google?",
+                  redirectUri: window.location.origin + "/auth/google?",
                   
 
                 });
