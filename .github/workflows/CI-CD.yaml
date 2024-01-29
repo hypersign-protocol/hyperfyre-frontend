@@ -93,7 +93,8 @@ jobs:
       - name: Replace Secrets
 
         run: find Dockerfile -type f -exec sed  -i -e "s#__VUE_APP_AUTH0_LOGIN_CLIENT_ID__#${{ vars.VUE_APP_AUTH0_LOGIN_CLIENT_ID }}#" {} \;
-
+      - name: Display secrets
+        run: cat Dockerfile
       - name: "Docker Build and Push"
         env:
           NODE_ENV: ${{ vars.NODE_ENV }}
