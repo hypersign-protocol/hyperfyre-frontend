@@ -19,9 +19,9 @@ spec:
           resources:
             limits:
               memory: "256Mi"
-              cpu: "500m"
+              cpu: "100m"
           ports:
-            - containerPort: 8080
+            - containerPort: 8088
           env:
             - name: NODE_ENV
               value: __NODE_ENV__
@@ -77,11 +77,13 @@ kind: Service
 metadata:
   name: fyre-ui-svc
   namespace: hypermine-development
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
 
 spec:
   type: NodePort
   selector:
     app: fyre-ui
   ports:
-    - port: 8080
+    - port: 8088
       targetPort: 80
