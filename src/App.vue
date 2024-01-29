@@ -194,7 +194,7 @@ export default {
           true :
           false;
     }else{
-      this.showUserNav = window.location.hash.includes("/form") || window.location.hash.includes('/auth/google') ||
+      this.showUserNav = window.location.hash.includes("/form") || window.location.pathname.includes('/auth/google') ||
         window.location.hash.includes("/user") || window.location.hash.includes("/sa/home")?true : false
         this.isForm= window.location.hash.includes("/form")? true:false
     }
@@ -222,7 +222,7 @@ export default {
           window.location.hash.includes("/admin/marketplace") ?
           true :
           false; 
-    this.showUserNav = window.location.hash.includes("/admin") || window.location.hash.includes("/auth/google")?false : true            
+    this.showUserNav = window.location.hash.includes("/admin") || window.location.pathname.includes("/auth/google")?false : true            
   },
 
   methods: {
