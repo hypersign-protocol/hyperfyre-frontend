@@ -349,7 +349,7 @@ i {
               >
                 <i class="fas fa-users"></i
                 ><a
-                  :href="`/admin/participants?projectId=${project._id}`"
+                  :href="`/#/admin/participants?projectId=${project._id}`"
                   target="_blank"
                   class="card-body-custom"
                   >Participants ({{ project.investorsCount }})</a
@@ -912,10 +912,10 @@ export default {
           x["whitelisting_link"] =
             window.location.origin +
             (x.slug && x.slug != ""
-              ? "/form/" + x.slug
-              : "/form?projectId=" + x._id);
+              ? "/#/form/" + x.slug
+              : "/#/form?projectId=" + x._id);
           x["investors_link"] =
-            window.location.origin + "/admin/participants?projectId=" + x._id;
+            window.location.origin + "/#/admin/participants?projectId=" + x._id;
           x.actions.forEach((action)=>{
             if (action.type && action.type == "PRIZE_CARD"){
               if (action.value && JSON.parse(action.value).type === "Tokens")

@@ -9,9 +9,9 @@ export default {
   components: {},
 
   async mounted() {
-    const routeHash = this.$route.hash;
-    const accessToken = routeHash.split("&")[0].split("=")[1];
-    const authToken = routeHash.split("&")[5].split("=")[1];
+    const routeHash = this.$route
+    const accessToken = routeHash.query['/access_token']
+    const authToken = routeHash.query['id_token']
     const payload = {
       provider: 'Google',
       accessToken,

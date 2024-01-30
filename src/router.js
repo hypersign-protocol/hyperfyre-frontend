@@ -7,197 +7,211 @@ import Auth from './components/login/Auth'
 Vue.use(Router);
 
 const router = new Router({
-    mode: "history",
+    mode: "hash",
     routes: [{
-            path: "/form/:slug",
-            name: "Event",
-            component: () =>
-                import (
-                    /* webpackChunkName: "investorLogin" */
-                    "./views/participant/Event.vue"
-                ),
-            meta: (route) => ({
-                requiresAuth: false,
-                title: `${config.appName} - ` + route.params.slug,
-                tabbar: false,
-            }),
-        },
-        {
-            path: "/user/home/",
-            name: "Home",
-            component: () =>
-                import (
-                    /* webpackChunkName: "investorLogin" */
-                    "./views/participant/Home.vue"
-                ),
-            meta: () => ({ requiresAuth: true, title: `${config.appName} - User Home` })
-        },
-        {
-            path: "/",
-            redirect: "/admin/login",
-        },
-        {
-            path: "/app",
-            redirect: "/admin/login",
-        },
-        {
-            path: "/admin",
-            redirect: "/admin/login",
-        },
-        {
-            path: "/invitation",
-            name: "Invitation",
-            component: () =>
-                import ( /* webpackChunkName: "adminLogin" */ "./views/Invitation.vue"),
-        },
-        
-        {
-            path:'/auth/google',
-            component:Auth
-        },
-        {
-            path: "/admin/login",
-            name: "AdminLogin",
+        path: "/form/:slug",
+        name: "Event",
+        component: () =>
+            import(
+                /* webpackChunkName: "investorLogin" */
+                "./views/participant/Event.vue"
+            ),
+        meta: (route) => ({
+            requiresAuth: false,
+            title: `${config.appName} - ` + route.params.slug,
+            tabbar: false,
+        }),
+    },
+    {
+        path: "/user/home/",
+        name: "Home",
+        component: () =>
+            import(
+                /* webpackChunkName: "investorLogin" */
+                "./views/participant/Home.vue"
+            ),
+        meta: () => ({ requiresAuth: true, title: `${config.appName} - User Home` })
+    },
+    {
+        path: "/",
+        redirect: "/admin/login",
+    },
+    {
+        path: "/app",
+        redirect: "/admin/login",
+    },
+    {
+        path: "/admin",
+        redirect: "/admin/login",
+    },
+    {
+        path: "/invitation",
+        name: "Invitation",
+        component: () =>
+            import( /* webpackChunkName: "adminLogin" */ "./views/Invitation.vue"),
+    },
 
-            component: () =>
-                import ( /* webpackChunkName: "adminLogin" */ './views/admin/AdminLogin.vue'),
-            meta: () => ({ requiresAuth: true, title: `${config.appName} - Admin Login`, tabbar: false })
 
-        },
-        {
-            path: "/404",
-            name: "PageNotFound",
+    {
+        path: "/admin/login",
+        name: "AdminLogin",
 
-            component: () =>
-                import ( /* webpackChunkName: "adminLogin" */ './views/404.vue'),
-            meta: {
-                title: `${config.appName} - 404`
-            }
+        component: () =>
+            import( /* webpackChunkName: "adminLogin" */ './views/admin/AdminLogin.vue'),
+        meta: () => ({ requiresAuth: true, title: `${config.appName} - Admin Login`, tabbar: false })
+
+    },
+    {
+        path: '/auth/google',
+        component: Auth,
+      
+    },
+    {
+        name:"Auth0Redirect",
+        path: "/access_token=*",
+        meta:{
+            name: "Access Token",
+        }
+      
+    },
+
+    {
+        path: "/404",
+        name: "PageNotFound",
+
+        component: () =>
+            import( /* webpackChunkName: "adminLogin" */ './views/404.vue'),
+        meta: {
+            title: `${config.appName} - 404`
+        }
+    },
+    {
+        path: "/admin/dashboard",
+        name: "Dashboard",
+        component: () =>
+            import(
+                /* webpackChunkName: "dashboard" */
+                "./views/admin/Dashboard.vue"
+            ),
+        meta: {
+            requiresAuth: true,
+            admin: true,
+            title: `${config.appName} - Admin Dashboard`
         },
-        {
-            path: "/admin/dashboard",
-            name: "Dashboard",
-            component: () =>
-                import (
-                    /* webpackChunkName: "dashboard" */
-                    "./views/admin/Dashboard.vue"
-                ),
-            meta: {
-                requiresAuth: true,
-                admin: true,
-                title: `${config.appName} - Admin Dashboard`
-            },
+    },
+    {
+        path: "/admin/teams",
+        name: "Teams",
+        component: () =>
+            import(
+                /* webpackChunkName: "dashboard" */
+                "./views/admin/TeamMate.vue"
+            ),
+        meta: {
+            requiresAuth: true,
+            admin: true,
+            title: `${config.appName} - Teams`
         },
-        {
-            path: "/admin/teams",
-            name: "Teams",
-            component: () =>
-                import (
-                    /* webpackChunkName: "dashboard" */
-                    "./views/admin/TeamMate.vue"
-                ),
-            meta: {
-                requiresAuth: true,
-                admin: true,
-                title: `${config.appName} - Teams`
-            },
+    },
+    {
+        path: "/admin/setting/org",
+        name: "Org",
+        component: () =>
+            import(
+                /* webpackChunkName: "dashboard" */
+                "./views/admin/setting/OrgSetting.vue"
+            ),
+        meta: {
+            requiresAuth: true,
+            admin: true,
+            title: `${config.appName} - Org`
         },
-        {
-            path: "/admin/setting/org",
-            name: "Org",
-            component: () =>
-                import (
-                    /* webpackChunkName: "dashboard" */
-                    "./views/admin/setting/OrgSetting.vue"
-                ),
-            meta: {
-                requiresAuth: true,
-                admin: true,
-                title: `${config.appName} - Org`
-            },
+    },
+    {
+        path: "/admin/createapp",
+        name: "CreateApp",
+        component: () =>
+            import(
+                /* webpackChunkName: "dashboard" */
+                "./views/admin/CreateApp.vue"
+            ),
+        meta: {
+            requiresAuth: true,
+            admin: true,
+            title: `${config.appName} - CreateApp`
         },
-        {
-            path: "/admin/createapp",
-            name: "CreateApp",
-            component: () =>
-                import (
-                    /* webpackChunkName: "dashboard" */
-                    "./views/admin/CreateApp.vue"
-                ),
-            meta: {
-                requiresAuth: true,
-                admin: true,
-                title: `${config.appName} - CreateApp`
-            },
+    },
+    {
+        path: "/admin/participants",
+        name: "Participants",
+        component: () =>
+            import(
+                /* webpackChunkName: "investors" */
+                "./views/admin/Participants.vue"
+            ),
+        meta: {
+            requiresAuth: true,
+            admin: true,
+            title: `${config.appName} - Participants`,
         },
-        {
-            path: "/admin/participants",
-            name: "Participants",
-            component: () =>
-                import (
-                    /* webpackChunkName: "investors" */
-                    "./views/admin/Participants.vue"
-                ),
-            meta: {
-                requiresAuth: true,
-                admin: true,
-                title: `${config.appName} - Participants`,
-            },
+    },
+    {
+        path: "/admin/events",
+        name: "Events",
+        component: () =>
+            import( /* webpackChunkName: "project" */ "./views/admin/Events.vue"),
+        meta: {
+            requiresAuth: true,
+            admin: true,
+            title: `${config.appName} - Events`
         },
-        {
-            path: "/admin/events",
-            name: "Events",
-            component: () =>
-                import ( /* webpackChunkName: "project" */ "./views/admin/Events.vue"),
-            meta: {
-                requiresAuth: true,
-                admin: true,
-                title: `${config.appName} - Events`
-            },
+    },
+    {
+        path: "/admin/subscription",
+        name: "subscription",
+        component: () =>
+            import(
+                /* webpackChunkName: "subscription" */
+                "./views/admin/Subscription.vue"
+            ),
+        meta: {
+            requiresAuth: true,
+            admin: true,
+            title: `${config.appName} - Subscription`
         },
-        {
-            path: "/admin/subscription",
-            name: "subscription",
-            component: () =>
-                import (
-                    /* webpackChunkName: "subscription" */
-                    "./views/admin/Subscription.vue"
-                ),
-            meta: {
-                requiresAuth: true,
-                admin: true,
-                title: `${config.appName} - Subscription`
-            },
+    },
+    {
+        path: "/admin/marketplace",
+        name: "MarketPlace",
+        component: () =>
+            import(
+                /* webpackChunkName: "MarketPlace" */
+                "./views/admin/MarketPlace.vue"
+            ),
+        meta: {
+            requiresAuth: true,
+            admin: true,
+            title: `${config.appName} - Marketplace`
         },
-        {
-            path: "/admin/marketplace",
-            name: "MarketPlace",
-            component: () =>
-                import (
-                    /* webpackChunkName: "MarketPlace" */
-                    "./views/admin/MarketPlace.vue"
-                ),
-            meta: {
-                requiresAuth: true,
-                admin: true,
-                title: `${config.appName} - Marketplace`
-            },
+    },
+    {
+        path: "/sa/home",
+        name: "SuperAdmin Home",
+        component: () =>
+            import( /* webpackChunkName: "project" */ "./views/superAdmin/Home.vue"),
+        meta: {
+            requiresAuth: false,
+            admin: false,
+            title: `${config.appName} - SuperAdmin Home`
         },
-        {
-            path: "/sa/home",
-            name: "SuperAdmin Home",
-            component: () =>
-                import ( /* webpackChunkName: "project" */ "./views/superAdmin/Home.vue"),
-            meta: {
-                requiresAuth: false,
-                admin: false,
-                title: `${config.appName} - SuperAdmin Home`
-            },
-        },
+    },
     ],
 });
 
 router.beforeEach((to, from, next) => {
+    if(to.name==="Auth0Redirect"){
+        return router.replace('/auth/google?'+to.fullPath)
+    }
 
     if (to.matched.length < 1) {
         document.title = to.meta.title;
@@ -215,11 +229,11 @@ router.beforeEach((to, from, next) => {
             }
             const url = `${config.studioServer.BASE_URL}hs/api/v2/auth/protected?usage=${usage}`;
             fetch(url, {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                    method: "POST",
-                })
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+                method: "POST",
+            })
                 .then((res) => res.json())
                 .then((json) => {
                     if (json.status == 403) {
@@ -276,7 +290,7 @@ router.beforeEach((to, from, next) => {
                 path: to.meta.admin ?
                     "/admin/login" :
                     !to.query["referrer"] ?
-                    `/login/${to.params["slug"]}` : `/login/${to.params["slug"]}?referrer=${to.query["referrer"]}`,
+                        `/login/${to.params["slug"]}` : `/login/${to.params["slug"]}?referrer=${to.query["referrer"]}`,
                 params: { nextUrl: to.fullPath },
             });
         }
